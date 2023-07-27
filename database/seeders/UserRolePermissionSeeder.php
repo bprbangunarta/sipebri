@@ -34,7 +34,7 @@ class UserRolePermissionSeeder extends Seeder
                 'username'  => 'zulfame',
             ], $default_user_value));
 
-            $admin = User::create(array_merge([
+            $admin2 = User::create(array_merge([
                 'email'     => 'yandi@gmail.com',
                 'name'      => 'Yandi',
                 'username'  => 'yandi',
@@ -54,6 +54,7 @@ class UserRolePermissionSeeder extends Seeder
             $role_writer->givePermissionTo('read post');
 
             $admin->assignRole('Administrator');
+            $admin2->assignRole('Administrator');
             $writer->assignRole('Writer');
 
             DB::commit();
