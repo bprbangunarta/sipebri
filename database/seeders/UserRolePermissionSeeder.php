@@ -34,6 +34,12 @@ class UserRolePermissionSeeder extends Seeder
                 'username'  => 'zulfame',
             ], $default_user_value));
 
+            $admin = User::create(array_merge([
+                'email'     => 'yandi@gmail.com',
+                'name'      => 'Yandi',
+                'username'  => 'yandi',
+            ], $default_user_value));
+
             $writer = User::create(array_merge([
                 'email'     => 'mutiawr27@gmail.com',
                 'name'      => 'Mutia Wahida Rahmi',
