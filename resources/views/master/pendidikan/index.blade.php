@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Data Pekerjaan')
+@section('title', 'Data Pendidikan')
 
 @section('content')
 <div class="page-body">
@@ -17,7 +17,7 @@
                                         Master
                                     </div>
                                     <h2 class="page-title">
-                                        Data Pekerjaan
+                                        Data Pendidikan
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->
@@ -43,10 +43,10 @@
 
                     <div class="card-body border-bottom py-3" style="margin-top:-7px;">
 
-                        <form action="{{ route('pekerjaan.index') }}" method="GET">
+                        <form action="{{ route('pendidikan.index') }}" method="GET">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Nama Pekerjaan" value="{{ Request('name') }}">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Nama Gelar"
+                                    value="{{ Request('name') }}">
                                 <button class="btn" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -68,7 +68,7 @@
                                     <tr>
                                         <th class="text-center" width="3%">No</th>
                                         <th class="text-center" width="7%">Kode</th>
-                                        <th class="text-center">Nama Pekerjaan</th>
+                                        <th class="text-center">Nama Pendidikan</th>
                                         <th class="text-center" width="20%">Created At</th>
                                         <th class="text-center" width="20%">Updated At</th>
                                         <th class="text-center" width="5%">Ubah</th>
@@ -76,11 +76,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($pekerjaan as $data)
+                                    @foreach ($pendidikan as $data)
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration + $pekerjaan->firstItem() -1}}</td>
-                                        <td class="text-center">{{ $data->kode_pekerjaan }}</td>
-                                        <td>{{ $data->nama_pekerjaan }}</td>
+                                        <td class="text-center">{{ $loop->iteration + $pendidikan->firstItem() -1}}</td>
+                                        <td class="text-center">{{ $data->kode_pendidikan }}</td>
+                                        <td>{{ $data->nama_pendidikan }}</td>
                                         <td class="text-center">{{ $data->created_at }}</td>
                                         <td class="text-center">{{ $data->updated_at }}</td>
                                         <td class="text-center">
@@ -130,7 +130,7 @@
                             </table>
                             <p></p>
 
-                            {{ $pekerjaan->links('vendor.pagination.bootstrap-5') }}
+                            {{ $pendidikan->links('vendor.pagination.bootstrap-5') }}
 
                         </div>
                     </div>
@@ -146,7 +146,7 @@
     <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Pekerjaan</h5>
+                <h5 class="modal-title">Tambah Pendidikan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -157,15 +157,15 @@
 
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Kode Pekerjaan</label>
-                                <input type="text" class="form-control" name="kode_pekerjaan" id="kode_pekerjaan">
+                                <label class="form-label">Kode Pendidikan</label>
+                                <input type="text" class="form-control" name="kode_pendidikan" id="kode_pendidikan">
                             </div>
                         </div>
 
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Nama Pekerjaan</label>
-                                <input type="text" class="form-control" name="nama_pekerjaan" id="nama_pekerjaan">
+                                <label class="form-label">Nama Pendidikan</label>
+                                <input type="text" class="form-control" name="nama_pendidikan" id="nama_pendidikan">
                             </div>
                         </div>
                     </div>
