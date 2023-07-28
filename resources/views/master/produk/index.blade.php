@@ -158,7 +158,7 @@ $year = Carbon::now()->year;
     <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Kantor</h5>
+                <h5 class="modal-title">Tambah Produk</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -169,17 +169,15 @@ $year = Carbon::now()->year;
 
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Kode Kantor</label>
-                                <input type="text" class="form-control" name="kode_kantor" id="kode_kantor"
-                                    placeholder="PMK">
+                                <label class="form-label">Kode Produk</label>
+                                <input type="text" class="form-control" name="kode_produk" id="kode_produk">
                             </div>
                         </div>
 
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Nama Kantor</label>
-                                <input type="text" class="form-control" name="nama_kantor" id="nama_kantor"
-                                    placeholder="Pamanukan">
+                                <label class="form-label">Nama Produk</label>
+                                <input type="text" class="form-control" name="nama_produk" id="nama_produk">
                             </div>
                         </div>
                     </div>

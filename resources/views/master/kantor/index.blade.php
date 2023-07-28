@@ -158,16 +158,14 @@
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label class="form-label">Kode Kantor</label>
-                                <input type="text" class="form-control" name="kode_kantor" id="kode_kantor"
-                                    placeholder="PMK">
+                                <input type="text" class="form-control" name="kode_kantor" id="kode_kantor">
                             </div>
                         </div>
 
                         <div class="col-lg-12">
                             <div class="mb-3">
                                 <label class="form-label">Nama Kantor</label>
-                                <input type="text" class="form-control" name="nama_kantor" id="nama_kantor"
-                                    placeholder="Pamanukan">
+                                <input type="text" class="form-control" name="nama_kantor" id="nama_kantor">
                             </div>
                         </div>
                     </div>
