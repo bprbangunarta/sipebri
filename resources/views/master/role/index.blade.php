@@ -77,7 +77,8 @@
                                         <th class="text-center">Guard Name</th>
                                         <th class="text-center" width="20%">Created At</th>
                                         <th class="text-center" width="20%">Update At</th>
-                                        <th class="text-center" width="8.5%">Action</th>
+                                        <th class="text-center" width="5%">Edit</th>
+                                        <th class="text-center" width="5%">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,7 +90,7 @@
                                         <td class="text-center">{{ $role->created_at }}</td>
                                         <td class="text-center">{{ $role->updated_at }}</td>
                                         <td class="text-center">
-                                            <a href="#" class="edit" role_id="{{ $role->id }}" style="float: left;">
+                                            <a href="#" class="edit" role_id="{{ $role->id }}">
                                                 <span class="badge bg-warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="icon icon-tabler icon-tabler-edit" width="24" height="24"
@@ -106,9 +107,9 @@
                                                     </svg>
                                                 </span>
                                             </a>
-
-                                            <form action="/admin/role/{{ $role->id }}/delete" method="POST"
-                                                style="float: right;">
+                                        </td>
+                                        <td class="text-center">
+                                            <form action="/admin/role/{{ $role->id }}/delete" method="POST">
                                                 @csrf
                                                 <a href="#" class="delete" role_id="{{ $role->id }}">
                                                     <span class="badge bg-danger">

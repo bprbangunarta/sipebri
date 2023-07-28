@@ -20,12 +20,12 @@ class RoleController extends Controller
         $query->select('roles.*', 'name');
         $query->whereNot('name', 'Administrator');
         $query->orderBy('name');
-        $roles = $query->paginate(10);
 
         if (!empty($request->name)) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
+        $roles = $query->paginate(10);
         return view('master.role.index', compact('roles'));
     }
 
@@ -39,8 +39,7 @@ class RoleController extends Controller
 
         $check = DB::table('roles')->where('name', $name)->count();
         if ($check > 0) {
-            toast('The name has already been taken!', 'error');
-            return redirect()->back();
+            return redirect()->back()->with('toast_warning', 'The name has already been taken!');
         }
 
         $role = Role::create([
@@ -48,20 +47,11 @@ class RoleController extends Controller
             'guard_name' => request('guard_name') ?? 'web',
         ]);
 
-        $data = [
-            'nama_role'       => request('name'),
-            'created_at'      => date('Y-m-d H:i:s'),
-            'updated_at'      => date('Y-m-d H:i:s'),
-        ];
-        DB::table('testing')->insert($data);
-
         if ($role) {
-            // toast('Saved successfully!', 'success');
-            Alert::success('Saved successfully!', 'Success Message');
-            return redirect()->back();
+            return redirect()->back()->with('toast_success', 'Saved successfully!');
         } else {
             toast('Failed to save!', 'error');
-            return redirect()->back();
+            return redirect()->back()->with('toast_warning', 'Failed to save!');
         }
     }
 
@@ -87,13 +77,9 @@ class RoleController extends Controller
                 ->where('id', $id)
                 ->update($data);
 
-            toast('Successfully updated!', 'success');
-            // Alert::success('Saved successfully!', 'Success Message');
-
-            return redirect()->back();
+            return redirect()->back()->with('toast_success', 'Successfully updated!');
         } catch (\Exception $e) {
-            toast('Failed to update!', 'error');
-            return redirect()->back();
+            return redirect()->back()->with('toast_warning', 'Failed to update!');
         }
     }
 
@@ -111,11 +97,10 @@ class RoleController extends Controller
         $delete = DB::table('roles')->where('id', $id)->delete();
 
         if ($delete) {
-            toast('Successfully deleted!', 'success');
-            return redirect()->back();
+            return redirect()->back()->with('toast_success', 'Successfully deleted!');
         } else {
             toast('Failed to delete!', 'error');
-            return redirect()->back();
+            return redirect()->back()->with('toast_warning', 'Failed to deleted!');
         }
     }
 }
