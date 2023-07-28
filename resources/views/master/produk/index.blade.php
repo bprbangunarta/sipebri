@@ -1,7 +1,13 @@
 @extends('templates.app')
-@section('title', 'Data Kantor')
+@section('title', 'Data Produk')
 
 @section('content')
+
+@php
+use Carbon\Carbon;
+$year = Carbon::now()->year;
+@endphp
+
 <div class="page-body">
     <div class="container-xl">
         <div class="row row-deck row-cards">
@@ -17,7 +23,7 @@
                                         Master
                                     </div>
                                     <h2 class="page-title">
-                                        Data Kantor
+                                        Data Produk
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->
@@ -43,9 +49,9 @@
 
                     <div class="card-body border-bottom py-3" style="margin-top:-7px;">
 
-                        <form action="{{ route('kantor.index') }}" method="GET">
+                        <form action="{{ route('produk.index') }}" method="GET">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Nama Kantor"
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Kode Produk"
                                     value="{{ Request('name') }}">
                                 <button class="btn" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
@@ -68,19 +74,25 @@
                                     <tr>
                                         <th class="text-center" width="3%">No</th>
                                         <th class="text-center" width="7%">Kode</th>
-                                        <th class="text-center">Nama Kantor</th>
-                                        <th class="text-center" width="20%">Created At</th>
-                                        <th class="text-center" width="20%">Updated At</th>
+                                        <th class="text-center">Nama Produk</th>
+                                        <th class="text-center" width="5%">Rate</th>
+                                        <th class="text-center" width="5%">Total</th>
+                                        <th class="text-center" width="5%">{{ $year }}</th>
+                                        <th class="text-center">Created At</th>
+                                        <th class="text-center">Updated At</th>
                                         <th class="text-center" width="5%">Ubah</th>
                                         <th class="text-center" width="5%">Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($kantor as $data)
+                                    @foreach ($produk as $data)
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration + $kantor->firstItem() -1}}</td>
-                                        <td class="text-center">{{ $data->kode_kantor }}</td>
-                                        <td>{{ $data->nama_kantor }}</td>
+                                        <td class="text-center">{{ $loop->iteration + $produk->firstItem() -1}}</td>
+                                        <td class="text-center">{{ $data->kode_produk }}</td>
+                                        <td>{{ $data->nama_produk }}</td>
+                                        <td class="text-center">{{ $data->rate }}%</td>
+                                        <td class="text-center">{{ $data->jumlah_pengajuan }}</td>
+                                        <td class="text-center">{{ $data->reset_nomer }}</td>
                                         <td class="text-center">{{ $data->created_at }}</td>
                                         <td class="text-center">{{ $data->updated_at }}</td>
                                         <td class="text-center">
@@ -130,7 +142,7 @@
                             </table>
                             <p></p>
 
-                            {{ $kantor->links('vendor.pagination.bootstrap-5') }}
+                            {{ $produk->links('vendor.pagination.bootstrap-5') }}
 
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\KantorController;
+use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -49,6 +50,9 @@ Route::middleware('auth')->group(function () {
 
             // Data Kantor
             Route::get('/kantor', [KantorController::class, 'index'])->name('kantor.index');
+
+            // Data Produk
+            Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
         });
     });
 });

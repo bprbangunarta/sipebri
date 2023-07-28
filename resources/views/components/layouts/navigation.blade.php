@@ -26,7 +26,7 @@
 
                     @can('menu master')
                     <li
-                        class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor') ? 'active' :'' }}">
+                        class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor', 'admin/produk') ? 'active' :'' }}">
                         <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
                             data-bs-auto-close="outside" role="button" aria-expanded="false">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -64,6 +64,10 @@
                             <a class="dropdown-item {{ request()->is('admin/kantor') ? 'active' :'' }}"
                                 href="{{ route('kantor.index') }}">
                                 Data Kantor
+                            </a>
+                            <a class="dropdown-item {{ request()->is('admin/produk') ? 'active' :'' }}"
+                                href="{{ route('produk.index') }}">
+                                Data Produk
                             </a>
                         </div>
                     </li>
