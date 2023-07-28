@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\KantorController;
+use App\Http\Controllers\Admin\PekerjaanController;
+use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +55,12 @@ Route::middleware('auth')->group(function () {
 
             // Data Produk
             Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
+
+            // Data Pekerjaan
+            Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
+
+            // Data Pendidikan
+            Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
         });
     });
 });

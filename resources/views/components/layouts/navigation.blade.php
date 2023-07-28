@@ -26,7 +26,7 @@
 
                     @can('menu master')
                     <li
-                        class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor', 'admin/produk') ? 'active' :'' }}">
+                        class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor', 'admin/produk', 'admin/pekerjaan', 'admin/pendidikan') ? 'active' :'' }}">
                         <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
                             data-bs-auto-close="outside" role="button" aria-expanded="false">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -68,6 +68,14 @@
                             <a class="dropdown-item {{ request()->is('admin/produk') ? 'active' :'' }}"
                                 href="{{ route('produk.index') }}">
                                 Data Produk
+                            </a>
+                            <a class="dropdown-item {{ request()->is('admin/pekerjaan') ? 'active' :'' }}"
+                                href="{{ route('pekerjaan.index') }}">
+                                Data Pekerjaan
+                            </a>
+                            <a class="dropdown-item {{ request()->is('admin/pendidikan') ? 'active' :'' }}"
+                                href="{{ route('pendidikan.index') }}">
+                                Data Pendidikan
                             </a>
                         </div>
                     </li>
