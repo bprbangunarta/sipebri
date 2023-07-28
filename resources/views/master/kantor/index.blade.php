@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Data User')
+@section('title', 'Data Kantor')
 
 @section('content')
 <div class="page-body">
@@ -17,7 +17,7 @@
                                         Master
                                     </div>
                                     <h2 class="page-title">
-                                        Data User
+                                        Data Kantor
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->
@@ -43,7 +43,7 @@
 
                     <div class="card-body border-bottom py-3" style="margin-top:-7px;">
 
-                        <form action="{{ route('user.index') }}" method="GET">
+                        <form action="{{ route('kantor.index') }}" method="GET">
                             <div class="input-group mb-2">
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Nama Pengguna" value="{{ Request('name') }}">
@@ -67,42 +67,22 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center" width="3%">No</th>
-                                        <th class="text-center">Nama User</th>
-                                        <th class="text-center">Email</th>
-                                        <th class="text-center">Username</th>
-                                        <th class="text-center">Kode</th>
-                                        <th class="text-center">Kantor</th>
-                                        <th class="text-center">Hak Akses</th>
-                                        <th class="text-center">Status</th>
+                                        <th class="text-center" width="7%">Kode</th>
+                                        <th class="text-center">Nama Kantor</th>
+                                        <th class="text-center" width="20%">Created At</th>
+                                        <th class="text-center" width="20%">Updated At</th>
                                         <th class="text-center" width="5%">Ubah</th>
                                         <th class="text-center" width="5%">Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $data)
+                                    @foreach ($kantor as $data)
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration + $users->firstItem() -1}}</td>
-                                        <td>{{ $data->name }}</td>
-                                        <td>{{ $data->email }}</td>
-                                        <td>{{ $data->username }}</td>
-                                        <td class="text-center">{{ $data->code_user }}</td>
+                                        <td class="text-center">{{ $loop->iteration + $kantor->firstItem() -1}}</td>
+                                        <td class="text-center">{{ $data->kode_kantor }}</td>
                                         <td>{{ $data->nama_kantor }}</td>
-                                        <td>
-                                            @if (empty($data->position))
-                                            <font>-</font>
-                                            @else
-                                            {{ $data->position }}
-                                            @endif
-
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($data->is_active == 1)
-                                            <span class="badge bg-success-lt">Aktif</span>
-                                            @else
-                                            <span class="badge bg-danger-lt">Tidak Aktif</span>
-                                            @endif
-
-                                        </td>
+                                        <td class="text-center">{{ $data->created_at }}</td>
+                                        <td class="text-center">{{ $data->updated_at }}</td>
                                         <td class="text-center">
                                             <a href="#" class="edit">
                                                 <span class="badge bg-warning">
@@ -150,7 +130,7 @@
                             </table>
                             <p></p>
 
-                            {{ $users->links('vendor.pagination.bootstrap-5') }}
+                            {{ $kantor->links('vendor.pagination.bootstrap-5') }}
 
                         </div>
                     </div>
@@ -163,10 +143,10 @@
 
 
 <div class="modal modal-blur fade" id="modal-tambah" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah User</h5>
+                <h5 class="modal-title">Tambah Kantor</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -175,70 +155,19 @@
                 <div class="modal-body">
                     <div class="row">
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Nama Lengkap">
+                                <label class="form-label">Kode Kantor</label>
+                                <input type="text" class="form-control" name="kode_kantor" id="kode_kantor"
+                                    placeholder="PMK">
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Email Address</label>
-                                <input type="email" class="form-control" name="email" id="email"
-                                    placeholder="example@app.com">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                <input type="text" class="form-control" name="username" id="username"
-                                    placeholder="Username">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Kode User</label>
-                                <input type="text" class="form-control" name="code_user" id="code_user"
-                                    placeholder="ZFR">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Kantor</label>
-                                <select class="form-control" name="kantor_kode" id="kantor_kode">
-                                    <option value="">--Pilih Kantor--</option>
-                                    @foreach ($kantor as $data)
-                                    <option value="{{ $data->kode_kantor }}">{{ $data->nama_kantor }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Hak Akses</label>
-                                <select class="form-control" name="role_id" id="role_id">
-                                    <option value="">--Pilih Akses--</option>
-                                    @foreach ($roles as $data)
-                                    <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-control" name="is_active" id="is_active">
-                                    <option value="">--Pilih Status--</option>
-                                    <option value="1">Aktif</option>
-                                    <option value="0">Tidak Aktif</option>
-                                </select>
+                                <label class="form-label">Nama Kantor</label>
+                                <input type="text" class="form-control" name="nama_kantor" id="nama_kantor"
+                                    placeholder="Pamanukan">
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Role Management')
+@section('title', 'Data Role')
 
 @section('content')
 <div class="page-body">
@@ -16,7 +16,7 @@
                                         Master
                                     </div>
                                     <h2 class="page-title">
-                                        Role Management
+                                        Data Role
                                     </h2>
                                 </div>
 
@@ -42,12 +42,6 @@
                     </div>
 
                     <div class="card-body border-bottom py-3" style="margin-top:-7px;">
-
-                        @if (Session::get('warning'))
-                        <div class="alert alert-warning">
-                            {{ Session::get('warning')}}
-                        </div>
-                        @endif
 
                         <form action="{{ route('role.index') }}" method="GET">
                             <div class="input-group mb-2">

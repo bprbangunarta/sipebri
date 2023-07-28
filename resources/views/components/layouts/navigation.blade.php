@@ -25,7 +25,8 @@
                     @endhasanyrole
 
                     @can('menu master')
-                    <li class="nav-item dropdown {{ request()->is('admin/role') ? 'active' :'' }}">
+                    <li
+                        class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor') ? 'active' :'' }}">
                         <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
                             data-bs-auto-close="outside" role="button" aria-expanded="false">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -52,15 +53,17 @@
                             </span>
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                                User List
+                            <a class="dropdown-item {{ request()->is('admin/user') ? 'active' :'' }}"
+                                href="{{ route('user.index') }}">
+                                Data User
                             </a>
                             <a class="dropdown-item {{ request()->is('admin/role') ? 'active' :'' }}"
                                 href="{{ route('role.index') }}">
-                                Role List
+                                Data Role
                             </a>
-                            <a class="dropdown-item" href="#">
-                                Data Wilayah
+                            <a class="dropdown-item {{ request()->is('admin/kantor') ? 'active' :'' }}"
+                                href="{{ route('kantor.index') }}">
+                                Data Kantor
                             </a>
                         </div>
                     </li>
