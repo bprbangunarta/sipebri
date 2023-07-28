@@ -77,8 +77,8 @@
                                         <th class="text-center">Guard Name</th>
                                         <th class="text-center" width="20%">Created At</th>
                                         <th class="text-center" width="20%">Update At</th>
-                                        <th class="text-center" width="5%">Edit</th>
-                                        <th class="text-center" width="5%">Delete</th>
+                                        <th class="text-center" width="5%">Ubah</th>
+                                        <th class="text-center" width="5%">Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>

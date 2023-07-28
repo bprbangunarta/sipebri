@@ -68,13 +68,14 @@
                                     <tr>
                                         <th class="text-center" width="3%">No</th>
                                         <th class="text-center">Nama User</th>
-                                        <th class="text-center">Wilayah</th>
-                                        <th class="text-center">Kode</th>
+                                        <th class="text-center">Email</th>
                                         <th class="text-center">Username</th>
+                                        <th class="text-center">Kode</th>
+                                        <th class="text-center">Kantor</th>
                                         <th class="text-center">Hak Akses</th>
                                         <th class="text-center">Status</th>
-                                        <th class="text-center" width="6%">Edit</th>
-                                        <th class="text-center" width="6%">Hapus</th>
+                                        <th class="text-center" width="5%">Ubah</th>
+                                        <th class="text-center" width="5%">Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,9 +83,10 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration + $users->firstItem() -1}}</td>
                                         <td>{{ $data->name }}</td>
-                                        <td>{{ $data->region }}</td>
-                                        <td class="text-center">{{ $data->code_user }}</td>
+                                        <td>{{ $data->email }}</td>
                                         <td>{{ $data->username }}</td>
+                                        <td class="text-center">{{ $data->code_user }}</td>
+                                        <td>{{ $data->nama_kantor }}</td>
                                         <td>
                                             @if (empty($data->position))
                                             <font>-</font>
@@ -102,7 +104,7 @@
 
                                         </td>
                                         <td class="text-center">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal-edit">
+                                            <a href="#" class="edit">
                                                 <span class="badge bg-warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="icon icon-tabler icon-tabler-edit" width="24" height="24"
@@ -123,8 +125,8 @@
                                         <td class="text-center">
                                             <form action="#" method="POST">
                                                 @csrf
-                                                <a href="#">
-                                                    <span class="badge bg-danger">
+                                                <a href="#" class="delete">
+                                                    <span class=" badge bg-danger">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-trash" width="24"
                                                             height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -199,9 +201,13 @@
 
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label class="form-label">Wilayah</label>
+                                <label class="form-label">Kantor</label>
                                 <select class="form-control" name="wilayah" id="wilayah">
-                                    <option value="">--Pilih Wilayah--</option>
+                                    <option value="">--Pilih Kantor--</option>
+                                    <option value="">--Pilih Akses--</option>
+                                    @foreach ($kantor as $data)
+                                    <option value="{{ $data->id }}">{{ $data->nama_kantor }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -211,15 +217,9 @@
                                 <label class="form-label">Hak Akses</label>
                                 <select class="form-control" name="hak_akses" id="hak_akses">
                                     <option value="">--Pilih Akses--</option>
-                                    <option value="1">Super Admin</option>
-                                    <option value="2">Direktur</option>
-                                    <option value="3">Kabag Administrasi</option>
-                                    <option value="4">Kabag Operasional</option>
-                                    <option value="5">Kepala Kantor</option>
-                                    <option value="6">Kasi Analis</option>
-                                    <option value="7">Head Teller</option>
-                                    <option value="8">Customer Service</option>
-                                    <option value="9">Staff Analis</option>
+                                    @foreach ($roles as $data)
+                                    <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
