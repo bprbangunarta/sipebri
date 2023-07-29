@@ -28,4 +28,8 @@ class UserController extends Controller
 
         return view('master/user.index', compact('users', 'roles', 'kantor'));
     }
+
+    public function store(Request $request){
+        dd($request);
+    }
 }

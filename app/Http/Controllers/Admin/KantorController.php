@@ -20,4 +20,19 @@ class KantorController extends Controller
         $kantor = $query->paginate(10);
         return view('master.kantor.index', compact('kantor'));
     }
+
+    public function store(Request $request){
+        $cek = $request->validate([
+            'kode_kantor' => 'required',
+            'nama_kantor' => 'required'
+        ]);
+
+        if ($cek) {
+            Kantor::create($cek);
+            toast('Your Post as been submited!','success');
+            return redirect()->back();
+        }else{
+            return redirect()->back()->withErrors('error', 'Cek kembali data anda');
+        }
+    }
 }

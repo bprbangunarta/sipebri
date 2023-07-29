@@ -40,7 +40,8 @@ Route::middleware('auth')->group(function () {
         // Admin
         Route::prefix('admin')->group(function () {
             // Data User
-            Route::get('/user', [UserController::class, 'index'])->name('user.index');
+            // Route::get('/user', [UserController::class, 'index'])->name('user.index');
+            Route::resource('user', UserController::class);
 
             // Data Role
             Route::get('/role', [RoleController::class, 'index'])->name('role.index');
@@ -51,7 +52,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
 
             // Data Kantor
-            Route::get('/kantor', [KantorController::class, 'index'])->name('kantor.index');
+            // Route::get('/kantor', [KantorController::class, 'index'])->name('kantor.index');
+            Route::resource('kantor', KantorController::class);
 
             // Data Produk
             Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
