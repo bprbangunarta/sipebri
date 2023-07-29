@@ -74,6 +74,7 @@
                                         <th class="text-center">Kantor</th>
                                         <th class="text-center">Hak Akses</th>
                                         <th class="text-center">Status</th>
+                                        <th class="text-center" width="5%">Akses</th>
                                         <th class="text-center" width="5%">Ubah</th>
                                         <th class="text-center" width="5%">Hapus</th>
                                     </tr>
@@ -102,6 +103,28 @@
                                             <span class="badge bg-danger-lt">Tidak Aktif</span>
                                             @endif
 
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" class="edit" data-bs-toggle="modal"
+                                                data-bs-target="#modal-akses">
+                                                <span class="badge bg-success">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="icon icon-tabler icon-tabler-lock-access" width="24"
+                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M4 8v-2a2 2 0 0 1 2 -2h2"></path>
+                                                        <path d="M4 16v2a2 2 0 0 0 2 2h2"></path>
+                                                        <path d="M16 4h2a2 2 0 0 1 2 2v2"></path>
+                                                        <path d="M16 20h2a2 2 0 0 0 2 -2v-2"></path>
+                                                        <path
+                                                            d="M8 11m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z">
+                                                        </path>
+                                                        <path d="M10 11v-2a2 2 0 1 1 4 0v2"></path>
+                                                    </svg>
+                                                </span>
+                                            </a>
                                         </td>
                                         <td class="text-center">
                                             <a href="#" class="edit">
@@ -207,7 +230,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Kantor</label>
                                 <select class="form-control" name="kantor_kode" id="kantor_kode">
@@ -219,7 +242,57 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" name="is_active" id="is_active">
+                                    <option value="">--Pilih Status--</option>
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
+                    <a href="#" class="btn btn-primary ms-auto">Simpan</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modal-akses" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hak Akses</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="#" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label class="form-label">ID User</label>
+                                <input type="text" class="form-control" name="id" id="id" value="1" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" name="name" id="name" value="Zulfadli Rizal"
+                                    readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
                             <div class="mb-3">
                                 <label class="form-label">Hak Akses</label>
                                 <select class="form-control" name="role_id" id="role_id">
@@ -227,17 +300,6 @@
                                     @foreach ($roles as $data)
                                     <option value="{{ $data->id }}">{{ $data->name }}</option>
                                     @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Status</label>
-                                <select class="form-control" name="is_active" id="is_active">
-                                    <option value="">--Pilih Status--</option>
-                                    <option value="1">Aktif</option>
-                                    <option value="0">Tidak Aktif</option>
                                 </select>
                             </div>
                         </div>
