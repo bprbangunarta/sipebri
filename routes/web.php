@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\KantorController;
+use App\Http\Controllers\Admin\PekerjaanController;
+use App\Http\Controllers\Admin\PendidikanController;
+use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,15 +39,28 @@ Route::middleware('auth')->group(function () {
     Route::middleware('has.role')->group(function () {
         // Admin
         Route::prefix('admin')->group(function () {
-            // Role Management
+            // Data User
+            Route::get('/user', [UserController::class, 'index'])->name('user.index');
+
+            // Data Role
             Route::get('/role', [RoleController::class, 'index'])->name('role.index');
             Route::post('/role/create', [RoleController::class, 'create'])->name('role.create');
-
             Route::post('/role/edit', [RoleController::class, 'edit'])->name('role.edit');
             Route::post('/role/{id}/update', [RoleController::class, 'update'])->name('role.update');
-
             Route::post('/role/delete', [RoleController::class, 'delete'])->name('role.delete');
             Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
+
+            // Data Kantor
+            Route::get('/kantor', [KantorController::class, 'index'])->name('kantor.index');
+
+            // Data Produk
+            Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
+
+            // Data Pekerjaan
+            Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
+
+            // Data Pendidikan
+            Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
         });
     });
 });

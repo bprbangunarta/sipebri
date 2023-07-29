@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Data Role')
+@section('title', 'Data User')
 
 @section('content')
 <div class="page-body">
@@ -12,18 +12,19 @@
                         <div class="container-xl">
                             <div class="row g-2 align-items-center">
                                 <div class="col">
+                                    <!-- Page pre-title -->
                                     <div class="page-pretitle">
                                         Master
                                     </div>
                                     <h2 class="page-title">
-                                        Data Role
+                                        Data User
                                     </h2>
                                 </div>
-
-                                @can('create role')
+                                <!-- Page title actions -->
                                 <div class="col-auto ms-auto d-print-none">
                                     <div class="btn-list">
-                                        <a href="#" class="btn btn-primary" id="btnCreateRole">
+                                        <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#modal-tambah">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-plus" width="24" height="24"
                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -32,21 +33,20 @@
                                                 <path d="M12 5l0 14"></path>
                                                 <path d="M5 12l14 0"></path>
                                             </svg>
-                                            Create
+                                            Tambah
                                         </a>
                                     </div>
                                 </div>
-                                @endcan
                             </div>
                         </div>
                     </div>
 
                     <div class="card-body border-bottom py-3" style="margin-top:-7px;">
 
-                        <form action="{{ route('role.index') }}" method="GET">
+                        <form action="{{ route('user.index') }}" method="GET">
                             <div class="input-group mb-2">
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Role Name"
-                                    value="{{ Request('name') }}">
+                                <input type="text" class="form-control" name="name" id="name"
+                                    placeholder="Nama Pengguna" value="{{ Request('name') }}">
                                 <button class="btn" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -67,24 +67,44 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center" width="3%">No</th>
-                                        <th class="text-center">Role Name</th>
-                                        <th class="text-center">Guard Name</th>
-                                        <th class="text-center" width="20%">Created At</th>
-                                        <th class="text-center" width="20%">Update At</th>
+                                        <th class="text-center">Nama User</th>
+                                        <th class="text-center">Email</th>
+                                        <th class="text-center">Username</th>
+                                        <th class="text-center">Kode</th>
+                                        <th class="text-center">Kantor</th>
+                                        <th class="text-center">Hak Akses</th>
+                                        <th class="text-center">Status</th>
                                         <th class="text-center" width="5%">Ubah</th>
                                         <th class="text-center" width="5%">Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($roles as $role)
+                                    @foreach ($users as $data)
                                     <tr>
-                                        <td class="text-center">{{ $loop->iteration + $roles->firstItem() -1}}</td>
-                                        <td>{{ $role->name }}</td>
-                                        <td>{{ $role->guard_name }}</td>
-                                        <td class="text-center">{{ $role->created_at }}</td>
-                                        <td class="text-center">{{ $role->updated_at }}</td>
+                                        <td class="text-center">{{ $loop->iteration + $users->firstItem() -1}}</td>
+                                        <td>{{ $data->name }}</td>
+                                        <td>{{ $data->email }}</td>
+                                        <td>{{ $data->username }}</td>
+                                        <td class="text-center">{{ $data->code_user }}</td>
+                                        <td>{{ $data->nama_kantor }}</td>
+                                        <td>
+                                            @if (empty($data->position))
+                                            <font>-</font>
+                                            @else
+                                            {{ $data->position }}
+                                            @endif
+
+                                        </td>
                                         <td class="text-center">
-                                            <a href="#" class="edit" role_id="{{ $role->id }}">
+                                            @if ($data->is_active == 1)
+                                            <span class="badge bg-success-lt">Aktif</span>
+                                            @else
+                                            <span class="badge bg-danger-lt">Tidak Aktif</span>
+                                            @endif
+
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" class="edit">
                                                 <span class="badge bg-warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="icon icon-tabler icon-tabler-edit" width="24" height="24"
@@ -103,10 +123,10 @@
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            <form action="/admin/role/{{ $role->id }}/delete" method="POST">
+                                            <form action="#" method="POST">
                                                 @csrf
-                                                <a href="#" class="delete" role_id="{{ $role->id }}">
-                                                    <span class="badge bg-danger">
+                                                <a href="#" class="delete">
+                                                    <span class=" badge bg-danger">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-trash" width="24"
                                                             height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -130,7 +150,7 @@
                             </table>
                             <p></p>
 
-                            {{ $roles->links('vendor.pagination.bootstrap-5') }}
+                            {{ $users->links('vendor.pagination.bootstrap-5') }}
 
                         </div>
                     </div>
@@ -142,132 +162,94 @@
 </div>
 
 
-<div class="modal modal-blur fade" id="modalCreateRole" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
+<div class="modal modal-blur fade" id="modal-tambah" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Role</h5>
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                <h5 class="modal-title">Tambah User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="{{ route('role.create') }}" method="POST" id="formCreateRole">
+            <form action="#" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
 
-                        <div class="col-lg-12">
-                            <label class="form-label">Role Name</label>
-                            <div class="input-icon mb-3">
-                                <input type="text" class="form-control @error('name') 
-                                is-invalid
-                                @enderror" name="name" id="name" value="{{ old('name') }}">
-                                @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" name="name" id="name"
+                                    placeholder="Nama Lengkap">
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
-                            <label class="form-label">Guard Name</label>
-                            <div class="input-icon mb-3">
-                                <input type="text" class="form-control @error('guard_name') 
-                                is-invalid
-                                @enderror" name="guard_name" id="guard_name" value="{{ old('guard_name') }}">
-                                @error('guard_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="example@app.com">
                             </div>
                         </div>
 
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" name="username" id="username"
+                                    placeholder="Username">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Kode User</label>
+                                <input type="text" class="form-control" name="code_user" id="code_user"
+                                    placeholder="ZFR">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Kantor</label>
+                                <select class="form-control" name="kantor_kode" id="kantor_kode">
+                                    <option value="">--Pilih Kantor--</option>
+                                    @foreach ($kantor as $data)
+                                    <option value="{{ $data->kode_kantor }}">{{ $data->nama_kantor }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Hak Akses</label>
+                                <select class="form-control" name="role_id" id="role_id">
+                                    <option value="">--Pilih Akses--</option>
+                                    @foreach ($roles as $data)
+                                    <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" name="is_active" id="is_active">
+                                    <option value="">--Pilih Status--</option>
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Close</a>
-                    <button type="submit" class="btn btn-primary ms-auto">Create</button>
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
+                    <a href="#" class="btn btn-primary ms-auto">Simpan</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-<div class="modal modal-blur fade" id="modalEditRole" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Role</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div id="loadeditform"></div>
-        </div>
-    </div>
-</div>
-
-<div class="modal modal-blur fade" id="modalDeleteRole" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-            <div class="modal-status bg-danger"></div>
-            <div id="loaddeleteform"></div>
-
-        </div>
-    </div>
-</div>
 @endsection
-
-@push('myscript')
-<script>
-    $(function() {
-        $("#btnCreateRole").click(function() {
-            $("#modalCreateRole").modal("show");
-        });
-
-        $(".edit").click(function() {
-            var role_id = $(this).attr('role_id');
-            $.ajax({
-                type: 'POST',
-                url: '/admin/role/edit',
-                cache: false,
-                data: {
-                    _token: "{{ csrf_token(); }}",
-                    role_id: role_id
-                },
-                success: function(respond) {
-                    $("#loadeditform").html(respond);
-                }
-            });
-            $("#modalEditRole").modal("show");
-        });
-
-        $(".delete").click(function() {
-            var role_id = $(this).attr('role_id');
-            $.ajax({
-                type: 'POST',
-                url: '/admin/role/delete',
-                cache: false,
-                data: {
-                    _token: "{{ csrf_token(); }}",
-                    role_id: role_id
-                },
-                success: function(respond) {
-                    $("#loaddeleteform").html(respond);
-                }
-            });
-            $("#modalDeleteRole").modal("show");
-        });
-
-        $("#formCreateRole").submit(function() {
-            var name       = $("#name").val();
-            var guard_name = $("#guard_name").val();
-
-            // if (name == "") {
-            //     $("#name").focus();
-            //     return false;
-            // }
-        });
-
-    });
-</script>
-@endpush

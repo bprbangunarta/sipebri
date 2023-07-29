@@ -46,7 +46,7 @@
 
 </head>
 
-<body>
+<body class="layout-fluid">
   <script src="{{ asset('tabler/dist/js/demo-theme.min.js?1674944402') }}"></script>
 
   @include('sweetalert::alert')
