@@ -14,10 +14,66 @@ class PekerjaanController extends Controller
         $query->select('*');
 
         if (!empty($request->name)) {
-            $query->where('nama_pekerjaan', 'like', '%' . $request->name . '%');
+            // $query->where('nama_pekerjaan', 'like', '%' . $request->name . '%');
+             $query->where('nama_pekerjaan', 'like', '%' . $request->name . '%')
+                ->orderBy('kode_pekerjaan', 'asc');
         }
 
+        //Ascending berdasarkan Kode Pekerjaan
+        $query->where('nama_pekerjaan', 'like', '%' . $request->name . '%')
+                ->orderBy('kode_pekerjaan', 'asc');
+                
         $pekerjaan = $query->paginate(10);
         return view('master.pekerjaan.index', compact('pekerjaan'));
+    }
+
+    public function store(Request $request){
+         $cek = $request->validate([
+            'kode_pekerjaan' => 'required',
+            'nama_pekerjaan' => 'required'
+        ]);
+
+        $cek['nama_pekerjaan'] = ucfirst($cek['nama_pekerjaan']); //kapital hanya depan saja
+
+        if ($cek) {
+            Pekerjaan::create($cek);
+            toast('Your Post as been submited!','success');
+            return redirect()->back();
+        }else{
+            return redirect()->back()->withErrors('error', 'Cek kembali data anda');
+        }
+    }
+
+    public function edit(Request $request, $id){
+        $data = Pekerjaan::where('kode_pekerjaan', $id)->get();
+        return response()->json($data);
+    }
+
+    public function update(Request $request, $job){
+        $cek = $request->validate([
+            'kode_pekerjaan' => 'required',
+            'nama_pekerjaan' => 'required'
+        ]);
+
+        $cek['nama_pekerjaan'] = ucfirst($cek['nama_pekerjaan']); //kapital hanya depan saja
+
+        if ($cek) {
+            Pekerjaan::where('kode_pekerjaan', $job)
+                    ->update($cek);
+            return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
+        }else{
+            return response()->json(['status' => 'error', 'message' => 'Data gagal diubah']);
+        }
+        
+    }
+
+    public function destroy(Request $request, $job){
+        $data = Pekerjaan::where('kode_pekerjaan', $job)->get();
+        if ($data) {
+            Pekerjaan::destroy($data[0]->id);
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        }else{
+            return redirect()->back()->with('error', 'Data gagal dihapus');
+        }
     }
 }

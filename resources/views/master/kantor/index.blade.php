@@ -85,7 +85,8 @@
                                                 <td class="text-center">{{ $data->created_at }}</td>
                                                 <td class="text-center">{{ $data->updated_at }}</td>
                                                 <td class="text-center">
-                                                    <a href="#" class="edit">
+                                                    <a href="" data-bs-toggle="modal" data-bs-target="#modal-edit"
+                                                        data-id="{{ $data->kode_kantor }}">
                                                         <span class="badge bg-warning">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="icon icon-tabler icon-tabler-edit" width="24"
@@ -106,9 +107,13 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <form action="#" method="POST">
+                                                    <form
+                                                        action="{{ route('kantor.destroy', ['kantor' => $data->kode_kantor]) }}"
+                                                        method="POST">
+                                                        @method('delete')
                                                         @csrf
-                                                        <a href="#" class="delete">
+                                                        <button type="submit"
+                                                            style="border: none; background: transparent;">
                                                             <span class=" badge bg-danger">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="icon icon-tabler icon-tabler-trash"
@@ -127,7 +132,7 @@
                                                                     </path>
                                                                 </svg>
                                                             </span>
-                                                        </a>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -186,4 +191,80 @@
             </div>
         </div>
     </div>
+
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Kantor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form action="{{ route('kantor.update', ['kantor' => $data->kode_kantor]) }}" method="post">
+                    @method('put')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Kode Kantor</label>
+                                    <input type="text" class="form-control" name="kode_kantor" id="kode_kan">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Kantor</label>
+                                    <input type="text" class="form-control" name="nama_kantor" id="nama_kan">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
+                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
+                        {{-- <a href="#" class="btn btn-primary ms-auto">Simpan</a> --}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+
+            $("#modal-edit").on("show.bs.modal", function(event) {
+                $('#status_wil').empty()
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var id = button.data("id"); // Ambil data-id dari tombol
+
+                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+                $.ajax({
+                    url: "/admin/kantor/" + id + "/edit",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        // Isi modal dengan data yang diterima
+                        var da = JSON.stringify(response)
+                        var data = JSON.parse(da)
+                        var hasil = data[0]
+                        var kode = hasil.kode_kantor
+                        var nama = hasil.nama_kantor
+
+                        var kapital = kode.toUpperCase()
+                        $("#kode_kan").val(kapital);
+
+                        var kap = nama.charAt(0).toUpperCase() + nama.slice(1);
+                        $("#nama_kan").val(kap);
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
+            });
+        });
+    </script>
 @endsection

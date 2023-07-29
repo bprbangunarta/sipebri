@@ -9,4 +9,13 @@ class Kantor extends Model
 {
     use HasFactory;
     protected $table = 'data_kantor';
+    protected $fillable = [
+        'kode_kantor',
+        'nama_kantor',
+    ];
+
+    public function getRouteKeyName()
+    {
+        return 'kantor';
+    }
 }

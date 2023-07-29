@@ -59,8 +59,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
 
             // Data Pekerjaan
-            Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
-
+            // Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
+            Route::resource('pekerjaan', PekerjaanController::class);
+            
             // Data Pendidikan
             Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
         });

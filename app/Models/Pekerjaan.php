@@ -9,4 +9,13 @@ class Pekerjaan extends Model
 {
     use HasFactory;
     protected $table = 'data_pekerjaan';
+    protected $fillable = [
+        'kode_pekerjaan',
+        'nama_pekerjaan',
+    ];
+
+    public function getRouteKeyName()
+    {
+        return 'job';
+    }
 }
