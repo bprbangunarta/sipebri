@@ -117,7 +117,7 @@
                                                         @method('delete')
                                                         @csrf
                                                         <button type="submit"
-                                                            style="border: none; background: transparent; margin-top: 15px;"
+                                                            style="border: none; background: transparent;"
                                                             class="ms-auto">
                                                             <span class=" badge bg-danger">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"

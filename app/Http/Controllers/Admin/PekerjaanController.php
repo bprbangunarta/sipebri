@@ -29,7 +29,7 @@ class PekerjaanController extends Controller
 
     public function store(Request $request){
          $cek = $request->validate([
-            'kode_pekerjaan' => 'required',
+            'kode_pekerjaan' => 'required|unique:data_pekerjaan,kode_pekerjaan',
             'nama_pekerjaan' => 'required'
         ]);
 
@@ -58,7 +58,8 @@ class PekerjaanController extends Controller
         $cek['nama_pekerjaan'] = ucfirst($cek['nama_pekerjaan']); //kapital hanya depan saja
 
         if ($cek) {
-            Pekerjaan::where('kode_pekerjaan', $job)
+            $data = Pekerjaan::where('kode_pekerjaan', $job)->get();
+            Pekerjaan::where('id', $data[0]->id)
                     ->update($cek);
             return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
         }else{

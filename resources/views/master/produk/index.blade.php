@@ -1,6 +1,7 @@
 @extends('templates.app')
 @section('title', 'Data Produk')
-
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
 @section('content')
 
     @php
@@ -211,7 +212,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="" method="POST" id="formEdit">
+                <form action="{{ route('produk.update', ['produk' => $data->kode_produk]) }}" method="POST"
+                    id="formEdit">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -227,6 +230,9 @@
                                 <div class="mb-3">
                                     <label class="form-label">Nama Produk</label>
                                     <input type="text" class="form-control" name="nama_produk" id="nama_pro">
+                                    <input type="text" class="form-control" name="rate" id="rate" hidden>
+                                    <input type="text" class="form-control" name="jumlah_pengajuan"
+                                        id="jumlah_pengajuan" hidden>
                                 </div>
                             </div>
                         </div>
@@ -241,89 +247,5 @@
         </div>
     </div>
 
-
-    <script>
-        $(document).ready(function() {
-            $("#modal-edit").on("show.bs.modal", function(event) {
-                var button = $(event.relatedTarget); // Tombol yang membuka modal
-                var id = button.data("id"); // Ambil data-id dari tombol
-
-                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-                $.ajax({
-                    url: "/admin/produk/" + id + "/edit",
-                    type: "GET",
-                    dataType: "json",
-                    success: function(response) {
-                        // Isi modal dengan data yang diterima
-                        var da = JSON.stringify(response)
-                        var data = JSON.parse(da)
-                        var hasil = data[0]
-                        var kode = hasil.kode_produk
-                        var nama = hasil.nama_produk
-
-                        $("#kode_pro").val(kode);
-                        $("#nama_pro").val(nama);
-
-                    },
-                    error: function(xhr, status, error) {
-                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                        console.error("Error:", xhr.responseText);
-                    },
-                });
-            });
-
-            //Simpan
-            $('#formEdit').submit(function(e) {
-                e.preventDefault();
-                var kode = $('#kode_pro').val();
-                var nama = $('#nama_pro').val();
-
-                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-                $.ajax({
-                    url: "/admin/produk/" + kode,
-                    method: "put",
-                    dataType: "json",
-                    data: {
-                        kode_produk: kode,
-                        nama_produk: nama,
-                        rate: 0,
-                        jumlah_pengajuan: 0,
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(response) {
-                        // Tangani respon sukses dari server
-                        if (response.status === "success") {
-                            Swal.fire({
-                                title: 'Succes',
-                                text: 'Data berhasil diupdate',
-                                icon: 'success', // success, error, warning, info, question
-                                confirmButtonText: 'OK'
-                            }).then(function() {
-                                $("#modal-edit").hide();
-                                location.reload();
-                            });
-                        } else if (response.status === "error") {
-                            // Jika error, tampilkan SweetAlert error
-                            Swal.fire({
-                                icon: "error",
-                                title: "Data anda gagal diupdate",
-                                text: response.message
-                            });
-                        }
-                        console.log(response)
-                    },
-                    error: function(xhr, status, error) {
-                        // Tangani kesalahan pada AJAX request (jika terjadi)
-                        // Tampilkan SweetAlert error
-                        Swal.fire({
-                            icon: "error",
-                            title: "Kesalahan!",
-                            text: "Terjadi kesalahan saat mengirim permintaan ke server."
-                        });
-                    }
-                });
-            })
-
-        });
-    </script>
+    <script src="{{ asset('assets/js/myscript/produk.js') }}"></script>
 @endsection

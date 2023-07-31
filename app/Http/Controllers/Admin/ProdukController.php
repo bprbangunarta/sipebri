@@ -22,12 +22,12 @@ class ProdukController extends Controller
     }
 
     public function store(Request $request){
+
         $cek = $request->validate([
-            'kode_produk' => 'required|max:3',
+            'kode_produk' => 'required|max:3|unique:data_produk,kode_produk',
             'nama_produk' => 'required',
         ]);
 
-        $cek['kode_produk'] = strtoupper($cek['kode_produk']); //Kapital semua
         $cek['nama_produk'] = ucfirst($cek['nama_produk']); //kapital hanya depan saja
 
         $cek ['rate'] = 0;
@@ -48,26 +48,33 @@ class ProdukController extends Controller
     }
 
     public function update(Request $request, $produk){
-         
+        
         $cek = $request->validate([
             'kode_produk' => 'required|max:3',
             'nama_produk' => 'required',
-            'rate' => 'required',
-            'jumlah_pengajuan' => 'required',
         ]);
        
+        if(is_null($request->rate)){
+            $cek ['rate'] = 0;
+        }else{
+           $cek ['rate'] = $request->rate;
+        }
+
+        if(is_null($request->jumlah_pengajuan)){
+            $cek ['jumlah_pengajuan'] = 0;
+        }else{
+           $cek ['jumlah_pengajuan'] = $request->rate;
+        }
+
         $cek['kode_produk'] = strtoupper($cek['kode_produk']); //Kapital semua
         $cek['nama_produk'] = ucfirst($cek['nama_produk']); //kapital hanya depan saja
-        $cek ['rate'] = 0;
-        $cek ['jumlah_pengajuan'] = 0;
-    
         
         if ($cek) {
-            Produk::where('kode_produk', $produk)
-                    ->update($cek);
-            return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
+            $data = Produk::where('kode_produk', $produk)->get();
+            Produk::where('id', $data[0]->id)->update($cek);
+            return redirect()->back()->with('success', 'Data berhasil diubah');
         }else{
-            return response()->json(['status' => 'error', 'message' => 'Data gagal diubah']);
+            return redirect()->back()->with('error', 'Data gagal diubah');
         }
     }
     

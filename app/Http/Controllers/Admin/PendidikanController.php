@@ -27,14 +27,14 @@ class PendidikanController extends Controller
 
     public function store(Request $request){
         $cek = $request->validate([
-            'kode_pendidikan' => 'required',
+            'kode_pendidikan' => 'required|unique:data_pendidikan,kode_pendidikan',
             'nama_pendidikan' => 'required',
         ]);
         
         $cek['nama_pendidikan'] = strtoupper($cek['nama_pendidikan']); //Kapital semua
         if ($cek) {
             Pendidikan::create($cek);
-            toast('Your Post as been submited!','success');
+            toast('Data berhasil ditambahkan','success');
             return redirect()->back();
         }else{
             return redirect()->back()->withErrors('error', 'Cek kembali data anda');
@@ -56,11 +56,12 @@ class PendidikanController extends Controller
          $cek['nama_pendidikan'] = ucfirst($cek['nama_pendidikan']); //kapital hanya depan saja
 
         if ($cek) {
-            Pendidikan::where('kode_pendidikan', $pendidikan)
+            $data = Pendidikan::where('kode_pendidikan', $pendidikan)->get();
+            Pendidikan::where('id', $data[0]->id)
                     ->update($cek);
-            return redirect()->back()->with('success');
+            return redirect()->back()->with('success', 'Data berhasil diupdate');
         }else{
-            return redirect()->back()->with('error');
+            return redirect()->back()->with('error', 'Data gagal diupdate');
         }
     }
 
