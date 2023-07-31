@@ -9,4 +9,13 @@ class Pendidikan extends Model
 {
     use HasFactory;
     protected $table = 'data_pendidikan';
+    protected $fillable = [
+            'kode_pendidikan',
+            'nama_pendidikan',
+        ];
+
+    public function getRouteKeyName()
+    {
+        return 'pendidikan';
+    }
 }

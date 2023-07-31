@@ -119,9 +119,13 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <form action="#" method="POST">
+                                                    <form
+                                                        action="{{ route('produk.destroy', ['produk' => $data->kode_produk]) }}"
+                                                        method="POST">
+                                                        @method('delete')
                                                         @csrf
-                                                        <a href="#" class="delete">
+                                                        <button type="submit"
+                                                            style="border: none; background: transparent;">
                                                             <span class=" badge bg-danger">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="icon icon-tabler icon-tabler-trash"
@@ -140,7 +144,7 @@
                                                                     </path>
                                                                 </svg>
                                                             </span>
-                                                        </a>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -203,7 +207,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Pekerjaan</h5>
+                    <h5 class="modal-title">Edit Produk</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -237,43 +241,6 @@
         </div>
     </div>
 
-    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Produk</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form action="{{ route('produk.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Kode Produk</label>
-                                    <input type="text" class="form-control" name="kode_produk" id="kode_pro">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Produk</label>
-                                    <input type="text" class="form-control" name="nama_produk" id="nama_pro">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <script>
         $(document).ready(function() {
@@ -334,7 +301,6 @@
                             }).then(function() {
                                 $("#modal-edit").hide();
                                 location.reload();
-                                console.log(response)
                             });
                         } else if (response.status === "error") {
                             // Jika error, tampilkan SweetAlert error
@@ -348,7 +314,6 @@
                     },
                     error: function(xhr, status, error) {
                         // Tangani kesalahan pada AJAX request (jika terjadi)
-                        console.error(error);
                         // Tampilkan SweetAlert error
                         Swal.fire({
                             icon: "error",

@@ -64,7 +64,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('pekerjaan', PekerjaanController::class);
             
             // Data Pendidikan
-            Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
+            // Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
+            Route::resource('/pendidikan', PendidikanController::class);
         });
     });
 });

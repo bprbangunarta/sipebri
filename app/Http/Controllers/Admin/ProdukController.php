@@ -23,7 +23,7 @@ class ProdukController extends Controller
 
     public function store(Request $request){
         $cek = $request->validate([
-            'kode_produk' => 'required',
+            'kode_produk' => 'required|max:3',
             'nama_produk' => 'required',
         ]);
 
@@ -50,7 +50,7 @@ class ProdukController extends Controller
     public function update(Request $request, $produk){
          
         $cek = $request->validate([
-            'kode_produk' => 'required',
+            'kode_produk' => 'required|max:3',
             'nama_produk' => 'required',
             'rate' => 'required',
             'jumlah_pengajuan' => 'required',
@@ -60,6 +60,7 @@ class ProdukController extends Controller
         $cek['nama_produk'] = ucfirst($cek['nama_produk']); //kapital hanya depan saja
         $cek ['rate'] = 0;
         $cek ['jumlah_pengajuan'] = 0;
+    
         
         if ($cek) {
             Produk::where('kode_produk', $produk)
@@ -67,6 +68,16 @@ class ProdukController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
         }else{
             return response()->json(['status' => 'error', 'message' => 'Data gagal diubah']);
+        }
+    }
+    
+    public function destroy($produk){
+        $data = Produk::where('kode_produk', $produk)->get();
+        if ($data) {
+            Produk::destroy($data[0]->id);
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        }else{
+            return redirect()->back()->with('error', 'Data gagal dihapus');
         }
     }
 }
