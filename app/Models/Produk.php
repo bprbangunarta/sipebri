@@ -9,4 +9,15 @@ class Produk extends Model
 {
     use HasFactory;
     protected $table = 'data_produk';
+    protected $fillable = [
+            'kode_produk',
+            'nama_produk',
+            'rate',
+            'jumlah_pengajuan',
+        ];
+
+    public function getRouteKeyName()
+    {
+        return 'produk';
+    }
 }
