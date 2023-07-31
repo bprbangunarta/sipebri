@@ -1,9 +1,6 @@
 @extends('templates.app')
 @section('title', 'Data Pendidikan')
-<!-- Jquery -->
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-    crossorigin="anonymous"></script>
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">

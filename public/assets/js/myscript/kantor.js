@@ -1,11 +1,12 @@
 $(document).ready(function () {
     $("#modal-edit").on("show.bs.modal", function (event) {
+        $("#status_wil").empty();
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/admin/produk/" + id + "/edit",
+            url: "/admin/kantor/" + id + "/edit",
             type: "GET",
             dataType: "json",
             success: function (response) {
@@ -13,11 +14,14 @@ $(document).ready(function () {
                 var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];
-                var kode = hasil.kode_produk;
-                var nama = hasil.nama_produk;
+                var kode = hasil.kode_kantor;
+                var nama = hasil.nama_kantor;
 
-                $("#kode_pro").val(kode);
-                $("#nama_pro").val(nama);
+                var kapital = kode.toUpperCase();
+                $("#kode_kan").val(kapital);
+
+                var kap = nama.charAt(0).toUpperCase() + nama.slice(1);
+                $("#nama_kan").val(kap);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

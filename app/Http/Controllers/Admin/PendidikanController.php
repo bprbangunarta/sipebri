@@ -46,7 +46,7 @@ class PendidikanController extends Controller
         return response()->json($data);
     }
 
-    public function update(Request $request, $pendidikan){
+    public function update(Request $request){
        
         $cek = $request->validate([
             'kode_pendidikan' => 'required',
@@ -56,7 +56,7 @@ class PendidikanController extends Controller
          $cek['nama_pendidikan'] = ucfirst($cek['nama_pendidikan']); //kapital hanya depan saja
 
         if ($cek) {
-            $data = Pendidikan::where('kode_pendidikan', $pendidikan)->get();
+            $data = Pendidikan::where('kode_pendidikan', $request->kode_pendidikan)->get();
             Pendidikan::where('id', $data[0]->id)
                     ->update($cek);
             return redirect()->back()->with('success', 'Data berhasil diupdate');

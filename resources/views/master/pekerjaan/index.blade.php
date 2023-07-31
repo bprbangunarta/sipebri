@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Data Pekerjaan')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -200,7 +200,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="" method="POST" id="formEdit">
+                <form action="{{ route('pekerjaan.update', ['pekerjaan' => $data->kode_pekerjaan]) }}" method="POST"
+                    id="formEdit">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -229,92 +231,5 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-
-            $("#modal-edit").on("show.bs.modal", function(event) {
-                var button = $(event.relatedTarget); // Tombol yang membuka modal
-                var id = button.data("id"); // Ambil data-id dari tombol
-
-                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-                $.ajax({
-                    url: "/admin/pekerjaan/" + id + "/edit",
-                    type: "GET",
-                    dataType: "json",
-                    success: function(response) {
-                        // Isi modal dengan data yang diterima
-                        var da = JSON.stringify(response)
-                        var data = JSON.parse(da)
-                        var hasil = data[0]
-                        var kode = hasil.kode_pekerjaan
-                        var nama = hasil.nama_pekerjaan
-
-                        var kapital = kode.toUpperCase()
-                        $("#kode_pek").val(kapital);
-
-                        var kap = nama.charAt(0).toUpperCase() + nama.slice(1);
-                        $("#nama_pek").val(kap);
-
-                    },
-                    error: function(xhr, status, error) {
-                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                        console.error("Error:", xhr.responseText);
-                    },
-                });
-            });
-
-            //Simpan
-            $('#formEdit').submit(function(e) {
-                e.preventDefault();
-                var kode = $('#kode_pek').val();
-                var nama = $('#nama_pek').val();
-
-                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-                $.ajax({
-                    url: "/admin/pekerjaan/" + kode,
-                    method: "put",
-                    dataType: "json",
-                    data: {
-                        kode_pekerjaan: kode,
-                        nama_pekerjaan: nama,
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(response) {
-                        // Tangani respon sukses dari server
-                        if (response.status === "success") {
-                            Swal.fire({
-                                title: 'Succes',
-                                text: 'Data berhasil diupdate',
-                                icon: 'success', // success, error, warning, info, question
-                                confirmButtonText: 'OK'
-                            }).then(function() {
-                                $("#modal-edit").hide();
-                                location.reload();
-                                console.log(response)
-                            });
-                        } else if (response.status === "error") {
-                            // Jika error, tampilkan SweetAlert error
-                            Swal.fire({
-                                icon: "error",
-                                title: "Kesalahan!",
-                                text: response.message
-                            });
-                        }
-
-                    },
-                    error: function(xhr, status, error) {
-                        // Tangani kesalahan pada AJAX request (jika terjadi)
-                        console.error(error);
-                        // Tampilkan SweetAlert error
-                        Swal.fire({
-                            icon: "error",
-                            title: "Kesalahan!",
-                            text: "Terjadi kesalahan saat mengirim permintaan ke server."
-                        });
-                    }
-                });
-            })
-
-        });
-    </script>
+    <script src="{{ asset('assets/js/myscript/pekerjaan.js') }}"></script>
 @endsection

@@ -49,7 +49,8 @@ class PekerjaanController extends Controller
         return response()->json($data);
     }
 
-    public function update(Request $request, $job){
+    public function update(Request $request){
+    
         $cek = $request->validate([
             'kode_pekerjaan' => 'required',
             'nama_pekerjaan' => 'required'
@@ -58,12 +59,12 @@ class PekerjaanController extends Controller
         $cek['nama_pekerjaan'] = ucfirst($cek['nama_pekerjaan']); //kapital hanya depan saja
 
         if ($cek) {
-            $data = Pekerjaan::where('kode_pekerjaan', $job)->get();
+            $data = Pekerjaan::where('kode_pekerjaan', $request->kode_pekerjaan)->get();
             Pekerjaan::where('id', $data[0]->id)
                     ->update($cek);
-            return response()->json(['status' => 'success', 'message' => 'Data berhasil diubah']);
+            return redirect()->back()->with('success', 'Data berhasil diubah');
         }else{
-            return response()->json(['status' => 'error', 'message' => 'Data gagal diubah']);
+            return redirect()->back()->with('error', 'Data gagal diubah');
         }
         
     }

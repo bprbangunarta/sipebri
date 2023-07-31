@@ -5,7 +5,7 @@ $(document).ready(function () {
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/admin/produk/" + id + "/edit",
+            url: "/admin/pekerjaan/" + id + "/edit",
             type: "GET",
             dataType: "json",
             success: function (response) {
@@ -13,11 +13,14 @@ $(document).ready(function () {
                 var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];
-                var kode = hasil.kode_produk;
-                var nama = hasil.nama_produk;
+                var kode = hasil.kode_pekerjaan;
+                var nama = hasil.nama_pekerjaan;
 
-                $("#kode_pro").val(kode);
-                $("#nama_pro").val(nama);
+                var kapital = kode.toUpperCase();
+                $("#kode_pek").val(kapital);
+
+                var kap = nama.charAt(0).toUpperCase() + nama.slice(1);
+                $("#nama_pek").val(kap);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

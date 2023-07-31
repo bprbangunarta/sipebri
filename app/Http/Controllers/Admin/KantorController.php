@@ -47,7 +47,7 @@ class KantorController extends Controller
         return response()->json($data);
     }
 
-    public function update(Request $request, $kantor){
+    public function update(Request $request){
 
         $cek = $request->validate([
             'kode_kantor' => 'required',
@@ -58,8 +58,8 @@ class KantorController extends Controller
         $cek['nama_kantor'] = ucfirst($cek['nama_kantor']); //kapital hanya depan saja
 
         if ($cek) {
-            $data = Kantor::where('kode_kantor', $kantor)->get();
-            Kantor::where('id', $data[0]->kode_kantor)
+            $data = Kantor::where('kode_kantor',$request->kode_kantor)->get();
+            Kantor::where('id', $data[0]->id)
                     ->update($cek);
             return redirect()->back()->with('success', 'Data berhasil diupdate');
         }else{

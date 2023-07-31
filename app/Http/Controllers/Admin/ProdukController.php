@@ -47,7 +47,7 @@ class ProdukController extends Controller
         return response()->json($data);
     }
 
-    public function update(Request $request, $produk){
+    public function update(Request $request){
         
         $cek = $request->validate([
             'kode_produk' => 'required|max:3',
@@ -70,7 +70,7 @@ class ProdukController extends Controller
         $cek['nama_produk'] = ucfirst($cek['nama_produk']); //kapital hanya depan saja
         
         if ($cek) {
-            $data = Produk::where('kode_produk', $produk)->get();
+            $data = Produk::where('kode_produk', $request->kode_produk)->get();
             Produk::where('id', $data[0]->id)->update($cek);
             return redirect()->back()->with('success', 'Data berhasil diubah');
         }else{
