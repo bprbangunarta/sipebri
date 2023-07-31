@@ -22,9 +22,7 @@ use App\Http\Controllers\Admin\UserController;
 */
 
 Route::get('/', function () {
-    // $role = Role::whereName('direksi')->first();
-    // dd($role->givePermissionTo('lihat pendaftaran'));
-    return view('welcome');
+    return redirect('login');
 });
 
 Route::get('/dashboard', function () {
@@ -62,7 +60,7 @@ Route::middleware('auth')->group(function () {
             // Data Pekerjaan
             // Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
             Route::resource('pekerjaan', PekerjaanController::class);
-            
+
             // Data Pendidikan
             // Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
             Route::resource('/pendidikan', PendidikanController::class);
