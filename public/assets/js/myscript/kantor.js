@@ -9,6 +9,7 @@ $(document).ready(function () {
             url: "/admin/kantor/" + id + "/edit",
             type: "GET",
             dataType: "json",
+            cache: false,
             success: function (response) {
                 // Isi modal dengan data yang diterima
                 var da = JSON.stringify(response);
