@@ -23,7 +23,7 @@
                                 <!-- Page title actions -->
                                 <div class="col-auto ms-auto d-print-none">
                                     <div class="btn-list">
-                                        <a href="/pendaftaran" class="btn btn-primary">
+                                        <a href="{{ route('pendaftaran.index') }}" class="btn btn-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24"
                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -74,18 +74,52 @@
 
                                         <div class="row g-3">
                                             <div class="col-md">
+                                                <div class="form-label">No CIF</div>
+                                                <input type="text" class="form-control" name="no_cif" id="no_cif"
+                                                    placeholder="001XXXXX" disabled>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">Jenis ID</div>
+                                                <select type="text" class="form-select" placeholder="Pilih Identitas"
+                                                    name="identitas" id="select-identitas">
+                                                    <option value="">Pilih Identitas</option>
+                                                    <option value="1">KTP</option>
+                                                    <option value="2">SIM</option>
+                                                    <option value="3">Pasport</option>
+                                                    <option value="9">Lainnya</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md">
                                                 <div class="form-label">No Identitas</div>
                                                 <input type="text" class="form-control" name="no_identitas"
-                                                    id="no_identitas">
+                                                    id="no_identitas" placeholder="3213XXXXX">
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">Masa Identitas</div>
+                                                <input type="date" class="form-control" name="masa_identitas"
+                                                    id="masa_identitas">
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div class="row g-3">
+                                            <div class="col-md">
+                                                <div class="form-label">Nama Panggilan</div>
+                                                <input type="text" class="form-control" name="nama_panggilan"
+                                                    id="nama_panggilan" placeholder="Nama Panggilan">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Nama Lengkap</div>
                                                 <input type="text" class="form-control" name="nama_lengkap"
-                                                    id="nama_lengkap">
+                                                    id="nama_lengkap" placeholder="Nama Lengkap">
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">Tempat Lahir</div>
+                                                <input type="text" class="form-control" name="tempat_lahir"
+                                                    id="tempat_lahir" placeholder="Tempat Lahir">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Tanggal Lahir</div>
-                                                <input type="date" class="form-control" class="tempat_lahir"
+                                                <input type="date" class="form-control" name="tempat_lahir"
                                                     id="tempat_lahir">
                                             </div>
                                         </div>
@@ -118,24 +152,58 @@
                                                     <option value="dll">Dll</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-1">
-                                                <div class="form-label">RT</div>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-1">
-                                                <div class="form-label">RW</div>
-                                                <input type="text" class="form-control">
+                                            <div class="col-md">
+                                                <div class="form-label">Kota</div>
+                                                <input class="form-control" type="text" name="kota" id="kota"
+                                                    placeholder="Kota">
                                             </div>
                                         </div>
                                         <p></p>
                                         <div class="row g-3">
                                             <div class="col-md">
-                                                <div class="form-label">Alamat</div>
-                                                <textarea class="form-control" name="" id=""></textarea>
+                                                <div class="form-label">Alamat KTP</div>
+                                                <input type="text" class="form-control" name="alamat" id="alamat"
+                                                    placeholder="Alamat Lengkap">
                                             </div>
                                         </div>
                                         <p></p>
                                         <div class="row g-3">
+                                            <div class="col-md">
+                                                <div class="form-label">Alamat Sekarang</div>
+                                                <input type="text" class="form-control" name="alamat" id="alamat"
+                                                    placeholder="Alamat">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-label">RT</div>
+                                                <input type="text" class="form-control text-center" name="rt" id="rt"
+                                                    placeholder="001">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-label">RW</div>
+                                                <input type="text" class="form-control text-center" name="rw" id="rw"
+                                                    placeholder="001">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-label">Kode Pos</div>
+                                                <input type="text" class="form-control text-center" name="kode_pos"
+                                                    id="kode_pos" placeholder="41254" readonly>
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div class="row g-3">
+                                            <div class="col-md">
+                                                <div class="form-label">Agama</div>
+                                                <select type="text" class="form-select" placeholder="Pilih Agama"
+                                                    name="agama" id="select-agama">
+                                                    <option value="">Pilih Agama</option>
+                                                    <option value="1">Islam</option>
+                                                    <option value="2">Katolik</option>
+                                                    <option value="3">Kristen</option>
+                                                    <option value="4">Hindu</option>
+                                                    <option value="5">Budha</option>
+                                                    <option value="6">Kong Hu Cu</option>
+                                                </select>
+                                            </div>
                                             <div class="col-md">
                                                 <div class="form-label">Status</div>
                                                 <select type="text" class="form-select" placeholder="Pilih Status"
@@ -148,25 +216,12 @@
                                                 </select>
                                             </div>
                                             <div class="col-md">
-                                                <div class="form-label">Kalamin</div>
-                                                <select type="text" class="form-select" placeholder="Pilih Kelamin"
-                                                    name="jenis_kelamin" id="select-kelamin">
-                                                    <option value="">Pilih Kalamin</option>
-                                                    <option value="1">Pria</option>
-                                                    <option value="2">Wanita</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="form-label">Agama</div>
-                                                <select type="text" class="form-select" placeholder="Pilih Agama"
-                                                    name="agama" id="select-agama">
-                                                    <option value="">Pilih Agama</option>
-                                                    <option value="1">Islam</option>
-                                                    <option value="2">Katolik</option>
-                                                    <option value="3">Kristen</option>
-                                                    <option value="4">Hindu</option>
-                                                    <option value="5">Budha</option>
-                                                    <option value="6">Kong Hu Cu</option>
+                                                <div class="form-label">Pekerjaan</div>
+                                                <select type="text" class="form-select" placeholder="Pilih Pekerjaan"
+                                                    name="perkerjaan_kode" id="select-pekerjaan">
+                                                    <option value="">Pilih Pekerjaan</option>
+                                                    <option value="001">Akunting</option>
+                                                    <option value="099">Lain-lain</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -182,47 +237,96 @@
                                                 </select>
                                             </div>
                                             <div class="col-md">
-                                                <div class="form-label">Ibu Kandung</div>
-                                                <input type="text" class="form-control">
+                                                <div class="form-label">Kalamin</div>
+                                                <select type="text" class="form-select" placeholder="Pilih Kelamin"
+                                                    name="jenis_kelamin" id="select-kelamin">
+                                                    <option value="">Pilih Kalamin</option>
+                                                    <option value="1">Pria</option>
+                                                    <option value="2">Wanita</option>
+                                                </select>
                                             </div>
                                             <div class="col-md">
-                                                <div class="form-label">Nomor Rekening</div>
-                                                <input type="number" class="form-control">
+                                                <div class="form-label">Kewarganegaraan</div>
+                                                <select type="text" class="form-select" placeholder="Kewarganegaraan"
+                                                    name="kewarganegaraan" id="select-kewarganegaraan">
+                                                    <option value="">Pilih Kewarganegaraan</option>
+                                                    <option value="WNI">Warga Negara Indonesia</option>
+                                                    <option value="WNA">Warga Negara Asing</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <p></p>
                                         <div class="row g-3">
                                             <div class="col-md">
-                                                <div class="form-label">Nomor NPWP</div>
-                                                <input type="number" class="form-control">
+                                                <div class="form-label">Ibu Kandung</div>
+                                                <input type="text" class="form-control" name="nama_ibu_kandung"
+                                                    id="nama_ibu_kandung" placeholder="Nama Ibu Kandung">
                                             </div>
                                             <div class="col-md">
-                                                <div class="form-label">Nomor HP</div>
-                                                <input type="number" class="form-control">
+                                                <div class="form-label">Nomor Rekening</div>
+                                                <input type="number" class="form-control" name="no_rekening"
+                                                    id="no_rekening" placeholder="No Rekening">
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">Nomor NPWP</div>
+                                                <input type="number" class="form-control" name="no_npwp" id="no_npwp"
+                                                    placeholder="No NPWP">
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div class="row g-3">
+                                            <div class="col-md">
+                                                <div class="form-label">Nomor Telp</div>
+                                                <input type="number" class="form-control" name="no_telp" id="no_telp"
+                                                    placeholder="0823XXXXX">
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">No Telp Darurat</div>
+                                                <input type="number" class="form-control" name="no_telp_darurat"
+                                                    id="no_telp_darurat" placeholder="0823XXXXX">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Alamat Email</div>
-                                                <input type="text" class="form-control">
+                                                <input type="email" class="form-control" name="email" id="email"
+                                                    placeholder="namalengkap@gmail.com">
                                             </div>
                                         </div>
                                         <p></p>
                                         <div class="row g-3">
                                             <div class="col-md">
                                                 <div class="form-label">Sumber Dana</div>
-                                                <select class="form-control" name="" id="">
-                                                    <option value="">--Pilih--</option>
+                                                <select type="text" class="form-select" placeholder="Sumber Dana"
+                                                    name="sumber_dana" id="select-sumber-dana">
+                                                    <option value="">Sumber Dana</option>
+                                                    <option value="Hibah">Hibah</option>
+                                                    <option value="Lain2">Lain2</option>
+                                                    <option value="Penghasilan">Penghasilan</option>
+                                                    <option value="Warisan">Warisan</option>
                                                 </select>
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Penghasilan Utama</div>
-                                                <select class="form-control" name="" id="">
-                                                    <option value="">--Pilih--</option>
+                                                <select type="text" class="form-select" placeholder="Penghasilan Utama"
+                                                    name="penghasilan_utama" id="select-penghasilan-utama">
+                                                    <option value="">Penghasilan Utama</option>
+                                                    <option value="1">s/d 2,5 jt</option>
+                                                    <option value="2">s/d 2,5 - 5 jt</option>
+                                                    <option value="3">s/d 5 - 7,5 jt</option>
+                                                    <option value="4">s/d 7,5 - 10 jt</option>
+                                                    <option value="5">> 10 jt</option>
                                                 </select>
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Penghasilan Lainnya</div>
-                                                <select class="form-control" name="" id="">
-                                                    <option value="">--Pilih--</option>
+                                                <select type="text" class="form-select"
+                                                    placeholder="Penghasilan Lainnya" name="penghasilan_lainnya"
+                                                    id="select-penghasilan-lainnya">
+                                                    <option value="">Penghasilan Lainnya</option>
+                                                    <option value="1">s/d 2,5 jt</option>
+                                                    <option value="2">s/d 2,5 - 5 jt</option>
+                                                    <option value="3">s/d 5 - 7,5 jt</option>
+                                                    <option value="4">s/d 7,5 - 10 jt</option>
+                                                    <option value="5">> 10 jt</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -230,11 +334,12 @@
                                         <div class="row g-3">
                                             <div class="col-md">
                                                 <div class="form-label">Photo Formal</div>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" class="photo" id="photo">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Photo Selfie</div>
-                                                <input type="file" class="form-control">
+                                                <input type="file" class="form-control" class="photo_selfie"
+                                                    id="photo_selfie">
                                             </div>
                                         </div>
 
@@ -242,15 +347,18 @@
                                         <div class="row g-3" style="margin-top: -30px;">
                                             <div class="col-md">
                                                 <div class="form-label">Tempat Kerja</div>
-                                                <input type="text" class="form-control">
+                                                <input type="text" class="form-control" name="tempat_kerja"
+                                                    id="tempat_kerja" placeholder="PT. BPR Bangunarta">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">No Telp Kantor</div>
-                                                <input type="number" class="form-control">
+                                                <input type="number" class="form-control" name="no_telp_kantor"
+                                                    id="no_telp_kantor" placeholder="(0260) 550888">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Nomor Karyawan</div>
-                                                <input type="text" class="form-control">
+                                                <input type="text" class="form-control" name="no_karyawan"
+                                                    id="no_karyawan" placeholder="NIK Karyawan">
                                             </div>
                                         </div>
 
@@ -279,6 +387,30 @@
 
 @push('myscript')
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-identitas'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
     	window.TomSelect && (new TomSelect(el = document.getElementById('select-kabupaten'), {
@@ -426,6 +558,126 @@
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
     	window.TomSelect && (new TomSelect(el = document.getElementById('select-pendidikan'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-sumber-dana'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-penghasilan-utama'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-penghasilan-lainnya'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-pekerjaan'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-kewarganegaraan'), {
     		copyClassesToDropdown: false,
     		dropdownClass: 'dropdown-menu ts-dropdown',
     		optionClass:'dropdown-item',
