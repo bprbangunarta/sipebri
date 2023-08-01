@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Edit Pendaftaran')
+@section('title', 'Data Pemohon')
 
 @section('content')
 <div class="page-body">
@@ -48,10 +48,10 @@
                                 <div class="col-3 d-none d-md-block border-end">
                                     <div class="card-body">
                                         <div class="list-group list-group-transparent">
-                                            <a href="/pendaftaran/data/pemohon"
+                                            <a href="/pendaftaran/edit"
                                                 class="list-group-item list-group-item-action d-flex align-items-center active">Data
                                                 Pemohon</a>
-                                            <a href="/pendaftaran/data/pendamping"
+                                            <a href="/pendaftaran/pendamping"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Data
                                                 Pendamping</a>
                                             <a href="/pendaftaran/data/kredit"
@@ -162,31 +162,13 @@
                                         <div class="row g-3">
                                             <div class="col-md">
                                                 <div class="form-label">Alamat KTP</div>
-                                                <input type="text" class="form-control" name="alamat" id="alamat"
-                                                    placeholder="Alamat Lengkap">
+                                                <textarea class="form-control" name="alamat_ktp" id="alamat_ktp"
+                                                    placeholder="Alamat Lengkap"></textarea>
                                             </div>
-                                        </div>
-                                        <p></p>
-                                        <div class="row g-3">
                                             <div class="col-md">
                                                 <div class="form-label">Alamat Sekarang</div>
-                                                <input type="text" class="form-control" name="alamat" id="alamat"
-                                                    placeholder="Alamat">
-                                            </div>
-                                            <div class="col-md-1">
-                                                <div class="form-label">RT</div>
-                                                <input type="text" class="form-control text-center" name="rt" id="rt"
-                                                    placeholder="001">
-                                            </div>
-                                            <div class="col-md-1">
-                                                <div class="form-label">RW</div>
-                                                <input type="text" class="form-control text-center" name="rw" id="rw"
-                                                    placeholder="001">
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-label">Kode Pos</div>
-                                                <input type="text" class="form-control text-center" name="kode_pos"
-                                                    id="kode_pos" placeholder="41254" readonly>
+                                                <textarea class="form-control" name="alamat_sekarang"
+                                                    id="alamat_sekarang" placeholder="Alamat Lengkap"></textarea>
                                             </div>
                                         </div>
                                         <p></p>
@@ -202,6 +184,36 @@
                                                     <option value="4">Hindu</option>
                                                     <option value="5">Budha</option>
                                                     <option value="6">Kong Hu Cu</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">Kalamin</div>
+                                                <select type="text" class="form-select" placeholder="Pilih Kelamin"
+                                                    name="jenis_kelamin" id="select-kelamin">
+                                                    <option value="">Pilih Kalamin</option>
+                                                    <option value="1">Pria</option>
+                                                    <option value="2">Wanita</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="form-label">Kewarganegaraan</div>
+                                                <select type="text" class="form-select" placeholder="Kewarganegaraan"
+                                                    name="kewarganegaraan" id="select-kewarganegaraan">
+                                                    <option value="">Pilih Kewarganegaraan</option>
+                                                    <option value="WNI">Warga Negara Indonesia</option>
+                                                    <option value="WNA">Warga Negara Asing</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div class="row g-3">
+                                            <div class="col-md">
+                                                <div class="form-label">Gelar</div>
+                                                <select type="text" class="form-select" placeholder="Pilih Pendidikan"
+                                                    name="pendidikan_kode" id="select-pendidikan">
+                                                    <option value="">Pilih Pendidikan</option>
+                                                    <option value="0100">Tanpa Gelar</option>
+                                                    <option value="0299">Lainnya - Perusahaan</option>
                                                 </select>
                                             </div>
                                             <div class="col-md">
@@ -222,36 +234,6 @@
                                                     <option value="">Pilih Pekerjaan</option>
                                                     <option value="001">Akunting</option>
                                                     <option value="099">Lain-lain</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <p></p>
-                                        <div class="row g-3">
-                                            <div class="col-md">
-                                                <div class="form-label">Gelar</div>
-                                                <select type="text" class="form-select" placeholder="Pilih Pendidikan"
-                                                    name="pendidikan_kode" id="select-pendidikan">
-                                                    <option value="">Pilih Pendidikan</option>
-                                                    <option value="0100">Tanpa Gelar</option>
-                                                    <option value="0299">Lainnya - Perusahaan</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="form-label">Kalamin</div>
-                                                <select type="text" class="form-select" placeholder="Pilih Kelamin"
-                                                    name="jenis_kelamin" id="select-kelamin">
-                                                    <option value="">Pilih Kalamin</option>
-                                                    <option value="1">Pria</option>
-                                                    <option value="2">Wanita</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md">
-                                                <div class="form-label">Kewarganegaraan</div>
-                                                <select type="text" class="form-select" placeholder="Kewarganegaraan"
-                                                    name="kewarganegaraan" id="select-kewarganegaraan">
-                                                    <option value="">Pilih Kewarganegaraan</option>
-                                                    <option value="WNI">Warga Negara Indonesia</option>
-                                                    <option value="WNA">Warga Negara Asing</option>
                                                 </select>
                                             </div>
                                         </div>

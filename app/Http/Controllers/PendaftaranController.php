@@ -15,4 +15,9 @@ class PendaftaranController extends Controller
     {
         return view('pendaftaran.edit');
     }
+
+    public function pendamping(Request $request)
+    {
+        return view('pendaftaran.pendamping');
+    }
 }

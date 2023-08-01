@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
         // Pendaftaran Nasabah
         Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
         Route::get('/pendaftaran/edit', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
+        Route::get('/pendaftaran/pendamping', [PendaftaranController::class, 'pendamping'])->name('pendaftaran.pendamping');
     });
 });
 
