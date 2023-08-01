@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PendaftaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,10 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('has.role')->group(function () {
         // Admin
         Route::prefix('admin')->group(function () {
-            // Data User
-            // Route::get('/user', [UserController::class, 'index'])->name('user.index');
-            Route::resource('user', UserController::class);
-
             // Data Role
             Route::get('/role', [RoleController::class, 'index'])->name('role.index');
             Route::post('/role/create', [RoleController::class, 'create'])->name('role.create');
@@ -49,22 +46,21 @@ Route::middleware('auth')->group(function () {
             Route::post('/role/delete', [RoleController::class, 'delete'])->name('role.delete');
             Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
 
+            // Data User
+            Route::resource('user', UserController::class);
             // Data Kantor
-            // Route::get('/kantor', [KantorController::class, 'index'])->name('kantor.index');
             Route::resource('kantor', KantorController::class);
-
             // Data Produk
-            // Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
             Route::resource('/produk', ProdukController::class);
-
             // Data Pekerjaan
-            // Route::get('/pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
             Route::resource('pekerjaan', PekerjaanController::class);
-
             // Data Pendidikan
-            // Route::get('/pendidikan', [PendidikanController::class, 'index'])->name('pendidikan.index');
             Route::resource('/pendidikan', PendidikanController::class);
         });
+
+        // Pendaftaran Nasabah
+        Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
+        Route::get('/pendaftaran/edit', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
     });
 });
 
