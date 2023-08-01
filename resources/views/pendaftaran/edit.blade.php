@@ -109,8 +109,8 @@
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Nama Lengkap</div>
-                                                <input type="text" class="form-control" name="nama_lengkap"
-                                                    id="nama_lengkap" placeholder="Nama Lengkap">
+                                                <input type="text" class="form-control" name="nama_nasabah"
+                                                    id="nama_nasabah" placeholder="Nama Lengkap">
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Tempat Lahir</div>
