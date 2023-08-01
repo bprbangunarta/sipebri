@@ -252,7 +252,7 @@
 
                     <div class="modal-footer">
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <a href="#" class="btn btn-primary ms-auto">Simpan</a>
+                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
                     </div>
                 </form>
             </div>
