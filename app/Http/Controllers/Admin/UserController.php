@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kantor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -30,7 +31,67 @@ class UserController extends Controller
     }
 
     public function store(Request $request){
-        dd($request);
         
+        $cek = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'username' => 'required|unique:users,username',
+            'code_user' => 'required',
+            'kantor_kode' => 'required',
+            'is_active' => 'required',
+        ]);
+        $cek['kantor_kode'] = strtoupper($cek['kantor_kode']);//Huruf kapital
+        $cek['code_user'] = strtoupper($cek['code_user']);//Huruf kapital
+        $cek['password'] = bcrypt('12345');
+        
+        if ($cek) {
+            User::create($cek);
+            return redirect()->back()->with('success', 'Data user berhasil ditambahkan');
+        }else{
+            return redirect()->back()->with('error', 'Data user gagal ditambahkan');
+        }
+    }
+
+    public function edit($user){
+        $data = User::where('code_user', $user)->get();
+        $kntr = Kantor::where('kode_kantor', $data[0]->kantor_kode)->get();
+        $data[0]['nama_kantor'] = $kntr[0]->nama_kantor;
+    
+        $kantor = Kantor::orderBy('nama_kantor', 'asc')->get();
+        return response()->json([$data, $kantor]);
+    }
+
+    public function update(Request $request){
+        
+        $cek = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'username' => 'required',
+            'code_user' => 'required',
+            'kantor_kode' => 'required',
+            'is_active' => 'required',
+        ]);
+
+        $cek['code_user'] = strtoupper($cek['code_user']); //kapital
+        $cek['kantor_kode'] = strtoupper($cek['kantor_kode']); //kapital
+
+        if ($cek) {
+            $data = User::where('code_user', $request->code_user)->get();
+            User::where('id', $data[0]->id)
+                ->update($cek);
+            return redirect()->back()->with('success', 'Data berhasil diupdate');
+        } else {
+            return redirect()->back()->with('error', 'Data gagal diupdate');
+        }
+    }
+
+    public function destroy($user){
+        $data = User::where('code_user', $user)->get();
+        if ($data) {
+            User::destroy($data[0]->id);
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        }else{
+            return redirect()->back()->with('error', 'Data gagal dihapus');
+        }
     }
 }

@@ -125,7 +125,8 @@
                                                         @method('delete')
                                                         @csrf
                                                         <button type="submit"
-                                                            style="border: none; background: transparent;">
+                                                            style="border: none; background: transparent;"
+                                                            class="confirmdelete">
                                                             <span class=" badge bg-danger">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="icon icon-tabler icon-tabler-trash"
@@ -247,4 +248,5 @@
     </div>
 
     <script src="{{ asset('assets/js/myscript/produk.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection

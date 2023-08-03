@@ -21,9 +21,14 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'password',
         'username',
+        'code_user',
+        'kantor_kode',
+        'is_active',
+        'password',
     ];
+
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,4 +48,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'user';
+    }
 }

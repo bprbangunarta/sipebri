@@ -24,7 +24,7 @@ class KantorController extends Controller
     }
 
     public function store(Request $request){
-        // dd($request);
+        
         $cek = $request->validate([
             'kode_kantor' => 'required|unique:data_kantor,kode_kantor',
             'nama_kantor' => 'required'
