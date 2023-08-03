@@ -394,10 +394,6 @@
                                 <div class="mb-3">
                                     <label class="form-label">Hak Akses</label>
                                     <select class="form-control" name="role_id" id="roles_id">
-                                        {{-- <option value="">--Pilih Akses--</option>
-                                        @foreach ($roles as $data)
-                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>

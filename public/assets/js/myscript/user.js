@@ -87,7 +87,7 @@ $(document).ready(function () {
     });
 
     $("#modal-akses").on("show.bs.modal", function (event) {
-        $("#kantor_kodes").empty(); // Kosongkan selec modal ketika modal diaktifkan
+        $("#roles_id").empty(); // Kosongkan selec modal ketika modal diaktifkan
         $("#is_actives").empty(); // Kosongkan selec modal ketika modal diaktifkan
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
@@ -106,19 +106,22 @@ $(document).ready(function () {
                 var id = hasil.id;
                 var name = hasil.name;
                 var kode = hasil.code_user;
-                var nmrole = data.name_roles;
+                var nmrole = data.nama_roles;
+                var dtrole = data.kode_roles;
 
                 $("#model_id").val(id);
                 $("#names").val(name);
                 $("#myForm").attr("action", "/admin/akses/" + kode);
-                console.log(response[0]);
-                console.log(response[1]);
-
-                var role = response[1];
 
                 // Role
-                if (condition) {
-                }
+                $("#roles_id").append(
+                    $("<option>", {
+                        value: dtrole,
+                        text: nmrole,
+                    }).prop("selected", true)
+                );
+
+                var role = response[1];
                 $.each(role, function (index, item) {
                     if (item.name != nmrole) {
                         $("#roles_id").append(
@@ -129,6 +132,15 @@ $(document).ready(function () {
                         );
                     }
                 });
+
+                if (dtrole !== undefined) {
+                    $("#roles_id").append(
+                        $("<option>", {
+                            value: "-",
+                            text: "--Pilih Role--",
+                        })
+                    );
+                }
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
