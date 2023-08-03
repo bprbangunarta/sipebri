@@ -106,7 +106,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="#" title="Hak Akses" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-akses">
+                                                        data-bs-target="#modal-akses" data-id="{{ $data->code_user }}">
                                                         <span class="badge bg-success">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="icon icon-tabler icon-tabler-lock-access"
@@ -296,7 +296,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                {{-- <form action="{{ route('user.update', ['user' => $data->code_user]) }}"> --}}
                 <form action="{{ route('user.update', ['user' => $users[0]->code_user]) }}" method="post">
                     @method('put')
                     @csrf
@@ -371,7 +370,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="#" method="POST">
+                <form action="" method="post" id="myForm">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -379,27 +379,25 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">ID User</label>
-                                    <input type="text" class="form-control" name="id" id="id"
-                                        value="1" readonly>
+                                    <input type="text" class="form-control" name="model_id" id="model_id" readonly>
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        value="Zulfadli Rizal" readonly>
+                                    <input type="text" class="form-control" name="name" id="names" readonly>
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Hak Akses</label>
-                                    <select class="form-control" name="role_id" id="role_id">
-                                        <option value="">--Pilih Akses--</option>
+                                    <select class="form-control" name="role_id" id="roles_id">
+                                        {{-- <option value="">--Pilih Akses--</option>
                                         @foreach ($roles as $data)
                                             <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>
@@ -408,7 +406,7 @@
 
                     <div class="modal-footer">
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <a href="#" class="btn btn-primary ms-auto">Simpan</a>
+                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
                     </div>
                 </form>
             </div>

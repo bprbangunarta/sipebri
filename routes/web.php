@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
@@ -47,13 +48,16 @@ Route::middleware('auth')->group(function () {
             Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
 
             // Data User
-            Route::resource('user', UserController::class);
+            Route::resource('/user', UserController::class);
+            // Data Akses
+            Route::get('/akses/{akses}/editakses', [HakAksesController::class, 'editakses'])->name('editakses');
+            Route::put('/akses/{akses}', [HakAksesController::class, 'updateakses'])->name('updateakses');
             // Data Kantor
-            Route::resource('kantor', KantorController::class);
+            Route::resource('/kantor', KantorController::class);
             // Data Produk
             Route::resource('/produk', ProdukController::class);
             // Data Pekerjaan
-            Route::resource('pekerjaan', PekerjaanController::class);
+            Route::resource('/pekerjaan', PekerjaanController::class);
             // Data Pendidikan
             Route::resource('/pendidikan', PendidikanController::class);
         });
