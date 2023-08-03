@@ -51,13 +51,17 @@ class HakAksesController extends Controller
             'role_id' => 'required'
         ]);
 
+        if ($request->role_id == '-') {
+           DB::table('model_has_roles')->where('model_id',$request->model_id)->delete();
+           return redirect()->back()->with('success', 'Hak akses berhasil diubah');
+        }
 
         $cek['role_id'] = $cek['role_id'];
         $cek['model_type'] = 'App\Models\User';
         $cek['model_id'];
         
         $cekdata = DB::table('model_has_roles')->where('model_id', $request->model_id)->first();
-        dd($request, $cekdata);
+        
         if (is_null($cekdata)) {
             DB::table('model_has_roles')->insert($cek);
             return redirect()->back()->with('success', 'Hak akses berhasil ditambahkan');
