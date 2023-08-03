@@ -234,3 +234,4 @@
     </div>
     <script src="{{ asset('assets/js/myscript/pekerjaan.js') }}"></script>
 @endsection
+<script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
