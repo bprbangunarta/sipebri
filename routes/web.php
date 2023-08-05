@@ -14,6 +14,7 @@ use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PendampingController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\SurveiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+        Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
 
         // Validasi Pendaftaran
         Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');
