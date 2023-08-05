@@ -63,9 +63,16 @@ Route::middleware('auth')->group(function () {
         });
 
         // Pendaftaran Nasabah
-        Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
-        Route::get('/pendaftaran/edit', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
-        Route::get('/pendaftaran/pendamping', [PendaftaranController::class, 'pendamping'])->name('pendaftaran.pendamping');
+        Route::controller(PendaftaranController::class)->group(function(){
+            // Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
+            // Route::get('/pendaftaran/edit', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
+            // Route::get('/pendaftaran/pendamping', [PendaftaranController::class, 'pendamping'])->name('pendaftaran.pendamping');
+            Route::get('/pendaftaran', 'index')->name('pendaftaran.index');
+            Route::post('/pendaftaran', 'store')->name('pendaftaran.store');
+            Route::get('/pendaftaran/edit', 'edit')->name('pendaftaran.edit');
+            Route::get('/pendaftaran/pendamping', 'pendamping')->name('pendaftaran.pendamping');
+        });
+
     });
 });
 

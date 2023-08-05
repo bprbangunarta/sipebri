@@ -9,4 +9,11 @@ class Pendaftaran extends Model
 {
     use HasFactory;
     protected $table = 'data_nasabah';
+    protected $fillable = [
+            'identitas',
+            'no_identitas',
+            'nama_nasabah',
+            'tanggal_lahir',
+            'kode_nasabah',
+        ];
 }
