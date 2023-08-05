@@ -47,26 +47,7 @@
                             <div class="row g-0">
                                 <div class="col-3 d-none d-md-block border-end">
                                     <div class="card-body">
-                                        <div class="list-group list-group-transparent">
-                                            <a href="{{ route('nasabah.edit') }}"
-                                                class="list-group-item list-group-item-action d-flex align-items-center active">Data
-                                                Nasabah</a>
-                                            <a href="{{ route('pendamping.edit') }}"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Data
-                                                Pendamping</a>
-                                            <a href="{{ route('pengajuan.edit') }}"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Data
-                                                Pengajuan</a>
-                                            <a href="/pendaftaran/data/agunan"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Data
-                                                Agunan</a>
-                                            <a href="/pendaftaran/data/survayor"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Data
-                                                Survayor</a>
-                                            <a href="/pendaftaran/data/konfirmasi"
-                                                class="list-group-item list-group-item-action d-flex align-items-center">Konfirmasi
-                                                Data</a>
-                                        </div>
+                                        @include('templates.menu-pendaftaran')
                                     </div>
                                 </div>
                                 <div class="col d-flex flex-column">

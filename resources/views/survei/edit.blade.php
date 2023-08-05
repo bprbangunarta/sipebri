@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Data Pengajuan')
+@section('title', 'Data Survayor')
 
 @section('content')
 <div class="page-body">
@@ -17,7 +17,7 @@
                                         Pendaftaran
                                     </div>
                                     <h2 class="page-title">
-                                        Data Pengajuan
+                                        Data Survayor
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->
@@ -55,76 +55,44 @@
 
                                             <div class="row g-3">
                                                 <div class="col-md">
-                                                    <div class="form-label">Plafon</div>
-                                                    <input type="text" class="form-control" name="plafon" id="plafon"
-                                                        placeholder="10.000.000">
+                                                    <div class="form-label">Wilayah</div>
+                                                    <select type="text" class="form-select" placeholder="Pilih Wilayah"
+                                                        name="kantor_kode" id="select-wilayah">
+                                                        <option value="">Pilih Wilayah</option>
+                                                        <option value="SBG">Subang</option>
+                                                        <option value="PGD">Pagaden</option>
+                                                        <option value="PMK">Pamanukan</option>
+                                                    </select>
                                                 </div>
                                                 <div class="col-md">
-                                                    <div class="form-label">Suku Bunga</div>
-                                                    <input type="text" class="form-control" name="suku_bunga"
-                                                        id="suku_bunga" placeholder="Suku Bunga">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Produk</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Produk"
-                                                        name="produk_kode" id="select-produk">
-                                                        <option value="">Pilih Produk</option>
-                                                        <option value="KRU">KRU - Kredit Multiguna</option>
-                                                        <option value="KBT">KBT - Kredit Budidaya Tani
-                                                        </option>
-                                                        <option value="KPS">KPS - Kredit Kepesta Raja</option>
-                                                        <option value="KTA">KTA - Kredit Tanpa Agunan</option>
+                                                    <div class="form-label">Kasi Analis</div>
+                                                    <select type="text" class="form-select" placeholder="Pilih Kasi"
+                                                        name="kasi_kode" id="select-kasi">
+                                                        <option value="">Pilih Kasi</option>
+                                                        <option value="DDN">Dede Doni</option>
+                                                        <option value="RND">Rian Destila</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <p></p>
                                             <div class="row g-3">
                                                 <div class="col-md">
-                                                    <div class="form-label">JK Kredit</div>
-                                                    <input type="number" class="form-control" name="jangka_waktu"
-                                                        id="jangka_waktu" placeholder="Jangka Waktu">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">JK Pokok</div>
-                                                    <input type="number" class="form-control" name="jangka_pokok"
-                                                        id="jangka_pokok" placeholder="Jangka Pokok">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">JK Bunga</div>
-                                                    <input type="number" class="form-control" name="jangka_bunga"
-                                                        id="jangka_bunga" placeholder="Jangka Bunga">
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Metode RPS</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Metode"
-                                                        name="metode_rps" id="select-metode">
-                                                        <option value="">Metode RPS</option>
-                                                        <option value="Flat">Flat</option>
-                                                        <option value="PRK">PRK</option>
-                                                        <option value="Efektif">Efektif</option>
-                                                        <option value="Efektif Anuitas">Efektif Anuitas</option>
-                                                        <option value="Efektif Musiman">Efektif Musiman</option>
+                                                    <div class="form-label">Survayor</div>
+                                                    <select type="text" class="form-select" placeholder="Pilih Survayor"
+                                                        name="survayor_kode" id="select-survayor">
+                                                        <option value="">Pilih Survayor</option>
+                                                        <option value="MHM">Muhidin</option>
+                                                        <option value="JAY">Jaelani</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md">
-                                                    <div class="form-label">Penggunaan</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Penggunaan" name="penggunaan"
-                                                        id="select-penggunaan">
-                                                        <option value="">Pilih Penggunaan</option>
-                                                        <option value="Modal Usaha">Modal Usaha</option>
-                                                        <option value="Investasi">Investasi</option>
-                                                        <option value="Konsumtif">Konsumtif</option>
-                                                        <option value="Lainnya">Lainnya</option>
+                                                    <div class="form-label">Nama CGC</div>
+                                                    <select type="text" class="form-select" placeholder="Pilih CGC"
+                                                        name="cgc_kode" id="select-cgc" value="">
+                                                        <option value="">Pilih CGC</option>
+                                                        <option value="0010101201">Yandi</option>
+                                                        <option value="0010101201">Zulfadli Rizal</option>
                                                     </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Keterangan</div>
-                                                    <input type="text" class="form-control" name="keterangan"
-                                                        name="keterangan" placeholder="Keterangan">
                                                 </div>
                                             </div>
 
@@ -233,7 +201,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('select-produk'), {
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-kasi'), {
     		copyClassesToDropdown: false,
     		dropdownClass: 'dropdown-menu ts-dropdown',
     		optionClass:'dropdown-item',
@@ -257,7 +225,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('select-metode'), {
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-wilayah'), {
     		copyClassesToDropdown: false,
     		dropdownClass: 'dropdown-menu ts-dropdown',
     		optionClass:'dropdown-item',
@@ -281,7 +249,31 @@
 
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('select-penggunaan'), {
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-survayor'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-cgc'), {
     		copyClassesToDropdown: false,
     		dropdownClass: 'dropdown-menu ts-dropdown',
     		optionClass:'dropdown-item',
