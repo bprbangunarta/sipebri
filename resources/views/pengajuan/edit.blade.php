@@ -75,16 +75,24 @@
                                             <div class="row g-3">
                                                 <div class="col-md">
                                                     <div class="form-label">Plafon</div>
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" class="form-control" name="plafon" id="plafon"
+                                                        placeholder="10.000.000">
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Suku Bunga</div>
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" class="form-control" name="suku_bunga"
+                                                        id="suku_bunga" placeholder="Suku Bunga">
                                                 </div>
                                                 <div class="col-md">
-                                                    <div class="form-label">Metode RPS</div>
-                                                    <select class="form-control" name="" id="">
-                                                        <option value="">--Pilih--</option>
+                                                    <div class="form-label">Produk</div>
+                                                    <select type="text" class="form-select" placeholder="Pilih Produk"
+                                                        name="produk_kode" id="select-produk">
+                                                        <option value="">Pilih Produk</option>
+                                                        <option value="KRU">KRU - Kredit Multiguna</option>
+                                                        <option value="KBT">KBT - Kredit Budidaya Tani
+                                                        </option>
+                                                        <option value="KPS">KPS - Kredit Kepesta Raja</option>
+                                                        <option value="KTA">KTA - Kredit Tanpa Agunan</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -92,28 +100,50 @@
                                             <div class="row g-3">
                                                 <div class="col-md">
                                                     <div class="form-label">JK Kredit</div>
-                                                    <input type="number" class="form-control">
+                                                    <input type="number" class="form-control" name="jangka_waktu"
+                                                        id="jangka_waktu" placeholder="Jangka Waktu">
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">JK Pokok</div>
-                                                    <input type="number" class="form-control">
+                                                    <input type="number" class="form-control" name="jangka_pokok"
+                                                        id="jangka_pokok" placeholder="Jangka Pokok">
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">JK Bunga</div>
-                                                    <input type="number" class="form-control">
+                                                    <input type="number" class="form-control" name="jangka_bunga"
+                                                        id="jangka_bunga" placeholder="Jangka Bunga">
                                                 </div>
                                             </div>
                                             <p></p>
                                             <div class="row g-3">
                                                 <div class="col-md">
+                                                    <div class="form-label">Metode RPS</div>
+                                                    <select type="text" class="form-select" placeholder="Pilih Metode"
+                                                        name="metode_rps" id="select-metode">
+                                                        <option value="">Metode RPS</option>
+                                                        <option value="Flat">Flat</option>
+                                                        <option value="PRK">PRK</option>
+                                                        <option value="Efektif">Efektif</option>
+                                                        <option value="Efektif Anuitas">Efektif Anuitas</option>
+                                                        <option value="Efektif Musiman">Efektif Musiman</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md">
                                                     <div class="form-label">Penggunaan</div>
-                                                    <select class="form-control" name="" id="">
-                                                        <option value="">--Pilih--</option>
+                                                    <select type="text" class="form-select"
+                                                        placeholder="Pilih Penggunaan" name="penggunaan"
+                                                        id="select-penggunaan">
+                                                        <option value="">Pilih Penggunaan</option>
+                                                        <option value="Modal Usaha">Modal Usaha</option>
+                                                        <option value="Investasi">Investasi</option>
+                                                        <option value="Konsumtif">Konsumtif</option>
+                                                        <option value="Lainnya">Lainnya</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Keterangan</div>
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" class="form-control" name="keterangan"
+                                                        name="keterangan" placeholder="Keterangan">
                                                 </div>
                                             </div>
 
@@ -195,6 +225,82 @@
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
     	window.TomSelect && (new TomSelect(el = document.getElementById('select-pisah-harta'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+</script>
+@endpush
+
+@push('myscript')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-produk'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-metode'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-penggunaan'), {
     		copyClassesToDropdown: false,
     		dropdownClass: 'dropdown-menu ts-dropdown',
     		optionClass:'dropdown-item',
