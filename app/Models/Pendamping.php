@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pendaftaran extends Model
+class Pendamping extends Model
 {
     use HasFactory;
-    protected $table = 'data_nasabah';
+    protected $table = 'data_pendamping';
 }

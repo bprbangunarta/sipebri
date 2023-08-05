@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Pendaftaran Kredit')
+@section('title', 'Pengajuan Kredit')
 
 @section('content')
 <div class="page-body">
@@ -17,7 +17,7 @@
                                         Pendaftaran
                                     </div>
                                     <h2 class="page-title">
-                                        Permohonan Kredit
+                                        Pengajuan Kredit
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->
@@ -47,7 +47,7 @@
 
                     <div class="card-body border-bottom py-3" style="margin-top:-7px;">
 
-                        <form action="{{ route('pendaftaran.index') }}" method="GET">
+                        <form action="{{ route('pengajuan.index') }}" method="GET">
                             <div class="input-group mb-2">
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Kode atau Nama Nasabah" value="{{ Request('name') }}">
@@ -100,7 +100,7 @@
                                         </td>
                                         @can('validasi pendaftaran')
                                         <td class="text-center">
-                                            <a href="#" title="Validasi Data">
+                                            <a href="{{ route('nasabah.validasi') }}" title="Validasi Data">
                                                 <span class="badge bg-success">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="icon icon-tabler icon-tabler-clipboard-check" width="24"
@@ -122,7 +122,7 @@
                                         @endcan
                                         @can('edit pendaftaran')
                                         <td class="text-center">
-                                            <a href="/pendaftaran/edit" title="Edit Data">
+                                            <a href="{{ route('nasabah.edit') }}" title="Edit Data">
                                                 <span class="badge bg-warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="icon icon-tabler icon-tabler-edit" width="24" height="24"
