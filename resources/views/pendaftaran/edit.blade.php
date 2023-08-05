@@ -50,7 +50,7 @@
                                         <div class="list-group list-group-transparent">
                                             <a href="/pendaftaran/edit"
                                                 class="list-group-item list-group-item-action d-flex align-items-center active">Data
-                                                Pemohon</a>
+                                                Nasabah</a>
                                             <a href="/pendaftaran/pendamping"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Data
                                                 Pendamping</a>
@@ -76,7 +76,7 @@
                                             <div class="col-md">
                                                 <div class="form-label">No CIF</div>
                                                 <input type="text" class="form-control" name="no_cif" id="no_cif"
-                                                    placeholder="001XXXXX" disabled>
+                                                    placeholder="00133323711" disabled>
                                             </div>
                                             <div class="col-md">
                                                 <div class="form-label">Jenis ID</div>
