@@ -14,16 +14,16 @@
                                 <div class="col">
                                     <!-- Page pre-title -->
                                     <div class="page-pretitle">
-                                        Master
+                                        Pendaftaran
                                     </div>
                                     <h2 class="page-title">
-                                        Permohonan Kredit
+                                        Data Pendamping
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->
                                 <div class="col-auto ms-auto d-print-none">
                                     <div class="btn-list">
-                                        <a href="{{ route('pendaftaran.index') }}" class="btn btn-primary">
+                                        <a href="{{ route('nasabah.edit') }}" class="btn btn-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24"
                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -48,15 +48,15 @@
                                 <div class="col-3 d-none d-md-block border-end">
                                     <div class="card-body">
                                         <div class="list-group list-group-transparent">
-                                            <a href="/pendaftaran/edit"
+                                            <a href="{{ route('nasabah.edit') }}"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Data
-                                                Pemohon</a>
-                                            <a href="/pendaftaran/pendamping"
+                                                Nasabah</a>
+                                            <a href="{{ route('pendamping.edit') }}"
                                                 class="list-group-item list-group-item-action d-flex align-items-center active">Data
                                                 Pendamping</a>
-                                            <a href="/pendaftaran/data/kredit"
+                                            <a href="{{ route('pengajuan.edit') }}"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Data
-                                                Kredit</a>
+                                                Pengajuan</a>
                                             <a href="/pendaftaran/data/agunan"
                                                 class="list-group-item list-group-item-action d-flex align-items-center">Data
                                                 Agunan</a>
@@ -185,6 +185,30 @@
 
 @push('myscript')
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    	var el;
+    	window.TomSelect && (new TomSelect(el = document.getElementById('select-identitas'), {
+    		copyClassesToDropdown: false,
+    		dropdownClass: 'dropdown-menu ts-dropdown',
+    		optionClass:'dropdown-item',
+    		controlInput: '<input>',
+    		render:{
+    			item: function(data,escape) {
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    			option: function(data,escape){
+    				if( data.customProperties ){
+    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+    				}
+    				return '<div>' + escape(data.text) + '</div>';
+    			},
+    		},
+    	}));
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
     	var el;
     	window.TomSelect && (new TomSelect(el = document.getElementById('select-status'), {

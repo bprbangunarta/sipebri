@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengajuan;
-
 use Illuminate\Http\Request;
 
-class PengajuanController extends Controller
+class SurveiController extends Controller
 {
-
     public function index(Request $request)
     {
-        return view('pengajuan.index');
+        return view('survei.index');
     }
 
     public function edit(Request $request)
     {
-        return view('pengajuan.edit');
+        return view('survei.edit');
     }
 }

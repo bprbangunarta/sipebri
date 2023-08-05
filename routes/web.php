@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\PendampingController;
+use App\Http\Controllers\PengajuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +66,7 @@ Route::middleware('auth')->group(function () {
         });
 
         // Pendaftaran Nasabah
+
         Route::controller(PendaftaranController::class)->group(function(){
             // Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
             // Route::get('/pendaftaran/edit', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
@@ -73,6 +77,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/pendaftaran/pendamping', 'pendamping')->name('pendaftaran.pendamping');
         });
 
+        Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
+        Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
+        Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
+        Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+
+        // Validasi Pendaftaran
+        Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');
     });
 });
 
