@@ -50,9 +50,9 @@
                                         @include('templates.menu-pendaftaran')
                                     </div>
                                 </div>
+
                                 <div class="col d-flex flex-column">
                                     <div class="card-body">
-
                                         <div class="row g-3">
                                             <div class="col-md">
                                                 <div class="form-label">No CIF</div>

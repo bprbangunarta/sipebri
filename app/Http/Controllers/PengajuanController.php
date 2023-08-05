@@ -15,4 +15,9 @@ class PengajuanController extends Controller
     {
         return view('pengajuan.edit');
     }
+
+    public function agunan(Request $request)
+    {
+        return view('pengajuan.agunan');
+    }
 }

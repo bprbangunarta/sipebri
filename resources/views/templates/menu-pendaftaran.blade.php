@@ -8,7 +8,7 @@
     <a href="{{ route('pengajuan.edit') }}"
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pengajuan/edit') ? 'active' :'' }}">Data
         Pengajuan</a>
-    <a href="/pendaftaran/data/agunan"
+    <a href="{{ route('pengajuan.agunan') }}"
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pengajuan/agunan') ? 'active' :'' }}">Data
         Agunan</a>
     <a href="{{ route('survei.edit') }}"

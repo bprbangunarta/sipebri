@@ -49,10 +49,10 @@
                                         @include('templates.menu-pendaftaran')
                                     </div>
                                 </div>
+
                                 <div class="col d-flex flex-column">
                                     <form action="#">
                                         <div class="card-body">
-
                                             <div class="row g-3">
                                                 <div class="col-md">
                                                     <div class="form-label">Plafon</div>
@@ -152,82 +152,6 @@
     </div>
 </div>
 @endsection
-
-@push('myscript')
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('select-status'), {
-    		copyClassesToDropdown: false,
-    		dropdownClass: 'dropdown-menu ts-dropdown',
-    		optionClass:'dropdown-item',
-    		controlInput: '<input>',
-    		render:{
-    			item: function(data,escape) {
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    			option: function(data,escape){
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    		},
-    	}));
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('select-tanggungan'), {
-    		copyClassesToDropdown: false,
-    		dropdownClass: 'dropdown-menu ts-dropdown',
-    		optionClass:'dropdown-item',
-    		controlInput: '<input>',
-    		render:{
-    			item: function(data,escape) {
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    			option: function(data,escape){
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    		},
-    	}));
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-    	var el;
-    	window.TomSelect && (new TomSelect(el = document.getElementById('select-pisah-harta'), {
-    		copyClassesToDropdown: false,
-    		dropdownClass: 'dropdown-menu ts-dropdown',
-    		optionClass:'dropdown-item',
-    		controlInput: '<input>',
-    		render:{
-    			item: function(data,escape) {
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    			option: function(data,escape){
-    				if( data.customProperties ){
-    					return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-    				}
-    				return '<div>' + escape(data.text) + '</div>';
-    			},
-    		},
-    	}));
-    });
-</script>
-@endpush
 
 @push('myscript')
 <script>
