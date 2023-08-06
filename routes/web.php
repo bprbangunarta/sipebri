@@ -1,20 +1,19 @@
 <?php
 
-use App\Http\Controllers\Admin\HakAksesController;
-use App\Http\Controllers\Admin\KantorController;
-use App\Http\Controllers\Admin\PekerjaanController;
-use App\Http\Controllers\Admin\PendidikanController;
-use App\Http\Controllers\Admin\ProdukController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SurveiController;
+use App\Http\Controllers\NasabahController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\NasabahController;
-use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\PendampingController;
-use App\Http\Controllers\PengajuanController;
-use App\Http\Controllers\SurveiController;
+use App\Http\Controllers\Admin\KantorController;
+use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\Admin\HakAksesController;
+use App\Http\Controllers\Admin\PekerjaanController;
+use App\Http\Controllers\Admin\PendidikanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,22 +65,12 @@ Route::middleware('auth')->group(function () {
             Route::resource('/pendidikan', PendidikanController::class);
         });
 
-        // Pendaftaran Nasabah
-
-        Route::controller(PendaftaranController::class)->group(function(){
-            // Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
-            // Route::get('/pendaftaran/edit', [PendaftaranController::class, 'edit'])->name('pendaftaran.edit');
-            // Route::get('/pendaftaran/pendamping', [PendaftaranController::class, 'pendamping'])->name('pendaftaran.pendamping');
-            Route::get('/pendaftaran', 'index')->name('pendaftaran.index');
-            Route::post('/pendaftaran', 'store')->name('pendaftaran.store');
-            Route::get('/pendaftaran/edit', 'edit')->name('pendaftaran.edit');
-            Route::get('/pendaftaran/pendamping', 'pendamping')->name('pendaftaran.pendamping');
-        });
-
+        //Pendaftaran Nasabah
         Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+        Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
 
         // Validasi Pendaftaran
