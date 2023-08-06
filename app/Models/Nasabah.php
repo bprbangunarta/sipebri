@@ -16,4 +16,7 @@ class Nasabah extends Model
             'tanggal_lahir',
             'kode_nasabah',
         ];
+    public function pengajuan(){
+        return $this->hasMany(Pengajuan::class);
+    }
 }

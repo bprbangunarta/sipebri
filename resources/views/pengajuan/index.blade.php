@@ -86,63 +86,77 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center">1</td>
-                                            <td>00039867</td>
-                                            <td>ZULFADLI RIZAL</td>
-                                            <td>KAMPUNG SUKAGALIH RT/RW 30/08 DESA SUKAMULYA KECAMATAN PAGADEN KABUPATEN
-                                                SUBANG
-                                            </td>
-                                            <td class="text-end">2.500.000.000</td>
-                                            <td class="text-center">24</td>
-                                            <td class="text-center">
-                                                <span class="badge bg-warning-lt">Lengkapi Data</span>
-                                            </td>
-                                            @can('validasi pendaftaran')
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        @foreach ($data as $item)
+                                            <tr>
+                                                <td class="text-center">{{ $no }}</td>
+                                                <td>{{ $item->kode }}</td>
+                                                <td>{{ strtoupper($item->nama) }}</td>
+                                                @if (is_null($item->alamat))
+                                                    <td class="text-center">-</td>
+                                                @else
+                                                    <td>{{ $item->alamat }}
+                                                    </td>
+                                                @endif
+                                                @php
+                                                    $item->plafon = 'Rp. ' . number_format($item->plafon, 2, ',', '.');
+                                                @endphp
+                                                <td class="text-start">{{ $item->plafon }}</td>
+                                                <td class="text-center">{{ $item->jk }}</td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('nasabah.validasi') }}" title="Validasi Data">
-                                                        <span class="badge bg-success">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-clipboard-check"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                stroke-width="2" stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <path
-                                                                    d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                                                </path>
-                                                                <path
-                                                                    d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
-                                                                </path>
-                                                                <path d="M9 14l2 2l4 -4"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
+                                                    <span class="badge bg-warning-lt">Lengkapi Data</span>
                                                 </td>
-                                            @endcan
-                                            @can('edit pendaftaran')
-                                                <td class="text-center">
-                                                    <a href="{{ route('nasabah.edit') }}" title="Edit Data">
-                                                        <span class="badge bg-warning">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-edit" width="24"
-                                                                height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                                stroke="currentColor" fill="none" stroke-linecap="round"
-                                                                stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <path
-                                                                    d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
-                                                                </path>
-                                                                <path
-                                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
-                                                                </path>
-                                                                <path d="M16 5l3 3"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                </td>
-                                            @endcan
-                                        </tr>
+                                                @can('validasi pendaftaran')
+                                                    <td class="text-center">
+                                                        <a href="{{ route('nasabah.validasi') }}" title="Validasi Data">
+                                                            <span class="badge bg-success">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon icon-tabler icon-tabler-clipboard-check"
+                                                                    width="24" height="24" viewBox="0 0 24 24"
+                                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
+                                                                    </path>
+                                                                    <path d="M9 14l2 2l4 -4"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                @endcan
+                                                @can('edit pendaftaran')
+                                                    <td class="text-center">
+                                                        <a href="{{ route('nasabah.edit') }}" title="Edit Data">
+                                                            <span class="badge bg-warning">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon icon-tabler icon-tabler-edit" width="24"
+                                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                                    stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
+                                                                    </path>
+                                                                    <path d="M16 5l3 3"></path>
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                    </td>
+                                                @endcan
+                                                <input type="text" hidden value="{{ $no++ }}" readonly>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
 
@@ -163,7 +177,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="#" method="POST">
+                <form action="{{ route('nasabah.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -208,7 +222,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Plafon</label>
-                                    <input type="text" class="form-control" name="plafon" id="plafon"
+                                    <input type="text" class="form-control" name="plafon" id="plafond"
                                         placeholder="10.000.000">
                                 </div>
                             </div>
@@ -232,7 +246,7 @@
 
                     <div class="modal-footer">
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <a href="#" class="btn btn-primary ms-auto">Simpan</a>
+                        <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -293,5 +307,28 @@
                 },
             }));
         });
+
+        //Format rupiah
+        var rupiah = document.getElementById('plafond');
+        rupiah.addEventListener('keyup', function(e) {
+            rupiah.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
     </script>
 @endpush

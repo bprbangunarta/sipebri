@@ -17,4 +17,8 @@ class Pengajuan extends Model
         'jangka_waktu',
     ];
     protected $guarded = ['id'];
+
+    public function nasabah(){
+        return $this->belongsTo(Nasabah::class);
+    }
 }

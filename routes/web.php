@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
+use App\Models\Nasabah;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,7 @@ Route::middleware('auth')->group(function () {
 
         //Pendaftaran Nasabah
         Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
+        Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
