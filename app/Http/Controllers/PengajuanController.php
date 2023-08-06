@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agunan;
 use App\Models\Pengajuan;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanController extends Controller
 {
@@ -26,6 +28,11 @@ class PengajuanController extends Controller
 
     public function agunan(Request $request)
     {
-        return view('pengajuan.agunan');
+        $agunan = Agunan::all();
+        $dok = DB::table('data_jenis_dokumen')->get();
+        return view('pengajuan.agunan', [
+            'agunan' => $agunan,
+            'dok' => $dok,
+        ]);
     }
 }

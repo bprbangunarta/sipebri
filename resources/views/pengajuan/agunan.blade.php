@@ -176,10 +176,10 @@
                                     <label class="form-label">Jenis Agunan</label>
                                     <select type="text" class="form-select" placeholder="Jenis Agunan"
                                         name="kode_jenis" id="select-jenis">
-                                        <option value="">Jenis Agunan</option>
-                                        <option value="01">Tabungan</option>
-                                        <option value="02">Kendaraan Bermotor Roda 2</option>
-                                        <option value="99">Lainnya</option>
+                                        <option value="" selected>Jenis Agunan</option>
+                                        @foreach ($agunan as $item)
+                                            <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -189,10 +189,10 @@
                                     <label class="form-label">Jenis Dokumen</label>
                                     <select type="text" class="form-select" placeholder="Jenis Dokumen"
                                         name="kode_dokumen" id="select-dokumen">
-                                        <option value="">Jenis Dokumen</option>
-                                        <option value="01">Deposito/Tabungan</option>
-                                        <option value="02">BPKB Motor Non Fiducia</option>
-                                        <option value="99">Lainnya</option>
+                                        <option value="" selected>Jenis Dokumen</option>
+                                        @foreach ($dok as $item)
+                                            <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

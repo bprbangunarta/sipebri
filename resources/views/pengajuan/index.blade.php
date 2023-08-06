@@ -133,7 +133,8 @@
                                                 @endcan
                                                 @can('edit pendaftaran')
                                                     <td class="text-center">
-                                                        <a href="{{ route('nasabah.edit') }}" title="Edit Data">
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kode, 'nama' => $item->nama]) }}"
+                                                            title="Edit Data">
                                                             <span class="badge bg-warning">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="icon icon-tabler icon-tabler-edit" width="24"
