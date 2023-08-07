@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Nasabah;
+use App\Models\Pekerjaan;
+use App\Models\Pendidikan;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,11 +15,16 @@ class NasabahController extends Controller
 {
     public function edit(Request $request)
     {
-        return view('nasabah.edit');
+        $pend = Pendidikan::all();
+        $job = Pekerjaan::all();
+        return view('nasabah.edit', [
+            'pend' => $pend,
+            'job' => $job,
+        ]);
     }
 
     public function store(Request $request){
-        // dd($request);
+        
         $ceknasabah = $request->validate([
             'kode_nasabah' => '',
             'identitas' => 'required',

@@ -197,9 +197,14 @@
                                                     <select type="text" class="form-select"
                                                         placeholder="Pilih Pendidikan" name="pendidikan_kode"
                                                         id="select-pendidikan">
-                                                        <option value="">Pilih Pendidikan</option>
+                                                        <option value="" selected>Pilih Pendidikan</option>
+                                                        @foreach ($pend as $item)
+                                                            <option value="{{ $item->kode_pendidikan }}">
+                                                                {{ $item->nama_pendidikan }}</option>
+                                                        @endforeach
+                                                        {{-- <option value="">Pilih Pendidikan</option>
                                                         <option value="0100">Tanpa Gelar</option>
-                                                        <option value="0299">Lainnya - Perusahaan</option>
+                                                        <option value="0299">Lainnya - Perusahaan</option> --}}
                                                     </select>
                                                 </div>
                                                 <div class="col-md">
@@ -218,9 +223,14 @@
                                                     <select type="text" class="form-select"
                                                         placeholder="Pilih Pekerjaan" name="perkerjaan_kode"
                                                         id="select-pekerjaan">
-                                                        <option value="">Pilih Pekerjaan</option>
+                                                        <option value="" selected>Pilih Pekerjaan</option>
+                                                        @foreach ($job as $item)
+                                                            <option value="{{ $item->kode_pekerjaan }}">
+                                                                {{ $item->nama_pekerjaan }}</option>
+                                                        @endforeach
+                                                        {{-- <option value="">Pilih Pekerjaan</option>
                                                         <option value="001">Akunting</option>
-                                                        <option value="099">Lain-lain</option>
+                                                        <option value="099">Lain-lain</option> --}}
                                                     </select>
                                                 </div>
                                             </div>
