@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
+use App\Http\Controllers\DatiController;
 use App\Models\Nasabah;
 
 /*
@@ -74,6 +75,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
         Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
+
+        //Dati
+        Route::controller(DatiController::class)->group(function(){
+            Route::post('/kabupaten', 'kabupaten')->name('kabupaten');
+        });
 
         // Validasi Pendaftaran
         Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');

@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Data Nasabah')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -52,6 +52,7 @@
                                         </div>
                                     </div>
 
+                                    {{-- {{ $identitas }} --}}
                                     <div class="col d-flex flex-column">
                                         <div class="card-body">
                                             <div class="row g-3">
@@ -60,11 +61,13 @@
                                                     <input type="text" class="form-control" name="no_cif" id="no_cif"
                                                         placeholder="00133323711" disabled>
                                                 </div>
+
                                                 <div class="col-md">
                                                     <div class="form-label">Jenis ID</div>
                                                     <select type="text" class="form-select" placeholder="Pilih Identitas"
                                                         name="identitas" id="select-identitas">
-                                                        <option value="">Pilih Identitas</option>
+                                                        <option value="{{ $nasabah->identitas }}" selected>
+                                                            {{ $nasabah->iden }}</option>
                                                         <option value="1">KTP</option>
                                                         <option value="2">SIM</option>
                                                         <option value="3">Pasport</option>
@@ -74,7 +77,8 @@
                                                 <div class="col-md">
                                                     <div class="form-label">No Identitas</div>
                                                     <input type="text" class="form-control" name="no_identitas"
-                                                        id="no_identitas" placeholder="3213XXXXX">
+                                                        id="no_identitas" placeholder="3213XXXXX"
+                                                        value="{{ $nasabah->nama_nasabah }}">
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Masa Identitas</div>
@@ -92,7 +96,8 @@
                                                 <div class="col-md">
                                                     <div class="form-label">Nama Lengkap</div>
                                                     <input type="text" class="form-control" name="nama_nasabah"
-                                                        id="nama_nasabah" placeholder="Nama Lengkap">
+                                                        id="nama_nasabah" placeholder="Nama Lengkap"
+                                                        value="{{ $nasabah->nama_nasabah }}">
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Tempat Lahir</div>
@@ -101,8 +106,13 @@
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Tanggal Lahir</div>
-                                                    <input type="date" class="form-control" name="tempat_lahir"
-                                                        id="tempat_lahir">
+                                                    @if (is_null($nasabah->tanggal_lahir))
+                                                        <input type="date" class="form-control" name="tempat_lahir"
+                                                            id="tanggal_lahir">
+                                                    @else
+                                                        <input type="text" class="form-control" name="tanggal_lahir"
+                                                            id="tgl_lahir" value="{{ $nasabah->tanggal_lahir }}">
+                                                    @endif
                                                 </div>
                                             </div>
                                             <p></p>
@@ -110,21 +120,24 @@
                                                 <div class="col-md">
                                                     <div class="form-label">Kabupaten</div>
                                                     <select type="text" class="form-select"
-                                                        placeholder="Pilih Kabupaten" name="kode_dati"
-                                                        id="select-kabupaten">
+                                                        placeholder="Pilih Kabupaten" name="kode_dati" id="select-kab">
                                                         <option value="">Pilih Kabupaten</option>
-                                                        <option value="Subang">Subang</option>
-                                                        <option value="dll">Dll</option>
+                                                        @foreach ($wilayah as $item)
+                                                            <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}
+                                                            </option>
+                                                        @endforeach
+                                                        {{-- <option value="Subang">Subang</option>
+                                                        <option value="dll">Dll</option> --}}
                                                     </select>
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Kecamatan</div>
                                                     <select type="text" class="form-select"
                                                         placeholder="Pilih Kecamatan" name="kode_kecamatan"
-                                                        id="select-kecamatan">
-                                                        <option value="">Pilih Kecamatan</option>
+                                                        id="select-kec">
+                                                        {{-- <option value="">Pilih Kecamatan</option>
                                                         <option value="Pagaden">Pagaden</option>
-                                                        <option value="dll">Dll</option>
+                                                        <option value="dll">Dll</option> --}}
                                                     </select>
                                                 </div>
                                                 <div class="col-md">
@@ -361,6 +374,7 @@
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/wilayah.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var el;

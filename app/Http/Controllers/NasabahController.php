@@ -17,11 +17,34 @@ class NasabahController extends Controller
 {
     public function edit(Request $request)
     {
+
+        $req = $request->query('nasabah');
+        $cek = Nasabah::where('kode_nasabah', $req)->first();
+       
+        //Format tanggal
+        $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
+        $cek->tanggal_lahir= $carbonDate->format('d-m-Y');
+        
+        //Ubah identitas dari nomor id menjadi data string
+        if ($cek->identitas == "1") {
+            $cek['iden'] = 'KTP';
+        }elseif ($cek->identitas == "2") {
+            $cek['iden'] = 'SIM';
+        }elseif ($cek->identitas == "3"){
+            $cek['iden'] = 'Passport';
+        }elseif ($cek->identitas == "9"){
+            $cek['iden']= 'Lainnya';
+        }
+
+        //Data Wilayah / Dati
+        $db = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return view('nasabah.edit', [
             'pend' => $pend,
             'job' => $job,
+            'nasabah' => $cek,
+            'wilayah' => $db
         ]);
     }
 
@@ -48,14 +71,6 @@ class NasabahController extends Controller
         $koderand = random_int(100000, 999999);
         $haskode = $date->format('m').$date->format('y').$koderand;
         $ceknasabah['kode_nasabah'] = $haskode;
-
-        //Generate kode otomatis dari kanan ke kiri data nasabah
-        // $last = Nasabah::latest('kode_nasabah')->first();
-        // if (is_null($last->kode_nasabah)) {
-        //     $counter = 1;
-        // }else{$counter = (int) $last->kode_nasabah + 1;}
-        // $length = 7;
-        // $kode = str_pad($counter, $length, '0', STR_PAD_LEFT);
 
         //Generate kode otomatis dari kanan ke kiri data pengajuan
         $lasts = Pengajuan::latest('kode_pengajuan')->first();
