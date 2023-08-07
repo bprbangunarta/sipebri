@@ -21,4 +21,8 @@ class Pengajuan extends Model
     public function nasabah(){
         return $this->belongsTo(Nasabah::class);
     }
+
+    public function survei(){
+        return $this->hasMany(Survei::class);
+    }
 }

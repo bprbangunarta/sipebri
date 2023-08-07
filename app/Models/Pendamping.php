@@ -9,4 +9,7 @@ class Pendamping extends Model
 {
     use HasFactory;
     protected $table = 'data_pendamping';
+    protected $fillable = [
+        'pengajuan_kode'
+    ];
 }
