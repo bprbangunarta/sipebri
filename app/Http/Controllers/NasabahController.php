@@ -35,19 +35,19 @@ class NasabahController extends Controller
         $ceknasabah['tanggal_lahir'] = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
         
         //Generate kode otomatis dari kanan ke kiri data nasabah
-        $last = Nasabah::pluck('kode_nasabah')->first();
-        if ($last == 0) {
+        $last = Nasabah::latest('kode_nasabah')->first();
+        if (is_null($last->kode_nasabah)) {
             $counter = 1;
-        }else{$counter = $last + 1;}
+        }else{$counter = (int) $last->kode_nasabah + 1;}
         $length = 7;
         $kode = str_pad($counter, $length, '0', STR_PAD_LEFT);
         $ceknasabah['kode_nasabah'] = $kode;
 
         //Generate kode otomatis dari kanan ke kiri data pengajuan
-        $lasts = Pengajuan::pluck('kode_pengajuan')->first();
-        if ($lasts == 0) {
+        $lasts = Pengajuan::latest('kode_pengajuan')->first();
+        if (is_null($lasts->kode_pengajuan)) {
             $count = 1;
-        }else{$count = $lasts + 1;}
+        }else{$count = (int) $lasts->kode_pengajuan + 1;}
         $lengths = 7;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
         $cekpengajuan['kode_pengajuan'] = $kodes;
@@ -56,6 +56,7 @@ class NasabahController extends Controller
         //Hapus format rupiah
         $remove = array("Rp", ".", " ");
         $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+        
         try {
             DB::transaction(function () use ($ceknasabah, $cekpengajuan) {
                 Nasabah::create($ceknasabah);
