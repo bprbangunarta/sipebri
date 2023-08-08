@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Data Nasabah')
-@yield('jquery')
+
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -52,313 +52,330 @@
                                         </div>
                                     </div>
 
-                                    {{-- {{ $identitas }} --}}
                                     <div class="col d-flex flex-column">
-                                        <div class="card-body">
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">No CIF</div>
-                                                    <input type="text" class="form-control" name="no_cif" id="no_cif"
-                                                        placeholder="00133323711" disabled>
+                                        <form action="{{ route('nasabah.update', ['nasabah' => $nasabah->kode_nasabah]) }}"
+                                            method="POST">
+                                            @method('put')
+                                            @csrf
+                                            <div class="card-body">
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">No CIF</div>
+                                                        <input type="text" class="form-control" name="no_cif"
+                                                            id="no_cif" placeholder="00133323711" disabled>
+                                                    </div>
+
+                                                    <div class="col-md">
+                                                        <div class="form-label">Jenis ID</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Identitas" name="identitas"
+                                                            id="select-identitas">
+                                                            <option value="{{ $nasabah->identitas }}" selected>
+                                                                {{ $nasabah->iden }}</option>
+                                                            <option value="1">KTP</option>
+                                                            <option value="2">SIM</option>
+                                                            <option value="3">Pasport</option>
+                                                            <option value="9">Lainnya</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">No Identitas</div>
+                                                        <input type="text" class="form-control" name="no_identitas"
+                                                            id="no_identitas" placeholder="3213XXXXX"
+                                                            value="{{ $nasabah->nama_nasabah }}">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Masa Identitas</div>
+                                                        <input type="date" class="form-control" name="masa_identitas"
+                                                            id="masa_identitas">
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nama Panggilan</div>
+                                                        <input type="text" class="form-control" name="nama_panggilan"
+                                                            id="nama_panggilan" placeholder="Nama Panggilan">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nama Lengkap</div>
+                                                        <input type="text" class="form-control" name="nama_nasabah"
+                                                            id="nama_nasabah" placeholder="Nama Lengkap"
+                                                            value="{{ $nasabah->nama_nasabah }}">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Tempat Lahir</div>
+                                                        <input type="text" class="form-control" name="tempat_lahir"
+                                                            id="tempat_lahir" placeholder="Tempat Lahir">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Tanggal Lahir</div>
+                                                        @if (is_null($nasabah->tanggal_lahir))
+                                                            <input type="date" class="form-control" name="tempat_lahir"
+                                                                id="tanggal_lahir">
+                                                        @else
+                                                            <input type="text" class="form-control"
+                                                                name="tanggal_lahir" id="tanggal_lahir"
+                                                                value="{{ $nasabah->tanggal_lahir }}">
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Kabupaten</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Kabupaten" name="kode_dati"
+                                                            id="select-kabupaten">
+                                                            <option value="">Pilih Kabupaten</option>
+                                                            @foreach ($kab as $item)
+                                                                <option value="{{ $item->kode_dati }}">
+                                                                    {{ $item->nama_dati }}
+                                                                </option>
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Kecamatan</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Kecamatan" name="kode_kecamatan"
+                                                            id="select-kecamatan">
+                                                            <option value="">Pilih Kecamatan</option>
+                                                            @foreach ($kec as $item)
+                                                                <option value="{{ $item->kecamatan }}">
+                                                                    {{ $item->kecamatan }}
+                                                                </option>
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Kelurahan</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Kelurahan" name="kode_kelurahan"
+                                                            id="select-kelurahan">>
+                                                            <option value="">Pilih Kelurahan</option>
+                                                            @foreach ($kel as $item)
+                                                                <option value="{{ $item->kelurahan }}">
+                                                                    {{ $item->kelurahan }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Kota</div>
+                                                        <input class="form-control" type="text" name="kota"
+                                                            id="kota" placeholder="Kota">
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Alamat KTP</div>
+                                                        <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap"></textarea>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Alamat Sekarang</div>
+                                                        <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap"></textarea>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Agama</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Agama" name="agama" id="select-agama">
+                                                            <option value="">Pilih Agama</option>
+                                                            <option value="1">Islam</option>
+                                                            <option value="2">Katolik</option>
+                                                            <option value="3">Kristen</option>
+                                                            <option value="4">Hindu</option>
+                                                            <option value="5">Budha</option>
+                                                            <option value="6">Kong Hu Cu</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Kalamin</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Kelamin" name="jenis_kelamin"
+                                                            id="select-kelamin">
+                                                            <option value="">Pilih Kalamin</option>
+                                                            <option value="1">Pria</option>
+                                                            <option value="2">Wanita</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Kewarganegaraan</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Kewarganegaraan" name="kewarganegaraan"
+                                                            id="select-kewarganegaraan">
+                                                            <option value="">Pilih Kewarganegaraan</option>
+                                                            <option value="WNI">Warga Negara Indonesia</option>
+                                                            <option value="WNA">Warga Negara Asing</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Gelar</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Pendidikan" name="pendidikan_kode"
+                                                            id="select-pendidikan">
+                                                            <option value="" selected>Pilih Pendidikan</option>
+                                                            @foreach ($pend as $item)
+                                                                <option value="{{ $item->kode_pendidikan }}">
+                                                                    {{ $item->nama_pendidikan }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Status</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Status" name="status_pernikahan"
+                                                            id="select-status">
+                                                            <option value="">Pilih Status</option>
+                                                            <option value="M">Menikah</option>
+                                                            <option value="L">Lajang</option>
+                                                            <option value="D">Duda</option>
+                                                            <option value="J">Janda</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Pekerjaan</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Pekerjaan" name="perkerjaan_kode"
+                                                            id="select-pekerjaan">
+                                                            <option value="" selected>Pilih Pekerjaan</option>
+                                                            @foreach ($job as $item)
+                                                                <option value="{{ $item->kode_pekerjaan }}">
+                                                                    {{ $item->nama_pekerjaan }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Ibu Kandung</div>
+                                                        <input type="text" class="form-control"
+                                                            name="nama_ibu_kandung" id="nama_ibu_kandung"
+                                                            placeholder="Nama Ibu Kandung">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nomor Rekening</div>
+                                                        <input type="number" class="form-control" name="no_rekening"
+                                                            id="no_rekening" placeholder="No Rekening">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nomor NPWP</div>
+                                                        <input type="number" class="form-control" name="no_npwp"
+                                                            id="no_npwp" placeholder="No NPWP">
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nomor Telp</div>
+                                                        <input type="number" class="form-control" name="no_telp"
+                                                            id="no_telp" placeholder="0823XXXXX">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">No Telp Darurat</div>
+                                                        <input type="number" class="form-control" name="no_telp_darurat"
+                                                            id="no_telp_darurat" placeholder="0823XXXXX">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Alamat Email</div>
+                                                        <input type="email" class="form-control" name="email"
+                                                            id="email" placeholder="namalengkap@gmail.com">
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Sumber Dana</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Sumber Dana" name="sumber_dana"
+                                                            id="select-sumber-dana">
+                                                            <option value="">Sumber Dana</option>
+                                                            <option value="Hibah">Hibah</option>
+                                                            <option value="Lain2">Lain2</option>
+                                                            <option value="Penghasilan">Penghasilan</option>
+                                                            <option value="Warisan">Warisan</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Penghasilan Utama</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Penghasilan Utama" name="penghasilan_utama"
+                                                            id="select-penghasilan-utama">
+                                                            <option value="">Penghasilan Utama</option>
+                                                            <option value="1">s/d 2,5 jt</option>
+                                                            <option value="2">s/d 2,5 - 5 jt</option>
+                                                            <option value="3">s/d 5 - 7,5 jt</option>
+                                                            <option value="4">s/d 7,5 - 10 jt</option>
+                                                            <option value="5">> 10 jt</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Penghasilan Lainnya</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Penghasilan Lainnya" name="penghasilan_lainnya"
+                                                            id="select-penghasilan-lainnya">
+                                                            <option value="">Penghasilan Lainnya</option>
+                                                            <option value="1">s/d 2,5 jt</option>
+                                                            <option value="2">s/d 2,5 - 5 jt</option>
+                                                            <option value="3">s/d 5 - 7,5 jt</option>
+                                                            <option value="4">s/d 7,5 - 10 jt</option>
+                                                            <option value="5">> 10 jt</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Photo Formal</div>
+                                                        <input type="file" class="form-control" class="photo"
+                                                            id="photo">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Photo Selfie</div>
+                                                        <input type="file" class="form-control" class="photo_selfie"
+                                                            id="photo_selfie">
+                                                    </div>
                                                 </div>
 
-                                                <div class="col-md">
-                                                    <div class="form-label">Jenis ID</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Identitas"
-                                                        name="identitas" id="select-identitas">
-                                                        <option value="{{ $nasabah->identitas }}" selected>
-                                                            {{ $nasabah->iden }}</option>
-                                                        <option value="1">KTP</option>
-                                                        <option value="2">SIM</option>
-                                                        <option value="3">Pasport</option>
-                                                        <option value="9">Lainnya</option>
-                                                    </select>
+                                                <hr style="margin-top: 25px;">
+                                                <div class="row g-3" style="margin-top: -30px;">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Tempat Kerja</div>
+                                                        <input type="text" class="form-control" name="tempat_kerja"
+                                                            id="tempat_kerja" placeholder="PT. BPR Bangunarta">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">No Telp Kantor</div>
+                                                        <input type="number" class="form-control" name="no_telp_kantor"
+                                                            id="no_telp_kantor" placeholder="(0260) 550888">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nomor Karyawan</div>
+                                                        <input type="text" class="form-control" name="no_karyawan"
+                                                            id="no_karyawan" placeholder="NIK Karyawan">
+                                                    </div>
                                                 </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">No Identitas</div>
-                                                    <input type="text" class="form-control" name="no_identitas"
-                                                        id="no_identitas" placeholder="3213XXXXX"
-                                                        value="{{ $nasabah->nama_nasabah }}">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Masa Identitas</div>
-                                                    <input type="date" class="form-control" name="masa_identitas"
-                                                        id="masa_identitas">
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Nama Panggilan</div>
-                                                    <input type="text" class="form-control" name="nama_panggilan"
-                                                        id="nama_panggilan" placeholder="Nama Panggilan">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Nama Lengkap</div>
-                                                    <input type="text" class="form-control" name="nama_nasabah"
-                                                        id="nama_nasabah" placeholder="Nama Lengkap"
-                                                        value="{{ $nasabah->nama_nasabah }}">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Tempat Lahir</div>
-                                                    <input type="text" class="form-control" name="tempat_lahir"
-                                                        id="tempat_lahir" placeholder="Tempat Lahir">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Tanggal Lahir</div>
-                                                    @if (is_null($nasabah->tanggal_lahir))
-                                                        <input type="date" class="form-control" name="tempat_lahir"
-                                                            id="tanggal_lahir">
-                                                    @else
-                                                        <input type="text" class="form-control" name="tanggal_lahir"
-                                                            id="tgl_lahir" value="{{ $nasabah->tanggal_lahir }}">
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Kabupaten</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Kabupaten" name="kode_dati" id="select-kab">
-                                                        <option value="">Pilih Kabupaten</option>
-                                                        @foreach ($wilayah as $item)
-                                                            <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}
-                                                            </option>
-                                                        @endforeach
-                                                        {{-- <option value="Subang">Subang</option>
-                                                        <option value="dll">Dll</option> --}}
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Kecamatan</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Kecamatan" name="kode_kecamatan"
-                                                        id="select-kec">
-                                                        {{-- <option value="">Pilih Kecamatan</option>
-                                                        <option value="Pagaden">Pagaden</option>
-                                                        <option value="dll">Dll</option> --}}
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Kelurahan</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Kelurahan" name="kode_kelurahan"
-                                                        id="select-kelurahan">
-                                                        <option value="">Pilih Kelurahan</option>
-                                                        <option value="Sukamulya">Sukamulya</option>
-                                                        <option value="dll">Dll</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Kota</div>
-                                                    <input class="form-control" type="text" name="kota"
-                                                        id="kota" placeholder="Kota">
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Alamat KTP</div>
-                                                    <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap"></textarea>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Alamat Sekarang</div>
-                                                    <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap"></textarea>
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Agama</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Agama"
-                                                        name="agama" id="select-agama">
-                                                        <option value="">Pilih Agama</option>
-                                                        <option value="1">Islam</option>
-                                                        <option value="2">Katolik</option>
-                                                        <option value="3">Kristen</option>
-                                                        <option value="4">Hindu</option>
-                                                        <option value="5">Budha</option>
-                                                        <option value="6">Kong Hu Cu</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Kalamin</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Kelamin" name="jenis_kelamin"
-                                                        id="select-kelamin">
-                                                        <option value="">Pilih Kalamin</option>
-                                                        <option value="1">Pria</option>
-                                                        <option value="2">Wanita</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Kewarganegaraan</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Kewarganegaraan" name="kewarganegaraan"
-                                                        id="select-kewarganegaraan">
-                                                        <option value="">Pilih Kewarganegaraan</option>
-                                                        <option value="WNI">Warga Negara Indonesia</option>
-                                                        <option value="WNA">Warga Negara Asing</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Gelar</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Pendidikan" name="pendidikan_kode"
-                                                        id="select-pendidikan">
-                                                        <option value="" selected>Pilih Pendidikan</option>
-                                                        @foreach ($pend as $item)
-                                                            <option value="{{ $item->kode_pendidikan }}">
-                                                                {{ $item->nama_pendidikan }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Status</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Status"
-                                                        name="status_pernikahan" id="select-status">
-                                                        <option value="">Pilih Status</option>
-                                                        <option value="M">Menikah</option>
-                                                        <option value="L">Lajang</option>
-                                                        <option value="D">Duda</option>
-                                                        <option value="J">Janda</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Pekerjaan</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Pilih Pekerjaan" name="perkerjaan_kode"
-                                                        id="select-pekerjaan">
-                                                        <option value="" selected>Pilih Pekerjaan</option>
-                                                        @foreach ($job as $item)
-                                                            <option value="{{ $item->kode_pekerjaan }}">
-                                                                {{ $item->nama_pekerjaan }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Ibu Kandung</div>
-                                                    <input type="text" class="form-control" name="nama_ibu_kandung"
-                                                        id="nama_ibu_kandung" placeholder="Nama Ibu Kandung">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Nomor Rekening</div>
-                                                    <input type="number" class="form-control" name="no_rekening"
-                                                        id="no_rekening" placeholder="No Rekening">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Nomor NPWP</div>
-                                                    <input type="number" class="form-control" name="no_npwp"
-                                                        id="no_npwp" placeholder="No NPWP">
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Nomor Telp</div>
-                                                    <input type="number" class="form-control" name="no_telp"
-                                                        id="no_telp" placeholder="0823XXXXX">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">No Telp Darurat</div>
-                                                    <input type="number" class="form-control" name="no_telp_darurat"
-                                                        id="no_telp_darurat" placeholder="0823XXXXX">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Alamat Email</div>
-                                                    <input type="email" class="form-control" name="email"
-                                                        id="email" placeholder="namalengkap@gmail.com">
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Sumber Dana</div>
-                                                    <select type="text" class="form-select" placeholder="Sumber Dana"
-                                                        name="sumber_dana" id="select-sumber-dana">
-                                                        <option value="">Sumber Dana</option>
-                                                        <option value="Hibah">Hibah</option>
-                                                        <option value="Lain2">Lain2</option>
-                                                        <option value="Penghasilan">Penghasilan</option>
-                                                        <option value="Warisan">Warisan</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Penghasilan Utama</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Penghasilan Utama" name="penghasilan_utama"
-                                                        id="select-penghasilan-utama">
-                                                        <option value="">Penghasilan Utama</option>
-                                                        <option value="1">s/d 2,5 jt</option>
-                                                        <option value="2">s/d 2,5 - 5 jt</option>
-                                                        <option value="3">s/d 5 - 7,5 jt</option>
-                                                        <option value="4">s/d 7,5 - 10 jt</option>
-                                                        <option value="5">> 10 jt</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Penghasilan Lainnya</div>
-                                                    <select type="text" class="form-select"
-                                                        placeholder="Penghasilan Lainnya" name="penghasilan_lainnya"
-                                                        id="select-penghasilan-lainnya">
-                                                        <option value="">Penghasilan Lainnya</option>
-                                                        <option value="1">s/d 2,5 jt</option>
-                                                        <option value="2">s/d 2,5 - 5 jt</option>
-                                                        <option value="3">s/d 5 - 7,5 jt</option>
-                                                        <option value="4">s/d 7,5 - 10 jt</option>
-                                                        <option value="5">> 10 jt</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Photo Formal</div>
-                                                    <input type="file" class="form-control" class="photo"
-                                                        id="photo">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Photo Selfie</div>
-                                                    <input type="file" class="form-control" class="photo_selfie"
-                                                        id="photo_selfie">
-                                                </div>
+
                                             </div>
 
-                                            <hr style="margin-top: 25px;">
-                                            <div class="row g-3" style="margin-top: -30px;">
-                                                <div class="col-md">
-                                                    <div class="form-label">Tempat Kerja</div>
-                                                    <input type="text" class="form-control" name="tempat_kerja"
-                                                        id="tempat_kerja" placeholder="PT. BPR Bangunarta">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">No Telp Kantor</div>
-                                                    <input type="number" class="form-control" name="no_telp_kantor"
-                                                        id="no_telp_kantor" placeholder="(0260) 550888">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Nomor Karyawan</div>
-                                                    <input type="text" class="form-control" name="no_karyawan"
-                                                        id="no_karyawan" placeholder="NIK Karyawan">
+                                            <div class="card-footer bg-transparent mt-auto">
+                                                <div class="btn-list justify-content-end">
+                                                    <button type="submit" class="btn btn-primary text-white ms-auto">
+                                                        Simpan
+                                                    </button>
                                                 </div>
                                             </div>
-
-                                        </div>
-
-                                        <div class="card-footer bg-transparent mt-auto">
-                                            <div class="btn-list justify-content-end">
-                                                <a href="#" class="btn btn-primary">
-                                                    Simpan
-                                                </a>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -373,8 +390,8 @@
     </div>
 @endsection
 
+
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/wilayah.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var el;
@@ -715,3 +732,86 @@
         });
     </script>
 @endpush
+
+{{-- @section('scr')
+    <script>
+        $(document).ready(function() {
+            // Menggunakan Ajax untuk mengirim data Kabupaten ke controller
+            $("#select-kabupaten").on("change", function() {
+                $("#select-kecamatan").empty();
+                $("#select-kelurahan").empty();
+                var nama = $("#select-kabupaten").val();
+                $.ajax({
+                    url: "/nasabah/kabupaten",
+                    type: "POST",
+                    cache: false,
+                    dataType: "json",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        name: nama,
+                    },
+                    success: function(response) {
+                        let obj = Object.values(response);
+                        var ch = [];
+                        for (var i = 0; i < obj.length; i++) {
+                            if (ch.indexOf(obj[i].kecamatan) === -1) {
+                                ch.push(obj[i].kecamatan);
+                            }
+                        }
+                        ch.sort();
+                        ch.forEach((data) => {
+                            $("#select-kecamatan").append(
+                                $("<option>", {
+                                    value: data,
+                                    text: data,
+                                })
+                            );
+                        });
+                    },
+                    error: function(xhr) {
+                        // Tindakan jika terjadi error
+                        console.log(xhr.responseText);
+                    },
+                });
+            });
+
+            // $("#select-kecamatan").on("change", function() {
+            //     $("#select-kelurahan").empty();
+            //     var nama = $("#select-kecamatan").val();
+            //     $.ajax({
+            //         url: "{{ route('kecamatan') }}",
+            //         type: "POST",
+            //         cache: false,
+            //         dataType: "json",
+            //         data: {
+            //             _token: "{{ csrf_token() }}",
+            //             name: nama,
+            //         },
+            //         success: function(response) {
+            //             // let st = JSON.stringify(response);
+            //             let obj = Object.values(response);
+            //             var ch = [];
+            //             for (var i = 0; i < obj.length; i++) {
+            //                 if (ch.indexOf(obj[i].kelurahan) === -1) {
+            //                     ch.push(obj[i].kelurahan);
+            //                 }
+            //             }
+            //             ch.sort();
+            //             ch.forEach((data) => {
+            //                 $("#select-kelurahan").append(
+            //                     $("<option>", {
+            //                         value: data,
+            //                         text: data,
+            //                     })
+            //                 );
+            //             });
+            //         },
+            //         error: function(xhr) {
+            //             // Tindakan jika terjadi error
+            //             console.log(xhr.responseText);
+            //         },
+            //     });
+            // });
+        });
+    </script>
+@endsection --}}

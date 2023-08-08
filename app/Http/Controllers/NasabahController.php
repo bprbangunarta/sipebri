@@ -37,14 +37,18 @@ class NasabahController extends Controller
         }
 
         //Data Wilayah / Dati
-        $db = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
+        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
+        $kec = DB::select('select distinct kecamatan from v_dati'); 
+        $kel = DB::select('select distinct kelurahan from v_dati'); 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return view('nasabah.edit', [
             'pend' => $pend,
             'job' => $job,
             'nasabah' => $cek,
-            'wilayah' => $db
+            'kab' => $kab,
+            'kec' => $kec,
+            'kel' =>$kel,
         ]);
     }
 
@@ -101,6 +105,10 @@ class NasabahController extends Controller
             return redirect()->back()->with('error', "Data gagal ditambahkan");
         }
            
+    }
+
+    public function update(Request $request){
+        dd($request);
     }
 
     public function validasi(Request $request)

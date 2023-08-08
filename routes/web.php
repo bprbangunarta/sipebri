@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
+        Route::post('/nasabah/update', [NasabahController::class, 'update'])->name('nasabah.update');
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
         Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
@@ -78,7 +79,8 @@ Route::middleware('auth')->group(function () {
 
         //Dati
         Route::controller(DatiController::class)->group(function(){
-            Route::post('/kabupaten', 'kabupaten')->name('kabupaten');
+            Route::post('/nasabah/kabupaten', 'kabupaten')->name('kabupaten');
+            Route::post('/nasabah/kecamatan', 'kecamatan')->name('kecamatan');
         });
 
         // Validasi Pendaftaran
