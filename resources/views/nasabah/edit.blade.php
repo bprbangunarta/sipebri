@@ -54,8 +54,8 @@
 
                                     <div class="col d-flex flex-column">
                                         <form action="{{ route('nasabah.update', ['nasabah' => $nasabah->kode_nasabah]) }}"
-                                            method="POST">
-                                            @method('put')
+                                            method="POST" enctype="multipart/form-data">
+                                            @method('PUT')
                                             @csrf
                                             <div class="card-body">
                                                 <div class="row g-3">
@@ -95,7 +95,7 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Panggilan</div>
                                                         <input type="text" class="form-control" name="nama_panggilan"
-                                                            id="nama_panggilan" placeholder="Nama Panggilan">
+                                                            id="nama_panggilan" placeholder="Nama Panggilan" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Lengkap</div>
@@ -106,13 +106,13 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Tempat Lahir</div>
                                                         <input type="text" class="form-control" name="tempat_lahir"
-                                                            id="tempat_lahir" placeholder="Tempat Lahir">
+                                                            id="tempat_lahir" placeholder="Tempat Lahir" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Tanggal Lahir</div>
                                                         @if (is_null($nasabah->tanggal_lahir))
-                                                            <input type="date" class="form-control" name="tempat_lahir"
-                                                                id="tanggal_lahir">
+                                                            <input type="date" class="form-control"
+                                                                name="tempat_lahir" id="tanggal_lahir">
                                                         @else
                                                             <input type="text" class="form-control"
                                                                 name="tanggal_lahir" id="tanggal_lahir"
@@ -173,11 +173,11 @@
                                                 <div class="row g-3">
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat KTP</div>
-                                                        <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap"></textarea>
+                                                        <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required></textarea>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat Sekarang</div>
-                                                        <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap"></textarea>
+                                                        <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required></textarea>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -261,17 +261,17 @@
                                                         <div class="form-label">Ibu Kandung</div>
                                                         <input type="text" class="form-control"
                                                             name="nama_ibu_kandung" id="nama_ibu_kandung"
-                                                            placeholder="Nama Ibu Kandung">
+                                                            placeholder="Nama Ibu Kandung" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Rekening</div>
                                                         <input type="number" class="form-control" name="no_rekening"
-                                                            id="no_rekening" placeholder="No Rekening">
+                                                            id="no_rekening" placeholder="No Rekening" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor NPWP</div>
                                                         <input type="number" class="form-control" name="no_npwp"
-                                                            id="no_npwp" placeholder="No NPWP">
+                                                            id="no_npwp" placeholder="No NPWP" required>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -279,17 +279,17 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Telp</div>
                                                         <input type="number" class="form-control" name="no_telp"
-                                                            id="no_telp" placeholder="0823XXXXX">
+                                                            id="no_telp" placeholder="0823XXXXX" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">No Telp Darurat</div>
                                                         <input type="number" class="form-control" name="no_telp_darurat"
-                                                            id="no_telp_darurat" placeholder="0823XXXXX">
+                                                            id="no_telp_darurat" placeholder="0823XXXXX" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat Email</div>
                                                         <input type="email" class="form-control" name="email"
-                                                            id="email" placeholder="namalengkap@gmail.com">
+                                                            id="email" placeholder="namalengkap@gmail.com" required>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -337,13 +337,25 @@
                                                 <div class="row g-3">
                                                     <div class="col-md">
                                                         <div class="form-label">Photo Formal</div>
+                                                        <input type="text" name="oldphoto"
+                                                            value="{{ $nasabah->fhoto }}" hidden> <br>
+                                                        <img src="{{ asset('storage/' . $nasabah->photo) }}"
+                                                            class="img-fluid img-preview mb-3 col-sm-5"
+                                                            style="width: 100px; position: relative;">
                                                         <input type="file" class="form-control" class="photo"
-                                                            id="photo">
+                                                            name="photo" id="photo" onchange="previewPhoto()"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Photo Selfie</div>
+                                                        <input type="text" name="oldphotoselfie"
+                                                            value="{{ $nasabah->fhoto_selfie }}" hidden> <br>
+                                                        <img src="{{ asset('storage/' . $nasabah->photo) }}"
+                                                            class="img-fluid img-preview2 mb-3 col-sm-5"
+                                                            style="width: 100px; position: relative;">
                                                         <input type="file" class="form-control" class="photo_selfie"
-                                                            id="photo_selfie">
+                                                            name="photo_selfie" id="photo_selfie"
+                                                            onchange="previewPhotoSelfi()" required>
                                                     </div>
                                                 </div>
 
@@ -352,17 +364,17 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Tempat Kerja</div>
                                                         <input type="text" class="form-control" name="tempat_kerja"
-                                                            id="tempat_kerja" placeholder="PT. BPR Bangunarta">
+                                                            id="tempat_kerja" placeholder="PT. BPR Bangunarta" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">No Telp Kantor</div>
                                                         <input type="number" class="form-control" name="no_telp_kantor"
-                                                            id="no_telp_kantor" placeholder="(0260) 550888">
+                                                            id="no_telp_kantor" placeholder="(0260) 550888" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Karyawan</div>
                                                         <input type="text" class="form-control" name="no_karyawan"
-                                                            id="no_karyawan" placeholder="NIK Karyawan">
+                                                            id="no_karyawan" placeholder="NIK Karyawan" required>
                                                     </div>
                                                 </div>
 
@@ -732,6 +744,36 @@
         });
     </script>
 @endpush
+
+<script>
+    function previewPhoto() {
+        const image = document.getElementById('photo');
+        const imgPreview = document.querySelector('.img-preview');
+
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+
+    function previewPhotoSelfi() {
+        const image = document.getElementById('photo_selfie');
+        const imgPreview = document.querySelector('.img-preview2');
+
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 
 {{-- @section('scr')
     <script>

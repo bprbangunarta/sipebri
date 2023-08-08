@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Survei;
 use App\Models\Nasabah;
 use App\Models\Pekerjaan;
+use App\Models\Pengajuan;
 use App\Models\Pendamping;
 use App\Models\Pendidikan;
-use App\Models\Pengajuan;
-use App\Models\Survei;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class NasabahController extends Controller
 {
@@ -108,7 +109,66 @@ class NasabahController extends Controller
     }
 
     public function update(Request $request){
-        dd($request);
+        $cek = $request->validate([
+            'identitas' => 'required',
+            'no_identitas' => 'required|unique:data_nasabah,identitas',
+            'masa_identitas' => 'required',
+            'nama_panggilan' => 'required',
+            'nama_nasabah' => 'required',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required',
+            'kode_dati' => 'required',
+            'kecamatan' => 'required',
+            'kelurahan' => 'required',
+            'kota' => 'required',
+            'alamat_ktp' => 'required',
+            'alamat_sekarang' => 'required',
+            'agama' => 'required',
+            'jenis_kelamin' => 'required',
+            'kewarganegaraan' => 'required',
+            'pendidikan_kode' => 'required',
+            'status_pernikahan' => 'required',
+            'perkerjaan_kode' => 'required',
+            'nama_ibu_kandung' => 'required',
+            'no_rekening' => 'required',
+            'no_npwp' => 'required',
+            'no_telp' => 'required',
+            'email' => 'required',
+            'sumber_dana' => 'required',
+            'penghasilan_utama' => 'required',
+            'penghasilan_lainnya' => 'required',
+            'tempat_kerja' => 'required',
+            'no_telp_kantor' => 'required',
+            'no_karyawan' => 'required',
+            'photo' => 'required|',
+            'photo.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_selfie' => 'required',
+            'photo_selfie.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+       
+        //cek image
+        if ($request->file('photo')) {
+            if ($request->oldphoto) {
+                Storage::delete($request->oldphoto);
+            }        
+            $cek['photo'] = $request->file('photo')->store('image/photo');         
+        }
+
+        if ($request->file('photo_selfie')) {
+            if ($request->oldphotoselfie) {
+                Storage::delete($request->oldphotoselfie);
+            }        
+            $cek['photo_selfie'] = $request->file('photo_selfie')->store('image/photo_selfie');         
+        }
+
+        if ($cek) {
+            $nas = Nasabah::where('kode_nasabah', $request->query('nasabah'))
+                    ->select('id')
+                    ->first();
+            Nasabah::where('id', $nas->id)->update($cek);   
+                return redirect()->back()->with('success', 'Data berhasil diupdate');
+        }
+
     }
 
     public function validasi(Request $request)
