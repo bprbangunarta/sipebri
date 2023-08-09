@@ -82,12 +82,18 @@
                                                         <div class="form-label">No Identitas</div>
                                                         <input type="text" class="form-control" name="no_identitas"
                                                             id="no_identitas" placeholder="3213XXXXX"
-                                                            value="{{ $nasabah->nama_nasabah }}">
+                                                            value="{{ $nasabah->no_identitas }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Masa Identitas</div>
-                                                        <input type="date" class="form-control" name="masa_identitas"
-                                                            id="masa_identitas">
+                                                        @if (is_null($nasabah->masa_identitas))
+                                                            <input type="date" class="form-control" name="masa_identitas"
+                                                                id="masa_identitas">
+                                                        @else
+                                                            <input type="text" class="form-control" name="masa_identitas"
+                                                                id="masa_identitas" value="{{ $nasabah->masa_identitas }}">
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -95,7 +101,8 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Panggilan</div>
                                                         <input type="text" class="form-control" name="nama_panggilan"
-                                                            id="nama_panggilan" placeholder="Nama Panggilan" required>
+                                                            id="nama_panggilan" placeholder="Nama Panggilan"
+                                                            value="{{ $nasabah->nama_panggilan }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Lengkap</div>
@@ -106,7 +113,8 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Tempat Lahir</div>
                                                         <input type="text" class="form-control" name="tempat_lahir"
-                                                            id="tempat_lahir" placeholder="Tempat Lahir" required>
+                                                            id="tempat_lahir" placeholder="Tempat Lahir"
+                                                            value="{{ $nasabah->tempat_lahir }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Tanggal Lahir</div>
@@ -127,7 +135,13 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Kabupaten" name="kode_dati"
                                                             id="select-kabupaten">
-                                                            <option value="">Pilih Kabupaten</option>
+                                                            @if (is_null($nasabah->kode_dati))
+                                                                <option value="">Pilih Kabupaten</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->kode_dati }}">
+                                                                    {{ $nasabah->kode_dati }}</option>
+                                                            @endif
+
                                                             @foreach ($kab as $item)
                                                                 <option value="{{ $item->kode_dati }}">
                                                                     {{ $item->nama_dati }}
@@ -139,9 +153,15 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Kecamatan</div>
                                                         <select type="text" class="form-select"
-                                                            placeholder="Pilih Kecamatan" name="kode_kecamatan"
+                                                            placeholder="Pilih Kecamatan" name="kecamatan"
                                                             id="select-kecamatan">
-                                                            <option value="">Pilih Kecamatan</option>
+                                                            @if (is_null($nasabah->kecamatan))
+                                                                <option value="">Pilih Kecamatan</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->kecamatan }}">
+                                                                    {{ $nasabah->kecamatan }}</option>
+                                                            @endif
+
                                                             @foreach ($kec as $item)
                                                                 <option value="{{ $item->kecamatan }}">
                                                                     {{ $item->kecamatan }}
@@ -153,9 +173,14 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Kelurahan</div>
                                                         <select type="text" class="form-select"
-                                                            placeholder="Pilih Kelurahan" name="kode_kelurahan"
-                                                            id="select-kelurahan">>
-                                                            <option value="">Pilih Kelurahan</option>
+                                                            placeholder="Pilih Kelurahan" name="kelurahan"
+                                                            id="select-kelurahan">
+                                                            @if (is_null($nasabah->kelurahan))
+                                                                <option value="">Pilih Kecamatan</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->kelurahan }}">
+                                                                    {{ $nasabah->kelurahan }}</option>
+                                                            @endif
                                                             @foreach ($kel as $item)
                                                                 <option value="{{ $item->kelurahan }}">
                                                                     {{ $item->kelurahan }}
@@ -165,19 +190,36 @@
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Kota</div>
-                                                        <input class="form-control" type="text" name="kota"
-                                                            id="kota" placeholder="Kota">
+                                                        @if (is_null($nasabah->kota))
+                                                            <input class="form-control" type="text" name="kota"
+                                                                id="kota" placeholder="Kota">
+                                                        @else
+                                                            <input class="form-control" type="text" name="kota"
+                                                                id="kota" placeholder="Kota"
+                                                                value="{{ $nasabah->kota }}">
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                                 <p></p>
                                                 <div class="row g-3">
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat KTP</div>
-                                                        <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required></textarea>
+                                                        @if (is_null($nasabah->alamat_ktp))
+                                                            <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required></textarea>
+                                                        @else
+                                                            <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required>{{ $nasabah->alamat_ktp }}</textarea>
+                                                        @endif
+
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat Sekarang</div>
-                                                        <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required></textarea>
+                                                        @if (is_null($nasabah->alamat_sekarang))
+                                                            <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required></textarea>
+                                                        @else
+                                                            <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required>{{ $nasabah->alamat_sekarang }}</textarea>
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -186,7 +228,13 @@
                                                         <div class="form-label">Agama</div>
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Agama" name="agama" id="select-agama">
-                                                            <option value="">Pilih Agama</option>
+                                                            @if (is_null($nasabah->religi))
+                                                                <option value="">Pilih Agama</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->agama }}">
+                                                                    {{ $nasabah->religi }}</option>
+                                                            @endif
+
                                                             <option value="1">Islam</option>
                                                             <option value="2">Katolik</option>
                                                             <option value="3">Kristen</option>
@@ -200,7 +248,13 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Kelamin" name="jenis_kelamin"
                                                             id="select-kelamin">
-                                                            <option value="">Pilih Kalamin</option>
+                                                            @if (is_null($nasabah->jk))
+                                                                <option value="">Pilih Kalamin</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->jenis_kelamin }}">
+                                                                    {{ $nasabah->jk }}</option>
+                                                            @endif
+
                                                             <option value="1">Pria</option>
                                                             <option value="2">Wanita</option>
                                                         </select>
@@ -210,7 +264,13 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Kewarganegaraan" name="kewarganegaraan"
                                                             id="select-kewarganegaraan">
-                                                            <option value="">Pilih Kewarganegaraan</option>
+                                                            @if (is_null($nasabah->kn))
+                                                                <option value="">Pilih Kewarganegaraan</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->kewarganegaraan }}">
+                                                                    {{ $nasabah->kn }}</option>
+                                                            @endif
+
                                                             <option value="WNI">Warga Negara Indonesia</option>
                                                             <option value="WNA">Warga Negara Asing</option>
                                                         </select>
@@ -223,7 +283,14 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Pendidikan" name="pendidikan_kode"
                                                             id="select-pendidikan">
-                                                            <option value="" selected>Pilih Pendidikan</option>
+                                                            @if (is_null($nasabah->pendidikan_kode))
+                                                                <option value="">Pilih Pendidikan</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->pendidikan_kode }}">
+                                                                    {{ $nasabah->std }}
+                                                                </option>
+                                                            @endif
+
                                                             @foreach ($pend as $item)
                                                                 <option value="{{ $item->kode_pendidikan }}">
                                                                     {{ $item->nama_pendidikan }}</option>
@@ -235,7 +302,13 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Status" name="status_pernikahan"
                                                             id="select-status">
-                                                            <option value="">Pilih Status</option>
+                                                            @if (is_null($nasabah->st))
+                                                                <option value="">Pilih Status</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->status_pernikahan }}">
+                                                                    {{ $nasabah->st }}</option>
+                                                            @endif
+
                                                             <option value="M">Menikah</option>
                                                             <option value="L">Lajang</option>
                                                             <option value="D">Duda</option>
@@ -247,7 +320,14 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Pekerjaan" name="perkerjaan_kode"
                                                             id="select-pekerjaan">
-                                                            <option value="" selected>Pilih Pekerjaan</option>
+                                                            @if (is_null($nasabah->jo))
+                                                                <option value="" selected>Pilih Pekerjaan</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->pekerjaan_kode }}" selected>
+                                                                    {{ $nasabah->jo }}
+                                                                </option>
+                                                            @endif
+
                                                             @foreach ($job as $item)
                                                                 <option value="{{ $item->kode_pekerjaan }}">
                                                                     {{ $item->nama_pekerjaan }}</option>
@@ -261,17 +341,20 @@
                                                         <div class="form-label">Ibu Kandung</div>
                                                         <input type="text" class="form-control"
                                                             name="nama_ibu_kandung" id="nama_ibu_kandung"
-                                                            placeholder="Nama Ibu Kandung" required>
+                                                            placeholder="Nama Ibu Kandung"
+                                                            value="{{ $nasabah->nama_ibu_kandung }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Rekening</div>
                                                         <input type="number" class="form-control" name="no_rekening"
-                                                            id="no_rekening" placeholder="No Rekening" required>
+                                                            id="no_rekening" placeholder="No Rekening"
+                                                            value="{{ $nasabah->no_rekening }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor NPWP</div>
                                                         <input type="number" class="form-control" name="no_npwp"
-                                                            id="no_npwp" placeholder="No NPWP" required>
+                                                            id="no_npwp" placeholder="No NPWP"
+                                                            value="{{ $nasabah->no_npwp }}" required>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -279,17 +362,20 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Telp</div>
                                                         <input type="number" class="form-control" name="no_telp"
-                                                            id="no_telp" placeholder="0823XXXXX" required>
+                                                            id="no_telp" placeholder="0823XXXXX"
+                                                            value="{{ $nasabah->no_telp }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">No Telp Darurat</div>
                                                         <input type="number" class="form-control" name="no_telp_darurat"
-                                                            id="no_telp_darurat" placeholder="0823XXXXX" required>
+                                                            id="no_telp_darurat" placeholder="0823XXXXX"
+                                                            value="{{ $nasabah->no_telp_darurat }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat Email</div>
                                                         <input type="email" class="form-control" name="email"
-                                                            id="email" placeholder="namalengkap@gmail.com" required>
+                                                            id="email" placeholder="namalengkap@gmail.com"
+                                                            value="{{ $nasabah->email }}" required>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -299,11 +385,17 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Sumber Dana" name="sumber_dana"
                                                             id="select-sumber-dana">
-                                                            <option value="">Sumber Dana</option>
-                                                            <option value="Hibah">Hibah</option>
-                                                            <option value="Lain2">Lain2</option>
-                                                            <option value="Penghasilan">Penghasilan</option>
-                                                            <option value="Warisan">Warisan</option>
+                                                            @if (is_null($nasabah->sumber_dana))
+                                                                <option value="">Sumber Dana</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->sumber_dana }}">
+                                                                    {{ $nasabah->dana }}</option>
+                                                            @endif
+
+                                                            <option value="1">Hibah</option>
+                                                            <option value="2">Lain2</option>
+                                                            <option value="3">Penghasilan</option>
+                                                            <option value="4">Warisan</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
@@ -311,12 +403,18 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Penghasilan Utama" name="penghasilan_utama"
                                                             id="select-penghasilan-utama">
-                                                            <option value="">Penghasilan Utama</option>
+                                                            @if (is_null($nasabah->penghasilan_utama))
+                                                                <option value="">Penghasilan Utama</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->penghasilan_utama }}">
+                                                                    {{ $nasabah->hasil }}</option>
+                                                            @endif
+
                                                             <option value="1">s/d 2,5 jt</option>
                                                             <option value="2">s/d 2,5 - 5 jt</option>
                                                             <option value="3">s/d 5 - 7,5 jt</option>
                                                             <option value="4">s/d 7,5 - 10 jt</option>
-                                                            <option value="5">> 10 jt</option>
+                                                            <option value="5"> 10 jt</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
@@ -324,7 +422,13 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Penghasilan Lainnya" name="penghasilan_lainnya"
                                                             id="select-penghasilan-lainnya">
-                                                            <option value="">Penghasilan Lainnya</option>
+                                                            @if (is_null($nasabah->penghasilan_utama))
+                                                                <option value="">Penghasilan Lainnya</option>
+                                                            @else
+                                                                <option value="{{ $nasabah->penghasilan_lainnya }}">
+                                                                    {{ $nasabah->lain }}</option>
+                                                            @endif
+
                                                             <option value="1">s/d 2,5 jt</option>
                                                             <option value="2">s/d 2,5 - 5 jt</option>
                                                             <option value="3">s/d 5 - 7,5 jt</option>
@@ -364,17 +468,20 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Tempat Kerja</div>
                                                         <input type="text" class="form-control" name="tempat_kerja"
-                                                            id="tempat_kerja" placeholder="PT. BPR Bangunarta" required>
+                                                            id="tempat_kerja" placeholder="PT. BPR Bangunarta"
+                                                            value="{{ $nasabah->tempat_kerja }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">No Telp Kantor</div>
                                                         <input type="number" class="form-control" name="no_telp_kantor"
-                                                            id="no_telp_kantor" placeholder="(0260) 550888" required>
+                                                            id="no_telp_kantor" placeholder="(0260) 550888"
+                                                            value="{{ $nasabah->no_telp_kantor }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Karyawan</div>
                                                         <input type="text" class="form-control" name="no_karyawan"
-                                                            id="no_karyawan" placeholder="NIK Karyawan" required>
+                                                            id="no_karyawan" placeholder="NIK Karyawan"
+                                                            value="{{ $nasabah->no_karyawan }}" required>
                                                     </div>
                                                 </div>
 
