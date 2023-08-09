@@ -133,7 +133,7 @@
                                                 @endcan
                                                 @can('edit pendaftaran')
                                                     <td class="text-center">
-                                                        <a href="{{ route('nasabah.edit', ['nama' => $item->nama]) }}"
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd_nasabah]) }}"
                                                             title="Edit Data">
                                                             <span class="badge bg-warning">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"

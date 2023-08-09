@@ -47,7 +47,9 @@
                                 <div class="row g-0">
                                     <div class="col-3 d-none d-md-block border-end">
                                         <div class="card-body">
-                                            @include('templates.menu-pendaftaran')
+                                            @include('templates.menu-pendaftaran', [
+                                                'nasabah' => $data->kode_nasabah,
+                                            ])
                                         </div>
                                     </div>
 
