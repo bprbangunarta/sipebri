@@ -25,4 +25,8 @@ class Pengajuan extends Model
     public function survei(){
         return $this->hasMany(Survei::class);
     }
+
+    public function pendamping(){
+        return $this->belongsTo(Pendamping::class);
+    }
 }

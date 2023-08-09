@@ -12,4 +12,8 @@ class Pendamping extends Model
     protected $fillable = [
         'pengajuan_kode'
     ];
+
+    public function pengajuan(){
+        return $this->hasMany(Pengajuan::class);
+    }
 }

@@ -20,9 +20,8 @@ class NasabahController extends Controller
 {
     public function edit(Request $request)
     {
-
-        $req = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $req)->first();
+        $req = $request->query('nama');
+        $cek = Nasabah::where('nama_nasabah', $req)->first();
        
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {
