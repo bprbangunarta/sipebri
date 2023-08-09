@@ -10,6 +10,7 @@ class Nasabah extends Model
     use HasFactory;
     protected $table = 'data_nasabah';
     protected $fillable = [
+            'kode_nasabah',
             'identitas',
             'no_identitas',
             'masa_identitas',

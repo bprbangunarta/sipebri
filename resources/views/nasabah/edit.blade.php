@@ -139,7 +139,7 @@
                                                                 <option value="">Pilih Kabupaten</option>
                                                             @else
                                                                 <option value="{{ $nasabah->kode_dati }}">
-                                                                    {{ $nasabah->kode_dati }}</option>
+                                                                    {{ $nasabah->nm_dati }}</option>
                                                             @endif
 
                                                             @foreach ($kab as $item)
@@ -318,7 +318,7 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Pekerjaan</div>
                                                         <select type="text" class="form-select"
-                                                            placeholder="Pilih Pekerjaan" name="perkerjaan_kode"
+                                                            placeholder="Pilih Pekerjaan" name="pekerjaan_kode"
                                                             id="select-pekerjaan">
                                                             @if (is_null($nasabah->jo))
                                                                 <option value="" selected>Pilih Pekerjaan</option>
@@ -442,24 +442,24 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Photo Formal</div>
                                                         <input type="text" name="oldphoto"
-                                                            value="{{ $nasabah->fhoto }}" hidden> <br>
-                                                        <img src="{{ asset('storage/' . $nasabah->photo) }}"
+                                                            value="{{ $nasabah->photo }}" hidden> <br>
+                                                        <img src="{{ asset('storage/image/photo/' . $nasabah->photo) }}"
                                                             class="img-fluid img-preview mb-3 col-sm-5"
                                                             style="width: 100px; position: relative;">
                                                         <input type="file" class="form-control" class="photo"
-                                                            name="photo" id="photo" onchange="previewPhoto()"
-                                                            required>
+                                                            name="photo" id="photo" onchange="previewPhoto()">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Photo Selfie</div>
                                                         <input type="text" name="oldphotoselfie"
-                                                            value="{{ $nasabah->fhoto_selfie }}" hidden> <br>
-                                                        <img src="{{ asset('storage/' . $nasabah->photo) }}"
+                                                            value="{{ $nasabah->photo_selfie }}" hidden> <br>
+                                                        <img src="{{ asset('storage/image/photo_selfie/' . $nasabah->photo_selfie) }}"
                                                             class="img-fluid img-preview2 mb-3 col-sm-5"
                                                             style="width: 100px; position: relative;">
                                                         <input type="file" class="form-control" class="photo_selfie"
                                                             name="photo_selfie" id="photo_selfie"
-                                                            onchange="previewPhotoSelfi()" required>
+                                                            onchange="previewPhotoSelfi()"
+                                                            value="{{ $nasabah->fhoto_selfie }}">
                                                     </div>
                                                 </div>
 
