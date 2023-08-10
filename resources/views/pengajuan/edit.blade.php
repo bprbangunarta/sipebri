@@ -24,7 +24,7 @@
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
                                             <a href="{{ route('pendamping.edit', [
-                                                'nasabah' => $data->kode_nasabah,
+                                                'nasabah' => $data[0]->kode_nasabah,
                                             ]) }}"
                                                 class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@
                                     <div class="col-3 d-none d-md-block border-end">
                                         <div class="card-body">
                                             @include('templates.menu-pendaftaran', [
-                                                'nasabah' => $data->kode_nasabah,
+                                                'nasabah' => $data[0]->kode_nasabah,
                                             ])
                                         </div>
                                     </div>
@@ -63,7 +63,8 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Plafon</div>
                                                         <input type="text" class="form-control" name="plafon"
-                                                            id="plafon" placeholder="10.000.000">
+                                                            id="plafon" placeholder="10.000.000"
+                                                            value="{{ $pengajuan[0]->plafon = 'Rp. ' . number_format($pengajuan[0]->plafon, 0, ',', '.') }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Suku Bunga</div>

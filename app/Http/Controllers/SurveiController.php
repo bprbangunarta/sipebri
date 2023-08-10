@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kantor;
 use App\Models\Nasabah;
 use Illuminate\Http\Request;
 
@@ -11,8 +12,11 @@ class SurveiController extends Controller
     {
         $req = $request->query('nasabah');
         $cek = Nasabah::where('kode_nasabah', $req)->first();
+
+        $kantor = Kantor::all();
         return view('survei.edit', [
-            'data' => $cek
+            'data' => $cek,
+            'kantor' => $kantor,
         ]);
     }
 }

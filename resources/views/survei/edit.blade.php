@@ -66,9 +66,10 @@
                                                             placeholder="Pilih Wilayah" name="kantor_kode"
                                                             id="select-wilayah">
                                                             <option value="">Pilih Wilayah</option>
-                                                            <option value="SBG">Subang</option>
-                                                            <option value="PGD">Pagaden</option>
-                                                            <option value="PMK">Pamanukan</option>
+                                                            @foreach ($kantor as $item)
+                                                                <option value="{{ $item->kode_kantor }}">
+                                                                    {{ $item->nama_kantor }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
