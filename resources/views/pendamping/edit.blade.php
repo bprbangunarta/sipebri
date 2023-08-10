@@ -23,7 +23,10 @@
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('nasabah.edit') }}" class="btn btn-primary">
+                                            <a href="{{ route('nasabah.edit', [
+                                                'nasabah' => $nasabah->kode_nasabah,
+                                            ]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -54,106 +57,178 @@
                                         </div>
                                     </div>
                                     <div class="col d-flex flex-column">
-                                        <div class="card-body">
+                                        <form
+                                            action="{{ route('pendamping.update', ['pendamping' => $pendamping[0]->pengajuan_kode]) }}"
+                                            method="POST" enctype="multipart/form-data">
+                                            @method('put')
+                                            @csrf
+                                            <div class="card-body">
 
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Jenis ID</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Identitas"
-                                                        name="identitas" id="select-identitas">
-                                                        <option value="">Pilih Identitas</option>
-                                                        <option value="1">KTP</option>
-                                                        <option value="2">SIM</option>
-                                                        <option value="3">Pasport</option>
-                                                        <option value="9">Lainnya</option>
-                                                    </select>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Jenis ID</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Identitas" name="identitas"
+                                                            id="select-identitas">
+                                                            @if (is_null($pendamping[0]->identitas))
+                                                                <option value="">Pilih Identitas</option>
+                                                            @else
+                                                                <option value="{{ $pendamping[0]->identitas }}" selected>
+                                                                    {{ $pendamping[0]->iden }}</option>
+                                                            @endif
+                                                            <option value="1">KTP</option>
+                                                            <option value="2">SIM</option>
+                                                            <option value="3">Pasport</option>
+                                                            <option value="9">Lainnya</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">No Identitas</div>
+                                                        <input type="text" class="form-control" name="no_identitas"
+                                                            id="no_identitas" placeholder="3213XXXXX"
+                                                            value="{{ $pendamping[0]->no_identitas }}">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Masa Identitas</div>
+                                                        @if (is_null($pendamping[0]->masa_identitas))
+                                                            <input type="date" class="form-control" name="masa_identitas"
+                                                                id="masa_identitas">
+                                                        @else
+                                                            <input type="text" class="form-control" name="masa_identitas"
+                                                                id="masa_identitas"
+                                                                value="{{ $pendamping[0]->masa_identitas }}">
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">No Identitas</div>
-                                                    <input type="text" class="form-control" name="no_identitas"
-                                                        id="no_identitas" placeholder="3213XXXXX">
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Nama Lengkap</div>
+                                                        @if (is_null($pendamping[0]->nama_pendamping))
+                                                            <input type="text" class="form-control"
+                                                                name="nama_pendamping" id="nama_pendamping"
+                                                                placeholder="Nama Lengkap">
+                                                        @else
+                                                            <input type="text" class="form-control"
+                                                                name="nama_pendamping" id="nama_pendamping"
+                                                                placeholder="Nama Lengkap"
+                                                                value="{{ $pendamping[0]->nama_pendamping }}">
+                                                        @endif
+
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Tempat Lahir</div>
+                                                        @if (is_null($pendamping[0]->tempat_lahir))
+                                                            <input type="text" class="form-control" name="tempat_lahir"
+                                                                id="tempat_lahir" placeholder="Tempat Lahir">
+                                                        @else
+                                                            <input type="text" class="form-control" name="tempat_lahir"
+                                                                id="tempat_lahir" placeholder="Tempat Lahir"
+                                                                value="{{ $pendamping[0]->tempat_lahir }}">
+                                                        @endif
+
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Tanggal Lahir</div>
+                                                        @if (is_null($pendamping[0]->tanggal_lahir))
+                                                            <input type="date" class="form-control"
+                                                                name="tanggal_lahir" id="tanggal_lahir">
+                                                        @else
+                                                            <input type="text" class="form-control"
+                                                                name="tanggal_lahir" id="tanggal_lahir"
+                                                                value="{{ $pendamping[0]->tanggal_lahir }}">
+                                                        @endif
+
+                                                    </div>
                                                 </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Masa Identitas</div>
-                                                    <input type="date" class="form-control" name="masa_identitas"
-                                                        id="masa_identitas">
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Status</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pilih Status" name="status" id="select-status">
+                                                            @if (is_null($pendamping[0]->status))
+                                                                <option value="">Pilih Status</option>
+                                                            @else
+                                                                <option value="{{ $pendamping[0]->status }}">
+                                                                    {{ $pendamping[0]->status }}</option>
+                                                            @endif
+                                                            <option value="Istri">Istri</option>
+                                                            <option value="Suami">Suami</option>
+                                                            <option value="Orang Tua">Orang Tua</option>
+                                                            <option value="Saudara">Saudara</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Tanggungan</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Tanggungan" name="tanggungan"
+                                                            id="select-tanggungan">
+                                                            @if (is_null($pendamping[0]->tanggungan))
+                                                                <option value="">Pilih Tanggungan</option>
+                                                            @else
+                                                                <option value="{{ $pendamping[0]->tanggungan }}">
+                                                                    {{ $pendamping[0]['tgn'] }}</option>
+                                                            @endif
+
+                                                            <option value="0">Tidak Ada</option>
+                                                            <option value="1">1 Orang</option>
+                                                            <option value="2">2 Orang</option>
+                                                            <option value="3">3 Orang</option>
+                                                            <option value="4">4 Orang</option>
+                                                            <option value="5">5 Orang</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Pisah Harta</div>
+                                                        <select type="text" class="form-select"
+                                                            placeholder="Pisah Harta" name="pisah_harta"
+                                                            id="select-pisah-harta">
+                                                            @if (is_null($pendamping[0]->pisah_harta))
+                                                                <option value="">Pisah Harta</option>
+                                                            @else
+                                                                <option value="{{ $pendamping[0]->pisah_harta }}">
+                                                                    {{ $pendamping[0]['pisah'] }}</option>
+                                                            @endif
+
+                                                            <option value="Y">Iya</option>
+                                                            <option value="T">Tidak</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <p></p>
+                                                <div class="row g-3">
+                                                    <div class="col-md">
+                                                        <div class="form-label">Photo Formal</div>
+                                                        <input type="text" name="oldphoto"
+                                                            value="{{ $pendamping[0]->photo }}" hidden> <br>
+                                                        <img src="{{ asset('storage/image/photo/' . $pendamping[0]->photo) }}"
+                                                            class="img-fluid img-preview mb-3 col-sm-5"
+                                                            style="width: 100px; position: relative;">
+                                                        <input type="file" class="form-control" class="photo"
+                                                            name="photo" id="photo" onchange="previewPhoto()">
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-label">Photo Selfie</div>
+                                                        <input type="text" name="oldphotoselfie"
+                                                            value="{{ $pendamping[0]->photo_selfie }}" hidden> <br>
+                                                        <img src="{{ asset('storage/image/photo_selfie/' . $pendamping[0]->photo_selfie) }}"
+                                                            class="img-fluid img-preview2 mb-3 col-sm-5"
+                                                            style="width: 100px; position: relative;">
+                                                        <input type="file" class="form-control" class="photo_selfie"
+                                                            name="photo_selfie" id="photo_selfie"
+                                                            onchange="previewPhotoSelfi()">
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Nama Lengkap</div>
-                                                    <input type="text" class="form-control" name="nama_pendamping"
-                                                        id="nama_pendamping" placeholder="Nama Lengkap">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Tempat Lahir</div>
-                                                    <input type="text" class="form-control" name="tempat_lahir"
-                                                        id="tempat_lahir" placeholder="Tempat Lahir">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Tanggal Lahir</div>
-                                                    <input type="date" class="form-control" name="tempat_lahir"
-                                                        id="tempat_lahir">
+                                            <div class="card-footer bg-transparent mt-auto">
+                                                <div class="btn-list justify-content-end">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Simpan
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Status</div>
-                                                    <select type="text" class="form-select" placeholder="Pilih Status"
-                                                        name="status" id="select-status">
-                                                        <option value="">Pilih Status</option>
-                                                        <option value="Istri">Istri</option>
-                                                        <option value="Suami">Suami</option>
-                                                        <option value="Orang Tua">Orang Tua</option>
-                                                        <option value="Saudara">Saudara</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Tanggungan</div>
-                                                    <select type="text" class="form-select" placeholder="Tanggungan"
-                                                        name="tanggungan" id="select-tanggungan">
-                                                        <option value="">Pilih Tanggungan</option>
-                                                        <option value="0">Tidak Ada</option>
-                                                        <option value="1">1 Orang</option>
-                                                        <option value="2">2 Orang</option>
-                                                        <option value="3">3 Orang</option>
-                                                        <option value="4">4 Orang</option>
-                                                        <option value="5">5 Orang</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Pisah Harta</div>
-                                                    <select type="text" class="form-select" placeholder="Pisah Harta"
-                                                        name="pisah_harta" id="select-pisah-harta">
-                                                        <option value="">Pisah Harta</option>
-                                                        <option value="Y">Iya</option>
-                                                        <option value="T">Tidak</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <p></p>
-                                            <div class="row g-3">
-                                                <div class="col-md">
-                                                    <div class="form-label">Photo Formal</div>
-                                                    <input type="file" class="form-control" class="photo"
-                                                        id="photo">
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Photo Selfie</div>
-                                                    <input type="file" class="form-control" class="photo_selfie"
-                                                        id="photo_selfie">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer bg-transparent mt-auto">
-                                            <div class="btn-list justify-content-end">
-                                                <a href="#" class="btn btn-primary">
-                                                    Simpan
-                                                </a>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -273,5 +348,34 @@
                 },
             }));
         });
+    </script>
+    <script>
+        function previewPhoto() {
+            const image = document.getElementById('photo');
+            const imgPreview = document.querySelector('.img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
+
+        function previewPhotoSelfi() {
+            const image = document.getElementById('photo_selfie');
+            const imgPreview = document.querySelector('.img-preview2');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
     </script>
 @endpush

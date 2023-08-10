@@ -460,8 +460,7 @@
                                                             style="width: 100px; position: relative;">
                                                         <input type="file" class="form-control" class="photo_selfie"
                                                             name="photo_selfie" id="photo_selfie"
-                                                            onchange="previewPhotoSelfi()"
-                                                            value="{{ $nasabah->fhoto_selfie }}">
+                                                            onchange="previewPhotoSelfi()">
                                                     </div>
                                                 </div>
 

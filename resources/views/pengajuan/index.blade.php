@@ -101,7 +101,7 @@
                                                     </td>
                                                 @endif
                                                 @php
-                                                    $item->plafon = 'Rp. ' . number_format($item->plafon, 2, ',', '.');
+                                                    $item->plafon = 'Rp. ' . number_format($item->plafon, 0, ',', '.');
                                                 @endphp
                                                 <td class="text-start">{{ $item->plafon }}</td>
                                                 <td class="text-center">{{ $item->jk }}</td>

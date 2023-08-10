@@ -265,7 +265,7 @@ class NasabahController extends Controller
         }else if (strlen($tg[0]) == 4){
             $cek['masa_identitas'] = Carbon::createFromFormat('Y-m-d', $request->masa_identitas)->format('Ymd');
         }
-        // dd($cek);
+       
         //Hapus format tanggal Y-M-D menjadi YMD
         $cek['tanggal_lahir'] = Carbon::createFromFormat('m-d-Y', $request->tanggal_lahir)->format('Ymd');
        

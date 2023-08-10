@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::put('/nasabah/update', [NasabahController::class, 'update'])->name('nasabah.update');
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
+        Route::put('/pendamping/update', [PendampingController::class, 'update'])->name('pendamping.update');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
         Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
