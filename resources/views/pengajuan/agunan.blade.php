@@ -84,7 +84,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <b>Jenis</b> : {{ $item->jenis_agunan }} <br>
-                                                                    <b>Dokument</b> : {{ $item->jenis_dokumen }}
+                                                                    <b>Dokumen</b> : {{ $item->jenis_dokumen }}
                                                                 </td>
                                                                 <td>{{ $item->no_dokumen }}</td>
                                                                 <td>{{ $item->atas_nama }}</td>
@@ -117,7 +117,9 @@
                                                                 </td>
 
                                                                 <td class="text-center">
-                                                                    <form action="" method="POST">
+                                                                    <form
+                                                                        action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
+                                                                        method="POST">
                                                                         @method('delete')
                                                                         @csrf
                                                                         <button type="submit"

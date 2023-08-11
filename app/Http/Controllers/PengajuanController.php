@@ -47,7 +47,7 @@ class PengajuanController extends Controller
                     ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
                     ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
                     ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-                    ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                    ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
                     ->where('data_pengajuan.kode_pengajuan', '=', $pengajuan[0]->kode_pengajuan)
                     ->get();
 
@@ -84,6 +84,7 @@ class PengajuanController extends Controller
             'catatan' => 'required',
         ]);
 
+        // Merubah tanggal 
         $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
         $cek['masa_agunan'] = $carbonDate->format('Ymd');
       
@@ -94,5 +95,14 @@ class PengajuanController extends Controller
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
 
+    }
+
+    public function destroy($pengajuan){
+        try {
+            DB::table('data_jaminan')->where('id', $pengajuan)->delete();   
+            return redirect()->back()->with('success', 'Data berhasil dihapus');           
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        }
     }
 }
