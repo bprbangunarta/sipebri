@@ -154,7 +154,7 @@
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Kecamatan</div>
-                                                        <select type="text" class="form-select"
+                                                        <select type="text" class="form-select kecamatan"
                                                             placeholder="Pilih Kecamatan" name="kecamatan"
                                                             id="select-kecamatan">
                                                             @if (is_null($nasabah->kecamatan))
@@ -164,17 +164,17 @@
                                                                     {{ $nasabah->kecamatan }}</option>
                                                             @endif
 
-                                                            @foreach ($kec as $item)
+                                                            {{-- @foreach ($kec as $item)
                                                                 <option value="{{ $item->kecamatan }}">
                                                                     {{ $item->kecamatan }}
                                                                 </option>
-                                                            @endforeach
+                                                            @endforeach --}}
 
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Kelurahan</div>
-                                                        <select type="text" class="form-select"
+                                                        <select type="text" class="form-select kelurahan"
                                                             placeholder="Pilih Kelurahan" name="kelurahan"
                                                             id="select-kelurahan">
                                                             @if (is_null($nasabah->kelurahan))
@@ -183,11 +183,11 @@
                                                                 <option value="{{ $nasabah->kelurahan }}">
                                                                     {{ $nasabah->kelurahan }}</option>
                                                             @endif
-                                                            @foreach ($kel as $item)
+                                                            {{-- @foreach ($kel as $item)
                                                                 <option value="{{ $item->kelurahan }}">
                                                                     {{ $item->kelurahan }}
                                                                 </option>
-                                                            @endforeach
+                                                            @endforeach --}}
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
@@ -510,7 +510,6 @@
     </div>
 @endsection
 
-
 @push('myscript')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -565,57 +564,57 @@
             }));
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
-            var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-kecamatan'), {
-                copyClassesToDropdown: false,
-                dropdownClass: 'dropdown-menu ts-dropdown',
-                optionClass: 'dropdown-item',
-                controlInput: '<input>',
-                render: {
-                    item: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                    option: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                },
-            }));
-        });
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     var el;
+        //     window.TomSelect && (new TomSelect(el = document.getElementById('select-kecamatan'), {
+        //         copyClassesToDropdown: false,
+        //         dropdownClass: 'dropdown-menu ts-dropdown',
+        //         optionClass: 'dropdown-item',
+        //         controlInput: '<input>',
+        //         render: {
+        //             item: function(data, escape) {
+        //                 if (data.customProperties) {
+        //                     return '<div><span class="dropdown-item-indicator">' + data
+        //                         .customProperties + '</span>' + escape(data.text) + '</div>';
+        //                 }
+        //                 return '<div>' + escape(data.text) + '</div>';
+        //             },
+        //             option: function(data, escape) {
+        //                 if (data.customProperties) {
+        //                     return '<div><span class="dropdown-item-indicator">' + data
+        //                         .customProperties + '</span>' + escape(data.text) + '</div>';
+        //                 }
+        //                 return '<div>' + escape(data.text) + '</div>';
+        //             },
+        //         },
+        //     }));
+        // });
 
-        document.addEventListener("DOMContentLoaded", function() {
-            var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-kelurahan'), {
-                copyClassesToDropdown: false,
-                dropdownClass: 'dropdown-menu ts-dropdown',
-                optionClass: 'dropdown-item',
-                controlInput: '<input>',
-                render: {
-                    item: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                    option: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                },
-            }));
-        });
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     var el;
+        //     window.TomSelect && (new TomSelect(el = document.getElementById('select-kelurahan'), {
+        //         copyClassesToDropdown: false,
+        //         dropdownClass: 'dropdown-menu ts-dropdown',
+        //         optionClass: 'dropdown-item',
+        //         controlInput: '<input>',
+        //         render: {
+        //             item: function(data, escape) {
+        //                 if (data.customProperties) {
+        //                     return '<div><span class="dropdown-item-indicator">' + data
+        //                         .customProperties + '</span>' + escape(data.text) + '</div>';
+        //                 }
+        //                 return '<div>' + escape(data.text) + '</div>';
+        //             },
+        //             option: function(data, escape) {
+        //                 if (data.customProperties) {
+        //                     return '<div><span class="dropdown-item-indicator">' + data
+        //                         .customProperties + '</span>' + escape(data.text) + '</div>';
+        //                 }
+        //                 return '<div>' + escape(data.text) + '</div>';
+        //             },
+        //         },
+        //     }));
+        // });
 
         document.addEventListener("DOMContentLoaded", function() {
             var el;
@@ -883,85 +882,88 @@
     }
 </script>
 
-{{-- @section('scr')
+@section('scr')
     <script>
         $(document).ready(function() {
-            // Menggunakan Ajax untuk mengirim data Kabupaten ke controller
-            $("#select-kabupaten").on("change", function() {
-                $("#select-kecamatan").empty();
-                $("#select-kelurahan").empty();
+            //Ambil data kabupaten
+            $("#select-kabupaten").on('change', function() {
+                $('#select-kecamatan').empty()
+                // $('#select-kelurahan').empty()
                 var nama = $("#select-kabupaten").val();
                 $.ajax({
                     url: "/nasabah/kabupaten",
                     type: "POST",
-                    cache: false,
-                    dataType: "json",
                     data: {
                         _token: "{{ csrf_token() }}",
-                        name: nama,
+                        name: nama
                     },
                     success: function(response) {
+                        let st = JSON.stringify(response);
                         let obj = Object.values(response);
-                        var ch = [];
+                        var ch = []
                         for (var i = 0; i < obj.length; i++) {
                             if (ch.indexOf(obj[i].kecamatan) === -1) {
-                                ch.push(obj[i].kecamatan);
+                                ch.push(obj[i].kecamatan)
+
                             }
                         }
-                        ch.sort();
-                        ch.forEach((data) => {
-                            $("#select-kecamatan").append(
-                                $("<option>", {
-                                    value: data,
-                                    text: data,
-                                })
-                            );
+
+                        ch.sort()
+
+                        ch.forEach(data => {
+                            $('#select-kecamatan').append($('<option>', {
+                                value: data,
+                                text: data
+                            }));
                         });
+
                     },
                     error: function(xhr) {
                         // Tindakan jika terjadi error
                         console.log(xhr.responseText);
-                    },
+                    }
                 });
             });
 
-            // $("#select-kecamatan").on("change", function() {
-            //     $("#select-kelurahan").empty();
-            //     var nama = $("#select-kecamatan").val();
-            //     $.ajax({
-            //         url: "{{ route('kecamatan') }}",
-            //         type: "POST",
-            //         cache: false,
-            //         dataType: "json",
-            //         data: {
-            //             _token: "{{ csrf_token() }}",
-            //             name: nama,
-            //         },
-            //         success: function(response) {
-            //             // let st = JSON.stringify(response);
-            //             let obj = Object.values(response);
-            //             var ch = [];
-            //             for (var i = 0; i < obj.length; i++) {
-            //                 if (ch.indexOf(obj[i].kelurahan) === -1) {
-            //                     ch.push(obj[i].kelurahan);
-            //                 }
-            //             }
-            //             ch.sort();
-            //             ch.forEach((data) => {
-            //                 $("#select-kelurahan").append(
-            //                     $("<option>", {
-            //                         value: data,
-            //                         text: data,
-            //                     })
-            //                 );
-            //             });
-            //         },
-            //         error: function(xhr) {
-            //             // Tindakan jika terjadi error
-            //             console.log(xhr.responseText);
-            //         },
-            //     });
-            // });
+            //Ambil data kecamatan
+            $("#select-kecamatan").on('change', function() {
+                $('#select-kelurahan').empty()
+                // $('#select-kelurahan').empty()
+                var nama = $("#select-kecamatan").val();
+                $.ajax({
+                    url: "/nasabah/kecamatan",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        name: nama
+                    },
+                    success: function(response) {
+                        let st = JSON.stringify(response);
+                        let obj = Object.values(response);
+                        var ch = []
+                        for (var i = 0; i < obj.length; i++) {
+                            if (ch.indexOf(obj[i].kelurahan) === -1) {
+                                ch.push(obj[i].kelurahan)
+
+                            }
+                        }
+
+                        ch.sort()
+
+                        ch.forEach(data => {
+                            $('#select-kelurahan').append($('<option>', {
+                                value: data,
+                                text: data
+                            }));
+                        });
+
+                    },
+                    error: function(xhr) {
+                        // Tindakan jika terjadi error
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
         });
     </script>
-@endsection --}}
+@endsection

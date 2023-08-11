@@ -144,9 +144,15 @@ class NasabahController extends Controller
         }
         
         //Data Wilayah / Dati
+        // $kab = DB::table('v_dati')
+        //         ->select('kode_dati', 'nama_dati')
+        //         ->distinct()
+        //         ->take(10)
+        //         ->get(); 
+        // select distinct kode_dati, nama_dati from v_dati LIMIT 10
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
-        $kec = DB::select('select distinct kecamatan from v_dati'); 
-        $kel = DB::select('select distinct kelurahan from v_dati'); 
+        // $kec = DB::select('select distinct kecamatan from v_dati'); 
+        // $kel = DB::select('select distinct kelurahan from v_dati'); 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return view('nasabah.edit', [
@@ -154,8 +160,8 @@ class NasabahController extends Controller
             'job' => $job,
             'nasabah' => $cek,
             'kab' => $kab,
-            'kec' => $kec,
-            'kel' =>$kel,
+            // 'kec' => $kec,
+            // 'kel' =>$kel,
         ]);
     }
 
