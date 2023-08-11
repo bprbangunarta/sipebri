@@ -82,7 +82,7 @@
                     @endcan
 
                     @can('lihat pendaftaran')
-                    <li class="nav-item {{ request()->is('pendaftaran', 'pendaftaran/edit') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('pengajuan', 'pendaftaran/edit') ? 'active' : '' }}">
                         <a class="nav-link" href="/pengajuan">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users"

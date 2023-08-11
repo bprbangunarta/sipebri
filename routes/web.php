@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\DatiController;
+use App\Http\Controllers\TabunganController;
 use App\Models\Nasabah;
 
 /*
@@ -31,6 +32,9 @@ use App\Models\Nasabah;
 Route::get('/', function () {
     return redirect('login');
 });
+
+Route::get('/tabungan', [TabunganController::class, 'index'])->name('tabungan.index');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -79,7 +83,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
 
         //Dati
-        Route::controller(DatiController::class)->group(function(){
+        Route::controller(DatiController::class)->group(function () {
             Route::post('/nasabah/kabupaten', 'kabupaten')->name('kabupaten');
             Route::post('/nasabah/kecamatan', 'kecamatan')->name('kecamatan');
         });
