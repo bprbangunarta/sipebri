@@ -23,7 +23,7 @@
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('pendamping.edit', [
+                                            <a href="{{ route('pengajuan.agunan', [
                                                 'nasabah' => $data->kode_nasabah,
                                             ]) }}"
                                                 class="btn btn-primary">
