@@ -80,50 +80,23 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <b>Jenis</b> : Kendaraan Bermotor Roda 2 <br>
-                                                                <b>Dokument</b> : BPKB Motor Non Fiducia
-                                                            </td>
-                                                            <td>S-03222526</td>
-                                                            <td>Zulfadli Rizal</td>
-                                                            <td class="text-center">
-                                                                <span class="badge bg-danger-lt">Minta Otorisasi</span>
-                                                            </td>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                <a href="#" title="Edit Data">
-                                                                    <span class="badge bg-warning">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            class="icon icon-tabler icon-tabler-edit"
-                                                                            width="24" height="24"
-                                                                            viewBox="0 0 24 24" stroke-width="2"
-                                                                            stroke="currentColor" fill="none"
-                                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                                fill="none"></path>
-                                                                            <path
-                                                                                d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
-                                                                            </path>
-                                                                            <path
-                                                                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
-                                                                            </path>
-                                                                            <path d="M16 5l3 3"></path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </a>
-                                                            </td>
-
-                                                            <td class="text-center">
-                                                                <form action="" method="POST">
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <button type="submit"
-                                                                        style="border: none; background: transparent;"
-                                                                        class="confirmdelete">
-                                                                        <span class=" badge bg-danger">
+                                                        @foreach ($jaminan as $item)
+                                                            <tr>
+                                                                <td>
+                                                                    <b>Jenis</b> : {{ $item->jenis_agunan }} <br>
+                                                                    <b>Dokument</b> : {{ $item->jenis_dokumen }}
+                                                                </td>
+                                                                <td>{{ $item->no_dokumen }}</td>
+                                                                <td>{{ $item->atas_nama }}</td>
+                                                                <td class="text-center">
+                                                                    <span class="badge bg-danger-lt">Minta Otorisasi</span>
+                                                                </td>
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <a href="#" title="Edit Data">
+                                                                        <span class="badge bg-warning">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                class="icon icon-tabler icon-tabler-trash"
+                                                                                class="icon icon-tabler icon-tabler-edit"
                                                                                 width="24" height="24"
                                                                                 viewBox="0 0 24 24" stroke-width="2"
                                                                                 stroke="currentColor" fill="none"
@@ -131,21 +104,51 @@
                                                                                 stroke-linejoin="round">
                                                                                 <path stroke="none" d="M0 0h24v24H0z"
                                                                                     fill="none"></path>
-                                                                                <path d="M4 7l16 0"></path>
-                                                                                <path d="M10 11l0 6"></path>
-                                                                                <path d="M14 11l0 6"></path>
                                                                                 <path
-                                                                                    d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
+                                                                                    d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
                                                                                 </path>
                                                                                 <path
-                                                                                    d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
+                                                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
                                                                                 </path>
+                                                                                <path d="M16 5l3 3"></path>
                                                                             </svg>
                                                                         </span>
-                                                                    </button>
-                                                                </form>
-                                                            </td>
-                                                        </tr>
+                                                                    </a>
+                                                                </td>
+
+                                                                <td class="text-center">
+                                                                    <form action="" method="POST">
+                                                                        @method('delete')
+                                                                        @csrf
+                                                                        <button type="submit"
+                                                                            style="border: none; background: transparent;"
+                                                                            class="confirmdelete">
+                                                                            <span class=" badge bg-danger">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="icon icon-tabler icon-tabler-trash"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24" stroke-width="2"
+                                                                                    stroke="currentColor" fill="none"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                                                        fill="none"></path>
+                                                                                    <path d="M4 7l16 0"></path>
+                                                                                    <path d="M10 11l0 6"></path>
+                                                                                    <path d="M14 11l0 6"></path>
+                                                                                    <path
+                                                                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
+                                                                                    </path>
+                                                                                    <path
+                                                                                        d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
+                                                                                    </path>
+                                                                                </svg>
+                                                                            </span>
+                                                                        </button>
+                                                                    </form>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -171,7 +174,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="#" method="POST">
+                <form action="{{ route('pengajuan.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -179,9 +182,12 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Agunan</label>
+                                    <input type="text" value="{{ $pengajuan[0]->kode_pengajuan }}"
+                                        name="pengajuan_kode" hidden>
                                     <select type="text" class="form-select" placeholder="Jenis Agunan"
-                                        name="kode_jenis" id="select-jenis">
+                                        name="jenis_agunan_kode" id="select-jenis">
                                         <option value="" selected>Jenis Agunan</option>
+                                        {{ $agunan }}
                                         @foreach ($agunan as $item)
                                             <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
                                         @endforeach
@@ -193,7 +199,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Dokumen</label>
                                     <select type="text" class="form-select" placeholder="Jenis Dokumen"
-                                        name="kode_dokumen" id="select-dokumen">
+                                        name="jenis_dokumen_kode" id="select-dokumen">
                                         <option value="" selected>Jenis Dokumen</option>
                                         @foreach ($dok as $item)
                                             <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
@@ -231,8 +237,9 @@
                                     <select type="text" class="form-select" placeholder="Kode Dati" name="kode_dati"
                                         id="select-dati">
                                         <option value="">Kode Dati</option>
-                                        <option value="0121">Subang, Kab.</option>
-                                        <option value="0122">Bandung Barat, Kab.</option>
+                                        @foreach ($dati as $item)
+                                            <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -256,7 +263,7 @@
 
                     <div class="modal-footer">
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <a href="#" class="btn btn-primary ms-auto">Simpan</a>
+                        <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
                     </div>
                 </form>
             </div>

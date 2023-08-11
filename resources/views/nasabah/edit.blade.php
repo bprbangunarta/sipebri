@@ -157,7 +157,7 @@
                                                         <select type="text" class="form-select kecamatan"
                                                             placeholder="Pilih Kecamatan" name="kecamatan"
                                                             id="select-kecamatan">
-                                                            {{-- @if (is_null($nasabah->kecamatan))
+                                                            @if (is_null($nasabah->kecamatan))
                                                                 <option value="">Pilih Kecamatan</option>
                                                             @else
                                                                 <option value="{{ $nasabah->kecamatan }}">
@@ -168,7 +168,7 @@
                                                                 <option value="{{ $item->kecamatan }}">
                                                                     {{ $item->kecamatan }}
                                                                 </option>
-                                                            @endforeach --}}
+                                                            @endforeach
 
                                                         </select>
                                                     </div>
@@ -177,7 +177,7 @@
                                                         <select type="text" class="form-select kelurahan"
                                                             placeholder="Pilih Kelurahan" name="kelurahan"
                                                             id="select-kelurahan">
-                                                            {{-- @if (is_null($nasabah->kelurahan))
+                                                            @if (is_null($nasabah->kelurahan))
                                                                 <option value="">Pilih Kecamatan</option>
                                                             @else
                                                                 <option value="{{ $nasabah->kelurahan }}">
@@ -187,7 +187,7 @@
                                                                 <option value="{{ $item->kelurahan }}">
                                                                     {{ $item->kelurahan }}
                                                                 </option>
-                                                            @endforeach --}}
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
