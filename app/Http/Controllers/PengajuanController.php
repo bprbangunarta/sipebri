@@ -87,12 +87,12 @@ class PengajuanController extends Controller
         $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
         $cek['masa_agunan'] = $carbonDate->format('Ymd');
       
-        DB::table('data_jaminan')->insert($cek);
-        return redirect()->back()->with('success', 'Data berhasil ditambahkan');
-        // try {
-        // } catch (Throwable $th) {
-        //     return redirect()->back()->with('error', 'Data gagal ditambahkan');
-        // }
+        try {
+            DB::table('data_jaminan')->insert($cek);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
 
     }
 }
