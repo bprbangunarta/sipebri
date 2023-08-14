@@ -93,7 +93,8 @@
                                                                 </td>
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <a href="#" title="Edit Data">
+                                                                    <a href="" data-bs-toggle="modal" data-bs-target="#modal-edit"
+                                                        data-id="{{ $item->id }}">
                                                                         <span class="badge bg-warning">
                                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                                 class="icon icon-tabler icon-tabler-edit"
@@ -271,6 +272,101 @@
             </div>
         </div>
     </div>
+
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Agunan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form action="{{ route('pengajuan.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Agunan</label>
+                                    <input type="text" value="{{ $pengajuan[0]->kode_pengajuan }}"
+                                        name="pengajuan_kode" hidden>
+                                    <select type="text" class="form-select" placeholder="Jenis Agunan"
+                                        name="jenis_agunan_kode" id="jenis">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis Dokumen</label>
+                                    <select type="text" class="form-select" placeholder="Jenis Dokumen"
+                                        name="jenis_dokumen_kode" id="dokumen">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">No Dokumen</label>
+                                    <input type="text" class="form-control" name="no_dokumen" id="no_dok"
+                                        placeholder="No Dokumen">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Atas Nama</label>
+                                    <input type="text" class="form-control" name="atas_nama" id="nama"
+                                        placeholder="Nama Lengkap">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Masa Agunan</label>
+                                    <input type="text" class="form-control" name="masa_agunan" id="masa_agunans">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Kode Dati</label>
+                                    <select type="text" class="form-select" placeholder="Kode Dati" name="kode_dati"
+                                        id="dati">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Lokasi</label>
+                                    <textarea class="form-control" name="lokasi" id="lok"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Catatan</label>
+                                    <textarea class="form-control" name="catatan" id="catatans"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
+                        <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+     <script src="{{ asset('assets/js/myscript/agunan.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection
 
