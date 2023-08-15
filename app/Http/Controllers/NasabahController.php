@@ -29,7 +29,7 @@ class NasabahController extends Controller
             $cek->masa_identitas= $carbonid->format('m-d-Y');
         }
        
-         //Format tanggal lahir
+        //Format tanggal lahir
         $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
         $cek->tanggal_lahir= $carbonDate->format('m-d-Y');
         

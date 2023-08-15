@@ -94,7 +94,78 @@ class PengajuanController extends Controller
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
+    }
 
+    public function editagunan($id){
+        $data = DB::table('data_jaminan')
+                ->where('id', $id)
+                ->get();
+        
+        //Ambil data agunan
+        $agunan = Agunan::where('kode', $data[0]->jenis_agunan_kode)->get();
+
+        //Ambil data dokumen
+        $dok= DB::table('data_jenis_dokumen')
+                ->select('jenis_dokumen')
+                ->where('kode', $data[0]->jenis_dokumen_kode)->get();
+
+        //Data dati
+        $dati = DB::table('v_dati')
+                ->select('nama_dati')
+                ->distinct()
+                ->where('kode_dati', $data[0]->kode_dati)->get();
+
+        //Dati all data
+        $kabupaten = DB::table('v_dati')
+                    ->select('kode_dati', 'nama_dati')
+                    ->distinct()->get(); 
+
+        //Agunan
+        $agn = Agunan::select('kode', 'jenis_agunan')->get();
+
+        //Dokumen
+        $dokumen = DB::table('data_jenis_dokumen')
+                    ->select('kode', 'jenis_dokumen')->get();
+        
+        //Format tanggal lahir
+        $carbonDate = Carbon::createFromFormat('Ymd', $data[0]->masa_agunan);
+        $data[0]->masa_agunan = $carbonDate->format('m-d-Y');
+
+        /* Menambahkan field baru ke variable data dari data agunan dan data dokumen */
+        $data[0]->jenis_agunan = $agunan[0]->jenis_agunan;
+        $data[0]->jenis_dokumen = $dok[0]->jenis_dokumen;
+        $data[0]->nama_dati = $dati[0]->nama_dati;
+
+       
+        
+        return response()->json([$data, $kabupaten, $agn, $dokumen]);
+    }
+
+    public function updateagunan(Request $request){
+        
+        $cek = $request->validate([
+            'jenis_agunan_kode' => 'required',
+            'jenis_dokumen_kode' => 'required',
+            'no_dokumen' => 'required',
+            'atas_nama' => 'required',
+            'masa_agunan' => 'required',
+            'kode_dati' => 'required',
+            'lokasi' => 'required',
+            'catatan' => 'required',
+        ]);
+
+        // Merubah tanggal 
+        $carbonDate = Carbon::createFromFormat('m-d-Y', $cek['masa_agunan']);
+        $cek['masa_agunan'] = $carbonDate->format('Ymd');
+
+        try {
+            DB::table('data_jaminan')
+                ->where('id', $request->data)
+                ->update($cek);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
     }
 
     public function destroy($pengajuan){

@@ -80,6 +80,8 @@ Route::middleware('auth')->group(function () {
         Route::put('/pendamping/update', [PendampingController::class, 'update'])->name('pendamping.update');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
         Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
+        Route::get('/pengajuan/editagunan/{id}/edit', [PengajuanController::class, 'editagunan'])->name('pengajuan.editagunan');
+        Route::put('/pengajuan/editagunan/update', [PengajuanController::class, 'updateagunan'])->name('pengajuan.updateagunan');
         Route::delete('/pengajuan/{pengajuan}/delete', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
         Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
