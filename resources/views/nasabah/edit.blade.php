@@ -53,7 +53,7 @@
                                             ])
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col d-flex flex-column">
                                         <form action="{{ route('nasabah.update', ['nasabah' => $nasabah->kode_nasabah]) }}"
                                             method="POST" enctype="multipart/form-data">
@@ -64,7 +64,7 @@
                                                     <div class="col-md">
                                                         <div class="form-label">No CIF</div>
                                                         <input type="text" class="form-control" name="no_cif"
-                                                            id="no_cif" placeholder="00133323711" disabled>
+                                                            id="no_cif" placeholder="00123456" value="{{ $nasabah->nocif }}" disabled>
                                                     </div>
 
                                                     <div class="col-md">
@@ -164,12 +164,6 @@
                                                                     {{ $nasabah->kecamatan }}</option>
                                                             @endif
 
-                                                            {{-- @foreach ($kec as $item)
-                                                                <option value="{{ $item->kecamatan }}">
-                                                                    {{ $item->kecamatan }}
-                                                                </option>
-                                                            @endforeach --}}
-
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
@@ -183,11 +177,7 @@
                                                                 <option value="{{ $nasabah->kelurahan }}">
                                                                     {{ $nasabah->kelurahan }}</option>
                                                             @endif
-                                                            {{-- @foreach ($kel as $item)
-                                                                <option value="{{ $item->kelurahan }}">
-                                                                    {{ $item->kelurahan }}
-                                                                </option>
-                                                            @endforeach --}}
+                                                            
                                                         </select>
                                                     </div>
                                                     <div class="col-md">

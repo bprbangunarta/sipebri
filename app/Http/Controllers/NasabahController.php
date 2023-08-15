@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
+use App\Models\Data;
 use App\Models\Survei;
 use App\Models\Nasabah;
+use App\Models\Tabungan;
 use App\Models\Pekerjaan;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
@@ -20,149 +22,133 @@ class NasabahController extends Controller
 {
     public function edit(Request $request)
     {
+
+        //Data nasabah sipebri
         $req = $request->query('nasabah');
         $cek = Nasabah::where('kode_nasabah', $req)->first();
-       
-        //Format masa identitas
-        if (!is_null($cek->masa_identitas)) {
-            $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
-            $cek->masa_identitas= $carbonid->format('m-d-Y');
-        }
-       
-        //Format tanggal lahir
-        $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
-        $cek->tanggal_lahir= $carbonDate->format('m-d-Y');
-        
-        //Ubah identitas dari nomor id menjadi data string
-        if ($cek->identitas == "1") {
-            $cek['iden'] = 'KTP';
-        }elseif ($cek->identitas == "2") {
-            $cek['iden'] = 'SIM';
-        }elseif ($cek->identitas == "3"){
-            $cek['iden'] = 'Passport';
-        }elseif ($cek->identitas == "9"){
-            $cek['iden']= 'Lainnya';
-        }
+        // dd($cek);
+        //Validasi data pertama kali berdasarkan data alamat yang null
+        if (is_null($cek->alamat_ktp)) {
+            
+            //Cek data Current CIF
+            $query = Tabungan::where('noid', $cek->no_identitas)
+                            ->where('jttempoid', $cek->tanggal_lahir)
+                            ->first();
 
-        //Ubah agama dari nomor id menjadi data string
-        if ($cek->identitas == "1") {
-            $cek['religi'] = 'Islam';
-        }elseif ($cek->identitas == "2") {
-            $cek['religi'] = 'Katolik';
-        }elseif ($cek->identitas == "3"){
-            $cek['religi'] = 'Kristen';
-        }elseif ($cek->identitas == "4"){
-            $cek['religi']= 'Hindu';
-        }elseif ($cek->identitas == "5"){
-            $cek['religi']= 'Budha';
-        }elseif ($cek->identitas == "6"){
-            $cek['religi']= 'Kong Hu Cu';
-        }
+            //Ubah identitas dari nomor id menjadi data string
+            $iden = Data::identitas($query->kodeid);
+            $query->iden = $iden;
 
-        //Ubah jenis kelamin dari nomor id menjadi data string
-        if ($cek->identitas == "1") {
-            $cek['jk'] = 'Pria';
-        }elseif ($cek->identitas == "2") {
-            $cek['jk'] = 'Wanita';
-        }
+            //Ubah agama dari nomor id menjadi data string
+            $agama = Data::agama($query->agama);
+            $query->religi = $agama;
 
-        //Ubah kewarganegaraan dari nomor id menjadi data string
-        if ($cek->kewarganegaraan == "WNI") {
-            $cek['kn'] = 'Warga Negara Indonesia';
-        }elseif ($cek->kewarganegaraan == "WNA") {
-            $cek['kn'] = 'Warga Negara Asing';
-        }
+            //Ubah jenis kelamin dari nomor id menjadi data string
+            $jk = Data::jk($query->sex);
+            $query->jk = $jk;
 
-        //Ubah pendidikan dari nomor id menjadi data string
-        if (!is_null($cek->pendidikan_kode)) {
-            $sc = Pendidikan::where('kode_pendidikan', $cek->pendidikan_kode)->get();
-            $cek['std'] = $sc[0]->nama_pendidikan;
-        }
+            //Ubah kewarganegaraan dari nomor id menjadi data string
+            $wn = Data::warganegara('1');
+            $query->kn = $wn;
 
-        //Ubah pekerjaan dari nomor id menjadi data string
-        if (!is_null($cek->pekerjaan_kode)) {
-            $pk = Pekerjaan::where('kode_pekerjaan', $cek->pekerjaan_kode)->get();
-            $cek['jo'] = $pk[0]->nama_pekerjaan;
-        }
-     
-        //Ubah status dari nomor id menjadi data string
-        if ($cek->status_pernikahan == "M") {
-            $cek['st'] = 'Menikah';
-        }elseif ($cek->status_pernikahan == "L") {
-            $cek['st'] = 'Lajang';
-        }elseif ($cek->status_pernikahan == "D") {
-            $cek['st'] = 'Duda';
-        }elseif ($cek->status_pernikahan == "J") {
-            $cek['st'] = 'Janda';
-        }
+            //Ubah status dari nomor id menjadi data string
+            $stat = Data::status($query->stsrt);
+            $query->st = $stat;
 
-        //Ubah kewarganegaraan dari nomor id menjadi data string
-        if ($cek->sumber_dana == "1") {
-            $cek['dana'] = 'Hibah';
-        }elseif ($cek->kewarganegaraan == "2") {
-            $cek['dana'] = 'Lain2';
-        }elseif ($cek->kewarganegaraan == "3") {
-            $cek['dana'] = 'Penghasilan';
-        }elseif ($cek->kewarganegaraan == "4") {
-            $cek['dana'] = 'Warisan';
-        }
+            // dd($query);
 
-        //Mencari sumber data dati berdasarkan kode_dati
-       $dati = DB::table('v_dati')
-            ->select('nama_dati')
-            ->distinct()
-            ->where('kode_dati', $cek->kode_dati)
-            ->first();
-        if (!is_null($dati)) {
-            $cek['nm_dati'] = $dati->nama_dati;
-        }
+            //Data dati
+            $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
 
-        //Ubah penghasilan utama dari nomor id menjadi data string
-        if ($cek->penghasilan_utama == "1") {
-            $cek['hasil'] = 's/d 2,5 jt';
-        }elseif ($cek->penghasilan_utama == "2") {
-            $cek['hasil'] = 's/d 2,5 - 5 jt';
-        }elseif ($cek->penghasilan_utama == "3"){
-            $cek['hasil'] = 's/d 5 - 7,5 jt';
-        }elseif ($cek->penghasilan_utama == "4"){
-            $cek['hasil']= 's/d 7,5 - 10 jt';
-        }elseif ($cek->penghasilan_utama == "5"){
-            $cek['hasil']= '10 jt';
-        }
+            $pend = Pendidikan::all();
+            $job = Pekerjaan::all();
+            return view('nasabah.edit', [
+                'pend' => $pend,
+                'job' => $job,
+                'nasabah' => $query,
+                'kab' => $kab,
+            ]);
+        }else{
+            
+                //Format masa identitas
+                if (!is_null($cek->masa_identitas)) {
+                    $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
+                    $cek->masa_identitas= $carbonid->format('m-d-Y');
+                }
+            
+                //Format tanggal lahir
+                $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
+                $cek->tanggal_lahir= $carbonDate->format('m-d-Y');
+                
+                //Ubah identitas dari nomor id menjadi data string
+                $iden = Data::identitas($cek->identitas);
+                $cek['iden'] = $iden;
 
-        //Ubah penghasilan lainnya dari nomor id menjadi data string
-        if ($cek->penghasilan_lainnya == "1") {
-            $cek['lain'] = 's/d 2,5 jt';
-        }elseif ($cek->penghasilan_lainnya == "2") {
-            $cek['lain'] = 's/d 2,5 - 5 jt';
-        }elseif ($cek->penghasilan_lainnya == "3"){
-            $cek['lain'] = 's/d 5 - 7,5 jt';
-        }elseif ($cek->penghasilan_lainnya == "4"){
-            $cek['lain']= 's/d 7,5 - 10 jt';
-        }elseif ($cek->penghasilan_lainnya == "5"){
-            $cek['lain']= '10 jt';
+                //Ubah agama dari nomor id menjadi data string
+                $agama = Data::agama($cek->agama);
+                $cek['religi'] = $agama;
+
+                //Ubah jenis kelamin dari nomor id menjadi data string
+                $jk = Data::jk($cek->jenis_kelamin);
+                $cek['jk'] = $jk;
+                
+                //Ubah kewarganegaraan dari nomor id menjadi data string
+                if ($cek->kewarganegaraan == "WNI") {
+                    $cek['kn'] = 'Warga Negara Indonesia';
+                }elseif ($cek->kewarganegaraan == "WNA") {
+                    $cek['kn'] = 'Warga Negara Asing';
+                }
+
+                //Ubah pendidikan dari nomor id menjadi data string
+                if (!is_null($cek->pendidikan_kode)) {
+                    $sc = Pendidikan::where('kode_pendidikan', $cek->pendidikan_kode)->get();
+                    $cek['std'] = $sc[0]->nama_pendidikan;
+                }
+
+                //Ubah pekerjaan dari nomor id menjadi data string
+                if (!is_null($cek->pekerjaan_kode)) {
+                    $pk = Pekerjaan::where('kode_pekerjaan', $cek->pekerjaan_kode)->get();
+                    $cek['jo'] = $pk[0]->nama_pekerjaan;
+                }
+            
+                //Ubah status dari nomor id menjadi data string
+                $sts = Data::status($cek->status_pernikahan);
+                $cek['st'] = $sts;
+
+                //Ubah sumber dana dari nomor id menjadi data string
+                $dn = Data::dana($cek->sumber_dana);
+                $cek['dana'] = $dn;
+
+                //Mencari sumber data dati berdasarkan kode_dati
+                $dati = DB::table('v_dati')
+                        ->select('nama_dati')
+                        ->distinct()
+                        ->where('kode_dati', $cek->kode_dati)
+                        ->first();
+                    if (!is_null($dati)) {
+                        $cek['nm_dati'] = $dati->nama_dati;
+                    }
+
+                //Ubah penghasilan utama dari nomor id menjadi data string
+                $utama = Data::penghasilanutama($cek->penghasilan_utama);
+                $cek['hasil'] = $utama;
+
+                //Ubah penghasilan lainnya dari nomor id menjadi data string
+                $lain = Data::penghasilanlain($cek->penghasilan_lainnya);
+                $cek['lain'] = $lain;
+                
+                //Data dati
+                $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
+
+                $pend = Pendidikan::all();
+                $job = Pekerjaan::all();
+                return view('nasabah.edit', [
+                    'pend' => $pend,
+                    'job' => $job,
+                    'nasabah' => $cek,
+                    'kab' => $kab,
+                ]);
         }
-        
-        //Data Wilayah / Dati
-        // $kab = DB::table('v_dati')
-        //         ->select('kode_dati', 'nama_dati')
-        //         ->distinct()
-        //         ->take(10)
-        //         ->get(); 
-        // select distinct kode_dati, nama_dati from v_dati LIMIT 10
-        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
-        // $kec = DB::select('select distinct kecamatan from v_dati'); 
-        // $kel = DB::select('select distinct kelurahan from v_dati'); 
-        $pend = Pendidikan::all();
-        $job = Pekerjaan::all();
-        return view('nasabah.edit', [
-            'pend' => $pend,
-            'job' => $job,
-            'nasabah' => $cek,
-            'kab' => $kab,
-            // 'kec' => $kec,
-            // 'kel' =>$kel,
-        ]);
     }
 
     public function store(Request $request){

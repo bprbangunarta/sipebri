@@ -22,17 +22,20 @@
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
 
                                 <thead>
-                                    <th>No Tabungan</th>
+                                
                                     <th>No CIF</th>
                                     <th>Nama Lengkap</th>
+                                    <th>NIK</th>
+                                    <th>TGL Lahir</th>
                                 </thead>
 
                                 <tbody>
                                     @foreach($tabungan as $row)
                                     <tr>
-                                        <td>{{ $row->noacc }}</td>
                                         <td>{{ $row->nocif }}</td>
-                                        <td>{{ $row->fnama }}</td>
+                                        <td>{{ $row->fname }}</td>
+                                        <td>{{ $row->noid }}</td>
+                                        <td>{{ $row->jttempoid }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

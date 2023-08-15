@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Data Survayor')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">

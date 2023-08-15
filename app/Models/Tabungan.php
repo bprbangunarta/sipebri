@@ -9,5 +9,6 @@ class Tabungan extends Model
 {
     use HasFactory;
     protected $connection = 'sqlsrv';
-    protected $table = 'm_tabunganb';
+    protected $table = 'm_cif';
+
 }
