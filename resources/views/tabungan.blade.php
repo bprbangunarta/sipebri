@@ -13,17 +13,10 @@
 
 <body>
     <div class="container">
-        <div class="card-header bg-secondary dark bgsize-darken-4 white card-header">
-            <h4 class="text-white">Handling Excel Data using PHPSpreadsheet in Laravel</h4>
-        </div>
-
         <div class="row justify-content-left">
             <div class="col-md-12">
                 <br />
                 <div class="card">
-                    <div class="card-header bgsize-primary-4 white card-header">
-                        <h4 class="card-title">Data Tabungan</h4>
-                    </div>
                     <div class="card-body">
                         <div class=" card-content table-responsive">
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -45,7 +38,7 @@
                                 </tbody>
                             </table>
 
-                            {{-- {{ $tabungan->links('vendor.pagination.bootstrap-5') }} --}}
+                            {{ $tabungan->onEachSide(0)->links('vendor.pagination.bootstrap-5') }}
 
                         </div>
                     </div>
