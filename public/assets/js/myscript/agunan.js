@@ -20,8 +20,14 @@ $(document).ready(function () {
 
                 var dti = JSON.stringify(response[1]);
                 var dat = JSON.parse(dti);
-                var dati = dat[0];
 
+                var ag = JSON.stringify(response[2]);
+                var agun = JSON.parse(ag);
+
+                var dok = JSON.stringify(response[3]);
+                var dokumen = JSON.parse(dok);
+
+                $("#data").val(hasil.id);
                 $("#jenis").append(
                     $("<option>", {
                         value: hasil.jenis_agunan_kode,
@@ -29,12 +35,36 @@ $(document).ready(function () {
                     }).prop("selected", true)
                 );
 
+                //Data agunan
+                agun.forEach((data) => {
+                    if (data.jenis_agunan != hasil.jenis_agunan) {
+                        $("#jenis").append(
+                            $("<option>", {
+                                value: data.kode,
+                                text: data.jenis_agunan,
+                            })
+                        );
+                    }
+                });
+
                 $("#dokumen").append(
                     $("<option>", {
                         value: hasil.jenis_dokumen_kode,
                         text: hasil.jenis_dokumen,
                     }).prop("selected", true)
                 );
+
+                //Data Dokumen
+                dokumen.forEach((data) => {
+                    if (data.jenis_dokumen != hasil.jenis_dokumen) {
+                        $("#dokumen").append(
+                            $("<option>", {
+                                value: data.kode,
+                                text: data.jenis_dokumen,
+                            })
+                        );
+                    }
+                });
 
                 $("#no_dok").val(hasil.no_dokumen);
 

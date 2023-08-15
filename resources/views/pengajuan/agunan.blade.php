@@ -281,7 +281,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="{{ route('pengajuan.store') }}" method="POST">
+                <form action="{{ route('pengajuan.updateagunan', ['pengajuan' => $jaminan[0]->id]) }}" method="POST">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -289,8 +290,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Jenis Agunan</label>
-                                    <input type="text" value="{{ $pengajuan[0]->kode_pengajuan }}"
-                                        name="pengajuan_kode" hidden>
+                                    <input type="text" name="data" id="data" hidden>
                                     <select type="text" class="form-select" placeholder="Jenis Agunan"
                                         name="jenis_agunan_kode" id="jenis">
                                         
