@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Data;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
@@ -32,34 +33,16 @@ class PendampingController extends Controller
             $carbonDate = Carbon::createFromFormat('Ymd', $pendamping[0]->tanggal_lahir);
             $pendamping[0]->tanggal_lahir= $carbonDate->format('m-d-Y');
         }
-        
-        // dd($pendamping[0]->tanggal_lahir);
-
+    
         //Ubah identitas dari nomor id menjadi data string
-        if ($pendamping[0]->identitas == "1") {
-            $pendamping[0]['iden'] = 'KTP';
-        }elseif ($pendamping[0]->identitas == "2") {
-            $pendamping[0]['iden'] = 'SIM';
-        }elseif ($pendamping[0]->identitas == "3"){
-            $pendamping[0]['iden'] = 'Passport';
-        }elseif ($pendamping[0]->identitas == "9"){
-            $pendamping[0]['iden']= 'Lainnya';
-        }
-
+        $id = Data::identitas($pendamping[0]->identitas);
+        $pendamping[0]['iden'] = $id;
+    
         //Ubah tanggungan dari nomor id menjadi data string
-        if ($pendamping[0]->tanggungan == "0") {
-            $pendamping[0]['tgn'] = 'Tidak Ada';
-        }elseif ($pendamping[0]->tanggungan == "1") {
-            $pendamping[0]['tgn'] = '1 Orang';
-        }elseif ($pendamping[0]->tanggungan == "2") {
-            $pendamping[0]['tgn'] = '2 Orang';
-        }elseif ($pendamping[0]->tanggungan == "3"){
-            $pendamping[0]['tgn'] = '3 Orang';
-        }elseif ($pendamping[0]->tanggungan == "4"){
-            $pendamping[0]['tgn']= '4 Orang';
-        }elseif ($pendamping[0]->tanggungan == "5"){
-            $pendamping[0]['tgn']= '5 Orang';
-        }
+        $pend = Data::tanggungan($pendamping[0]->tanggungan);
+        $pendamping[0]['tgn'] = $pend;
+       
+        dd($pendamping);
 
         //Ubah pisah harta dari nomor id menjadi data string
         if ($pendamping[0]->pisah_harta == "Y") {

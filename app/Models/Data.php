@@ -104,4 +104,20 @@ class Data extends Model
             return '10 jt';
         }
     }
+
+    public static function tanggungan($tanggungan){
+        if ($tanggungan == "0") {
+            return 'Tidak Ada';
+        }elseif ($tanggungan == "1") {
+            return '1 Orang';
+        }elseif ($tanggungan == "2") {
+            return '2 Orang';
+        }elseif ($tanggungan == "3"){
+            return '3 Orang';
+        }elseif ($tanggungan == "4"){
+            return '4 Orang';
+        }elseif ($tanggungan == "5"){
+            return '5 Orang';
+        }
+    }
 }
