@@ -120,4 +120,16 @@ class Data extends Model
             return '5 Orang';
         }
     }
+
+    public static function data($produk){
+        if ($produk == "KRU") {
+            return 'Kredit Multiguna';
+        }elseif ($produk == "KBT") {
+            return 'Kredit Budidaya Tani';
+        }elseif ($produk == "KPS") {
+            return 'Kredit Kepesta Raja';
+        }elseif ($produk == "KTA") {
+            return 'Kredit Tanpa Agunan';
+        }
+    }
 }

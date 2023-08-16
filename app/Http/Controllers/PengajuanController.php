@@ -24,16 +24,44 @@ class PengajuanController extends Controller
         ]);
     }
 
+    public function storepengajuan(Request $request){
+        
+        $cek = $request->validate([
+            'kode_pengajuan' => 'required',
+            'plafon' => 'required',
+            'produk_kode' => 'required',
+            'suku_bunga' => 'required',
+            'jangka_waktu' => 'required',
+            'metode_rps' => 'required',
+            'jangka_pokok' => 'required',
+            'resort_kode' => 'required',
+            'penggunaan' => 'required',
+            'keterangan' => 'required',
+        ]);
+        
+        //Hapus format rupiah
+        $remove = array("Rp", ".", " ");
+        $cek['plafon'] = str_replace($remove, "", $cek['plafon']);
+
+        try {
+            Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($cek);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
+        dd($cek);
+    }
+
     public function edit(Request $request)
     {
         $req = $request->query('nasabah');
         $nasabah = Nasabah::where('kode_nasabah', $req)->get();
 
         $pengajuan = Pengajuan::where('nasabah_kode', $nasabah[0]->kode_nasabah)->get();
-        
+       
         return view('pengajuan.edit',[
             'data' => $nasabah,
-            'pengajuan' => $pengajuan,
+            'pengajuan' => $pengajuan[0],
         ]);
     }
 
