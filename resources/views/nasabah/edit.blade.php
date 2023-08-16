@@ -341,7 +341,7 @@
                                                         <input type="number" class="form-control" name="no_rekening"
                                                             id="no_rekening" placeholder="No Rekening"
                                                             value="{{ $nasabah->no_rekening }}" required>
-                                                    </div>
+                                                    </div>                                                
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor NPWP</div>
                                                         <input type="number" class="form-control" name="no_npwp"

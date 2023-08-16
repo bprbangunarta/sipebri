@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Data;
+use App\Models\Handle;
+use App\Models\Midle;
 use App\Models\Survei;
 use App\Models\Nasabah;
 use App\Models\Tabungan;
@@ -26,128 +28,49 @@ class NasabahController extends Controller
         //Data nasabah sipebri
         $req = $request->query('nasabah');
         $cek = Nasabah::where('kode_nasabah', $req)->first();
-        // dd($cek);
+        
         //Validasi data pertama kali berdasarkan data alamat yang null
         if (is_null($cek->alamat_ktp)) {
-            
-            //Cek data Current CIF
+
             $query = Tabungan::where('noid', $cek->no_identitas)
-                            ->where('jttempoid', $cek->tanggal_lahir)
-                            ->first();
-
-            //Ubah identitas dari nomor id menjadi data string
-            $iden = Data::identitas($query->kodeid);
-            $query->iden = $iden;
-
-            //Ubah agama dari nomor id menjadi data string
-            $agama = Data::agama($query->agama);
-            $query->religi = $agama;
-
-            //Ubah jenis kelamin dari nomor id menjadi data string
-            $jk = Data::jk($query->sex);
-            $query->jk = $jk;
-
-            //Ubah kewarganegaraan dari nomor id menjadi data string
-            $wn = Data::warganegara('1');
-            $query->kn = $wn;
-
-            //Ubah status dari nomor id menjadi data string
-            $stat = Data::status($query->stsrt);
-            $query->st = $stat;
-
-            // dd($query);
-
-            //Data dati
-            $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
-
-            $pend = Pendidikan::all();
-            $job = Pekerjaan::all();
-            return view('nasabah.edit', [
-                'pend' => $pend,
-                'job' => $job,
-                'nasabah' => $query,
-                'kab' => $kab,
-            ]);
-        }else{
-            
-                //Format masa identitas
-                if (!is_null($cek->masa_identitas)) {
-                    $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
-                    $cek->masa_identitas= $carbonid->format('m-d-Y');
-                }
-            
-                //Format tanggal lahir
-                $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
-                $cek->tanggal_lahir= $carbonDate->format('m-d-Y');
-                
-                //Ubah identitas dari nomor id menjadi data string
-                $iden = Data::identitas($cek->identitas);
-                $cek['iden'] = $iden;
-
-                //Ubah agama dari nomor id menjadi data string
-                $agama = Data::agama($cek->agama);
-                $cek['religi'] = $agama;
-
-                //Ubah jenis kelamin dari nomor id menjadi data string
-                $jk = Data::jk($cek->jenis_kelamin);
-                $cek['jk'] = $jk;
-                
-                //Ubah kewarganegaraan dari nomor id menjadi data string
-                if ($cek->kewarganegaraan == "WNI") {
-                    $cek['kn'] = 'Warga Negara Indonesia';
-                }elseif ($cek->kewarganegaraan == "WNA") {
-                    $cek['kn'] = 'Warga Negara Asing';
-                }
-
-                //Ubah pendidikan dari nomor id menjadi data string
-                if (!is_null($cek->pendidikan_kode)) {
-                    $sc = Pendidikan::where('kode_pendidikan', $cek->pendidikan_kode)->get();
-                    $cek['std'] = $sc[0]->nama_pendidikan;
-                }
-
-                //Ubah pekerjaan dari nomor id menjadi data string
-                if (!is_null($cek->pekerjaan_kode)) {
-                    $pk = Pekerjaan::where('kode_pekerjaan', $cek->pekerjaan_kode)->get();
-                    $cek['jo'] = $pk[0]->nama_pekerjaan;
-                }
-            
-                //Ubah status dari nomor id menjadi data string
-                $sts = Data::status($cek->status_pernikahan);
-                $cek['st'] = $sts;
-
-                //Ubah sumber dana dari nomor id menjadi data string
-                $dn = Data::dana($cek->sumber_dana);
-                $cek['dana'] = $dn;
-
-                //Mencari sumber data dati berdasarkan kode_dati
-                $dati = DB::table('v_dati')
-                        ->select('nama_dati')
-                        ->distinct()
-                        ->where('kode_dati', $cek->kode_dati)
+                        ->where('jttempoid', $cek->tanggal_lahir)
                         ->first();
-                    if (!is_null($dati)) {
-                        $cek['nm_dati'] = $dati->nama_dati;
-                    }
 
-                //Ubah penghasilan utama dari nomor id menjadi data string
-                $utama = Data::penghasilanutama($cek->penghasilan_utama);
-                $cek['hasil'] = $utama;
+                        if (is_null($query)) {
+                                //Jika alamat kosong dan data CIF kosong
+                                $kosong = Midle::nasabahedit($req);
+                                return view('nasabah.edit', [
+                                    'pend' => $kosong['pend'],
+                                    'job' => $kosong['job'],
+                                    'nasabah' => $kosong['nasabah'],
+                                    'kab' => $kosong['kab'],
+                                ]);
+                        }else {
+                            //jika ada data CIF
+                            $data = ['no_identitas' => $cek->no_identitas,
+                                    'tanggal_lahir' => $cek->tanggal_lahir,];
 
-                //Ubah penghasilan lainnya dari nomor id menjadi data string
-                $lain = Data::penghasilanlain($cek->penghasilan_lainnya);
-                $cek['lain'] = $lain;
-                
-                //Data dati
-                $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
+                            $cif = Midle::cifedit($data);
+                            $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
+                            // dd($cif);
+                            return view('nasabah.edit', [
+                                'pend' => $cif['pend'],
+                                'job' => $cif['job'],
+                                'nasabah' => $cif['nasabah'],
+                                'kab' => $cif['kab'],
+                            ]);
+                        }
 
-                $pend = Pendidikan::all();
-                $job = Pekerjaan::all();
-                return view('nasabah.edit', [
-                    'pend' => $pend,
-                    'job' => $job,
-                    'nasabah' => $cek,
-                    'kab' => $kab,
-                ]);
+            
+        }else{
+            //Jika alamat ada
+            $data = Midle::nasabahedit($req);    
+            return view('nasabah.edit', [
+                        'pend' => $data['pend'],
+                        'job' => $data['job'],
+                        'nasabah' => $data['nasabah'],
+                        'kab' => $data['kab'],
+                    ]);            
         }
     }
 

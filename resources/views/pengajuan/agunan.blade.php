@@ -280,8 +280,11 @@
                     <h5 class="modal-title">Edit Agunan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
-                <form action="{{ route('pengajuan.updateagunan', ['pengajuan' => $jaminan[0]->id]) }}" method="POST">
+                @foreach ($jaminan as $item)
+                    
+                
+                <form action="{{ route('pengajuan.updateagunan', ['pengajuan' => $item->id]) }}" method="POST">
+                    @endforeach
                     @method('put')
                     @csrf
                     <div class="modal-body">
@@ -362,7 +365,7 @@
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
                         <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
                     </div>
-                </form>
+                </form>                
             </div>
         </div>
     </div>

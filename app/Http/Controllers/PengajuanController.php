@@ -59,7 +59,7 @@ class PengajuanController extends Controller
 
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
-        
+        // dd($jaminan);
         return view('pengajuan.agunan', [
             'agunan' => $agunan,
             'dok' => $dok,
@@ -142,7 +142,7 @@ class PengajuanController extends Controller
     }
 
     public function updateagunan(Request $request){
-        
+        dd($request);
         $cek = $request->validate([
             'jenis_agunan_kode' => 'required',
             'jenis_dokumen_kode' => 'required',
