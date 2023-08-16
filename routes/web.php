@@ -79,6 +79,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
         Route::put('/pendamping/update', [PendampingController::class, 'update'])->name('pendamping.update');
         Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+        Route::put('/pengajuan/simpan', [PengajuanController::class, 'storepengajuan'])->name('pengajuan.storepengajuan');
         Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
         Route::get('/pengajuan/editagunan/{id}/edit', [PengajuanController::class, 'editagunan'])->name('pengajuan.editagunan');
         Route::put('/pengajuan/editagunan/update', [PengajuanController::class, 'updateagunan'])->name('pengajuan.updateagunan');

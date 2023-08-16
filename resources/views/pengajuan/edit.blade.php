@@ -55,14 +55,17 @@
                                 </div>
 
                                 <div class="col d-flex flex-column">
-                                    <form action="#">
+                                    <form action="{{ route('pengajuan.storepengajuan', ['pengajuan' => $pengajuan->nasabah_kode]) }}" method="POST">
+                                        @method('put')
+                                        @csrf
                                         <div class="card-body">
                                             <div class="row g-3">
                                                 <div class="col-md">
                                                     <div class="form-label">Plafon</div>
+                                                    <input type="text" name="kode_pengajuan" value="{{ $pengajuan->kode_pengajuan }}" hidden>
                                                     <input type="text" class="form-control" name="plafon" id="plafon"
                                                         placeholder="10.000.000"
-                                                        value="{{ $pengajuan[0]->plafon = 'Rp. ' . number_format($pengajuan[0]->plafon, 0, ',', '.') }}"
+                                                        value="{{ $pengajuan->plafon = 'Rp. ' . number_format($pengajuan->plafon, 0, ',', '.') }}"
                                                         readonly>
                                                 </div>
                                                 <div class="col-md">
@@ -85,7 +88,7 @@
                                                 <div class="col-md">
                                                     <div class="form-label">JK Kredit</div>
                                                     <input type="number" class="form-control" name="jangka_waktu"
-                                                        id="jangka_waktu" placeholder="Jangka Waktu">
+                                                        id="jangka_waktu" placeholder="Jangka Waktu" value="{{ $pengajuan->jangka_waktu }}">
                                                 </div>
                                             </div>
                                             <p></p>
@@ -146,9 +149,9 @@
                                         </div>
                                         <div class="card-footer bg-transparent mt-auto">
                                             <div class="btn-list justify-content-end">
-                                                <a href="#" class="btn btn-primary">
+                                                <button type="submit" class="btn btn-primary">
                                                     Simpan
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
 

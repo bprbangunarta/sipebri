@@ -28,6 +28,7 @@ class PendampingController extends Controller
             $carbonid = Carbon::createFromFormat('Ymd', $pendamping[0]->masa_identitas);
             $pendamping[0]->masa_identitas = $carbonid->format('m-d-Y');
         }
+        
         //Ubah format tanggal lahir Ymd menjadi m-d-Y
         if (!is_null($pendamping[0]->masa_identitas)) {
             $carbonDate = Carbon::createFromFormat('Ymd', $pendamping[0]->tanggal_lahir);
@@ -41,8 +42,6 @@ class PendampingController extends Controller
         //Ubah tanggungan dari nomor id menjadi data string
         $pend = Data::tanggungan($pendamping[0]->tanggungan);
         $pendamping[0]['tgn'] = $pend;
-       
-        dd($pendamping);
 
         //Ubah pisah harta dari nomor id menjadi data string
         if ($pendamping[0]->pisah_harta == "Y") {
@@ -119,9 +118,9 @@ class PendampingController extends Controller
         }
 
         try {
-        $pend = Pendamping::where('pengajuan_kode', $request->query('pendamping'))->get();
-        Pendamping::where('id', $pend[0]->id)->update($cek);   
-        return redirect()->back()->with('success', 'Data berhasil diupdate');
+            $pend = Pendamping::where('pengajuan_kode', $request->query('pendamping'))->get();
+            Pendamping::where('id', $pend[0]->id)->update($cek);   
+            return redirect()->back()->with('success', 'Data berhasil diupdate');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal diupdate');
         }
