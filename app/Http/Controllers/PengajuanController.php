@@ -142,7 +142,6 @@ class PengajuanController extends Controller
     }
 
     public function updateagunan(Request $request){
-        dd($request);
         $cek = $request->validate([
             'jenis_agunan_kode' => 'required',
             'jenis_dokumen_kode' => 'required',
