@@ -72,6 +72,7 @@ class PengajuanController extends Controller
             ->select('kode', 'ket')
             ->where('kode', $peng->resort_kode)
             ->first();
+            
 
         if (is_null($query)) {
            $peng->nama_resort = null;
@@ -116,7 +117,7 @@ class PengajuanController extends Controller
 
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
-        // dd($jaminan);
+        
         return view('pengajuan.agunan', [
             'agunan' => $agunan,
             'dok' => $dok,

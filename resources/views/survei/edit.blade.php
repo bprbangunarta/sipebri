@@ -55,18 +55,27 @@
                                             ])
                                         </div>
                                     </div>
+
                                     <div class="col d-flex flex-column">
-                                        <form action="#">
+                                        <form action="{{ route('survei.update', ['survei' => $data->kode_pengajuan]) }}" method="POST">
+                                            @method('put')
+                                            @csrf
                                             <div class="card-body">
 
                                                 <div class="row g-3">
                                                     <div class="col-md">
                                                         <div class="form-label">Wilayah</div>
+                                                        <input type="text" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode" hidden>
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Wilayah" name="kantor_kode"
                                                             id="select-wilayah">
-                                                            <option value="">Pilih Wilayah</option>
-                                                            @foreach ($kantor as $item)
+                                                            @if (is_null($survey->kantor_kode))
+                                                                <option value="">Pilih Wilayah</option>    
+                                                            @else
+                                                                <option value="{{ $survey->kantor_kode }}">{{ $survey->nama_kantor }}</option>
+                                                            @endif
+                                                            
+                                                            @foreach ($kantor->sortBy('nama_kantor') as $item)
                                                                 <option value="{{ $item->kode_kantor }}">
                                                                     {{ $item->nama_kantor }}</option>
                                                             @endforeach
@@ -76,7 +85,12 @@
                                                         <div class="form-label">Kasi Analis</div>
                                                         <select type="text" class="form-select" placeholder="Pilih Kasi"
                                                             name="kasi_kode" id="select-kasi">
-                                                            <option value="">Pilih Kasi</option>
+                                                            @if (is_null($survey->kasi_kode))
+                                                                <option value="">Pilih Kasi</option>   
+                                                            @else
+                                                                <option value="{{ $survey->kasi_kode }}">{{ $survey->nama_kasi }}</option>
+                                                            @endif
+                                                            
                                                             <option value="DDN">Dede Doni</option>
                                                             <option value="RND">Rian Destila</option>
                                                         </select>
@@ -87,9 +101,14 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Survayor</div>
                                                         <select type="text" class="form-select"
-                                                            placeholder="Pilih Survayor" name="survayor_kode"
+                                                            placeholder="Pilih Survayor" name="surveyor_kode"
                                                             id="select-survayor">
-                                                            <option value="">Pilih Survayor</option>
+                                                            @if (is_null($survey->surveyor_kode))
+                                                                <option value="">Pilih Survayor</option>   
+                                                            @else
+                                                                <option value="{{ $survey->surveyor_kode }}">{{ $survey->nama_surveyor }}</option>
+                                                            @endif
+                                                            
                                                             <option value="MHM">Muhidin</option>
                                                             <option value="JAY">Jaelani</option>
                                                         </select>
@@ -98,9 +117,15 @@
                                                         <div class="form-label">Nama CGC</div>
                                                         <select type="text" class="form-select" placeholder="Pilih CGC"
                                                             name="tabungan_cgc" id="select-cgc" value="">
-                                                            <option value="">Pilih CGC</option>
-                                                            <option value="0010101201">Yandi</option>
-                                                            <option value="0010101201">Zulfadli Rizal</option>
+                                                            @if (is_null($survey->tabungan_cgc))
+                                                                <option value="">Pilih CGC</option>
+                                                            @else
+                                                                <option value="{{ $survey->tabungan_cgc }}">{{ $survey->tabungan_cgc }}</option>
+                                                            @endif
+                                                            
+                                                            @foreach ($cgc as $item)                                                                
+                                                                <option value="{{ $item->noacc }}">{{ $item->noacc }} - {{ $item->fnama }}</option>                                                            
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -108,9 +133,9 @@
                                             </div>
                                             <div class="card-footer bg-transparent mt-auto">
                                                 <div class="btn-list justify-content-end">
-                                                    <a href="#" class="btn btn-primary">
+                                                    <button type="submit" class="btn btn-primary">
                                                         Simpan
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </div>
 

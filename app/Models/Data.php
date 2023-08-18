@@ -46,9 +46,9 @@ class Data extends Model
     }
 
     public static function warganegara($wn){
-        if ($wn == "1") {
+        if ($wn == "WNI") {
             return 'Warga Negara Indonesia';
-        }elseif ($wn == "2") {
+        }elseif ($wn == "WNA") {
             return 'Warga Negara Asing';
         }
     }

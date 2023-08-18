@@ -64,7 +64,7 @@ class NasabahController extends Controller
             
         }else{
             //Jika alamat ada
-            $data = Midle::nasabahedit($req);    
+            $data = Midle::nasabahedit($req);  
             return view('nasabah.edit', [
                         'pend' => $data['pend'],
                         'job' => $data['job'],

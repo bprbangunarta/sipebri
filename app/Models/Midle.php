@@ -61,12 +61,6 @@ class Midle extends Model
             'nasabah' => $query,
             'kab' => $kab,
             ];
-        // return view('nasabah.edit', [
-        //     'pend' => $pend,
-        //     'job' => $job,
-        //     'nasabah' => $query,
-        //     'kab' => $kab,
-        // ]);
     }
 
     protected static function nasabahedit($data){
@@ -148,11 +142,5 @@ class Midle extends Model
                 'nasabah' => $cek,
                 'kab' => $kab,
             ];
-        // return view('nasabah.edit', [
-        //     'pend' => $pend,
-        //     'job' => $job,
-        //     'nasabah' => $cek,
-        //     'kab' => $kab,
-        // ]);
     }
 }

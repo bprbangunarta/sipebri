@@ -288,7 +288,7 @@
 
                                                         @foreach ($pend as $item)
                                                         <option value="{{ $item->kode_pendidikan }}">
-                                                            {{ $item->nama_pendidikan }}</option>
+                                                            {{ $item->nama_pendidikan }}</option>                                                           
                                                         @endforeach
                                                     </select>
                                                 </div>

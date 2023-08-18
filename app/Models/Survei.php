@@ -10,7 +10,9 @@ class Survei extends Model
     use HasFactory;
     protected $table = 'data_survei';
     protected $fillable = [
-        'pengajuan_kode'
+        'pengajuan_kode',
+        'kasi_kode',
+        'surveyor_kode',        
     ];
 
     public function pengajuan(){

@@ -15,6 +15,7 @@ class Pengajuan extends Model
         'nasabah_kode',
         'plafon',
         'jangka_waktu',
+        'tabungan_cgc',
     ];
     protected $guarded = ['id'];
 

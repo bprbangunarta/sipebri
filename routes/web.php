@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/pengajuan/{pengajuan}/delete', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
         Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
+        Route::put('/survei/{survei}/update', [SurveiController::class, 'update'])->name('survei.update');
 
         //Dati
         Route::controller(DatiController::class)->group(function () {
