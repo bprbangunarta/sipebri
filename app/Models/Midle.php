@@ -19,16 +19,18 @@ class Midle extends Model
             ->where('jttempoid', $data['tanggal_lahir'])
             ->first();
         // dd($query);
+
         //Ubah identitas dari nomor id menjadi data string
         $iden = Data::identitas($query->kodeid);
         $query->identitas = $query->kodeid;
         $query->iden = $iden;
 
-        //Merubah tanggal 
+        //Ubah tanggal lahir
         $carbonDate = Carbon::createFromFormat('Ymd', $query->jttempoid);
         $query->jttempoid = $carbonDate->format('Y-m-d');
         $query->tanggal_lahir = $query->jttempoid;
 
+        //Ubah masa identitas
         $carbonMasa = Carbon::createFromFormat('Ymd', $query->tgllahir);
         $query->tgllahir = $carbonMasa->format('Y-m-d');
         $query->masa_identitas = $query->tgllahir;
