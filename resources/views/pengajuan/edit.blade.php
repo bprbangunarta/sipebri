@@ -142,11 +142,15 @@
                                                             placeholder="Pilih Resort" name="resort_kode"
                                                             id="select-resort">
                                                             @if (is_null($pengajuan->resort_kode))
-                                                            @else
-                                                            @endif
                                                             <option value="">Resort</option>
-                                                            <option value="001">Klinik Happy Healty</option>
-                                                            <option value="002">PT. Kwanglim Hyi</option>
+                                                            @else
+                                                            <option value="{{ $pengajuan->resort_kode }}">{{ $pengajuan->nama_resort }}</option>
+                                                            @endif
+                                                            
+                                                            @foreach ($resort as $item)                                                                
+                                                            <option value="{{ $item->kode }}">{{ $item->ket }}</option>
+                                                            @endforeach
+                                                            
                                                         </select>
                                                     </div>
                                                 </div>
@@ -157,7 +161,11 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Penggunaan" name="penggunaan"
                                                             id="select-penggunaan">
+                                                            @if (is_null($pengajuan->penggunaan))                                                                
                                                             <option value="">Pilih Penggunaan</option>
+                                                            @else
+                                                            <option value="{{ $pengajuan->penggunaan }}">{{ $pengajuan->penggunaan }}</option>
+                                                            @endif
                                                             <option value="Modal Usaha">Modal Usaha</option>
                                                             <option value="Investasi">Investasi</option>
                                                             <option value="Konsumtif">Konsumtif</option>
@@ -167,7 +175,7 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Keterangan</div>
                                                         <input type="text" class="form-control" name="keterangan"
-                                                            name="keterangan" placeholder="Keterangan">
+                                                            name="keterangan" placeholder="Keterangan" value="{{ $pengajuan->keterangan }}">
                                                     </div>
                                                 </div>
 

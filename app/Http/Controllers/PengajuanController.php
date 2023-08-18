@@ -27,7 +27,7 @@ class PengajuanController extends Controller
     }
 
     public function storepengajuan(Request $request){
-        
+        // dd($request);
         $cek = $request->validate([
             'kode_pengajuan' => 'required',
             'plafon' => 'required',
@@ -36,7 +36,8 @@ class PengajuanController extends Controller
             'jangka_waktu' => 'required',
             'metode_rps' => 'required',
             'jangka_pokok' => 'required',
-            'resort_kode' => 'required',
+            'jangka_bunga' => 'required',
+            'resort_kode' => '',
             'penggunaan' => 'required',
             'keterangan' => 'required',
         ]);
@@ -66,22 +67,30 @@ class PengajuanController extends Controller
         $peng = $pengajuan[0];
         
         // mencari nama
-        // $query = DB::connection('sqlsrv')
-        //     ->table('resort')
-        //     ->select('kode', 'ket')
-        //     ->where('kode', $peng->resort_kode)
-        //     ->get();
         $query = DB::connection('sqlsrv')
             ->table('resort')
-            ->join('mysql.data_pengajuan', 'resort.kode', '=', 'data_pengajuan.resort_kode')
-            ->select('resort.ket', 'data_pengajuan.*')
-            ->where('resort.kode', $peng->resort_kode);
-            // ->get();
-        dd($peng, $query);
+            ->select('kode', 'ket')
+            ->where('kode', $peng->resort_kode)
+            ->first();
+
+        if (is_null($query)) {
+           $peng->nama_resort = null;
+        }else{
+            $peng->nama_resort = $query->ket;
+        }
+
+        //Data resort
+        $resort = DB::connection('sqlsrv')
+                ->table('resort')
+                ->select('kode', 'ket')
+                ->get();
+
+     
         return view('pengajuan.edit',[
             'data' => $nasabah,
             // 'resort' => $resort,
             'pengajuan' => $peng,
+            'resort' => $resort,
         ]);
     }
 
