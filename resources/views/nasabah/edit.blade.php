@@ -353,13 +353,13 @@
                                             <div class="row g-3">
                                                 <div class="col-md">
                                                     <div class="form-label">Nomor Telp</div>
-                                                    <input type="number" class="form-control" name="no_telp"
-                                                        id="no_telp" placeholder="0823XXXXX"
-                                                        value="{{ $nasabah->no_telp }}" required>
+                                                    <input type="text" class="form-control" name="no_telp" id="no_telp"
+                                                        placeholder="0823XXXXX" value="{{ $nasabah->no_telp }}"
+                                                        required>
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">No Telp Darurat</div>
-                                                    <input type="number" class="form-control" name="no_telp_darurat"
+                                                    <input type="text" class="form-control" name="no_telp_darurat"
                                                         id="no_telp_darurat" placeholder="0823XXXXX"
                                                         value="{{ $nasabah->no_telp_darurat }}" required>
                                                 </div>
@@ -565,7 +565,7 @@
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">No Telp Kantor</div>
-                                                    <input type="number" class="form-control" name="no_telp_kantor"
+                                                    <input type="text" class="form-control" name="no_telp_kantor"
                                                         id="no_telp_kantor" placeholder="(0260) 550888"
                                                         value="{{ $nasabah->no_telp_kantor }}" required>
                                                 </div>

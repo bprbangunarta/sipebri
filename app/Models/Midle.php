@@ -54,8 +54,12 @@ class Midle extends Model
         $query->nama_nasabah = $query->fname;
         $query->tempat_lahir = $query->tempatlahir;
         $query->alamat_ktp = $query->alamat;
-        $query->no_npwp = (int) $query->npwp;
-        $query->no_telp = (int) $query->nohp;
+
+        // $query->no_npwp = (int) $query->npwp;
+        // $query->no_telp = (int) $query->nohp;
+
+        $query->no_npwp = $query->npwp;
+        $query->no_telp = $query->nohp;
         $query->nama_ibu_kandung = $query->nmibukandung;
 
         //Data dati
