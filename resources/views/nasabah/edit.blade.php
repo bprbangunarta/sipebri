@@ -91,7 +91,7 @@
                                                     <input type="date" class="form-control" name="masa_identitas"
                                                         id="masa_identitas">
                                                     @else
-                                                    <input type="text" class="form-control" name="masa_identitas"
+                                                    <input type="date" class="form-control" name="masa_identitas"
                                                         id="masa_identitas" value="{{ $nasabah->masa_identitas }}">
                                                     @endif
 
@@ -103,7 +103,7 @@
                                                     <div class="form-label">Nama Panggilan</div>
                                                     <input type="text" class="form-control" name="nama_panggilan"
                                                         id="nama_panggilan" placeholder="Nama Panggilan"
-                                                        value="{{ $nasabah->nama_panggilan }}" required>
+                                                        value="{{ $nasabah->sname }}" required>
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Nama Lengkap</div>
@@ -123,7 +123,7 @@
                                                     <input type="date" class="form-control" name="tempat_lahir"
                                                         id="tanggal_lahir">
                                                     @else
-                                                    <input type="text" class="form-control" name="tanggal_lahir"
+                                                    <input type="date" class="form-control" name="tanggal_lahir"
                                                         id="tanggal_lahir" value="{{ $nasabah->tanggal_lahir }}">
                                                     @endif
                                                 </div>
@@ -288,7 +288,7 @@
 
                                                         @foreach ($pend as $item)
                                                         <option value="{{ $item->kode_pendidikan }}">
-                                                            {{ $item->nama_pendidikan }}</option>                                                           
+                                                            {{ $item->nama_pendidikan }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

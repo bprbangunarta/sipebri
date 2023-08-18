@@ -11,12 +11,13 @@ class Midle extends Model
 {
     use HasFactory;
 
-    protected static function cifedit($data){
-        
+    protected static function cifedit($data)
+    {
+
         //Cek data Current CIF
         $query = Tabungan::where('noid', $data['no_identitas'])
-                        ->where('jttempoid', $data['tanggal_lahir'])
-                        ->first();
+            ->where('jttempoid', $data['tanggal_lahir'])
+            ->first();
         // dd($query);
         //Ubah identitas dari nomor id menjadi data string
         $iden = Data::identitas($query->kodeid);
@@ -25,8 +26,12 @@ class Midle extends Model
 
         //Merubah tanggal 
         $carbonDate = Carbon::createFromFormat('Ymd', $query->jttempoid);
-        $query->jttempoid = $carbonDate->format('m-d-Y');
+        $query->jttempoid = $carbonDate->format('Y-m-d');
         $query->tanggal_lahir = $query->jttempoid;
+
+        $carbonMasa = Carbon::createFromFormat('Ymd', $query->tgllahir);
+        $query->tgllahir = $carbonMasa->format('Y-m-d');
+        $query->masa_identitas = $query->tgllahir;
 
         //Ubah agama dari nomor id menjadi data string
         $agama = Data::agama($query->agama);
@@ -52,7 +57,7 @@ class Midle extends Model
         $query->nama_ibu_kandung = $query->nmibukandung;
 
         //Data dati
-        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
+        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return [
@@ -60,23 +65,24 @@ class Midle extends Model
             'job' => $job,
             'nasabah' => $query,
             'kab' => $kab,
-            ];
+        ];
     }
 
-    protected static function nasabahedit($data){
+    protected static function nasabahedit($data)
+    {
 
         $cek = Nasabah::where('kode_nasabah', $data)->first();
         // dd($cek);
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {
             $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
-            $cek->masa_identitas= $carbonid->format('m-d-Y');
+            $cek->masa_identitas = $carbonid->format('m-d-Y');
         }
-    
+
         //Format tanggal lahir
         $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
-        $cek->tanggal_lahir= $carbonDate->format('m-d-Y');
-        
+        $cek->tanggal_lahir = $carbonDate->format('m-d-Y');
+
         //Ubah identitas dari nomor id menjadi data string
         $iden = Data::identitas($cek->identitas);
         $cek['iden'] = $iden;
@@ -88,7 +94,7 @@ class Midle extends Model
         //Ubah jenis kelamin dari nomor id menjadi data string
         $jk = Data::jk($cek->jenis_kelamin);
         $cek['jk'] = $jk;
-        
+
         //Ubah kewarganegaraan dari nomor id menjadi data string
         $warga = Data::warganegara($cek->kewarganegaraan);
         $cek['kn'] = $warga;
@@ -104,7 +110,7 @@ class Midle extends Model
             $pk = Pekerjaan::where('kode_pekerjaan', $cek->pekerjaan_kode)->get();
             $cek['jo'] = $pk[0]->nama_pekerjaan;
         }
-    
+
         //Ubah status dari nomor id menjadi data string
         $sts = Data::status($cek->status_pernikahan);
         $cek['st'] = $sts;
@@ -115,13 +121,13 @@ class Midle extends Model
 
         //Mencari sumber data dati berdasarkan kode_dati
         $dati = DB::table('v_dati')
-                ->select('nama_dati')
-                ->distinct()
-                ->where('kode_dati', $cek->kode_dati)
-                ->first();
-            if (!is_null($dati)) {
-                $cek['nm_dati'] = $dati->nama_dati;
-            }
+            ->select('nama_dati')
+            ->distinct()
+            ->where('kode_dati', $cek->kode_dati)
+            ->first();
+        if (!is_null($dati)) {
+            $cek['nm_dati'] = $dati->nama_dati;
+        }
 
         //Ubah penghasilan utama dari nomor id menjadi data string
         $utama = Data::penghasilanutama($cek->penghasilan_utama);
@@ -130,17 +136,17 @@ class Midle extends Model
         //Ubah penghasilan lainnya dari nomor id menjadi data string
         $lain = Data::penghasilanlain($cek->penghasilan_lainnya);
         $cek['lain'] = $lain;
-        
+
         //Data dati
-        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati'); 
+        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return [
-                'pend' => $pend,
-                'job' => $job,
-                'nasabah' => $cek,
-                'kab' => $kab,
-            ];
+            'pend' => $pend,
+            'job' => $job,
+            'nasabah' => $cek,
+            'kab' => $kab,
+        ];
     }
 }
