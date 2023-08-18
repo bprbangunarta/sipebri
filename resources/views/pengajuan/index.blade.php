@@ -215,7 +215,8 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Tanggal Lahir</label>
-                                <input type="date" class="form-control" name="tanggal_lahir" id="tanggal_lahir">
+                                <input class="form-control mb-2" placeholder="Pilih Tanggal" name="tanggal_lahir"
+                                    id="datepicker-lahir" />
                             </div>
                         </div>
 
@@ -256,6 +257,18 @@
 
 @push('myscript')
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      window.Litepicker && (new Litepicker({
+        element: document.getElementById('datepicker-lahir'),
+        buttonText: {
+          previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+          nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+        },
+      }));
+    });
+    
     document.addEventListener("DOMContentLoaded", function() {
             var el;
             window.TomSelect && (new TomSelect(el = document.getElementById('select-identitas'), {

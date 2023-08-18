@@ -63,7 +63,7 @@
                                                 <div class="col-md">
                                                     <div class="form-label">No CIF</div>
                                                     <input type="text" class="form-control" name="no_cif" id="no_cif"
-                                                        placeholder="00123456" value="{{ $nasabah->nocif }}" disabled>
+                                                        value="{{ $nasabah->nocif }}" disabled>
                                                 </div>
 
                                                 <div class="col-md">
@@ -88,13 +88,13 @@
                                                 <div class="col-md">
                                                     <div class="form-label">Masa Identitas</div>
                                                     @if (is_null($nasabah->masa_identitas))
-                                                    <input type="date" class="form-control" name="masa_identitas"
-                                                        id="masa_identitas">
+                                                    <input class="form-control mb-2" placeholder="Pilih Tanggal"
+                                                        name="masa_identitas" id="datepicker-masa-identitas" />
                                                     @else
-                                                    <input type="date" class="form-control" name="masa_identitas"
-                                                        id="masa_identitas" value="{{ $nasabah->masa_identitas }}">
+                                                    <input class="form-control mb-2" placeholder="Pilih Tanggal"
+                                                        name="masa_identitas" id="datepicker-masa-identitas-old"
+                                                        value="{{ $nasabah->masa_identitas }}" />
                                                     @endif
-
                                                 </div>
                                             </div>
                                             <p></p>
@@ -120,11 +120,12 @@
                                                 <div class="col-md">
                                                     <div class="form-label">Tanggal Lahir</div>
                                                     @if (is_null($nasabah->tanggal_lahir))
-                                                    <input type="date" class="form-control" name="tempat_lahir"
-                                                        id="tanggal_lahir">
+                                                    <input class="form-control mb-2" placeholder="Pilih Tanggal"
+                                                        name="tempat_lahir" id="datepicker-tanggal-lahir" />
                                                     @else
-                                                    <input type="date" class="form-control" name="tanggal_lahir"
-                                                        id="tanggal_lahir" value="{{ $nasabah->tanggal_lahir }}">
+                                                    <input class="form-control mb-2" placeholder="Pilih Tanggal"
+                                                        name="tempat_lahir" id="datepicker-tanggal-lahir-old"
+                                                        value="{{ $nasabah->tanggal_lahir }}" />
                                                     @endif
                                                 </div>
                                             </div>
@@ -260,14 +261,12 @@
                                                         placeholder="Kewarganegaraan" name="kewarganegaraan"
                                                         id="select-kewarganegaraan">
                                                         @if (is_null($nasabah->kn))
-                                                        <option value="">Pilih Kewarganegaraan</option>
+                                                        <option value="WNI">Warga Negara Indonesia</option>
+                                                        <option value="WNA">Warga Negara Asing</option>
                                                         @else
                                                         <option value="{{ $nasabah->kewarganegaraan }}">
                                                             {{ $nasabah->kn }}</option>
                                                         @endif
-
-                                                        <option value="WNI">Warga Negara Indonesia</option>
-                                                        <option value="WNA">Warga Negara Asing</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -604,6 +603,56 @@
 
 @push('myscript')
 <script>
+    // JS Darepicker
+    document.addEventListener("DOMContentLoaded", function () {
+      window.Litepicker && (new Litepicker({
+        element: document.getElementById('datepicker-masa-identitas'),
+        buttonText: {
+          previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+          nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+        },
+      }));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      window.Litepicker && (new Litepicker({
+        element: document.getElementById('datepicker-masa-identitas-old'),
+        buttonText: {
+          previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+          nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+        },
+      }));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      window.Litepicker && (new Litepicker({
+        element: document.getElementById('datepicker-tanggal-lahir'),
+        buttonText: {
+          previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+          nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+        },
+      }));
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      window.Litepicker && (new Litepicker({
+        element: document.getElementById('datepicker-tanggal-lahir-old'),
+        buttonText: {
+          previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+          nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+        },
+      }));
+    });
+
+    // JS TomSelect
     document.addEventListener("DOMContentLoaded", function() {
             var el;
             window.TomSelect && (new TomSelect(el = document.getElementById('select-identitas'), {
@@ -945,6 +994,35 @@
 @endpush
 
 <script>
+    // JS Image Preview
+    function previewPhotoKtp() {
+        const image = document.getElementById('photo_ktp');
+        const imgPreview = document.querySelector('.img-preview-ktp');
+
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+
+    function previewPhotoKk() {
+        const image = document.getElementById('photo_kk');
+        const imgPreview = document.querySelector('.img-preview-kk');
+
+        imgPreview.style.display = 'block';
+
+        const oFReader = new FileReader();
+        oFReader.readAsDataURL(image.files[0]);
+
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+
     function previewPhoto() {
         const image = document.getElementById('photo');
         const imgPreview = document.querySelector('.img-preview');
