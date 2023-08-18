@@ -26,15 +26,17 @@ class SurveiController extends Controller
 
         //Data survey
         $survey = Survei::where('pengajuan_kode', $cek->kode_pengajuan)->first();        
+        
         //Data kantor
         $ktr = Kantor::where('kode_kantor', $survey->kantor_kode)->first();
+        
+        //inisialisasi variable ketika data null
         if (is_null($ktr)) {
             $survey->nama_kantor = "";
         } else {
             $survey->nama_kantor = $ktr->nama_kantor;
         }
-        
-        
+                
         //Data kasi
         if ($survey->kasi_kode == 'DDN') {
             $survey->nama_kasi = 'Dede Doni';
@@ -71,7 +73,7 @@ class SurveiController extends Controller
 
         $cgc = $request->validate(['tabungan_cgc' => '']);
     
-    $kode_pengajuan = $request->pengajuan_kode;    
+        $kode_pengajuan = $request->pengajuan_kode;    
 
         if ($cek) {
             DB::transaction(function () use ($cek, $kode_pengajuan, $cgc) {                
