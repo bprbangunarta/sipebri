@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Throwable;
 use Carbon\Carbon;
+use App\Models\Data;
 use App\Models\Agunan;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
+use App\Models\Resort;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -49,7 +51,6 @@ class PengajuanController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
-        dd($cek);
     }
 
     public function edit(Request $request)
@@ -58,10 +59,29 @@ class PengajuanController extends Controller
         $nasabah = Nasabah::where('kode_nasabah', $req)->get();
 
         $pengajuan = Pengajuan::where('nasabah_kode', $nasabah[0]->kode_nasabah)->get();
-       
+        
+        //Data produk
+        $produk = Data::produk($pengajuan[0]->produk_kode);
+        $pengajuan[0]->produk_nama = $produk;
+        $peng = $pengajuan[0];
+        
+        // mencari nama
+        // $query = DB::connection('sqlsrv')
+        //     ->table('resort')
+        //     ->select('kode', 'ket')
+        //     ->where('kode', $peng->resort_kode)
+        //     ->get();
+        $query = DB::connection('sqlsrv')
+            ->table('resort')
+            ->join('mysql.data_pengajuan', 'resort.kode', '=', 'data_pengajuan.resort_kode')
+            ->select('resort.ket', 'data_pengajuan.*')
+            ->where('resort.kode', $peng->resort_kode);
+            // ->get();
+        dd($peng, $query);
         return view('pengajuan.edit',[
             'data' => $nasabah,
-            'pengajuan' => $pengajuan[0],
+            // 'resort' => $resort,
+            'pengajuan' => $peng,
         ]);
     }
 
