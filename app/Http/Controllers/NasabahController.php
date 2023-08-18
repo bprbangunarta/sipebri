@@ -52,7 +52,7 @@ class NasabahController extends Controller
 
                             $cif = Midle::cifedit($data);
                             $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
-                            
+                            // dd($cif);
                             return view('nasabah.edit', [
                                 'pend' => $cif['pend'],
                                 'job' => $cif['job'],
