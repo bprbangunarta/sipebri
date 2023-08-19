@@ -96,7 +96,7 @@ class NasabahController extends Controller
 
         //Hapus format tanggal Y-M-D menjadi YMD
         $ceknasabah['tanggal_lahir'] = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
-        
+        //NEw
 
         //Generate kode otomatis dari kanan ke kiri data pengajuan
         $lasts = Pengajuan::latest('kode_pengajuan')->first();
