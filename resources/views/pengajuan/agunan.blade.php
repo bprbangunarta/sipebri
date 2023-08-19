@@ -72,7 +72,6 @@
                                                         <th class="text-center">Agunan</th>
                                                         <th class="text-center">No Dokumen</th>
                                                         <th class="text-center">Atas Nama</th>
-                                                        <th class="text-center">Catatan</th>
                                                         <th class="text-center" width="10%">Status</th>
                                                         <th class="text-center" width="5%">Aksi</th>
                                                         <th class="text-center" width="5%">Ubah</th>
@@ -87,7 +86,6 @@
                                                             <b>Dokumen</b> : {{ $item->jenis_dokumen }}
                                                         </td>
                                                         <td>{{ $item->no_dokumen }}</td>
-                                                        <td>{{ $item->catatan }}</td>
                                                         <td>{{ $item->atas_nama }}</td>
                                                         <td class="text-center">
                                                             <span class="badge bg-danger-lt">Minta Otorisasi</span>
