@@ -1,54 +1,68 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('templates.auth')
+@section('title', 'Sistem Pemberian Kredit')
+@section('bg', 'bg-white')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('content')
+<div class="row g-0 flex-fill">
+    <div class="col-12 col-lg-6 col-xl-4 border-top-wide border-primary d-flex flex-column justify-content-center">
+        <div class="container container-tight my-5 px-lg-5">
+            <div class="text-center mb-4">
+                <a href="/" class="navbar-brand navbar-brand-autodark">
+                    <img src="assets/img/logo.svg" height="36" alt="">
+                </a>
+            </div>
 
-        <!-- Username or Email -->
-        <div>
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')"
-                required autofocus autocomplete="username" placeholder="Username or Email" />
-            @error('username')
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-            @enderror
-            @error('email')
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            @enderror
+            <form method="POST" action="{{ route('login') }}" novalidate>
+                @csrf
+
+                <div class="mb-2">
+                    <label class="form-label">Username</label>
+                    <input type="text"
+                        class="form-control @error('username') is-invalid @enderror @error('email') is-invalid @enderror"
+                        name="username" value="{{ old('username') }}" placeholder="Username atau Email">
+
+                    @error('username')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">
+                        Password
+                        <span class="form-label-description">
+                            <a href="/forgot-password">Lupa Password</a>
+                        </span>
+                    </label>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password"
+                        value="{{ old('password') }}" placeholder="********">
+
+                    @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-2">
+                    <label class="form-check">
+                        <input type="checkbox" class="form-check-input" />
+                        <span class="form-check-label">Ingat saya</span>
+                    </label>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Masuk</button>
+                </div>
+            </form>
+            <div class="text-center text-muted mt-3">
+                Belum mempunyai akun? <a href="/register" tabindex="-1">Buat akun</a>
+            </div>
         </div>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                autocomplete="current-password" placeholder="************" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+    <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
+        <div class="bg-cover h-100 min-vh-100"
+            style="background-image: url(tabler/static/photos/finances-us-dollars-and-bitcoins-currency-money-2.jpg)">
         </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox"
-                    class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                    name="remember">
-                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                href="{{ route('password.request') }}">
-                {{ __('Forgot your password?') }}
-            </a>
-            @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+</div>
+@endsection
