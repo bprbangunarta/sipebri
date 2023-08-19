@@ -121,10 +121,10 @@
                                                     <div class="form-label">Tanggal Lahir</div>
                                                     @if (is_null($nasabah->tanggal_lahir))
                                                     <input class="form-control mb-2" placeholder="Pilih Tanggal"
-                                                        name="tempat_lahir" id="datepicker-tanggal-lahir" />
+                                                        name="tanggal_lahir" id="datepicker-tanggal-lahir" />
                                                     @else
                                                     <input class="form-control mb-2" placeholder="Pilih Tanggal"
-                                                        name="tempat_lahir" id="datepicker-tanggal-lahir-old"
+                                                        name="tanggal_lahir" id="datepicker-tanggal-lahir-old"
                                                         value="{{ $nasabah->tanggal_lahir }}" />
                                                     @endif
                                                 </div>
@@ -651,7 +651,9 @@
         },
       }));
     });
+</script>
 
+<script>
     // JS TomSelect
     document.addEventListener("DOMContentLoaded", function() {
             var el;
