@@ -272,14 +272,14 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Lokasi</label>
-                                <textarea class="form-control" name="lokasi" id="lokasi"></textarea>
+                                <textarea class="form-control" name="lokasi" id="lokasi" rows="3"></textarea>
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Catatan</label>
-                                <textarea class="form-control" name="catatan" id="catatan"></textarea>
+                                <textarea class="form-control" name="catatan" id="catatan" rows="3"></textarea>
                             </div>
                         </div>
 
@@ -369,14 +369,14 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Lokasi</label>
-                                <textarea class="form-control" name="lokasi" id="lok"></textarea>
+                                <textarea class="form-control" name="lokasi" id="lok" rows="3"></textarea>
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Catatan</label>
-                                <textarea class="form-control" name="catatan" id="catatans"></textarea>
+                                <textarea class="form-control" name="catatan" id="catatans" rows="3"></textarea>
                             </div>
                         </div>
 

@@ -35,7 +35,6 @@ Route::get('/', function () {
 
 Route::get('/tabungan', [TabunganController::class, 'index'])->name('tabungan.index');
 
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -96,6 +95,7 @@ Route::middleware('auth')->group(function () {
 
         // Validasi Pendaftaran
         Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');
+        Route::view('/konfirmasi/pengajuan', 'pengajuan.konfirmasi');
     });
 });
 

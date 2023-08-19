@@ -14,10 +14,10 @@
     <a href="{{ route('survei.edit', ['nasabah' => $nasabah]) }}"
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('survei/edit') ? 'active' : '' }}">Data
         Survayor</a>
-    <a href="/pendaftaran/data/konfirmasi"
-        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pengajuan/konfirmasi') ? 'active' : '' }}">Konfirmasi
+    <a href="/konfirmasi/pengajuan"
+        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">Konfirmasi
         Data</a>
-    <a href="/pendaftaran/data/konfirmasi"
-        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pengajuan/konfirmasi') ? 'active' : '' }}">Otorisasi
+    <a href="/otorisasi/pengajuan"
+        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">Otorisasi
         Data</a>
 </div>
