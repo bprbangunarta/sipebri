@@ -170,6 +170,10 @@ class NasabahController extends Controller
             'photo.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'photo_selfie' => '',
             'photo_selfie.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_ktp' => '',
+            'photo_ktp.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_kk' => '',
+            'photo_kk.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
         
         // Pengecekan format "m-d-Y"

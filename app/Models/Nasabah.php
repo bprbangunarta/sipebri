@@ -43,6 +43,8 @@ class Nasabah extends Model
             'no_karyawan',
             'photo',
             'photo_selfie',
+            'photo_ktp',
+            'photo_kk',
         ];
     public function pengajuan(){
         return $this->hasMany(Pengajuan::class);
