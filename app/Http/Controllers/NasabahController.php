@@ -16,6 +16,7 @@ use App\Models\Pendamping;
 use App\Models\Pendidikan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Storage;
@@ -28,50 +29,60 @@ class NasabahController extends Controller
         //Data nasabah sipebri
         $req = $request->query('nasabah');
         $cek = Nasabah::where('kode_nasabah', $req)->first();
-        
-        //Validasi data pertama kali berdasarkan data alamat yang null
-        if (is_null($cek->alamat_ktp)) {
 
-            $query = Tabungan::where('noid', $cek->no_identitas)
-                        ->where('jttempoid', $cek->tanggal_lahir)
-                        ->first();
 
-                        if (is_null($query)) {
-                                //Jika alamat kosong dan data CIF kosong
-                                $kosong = Midle::nasabahedit($req);
-                                return view('nasabah.edit', [
-                                    'pend' => $kosong['pend'],
-                                    'job' => $kosong['job'],
-                                    'nasabah' => $kosong['nasabah'],
-                                    'kab' => $kosong['kab'],
-                                ]);
-                        }else {
-                            //jika ada data CIF
-                            $data = ['no_identitas' => $cek->no_identitas,
-                                    'tanggal_lahir' => $cek->tanggal_lahir,];
-
-                            $cif = Midle::cifedit($data);
-                            $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
-                            // dd($cif);
-                            return view('nasabah.edit', [
-                                'pend' => $cif['pend'],
-                                'job' => $cif['job'],
-                                'nasabah' => $cif['nasabah'],
-                                'kab' => $cif['kab'],
-                            ]);
-                        }
-
-            
-        }else{
-            //Jika alamat ada
-            $data = Midle::nasabahedit($req);  
+        //sementara
+        $data = Midle::nasabahedit($req); 
             return view('nasabah.edit', [
                         'pend' => $data['pend'],
                         'job' => $data['job'],
                         'nasabah' => $data['nasabah'],
                         'kab' => $data['kab'],
-                    ]);            
-        }
+                    ]); 
+        
+        // //Validasi data pertama kali berdasarkan data alamat yang null
+        // if (is_null($cek->alamat_ktp)) {
+
+        //     $query = Tabungan::where('noid', $cek->no_identitas)
+        //                 ->where('jttempoid', $cek->tanggal_lahir)
+        //                 ->first();
+
+        //                 if (is_null($query)) {
+        //                         //Jika alamat kosong dan data CIF kosong
+        //                         $kosong = Midle::nasabahedit($req);
+        //                         return view('nasabah.edit', [
+        //                             'pend' => $kosong['pend'],
+        //                             'job' => $kosong['job'],
+        //                             'nasabah' => $kosong['nasabah'],
+        //                             'kab' => $kosong['kab'],
+        //                         ]);
+        //                 }else {
+        //                     //jika ada data CIF
+        //                     $data = ['no_identitas' => $cek->no_identitas,
+        //                             'tanggal_lahir' => $cek->tanggal_lahir,];
+
+        //                     $cif = Midle::cifedit($data);
+        //                     $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
+        //                     // dd($cif);
+        //                     return view('nasabah.edit', [
+        //                         'pend' => $cif['pend'],
+        //                         'job' => $cif['job'],
+        //                         'nasabah' => $cif['nasabah'],
+        //                         'kab' => $cif['kab'],
+        //                     ]);
+        //                 }
+
+            
+        // }else{
+        //     //Jika alamat ada
+        //     $data = Midle::nasabahedit($req); 
+        //     return view('nasabah.edit', [
+        //                 'pend' => $data['pend'],
+        //                 'job' => $data['job'],
+        //                 'nasabah' => $data['nasabah'],
+        //                 'kab' => $data['kab'],
+        //             ]);            
+        // }
     }
 
     public function store(Request $request){

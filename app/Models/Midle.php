@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class Midle extends Model
 {
@@ -145,6 +146,15 @@ class Midle extends Model
 
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
+
+        //Auth user
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.name as nama', 'roles.name')
+                    ->where('users.id', '=', $us)->get();
+        // dd($user);
 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();

@@ -106,11 +106,7 @@
                                                 <td class="text-start">{{ $item->plafon }}</td>
                                                 <td class="text-center">{{ $item->jk }}</td>
                                                 <td class="text-center">
-                                                    @if ($item->entry == 1)
-                                                        <span class="badge bg-success-lt">Data lengkap</span>
-                                                    @else
-                                                        <span class="badge bg-warning-lt">Lengkapi Data</span>
-                                                    @endif
+                                                    <span class="badge bg-warning-lt">Lengkapi Data</span>
                                                 </td>
                                                 @can('validasi pendaftaran')
                                                     <td class="text-center">
