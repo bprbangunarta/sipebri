@@ -63,6 +63,15 @@ class Midle extends Model
         $query->no_telp = $query->nohp;
         $query->nama_ibu_kandung = $query->nmibukandung;
 
+        //Auth user
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user')
+                    ->where('users.id', '=', $us)->get();
+        $query->kode_user = $user[0]->code_user;
+
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
         $pend = Pendidikan::all();
@@ -152,9 +161,10 @@ class Midle extends Model
         $user = DB::table('users')
                     ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                     ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.name as nama', 'roles.name')
+                    ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
-        // dd($user);
+        $cek['kode_user'] = $user[0]->code_user;
+        $cek['sname'] = $cek['nama_panggilan'];
 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();

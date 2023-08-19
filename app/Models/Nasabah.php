@@ -41,6 +41,8 @@ class Nasabah extends Model
             'tempat_kerja',
             'no_telp_kantor',
             'no_karyawan',
+            'input_user',
+            'is_entry',
             'photo',
             'photo_selfie',
             'photo_ktp',

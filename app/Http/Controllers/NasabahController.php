@@ -177,6 +177,8 @@ class NasabahController extends Controller
             'tempat_kerja' => 'required',
             'no_telp_kantor' => 'required',
             'no_karyawan' => 'required',
+            'input_user' => 'required',
+            'is_entry' => '',
             'photo' => '',
             'photo.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'photo_selfie' => '',
@@ -196,30 +198,58 @@ class NasabahController extends Controller
         }
        
         //Hapus format tanggal Y-M-D menjadi YMD
-        $cek['tanggal_lahir'] = Carbon::createFromFormat('m-d-Y', $request->tanggal_lahir)->format('Ymd');
-       
+        $cek['tanggal_lahir'] = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
+        
         //Cek Photo
         if ($request->file('photo')) {
             if ($request->oldphoto) {
                 Storage::delete('public/image/photo/'.$request->oldphoto);
             }        
-            $filename = $cek['photo']->getClientOriginalName(); 
-            $cek['photo'] = $request->file('photo')->storeAs('image/photo', $request->nama_nasabah.$filename, 'public'); 
-            $cek['photo'] = $request->nama_nasabah.$filename;     
+            $ekstensi = $cek['photo']->getClientOriginalExtension(); 
+            $new = $request->no_identitas.'_'.$request->nama_nasabah.'.'.$ekstensi;
+            $cek['photo'] = $request->file('photo')->storeAs('image/photo', $new, 'public'); 
+            $cek['photo'] = $new;     
         }else{
             $cek['photo'] = $request->oldphoto;
         }
         
-         //Cek Photo Selfie
+        //Cek Photo Selfie
         if ($request->file('photo_selfie')) {
             if ($request->oldphotoselfie) {
                 Storage::delete('public/image/photo_selfie/'.$request->oldphotoselfie);
             }
-            $files = $cek['photo_selfie']->getClientOriginalName();         
-            $cek['photo_selfie'] = $request->file('photo_selfie')->storeAs('image/photo_selfie', $request->nama_nasabah.$files, 'public');         
-            $cek['photo_selfie'] = $request->nama_nasabah.$files;
+            $files = $cek['photo_selfie']->getClientOriginalExtension();        
+            $new = $request->no_identitas.'_'.$request->nama_nasabah.'.'.$files; 
+            $cek['photo_selfie'] = $request->file('photo_selfie')->storeAs('image/photo_selfie', $new, 'public');         
+            $cek['photo_selfie'] = $new;
         }else{
             $cek['photo_selfie'] = $request->oldphotoselfie;
+        }
+
+        //Cek Photo KTP
+        if ($request->file('photo_ktp')) {
+            if ($request->oldphotoktp) {
+                Storage::delete('public/image/photo_ktp/'.$request->oldphotoktp);
+            }
+            $files = $cek['photo_ktp']->getClientOriginalExtension();    
+            $new = $request->no_identitas.'_'.$request->nama_nasabah.'.'.$files;     
+            $cek['photo_ktp'] = $request->file('photo_ktp')->storeAs('image/photo_ktp', $new, 'public');         
+            $cek['photo_ktp'] = $new;
+        }else{
+            $cek['photo_ktp'] = $request->oldphotoktp;
+        }
+
+        //Cek Photo KK
+        if ($request->file('photo_kk')) {
+            if ($request->oldphotokk) {
+                Storage::delete('public/image/photo_kk/'.$request->oldphotokk);
+            }
+            $files = $cek['photo_kk']->getClientOriginalExtension();    
+            $new = $request->no_identitas.'_'.$request->nama_nasabah.'.'.$files;     
+            $cek['photo_kk'] = $request->file('photo_kk')->storeAs('image/photo_kk', $new, 'public');         
+            $cek['photo_kk'] = $new;
+        }else{
+            $cek['photo_kk'] = $request->oldphotokk;
         }
         
         //Huruf kapital
@@ -233,6 +263,8 @@ class NasabahController extends Controller
         $cek['alamat_sekarang'] = strtoupper($cek['alamat_sekarang']);
         $cek['nama_ibu_kandung'] = strtoupper($cek['nama_ibu_kandung']);
         $cek['tempat_kerja'] = strtoupper($cek['tempat_kerja']);
+
+        $cek['is_entry'] = 1;
 
         
         if ($cek) {
