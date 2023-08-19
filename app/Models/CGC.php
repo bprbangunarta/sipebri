@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CGC extends Model
 {
     use HasFactory;
-    protected $connection = 'sqlsrv';
-    protected $table = 'm_tabunganb';
+    // protected $connection = 'sqlsrv';
+
+    protected $table = 'v_tabungan';
 }
