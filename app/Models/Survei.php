@@ -13,6 +13,8 @@ class Survei extends Model
         'pengajuan_kode',
         'kasi_kode',
         'surveyor_kode',        
+        'input_user',        
+        'is_entry',        
     ];
 
     public function pengajuan(){

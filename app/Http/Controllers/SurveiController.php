@@ -9,6 +9,7 @@ use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SurveiController extends Controller
 {
@@ -38,27 +39,51 @@ class SurveiController extends Controller
         }
                 
         //Data kasi
-        if ($survey->kasi_kode == 'DDN') {
-            $survey->nama_kasi = 'Dede Doni';
-        } elseif ($survey->kasi_kode == 'RND') {
-            $survey->nama_kasi = 'Rian Destila';
-        }
+        $ks = DB::table('users')
+                ->select('name')
+                ->where('code_user', $survey->kasi_kode)->first();
+        $survey->nama_kasi = $ks->name;
 
         //Data surveyor
-        if ($survey->surveyor_kode == 'MHM') {
-            $survey->nama_surveyor = 'Muhidin';
-        } elseif ($survey->surveyor_kode == 'JAY') {
-            $survey->nama_surveyor = 'Jaelani';
-        }
-
-        //Inisialisasi data        
-        $survey->tabungan_cgc = $pengajuan->tabungan_cgc;                              
-                                  
+        $st = DB::table('users')
+                ->select('name')
+                ->where('code_user', $survey->kasi_kode)->first();
+        $survey->nama_surveyor = $st->name;
         
+        //Inisialisasi data        
+        $survey->tabungan_cgc = $pengajuan->tabungan_cgc;   
+        
+        //Data kasi
+        $kasi = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user', 'users.name as nama')
+                    ->where('roles.name', '=', 'Kasi Analis')->get();  
+        
+        //Data Staff Analis
+        $staff = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user', 'users.name as nama')
+                    ->where('roles.name', '=', 'Staff Analis')->get();
+        
+        //Data Kantor
         $kantor = Kantor::all();
+
+        //Data Auth
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user')
+                    ->where('users.id', '=', $us)->get();
+        $cek->auth = $user[0]->code_user;
+                    
         return view('survei.edit', [
             'data' => $cek,
             'cgc' => $cgc,
+            'kasi' => $kasi,
+            'staff' => $staff,
             'survey' => $survey,
             'kantor' => $kantor,
         ]);
@@ -69,12 +94,14 @@ class SurveiController extends Controller
             'kantor_kode' => 'required',
             'kasi_kode' => 'required',
             'surveyor_kode' => 'required',
+            'input_user' => 'required',
         ]);
 
+        $cek['is_entry'] = 1;
         $cgc = $request->validate(['tabungan_cgc' => '']);
     
         $kode_pengajuan = $request->pengajuan_kode;    
-
+        
         if ($cek) {
             DB::transaction(function () use ($cek, $kode_pengajuan, $cgc) {                
                 Survei::where('pengajuan_kode', $kode_pengajuan)->update($cek);                        
