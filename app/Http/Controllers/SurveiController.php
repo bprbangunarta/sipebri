@@ -38,34 +38,39 @@ class SurveiController extends Controller
             $survey->nama_kantor = $ktr->nama_kantor;
         }
                 
-        //Data kasi
-        $ks = DB::table('users')
-                ->select('name')
+        //Data kasi ambil
+        $ks = DB::table('v_users')
+                ->select('nama_user')
                 ->where('code_user', $survey->kasi_kode)->first();
-        $survey->nama_kasi = $ks->name;
+        if (is_null($ks)) {
+            $survey->nama_kasi = null;
+        } else {
+             $survey->nama_kasi = $ks->nama_user;
+        }  
+       
 
         //Data surveyor
-        $st = DB::table('users')
-                ->select('name')
+        $st = DB::table('v_users')
+                ->select('nama_user')
                 ->where('code_user', $survey->kasi_kode)->first();
-        $survey->nama_surveyor = $st->name;
-        
+        if (is_null($st)) {
+            $survey->nama_surveyor = null;
+        } else {
+            $survey->nama_surveyor = $st->nama_user;
+        }       
+     
         //Inisialisasi data        
         $survey->tabungan_cgc = $pengajuan->tabungan_cgc;   
         
         //Data kasi
-        $kasi = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user', 'users.name as nama')
-                    ->where('roles.name', '=', 'Kasi Analis')->get();  
+        $kasi = DB::table('v_users')
+                    ->select('code_user', 'nama_user as nama')
+                    ->where('role_name', '=', 'Kasi Analis')->get();  
         
         //Data Staff Analis
-        $staff = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user', 'users.name as nama')
-                    ->where('roles.name', '=', 'Staff Analis')->get();
+        $staff = DB::table('v_users')
+                    ->select('code_user', 'nama_user as nama')
+                    ->where('role_name', '=', 'Staff Analis')->get();
         
         //Data Kantor
         $kantor = Kantor::all();
