@@ -186,6 +186,7 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Jenis ID</label>
+                                    <input type="text" value="{{ $auth }}" name="input_user" hidden>
                                     <select type="text" class="form-select" placeholder="Pilih Identitas"
                                         name="identitas" id="select-identitas">
                                         <option value="">Pilih Identitas</option>

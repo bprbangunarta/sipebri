@@ -92,7 +92,9 @@ class NasabahController extends Controller
             'no_identitas' => 'required|unique:data_nasabah,identitas',
             'nama_nasabah' => 'required',
             'tanggal_lahir' => 'required',
+            'input_user' => 'required',
         ]);
+        $ceknasabah['is_entry'] = 1;
 
         //Membuat kode Nasabah otomatis
         $date = Carbon::now();
