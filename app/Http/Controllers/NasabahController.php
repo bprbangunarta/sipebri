@@ -180,7 +180,6 @@ class NasabahController extends Controller
             'no_telp_kantor' => 'required',
             'no_karyawan' => 'required',
             'input_user' => 'required',
-            'is_entry' => '',
             'photo' => '',
             'photo.*' => 'image|mimes:jpeg,png,jpg|max:2048',
             'photo_selfie' => '',
@@ -190,6 +189,7 @@ class NasabahController extends Controller
             'photo_kk' => '',
             'photo_kk.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        $cek['is_entry'] = 1;
         
         // Pengecekan format "m-d-Y"
         $tg = explode('-', $request->masa_identitas);
