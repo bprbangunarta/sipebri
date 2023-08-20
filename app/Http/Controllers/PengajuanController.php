@@ -6,12 +6,13 @@ use Throwable;
 use Carbon\Carbon;
 use App\Models\Data;
 use App\Models\Agunan;
+use App\Models\Resort;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
-use App\Models\Resort;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PengajuanController extends Controller
 {
@@ -28,7 +29,6 @@ class PengajuanController extends Controller
 
     public function storepengajuan(Request $request)
     {
-        // dd($request);
         $cek = $request->validate([
             'kode_pengajuan' => 'required',
             'plafon' => 'required',
@@ -119,6 +119,14 @@ class PengajuanController extends Controller
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
 
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user')
+                    ->where('users.id', '=', $us)->get();
+        $cek->auth = $user[0]->code_user;
+
         return view('pengajuan.agunan', [
             'agunan' => $agunan,
             'dok' => $dok,
@@ -142,7 +150,9 @@ class PengajuanController extends Controller
             'kode_dati' => 'required',
             'lokasi' => 'required',
             'catatan' => 'required',
+            'input_user' => 'required',
         ]);
+        $cek['is_entry'] = 1;
 
         // Merubah tanggal 
         $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
@@ -197,6 +207,13 @@ class PengajuanController extends Controller
         $data[0]->jenis_dokumen = $dok[0]->jenis_dokumen;
         $data[0]->nama_dati = $dati[0]->nama_dati;
 
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user')
+                    ->where('users.id', '=', $us)->get();
+        $data[0]->auth = $user[0]->code_user;
 
 
         return response()->json([$data, $kabupaten, $agn, $dokumen]);
@@ -213,10 +230,12 @@ class PengajuanController extends Controller
             'kode_dati' => 'required',
             'lokasi' => 'required',
             'catatan' => 'required',
+            'input_user' => 'required',
         ]);
+        $cek['is_entry'] = 1;
 
         // Merubah tanggal 
-        $carbonDate = Carbon::createFromFormat('m-d-Y', $cek['masa_agunan']);
+        $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
         $cek['masa_agunan'] = $carbonDate->format('Ymd');
 
         try {

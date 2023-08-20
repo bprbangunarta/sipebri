@@ -28,6 +28,8 @@ $(document).ready(function () {
                 var dokumen = JSON.parse(dok);
 
                 $("#data").val(hasil.id);
+                $("#input_user").val(hasil.auth);
+                console.log(hasil);
                 $("#jenis").append(
                     $("<option>", {
                         value: hasil.jenis_agunan_kode,
