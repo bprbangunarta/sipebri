@@ -22,6 +22,8 @@ class Pendamping extends Model
         'pisah_harta',
         'photo',
         'photo_selfie',
+        'input_user',
+        'is_entry',
     ];
 
     public function pengajuan(){

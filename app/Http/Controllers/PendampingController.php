@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Data;
+use App\Models\Midle;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PendampingController extends Controller
@@ -49,6 +52,15 @@ class PendampingController extends Controller
         }elseif ($pendamping[0]->pisah_harta == "T") {
             $pendamping[0]['pisah'] = 'Tidak';
         }
+
+        //Auth user
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user')
+                    ->where('users.id', '=', $us)->get();
+        $cek->auth = $user[0]->code_user;
         
         return view('pendamping.edit', [
             'nasabah' => $cek,
@@ -71,14 +83,17 @@ class PendampingController extends Controller
             'pisah_harta' => 'required',
             'photo' => '',
             'photo.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'photo_selfie' => '',
-            'photo_selfie.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_ktp' => '',
+            'photo_ktp.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        $cek['input_user'] = $request->input_user;
+        $cek['is_entry'] = 1;
 
+        
         // Pengecekan format "m-d-Y"
         $tg = explode('-', $request->masa_identitas);
         if (strlen($tg[0]) == 2) {
-            $cek['masa_identitas'] = Carbon::createFromFormat('m-d-Y', $request->masa_identitas)->format('Ymd');
+            $cek['masa_identitas'] = Carbon::createFromFormat('Y-m-d', $request->masa_identitas)->format('Ymd');
         }else if (strlen($tg[0]) == 4){
             $cek['masa_identitas'] = Carbon::createFromFormat('Y-m-d', $request->masa_identitas)->format('Ymd');
         }
@@ -86,35 +101,35 @@ class PendampingController extends Controller
         //Hapus format tanggal lahir Y-M-D menjadi YMD
         $tl = explode('-', $request->tanggal_lahir);
         if (strlen($tl[0])) {
-            $cek['tanggal_lahir'] = Carbon::createFromFormat('m-d-Y', $request->tanggal_lahir)->format('Ymd');
+            $cek['tanggal_lahir'] = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
         }else{
             $cek['tanggal_lahir'] = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
         }
-        
-        // dd($cek['tanggal_lahir']);
-        
+                
         //Cek Photo
         if ($request->file('photo')) {
             if ($request->oldphoto) {
                 Storage::delete('public/image/photo/'.$request->oldphoto);
             }        
-            $filename = $cek['photo']->getClientOriginalName(); 
-            $cek['photo'] = $request->file('photo')->storeAs('image/photo', 'pendamping'.'_'.$request->nama_pendamping.'_'.$filename, 'public'); 
-            $cek['photo'] = 'pendamping'.'_'.$request->nama_pendamping.'_'.$filename;     
+            $files = $cek['photo']->getClientOriginalExtension();        
+            $new = $request->no_identitas.'_'.$request->nama_pendamping.'.'.$files; 
+            $cek['photo'] = $request->file('photo')->storeAs('image/photo', $new, 'public'); 
+            $cek['photo'] = $new;     
         }else{
             $cek['photo'] = $request->oldphoto;
         }
         
-        //Cek Photo Selfie
-        if ($request->file('photo_selfie')) {
-            if ($request->oldphotoselfie) {
-                Storage::delete('public/image/photo_selfie/'.$request->oldphotoselfie);
+        //Cek Photo KTP
+        if ($request->file('photo_ktp')) {
+            if ($request->oldphotoktp) {
+                Storage::delete('public/image/photo_ktp/'.$request->oldphotoktp);
             }
-            $files = $cek['photo_selfie']->getClientOriginalName();         
-            $cek['photo_selfie'] = $request->file('photo_selfie')->storeAs('image/photo_selfie', 'pendamping'.'_'.$request->nama_pendamping.'_'.$files, 'public');         
-            $cek['photo_selfie'] = 'pendamping'.'_'.$request->nama_pendamping.'_'.$files;
+            $files = $cek['photo_ktp']->getClientOriginalExtension();        
+            $new = $request->no_identitas.'_'.$request->nama_pendamping.'.'.$files;         
+            $cek['photo_ktp'] = $request->file('photo_ktp')->storeAs('image/photo_ktp', $new, 'public');         
+            $cek['photo_ktp'] = $new;
         }else{
-            $cek['photo_selfie'] = $request->oldphotoselfie;
+            $cek['photo_ktp'] = $request->oldphotoktp;
         }
 
         try {
