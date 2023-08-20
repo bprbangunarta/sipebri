@@ -14,7 +14,8 @@
     <a href="{{ route('survei.edit', ['nasabah' => $nasabah]) }}"
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('survei/edit') ? 'active' : '' }}">Data
         Survayor</a>
-    <a href="/konfirmasi/pengajuan"
+    {{-- <a href="/konfirmasi/pengajuan" --}}
+    <a href="{{ route('pengajuan.konfirmasi', ['nasabah' => $nasabah]) }}"
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">Konfirmasi
         Data</a>
     <a href="/otorisasi/pengajuan"
