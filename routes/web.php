@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
         // Validasi Pendaftaran
         Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');
         Route::view('/konfirmasi/pengajuan', 'pengajuan.konfirmasi');
+        Route::view('/otorisasi/pengajuan', 'pengajuan.otorisasi');
     });
 });
 
