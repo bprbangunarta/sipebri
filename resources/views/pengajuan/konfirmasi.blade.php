@@ -47,33 +47,9 @@
                                 <div class="row g-0">
                                     <div class="col-3 d-none d-md-block border-end">
                                         <div class="card-body">
-                                            {{-- @include('templates.menu-pendaftaran', [
-                                                'nasabah' => $data[0]->kode_nasabah,
-                                            ]) --}}
-
-                                            <div class="list-group list-group-transparent">
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('nasabah/edit') ? 'active' : '' }}">Data
-                                                    Nasabah</a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pendamping/edit') ? 'active' : '' }}">Data
-                                                    Pendamping</a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pengajuan/edit') ? 'active' : '' }}">Data
-                                                    Pengajuan</a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('pengajuan/agunan') ? 'active' : '' }}">Data
-                                                    Agunan</a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('survei/edit') ? 'active' : '' }}">Data
-                                                    Survayor</a>
-                                                <a href="/konfirmasi/pengajuan"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">Konfirmasi
-                                                    Data</a>
-                                                <a href="/otorisasi/pengajuan"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">Otorisasi
-                                                    Data</a>
-                                            </div>
+                                            @include('templates.menu-pendaftaran', [
+                                                'nasabah' => $data->kode_nasabah,
+                                            ])
                                         </div>
                                     </div>
 
@@ -136,8 +112,7 @@
                                                                     viewBox="0 0 24 24" stroke-width="2"
                                                                     stroke="currentColor" fill="none"
                                                                     stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z"
-                                                                        fill="none">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none">
                                                                     </path>
                                                                     <path d="M18 6l-12 12"></path>
                                                                     <path d="M6 6l12 12"></path>

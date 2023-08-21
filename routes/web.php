@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\DatiController;
+use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\TabunganController;
 use App\Models\Nasabah;
 
@@ -95,7 +96,7 @@ Route::middleware('auth')->group(function () {
 
         // Validasi Pendaftaran
         Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');
-        Route::view('/konfirmasi/pengajuan', 'pengajuan.konfirmasi')->name('pengajuan.konfirmasi');
+        Route::get('/konfirmasi/pengajuan', [KonfirmasiController::class, 'index'])->name('pengajuan.konfirmasi');
         Route::view('/otorisasi/pengajuan', 'pengajuan.otorisasi');
     });
 });
