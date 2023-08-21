@@ -58,7 +58,6 @@ class KonfirmasiController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Ada data yang tidak terisi');
         }
-        dd($user[0]);
     }
 
     public function otorisasi(Request $request){
@@ -81,6 +80,7 @@ class KonfirmasiController extends Controller
         if ($data[0]->status != "Minta Otorisasi") {
            return redirect()->back()->with('error', 'Anda tidak diizinkan melakukan Otorisasi');
         }
+
         $cek = [
             'nasabah' => $request->nasabah,
             'pendamping' => $request->pendamping,
