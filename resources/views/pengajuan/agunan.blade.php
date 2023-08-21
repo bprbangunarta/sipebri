@@ -200,13 +200,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">$us = Auth::user()->id;
-                        $user = DB::table('users')
-                        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                        ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                        ->select('users.code_user')
-                        ->where('users.id', '=', $us)->get();
-                        $cek->auth = $user[0]->code_user;</h5>
+                    <h5 class="modal-title">Tambah Agunan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 

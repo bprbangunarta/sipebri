@@ -19,7 +19,6 @@ class Midle extends Model
         $query = Tabungan::where('noid', $data['no_identitas'])
             ->where('jttempoid', $data['tanggal_lahir'])
             ->first();
-        // dd($query);
 
         //Ubah identitas dari nomor id menjadi data string
         $iden = Data::identitas($query->kodeid);
@@ -71,7 +70,7 @@ class Midle extends Model
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $query->kode_user = $user[0]->code_user;
-
+        // dd($query);
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
         $pend = Pendidikan::all();
@@ -88,7 +87,7 @@ class Midle extends Model
     {
 
         $cek = Nasabah::where('kode_nasabah', $data)->first();
-        // dd($cek);
+        
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {
             $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
