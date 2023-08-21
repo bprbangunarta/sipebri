@@ -54,9 +54,8 @@ class Midle extends Model
         $query->jo = $j->nama_pekerjaan;
 
         //Pendidikan dari CIF
-        // $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
-
-        dd($query);
+        $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
+        $query->std = $p->nama_pendidikan;
 
         //perubahan field tabel untuk view
         $query->no_identitas = $query->noid;
