@@ -52,9 +52,12 @@
                                             ])
                                         </div>
                                     </div>
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="col d-flex flex-column">
+                                    <div class="col d-flex flex-column">
+
+                                        <form
+                                            action="{{ route('konfirmasi', ['konfirmasi' => $konfirmasi->kode_nasabah]) }}"
+                                            method="post">
+                                            @csrf
                                             <div class="card-body">
                                                 <div class="card mb-3">
                                                     <div class="card-stamp">
@@ -254,8 +257,8 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
 
