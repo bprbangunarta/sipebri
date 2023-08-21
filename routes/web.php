@@ -71,15 +71,18 @@ Route::middleware('auth')->group(function () {
             Route::resource('/pendidikan', PendidikanController::class);
         });
 
-        //Pendaftaran Nasabah
-        Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
-        Route::get('/pengajuan/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
-        Route::put('/pengajuan/simpan', [PengajuanController::class, 'storepengajuan'])->name('pengajuan.storepengajuan');
-        Route::get('/pengajuan/agunan', [PengajuanController::class, 'agunan'])->name('pengajuan.agunan');
-        Route::get('/pengajuan/editagunan/{id}/edit', [PengajuanController::class, 'editagunan'])->name('pengajuan.editagunan');
-        Route::put('/pengajuan/editagunan/update', [PengajuanController::class, 'updateagunan'])->name('pengajuan.updateagunan');
-        Route::delete('/pengajuan/{pengajuan}/delete', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
-        Route::post('/pengajuan/store', [PengajuanController::class, 'store'])->name('pengajuan.store');
+        //======Pendaftaran Nasabah======//
+        Route::controller(PengajuanController::class)->group(function(){
+            Route::get('/pengajuan', 'index')->name('pengajuan.index');
+            Route::get('/pengajuan/edit', 'edit')->name('pengajuan.edit');
+            Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
+            Route::get('/pengajuan/agunan', 'agunan')->name('pengajuan.agunan');
+            Route::get('/pengajuan/editagunan/{id}/edit', 'editagunan')->name('pengajuan.editagunan');
+            Route::put('/pengajuan/editagunan/update', 'updateagunan')->name('pengajuan.updateagunan');
+            Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');
+            Route::post('/pengajuan/store', 'store')->name('pengajuan.store');
+        });
+        
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::put('/nasabah/update', [NasabahController::class, 'update'])->name('nasabah.update');
@@ -87,6 +90,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/pendamping/update', [PendampingController::class, 'update'])->name('pendamping.update');
         Route::get('/survei/edit', [SurveiController::class, 'edit'])->name('survei.edit');
         Route::put('/survei/{survei}/update', [SurveiController::class, 'update'])->name('survei.update');
+        //======Pendaftaran Nasabah======//
 
         //Dati
         Route::controller(DatiController::class)->group(function () {
