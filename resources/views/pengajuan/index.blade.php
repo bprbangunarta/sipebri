@@ -106,7 +106,13 @@
                                                 <td class="text-start">{{ $item->plafon }}</td>
                                                 <td class="text-center">{{ $item->jk }}</td>
                                                 <td class="text-center">
-                                                    <span class="badge bg-warning-lt">Lengkapi Data</span>
+                                                    @if ($item->status == 'Lengkapi Data')
+                                                        <span class="badge bg-danger-lt">{{ $item->status }}</span>
+                                                    @elseif ($item->status == 'Minta Otorisasi')
+                                                        <span class="badge bg-warning-lt">{{ $item->status }}</span>
+                                                    @else
+                                                        <span class="badge bg-success-lt">{{ $item->status }}</span>
+                                                    @endif
                                                 </td>
                                                 @can('validasi pendaftaran')
                                                     <td class="text-center">

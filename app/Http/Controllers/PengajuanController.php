@@ -20,7 +20,7 @@ class PengajuanController extends Controller
     public function index(Request $request)
     {
         $query = Pengajuan::join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.is_entry as entry')->get();
+            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry')->get();
 
         $us = Auth::user()->id;
         $user = DB::table('users')
@@ -50,7 +50,9 @@ class PengajuanController extends Controller
             'resort_kode' => '',
             'penggunaan' => 'required',
             'keterangan' => 'required',
+            'input_user' => 'required',
         ]);
+        $cek['is_entry'] = 1;
 
         //Hapus format rupiah
         $remove = array("Rp", ".", " ");
@@ -90,6 +92,15 @@ class PengajuanController extends Controller
             $peng->nama_resort = $query->ket;
         }
 
+        //Data auth
+        $us = Auth::user()->id;
+        $user = DB::table('users')
+                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                    ->select('users.code_user')
+                    ->where('users.id', '=', $us)->get();
+        $peng->auth = $user[0]->code_user;
+
         //Data resort
         $resort = DB::connection('sqlsrv')
             ->table('resort')
@@ -99,7 +110,7 @@ class PengajuanController extends Controller
 
         return view('pengajuan.edit', [
             'data' => $nasabah,
-            // 'resort' => $resort,
+            'resort' => $resort,
             'pengajuan' => $peng,
             'resort' => $resort,
         ]);

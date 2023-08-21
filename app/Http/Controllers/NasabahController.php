@@ -138,6 +138,7 @@ class NasabahController extends Controller
         
         $cek = $request->validate([
             'kode_nasabah' => $request->query('nasabah'),
+            'no_cif' => '',
             'identitas' => 'required',
             'no_identitas' => 'required|unique:data_nasabah,identitas',
             'masa_identitas' => 'required',
