@@ -97,6 +97,8 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td>Pengisian Data Nasabah</td>
+                                                                <input type="text" value="{{ $konfirmasi->nasabah }}"
+                                                                    name="nasabah" hidden>
                                                                 @if ($konfirmasi->nasabah == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -130,6 +132,9 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Pendamping</td>
+                                                                <input type="text"
+                                                                    value="{{ $konfirmasi->pendamping }}"
+                                                                    name="pendamping" hidden>
                                                                 @if ($konfirmasi->pendamping == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -164,6 +169,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Pengajuan</td>
+                                                                <input type="text" value="{{ $konfirmasi->pengajuan }}"
+                                                                    name="pengajuan" hidden>
                                                                 @if ($konfirmasi->pengajuan == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -214,6 +221,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Survayor</td>
+                                                                <input type="text" value="{{ $konfirmasi->survei }}"
+                                                                    name="survei" hidden>
                                                                 @if ($konfirmasi->survei == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"

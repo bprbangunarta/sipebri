@@ -25,6 +25,19 @@ class KonfirmasiController extends Controller
 
     public function konfirmasi(Request $request){
         $nasabah = $request->query('konfirmasi');
+        
+        $cek = [
+            'nasabah' => $request->nasabah,
+            'pendamping' => $request->pendamping,
+            'pengajuan' => $request->pengajuan,
+            'survei' => $request->survei,
+        ];
+
+        foreach ($cek as $key => $value) {
+            if ($value == "0") {
+                return redirect()->back()->with('error', 'Data harus diisi sesuai dengan ketentuan');
+            }
+        }
 
         $us = Auth::user()->id;
         $user = DB::table('v_users')
@@ -41,7 +54,7 @@ class KonfirmasiController extends Controller
             Nasabah::where('id', $nas[0]->id)->update($data);
             return redirect()->back()->with('success', 'Status telah diperbaharui');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('success', 'Status telah diperbaharui');
+            return redirect()->back()->with('error', 'Ada data yang tidak terisi');
         }
         dd($user[0]);
     }
