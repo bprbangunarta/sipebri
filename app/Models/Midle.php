@@ -52,18 +52,20 @@ class Midle extends Model
         //Pekerjaan dari CIF
         $j = Pekerjaan::where('kode_pekerjaan', $query->pekerjaan)->first();
         $query->jo = $j->nama_pekerjaan;
+        $query->pekerjaan_kode = $query->pekerjaan;
 
         //Pendidikan dari CIF
         $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
         $query->std = $p->nama_pendidikan;
+        $query->pendidikan_kode = $query->pendidikan;
 
         //perubahan field tabel untuk view
         $query->no_identitas = $query->noid;
         $query->nama_nasabah = $query->fname;
         $query->tempat_lahir = $query->tempatlahir;
         $query->alamat_ktp = $query->alamat;
-        $query->no_npwp = $query->npwp;
-        $query->no_telp = $query->nohp;
+        $query->no_npwp = trim($query->npwp);
+        $query->no_telp = trim($query->nohp);
         $query->nama_ibu_kandung = $query->nmibukandung;
 
         //Auth user
