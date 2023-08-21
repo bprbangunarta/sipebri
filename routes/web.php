@@ -102,7 +102,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/nasabah/validasi', [NasabahController::class, 'validasi'])->name('nasabah.validasi');
         Route::get('/konfirmasi/pengajuan', [KonfirmasiController::class, 'index'])->name('pengajuan.konfirmasi');
         Route::post('/konfirmasi/pengajuan', [KonfirmasiController::class, 'konfirmasi'])->name('konfirmasi');
-        Route::view('/otorisasi/pengajuan', 'pengajuan.otorisasi');
+        Route::get('/otorisasi/pengajuan', [KonfirmasiController::class, 'otorisasi'])->name('pengajuan.otorisasi');
+        Route::post('/otorisasi/pengajuan', [KonfirmasiController::class, 'validasiotor'])->name('validasiotor');
     });
 });
 
