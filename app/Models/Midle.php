@@ -49,15 +49,20 @@ class Midle extends Model
         $query->status_pernikahan = $query->stsrt;
         $query->st = $stat;
 
+        //Pekerjaan dari CIF
+        $j = Pekerjaan::where('kode_pekerjaan', $query->pekerjaan)->first();
+        $query->jo = $j->nama_pekerjaan;
+
+        //Pendidikan dari CIF
+        // $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
+
+        dd($query);
+
         //perubahan field tabel untuk view
         $query->no_identitas = $query->noid;
         $query->nama_nasabah = $query->fname;
         $query->tempat_lahir = $query->tempatlahir;
         $query->alamat_ktp = $query->alamat;
-
-        // $query->no_npwp = (int) $query->npwp;
-        // $query->no_telp = (int) $query->nohp;
-
         $query->no_npwp = $query->npwp;
         $query->no_telp = $query->nohp;
         $query->nama_ibu_kandung = $query->nmibukandung;
@@ -70,7 +75,7 @@ class Midle extends Model
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $query->kode_user = $user[0]->code_user;
-        // dd($query);
+
         //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
         $pend = Pendidikan::all();
