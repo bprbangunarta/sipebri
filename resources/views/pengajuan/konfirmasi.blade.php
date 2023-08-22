@@ -23,7 +23,10 @@
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="#" class="btn btn-primary">
+                                            <a href="{{ route('survei.edit', [
+                                                'nasabah' => $data->kode_nasabah,
+                                            ]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
