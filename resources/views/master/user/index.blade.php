@@ -438,7 +438,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Reset Password</label>
                                     <input type="password" class="form-control" name="reset" id="reset"
-                                        value="password" readonly>
+                                        value="123456" readonly>
                                 </div>
                             </div>
                         </div>
