@@ -23,7 +23,10 @@
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="#" class="btn btn-primary">
+                                            <a href="{{ route('survei.edit', [
+                                                'nasabah' => $data->kode_nasabah,
+                                            ]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -97,6 +100,8 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td>Pengisian Data Nasabah</td>
+                                                                <input type="text" value="{{ $konfirmasi->nasabah }}"
+                                                                    name="nasabah" hidden>
                                                                 @if ($konfirmasi->nasabah == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -130,6 +135,9 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Pendamping</td>
+                                                                <input type="text"
+                                                                    value="{{ $konfirmasi->pendamping }}"
+                                                                    name="pendamping" hidden>
                                                                 @if ($konfirmasi->pendamping == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -164,6 +172,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Pengajuan</td>
+                                                                <input type="text" value="{{ $konfirmasi->pengajuan }}"
+                                                                    name="pengajuan" hidden>
                                                                 @if ($konfirmasi->pengajuan == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -214,6 +224,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Survayor</td>
+                                                                <input type="text" value="{{ $konfirmasi->survei }}"
+                                                                    name="survei" hidden>
                                                                 @if ($konfirmasi->survei == 1)
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"

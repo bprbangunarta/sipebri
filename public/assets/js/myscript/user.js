@@ -148,4 +148,46 @@ $(document).ready(function () {
             },
         });
     });
+
+    //Reset Password
+    $("#modal-password").on("show.bs.modal", function (event) {
+        var button = $(event.relatedTarget); // Tombol yang membuka modal
+        var user = button.data("user"); // Ambil data-id dari tombol
+
+        //Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+        $.ajax({
+            url: "/admin/user/reset/" + user + "/password",
+            type: "get",
+            dataType: "json",
+            cache: false,
+            success: function (response) {
+                // Isi modal dengan data yang diterima
+                var da = JSON.stringify(response);
+                var data = JSON.parse(da);
+                var hasil = data;
+                var name = hasil[0].name;
+                var code = hasil[0].code_user;
+
+                $("#name_user").val(name);
+                $("#code").val(code);
+            },
+            error: function (xhr, status, error) {
+                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                console.error("Error:", xhr.responseText);
+            },
+        });
+    });
+
+    //Show password
+    $("#modal-password").on("show.bs.modal", function (event) {
+        $("#reset").click(function () {
+            var passwordInput = $("#reset");
+
+            if (passwordInput.attr("type") === "password") {
+                passwordInput.attr("type", "text");
+            } else {
+                passwordInput.attr("type", "password");
+            }
+        });
+    });
 });

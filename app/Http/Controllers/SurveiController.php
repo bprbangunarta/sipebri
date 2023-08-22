@@ -48,11 +48,10 @@ class SurveiController extends Controller
              $survey->nama_kasi = $ks->nama_user;
         }  
        
-
         //Data surveyor
         $st = DB::table('v_users')
                 ->select('nama_user')
-                ->where('code_user', $survey->kasi_kode)->first();
+                ->where('code_user', $survey->surveyor_kode)->first();
         if (is_null($st)) {
             $survey->nama_surveyor = null;
         } else {
@@ -83,7 +82,7 @@ class SurveiController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
-                    
+               
         return view('survei.edit', [
             'data' => $cek,
             'cgc' => $cgc,
