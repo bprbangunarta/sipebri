@@ -19,9 +19,11 @@ class PengajuanController extends Controller
 
     public function index(Request $request)
     {
-        $query = Pengajuan::join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry')->get();
-
+        $query = DB::table('data_pengajuan')
+                    ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                    ->leftJoin('v_validasi_pengajuan', 'data_nasabah.kode_nasabah', '=', 'v_validasi_pengajuan.kode_nasabah')
+                    ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry', 'v_validasi_pengajuan.is_valid as validasi')->get();
+        
         $us = Auth::user()->id;
         $user = DB::table('users')
                     ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -32,11 +34,10 @@ class PengajuanController extends Controller
         
         $cetak = DB::table('v_validasi_pengajuan')
                     ->select('is_valid')->get();
-        // dd($cetak);
+        // dd($query);
         return view('pengajuan.index', [
             'data' => $query,
             'auth' => $auth,
-            'validasi' => $cetak
         ]);
     }
 
