@@ -48,7 +48,6 @@ class SurveiController extends Controller
              $survey->nama_kasi = $ks->nama_user;
         }  
        
-
         //Data surveyor
         $st = DB::table('v_users')
                 ->select('nama_user')
