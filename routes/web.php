@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('/user', UserController::class);
             //Reset Password
             Route::get('/user/reset/{user}/password', [PasswordController::class, 'datareset'])->name('datareset');
+            Route::put('/user/reset/reset', [PasswordController::class, 'update'])->name('reset.update');
             // Data Akses
             Route::get('/akses/{akses}/editakses', [HakAksesController::class, 'editakses'])->name('editakses');
             Route::put('/akses/{akses}', [HakAksesController::class, 'updateakses'])->name('updateakses');

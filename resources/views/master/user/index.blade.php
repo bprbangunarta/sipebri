@@ -415,11 +415,13 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Perubahan Password User</h5>
+                    <h5 class="modal-title">Reset Password User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="" method="post" id="reset-password">
+                <form action="{{ route('reset.update', ['reset' => $users[0]->code_user]) }}" method="post"
+                    id="reset-password">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -427,22 +429,16 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Nama User</label>
-                                    <input type="text" class="form-control" name="model_id" id="model_id" readonly>
+                                    <input type="text" class="form-control" name="code_user" id="code" hidden>
+                                    <input type="text" class="form-control" name="name" id="name_user" readonly>
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Password baru</label>
-                                    <input type="text" class="form-control" name="name" id="names" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Konfirmasi Password baru</label>
-                                    <select class="form-control" name="role_id" id="roles_id">
-                                    </select>
+                                    <label class="form-label">Reset Password</label>
+                                    <input type="password" class="form-control" name="reset" id="reset"
+                                        value="password" readonly>
                                 </div>
                             </div>
                         </div>
@@ -450,7 +446,7 @@
 
                     <div class="modal-footer">
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
+                        <button type="submit" class="btn btn-primary text-white ms-auto confirmupdate">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -459,4 +455,5 @@
 
     <script src="{{ asset('assets/js/myscript/user.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/update.js') }}"></script>
 @endsection
