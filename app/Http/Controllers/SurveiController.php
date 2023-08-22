@@ -52,7 +52,7 @@ class SurveiController extends Controller
         //Data surveyor
         $st = DB::table('v_users')
                 ->select('nama_user')
-                ->where('code_user', $survey->kasi_kode)->first();
+                ->where('code_user', $survey->surveyor_kode)->first();
         if (is_null($st)) {
             $survey->nama_surveyor = null;
         } else {
