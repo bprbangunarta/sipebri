@@ -12,6 +12,7 @@ use App\Http\Controllers\PendampingController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\HakAksesController;
+use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\DatiController;
@@ -58,6 +59,8 @@ Route::middleware('auth')->group(function () {
 
             // Data User
             Route::resource('/user', UserController::class);
+            //Reset Password
+            Route::get('/user/reset/{user}/password', [PasswordController::class, 'datareset'])->name('datareset');
             // Data Akses
             Route::get('/akses/{akses}/editakses', [HakAksesController::class, 'editakses'])->name('editakses');
             Route::put('/akses/{akses}', [HakAksesController::class, 'updateakses'])->name('updateakses');

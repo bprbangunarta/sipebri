@@ -148,4 +148,29 @@ $(document).ready(function () {
             },
         });
     });
+
+    //Reset Password
+    $("#modal-password").on("show.bs.modal", function (event) {
+        var button = $(event.relatedTarget); // Tombol yang membuka modal
+        var user = button.data("user"); // Ambil data-id dari tombol
+
+        // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+        $.ajax({
+            url: "/admin/user/reset/" + user + "/password",
+            type: "get",
+            dataType: "json",
+            cache: false,
+            success: function (response) {
+                // Isi modal dengan data yang diterima
+                var da = JSON.stringify(response);
+                var data = JSON.parse(da);
+                var hasil = data;
+                console.log(hasil);
+            },
+            error: function (xhr, status, error) {
+                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                console.error("Error:", xhr.responseText);
+            },
+        });
+    });
 });
