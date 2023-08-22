@@ -152,7 +152,7 @@
                                                             </svg>
                                                         </span>
                                                     </a>
-                                                    @if ($item->validasi == 'valid')
+                                                    @if ($item->status == 'Sudah Otorisasi')
                                                         <a href="/cetak/pengajuan" title="Print Data">
                                                             <span class="badge bg-info">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
