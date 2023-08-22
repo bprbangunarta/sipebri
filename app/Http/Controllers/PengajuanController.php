@@ -30,9 +30,13 @@ class PengajuanController extends Controller
                     ->where('users.id', '=', $us)->get();
         $auth = $user[0]->code_user;
         
+        $cetak = DB::table('v_validasi_pengajuan')
+                    ->select('is_valid')->get();
+        // dd($cetak);
         return view('pengajuan.index', [
             'data' => $query,
             'auth' => $auth,
+            'validasi' => $cetak
         ]);
     }
 

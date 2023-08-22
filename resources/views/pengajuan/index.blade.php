@@ -151,7 +151,7 @@
                                                     </svg>
                                                 </span>
                                             </a>
-
+                                            {{ $validasi }}
                                             <a href="/cetak/pengajuan" title="Print Data">
                                                 <span class="badge bg-info">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
