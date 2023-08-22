@@ -82,7 +82,7 @@ class SurveiController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
-            dd($survey);        
+               
         return view('survei.edit', [
             'data' => $cek,
             'cgc' => $cgc,
