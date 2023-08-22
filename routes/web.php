@@ -115,6 +115,7 @@ Route::middleware('auth')->group(function () {
 
         // Cetak Berkas Pengajuan
         Route::view('/cetak/pengajuan', 'cetak.pengajuan');
+        Route::view('/cetak/slik', 'cetak.layouts.slik');
     });
 });
 

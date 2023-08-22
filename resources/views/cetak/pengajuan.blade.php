@@ -22,7 +22,7 @@
                                 <!-- Page title actions -->
                                 <div class="col-auto ms-auto d-print-none">
                                     <div class="btn-list">
-                                        <a href="#" class="btn btn-primary">
+                                        <a href="{{ route('pengajuan.index') }}" class="btn btn-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                 class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24"
                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -239,7 +239,7 @@
                                         <td class="text-center">4</td>
                                         <td>Surat pernyataan pengecekan Slik</td>
                                         <td class="text-center">
-                                            <a href="#" title="Cetak Berkas">
+                                            <a href="/cetak/slik" title="Cetak Berkas">
                                                 <span class="badge bg-info">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         class="icon icon-tabler icon-tabler-printer" width="24"
