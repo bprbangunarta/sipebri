@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
         });
 
         //======Pendaftaran Nasabah======//
-        Route::controller(PengajuanController::class)->group(function(){
+        Route::controller(PengajuanController::class)->group(function () {
             Route::get('/pengajuan', 'index')->name('pengajuan.index');
             Route::get('/pengajuan/edit', 'edit')->name('pengajuan.edit');
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');
             Route::post('/pengajuan/store', 'store')->name('pengajuan.store');
         });
-        
+
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::put('/nasabah/update', [NasabahController::class, 'update'])->name('nasabah.update');
@@ -103,6 +103,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/konfirmasi/pengajuan', [KonfirmasiController::class, 'index'])->name('pengajuan.konfirmasi');
         Route::post('/konfirmasi/pengajuan', [KonfirmasiController::class, 'konfirmasi'])->name('konfirmasi');
         Route::view('/otorisasi/pengajuan', 'pengajuan.otorisasi');
+
+        Route::view('/cetak/pengajuan', 'cetak.pengajuan');
     });
 });
 
