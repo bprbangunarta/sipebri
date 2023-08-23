@@ -118,9 +118,9 @@ Route::middleware('auth')->group(function () {
         // Cetak Berkas Pengajuan
         Route::get('/cetak/pengajuan', [CetakController::class, 'pengajuan'])->name('cetak.pengajuan');
         Route::get('/cetak/slik', [DataCetakController::class, 'slik'])->name('data.slik');
-
         Route::get('/cetak/nik', [CetakController::class, 'nik'])->name('cetak.nik');
         Route::get('/cetak/pendamping', [CetakController::class, 'pendamping'])->name('cetak.pendamping');
+        Route::get('/cetak/motor', [CetakController::class, 'motor'])->name('cetak.motor');
     });
 });
 

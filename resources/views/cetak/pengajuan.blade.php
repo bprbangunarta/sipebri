@@ -292,7 +292,8 @@
                                             <td class="text-center">6</td>
                                             <td>BA Pemerikasaan Agunan Kendaraan Motor</td>
                                             <td class="text-center">
-                                                <a href="#" title="Cetak Berkas">
+                                                <a href="{{ route('cetak.motor', ['cetak' => $data]) }}"
+                                                    title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
