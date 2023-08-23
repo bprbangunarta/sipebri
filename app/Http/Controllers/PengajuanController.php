@@ -21,9 +21,8 @@ class PengajuanController extends Controller
     {
         $query = DB::table('data_pengajuan')
                     ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                    ->leftJoin('v_validasi_pengajuan', 'data_nasabah.kode_nasabah', '=', 'v_validasi_pengajuan.kode_nasabah')
-                    ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry', 'v_validasi_pengajuan.is_valid as validasi')->get();
-        
+                    ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry')->get();
+
         $us = Auth::user()->id;
         $user = DB::table('users')
                     ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -32,9 +31,6 @@ class PengajuanController extends Controller
                     ->where('users.id', '=', $us)->get();
         $auth = $user[0]->code_user;
         
-        $cetak = DB::table('v_validasi_pengajuan')
-                    ->select('is_valid')->get();
-        // dd($query);
         return view('pengajuan.index', [
             'data' => $query,
             'auth' => $auth,

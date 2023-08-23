@@ -32,4 +32,5 @@ class Pengajuan extends Model
     public function pendamping(){
         return $this->belongsTo(Pendamping::class);
     }
+
 }

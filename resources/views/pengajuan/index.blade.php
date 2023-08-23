@@ -46,11 +46,13 @@
                         </div>
 
                         <div class="card-body border-bottom py-3" style="margin-top:-7px;">
-
+                            {{-- @foreach ($data as $item)
+                                {{ dd($item) }}
+                            @endforeach --}}
                             <form action="{{ route('pengajuan.index') }}" method="GET">
                                 <div class="input-group mb-2">
                                     <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Kode atau Nama Nasabah" value="{{ Request('name') }}">
+                                        placeholder="Kode atau Nama Nasabah" value="{{ request('name') }}">
                                     <button class="btn" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
                                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
