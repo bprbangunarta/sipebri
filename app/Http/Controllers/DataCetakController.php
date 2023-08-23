@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class DataCetakController extends Controller
 {
     public function slik(Request $request){
-        $kode = $request->query('pengajuan');
+        $kode = $request->query('cetak');
         $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -20,8 +20,7 @@ class DataCetakController extends Controller
         
         //Surveyor dan Kasi
         $kasi = DB::table('v_users')
-                    ->where('code_user', $data[0]->kasi_kode)
-                    // ->where('code_user', $data[0]->surveyor_kode)
+                    ->where('code_user', $data[0]->kasi_kode)                   
                     ->select('nama_user')->get();
 
         $surveyor = DB::table('v_users')    

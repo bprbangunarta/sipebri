@@ -87,14 +87,14 @@
                 <td style="width: 5%;"></td>
                 <td>NIK</td>
                 <td class="text-center"> : </td>
-                <td><input type="text" style="width: 100%;" value="3213070701980004"></td>
+                <td><input type="text" style="width: 100%;" value="{{ $data->no_identitas }}"></td>
 
             </tr>
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width:5%;">Nama</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td><input type="text" style="width: 100%;" value="ZULFADLI RIZAL"></td>
+                <td><input type="text" style="width: 100%;" value="{{ $data->nama_nasabah }}"></td>
             </tr>
         </table>
 
@@ -108,7 +108,7 @@
             Demikian Surat Pernyataan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.
         </p>
 
-        <p style="float: right;">Pamanukan, Jumat 29 Agustus 2023</p>
+        <p style="float: right;">Pamanukan, {{ $data->hari }}</p>
         <br>
 
         <table>
@@ -116,7 +116,7 @@
                 <td class="text-center">
                     Yang Menyatakan,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Zulfadli Rizal</font>
+                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_nasabah }}</font>
                 </td>
                 <td class="text-center">
                     Petugas Pengecek NIK,<br><br><br><br><br>
