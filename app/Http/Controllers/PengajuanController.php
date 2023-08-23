@@ -20,15 +20,14 @@ class PengajuanController extends Controller
     public function index(Request $request)
     {
         $name = request('name');
+        $usr = Auth::user()->code_user;
         $query = DB::table('data_pengajuan')
                     ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                     ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry')
                     ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->where('data_pengajuan.input_user', '=', $usr)
                     ->get();
-        // $query = DB::table('data_pengajuan')
-        //             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-        //             ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry')->get();
-        // dd($query);
+        
         $us = Auth::user()->id;
         $user = DB::table('users')
                     ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
