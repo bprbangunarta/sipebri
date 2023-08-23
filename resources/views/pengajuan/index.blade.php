@@ -46,9 +46,7 @@
                         </div>
 
                         <div class="card-body border-bottom py-3" style="margin-top:-7px;">
-                            {{-- @foreach ($data as $item)
-                                {{ dd($item) }}
-                            @endforeach --}}
+
                             <form action="{{ route('pengajuan.index') }}" method="GET">
                                 <div class="input-group mb-2">
                                     <input type="text" class="form-control" name="name" id="name"
