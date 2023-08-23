@@ -182,7 +182,7 @@
                     Yang Memberi Persetujuan,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">
-                        ZULFADLI RIZAL
+                        {{ $data->nama_pendamping }}
                     </font>
                 </td>
             </tr>
