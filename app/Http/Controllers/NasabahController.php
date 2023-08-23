@@ -17,6 +17,7 @@ use App\Models\Pendidikan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +29,9 @@ class NasabahController extends Controller
 
         //Data nasabah sipebri
         $req = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $req)->first();
+        $enc = Crypt::decrypt($req);
+        
+        $cek = Nasabah::where('kode_nasabah', $enc)->first();
 
         //Validasi data pertama kali berdasarkan data alamat yang null
         if (is_null($cek->alamat_ktp)) {

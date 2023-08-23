@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Pengajuan;
 use App\Models\Survei;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class DataCetakController extends Controller
 {
     public function slik(Request $request){
         $kode = $request->query('cetak');
+        $enc = Crypt::decrypt($kode);
         $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
                 ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir', 'data_nasabah.tanggal_lahir', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp', 'data_survei.kasi_kode', 'data_survei.surveyor_kode')
-                ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
         
         //Surveyor dan Kasi
         $kasi = DB::table('v_users')

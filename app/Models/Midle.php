@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Auth;
 
 class Midle extends Model
 {
@@ -15,9 +16,10 @@ class Midle extends Model
     protected static function cifedit($data)
     {
 
+        $enc = Crypt::decrypt($data);
         //Cek data Current CIF
-        $query = Tabungan::where('noid', $data['no_identitas'])
-            ->where('jttempoid', $data['tanggal_lahir'])
+        $query = Tabungan::where('noid', $enc['no_identitas'])
+            ->where('jttempoid', $enc['tanggal_lahir'])
             ->first();
 
         //Ubah identitas dari nomor id menjadi data string
@@ -91,8 +93,8 @@ class Midle extends Model
 
     protected static function nasabahedit($data)
     {
-
-        $cek = Nasabah::where('kode_nasabah', $data)->first();
+        $enc = Crypt::decrypt($data);
+        $cek = Nasabah::where('kode_nasabah', $enc)->first();
         
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {

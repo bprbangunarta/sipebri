@@ -6,6 +6,7 @@ use App\Models\Pekerjaan;
 use App\Models\Pendidikan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\Return_;
 
@@ -21,10 +22,11 @@ class CetakController extends Controller
 
     public function nik(Request $request){
         $kode = $request->query('cetak');
+        $enc = Crypt::decrypt($kode);
         $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah')
-                ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
         //Hari ini
         $hari = Carbon::today();
@@ -37,10 +39,12 @@ class CetakController extends Controller
 
     public function pendamping(Request $request){
         $kode = $request->query('cetak');
+        $enc = Crypt::decrypt($kode);
+        
         $data = DB::table('data_pengajuan')
                 ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->where('data_pengajuan.kode_pengajuan', '=', $kode)
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->select('data_pendamping.no_identitas', 'data_pendamping.nama_pendamping', 'data_pendamping.tempat_lahir', 'data_pendamping.tanggal_lahir', 'data_nasabah.no_identitas as iden', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir as tempat', 'data_nasabah.tanggal_lahir as ttl', 'data_nasabah.pendidikan_kode', 'data_nasabah.alamat_ktp')->get();
                 
 
@@ -64,11 +68,12 @@ class CetakController extends Controller
 
     public function motor(Request $request){
         $kode = $request->query('cetak');
+        $enc = Crypt::decrypt($kode);
         $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
                 ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir', 'data_nasabah.tanggal_lahir', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp', 'data_survei.surveyor_kode')
-                ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
         
         //Surveyor
         $surveyor = DB::table('v_users')    

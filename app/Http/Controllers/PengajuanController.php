@@ -13,6 +13,7 @@ use App\Models\Pendamping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class PengajuanController extends Controller
 {
@@ -35,6 +36,10 @@ class PengajuanController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $auth = $user[0]->code_user;
+        foreach ($query as $item) {
+            $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
+            $item->kd = Crypt::encrypt($item->kode);
+        }
         
         return view('pengajuan.index', [
             'data' => $query,

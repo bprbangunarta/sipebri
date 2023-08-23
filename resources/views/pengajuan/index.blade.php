@@ -153,7 +153,7 @@
                                                         </span>
                                                     </a>
                                                     @if ($item->status == 'Sudah Otorisasi')
-                                                        <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kode]) }}"
+                                                        <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}"
                                                             title="Print Data">
                                                             <span class="badge bg-info">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
