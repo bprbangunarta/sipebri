@@ -84,28 +84,34 @@
             <tr>
                 <td>Nomot KTP</td>
                 <td class="text-center"> : </td>
-                <td><input type="text" style="width: 100%;" value="3213070701980004"></td>
+                <td>{{ $data->no_identitas }}</td>
+                {{-- <td><input type="text" style="width: 100%;" value="{{ $data->no_identitas }}"></td> --}}
             </tr>
             <tr>
                 <td style="width: 23%;">Nama Sesuai Identitas</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td><input type="text" style="width: 100%;" value="ZULFADLI RIZAL"></td>
+                <td>{{ $data->nama_nasabah }}</td>
+                {{-- <td><input type="text" style="width: 100%;" value="{{ $data->nama_nasabah }}"></td> --}}
             </tr>
             <tr>
                 <td>Tempat. Tanggal Lahir</td>
                 <td class="text-center"> : </td>
-                <td><input type="text" style="width: 100%;" value="Subang, 7 Januari 1998"></td>
+                <td>{{ $data->tempat_lahir . ',' . ' ' . $data->tanggal_lahir }}</td>
+                {{-- <td><input type="text" style="width: 100%;"
+                        value=""></td> --}}
             </tr>
             <tr>
                 <td>Nomor Telepon</td>
                 <td class="text-center"> : </td>
-                <td><input type="text" style="width: 100%;" value="082320099971"></td>
+                <td>{{ $data->no_telp }}</td>
+                {{-- <td><input type="text" style="width: 100%;" value="{{ $data->no_telp }}"></td> --}}
             </tr>
             <tr>
                 <td>Alamat Sesuai Identitas</td>
                 <td class="text-center"> : </td>
                 <td>
-                    <textarea style="width: 100.1%;">KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG</textarea>
+                    {{ $data->alamat_ktp }}
+                    {{-- <textarea style="width: 100.1%;"></textarea> --}}
                 </td>
             </tr>
             <tr>
@@ -124,7 +130,7 @@
             </tr>
         </table>
 
-        <p style="float: right;">Pamanukan, Jumat 29 Agustus 2023</p>
+        <p style="float: right;">Pamanukan, {{ $data->hari }}</p>
         <br>
 
         <table>
@@ -137,12 +143,12 @@
                 <td class="text-center">
                     Menyetujui,<br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Dede Doni</font>
+                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->kasi_kode }}</font>
                 </td>
                 <td class="text-center">
                     Pemohon,<br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Zulfadli Rizal</font>
+                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->surveyor_kode }}</font>
                 </td>
             </tr>
         </table>

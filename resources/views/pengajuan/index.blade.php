@@ -153,7 +153,8 @@
                                                         </span>
                                                     </a>
                                                     @if ($item->status == 'Sudah Otorisasi')
-                                                        <a href="/cetak/pengajuan" title="Print Data">
+                                                        <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kode]) }}"
+                                                            title="Print Data">
                                                             <span class="badge bg-info">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="icon icon-tabler icon-tabler-printer"
@@ -175,7 +176,8 @@
                                                             </span>
                                                         </a>
                                                     @else
-                                                        <a href="/cetak/pengajuan" title="Print Data"
+                                                        <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kode]) }}"
+                                                            title="Print Data"
                                                             style="pointer-events: none; text-decoration: none; cursor: default;">
                                                             <span class="badge bg-gray">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"

@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
+use App\Http\Controllers\CetakController;
+use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\TabunganController;
@@ -114,8 +116,8 @@ Route::middleware('auth')->group(function () {
         });
 
         // Cetak Berkas Pengajuan
-        Route::view('/cetak/pengajuan', 'cetak.pengajuan');
-        Route::view('/cetak/slik', 'cetak.layouts.slik');
+        Route::get('/cetak/pengajuan', [CetakController::class, 'pengajuan'])->name('cetak.pengajuan');
+        Route::get('/cetak/slik', [DataCetakController::class, 'slik'])->name('data.slik');
     });
 });
 
