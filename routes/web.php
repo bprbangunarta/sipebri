@@ -120,8 +120,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/slik', [DataCetakController::class, 'slik'])->name('data.slik');
 
         Route::get('/cetak/nik', [CetakController::class, 'nik'])->name('cetak.nik');
-        Route::get('/cetak/nik', [CetakController::class, 'nik'])->name('cetak.nik');
-        Route::view('/cetak/pendamping', 'cetak.layouts.pendamping');
+        Route::get('/cetak/pendamping', [CetakController::class, 'pendamping'])->name('cetak.pendamping');
     });
 });
 

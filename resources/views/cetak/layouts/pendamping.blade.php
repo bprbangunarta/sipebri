@@ -88,33 +88,32 @@
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
                 <td class="text-center"> : </td>
-                <td>3213070701980004</td>
+                <td>{{ $data->no_identitas }}</td>
 
             </tr>
             <tr>
                 <td></td>
                 <td>Nama Pendamping</td>
                 <td class="text-center"> : </td>
-                <td>PUADAH</td>
+                <td>{{ $data->nama_pendamping }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tempat, Tanggal Lahir</td>
                 <td class="text-center"> : </td>
-                <td>Subang, 7 Januari 1985</td>
+                <td>{{ $data->tempat_lahir . ',' . ' ' . $data->tanggal_lahir }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Pekerjaan</td>
                 <td class="text-center"> : </td>
-                <td>Guru SD</td>
+                <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Alamat</td>
                 <td class="text-center"> : </td>
-                <td>KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN KABUPATEN SUBANG, PROVINSI JAWA BARAT, INDONESIA
-                </td>
+                <td></td>
             </tr>
         </table>
 
@@ -128,33 +127,32 @@
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
                 <td class="text-center"> : </td>
-                <td>3213070701980004</td>
+                <td>{{ $data->iden }}</td>
 
             </tr>
             <tr>
                 <td></td>
                 <td>Nama Pendamping</td>
                 <td class="text-center"> : </td>
-                <td>ZULFADLI RIZAL</td>
+                <td>{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tempat, Tanggal Lahir</td>
                 <td class="text-center"> : </td>
-                <td>Subang, 7 Januari 1998</td>
+                <td>{{ $data->tempat . ',' . ' ' . $data->ttl }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Pekerjaan</td>
                 <td class="text-center"> : </td>
-                <td>Karyawan Swasta</td>
+                <td>{{ $data->pendidikan_kode }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td style="position: absolute;">Alamat</td>
                 <td class="text-center"> : </td>
-                <td>KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN KABUPATEN SUBANG, PROVINSI JAWA BARAT, INDONESIA
-                </td>
+                <td>{{ $data->alamat_ktp }}</td>
             </tr>
         </table>
 
@@ -180,7 +178,7 @@
         <table>
             <tr>
                 <td style="width: 15%;">
-                    Subang, Jumat 29 Agustus 2023<br>
+                    Subang, {{ $data->hari }}<br>
                     Yang Memberi Persetujuan,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">

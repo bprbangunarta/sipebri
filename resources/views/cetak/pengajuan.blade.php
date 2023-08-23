@@ -193,7 +193,8 @@
                                             <td class="text-center">2</td>
                                             <td>Surat Persetujuan Pendamping</td>
                                             <td class="text-center">
-                                                <a href="/cetak/pendamping" title="Cetak Berkas">
+                                                <a href="{{ route('cetak.pendamping', ['cetak' => $data]) }}"
+                                                    title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
