@@ -237,7 +237,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-center">4</td>
-                                        <td>Surat pernyataan pengecekan Slik</td>
+                                        <td>Surat pernyataan pengecekan IDEB</td>
                                         <td class="text-center">
                                             <a href="/cetak/slik" title="Cetak Berkas">
                                                 <span class="badge bg-info">
