@@ -118,6 +118,9 @@ Route::middleware('auth')->group(function () {
         // Cetak Berkas Pengajuan
         Route::get('/cetak/pengajuan', [CetakController::class, 'pengajuan'])->name('cetak.pengajuan');
         Route::get('/cetak/slik', [DataCetakController::class, 'slik'])->name('data.slik');
+
+        Route::view('/cetak/nik', 'cetak.layouts.nik');
+        Route::view('/cetak/pendamping', 'cetak.layouts.pendamping');
     });
 });
 

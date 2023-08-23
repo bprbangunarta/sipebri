@@ -13,7 +13,8 @@
 
         body {
             margin: 0;
-            font-family: 'Calibri', serif;
+            /* font-family: 'Calibri', serif; */
+            font-family: "Times New Roman", Times, serif;
         }
 
         table {
@@ -85,37 +86,31 @@
                 <td>Nomot KTP</td>
                 <td class="text-center"> : </td>
                 <td>{{ $data->no_identitas }}</td>
-                {{-- <td><input type="text" style="width: 100%;" value="{{ $data->no_identitas }}"></td> --}}
             </tr>
             <tr>
                 <td style="width: 23%;">Nama Sesuai Identitas</td>
                 <td class="text-center" style="width: 3%;"> : </td>
                 <td>{{ $data->nama_nasabah }}</td>
-                {{-- <td><input type="text" style="width: 100%;" value="{{ $data->nama_nasabah }}"></td> --}}
             </tr>
             <tr>
                 <td>Tempat. Tanggal Lahir</td>
                 <td class="text-center"> : </td>
                 <td>{{ $data->tempat_lahir . ',' . ' ' . $data->tanggal_lahir }}</td>
-                {{-- <td><input type="text" style="width: 100%;"
-                        value=""></td> --}}
             </tr>
             <tr>
                 <td>Nomor Telepon</td>
                 <td class="text-center"> : </td>
                 <td>{{ $data->no_telp }}</td>
-                {{-- <td><input type="text" style="width: 100%;" value="{{ $data->no_telp }}"></td> --}}
             </tr>
             <tr>
-                <td>Alamat Sesuai Identitas</td>
+                <td style="position: absolute;">Alamat Sesuai Identitas</td>
                 <td class="text-center"> : </td>
                 <td>
                     {{ $data->alamat_ktp }}
-                    {{-- <textarea style="width: 100.1%;"></textarea> --}}
                 </td>
             </tr>
             <tr>
-                <td>Tujuan Penggunaan</td>
+                <td style="position: absolute;">Tujuan Penggunaan</td>
                 <td class="text-center"> : </td>
                 <td>
                     <input type="checkbox"> Pemeriksaan Calon Debitur&nbsp;&nbsp;&nbsp;&nbsp;
@@ -136,30 +131,27 @@
         <table>
             <tr>
                 <td class="text-center">
-                    Pelaksana IDEB,<br><br><br><br>
+                    Pelaksana IDEB,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">Unun Nurainun</font>
                 </td>
                 <td class="text-center">
-                    Menyetujui,<br><br><br><br>
+                    Menyetujui,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">{{ $data->kasi_kode }}</font>
                 </td>
                 <td class="text-center">
-                    Pemohon,<br><br><br><br>
+                    Pemohon,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">{{ $data->surveyor_kode }}</font>
                 </td>
             </tr>
         </table>
-        {{-- <button onclick=" printPage()">Cetak Halaman</button> --}}
     </div>
 
-    <script>
-        function printPage() {
-            window.print();
-        }
-    </script>
+    {{-- <script>
+        window.print();
+    </script> --}}
 </body>
 
 </html>
