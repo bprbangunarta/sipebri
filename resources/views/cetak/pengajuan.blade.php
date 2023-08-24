@@ -266,9 +266,10 @@
                                         </tr>
                                         <tr>
                                             <td class="text-center">5</td>
-                                            <td>BA Pemerikasaan Agunan Sertifikat</td>
+                                            <td>BA Pemerikasaan Sertifikat Tanah</td>
                                             <td class="text-center">
-                                                <a href="#" title="Cetak Berkas">
+                                                <a href="{{ route('cetak.tanah', ['cetak' => $data]) }}"
+                                                    title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"

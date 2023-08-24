@@ -87,4 +87,31 @@ class CetakController extends Controller
             'data' =>$data[0]
         ]);
     }
+
+    public function tanah(Request $request){
+        $kode = $request->query('cetak');
+        $enc = Crypt::decrypt($kode);
+
+        $data = DB::table('data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir', 'data_nasabah.tanggal_lahir', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp', 'data_survei.surveyor_kode')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
+
+        //Surveyor
+        $surveyor = DB::table('v_users')    
+                    ->where('code_user', $data[0]->surveyor_kode)
+                    ->select('nama_user', 'role_name')->get();
+
+        $data[0]->nama_user = $surveyor[0]->nama_user;
+        $data[0]->role_name = $surveyor[0]->role_name;
+
+        //Tahun
+        $thn = Carbon::now()->year;
+        $data[0]->thn = $thn;
+        
+        return view('cetak.layouts.tanah', [
+            'data' => $data[0]
+        ]);
+    }
 }

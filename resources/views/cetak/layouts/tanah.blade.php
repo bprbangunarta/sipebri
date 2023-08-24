@@ -90,14 +90,14 @@
                 <td style="width: 5%;"></td>
                 <td>Nama</td>
                 <td class="text-center"> : </td>
-                <td>MUHIDIN PS</td>
+                <td>{{ $data->nama_user }}</td>
 
             </tr>
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width:5%;">Jabatan</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td>Staff Analis</td>
+                <td>{{ $data->role_name }}</td>
             </tr>
         </table>
 
@@ -107,14 +107,14 @@
                 <td style="width: 5%;"></td>
                 <td>Nama</td>
                 <td class="text-center"> : </td>
-                <td>ZULFADLI RIZAL</td>
+                <td>{{ $data->nama_nasabah }}</td>
 
             </tr>
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width:5%;">Alamat</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td>KP. SALAM DESA SALAMJAYA KEC. PABUARAN KAB. SUBANG</td>
+                <td>{{ $data->alamat_ktp }}</td>
             </tr>
         </table>
 
@@ -144,17 +144,20 @@
             </tr>
             <tr>
                 <td class="br-1">&nbsp; Luas Tanah Sawah</td>
-                <td class="br-1">&nbsp; . . . . . . . . . . . . x . . . . . . . . . . . . = . . . . . . . . . . . . . .
+                <td class="br-1">&nbsp; . . . . . . . . . . . . x . . . . . . . . . . . . = . . . . . . . . . . . . .
+                    .
                     M2</td>
             </tr>
             <tr>
                 <td class="br-1">&nbsp; Luas Tanah Darat</td>
-                <td class="br-1">&nbsp; . . . . . . . . . . . . x . . . . . . . . . . . . = . . . . . . . . . . . . . .
+                <td class="br-1">&nbsp; . . . . . . . . . . . . x . . . . . . . . . . . . = . . . . . . . . . . . . .
+                    .
                     M2</td>
             </tr>
             <tr>
                 <td class="br-1">&nbsp; Luas Bangunan Rumah</td>
-                <td class="br-1">&nbsp; . . . . . . . . . . . . x . . . . . . . . . . . . = . . . . . . . . . . . . . .
+                <td class="br-1">&nbsp; . . . . . . . . . . . . x . . . . . . . . . . . . = . . . . . . . . . . . . .
+                    .
                     M2</td>
             </tr>
             <tr>
@@ -211,7 +214,7 @@
             Demikian Berita Acara Pemeriksaan ini agar dapat digunakan sesuai dengan kepentingannya.
         </p>
 
-        <p style="float: right;">Subang, ......................... 2023</p>
+        <p style="float: right;">Subang, ......................... {{ $data->thn }}</p>
 
         <table>
             <tr>
@@ -219,12 +222,12 @@
                     Calon Debitur
                     ,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Zulfadli Rizal</font>
+                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_nasabah }}</font>
                 </td>
                 <td class="text-center">
                     Petugas Survei,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Muhidin P</font>
+                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_user }}</font>
                 </td>
             </tr>
         </table>
