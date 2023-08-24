@@ -76,9 +76,10 @@ class PengajuanController extends Controller
     {
         $req = $request->query('nasabah');
         $enc = Crypt::decrypt($req);
-        $nasabah = Nasabah::where('kode_nasabah', $enc)->get();
-
-        $pengajuan = Pengajuan::where('nasabah_kode', $nasabah[0]->kode_nasabah)->get();
+        
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+        
+        $nasabah = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
 
         //Data produk
         $produk = Data::produk($pengajuan[0]->produk_kode);
@@ -91,7 +92,6 @@ class PengajuanController extends Controller
             ->select('kode', 'ket')
             ->where('kode', $peng->resort_kode)
             ->first();
-
 
         if (is_null($query)) {
             $peng->nama_resort = null;
@@ -115,7 +115,8 @@ class PengajuanController extends Controller
             ->get();
 
         $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
-        
+        $peng->kode_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
+
         //Produk All
         $pro = Produk::all();
         

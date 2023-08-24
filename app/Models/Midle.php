@@ -93,8 +93,10 @@ class Midle extends Model
     protected static function nasabahedit($data)
     {
         $enc = Crypt::decrypt($data);
-        $cek = Nasabah::where('kode_nasabah', $enc)->first();
+        $kd_pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
         
+        $cek = Nasabah::where('kode_nasabah', $kd_pengajuan[0]->nasabah_kode)->first();
+                
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {
             $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
@@ -171,7 +173,8 @@ class Midle extends Model
                     ->where('users.id', '=', $us)->get();
         $cek['kode_user'] = $user[0]->code_user;
         $cek['sname'] = $cek['nama_panggilan'];
-
+        $cek['kd_pengajuan'] = $kd_pengajuan[0]->kode_pengajuan;
+        
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return [

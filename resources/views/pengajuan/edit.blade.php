@@ -51,7 +51,7 @@
                                     <div class="col-3 d-none d-md-block border-end">
                                         <div class="card-body">
                                             @include('templates.menu-pendaftaran', [
-                                                'nasabah' => $data[0]->kd_nasabah,
+                                                'nasabah' => $pengajuan->kode_pengajuan,
                                             ])
                                         </div>
                                     </div>

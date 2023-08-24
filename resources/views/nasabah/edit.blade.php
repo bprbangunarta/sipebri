@@ -49,7 +49,7 @@
                                     <div class="col-3 d-none d-md-block border-end">
                                         <div class="card-body">
                                             @include('templates.menu-pendaftaran', [
-                                                'nasabah' => $nasabah->kd_nasabah,
+                                                'nasabah' => $nasabah->kd_pengajuan,
                                             ])
                                         </div>
                                     </div>

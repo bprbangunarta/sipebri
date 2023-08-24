@@ -132,7 +132,7 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd_nasabah]) }}"
+                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
                                                         title="Edit Data">
                                                         <span class="badge bg-warning">
                                                             <svg xmlns="http://www.w3.org/2000/svg"

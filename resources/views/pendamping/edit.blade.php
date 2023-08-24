@@ -24,7 +24,7 @@
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
                                             <a href="{{ route('nasabah.edit', [
-                                                'nasabah' => $nasabah->kode_nasabah,
+                                                'nasabah' => $nasabah->kd_pengajuan,
                                             ]) }}"
                                                 class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@
                                     <div class="col-3 d-none d-md-block border-end">
                                         <div class="card-body">
                                             @include('templates.menu-pendaftaran', [
-                                                'nasabah' => $nasabah->kd_nasabah,
+                                                'nasabah' => $nasabah->kd_pengajuan,
                                             ])
                                         </div>
                                     </div>

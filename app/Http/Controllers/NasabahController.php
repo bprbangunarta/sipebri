@@ -29,8 +29,9 @@ class NasabahController extends Controller
         //Data nasabah sipebri
         $req = $request->query('nasabah');
         $enc = Crypt::decrypt($req);
+        $kd_pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
         
-        $cek = Nasabah::where('kode_nasabah', $enc)->first();
+        $cek = Nasabah::where('kode_nasabah', $kd_pengajuan[0]->nasabah_kode)->first();
 
         //Validasi data pertama kali berdasarkan data alamat yang null
         if (is_null($cek->alamat_ktp)) {
@@ -58,7 +59,7 @@ class NasabahController extends Controller
                     $cif = Midle::cifedit($data);
                     $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
                     $cif['nasabah']->kd_nasabah = Crypt::encrypt($cif['nasabah']->kode_nasabah);
-                    // dd($cif);
+                    
                     return view('nasabah.edit', [
                         'pend' => $cif['pend'],
                         'job' => $cif['job'],
@@ -73,6 +74,7 @@ class NasabahController extends Controller
             $data = Midle::nasabahedit($req); 
             $data['nasabah']->kd_nasabah = Crypt::encrypt($data['nasabah']->kode_nasabah);
             $data['nasabah']->nocif = $data['nasabah']->no_cif;
+            $data['nasabah']->kd_pengajuan = Crypt::encrypt($data['nasabah']->kd_pengajuan);
             
             return view('nasabah.edit', [
                         'pend' => $data['pend'],
@@ -190,7 +192,7 @@ class NasabahController extends Controller
             $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
             $kdpengajuan['input_user'] = $usr;
             $kdpengajuan['is_entry'] = 1;
-// dd($cekpengajuan, $request);
+
             try {
                 DB::transaction(function () use ($cekpengajuan, $kdpengajuan) {
                     Pengajuan::create($cekpengajuan);

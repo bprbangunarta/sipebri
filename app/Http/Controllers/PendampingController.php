@@ -21,10 +21,10 @@ class PendampingController extends Controller
         $nasabah = $request->query('nasabah');
         $enc = Crypt::decrypt($nasabah);
         
-        $cek = Nasabah::where('kode_nasabah', $enc)->first();
-        
         //Ambil kode pengajuan
-        $pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->get();
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+        
+        $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
         
         //Ambil kode pendamping
         $pendamping = Pendamping::where('pengajuan_kode',$pengajuan[0]->kode_pengajuan)->get();
@@ -65,6 +65,7 @@ class PendampingController extends Controller
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
         $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
+        $cek->kd_pengajuan = $nasabah;
         
         return view('pendamping.edit', [
             'nasabah' => $cek,
