@@ -26,7 +26,6 @@ class NasabahController extends Controller
 {
     public function edit(Request $request)
     {
-
         //Data nasabah sipebri
         $req = $request->query('nasabah');
         $enc = Crypt::decrypt($req);
@@ -43,6 +42,7 @@ class NasabahController extends Controller
                         if (is_null($query)) {
                                 //Jika alamat kosong dan data CIF kosong
                                 $kosong = Midle::nasabahedit($req);
+                                $kosong['nasabah']->kd_nasabah = Crypt::encrypt($kosong['nasabah']->kode_nasabah);
                                 return view('nasabah.edit', [
                                     'pend' => $kosong['pend'],
                                     'job' => $kosong['job'],
@@ -56,6 +56,7 @@ class NasabahController extends Controller
 
                             $cif = Midle::cifedit($data);
                             $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
+                            $cif['nasabah']->kd_nasabah = Crypt::encrypt($cif['nasabah']->kode_nasabah);
                             // dd($cif);
                             return view('nasabah.edit', [
                                 'pend' => $cif['pend'],
@@ -69,6 +70,8 @@ class NasabahController extends Controller
         }else{
             //Jika alamat ada
             $data = Midle::nasabahedit($req); 
+            $data['nasabah']->kd_nasabah = Crypt::encrypt($data['nasabah']->kode_nasabah);
+            
             return view('nasabah.edit', [
                         'pend' => $data['pend'],
                         'job' => $data['job'],

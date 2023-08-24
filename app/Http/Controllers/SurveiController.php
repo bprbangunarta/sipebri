@@ -10,13 +10,15 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class SurveiController extends Controller
 {
     public function edit(Request $request)
     {
         $req = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $req)->first();     
+        $enc = Crypt::decrypt($req);
+        $cek = Nasabah::where('kode_nasabah', $enc)->first();     
         
         //Data pengajuan
         $pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->first();                
@@ -82,7 +84,7 @@ class SurveiController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
-               
+        $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);     
         return view('survei.edit', [
             'data' => $cek,
             'cgc' => $cgc,

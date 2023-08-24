@@ -9,14 +9,18 @@ use App\Models\Pendamping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class KonfirmasiController extends Controller
 {
     public function index(Request $request){
         $nasabah = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $nasabah)->get();
+        $enc = Crypt::decrypt($nasabah);
+        
+        $cek = Nasabah::where('kode_nasabah', $enc)->get();
         $konfirmasi = DB::table('v_validasi_pengajuan')
-                        ->where('kode_nasabah', $nasabah)->get();               
+                        ->where('kode_nasabah', $enc)->get();   
+        $cek[0]->kd_nasabah = Crypt::encrypt($cek[0]->kode_nasabah);            
         return view('pengajuan.konfirmasi', [
             'data' => $cek[0],
             'konfirmasi' => $konfirmasi[0],
@@ -62,10 +66,12 @@ class KonfirmasiController extends Controller
 
     public function otorisasi(Request $request){
         $nasabah = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $nasabah)->get();
+        $enc = Crypt::decrypt($nasabah);
+        $cek = Nasabah::where('kode_nasabah', $enc)->get();
         $otorisasi = DB::table('v_validasi_pengajuan')
-                        ->where('kode_nasabah', $nasabah)->get();
-        // dd($otorisasi);
+                        ->where('kode_nasabah', $enc)->get();
+        
+        $cek[0]->kd_nasabah = Crypt::encrypt($cek[0]->kode_nasabah);
         return view('pengajuan.otorisasi', [
             'data' => $cek[0],
             'otorisasi' => $otorisasi[0],

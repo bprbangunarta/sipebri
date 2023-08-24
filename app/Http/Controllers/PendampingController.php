@@ -11,6 +11,7 @@ use App\Models\Pendamping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
 class PendampingController extends Controller
@@ -18,7 +19,9 @@ class PendampingController extends Controller
     public function edit(Request $request)
     {
         $nasabah = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $nasabah)->first();
+        $enc = Crypt::decrypt($nasabah);
+        
+        $cek = Nasabah::where('kode_nasabah', $enc)->first();
         
         //Ambil kode pengajuan
         $pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->get();
@@ -61,6 +64,7 @@ class PendampingController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
+        $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
         
         return view('pendamping.edit', [
             'nasabah' => $cek,

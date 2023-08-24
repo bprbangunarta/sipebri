@@ -80,7 +80,8 @@ class PengajuanController extends Controller
     public function edit(Request $request)
     {
         $req = $request->query('nasabah');
-        $nasabah = Nasabah::where('kode_nasabah', $req)->get();
+        $enc = Crypt::decrypt($req);
+        $nasabah = Nasabah::where('kode_nasabah', $enc)->get();
 
         $pengajuan = Pengajuan::where('nasabah_kode', $nasabah[0]->kode_nasabah)->get();
 
@@ -118,7 +119,8 @@ class PengajuanController extends Controller
             ->select('kode', 'ket')
             ->get();
 
-
+        $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
+        
         return view('pengajuan.edit', [
             'data' => $nasabah,
             'resort' => $resort,
@@ -130,7 +132,8 @@ class PengajuanController extends Controller
     public function agunan(Request $request)
     {
         $req = $request->query('nasabah');
-        $cek = Nasabah::where('kode_nasabah', $req)->first();
+        $enc = Crypt::decrypt($req);
+        $cek = Nasabah::where('kode_nasabah', $enc)->first();
 
         $pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->get();
         $jaminan = DB::table('data_pengajuan')
@@ -157,7 +160,7 @@ class PengajuanController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
-
+        $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
         return view('pengajuan.agunan', [
             'agunan' => $agunan,
             'dok' => $dok,
