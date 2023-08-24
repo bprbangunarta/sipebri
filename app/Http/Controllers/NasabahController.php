@@ -117,11 +117,20 @@ class NasabahController extends Controller
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
         $cekpengajuan['kode_pengajuan'] = $kodes;
         $cekpengajuan['nasabah_kode'] = $ceknasabah['kode_nasabah'];
-               
+
+        //Auth
+        $usr = Auth::user()->code_user;
+        
         //Hapus format rupiah
         $remove = array("Rp", ".", " ");
         $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+        $cekpengajuan['input_user'] = $usr;
+        $cekpengajuan['is_entry'] = 1;
+    
+        //masuk ke pendamping dan survei
         $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
+        $kdpengajuan['input_user'] = $usr;
+        $kdpengajuan['is_entry'] = 1;
 
         //huruf kapital nama nasabah
         $ceknasabah['nama_nasabah'] = strtoupper($ceknasabah['nama_nasabah']);
