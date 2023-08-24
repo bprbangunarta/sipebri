@@ -15,11 +15,10 @@ class Midle extends Model
 
     protected static function cifedit($data)
     {
-
-        $enc = Crypt::decrypt($data);
+    
         //Cek data Current CIF
-        $query = Tabungan::where('noid', $enc['no_identitas'])
-            ->where('jttempoid', $enc['tanggal_lahir'])
+        $query = Tabungan::where('noid', $data['no_identitas'])
+            ->where('jttempoid', $data['tanggal_lahir'])
             ->first();
 
         //Ubah identitas dari nomor id menjadi data string

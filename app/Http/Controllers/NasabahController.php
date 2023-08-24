@@ -32,6 +32,7 @@ class NasabahController extends Controller
         
         $cek = Nasabah::where('kode_nasabah', $enc)->first();
 
+
         //Validasi data pertama kali berdasarkan data alamat yang null
         if (is_null($cek->alamat_ktp)) {
 
@@ -42,6 +43,7 @@ class NasabahController extends Controller
                 if (is_null($query)) {
                         //Jika alamat kosong dan data CIF kosong
                         $kosong = Midle::nasabahedit($req);
+        
                         $kosong['nasabah']->kd_nasabah = Crypt::encrypt($kosong['nasabah']->kode_nasabah);
                         return view('nasabah.edit', [
                             'pend' => $kosong['pend'],
