@@ -77,8 +77,8 @@ class Midle extends Model
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $query->kode_user = $user[0]->code_user;
+        $query->tempat_kerja = $query->tempat_bekerja;
         
-        //Data dati
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
