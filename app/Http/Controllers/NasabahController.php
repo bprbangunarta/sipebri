@@ -39,32 +39,32 @@ class NasabahController extends Controller
                         ->where('jttempoid', $cek->tanggal_lahir)
                         ->first();
 
-                        if (is_null($query)) {
-                                //Jika alamat kosong dan data CIF kosong
-                                $kosong = Midle::nasabahedit($req);
-                                $kosong['nasabah']->kd_nasabah = Crypt::encrypt($kosong['nasabah']->kode_nasabah);
-                                return view('nasabah.edit', [
-                                    'pend' => $kosong['pend'],
-                                    'job' => $kosong['job'],
-                                    'nasabah' => $kosong['nasabah'],
-                                    'kab' => $kosong['kab'],
-                                ]);
-                        }else {
-                            //jika ada data CIF
-                            $data = ['no_identitas' => $cek->no_identitas,
-                                    'tanggal_lahir' => $cek->tanggal_lahir,];
+                if (is_null($query)) {
+                        //Jika alamat kosong dan data CIF kosong
+                        $kosong = Midle::nasabahedit($req);
+                        $kosong['nasabah']->kd_nasabah = Crypt::encrypt($kosong['nasabah']->kode_nasabah);
+                        return view('nasabah.edit', [
+                            'pend' => $kosong['pend'],
+                            'job' => $kosong['job'],
+                            'nasabah' => $kosong['nasabah'],
+                            'kab' => $kosong['kab'],
+                        ]);
+                }else {
+                    //jika ada data CIF
+                    $data = ['no_identitas' => $cek->no_identitas,
+                            'tanggal_lahir' => $cek->tanggal_lahir,];
 
-                            $cif = Midle::cifedit($data);
-                            $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
-                            $cif['nasabah']->kd_nasabah = Crypt::encrypt($cif['nasabah']->kode_nasabah);
-                            // dd($cif);
-                            return view('nasabah.edit', [
-                                'pend' => $cif['pend'],
-                                'job' => $cif['job'],
-                                'nasabah' => $cif['nasabah'],
-                                'kab' => $cif['kab'],
-                            ]);
-                        }
+                    $cif = Midle::cifedit($data);
+                    $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
+                    $cif['nasabah']->kd_nasabah = Crypt::encrypt($cif['nasabah']->kode_nasabah);
+                    // dd($cif);
+                    return view('nasabah.edit', [
+                        'pend' => $cif['pend'],
+                        'job' => $cif['job'],
+                        'nasabah' => $cif['nasabah'],
+                        'kab' => $cif['kab'],
+                    ]);
+                }
 
             
         }else{
@@ -85,66 +85,121 @@ class NasabahController extends Controller
         $ceknasabah = $request->validate([
             'kode_nasabah' => '',
             'identitas' => 'required',
-            'no_identitas' => 'required|unique:data_nasabah,identitas',
+            'no_identitas' => 'required',
             'nama_nasabah' => 'required',
             'tanggal_lahir' => 'required',
             'input_user' => 'required',
         ]);
         $ceknasabah['is_entry'] = 1;
 
-        //Membuat kode Nasabah otomatis
-        $date = Carbon::now();
-        $koderand = random_int(100000, 999999);
-        $haskode = $date->format('m').$date->format('y').$koderand;
-        $ceknasabah['kode_nasabah'] = $haskode;
-
-        $cekpengajuan = $request->validate([
-            'plafon' => 'required',
-            'jangka_waktu' => 'required',
-        ]);
-
         //Hapus format tanggal Y-M-D menjadi YMD
-        $ceknasabah['tanggal_lahir'] = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
+        $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
 
-        //Generate kode otomatis dari kanan ke kiri data pengajuan
-        $lasts = Pengajuan::latest('kode_pengajuan')->first();
-        if (is_null($lasts)) {
-            $count = 339931;
-        }else{
-            $count = (int) $lasts->kode_pengajuan + 1;
-        }
-        $lengths = 8;
-        $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
-        $cekpengajuan['kode_pengajuan'] = $kodes;
-        $cekpengajuan['nasabah_kode'] = $ceknasabah['kode_nasabah'];
-
-        //Auth
-        $usr = Auth::user()->code_user;
+        //Cek Nik ke database sipebri
+        $nik = Nasabah::where('no_identitas', $request->no_identitas)
+                        ->where('tanggal_lahir', $tanggal)->first();
         
-        //Hapus format rupiah
-        $remove = array("Rp", ".", " ");
-        $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
-        $cekpengajuan['input_user'] = $usr;
-        $cekpengajuan['is_entry'] = 1;
-    
-        //masuk ke pendamping dan survei
-        $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
-        $kdpengajuan['input_user'] = $usr;
-        $kdpengajuan['is_entry'] = 1;
+        if (is_null($nik)) {
+            //===Jika NIK tidak ada di data si pebri===//
+            //Membuat kode Nasabah otomatis
+            $date = Carbon::now();
+            $koderand = random_int(100000, 999999);
+            $haskode = $date->format('m').$date->format('y').$koderand;
+            $ceknasabah['kode_nasabah'] = $haskode;
 
-        //huruf kapital nama nasabah
-        $ceknasabah['nama_nasabah'] = strtoupper($ceknasabah['nama_nasabah']);
+            $cekpengajuan = $request->validate([
+                'plafon' => 'required',
+                'jangka_waktu' => 'required',
+            ]);
+
+            //Hapus format tanggal Y-M-D menjadi YMD
+            $ceknasabah['tanggal_lahir'] = $tanggal;
+
+            //Generate kode otomatis dari kanan ke kiri data pengajuan
+            $lasts = Pengajuan::latest('kode_pengajuan')->first();
+            if (is_null($lasts)) {
+                $count = 339931;
+            }else{
+                $count = (int) $lasts->kode_pengajuan + 1;
+            }
+            $lengths = 8;
+            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+            $cekpengajuan['kode_pengajuan'] = $kodes;
+            $cekpengajuan['nasabah_kode'] = $ceknasabah['kode_nasabah'];
+
+            //Auth
+            $usr = Auth::user()->code_user;
+            
+            //Hapus format rupiah
+            $remove = array("Rp", ".", " ");
+            $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+            $cekpengajuan['input_user'] = $usr;
+            $cekpengajuan['is_entry'] = 1;
         
-        try {
-            DB::transaction(function () use ($ceknasabah, $cekpengajuan, $kdpengajuan) {
-                Nasabah::create($ceknasabah);
-                Pengajuan::create($cekpengajuan);
-                Pendamping::create($kdpengajuan);
-                Survei::create($kdpengajuan);
-            });
-            return redirect()->back()->with('success', "Data berhasil ditambahkan");
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', "Data gagal ditambahkan");
+            //masuk ke pendamping dan survei
+            $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
+            $kdpengajuan['input_user'] = $usr;
+            $kdpengajuan['is_entry'] = 1;
+
+            //huruf kapital nama nasabah
+            $ceknasabah['nama_nasabah'] = strtoupper($ceknasabah['nama_nasabah']);
+            
+            try {
+                DB::transaction(function () use ($ceknasabah, $cekpengajuan, $kdpengajuan) {
+                    Nasabah::create($ceknasabah);
+                    Pengajuan::create($cekpengajuan);
+                    Pendamping::create($kdpengajuan);
+                    Survei::create($kdpengajuan);
+                });
+                return redirect()->back()->with('success', "Data berhasil ditambahkan");
+            } catch (Exception $e) {
+                return redirect()->back()->with('error', "Data gagal ditambahkan");
+            }
+
+
+        }else {
+            //Generate kode otomatis dari kanan ke kiri data pengajuan
+            $cekpengajuan = $request->validate([
+                'plafon' => 'required',
+                'jangka_waktu' => 'required',
+            ]);
+
+            $lasts = Pengajuan::latest('kode_pengajuan')->first();
+            if (is_null($lasts)) {
+                $count = 339931;
+            }else{
+                $count = (int) $lasts->kode_pengajuan + 1;
+            }
+            $lengths = 8;
+            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+            $cekpengajuan['kode_pengajuan'] = $kodes;
+            $cekpengajuan['nasabah_kode'] = $nik->kode_nasabah;
+            
+            //Auth
+            $usr = Auth::user()->code_user;
+            
+            //Hapus format rupiah
+            $remove = array("Rp", ".", " ");
+            $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+            $cekpengajuan['input_user'] = $usr;
+            $cekpengajuan['is_entry'] = 1;
+
+            //masuk ke pendamping dan survei
+            $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
+            $kdpengajuan['input_user'] = $usr;
+            $kdpengajuan['is_entry'] = 1;
+
+            dd($cekpengajuan, $kdpengajuan);
+            try {
+                DB::transaction(function () use ($cekpengajuan, $kdpengajuan) {
+                    Pengajuan::create($cekpengajuan);
+                    Pendamping::create($kdpengajuan);
+                    Survei::create($kdpengajuan);
+                });
+                return redirect()->back()->with('success', "Data berhasil ditambahkan");
+            } catch (Exception $e) {
+                return redirect()->back()->with('error', "Data gagal ditambahkan");
+            }
         }
            
     }
