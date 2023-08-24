@@ -67,7 +67,7 @@
             }
 
             .content {
-                padding: 1.2cm;
+                padding: 1.5cm;
             }
         }
     </style>
@@ -133,25 +133,28 @@
                 <td class="text-center">
                     Pelaksana IDEB,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Unun Nurainun</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">Unun Nurainun
+                    </font>
                 </td>
                 <td class="text-center">
                     Menyetujui,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->kasi_kode }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
+                        $data->kasi_kode }}</font>
                 </td>
                 <td class="text-center">
                     Pemohon,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->surveyor_kode }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
+                        $data->surveyor_kode }}</font>
                 </td>
             </tr>
         </table>
     </div>
 
-    {{-- <script>
+    <script>
         window.print();
-    </script> --}}
+    </script>
 </body>
 
 </html>

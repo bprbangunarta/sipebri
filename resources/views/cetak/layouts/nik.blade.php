@@ -66,7 +66,7 @@
             }
 
             .content {
-                padding: 1.2cm;
+                padding: 1.5cm;
             }
         }
     </style>
@@ -87,14 +87,14 @@
                 <td style="width: 5%;"></td>
                 <td>NIK</td>
                 <td class="text-center"> : </td>
-                <td><input type="text" style="width: 100%;" value="{{ $data->no_identitas }}"></td>
+                <td>{{ $data->no_identitas }}</td>
 
             </tr>
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width:5%;">Nama</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td><input type="text" style="width: 100%;" value="{{ $data->nama_nasabah }}"></td>
+                <td>{{ $data->nama_nasabah }}</td>
             </tr>
         </table>
 
@@ -121,7 +121,8 @@
                 <td class="text-center">
                     Petugas Pengecek NIK,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">Unun Nurainun</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">Unun Nurainun
+                    </font>
                 </td>
             </tr>
         </table>

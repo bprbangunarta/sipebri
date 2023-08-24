@@ -181,7 +181,7 @@
                     Subang, {{ $data->hari }}<br>
                     Yang Memberi Persetujuan,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         {{ $data->nama_pendamping }}
                     </font>
                 </td>
@@ -189,9 +189,9 @@
         </table>
     </div>
 
-    {{-- <script>
+    <script>
         window.print();
-    </script> --}}
+    </script>
 </body>
 
 </html>

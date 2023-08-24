@@ -65,7 +65,7 @@
 
         @media print {
             body {
-                font-size: 10pt;
+                font-size: 12pt;
             }
 
             .content {
@@ -81,7 +81,9 @@
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
-        <h4 style="text-align: center;font-size: 12pt;">BERITA ACARA PEMERIKSAAN KENDARAAN BERMOTOR</h4>
+        <h4 style="text-align: center;font-size: 12pt;">BERITA ACARA PEMERIKSAAN <br>
+            KENDARAAN BERMOTOR RODA EMPAT
+        </h4>
 
         <table>
             Pada hari ini ............. tanggal, ........................... telah dilakukan pemeriksaan kondisi
@@ -165,33 +167,53 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Tutup Oli Samping</td>
+                <td class="br-1" style="width: 25%">&nbsp; Kursi Pengemudi</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Slebor Depan</td>
+                <td class="br-1" style="width: 25%">&nbsp; Kunci Kontak/Pintu</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Tutup Oli</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Velg Depan</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Filter Udara</td>
+                <td class="br-1" style="width: 25%">&nbsp; Kursi Penumpang</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Kepala Babi</td>
+                <td class="br-1" style="width: 25%">&nbsp; Lampu Depan Ka/Ki</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Ban Cadangan</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Riting Depan Ka/ki</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Kaca-Kaca</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Spion Ka/Ki</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Ban Velg</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Dashboard</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
@@ -201,7 +223,37 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Kabel Rem</td>
+                <td class="br-1" style="width: 25%">&nbsp; Panel Instrument</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Body</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Perseneling</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Strip Body</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Rem Pijakan</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Tangki Bensin Tutup</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Rem Tangan</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
@@ -211,7 +263,7 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Shock Depan</td>
+                <td class="br-1" style="width: 25%">&nbsp; Kopling Pijakan</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
@@ -221,7 +273,17 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Lampu Depan</td>
+                <td class="br-1" style="width: 25%">&nbsp; Pijakan Gas</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 25%">&nbsp; Busi Kabel Busi</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+                <td class="br-1" style="width: 8%">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="br-1" style="width: 25%">&nbsp; Weeper</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
@@ -231,147 +293,37 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Stang</td>
+                <td class="br-1" style="width: 25%">&nbsp; Bumper Depan</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Accu</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Holder Ka/Ki</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Kabel Busi</td>
+                <td class="br-1" style="width: 25%">&nbsp; Accumulator</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Spion Ka/ki</td>
+                <td class="br-1" style="width: 25%">&nbsp; Air Conditioner</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Rantai</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Riting Depan Ka/Ki</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Tutup Rantai</td>
+                <td class="br-1" style="width: 25%">&nbsp; Chasis</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Kunci Kontak</td>
+                <td class="br-1" style="width: 25%">&nbsp; Stir</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Foot Step Depan Ka/Ki</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Rem Depan</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Foot Step Belakang Ka/Ki</td>
+                <td class="br-1" style="width: 25%">&nbsp; Kaki-Kaki</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Rem Belakang</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Kick Starter</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Cakram (rem)</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Pijakan Rem</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Panel Instrument</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Pijakan Perseneling</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Klakson</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Standar</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Jok</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Gear Belakang</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Body</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Slebor Belakang</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Strip Body</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Velg Belakang</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Front Guard Sayap Body</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Shock Belakang</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 8%">&nbsp;</td>
-            </tr>
-            <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Swing Arm</td>
+                <td class="br-1" style="width: 25%">&nbsp; Power Steering</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
@@ -381,7 +333,7 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Tangki Bensin</td>
+                <td class="br-1" style="width: 25%">&nbsp; Power Window</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
@@ -391,17 +343,17 @@
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Tutup Tangki Bensin</td>
+                <td class="br-1" style="width: 25%">&nbsp; Klakson</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
-                <td class="br-1" style="width: 25%">&nbsp; Pegangan Belakang</td>
+                <td class="br-1" style="width: 25%">&nbsp; Bumper Belakang</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
             </tr>
             <tr>
-                <td class="br-1" style="width: 25%">&nbsp; Tangki Oli Samping</td>
+                <td class="br-1" style="width: 25%">&nbsp; Tape</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>
                 <td class="br-1" style="width: 8%">&nbsp;</td>

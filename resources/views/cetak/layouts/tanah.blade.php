@@ -222,20 +222,22 @@
                     Calon Debitur
                     ,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_nasabah }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
+                        $data->nama_nasabah }}</font>
                 </td>
                 <td class="text-center">
                     Petugas Survei,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_user }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
+                        $data->nama_user }}</font>
                 </td>
             </tr>
         </table>
     </div>
 
-    {{-- <script>
+    <script>
         window.print();
-    </script> --}}
+    </script>
 </body>
 
 </html>
