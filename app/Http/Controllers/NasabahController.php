@@ -72,7 +72,8 @@ class NasabahController extends Controller
             //Jika alamat ada
             $data = Midle::nasabahedit($req); 
             $data['nasabah']->kd_nasabah = Crypt::encrypt($data['nasabah']->kode_nasabah);
-            dd($data['nasabah']);
+            $data['nasabah']->nocif = $data['nasabah']->no_cif;
+            
             return view('nasabah.edit', [
                         'pend' => $data['pend'],
                         'job' => $data['job'],
