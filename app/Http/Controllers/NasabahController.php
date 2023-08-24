@@ -189,7 +189,6 @@ class NasabahController extends Controller
             $kdpengajuan['input_user'] = $usr;
             $kdpengajuan['is_entry'] = 1;
 
-            dd($cekpengajuan, $kdpengajuan);
             try {
                 DB::transaction(function () use ($cekpengajuan, $kdpengajuan) {
                     Pengajuan::create($cekpengajuan);
