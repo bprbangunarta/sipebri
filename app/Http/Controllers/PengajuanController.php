@@ -29,13 +29,7 @@ class PengajuanController extends Controller
                     ->where('data_pengajuan.input_user', '=', $usr)
                     ->get();
         
-        $us = Auth::user()->id;
-        $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
-        $auth = $user[0]->code_user;
+        $auth = Auth::user()->code_user;
         foreach ($query as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
@@ -241,14 +235,7 @@ class PengajuanController extends Controller
         $data[0]->jenis_dokumen = $dok[0]->jenis_dokumen;
         $data[0]->nama_dati = $dati[0]->nama_dati;
 
-        $us = Auth::user()->id;
-        $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
-        $data[0]->auth = $user[0]->code_user;
-
+        $data[0]->auth = Auth::user()->code_user;
 
         return response()->json([$data, $kabupaten, $agn, $dokumen]);
     }
