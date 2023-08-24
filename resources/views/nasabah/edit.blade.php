@@ -66,7 +66,7 @@
                                                         <input type="text" value="{{ $nasabah->kode_user }}"
                                                             name="input_user" hidden>
                                                         <input type="text" class="form-control" name="no_cif"
-                                                            id="no_cif" value="{{ $nasabah->nocif }}" disabled>
+                                                            id="no_cif" value="{{ $nasabah->nocif }}" readonly>
                                                     </div>
 
                                                     <div class="col-md">
