@@ -237,10 +237,10 @@
                                     <select type="text" class="form-select" placeholder="Pilih Identitas"
                                         name="identitas" id="select-identitas">
                                         <option value="">Pilih Identitas</option>
-                                        <option value="1">KTP</option>
-                                        <option value="2">SIM</option>
-                                        <option value="3">Pasport</option>
-                                        <option value="9">Lainnya</option>
+                                        <option value="1" {{ old('identitas') == '1' ? 'selected' : '' }}>KTP</option>
+                                        <option value="2" {{ old('identitas') == '2' ? 'selected' : '' }}>SIM</option>
+                                        <option value="3" {{ old('identitas') == '3' ? 'selected' : '' }}>Pasport</option>
+                                        <option value="9" {{ old('identitas') == '9' ? 'selected' : '' }}>Lainnya</option>
                                     </select>
                                 </div>
                             </div>
@@ -249,7 +249,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">No. Indentias</label>
                                     <input type="text" class="form-control" name="no_identitas" id="no_identitas"
-                                        placeholder="3213000000000000">
+                                        placeholder="3213000000000000" value="{{ old('no_identitas') }}">
                                 </div>
                             </div>
 
@@ -257,7 +257,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Nama Lengkap</label>
                                     <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah"
-                                        placeholder="Nama Lengkap">
+                                        placeholder="Nama Lengkap" value="{{ old('nama_nasabah') }}">
                                 </div>
                             </div>
 
@@ -273,7 +273,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Plafon</label>
                                     <input type="text" class="form-control" name="plafon" id="plafond"
-                                        placeholder="10.000.000">
+                                        placeholder="10.000.000" value="{{ old('plafon') }}">
                                 </div>
                             </div>
 
@@ -283,10 +283,10 @@
                                     <select type="text" class="form-select" placeholder="Jengka Waktu"
                                         name="jangka_waktu" id="select-jk">
                                         <option value="">Pilih JK</option>
-                                        <option value="6">6 Bulan</option>
-                                        <option value="12">12 Bulan</option>
-                                        <option value="24">24 Bulan</option>
-                                        <option value="36">36 Bulan</option>
+                                        <option value="6" {{ old('jangka_waktu') === '6' ? 'selected' : '' }}>6 Bulan</option>
+                                        <option value="12" {{ old('jangka_waktu') === '12' ? 'selected' : '' }}>12 Bulan</option>
+                                        <option value="24" {{ old('jangka_waktu') === '24' ? 'selected' : '' }}>24 Bulan</option>
+                                        <option value="36" {{ old('jangka_waktu') === '36' ? 'selected' : '' }}>36 Bulan</option>
                                     </select>
                                 </div>
                             </div>

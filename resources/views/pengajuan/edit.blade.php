@@ -87,11 +87,11 @@
                                                                     {{ $pengajuan->produk_nama }}
                                                                 </option>
                                                             @endif
-                                                            <option value="KRU">Kredit Multiguna</option>
-                                                            <option value="KBT">Kredit Budidaya Tani
-                                                            </option>
-                                                            <option value="KPS">Kredit Kepesta Raja</option>
-                                                            <option value="KTA">Kredit Tanpa Agunan</option>
+                                                            @foreach ($produk as $item)
+                                                                <option value="{{ $item->kode_produk }}">
+                                                                    {{ $item->nama_produk }}
+                                                                </option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="col-md">

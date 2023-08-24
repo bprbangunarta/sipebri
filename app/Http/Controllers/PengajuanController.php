@@ -10,6 +10,7 @@ use App\Models\Resort;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -115,11 +116,14 @@ class PengajuanController extends Controller
 
         $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
         
+        //Produk All
+        $pro = Produk::all();
+        
         return view('pengajuan.edit', [
             'data' => $nasabah,
-            'resort' => $resort,
             'pengajuan' => $peng,
             'resort' => $resort,
+            'produk' => $pro,
         ]);
     }
 
