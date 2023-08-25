@@ -131,7 +131,7 @@
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center d-flex">
                                                     <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
                                                         title="Edit Data" style="text-decoration: none;">
                                                         <span class="badge bg-warning">
@@ -152,6 +152,34 @@
                                                             </svg>
                                                         </span>
                                                     </a>
+                                                    <form
+                                                        action="{{ route('pengajuan.destroy', ['pengajuan' => $item->kd]) }}"
+                                                        method="POST">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit"
+                                                            style="border: none; background: transparent;"
+                                                            class="confirmdelete">
+                                                            <span class=" badge bg-danger">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon icon-tabler icon-tabler-trash"
+                                                                    width="24" height="24" viewBox="0 0 24 24"
+                                                                    stroke-width="2" stroke="currentColor" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                                        fill="none"></path>
+                                                                    <path d="M4 7l16 0"></path>
+                                                                    <path d="M10 11l0 6"></path>
+                                                                    <path d="M14 11l0 6"></path>
+                                                                    <path
+                                                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
+                                                                    </path>
+                                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
+                                                                    </path>
+                                                                </svg>
+                                                            </span>
+                                                        </button>
+                                                    </form>
                                                     @if ($item->status == 'Sudah Otorisasi')
                                                         <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}"
                                                             title="Print Data">
@@ -310,6 +338,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection
 
 @push('myscript')

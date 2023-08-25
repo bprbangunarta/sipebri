@@ -11,10 +11,13 @@ use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
 use App\Models\Produk;
+use App\Models\Survei;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+
+use function Pest\Laravel\delete;
 
 class PengajuanController extends Controller
 {
@@ -277,12 +280,28 @@ class PengajuanController extends Controller
     }
 
     public function destroy($pengajuan)
-    {
+    {   
+        $enc = Crypt::decrypt($pengajuan);
+        
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+        $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
+        $survei = Survei::where('pengajuan_kode', $enc)->get();
+        $agunan = Agunan::where('pengajuan_kode', $enc)->first();
+
+        if(!is_null($agunan)){
+            Agunan::where('id', $agunan[0]->id)->delete();
+        }
+        
         try {
-            DB::table('data_jaminan')->where('id', $pengajuan)->delete();
+            
+            DB::transaction(function() use ($pengajuan, $pendamping, $survei){
+                Pengajuan::where('id', $pengajuan[0]->id)->delete();
+                Pendamping::where('id', $pendamping[0]->id)->delete();
+                Survei::where('id', $survei[0]->id)->delete();
+            });
             return redirect()->back()->with('success', 'Data berhasil dihapus');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('success', 'Data berhasil dihapus');
+            return redirect()->back()->with('error', 'Data gagal dihapus');
         }
     }
 }
