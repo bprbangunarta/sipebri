@@ -26,13 +26,14 @@ class PengajuanController extends Controller
     {
         $name = request('name');
         $usr = Auth::user()->code_user;
+        
         $query = DB::table('data_pengajuan')
                     ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                     ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_nasabah.status',  'data_nasabah.is_entry as entry')
                     ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->where('data_pengajuan.input_user', '=', $usr)
                     ->get();
-        
+        // dd($query);
         $auth = Auth::user()->code_user;
         foreach ($query as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
@@ -47,7 +48,7 @@ class PengajuanController extends Controller
 
     public function storepengajuan(Request $request)
     {
-        $request->kode_pengajuan = Crypt::decrypt($request->kode_pengajuan);
+       
         $cek = $request->validate([
             'kode_pengajuan' => 'required',
             'plafon' => 'required',
@@ -68,9 +69,9 @@ class PengajuanController extends Controller
         //Hapus format rupiah
         $remove = array("Rp", ".", " ");
         $cek['plafon'] = str_replace($remove, "", $cek['plafon']);
-        
+        dd($cek);
         try {
-            Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($cek);
+            Pengajuan::where('kode_pengajuan', $cek['kode_pengajuan'])->update($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');

@@ -18,12 +18,12 @@ class KonfirmasiController extends Controller
         $enc = Crypt::decrypt($nasabah);
         
         $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-
+        
         $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
         $konfirmasi = DB::table('v_validasi_pengajuan')
-                        ->where('kode_nasabah', $cek[0]->kode_nasabah)->get();   
+                        ->where('kode_pengajuan', $enc)->get();   
         $cek[0]->kd_pengajuan = $nasabah;  
-                
+        
         return view('pengajuan.konfirmasi', [
             'data' => $cek[0],
             'konfirmasi' => $konfirmasi[0],
@@ -75,9 +75,10 @@ class KonfirmasiController extends Controller
         // dd($pengajuan);
         $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
         $otorisasi = DB::table('v_validasi_pengajuan')
-                        ->where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
+                        ->where('kode_pengajuan', $enc)->get();
         
         $cek[0]->kd_pengajuan = $nasabah;
+
         return view('pengajuan.otorisasi', [
             'data' => $cek[0],
             'otorisasi' => $otorisasi[0],

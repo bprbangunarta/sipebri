@@ -145,7 +145,7 @@ class NasabahController extends Controller
 
             //huruf kapital nama nasabah
             $ceknasabah['nama_nasabah'] = strtoupper($ceknasabah['nama_nasabah']);
-            dd($ceknasabah, $cekpengajuan, $kdpengajuan, $kdpengajuan);
+            
             try {
                 DB::transaction(function () use ($ceknasabah, $cekpengajuan, $kdpengajuan) {
                     Nasabah::create($ceknasabah);

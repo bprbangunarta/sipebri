@@ -136,7 +136,7 @@
                                                         <div class="form-label">JK Bunga</div>
                                                         <input type="number" class="form-control" name="jangka_bunga"
                                                             id="jangka_bunga" placeholder="Jangka Bunga"
-                                                            value="{{ $pengajuan->jangka_pokok }}">
+                                                            value="{{ $pengajuan->jangka_bunga }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Resort</div>
