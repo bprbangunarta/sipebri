@@ -86,7 +86,7 @@
                                                         <div class="form-label">No Identitas</div>
                                                         <input type="text" class="form-control" name="no_identitas"
                                                             id="no_identitas" placeholder="3213XXXXX"
-                                                            value="{{ $nasabah->no_identitas }}">
+                                                            value="{{ old('no_identitas', $nasabah->no_identitas) }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Masa Identitas</div>
@@ -106,19 +106,20 @@
                                                         <div class="form-label">Nama Panggilan</div>
                                                         <input type="text" class="form-control" name="nama_panggilan"
                                                             id="nama_panggilan" placeholder="Nama Panggilan"
-                                                            value="{{ $nasabah->sname }}" required>
+                                                            value="{{ old('nama_panggilan', $nasabah->sname) }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Lengkap</div>
                                                         <input type="text" class="form-control" name="nama_nasabah"
                                                             id="nama_nasabah" placeholder="Nama Lengkap"
-                                                            value="{{ $nasabah->nama_nasabah }}">
+                                                            value="{{ old('nama_nasabah', $nasabah->nama_nasabah) }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Tempat Lahir</div>
                                                         <input type="text" class="form-control" name="tempat_lahir"
                                                             id="tempat_lahir" placeholder="Tempat Lahir"
-                                                            value="{{ $nasabah->tempat_lahir }}" required>
+                                                            value="{{ old('tempat_lahir', $nasabah->tempat_lahir) }}"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Tanggal Lahir</div>
@@ -186,11 +187,12 @@
                                                         <div class="form-label">Kota</div>
                                                         @if (is_null($nasabah->kota))
                                                             <input class="form-control" type="text" name="kota"
-                                                                id="kota" placeholder="Kota">
+                                                                id="kota" placeholder="Kota"
+                                                                value="{{ old('kota') }}">
                                                         @else
                                                             <input class="form-control" type="text" name="kota"
                                                                 id="kota" placeholder="Kota"
-                                                                value="{{ $nasabah->kota }}">
+                                                                value="{{ old('kota', $nasabah->kota) }}">
                                                         @endif
 
                                                     </div>
@@ -200,18 +202,18 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat KTP</div>
                                                         @if (is_null($nasabah->alamat_ktp))
-                                                            <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required></textarea>
+                                                            <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required>{{ old('alamat_ktp') }}</textarea>
                                                         @else
-                                                            <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required>{{ $nasabah->alamat_ktp }}</textarea>
+                                                            <textarea class="form-control" name="alamat_ktp" id="alamat_ktp" placeholder="Alamat Lengkap" required>{{ old('alamat_ktp', $nasabah->alamat_ktp) }}</textarea>
                                                         @endif
 
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat Sekarang</div>
                                                         @if (is_null($nasabah->alamat_sekarang))
-                                                            <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required></textarea>
+                                                            <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required>{{ old('alamat_sekarang') }}</textarea>
                                                         @else
-                                                            <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required>{{ $nasabah->alamat_sekarang }}</textarea>
+                                                            <textarea class="form-control" name="alamat_sekarang" id="alamat_sekarang" placeholder="Alamat Lengkap" required>{{ old('alamat_sekarang', $nasabah->alamat_sekarang) }}</textarea>
                                                         @endif
 
                                                     </div>
@@ -334,19 +336,21 @@
                                                         <input type="text" class="form-control"
                                                             name="nama_ibu_kandung" id="nama_ibu_kandung"
                                                             placeholder="Nama Ibu Kandung"
-                                                            value="{{ $nasabah->nama_ibu_kandung }}" required>
+                                                            value="{{ old('nama_ibu_kandung', $nasabah->nama_ibu_kandung) }}"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Rekening</div>
                                                         <input type="number" class="form-control" name="no_rekening"
                                                             id="no_rekening" placeholder="No Rekening"
-                                                            value="{{ $nasabah->no_rekening }}" required>
+                                                            value="{{ old('no_rekening', $nasabah->no_rekening) }}"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor NPWP</div>
                                                         <input type="number" class="form-control" name="no_npwp"
                                                             id="no_npwp" placeholder="No NPWP"
-                                                            value="{{ $nasabah->no_npwp }}" required>
+                                                            value="{{ old('no_npwp', $nasabah->no_npwp) }}" required>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -355,19 +359,20 @@
                                                         <div class="form-label">Nomor Telp</div>
                                                         <input type="text" class="form-control" name="no_telp"
                                                             id="no_telp" placeholder="0823XXXXX"
-                                                            value="{{ $nasabah->no_telp }}" required>
+                                                            value="{{ old('no_telp', $nasabah->no_telp) }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">No Telp Darurat</div>
                                                         <input type="text" class="form-control" name="no_telp_darurat"
                                                             id="no_telp_darurat" placeholder="0823XXXXX"
-                                                            value="{{ $nasabah->no_telp_darurat }}" required>
+                                                            value="{{ old('no_telp_darurat', $nasabah->no_telp_darurat) }}"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Alamat Email</div>
                                                         <input type="email" class="form-control" name="email"
                                                             id="email" placeholder="namalengkap@gmail.com"
-                                                            value="{{ $nasabah->email }}" required>
+                                                            value="{{ old('email', $nasabah->email) }}" required>
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -562,19 +567,22 @@
                                                         <div class="form-label">Tempat Kerja</div>
                                                         <input type="text" class="form-control" name="tempat_kerja"
                                                             id="tempat_kerja" placeholder="PT. BPR Bangunarta"
-                                                            value="{{ $nasabah->tempat_kerja }}" required>
+                                                            value="{{ old('tempat_kerja', $nasabah->tempat_kerja) }}"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">No Telp Kantor</div>
                                                         <input type="text" class="form-control" name="no_telp_kantor"
                                                             id="no_telp_kantor" placeholder="(0260) 550888"
-                                                            value="{{ $nasabah->no_telp_kantor }}" required>
+                                                            value="{{ old('no_telp_kantor', $nasabah->no_telp_kantor) }}"
+                                                            required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor Karyawan</div>
                                                         <input type="text" class="form-control" name="no_karyawan"
                                                             id="no_karyawan" placeholder="NIK Karyawan"
-                                                            value="{{ $nasabah->no_karyawan }}" required>
+                                                            value="{{ old('no_karyawan', $nasabah->no_karyawan) }}"
+                                                            required>
                                                     </div>
                                                 </div>
 

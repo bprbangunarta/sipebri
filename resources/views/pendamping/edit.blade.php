@@ -88,7 +88,7 @@
                                                             hidden>
                                                         <input type="text" class="form-control" name="no_identitas"
                                                             id="no_identitas" placeholder="3213XXXXX"
-                                                            value="{{ $pendamping[0]->no_identitas }}">
+                                                            value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Masa Identitas</div>
@@ -109,12 +109,13 @@
                                                         @if (is_null($pendamping[0]->nama_pendamping))
                                                             <input type="text" class="form-control"
                                                                 name="nama_pendamping" id="nama_pendamping"
-                                                                placeholder="Nama Lengkap">
+                                                                placeholder="Nama Lengkap"
+                                                                value="{{ old('nama_pendamping') }}">
                                                         @else
                                                             <input type="text" class="form-control"
                                                                 name="nama_pendamping" id="nama_pendamping"
                                                                 placeholder="Nama Lengkap"
-                                                                value="{{ $pendamping[0]->nama_pendamping }}">
+                                                                value="{{ old('nama_pendamping', $pendamping[0]->nama_pendamping) }}">
                                                         @endif
 
                                                     </div>
@@ -122,11 +123,13 @@
                                                         <div class="form-label">Tempat Lahir</div>
                                                         @if (is_null($pendamping[0]->tempat_lahir))
                                                             <input type="text" class="form-control" name="tempat_lahir"
-                                                                id="tempat_lahir" placeholder="Tempat Lahir">
-                                                        @else
-                                                            <input type="text" class="form-control" name="tempat_lahir"
                                                                 id="tempat_lahir" placeholder="Tempat Lahir"
-                                                                value="{{ $pendamping[0]->tempat_lahir }}">
+                                                                value="{{ old('tempat_lahir') }}">
+                                                        @else
+                                                            <input type="text" class="form-control"
+                                                                name="tempat_lahir" id="tempat_lahir"
+                                                                placeholder="Tempat Lahir"
+                                                                value="{{ old('tempat_lahir', $pendamping[0]->tempat_lahir) }}">
                                                         @endif
 
                                                     </div>

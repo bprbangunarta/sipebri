@@ -243,7 +243,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">No Dokumen</label>
                                     <input type="text" class="form-control" name="no_dokumen" id="no_dokumen"
-                                        placeholder="No Dokumen">
+                                        placeholder="No Dokumen" value="{{ old('no_dokumen') }}">
                                 </div>
                             </div>
 
@@ -251,7 +251,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Atas Nama</label>
                                     <input type="text" class="form-control" name="atas_nama" id="atas_nama"
-                                        placeholder="Nama Lengkap">
+                                        placeholder="Nama Lengkap" value="{{ old('atas_nama') }}">
                                 </div>
                             </div>
 
@@ -279,14 +279,14 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Lokasi</label>
-                                    <textarea class="form-control" name="lokasi" id="lokasi" rows="3"></textarea>
+                                    <textarea class="form-control" name="lokasi" id="lokasi" rows="3">{{ old('lokasi') }}</textarea>
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Catatan</label>
-                                    <textarea class="form-control" name="catatan" id="catatan" rows="3"></textarea>
+                                    <textarea class="form-control" name="catatan" id="catatan" rows="3">{{ old('catatan') }}</textarea>
                                 </div>
                             </div>
 

@@ -98,7 +98,7 @@
                                                         <div class="form-label">Suku Bunga</div>
                                                         <input type="number" class="form-control" name="suku_bunga"
                                                             id="suku_bunga" placeholder="Suku Bunga"
-                                                            value="{{ $pengajuan->suku_bunga }}">
+                                                            value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">JK Kredit</div>
@@ -130,13 +130,13 @@
                                                         <div class="form-label">JK Pokok</div>
                                                         <input type="number" class="form-control" name="jangka_pokok"
                                                             id="jangka_pokok" placeholder="Jangka Pokok"
-                                                            value="{{ $pengajuan->jangka_pokok }}">
+                                                            value="{{ old('jangka_pokok', $pengajuan->jangka_pokok) }}">
                                                     </div>
                                                     <div class="col-sm-4 col-md-2">
                                                         <div class="form-label">JK Bunga</div>
                                                         <input type="number" class="form-control" name="jangka_bunga"
                                                             id="jangka_bunga" placeholder="Jangka Bunga"
-                                                            value="{{ $pengajuan->jangka_bunga }}">
+                                                            value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Resort</div>
@@ -181,7 +181,7 @@
                                                         <div class="form-label">Keterangan</div>
                                                         <input type="text" class="form-control" name="keterangan"
                                                             name="keterangan" placeholder="Keterangan"
-                                                            value="{{ $pengajuan->keterangan }}">
+                                                            value="{{ old('keterangan', $pengajuan->keterangan) }}">
                                                     </div>
                                                 </div>
 
