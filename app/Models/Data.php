@@ -121,18 +121,6 @@ class Data extends Model
         }
     }
 
-    public static function produk($produk){
-        if ($produk == "KRU") {
-            return 'Kredit Multiguna';
-        }elseif ($produk == "KBT") {
-            return 'Kredit Budidaya Tani';
-        }elseif ($produk == "KPS") {
-            return 'Kredit Kepesta Raja';
-        }elseif ($produk == "KTA") {
-            return 'Kredit Tanpa Agunan';
-        }
-    }
-
     public static function metode($metode){
         if ($metode == "FLAT") {
             return 'Flat';

@@ -47,6 +47,7 @@ class PengajuanController extends Controller
 
     public function storepengajuan(Request $request)
     {
+        $request->kode_pengajuan = Crypt::decrypt($request->kode_pengajuan);
         $cek = $request->validate([
             'kode_pengajuan' => 'required',
             'plafon' => 'required',
@@ -62,11 +63,12 @@ class PengajuanController extends Controller
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
+        $cek['kode_pengajuan'] = Crypt::decrypt($cek['kode_pengajuan']);
 
         //Hapus format rupiah
         $remove = array("Rp", ".", " ");
         $cek['plafon'] = str_replace($remove, "", $cek['plafon']);
-
+        
         try {
             Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -85,9 +87,14 @@ class PengajuanController extends Controller
         $nasabah = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
 
         //Data produk
-        $produk = Data::produk($pengajuan[0]->produk_kode);
-        $pengajuan[0]->produk_nama = $produk;
-        $peng = $pengajuan[0];
+        $produk = Produk::where('kode_produk',$pengajuan[0]->produk_kode)->first();
+        if (is_null($produk)) {
+            $pengajuan[0]->produk_nama = null;
+            $peng = $pengajuan[0];
+        } else {
+            $pengajuan[0]->produk_nama = $produk->nama_produk;
+            $peng = $pengajuan[0];
+        }
 
         // mencari nama
         $query = DB::connection('sqlsrv')
@@ -119,7 +126,7 @@ class PengajuanController extends Controller
 
         $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
         $peng->kode_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
-        // dd($peng);
+        
         //Produk All
         $pro = Produk::all();
         
