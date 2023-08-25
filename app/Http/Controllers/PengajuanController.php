@@ -286,8 +286,9 @@ class PengajuanController extends Controller
         $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
         $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
         $survei = Survei::where('pengajuan_kode', $enc)->get();
-        $agunan = Agunan::where('pengajuan_kode', $enc)->first();
-
+        $agunan = DB::table('data_jaminan')
+                    ->where('pengajuan_kode', $enc)->first();
+        
         if(!is_null($agunan)){
             Agunan::where('id', $agunan[0]->id)->delete();
         }
