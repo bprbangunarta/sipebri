@@ -86,6 +86,7 @@ class NasabahController extends Controller
     }
 
     public function store(Request $request){
+   
         $ceknasabah = $request->validate([
             'kode_nasabah' => '',
             'identitas' => 'required',
@@ -144,7 +145,7 @@ class NasabahController extends Controller
 
             //huruf kapital nama nasabah
             $ceknasabah['nama_nasabah'] = strtoupper($ceknasabah['nama_nasabah']);
-            
+            dd($ceknasabah, $cekpengajuan, $kdpengajuan, $kdpengajuan);
             try {
                 DB::transaction(function () use ($ceknasabah, $cekpengajuan, $kdpengajuan) {
                     Nasabah::create($ceknasabah);
@@ -183,12 +184,12 @@ class NasabahController extends Controller
             $remove = array("Rp", ".", " ");
             $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
             $cekpengajuan['input_user'] = $usr;
-            $cekpengajuan['is_entry'] = 1;
+    
 
             //masuk ke pendamping dan survei
             $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
             $kdpengajuan['input_user'] = $usr;
-            $kdpengajuan['is_entry'] = 1;
+            
 
             try {
                 DB::transaction(function () use ($cekpengajuan, $kdpengajuan) {

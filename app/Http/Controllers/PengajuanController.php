@@ -290,7 +290,9 @@ class PengajuanController extends Controller
                     ->where('pengajuan_kode', $enc)->first();
         
         if(!is_null($agunan)){
-            Agunan::where('id', $agunan[0]->id)->delete();
+            DB::table('data_jaminan')
+                    ->where('id', $agunan->id)
+                    ->delete();
         }
         
         try {
