@@ -14,7 +14,8 @@ class CetakController extends Controller
 {
     public function pengajuan(Request $request){
         $kode = $request->query('pengajuan');
-        
+        $enc = Crypt::decrypt($kode);
+        dd($enc);
         return view('cetak.pengajuan',[
             'data' => $kode
         ]);
