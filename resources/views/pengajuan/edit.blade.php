@@ -24,7 +24,7 @@
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
                                             <a href="{{ route('pendamping.edit', [
-                                                'nasabah' => $data[0]->kode_nasabah,
+                                                'nasabah' => $pengajuan->kode_pengajuan,
                                             ]) }}"
                                                 class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"

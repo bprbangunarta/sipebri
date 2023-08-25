@@ -24,7 +24,7 @@
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
                                             <a href="{{ route('pengajuan.agunan', [
-                                                'nasabah' => $data->kode_nasabah,
+                                                'nasabah' => $data->kd_pengajuan,
                                             ]) }}"
                                                 class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"

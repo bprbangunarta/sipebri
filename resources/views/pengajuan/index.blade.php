@@ -133,7 +133,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
-                                                        title="Edit Data">
+                                                        title="Edit Data" style="text-decoration: none;">
                                                         <span class="badge bg-warning">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="icon icon-tabler icon-tabler-edit" width="24"
@@ -237,10 +237,14 @@
                                     <select type="text" class="form-select" placeholder="Pilih Identitas"
                                         name="identitas" id="select-identitas">
                                         <option value="">Pilih Identitas</option>
-                                        <option value="1" {{ old('identitas') == '1' ? 'selected' : '' }}>KTP</option>
-                                        <option value="2" {{ old('identitas') == '2' ? 'selected' : '' }}>SIM</option>
-                                        <option value="3" {{ old('identitas') == '3' ? 'selected' : '' }}>Pasport</option>
-                                        <option value="9" {{ old('identitas') == '9' ? 'selected' : '' }}>Lainnya</option>
+                                        <option value="1" {{ old('identitas') == '1' ? 'selected' : '' }}>KTP
+                                        </option>
+                                        <option value="2" {{ old('identitas') == '2' ? 'selected' : '' }}>SIM
+                                        </option>
+                                        <option value="3" {{ old('identitas') == '3' ? 'selected' : '' }}>Pasport
+                                        </option>
+                                        <option value="9" {{ old('identitas') == '9' ? 'selected' : '' }}>Lainnya
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -283,10 +287,14 @@
                                     <select type="text" class="form-select" placeholder="Jengka Waktu"
                                         name="jangka_waktu" id="select-jk">
                                         <option value="">Pilih JK</option>
-                                        <option value="6" {{ old('jangka_waktu') === '6' ? 'selected' : '' }}>6 Bulan</option>
-                                        <option value="12" {{ old('jangka_waktu') === '12' ? 'selected' : '' }}>12 Bulan</option>
-                                        <option value="24" {{ old('jangka_waktu') === '24' ? 'selected' : '' }}>24 Bulan</option>
-                                        <option value="36" {{ old('jangka_waktu') === '36' ? 'selected' : '' }}>36 Bulan</option>
+                                        <option value="6" {{ old('jangka_waktu') === '6' ? 'selected' : '' }}>6 Bulan
+                                        </option>
+                                        <option value="12" {{ old('jangka_waktu') === '12' ? 'selected' : '' }}>12
+                                            Bulan</option>
+                                        <option value="24" {{ old('jangka_waktu') === '24' ? 'selected' : '' }}>24
+                                            Bulan</option>
+                                        <option value="36" {{ old('jangka_waktu') === '36' ? 'selected' : '' }}>36
+                                            Bulan</option>
                                     </select>
                                 </div>
                             </div>
