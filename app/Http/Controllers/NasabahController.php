@@ -94,7 +94,6 @@ class NasabahController extends Controller
             'tanggal_lahir' => 'required',
             'input_user' => 'required',
         ]);
-        $ceknasabah['is_entry'] = 1;
 
         //Hapus format tanggal Y-M-D menjadi YMD
         $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
@@ -138,12 +137,10 @@ class NasabahController extends Controller
             $remove = array("Rp", ".", " ");
             $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
             $cekpengajuan['input_user'] = $usr;
-            $cekpengajuan['is_entry'] = 1;
         
             //masuk ke pendamping dan survei
             $kdpengajuan['pengajuan_kode'] = $cekpengajuan['kode_pengajuan'];
             $kdpengajuan['input_user'] = $usr;
-            $kdpengajuan['is_entry'] = 1;
 
             //huruf kapital nama nasabah
             $ceknasabah['nama_nasabah'] = strtoupper($ceknasabah['nama_nasabah']);
