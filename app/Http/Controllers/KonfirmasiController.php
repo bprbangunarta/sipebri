@@ -17,10 +17,13 @@ class KonfirmasiController extends Controller
         $nasabah = $request->query('nasabah');
         $enc = Crypt::decrypt($nasabah);
         
-        $cek = Nasabah::where('kode_nasabah', $enc)->get();
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+
+        $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
         $konfirmasi = DB::table('v_validasi_pengajuan')
-                        ->where('kode_nasabah', $enc)->get();   
-        $cek[0]->kd_nasabah = Crypt::encrypt($cek[0]->kode_nasabah);            
+                        ->where('kode_nasabah', $cek[0]->kode_nasabah)->get();   
+        $cek[0]->kd_pengajuan = $nasabah;  
+                
         return view('pengajuan.konfirmasi', [
             'data' => $cek[0],
             'konfirmasi' => $konfirmasi[0],
@@ -67,11 +70,14 @@ class KonfirmasiController extends Controller
     public function otorisasi(Request $request){
         $nasabah = $request->query('nasabah');
         $enc = Crypt::decrypt($nasabah);
-        $cek = Nasabah::where('kode_nasabah', $enc)->get();
-        $otorisasi = DB::table('v_validasi_pengajuan')
-                        ->where('kode_nasabah', $enc)->get();
         
-        $cek[0]->kd_nasabah = Crypt::encrypt($cek[0]->kode_nasabah);
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+        // dd($pengajuan);
+        $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
+        $otorisasi = DB::table('v_validasi_pengajuan')
+                        ->where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
+        
+        $cek[0]->kd_pengajuan = $nasabah;
         return view('pengajuan.otorisasi', [
             'data' => $cek[0],
             'otorisasi' => $otorisasi[0],

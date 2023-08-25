@@ -18,10 +18,11 @@ class SurveiController extends Controller
     {
         $req = $request->query('nasabah');
         $enc = Crypt::decrypt($req);
-        $cek = Nasabah::where('kode_nasabah', $enc)->first();     
         
         //Data pengajuan
-        $pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->first();                
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();                
+
+        $cek = Nasabah::where('kode_nasabah', $pengajuan->nasabah_kode)->first();     
 
         //Ambil data CGC        
         $cgc = CGC::select('*')->get();  
@@ -84,7 +85,8 @@ class SurveiController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
-        $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);     
+        $cek->kd_pengajuan = $req;
+         
         return view('survei.edit', [
             'data' => $cek,
             'cgc' => $cgc,

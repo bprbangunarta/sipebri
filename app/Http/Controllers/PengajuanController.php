@@ -116,7 +116,7 @@ class PengajuanController extends Controller
 
         $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
         $peng->kode_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
-
+        // dd($peng);
         //Produk All
         $pro = Produk::all();
         
@@ -132,9 +132,10 @@ class PengajuanController extends Controller
     {
         $req = $request->query('nasabah');
         $enc = Crypt::decrypt($req);
-        $cek = Nasabah::where('kode_nasabah', $enc)->first();
-
-        $pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->get();
+        
+        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+        
+        $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
         $jaminan = DB::table('data_pengajuan')
             ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
             ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
@@ -159,7 +160,8 @@ class PengajuanController extends Controller
                     ->select('users.code_user')
                     ->where('users.id', '=', $us)->get();
         $cek->auth = $user[0]->code_user;
-        $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
+        $cek->kd_pengajuan = $req;
+        
         return view('pengajuan.agunan', [
             'agunan' => $agunan,
             'dok' => $dok,
