@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pekerjaan;
 use App\Models\Pendidikan;
+use App\Models\Pengajuan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -15,9 +16,23 @@ class CetakController extends Controller
     public function pengajuan(Request $request){
         $kode = $request->query('pengajuan');
         $enc = Crypt::decrypt($kode);
-        dd($enc);
+        $data = DB::table('data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_nasabah.nama_nasabah', 'data_pengajuan.produk_kode', 'data_pengajuan.metode_rps', 'data_pengajuan.jangka_bunga', 'data_pengajuan.jangka_waktu')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
+        
+        $data[0]->kd_pengajuan = $kode;
+        
+        //Hari
+        $hari = Carbon::today();
+        $data[0]->hari = $hari->isoformat('D MMMM Y');
+
+        //Format Angka
+        $format_angka = "Rp. " . number_format($data[0]->plafon, 0, ',', '.');
+        $data[0]->rp_plafon = $format_angka;
+        // dd($data[0]);
         return view('cetak.pengajuan',[
-            'data' => $kode
+            'data' => $data[0]
         ]);
     }
 
@@ -81,6 +96,10 @@ class CetakController extends Controller
                     ->where('code_user', $data[0]->surveyor_kode)
                     ->select('nama_user', 'role_name')->get();
 
+        //Tahun
+        $thn = Carbon::now()->year;
+        $data[0]->thn = $thn;
+        
         $data[0]->nama_user = $surveyor[0]->nama_user;
         $data[0]->role_name = $surveyor[0]->role_name;
         

@@ -66,7 +66,7 @@
                                             <path d="M19 11l0 2"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" class="form-control" value="00339933" readonly>
+                                    <input type="text" class="form-control" value="{{ $data->kode_pengajuan }}" readonly>
                                 </div>
                             </div>
 
@@ -86,7 +86,7 @@
                                             <path d="M5 15v1m0 -8v1"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" class="form-control" value="50.000.000" readonly>
+                                    <input type="text" class="form-control" value="{{ $data->rp_plafon }}" readonly>
                                 </div>
                             </div>
 
@@ -101,7 +101,8 @@
                                             <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" class="form-control" value="ZULFADLI RIZAL" readonly>
+                                    <input type="text" class="form-control" value="{{ $data->nama_nasabah }}"
+                                        readonly>
                                 </div>
                             </div>
 
@@ -122,7 +123,7 @@
                                             <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" class="form-control" value="23 Agustus 2023" readonly>
+                                    <input type="text" class="form-control" value="{{ $data->hari }}" readonly>
                                 </div>
                             </div>
 
@@ -144,7 +145,9 @@
                                             <path d="M16 14l0 3"></path>
                                         </svg>
                                     </span>
-                                    <input type="text" class="form-control" value=" KPS - 19% - Flat - 36 Bulan"
+                                    {{-- <input type="text" class="form-control" value="KPS - 19% - Flat - 36 Bulan" --}}
+                                    <input type="text" class="form-control"
+                                        value="{{ $data->produk_kode }} - {{ $data->jangka_bunga }} - {{ $data->metode_rps }} - {{ $data->jangka_waktu }} Bulan"
                                         readonly>
                                 </div>
                             </div>
@@ -193,7 +196,7 @@
                                             <td class="text-center">2</td>
                                             <td>Surat Persetujuan Pendamping</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.pendamping', ['cetak' => $data]) }}"
+                                                <a href="{{ route('cetak.pendamping', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -218,7 +221,7 @@
                                             <td class="text-center">3</td>
                                             <td>Surat pernyataan pengecekan NIK</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.nik', ['cetak' => $data]) }}"
+                                                <a href="{{ route('cetak.nik', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -243,7 +246,7 @@
                                             <td class="text-center">4</td>
                                             <td>Surat pernyataan pengecekan IDEB</td>
                                             <td class="text-center">
-                                                <a href="{{ route('data.slik', ['cetak' => $data]) }}"
+                                                <a href="{{ route('data.slik', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -268,7 +271,7 @@
                                             <td class="text-center">5</td>
                                             <td>BA Pemerikasaan Sertifikat Tanah</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.tanah', ['cetak' => $data]) }}"
+                                                <a href="{{ route('cetak.tanah', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -293,7 +296,7 @@
                                             <td class="text-center">6</td>
                                             <td>BA Pemerikasaan Agunan Kendaraan Motor</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.motor', ['cetak' => $data]) }}"
+                                                <a href="{{ route('cetak.motor', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
