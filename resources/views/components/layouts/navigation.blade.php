@@ -4,6 +4,7 @@
             <div class="container-xl">
                 <ul class="navbar-nav">
 
+                    @hasanyrole(@roles)
                     <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
                         <a class="nav-link" href="/dashboard">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -21,8 +22,9 @@
                             </span>
                         </a>
                     </li>
+                    @endhasanyrole
 
-                    @can('menu master')
+                    @can('meni admin')
                     <li
                         class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor', 'admin/produk', 'admin/pekerjaan', 'admin/pendidikan') ? 'active' : '' }}">
                         <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
@@ -79,7 +81,7 @@
                     </li>
                     @endcan
 
-                    @can('lihat pendaftaran')
+                    @can('pengajuan tampil')
                     <li class="nav-item {{ request()->is('pengajuan', 'pendaftaran/edit') ? 'active' : '' }}">
                         <a class="nav-link" href="/pengajuan">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -100,6 +102,7 @@
                     </li>
                     @endcan
 
+                    @can('menu analis')
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
                             data-bs-auto-close="outside" role="button" aria-expanded="false">
@@ -140,6 +143,7 @@
                             </a>
                         </div>
                     </li>
+                    @endcan
 
                 </ul>
 
