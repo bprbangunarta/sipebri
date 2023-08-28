@@ -30,7 +30,7 @@ class CetakController extends Controller
         //Format Angka
         $format_angka = "Rp. " . number_format($data[0]->plafon, 0, ',', '.');
         $data[0]->rp_plafon = $format_angka;
-        // dd($data[0]);
+        
         return view('cetak.pengajuan',[
             'data' => $data[0]
         ]);
