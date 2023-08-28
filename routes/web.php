@@ -85,6 +85,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/pengajuan/agunan', 'agunan')->name('pengajuan.agunan');
             Route::get('/pengajuan/editagunan/{id}/edit', 'editagunan')->name('pengajuan.editagunan');
             Route::put('/pengajuan/editagunan/update', 'updateagunan')->name('pengajuan.updateagunan');
+            Route::put('/pengajuan/editagunan/validasi', 'validasiagunan')->name('pengajuan.validasiagunan');
             Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');
             Route::post('/pengajuan/store', 'store')->name('pengajuan.store');
         });

@@ -17,6 +17,7 @@ class Pengajuan extends Model
         'jangka_waktu',
         'tabungan_cgc',
         'input_user',
+        'otorisasi',
         'is_entry',
     ];
     protected $guarded = ['id'];

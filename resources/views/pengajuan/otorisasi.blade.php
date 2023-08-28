@@ -100,9 +100,9 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td>Pengisian Data Nasabah</td>
-                                                                <input type="text" value="{{ $otorisasi->nasabah }}"
+                                                                <input type="text" value="{{ $otorisasi->otornasabah }}"
                                                                     name="nasabah" hidden>
-                                                                @if ($otorisasi->nasabah == 1)
+                                                                @if ($otorisasi->otornasabah == 'A')
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon text-green" width="24"
@@ -135,9 +135,10 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Pendamping</td>
-                                                                <input type="text" value="{{ $otorisasi->pendamping }}"
+                                                                <input type="text"
+                                                                    value="{{ $otorisasi->otorpendamping }}"
                                                                     name="pendamping" hidden>
-                                                                @if ($otorisasi->pendamping == 1)
+                                                                @if ($otorisasi->otorpendamping == 'A')
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon text-green" width="24"
@@ -170,9 +171,10 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Pengajuan</td>
-                                                                <input type="text" value="{{ $otorisasi->pengajuan }}"
+                                                                <input type="text"
+                                                                    value="{{ $otorisasi->otorpengajuan }}"
                                                                     name="pengajuan" hidden>
-                                                                @if ($otorisasi->pengajuan == 1)
+                                                                @if ($otorisasi->otorpengajuan == 'A')
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon text-green" width="24"
@@ -205,25 +207,44 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Agunan</td>
-                                                                <td class="text-center">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon text-green" width="24"
-                                                                        height="24" viewBox="0 0 24 24"
-                                                                        stroke-width="2" stroke="currentColor"
-                                                                        fill="none" stroke-linecap="round"
-                                                                        stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                            fill="none">
-                                                                        </path>
-                                                                        <path d="M5 12l5 5l10 -10"></path>
-                                                                    </svg>
-                                                                </td>
+                                                                <input type="text" value="{{ $otorisasi->otoragunan }}"
+                                                                    name="agunan" hidden>
+                                                                @if ($otorisasi->otoragunan == 'A')
+                                                                    <td class="text-center">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="icon text-green" width="24"
+                                                                            height="24" viewBox="0 0 24 24"
+                                                                            stroke-width="2" stroke="currentColor"
+                                                                            fill="none" stroke-linecap="round"
+                                                                            stroke-linejoin="round">
+                                                                            <path stroke="none" d="M0 0h24v24H0z"
+                                                                                fill="none">
+                                                                            </path>
+                                                                            <path d="M5 12l5 5l10 -10"></path>
+                                                                        </svg>
+                                                                    </td>
+                                                                @else
+                                                                    <td class="text-center">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="icon text-red" width="24"
+                                                                            height="24" viewBox="0 0 24 24"
+                                                                            stroke-width="2" stroke="currentColor"
+                                                                            fill="none" stroke-linecap="round"
+                                                                            stroke-linejoin="round">
+                                                                            <path stroke="none" d="M0 0h24v24H0z"
+                                                                                fill="none">
+                                                                            </path>
+                                                                            <path d="M18 6l-12 12"></path>
+                                                                            <path d="M6 6l12 12"></path>
+                                                                        </svg>
+                                                                    </td>
+                                                                @endif
                                                             </tr>
                                                             <tr>
                                                                 <td>Pengisian Data Survayor</td>
-                                                                <input type="text" value="{{ $otorisasi->survei }}"
+                                                                <input type="text" value="{{ $otorisasi->otorsurvei }}"
                                                                     name="survei" hidden>
-                                                                @if ($otorisasi->survei == 1)
+                                                                @if ($otorisasi->otorsurvei == 'A')
                                                                     <td class="text-center">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon text-green" width="24"

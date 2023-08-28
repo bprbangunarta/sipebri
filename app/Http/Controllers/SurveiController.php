@@ -108,6 +108,7 @@ class SurveiController extends Controller
         ]);
 
         $cek['is_entry'] = 1;
+        $cek['otorisasi'] ='N';
         $cgc = $request->validate(['tabungan_cgc' => '']);
     
         $kode_pengajuan = $request->pengajuan_kode;    

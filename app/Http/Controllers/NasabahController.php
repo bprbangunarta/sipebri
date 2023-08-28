@@ -335,8 +335,8 @@ class NasabahController extends Controller
         $cek['tempat_kerja'] = strtoupper($cek['tempat_kerja']);
 
         $cek['is_entry'] = 1;
+        $cek['otorisasi'] = 'N';
 
-        
         if ($cek) {
             $nas = Nasabah::where('kode_nasabah', $request->query('nasabah'))->get();
             Nasabah::where('id', $nas[0]->id)->update($cek);   

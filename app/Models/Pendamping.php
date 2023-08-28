@@ -23,6 +23,7 @@ class Pendamping extends Model
         'photo',
         'photo_selfie',
         'input_user',
+        'otorisasi',
         'is_entry',
     ];
 

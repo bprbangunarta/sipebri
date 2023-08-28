@@ -83,13 +83,25 @@ class KonfirmasiController extends Controller
             $enc = Crypt::decrypt($nasabah);
         
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-            
             $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
-            $otorisasi = DB::table('v_validasi_pengajuan')
-                            ->where('kode_pengajuan', $enc)->get();
+            // $otorisasi = DB::table('v_validasi_pengajuan')
+            //                 ->where('kode_pengajuan', $enc)->get();
+
+            $otorisasi = DB::table('data_pengajuan')
+                    ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                    ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
+                    ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                    ->select('data_pengajuan.otorisasi as otorpengajuan', 'data_nasabah.otorisasi as otornasabah', 'data_pendamping.otorisasi as otorpendamping', 'data_survei.otorisasi as otorsurvei')
+                    ->where('kode_pengajuan', '=', $enc)->get();
+            
+            //Cek data agunan apakah sudah otorisasi
+            $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->get();
+            foreach ($agunan as $value) {
+                    $otor = $value->otorisasi;
+            }
+            $otorisasi[0]->otoragunan = $otor;
             
             $cek[0]->kd_pengajuan = $nasabah;
-            
             return view('pengajuan.otorisasi', [
                 'data' => $cek[0],
                 'otorisasi' => $otorisasi[0],

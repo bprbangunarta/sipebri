@@ -140,7 +140,8 @@ class PendampingController extends Controller
         }else{
             $cek['photo_ktp'] = $request->oldphotoktp;
         }
-
+        $cek['otorisasi'] ='N';
+        
         try {
             $pend = Pendamping::where('pengajuan_kode', $request->query('pendamping'))->get();
             Pendamping::where('id', $pend[0]->id)->update($cek);   

@@ -48,6 +48,7 @@ class Nasabah extends Model
             'photo_selfie',
             'photo_ktp',
             'photo_kk',
+            'otorisasi',
         ];
     public function pengajuan(){
         return $this->hasMany(Pengajuan::class);

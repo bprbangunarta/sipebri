@@ -4,72 +4,72 @@
             <div class="container-xl">
                 <ul class="navbar-nav">
 
-                    @hasanyrole(@roles)
-                    <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                        <a class="nav-link" href="/dashboard">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Dashboard
-                            </span>
-                        </a>
-                    </li>
+                    @hasanyrole('@roles')
+                        <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
+                            <a class="nav-link" href="/dashboard">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Dashboard
+                                </span>
+                            </a>
+                        </li>
                     @endhasanyrole
 
                     @can('meni admin')
-                    <li
-                        class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor', 'admin/produk', 'admin/pekerjaan', 'admin/pendidikan') ? 'active' : '' }}">
-                        <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
-                            data-bs-auto-close="outside" role="button" aria-expanded="false">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-settings-cog" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path
-                                        d="M12.003 21c-.732 .001 -1.465 -.438 -1.678 -1.317a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c.886 .215 1.325 .957 1.318 1.694">
-                                    </path>
-                                    <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
-                                    <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                                    <path d="M19.001 15.5v1.5"></path>
-                                    <path d="M19.001 21v1.5"></path>
-                                    <path d="M22.032 17.25l-1.299 .75"></path>
-                                    <path d="M17.27 20l-1.3 .75"></path>
-                                    <path d="M15.97 17.25l1.3 .75"></path>
-                                    <path d="M20.733 20l1.3 .75"></path>
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Master
-                            </span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item {{ request()->is('admin/user') ? 'active' : '' }}"
-                                href="{{ route('user.index') }}">
-                                Data User
+                        <li
+                            class="nav-item dropdown {{ request()->is('admin/role', 'admin/user', 'admin/kantor', 'admin/produk', 'admin/pekerjaan', 'admin/pendidikan') ? 'active' : '' }}">
+                            <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-settings-cog" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path
+                                            d="M12.003 21c-.732 .001 -1.465 -.438 -1.678 -1.317a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c.886 .215 1.325 .957 1.318 1.694">
+                                        </path>
+                                        <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                                        <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                        <path d="M19.001 15.5v1.5"></path>
+                                        <path d="M19.001 21v1.5"></path>
+                                        <path d="M22.032 17.25l-1.299 .75"></path>
+                                        <path d="M17.27 20l-1.3 .75"></path>
+                                        <path d="M15.97 17.25l1.3 .75"></path>
+                                        <path d="M20.733 20l1.3 .75"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Master
+                                </span>
                             </a>
-                            <a class="dropdown-item {{ request()->is('admin/role') ? 'active' : '' }}"
-                                href="{{ route('role.index') }}">
-                                Data Role
-                            </a>
-                            <a class="dropdown-item {{ request()->is('admin/kantor') ? 'active' : '' }}"
-                                href="{{ route('kantor.index') }}">
-                                Data Kantor
-                            </a>
-                            <a class="dropdown-item {{ request()->is('admin/produk') ? 'active' : '' }}"
-                                href="{{ route('produk.index') }}">
-                                Data Produk
-                            </a>
-                            {{-- <a class="dropdown-item {{ request()->is('admin/pekerjaan') ? 'active' : '' }}"
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item {{ request()->is('admin/user') ? 'active' : '' }}"
+                                    href="{{ route('user.index') }}">
+                                    Data User
+                                </a>
+                                <a class="dropdown-item {{ request()->is('admin/role') ? 'active' : '' }}"
+                                    href="{{ route('role.index') }}">
+                                    Data Role
+                                </a>
+                                <a class="dropdown-item {{ request()->is('admin/kantor') ? 'active' : '' }}"
+                                    href="{{ route('kantor.index') }}">
+                                    Data Kantor
+                                </a>
+                                <a class="dropdown-item {{ request()->is('admin/produk') ? 'active' : '' }}"
+                                    href="{{ route('produk.index') }}">
+                                    Data Produk
+                                </a>
+                                {{-- <a class="dropdown-item {{ request()->is('admin/pekerjaan') ? 'active' : '' }}"
                                 href="{{ route('pekerjaan.index') }}">
                                 Data Pekerjaan
                             </a>
@@ -77,72 +77,72 @@
                                 href="{{ route('pendidikan.index') }}">
                                 Data Pendidikan
                             </a> --}}
-                        </div>
-                    </li>
+                            </div>
+                        </li>
                     @endcan
 
                     @can('pengajuan tampil')
-                    <li class="nav-item {{ request()->is('pengajuan', 'pendaftaran/edit') ? 'active' : '' }}">
-                        <a class="nav-link" href="/pengajuan">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users"
-                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Pendaftaran
-                            </span>
-                        </a>
-                    </li>
+                        <li class="nav-item {{ request()->is('pengajuan', 'pendaftaran/edit') ? 'active' : '' }}">
+                            <a class="nav-link" href="/pengajuan">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users"
+                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Pendaftaran
+                                </span>
+                            </a>
+                        </li>
                     @endcan
 
                     @can('menu analis')
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
-                            data-bs-auto-close="outside" role="button" aria-expanded="false">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-clipboard-list" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path
-                                        d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                    </path>
-                                    <path
-                                        d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
-                                    </path>
-                                    <path d="M9 12l.01 0"></path>
-                                    <path d="M13 12l2 0"></path>
-                                    <path d="M9 16l.01 0"></path>
-                                    <path d="M13 16l2 0"></path>
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Analisa
-                            </span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">
-                                Penjadwalan
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#navbar-help" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-clipboard-list" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path
+                                            d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
+                                        </path>
+                                        <path
+                                            d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
+                                        </path>
+                                        <path d="M9 12l.01 0"></path>
+                                        <path d="M13 12l2 0"></path>
+                                        <path d="M9 16l.01 0"></path>
+                                        <path d="M13 16l2 0"></path>
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Analisa
+                                </span>
                             </a>
-                            <a class="dropdown-item" href="#">
-                                Proses Analisa
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                Putusan Komite
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                Validasi Berkas
-                            </a>
-                        </div>
-                    </li>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">
+                                    Penjadwalan
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    Proses Analisa
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    Putusan Komite
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    Validasi Berkas
+                                </a>
+                            </div>
+                        </li>
                     @endcan
 
                 </ul>
@@ -160,8 +160,8 @@
                                     <path d="M21 21l-6 -6" />
                                 </svg>
                             </span>
-                            <input type="text" value="" class="form-control" placeholder="Nama atau No. KTP"
-                                aria-label="Search in website">
+                            <input type="text" value="" class="form-control"
+                                placeholder="Nama atau No. KTP" aria-label="Search in website">
                         </div>
                     </form>
                 </div>
