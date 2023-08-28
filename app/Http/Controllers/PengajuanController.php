@@ -6,18 +6,19 @@ use Throwable;
 use Carbon\Carbon;
 use App\Models\Data;
 use App\Models\Agunan;
+use App\Models\Produk;
 use App\Models\Resort;
+use App\Models\Survei;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
-use App\Models\Produk;
-use App\Models\Survei;
 use Illuminate\Http\Request;
+use function Pest\Laravel\delete;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 
-use function Pest\Laravel\delete;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class PengajuanController extends Controller
 {
@@ -81,106 +82,112 @@ class PengajuanController extends Controller
     public function edit(Request $request)
     {
         $req = $request->query('nasabah');
-        $enc = Crypt::decrypt($req);
-        
-        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-        
-        $nasabah = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
 
-        //Data produk
-        $produk = Produk::where('kode_produk',$pengajuan[0]->produk_kode)->first();
-        if (is_null($produk)) {
-            $pengajuan[0]->produk_nama = null;
-            $peng = $pengajuan[0];
-        } else {
-            $pengajuan[0]->produk_nama = $produk->nama_produk;
-            $peng = $pengajuan[0];
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($req);
+            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+            $nasabah = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
+
+            //Data produk
+            $produk = Produk::where('kode_produk',$pengajuan[0]->produk_kode)->first();
+            if (is_null($produk)) {
+                $pengajuan[0]->produk_nama = null;
+                $peng = $pengajuan[0];
+            } else {
+                $pengajuan[0]->produk_nama = $produk->nama_produk;
+                $peng = $pengajuan[0];
+            }
+
+            // mencari nama
+            $query = DB::connection('sqlsrv')->table('resort')->select('kode', 'ket')
+                    ->where('kode', $peng->resort_kode)->first();
+
+            if (is_null($query)) {
+                $peng->nama_resort = null;
+            } else {
+                $peng->nama_resort = $query->ket;
+            }
+
+            //Data auth
+            $us = Auth::user()->id;
+            $user = DB::table('users')
+                        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                        ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                        ->select('users.code_user')
+                        ->where('users.id', '=', $us)->get();
+            $peng->auth = $user[0]->code_user;
+
+            //Data resort
+            $resort = DB::connection('sqlsrv')
+                ->table('resort')
+                ->select('kode', 'ket')
+                ->get();
+
+            $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
+            $peng->kode_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
+            
+            //Produk All
+            $pro = Produk::all();
+            
+            return view('pengajuan.edit', [
+                'data' => $nasabah,
+                'pengajuan' => $peng,
+                'resort' => $resort,
+                'produk' => $pro,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
         }
-
-        // mencari nama
-        $query = DB::connection('sqlsrv')
-            ->table('resort')
-            ->select('kode', 'ket')
-            ->where('kode', $peng->resort_kode)
-            ->first();
-
-        if (is_null($query)) {
-            $peng->nama_resort = null;
-        } else {
-            $peng->nama_resort = $query->ket;
-        }
-
-        //Data auth
-        $us = Auth::user()->id;
-        $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
-        $peng->auth = $user[0]->code_user;
-
-        //Data resort
-        $resort = DB::connection('sqlsrv')
-            ->table('resort')
-            ->select('kode', 'ket')
-            ->get();
-
-        $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
-        $peng->kode_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
         
-        //Produk All
-        $pro = Produk::all();
         
-        return view('pengajuan.edit', [
-            'data' => $nasabah,
-            'pengajuan' => $peng,
-            'resort' => $resort,
-            'produk' => $pro,
-        ]);
+        
     }
 
     public function agunan(Request $request)
     {
         $req = $request->query('nasabah');
-        $enc = Crypt::decrypt($req);
+
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($req);
+            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+            $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
+            $jaminan = DB::table('data_pengajuan')
+                    ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                    ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+                    ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+                    ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                    ->where('data_pengajuan.kode_pengajuan', '=', $pengajuan[0]->kode_pengajuan)
+                    ->get();
+            
+            //Data agunan
+            $agunan = Agunan::all();
+            //Data jenis dokumen
+            $dok = DB::table('data_jenis_dokumen')->get();
+            //Data dati
+            $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
+            $us = Auth::user()->id;
+            $user = DB::table('users')
+                        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                        ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                        ->select('users.code_user')
+                        ->where('users.id', '=', $us)->get();
+            $cek->auth = $user[0]->code_user;
+            $cek->kd_pengajuan = $req;
+            
+            return view('pengajuan.agunan', [
+                'agunan' => $agunan,
+                'dok' => $dok,
+                'data' => $cek,
+                'jaminan' => $jaminan,
+                'pengajuan' => $pengajuan,
+                'dati' => $kab,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
         
-        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-        
-        $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
-        $jaminan = DB::table('data_pengajuan')
-            ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
-            ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
-            ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-            ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
-            ->where('data_pengajuan.kode_pengajuan', '=', $pengajuan[0]->kode_pengajuan)
-            ->get();
-
-        //Data agunan
-        $agunan = Agunan::all();
-
-        //Data jenis dokumen
-        $dok = DB::table('data_jenis_dokumen')->get();
-
-        //Data dati
-        $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
-
-        $us = Auth::user()->id;
-        $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
-        $cek->auth = $user[0]->code_user;
-        $cek->kd_pengajuan = $req;
-        
-        return view('pengajuan.agunan', [
-            'agunan' => $agunan,
-            'dok' => $dok,
-            'data' => $cek,
-            'jaminan' => $jaminan,
-            'pengajuan' => $pengajuan,
-            'dati' => $kab,
-        ]);
     }
 
     public function store(Request $request)
@@ -289,30 +296,36 @@ class PengajuanController extends Controller
 
     public function destroy($pengajuan)
     {   
-        $enc = Crypt::decrypt($pengajuan);
-        
-        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-        $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
-        $survei = Survei::where('pengajuan_kode', $enc)->get();
-        $agunan = DB::table('data_jaminan')
-                    ->where('pengajuan_kode', $enc)->first();
-        
-        if(!is_null($agunan)){
-            DB::table('data_jaminan')
-                    ->where('id', $agunan->id)
-                    ->delete();
-        }
-        
+        //====Try Enkripsi Request====//
         try {
+            $enc = Crypt::decrypt($pengajuan);
+        
+            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+            $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
+            $survei = Survei::where('pengajuan_kode', $enc)->get();
+            $agunan = DB::table('data_jaminan')
+                        ->where('pengajuan_kode', $enc)->first();
             
-            DB::transaction(function() use ($pengajuan, $pendamping, $survei){
-                Pengajuan::where('id', $pengajuan[0]->id)->delete();
-                Pendamping::where('id', $pendamping[0]->id)->delete();
-                Survei::where('id', $survei[0]->id)->delete();
-            });
-            return redirect()->back()->with('success', 'Data berhasil dihapus');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Data gagal dihapus');
+            if(!is_null($agunan)){
+                DB::table('data_jaminan')
+                        ->where('id', $agunan->id)
+                        ->delete();
+            }
+            
+            try {
+                
+                DB::transaction(function() use ($pengajuan, $pendamping, $survei){
+                    Pengajuan::where('id', $pengajuan[0]->id)->delete();
+                    Pendamping::where('id', $pendamping[0]->id)->delete();
+                    Survei::where('id', $survei[0]->id)->delete();
+                });
+                return redirect()->back()->with('success', 'Data berhasil dihapus');
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Data gagal dihapus');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
         }
+        
     }
 }

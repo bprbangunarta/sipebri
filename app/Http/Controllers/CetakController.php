@@ -41,7 +41,7 @@ class CetakController extends Controller
             ]);
 
         } catch (DecryptException $e) {
-            return abort(403, 'Anda gagal dalam berselancar');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
         
     }
@@ -67,7 +67,7 @@ class CetakController extends Controller
             ]);
 
         } catch (DecryptException $e) {
-            return abort(403, 'Anda gagal dalam berselancar');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
         
     }
@@ -104,7 +104,7 @@ class CetakController extends Controller
             ]);
 
         } catch (DecryptException $e) {
-            return abort(403, 'Anda gagal dalam berselancar');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
         
     }
@@ -140,7 +140,7 @@ class CetakController extends Controller
 
 
         } catch (DecryptException $e) {
-            return abort(403, 'Anda gagal dalam berselancar');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
         
     }
@@ -176,7 +176,7 @@ class CetakController extends Controller
             ]);
 
         } catch (DecryptException $e) {
-            return abort(403, 'Anda gagal dalam berselancar');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
         
     }
