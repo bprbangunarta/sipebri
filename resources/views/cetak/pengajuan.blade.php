@@ -172,7 +172,7 @@
                                             <td class="text-center">1</td>
                                             <td>Formulir Pengajuan Kredit</td>
                                             <td class="text-center">
-                                                <a href="#" title="Cetak Berkas">
+                                                <a href="#" title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
@@ -197,7 +197,7 @@
                                             <td>Surat Persetujuan Pendamping</td>
                                             <td class="text-center">
                                                 <a href="{{ route('cetak.pendamping', ['cetak' => $data->kd_pengajuan]) }}"
-                                                    title="Cetak Berkas">
+                                                    title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
@@ -222,7 +222,7 @@
                                             <td>Surat pernyataan pengecekan NIK</td>
                                             <td class="text-center">
                                                 <a href="{{ route('cetak.nik', ['cetak' => $data->kd_pengajuan]) }}"
-                                                    title="Cetak Berkas">
+                                                    title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
@@ -247,7 +247,7 @@
                                             <td>Surat pernyataan pengecekan IDEB</td>
                                             <td class="text-center">
                                                 <a href="{{ route('data.slik', ['cetak' => $data->kd_pengajuan]) }}"
-                                                    title="Cetak Berkas">
+                                                    title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
@@ -272,7 +272,7 @@
                                             <td>BA Pemerikasaan Sertifikat Tanah</td>
                                             <td class="text-center">
                                                 <a href="{{ route('cetak.tanah', ['cetak' => $data->kd_pengajuan]) }}"
-                                                    title="Cetak Berkas">
+                                                    title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
@@ -297,7 +297,7 @@
                                             <td>BA Pemerikasaan Agunan Kendaraan Motor</td>
                                             <td class="text-center">
                                                 <a href="{{ route('cetak.motor', ['cetak' => $data->kd_pengajuan]) }}"
-                                                    title="Cetak Berkas">
+                                                    title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                             class="icon icon-tabler icon-tabler-printer" width="24"
@@ -320,7 +320,7 @@
                                         <tr>
                                             <td class="text-center">7</td>
                                             <td>BA Pemerikasaan Agunan Kendaraan Mobil</td>
-                                            <td class="text-center">
+                                            <td class="text-center" target="_blank">
                                                 <a href="#" title="Cetak Berkas">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
