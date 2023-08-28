@@ -58,8 +58,7 @@
                                     </div>
 
                                     <div class="col d-flex flex-column">
-                                        <form
-                                            action="{{ route('validasiotor', ['validasiotor' => $otorisasi->kode_nasabah]) }}"
+                                        <form action="{{ route('validasiotor', ['validasiotor' => $data->kd_pengajuan]) }}"
                                             method="post">
                                             @csrf
                                             <div class="card-body">
