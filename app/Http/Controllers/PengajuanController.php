@@ -70,7 +70,7 @@ class PengajuanController extends Controller
         //Hapus format rupiah
         $remove = array("Rp", ".", " ");
         $cek['plafon'] = str_replace($remove, "", $cek['plafon']);
-        dd($cek);
+        
         try {
             Pengajuan::where('kode_pengajuan', $cek['kode_pengajuan'])->update($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
