@@ -13,65 +13,69 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class PendampingController extends Controller
 {
     public function edit(Request $request)
     {
         $nasabah = $request->query('nasabah');
-        $enc = Crypt::decrypt($nasabah);
-        
-        //Ambil kode pengajuan
-        $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-        
-        $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
-        
-        //Ambil kode pendamping
-        $pendamping = Pendamping::where('pengajuan_kode',$pengajuan[0]->kode_pengajuan)->get();
 
-        //Ubah format masa identitas Ymd menjadi m-d-Y
-         if (!is_null($pendamping[0]->masa_identitas)) {
-            $carbonid = Carbon::createFromFormat('Ymd', $pendamping[0]->masa_identitas);
-            $pendamping[0]->masa_identitas = $carbonid->format('m-d-Y');
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($nasabah);
+            //Ambil kode pengajuan
+            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+            $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
+            //Ambil kode pendamping
+            $pendamping = Pendamping::where('pengajuan_kode',$pengajuan[0]->kode_pengajuan)->get();
+            //Ubah format masa identitas Ymd menjadi m-d-Y
+            if (!is_null($pendamping[0]->masa_identitas)) {
+                $carbonid = Carbon::createFromFormat('Ymd', $pendamping[0]->masa_identitas);
+                $pendamping[0]->masa_identitas = $carbonid->format('m-d-Y');
+            }
+            
+            //Ubah format tanggal lahir Ymd menjadi m-d-Y
+            if (!is_null($pendamping[0]->masa_identitas)) {
+                $carbonDate = Carbon::createFromFormat('Ymd', $pendamping[0]->tanggal_lahir);
+                $pendamping[0]->tanggal_lahir= $carbonDate->format('m-d-Y');
+            }
+        
+            //Ubah identitas dari nomor id menjadi data string
+            $id = Data::identitas($pendamping[0]->identitas);
+            $pendamping[0]['iden'] = $id;
+        
+            //Ubah tanggungan dari nomor id menjadi data string
+            $pend = Data::tanggungan($pendamping[0]->tanggungan);
+            $pendamping[0]['tgn'] = $pend;
+
+            //Ubah pisah harta dari nomor id menjadi data string
+            if ($pendamping[0]->pisah_harta == "Y") {
+                $pendamping[0]['pisah'] = 'Iya';
+            }elseif ($pendamping[0]->pisah_harta == "T") {
+                $pendamping[0]['pisah'] = 'Tidak';
+            }
+
+            //Auth user
+            $us = Auth::user()->id;
+            $user = DB::table('users')
+                        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                        ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                        ->select('users.code_user')
+                        ->where('users.id', '=', $us)->get();
+            $cek->auth = $user[0]->code_user;
+            $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
+            $cek->kd_pengajuan = $nasabah;
+            
+            return view('pendamping.edit', [
+                'nasabah' => $cek,
+                'pengajuan' => $pengajuan,
+                'pendamping' => $pendamping,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
         }
         
-        //Ubah format tanggal lahir Ymd menjadi m-d-Y
-        if (!is_null($pendamping[0]->masa_identitas)) {
-            $carbonDate = Carbon::createFromFormat('Ymd', $pendamping[0]->tanggal_lahir);
-            $pendamping[0]->tanggal_lahir= $carbonDate->format('m-d-Y');
-        }
-    
-        //Ubah identitas dari nomor id menjadi data string
-        $id = Data::identitas($pendamping[0]->identitas);
-        $pendamping[0]['iden'] = $id;
-    
-        //Ubah tanggungan dari nomor id menjadi data string
-        $pend = Data::tanggungan($pendamping[0]->tanggungan);
-        $pendamping[0]['tgn'] = $pend;
-
-        //Ubah pisah harta dari nomor id menjadi data string
-        if ($pendamping[0]->pisah_harta == "Y") {
-            $pendamping[0]['pisah'] = 'Iya';
-        }elseif ($pendamping[0]->pisah_harta == "T") {
-            $pendamping[0]['pisah'] = 'Tidak';
-        }
-
-        //Auth user
-        $us = Auth::user()->id;
-        $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
-        $cek->auth = $user[0]->code_user;
-        $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
-        $cek->kd_pengajuan = $nasabah;
-        
-        return view('pendamping.edit', [
-            'nasabah' => $cek,
-            'pengajuan' => $pengajuan,
-            'pendamping' => $pendamping,
-        ]);
     }
 
     public function update(Request $request){
