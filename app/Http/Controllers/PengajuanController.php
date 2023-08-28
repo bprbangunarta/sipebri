@@ -33,7 +33,7 @@ class PengajuanController extends Controller
                     ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->where('data_pengajuan.input_user', '=', $usr)
                     ->get();
-        // dd($query);
+        
         $auth = Auth::user()->code_user;
         foreach ($query as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);

@@ -110,7 +110,7 @@ class KonfirmasiController extends Controller
         }
 
         try {
-            $nas = Pengajuan::where('kode_pengajuan', $nasabah)->get();
+            $nas = Pengajuan::where('kode_pengajuan', $enc)->get();
             Pengajuan::where('id', $nas[0]->id)->update($data);
             return redirect()->back()->with('success', 'Status telah diperbaharui');
         } catch (\Throwable $th) {
