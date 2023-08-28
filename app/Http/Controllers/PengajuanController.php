@@ -280,7 +280,6 @@ class PengajuanController extends Controller
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
-
         // Merubah tanggal 
         $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
         $cek['masa_agunan'] = $carbonDate->format('Ymd');
@@ -302,9 +301,9 @@ class PengajuanController extends Controller
             'otorisasi' => 'A',
             'auth_user' => Auth::user()->code_user,
         ];
-
+        
         try {
-            $agunan = DB::table('data_jaminan')->where('id', '=', $req)->update($data);
+            DB::table('data_jaminan')->where('id', '=', $request->data)->update($data);
             return redirect()->back()->with('success', 'Data berhasil divalidasi');
         } catch (\Throwable $th) {
            return redirect()->back()->with('error', 'Data gagal divalidasi');
