@@ -102,24 +102,27 @@ class KonfirmasiController extends Controller
 
     public function validasiotor(Request $request){
         $nasabah = $request->query('validasiotor');
-
+        
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($nasabah);
             $data = Pengajuan::where('kode_pengajuan', $enc)->get();
             
-            //Cek Status hanya Minta Otorisasi
-            if ($data[0]->status != "Minta Otorisasi") {
-            return redirect()->back()->with('error', 'Anda tidak diizinkan melakukan Otorisasi');
-            }
-
             $cek = [
                 'nasabah' => $request->nasabah,
                 'pendamping' => $request->pendamping,
                 'pengajuan' => $request->pengajuan,
                 'survei' => $request->survei,
             ];
-        
+
+            //Cek data agunan apakah sudah otorisasi
+            $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $data[0]->kode_pengajuan)->get();
+            foreach ($agunan as $value) {
+                if ($value->otorisasi == "N") {
+                    return redirect()->route('pengajuan.agunan', ['nasabah' => $nasabah])->with('error', 'Data agunan ada yang belum diotorisasi');
+                }
+            }
+
             $data = [
                 'auth_user' => Auth::user()->code_user,
                 'status' => 'Sudah Otorisasi',
