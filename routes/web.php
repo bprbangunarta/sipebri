@@ -74,6 +74,9 @@ Route::middleware('auth')->group(function () {
             Route::put('/permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
             Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])->name('permission.delete');
 
+            // GivePermissionTo
+            Route::get('/give/permission', [PermissionController::class, 'givepermission'])->name('permission.to');
+
             // Data User
             Route::resource('/user', UserController::class);
             //Reset Password

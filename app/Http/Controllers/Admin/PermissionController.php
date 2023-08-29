@@ -25,7 +25,7 @@ class PermissionController extends Controller
         }
 
         $permission = $query->paginate(10);
-        
+
         return view('master.permission.index', compact('permission'));
     }
 
@@ -55,35 +55,55 @@ class PermissionController extends Controller
         }
     }
 
-    public function edit(Request $request, $id){
-        
+    public function edit(Request $request, $id)
+    {
+
         if ($id) {
             $permission = DB::table('permissions')
-                        ->where('id', '=', $id)->get();
+                ->where('id', '=', $id)->get();
 
             return response()->json($permission);
         }
-        
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $data = ['name' => $request->name];
-        
+
         if ($id) {
             DB::table('permissions')->where('id', $id)->update($data);
             return redirect()->back()->with('success', 'Data permission berhasil diubah');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Data permission gagal diubah');
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         if ($id) {
             DB::table('permissions')
                 ->where('id', '=', $id)->delete();
-           return redirect()->back()->with('success', 'Data berhasil dihapus');
-        }else{
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        } else {
             return redirect()->back()->with('error', 'Data gagal dihapus');
         }
+    }
+
+    // givePermissionTo
+
+    public function givepermission(Request $request)
+    {
+
+        $query = Permission::query();
+        $query->select('permissions.*', 'name');
+        $query->orderBy('name');
+
+        if (!empty($request->name)) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $permission = $query->paginate(10);
+
+        return view('master.role.give-permission', compact('permission'));
     }
 }

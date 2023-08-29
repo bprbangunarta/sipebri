@@ -1,0 +1,103 @@
+@extends('templates.app')
+@section('title', 'Give Permission To')
+
+@section('content')
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row row-deck row-cards">
+
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="container-xl">
+              <div class="row g-2 align-items-center">
+                <div class="col">
+                  <div class="page-pretitle">
+                    Master
+                  </div>
+                  <h2 class="page-title">
+                    Give Permission To
+                  </h2>
+                </div>
+
+                <div class="col-auto ms-auto d-print-none">
+                  <div class="btn-list">
+                    <a href="#" class="btn btn-primary" id="btnCreateRole">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 5l0 14"></path>
+                        <path d="M5 12l14 0"></path>
+                      </svg>
+                      Create
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body border-bottom py-3" style="margin-top:-7px;">
+
+            <form action="{{ route('role.index') }}" method="GET">
+              <div class="input-group mb-2">
+                <input type="text" class="form-control" name="name" id="name" placeholder="Permission Name"
+                  value="{{ Request('name') }}">
+                <button class="btn" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter" width="24"
+                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                      d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z">
+                    </path>
+                  </svg>
+                  Filter
+                </button>
+              </div>
+            </form>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-vcenter">
+                <thead>
+                  <tr>
+                    <th class="text-center" width="3%">No</th>
+                    <th class="text-center">Permission Name</th>
+                    <th class="text-center" width="5%">ID</th>
+                    <th class="text-center" width="5%">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($permission as $data)
+                  <tr>
+                    <td class="text-center">{{ $loop->iteration + $permission->firstItem() -1}}</td>
+                    <td style="text-transform: capitalize;">{{ $data->name }}</td>
+                    <td class="text-center">{{ $data->id }}</td>
+                    <td class="text-center">
+
+                      {{-- INSERT (permission_id, role_id) INTO role_has_permissions VALUE ('ngambil di $data->id',
+                      'role_id yang dibawa') --}}
+
+                      {{-- DELETE FROM role_has_permissions WHERE permissio_id='ngambil di $data->id' AND
+                      role_id='role_id yang dibawa' --}}
+
+                      <input type="checkbox" name="" id="">
+                    </td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
+              <p></p>
+
+              {{ $permission->links('vendor.pagination.bootstrap-5') }}
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+@endsection

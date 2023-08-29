@@ -65,6 +65,9 @@
                                 href="{{ route('permission.index') }}">
                                 Permission
                             </a>
+                            <a class="dropdown-item" href="#">
+                                Give Permission
+                            </a>
 
                             {{-- <a class="dropdown-item {{ request()->is('admin/kantor') ? 'active' : '' }}"
                                 href="{{ route('kantor.index') }}">
