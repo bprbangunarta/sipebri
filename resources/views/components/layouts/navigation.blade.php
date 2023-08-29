@@ -4,7 +4,7 @@
             <div class="container-xl">
                 <ul class="navbar-nav">
 
-                    @hasanyrole('@roles')
+                    @hasanyrole($roles)
                         <li class="nav-item {{ request()->is('dashboard') ? 'active' : '' }}">
                             <a class="nav-link" href="/dashboard">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
