@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
@@ -34,6 +35,13 @@ use App\Models\Nasabah;
 */
 
 Route::get('/', function () {
+    // $role = Role::find(5);
+    // $role->givePermissionTo('nasabah edit', 'pendamping edit', 'agunan tambah', 'agunan edit', 'agunan hapus', 'survei edit');
+    // dd($role);
+    return view('welcome');
+});
+
+Route::get('/login', function () {
     return redirect('login');
 });
 
@@ -58,6 +66,10 @@ Route::middleware('auth')->group(function () {
             Route::post('/role/{id}/update', [RoleController::class, 'update'])->name('role.update');
             Route::post('/role/delete', [RoleController::class, 'delete'])->name('role.delete');
             Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
+
+            // Data Role
+            Route::get('/permission', [PermissionController::class, 'index'])->name('permission.index');
+            Route::post('/permission/create', [PermissionController::class, 'create'])->name('permission.create');
 
             // Data User
             Route::resource('/user', UserController::class);
