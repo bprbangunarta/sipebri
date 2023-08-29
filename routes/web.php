@@ -114,6 +114,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/konfirmasi/pengajuan', 'konfirmasi')->name('konfirmasi');
             Route::get('/otorisasi/pengajuan', 'otorisasi')->name('pengajuan.otorisasi');
             Route::post('/otorisasi/pengajuan', 'validasiotor')->name('validasiotor');
+            // Route::post('/nasabah/edit/otorisasi', )
         });
 
         // Cetak Berkas Pengajuan

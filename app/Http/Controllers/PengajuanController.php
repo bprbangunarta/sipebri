@@ -14,6 +14,8 @@ use App\Models\Pengajuan;
 use App\Models\Pendamping;
 use Illuminate\Http\Request;
 use function Pest\Laravel\delete;
+use function Pest\Laravel\get;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,21 +30,32 @@ class PengajuanController extends Controller
         $name = request('name');
         $usr = Auth::user()->code_user;
         
+        //Cek Role User
+        $role = DB::table('v_users')->select('v_users.role_name')->where('code_user', $usr)->get();
+        
         $query = DB::table('data_pengajuan')
                     ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                     ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
-                    ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->where('data_pengajuan.input_user', '=', $usr)
-                    ->get();
+                    ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%');
+                    
+                    if ($role[0]->role_name == 'Administrator') {
+                        $pengajuan = $query->get();
+                    }elseif($role[0]->role_name == 'Customer Service'){
+                        $query->where('data_pengajuan.input_user', '=', $usr);
+                    }elseif($role[0]->role_name == 'Head Teller'){
+                        $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
+                    }
+                    $pengajuan = $query->get();
+        
         
         $auth = Auth::user()->code_user;
-        foreach ($query as $item) {
+        foreach ($pengajuan as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
         }
-        
+        // dd($pengajuan);
         return view('pengajuan.index', [
-            'data' => $query,
+            'data' => $pengajuan,
             'auth' => $auth,
         ]);
     }
