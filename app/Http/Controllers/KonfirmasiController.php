@@ -6,6 +6,7 @@ use App\Models\Agunan;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
+use App\Models\Survei;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -158,5 +159,100 @@ class KonfirmasiController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
         
+    }
+
+    public function otornasabah(Request $request){
+        $req = $request->query('otorisasi');
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($req);
+        
+            $data = [
+                'otorisasi' => $request->otorisasi,
+                'auth_user' => Auth::user()->code_user,
+            ];
+
+            try {
+                $nasabah = Nasabah::where('kode_nasabah', $enc)->get();
+                Nasabah::where('id', $nasabah[0]->id)->update($data);
+                return redirect()->back()->with('success', 'Data Nasabah berhasil diotorisasi');
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Data Nasabah gagal diotorisasi');
+            }
+
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        
+
+    }
+
+    public function otorpendamping(Request $request){
+        $req = $request->query('otorisasi');
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($req);
+            
+            $data = [
+                'otorisasi' => $request->otorisasi,
+                'auth_user' => Auth::user()->code_user,
+            ];
+
+            try {
+                $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
+                Pendamping::where('id', $pendamping[0]->id)->update($data);
+                return redirect()->back()->with('success', 'Data Pendamping berhasil diotorisasi');
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Data Pendamping gagal diotorisasi');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function otorpengajuan(Request $request){
+        $req = $request->query('otorisasi');
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($req);
+            
+            $data = [
+                'otorisasi' => $request->otorisasi,
+                'auth_user' => Auth::user()->code_user,
+            ];
+
+            try {
+                $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+                Pengajuan::where('id', $pengajuan[0]->id)->update($data);
+                return redirect()->back()->with('success', 'Data Pengajuan berhasil diotorisasi');
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Data Pengajuan gagal diotorisasi');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function otorsurvei(Request $request){
+        $req = $request->query('otorisasi');
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($req);
+            
+            $data = [
+                'otorisasi' => $request->otorisasi,
+                'auth_user' => Auth::user()->code_user,
+            ];
+
+            try {
+                $survei = Survei::where('pengajuan_kode', $enc)->get();
+                Survei::where('id', $survei[0]->id)->update($data);
+                return redirect()->back()->with('success', 'Data Survei berhasil diotorisasi');
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Data Survei gagal diotorisasi');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 }

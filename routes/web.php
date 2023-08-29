@@ -114,7 +114,10 @@ Route::middleware('auth')->group(function () {
             Route::post('/konfirmasi/pengajuan', 'konfirmasi')->name('konfirmasi');
             Route::get('/otorisasi/pengajuan', 'otorisasi')->name('pengajuan.otorisasi');
             Route::post('/otorisasi/pengajuan', 'validasiotor')->name('validasiotor');
-            // Route::post('/nasabah/edit/otorisasi', )
+            Route::post('/nasabah/edit/otorisasi', 'otornasabah')->name('otornasabah');
+            Route::post('/pendamping/edit/otorisasi', 'otorpendamping')->name('otorpendamping');
+            Route::post('/pengajuan/edit/otorisasi', 'otorpengajuan')->name('otorpengajuan');
+            Route::post('/survei/edit/otorisasi', 'otorsurvei')->name('otorsurvei');
         });
 
         // Cetak Berkas Pengajuan

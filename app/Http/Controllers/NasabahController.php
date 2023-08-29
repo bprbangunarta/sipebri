@@ -79,6 +79,7 @@ class NasabahController extends Controller
                 $data['nasabah']->nocif = $data['nasabah']->no_cif;
                 $data['nasabah']->kd_pengajuan = Crypt::encrypt($data['nasabah']->kd_pengajuan);
                 //tambah data
+                
                 return view('nasabah.edit', [
                             'pend' => $data['pend'],
                             'job' => $data['job'],

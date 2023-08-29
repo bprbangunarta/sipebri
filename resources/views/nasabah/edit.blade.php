@@ -600,7 +600,9 @@
                                         </form>
 
                                         @can('nasabah otorisasi')
-                                            <form action="#">
+                                            <form action="{{ route('otornasabah', ['otorisasi' => $nasabah->kd_nasabah]) }}"
+                                                method="POST">
+                                                @csrf
                                                 <div class="card-footer bg-transparent mt-auto">
                                                     <div class="btn-list justify-content-end">
                                                         <input type="text" name="otorisasi" id="otorisasi" value="A"
