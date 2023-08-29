@@ -102,7 +102,7 @@
                                 </svg>
                             </span>
                             <span class="nav-link-title">
-                                Pendaftaran
+                                Pengajuan
                             </span>
                         </a>
                     </li>
