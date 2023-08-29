@@ -49,7 +49,10 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (!Auth::attempt($this->only($this->usernameOrEmail, 'password'), $this->boolean('remember'))) {
+        $credentials = $this->only($this->usernameOrEmail, 'password');
+        $credentials['is_active'] = 1; // Add this line to ensure user is active
+
+        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -59,6 +62,7 @@ class LoginRequest extends FormRequest
 
         RateLimiter::clear($this->throttleKey());
     }
+
 
     /**
      * Ensure the login request is not rate limited.
