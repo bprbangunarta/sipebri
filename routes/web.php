@@ -76,6 +76,8 @@ Route::middleware('auth')->group(function () {
 
             // GivePermissionTo
             Route::get('/give/permission', [PermissionController::class, 'givepermission'])->name('permission.to');
+            Route::post('/give/permission', [PermissionController::class, 'postpermission'])->name('permission.postpermission');
+            Route::post('/give/permission/destroy', [PermissionController::class, 'destroypermission'])->name('permission.destroypermission');
 
             // Data User
             Route::resource('/user', UserController::class);

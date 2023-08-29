@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Permission;
 
+use function Pest\Laravel\json;
+
 class PermissionController extends Controller
 {
     public function index(Request $request)
@@ -93,7 +95,6 @@ class PermissionController extends Controller
 
     public function givepermission(Request $request)
     {
-
         $query = Permission::query();
         $query->select('permissions.*', 'name');
         $query->orderBy('name');
@@ -101,9 +102,58 @@ class PermissionController extends Controller
         if (!empty($request->name)) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
-
+        
+        $cek = DB::table('role_has_permissions')
+                ->get();
+        
         $permission = $query->paginate(10);
+        
+        return view('master.role.give-permission', [
+            'permission' => $permission,
+            'role' => $cek,
+            'datas' => $request->query('id'),
+        ]);
+    }
 
-        return view('master.role.give-permission', compact('permission'));
+    public function postpermission(Request $request){
+        $permission = $request->input('id1');
+        $role = $request->input('id2');
+        
+        $data = [
+            'permission_id' => $permission,
+            'role_id' => $role,
+        ];
+        
+        
+        try {
+            DB::table('role_has_permissions')
+            ->insert($data);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
+
+        // return response()->json($data);
+    }
+
+    public function destroypermission(Request $request){
+        $permission = $request->input('id1');
+        $role = $request->input('id2');
+        $data = [
+            'permission_id' => $permission,
+            'role_id' => $role,
+        ];
+        
+        
+        try {
+            DB::table('role_has_permissions')
+                ->where('permission_id', '=', $permission)
+                ->where('role_id', '=', $role)
+                ->delete();
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
+        // return response()->json('Yandi');
     }
 }
