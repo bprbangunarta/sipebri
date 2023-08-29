@@ -70,6 +70,9 @@ Route::middleware('auth')->group(function () {
             // Data Role
             Route::get('/permission', [PermissionController::class, 'index'])->name('permission.index');
             Route::post('/permission/create', [PermissionController::class, 'create'])->name('permission.create');
+            Route::get('/permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
+            Route::put('/permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
+            Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])->name('permission.delete');
 
             // Data User
             Route::resource('/user', UserController::class);
