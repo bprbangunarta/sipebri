@@ -36,7 +36,7 @@ use App\Models\Nasabah;
 
 Route::get('/', function () {
     // $role = Role::find(5);
-    // $role->givePermissionTo('nasabah edit', 'pendamping edit', 'agunan tambah', 'agunan edit', 'agunan hapus', 'survei edit');
+    // $role->givePermissionTo('pengajuan konfirmasi');
     // dd($role);
     return view('welcome');
 });
