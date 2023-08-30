@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Carbon;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\json;
 
@@ -117,17 +118,20 @@ class PermissionController extends Controller
 
     public function postpermission(Request $request){
         $permission = $request->input('id1');
-        $role = $request->input('id2');
+        $id = $request->input('id2');
         
         $data = [
             'permission_id' => $permission,
-            'role_id' => $role,
+            'role_id' => $id,
         ];
         
         
         try {
-            DB::table('role_has_permissions')
-            ->insert($data);
+            // DB::table('role_has_permissions')
+            // ->givePermissionTo($data);
+
+            $role = Role::find($id);
+            $role->givePermissionTo($permission);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
@@ -139,15 +143,13 @@ class PermissionController extends Controller
     public function destroypermission(Request $request){
         $permission = $request->input('id1');
         $role = $request->input('id2');
-        $data = [
-            'permission_id' => $permission,
-            'role_id' => $role,
-        ];
         
-        
+        $cek = DB::table('permissions')
+                ->where('name', $permission)->get();
+
         try {
             DB::table('role_has_permissions')
-                ->where('permission_id', '=', $permission)
+                ->where('permission_id', '=', $cek[0]->id)
                 ->where('role_id', '=', $role)
                 ->delete();
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');

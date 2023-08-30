@@ -81,7 +81,7 @@
                                                 <td class="text-center">
 
                                                     <input type="checkbox" name="give-permission" id="give-permission"
-                                                        class="give-permission" data-id1="{{ $data->id }}"
+                                                        class="give-permission" data-id1="{{ $data->name }}"
                                                         data-id2="{{ $datas }}"
                                                         @foreach ($role as $item)
                                                             @if ($item->permission_id == $data->id && $item->role_id == $datas) checked @break @endif @endforeach>
@@ -121,7 +121,6 @@
                             id2: value2,
                             _token: "{{ csrf_token() }}",
                         },
-
                     });
                 } else {
                     const value1 = $(this).data("id1");
