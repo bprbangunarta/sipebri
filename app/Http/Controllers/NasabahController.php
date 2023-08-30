@@ -250,13 +250,13 @@ class NasabahController extends Controller
             'no_karyawan' => 'required',
             'input_user' => 'required',
             'photo' => '',
-            'photo.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo.*' => 'image|mimes:jpeg,png,jpg|max:5120',
             'photo_selfie' => '',
-            'photo_selfie.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_selfie.*' => 'image|mimes:jpeg,png,jpg|max:5120',
             'photo_ktp' => '',
-            'photo_ktp.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_ktp.*' => 'image|mimes:jpeg,png,jpg|max:5120',
             'photo_kk' => '',
-            'photo_kk.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'photo_kk.*' => 'image|mimes:jpeg,png,jpg|max:5120',
         ]);
         $cek['is_entry'] = 1;
         
