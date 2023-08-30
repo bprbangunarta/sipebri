@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
@@ -159,8 +160,8 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-Route::view('/analisa/proses', 'analisa.proses')->name('analisa.proses');
+Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
+// Route::view('/analisa/proses', 'analisa.proses')->name('analisa.proses');
 
 Route::view('/analisa/usaha/perdagangan', 'analisa.usaha.perdagangan')->name('analisa.usaha.perdagangan');
 Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail')->name('analisa.usaha.perdagangan.detail');
