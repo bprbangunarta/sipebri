@@ -69,7 +69,7 @@
                                             <tr>
                                                 <td class="text-center">{{ $no }}</td>
                                                 <td class="text-center">{{ $item->kode_nasabah }}</td>
-                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->nama_nasabah }}</td>
                                                 <td>{{ $item->plafon = 'Rp. ' . number_format($item->plafon, 0, ',', '.') }}
                                                 </td>
                                                 <td class="text-center">{{ $item->nama_kantor }}</td>
