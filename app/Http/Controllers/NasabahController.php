@@ -241,7 +241,7 @@ class NasabahController extends Controller
             'no_npwp' => 'required',
             'no_telp' => 'required',
             'no_telp_darurat' => 'required',
-            'email' => 'required',
+            'email' => '',
             'sumber_dana' => 'required',
             'penghasilan_utama' => 'required',
             'penghasilan_lainnya' => 'required',
