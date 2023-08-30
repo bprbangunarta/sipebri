@@ -20,6 +20,7 @@ use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\KonfirmasiController;
+use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\TabunganController;
 use App\Models\Nasabah;
 
@@ -147,10 +148,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/pendamping', [CetakController::class, 'pendamping'])->name('cetak.pendamping');
         Route::get('/cetak/motor', [CetakController::class, 'motor'])->name('cetak.motor');
         Route::get('/cetak/tanah', [CetakController::class, 'tanah'])->name('cetak.tanah');
+
+        //Penjadawlan
+        Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function(){
+            Route::get('/penjadwalan', 'index')->name('analisa.penjadwalan');
+            Route::get('/penjadwalan/{id}', 'edit')->name('analisa.editpenjadwalan');
+            Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
+        });
     });
 });
 
-Route::view('/penjadwalan', 'analisa.penjadwalan')->name('analisa.penjadwalan');
 
 
 Route::view('/analisa/proses', 'analisa.proses')->name('analisa.proses');
