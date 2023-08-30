@@ -372,7 +372,7 @@
                                                         <div class="form-label">Alamat Email</div>
                                                         <input type="email" class="form-control" name="email"
                                                             id="email" placeholder="namalengkap@gmail.com"
-                                                            value="{{ old('email', $nasabah->email) }}" required>
+                                                            value="{{ old('email', $nasabah->email) }}">
                                                     </div>
                                                 </div>
                                                 <p></p>
