@@ -17,7 +17,7 @@
                                             Pendaftaran
                                         </div>
                                         <h2 class="page-title">
-                                            Data Survayor
+                                            Data Surveyor
                                         </h2>
                                     </div>
                                     <!-- Page title actions -->
@@ -107,7 +107,7 @@
                                                 <p></p>
                                                 <div class="row g-3">
                                                     <div class="col-md">
-                                                        <div class="form-label">Survayor</div>
+                                                        <div class="form-label">Surveyor</div>
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih Survayor" name="surveyor_kode"
                                                             id="select-survayor">
