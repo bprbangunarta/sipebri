@@ -340,7 +340,7 @@
                                                             required>
                                                     </div>
                                                     <div class="col-md">
-                                                        <div class="form-label">Nomor Rekening</div>
+                                                        <div class="form-label">Nomor Rekening Bank Umum</div>
                                                         <input type="number" class="form-control" name="no_rekening"
                                                             id="no_rekening" placeholder="No Rekening"
                                                             value="{{ old('no_rekening', $nasabah->no_rekening) }}"
