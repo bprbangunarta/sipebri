@@ -12,7 +12,10 @@ class Survei extends Model
     protected $fillable = [
         'pengajuan_kode',
         'kasi_kode',
-        'surveyor_kode',        
+        'surveyor_kode',    
+        'tgl_survei',    
+        'tgl_jadul_1',    
+        'tgl_jadul_2',    
         'input_user',      
         'otorisasi',  
         'is_entry',        
