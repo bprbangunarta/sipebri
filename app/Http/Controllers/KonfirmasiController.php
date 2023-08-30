@@ -143,7 +143,7 @@ class KonfirmasiController extends Controller
             
             //Cek data apakah sudah ceklis semua apa belum
             foreach ($cek as $value) {
-                if ($value == "A") {
+                if ($value == "N") {
                     return redirect()->back()->with('error', 'Ada data yang belum diotorisasi');
                 }
             }
