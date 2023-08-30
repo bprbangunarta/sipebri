@@ -281,7 +281,7 @@
 
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Jatuh Tempo</label>
+                                    <label class="form-label">Jatuh Tempo Agunan</label>
                                     <input class="form-control mb-2" placeholder="Pilih Tanggal" name="masa_agunan"
                                         id="datepicker-masa-agunan">
                                 </div>
