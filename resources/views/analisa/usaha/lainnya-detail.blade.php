@@ -177,7 +177,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
-                                                                value="Proyeksi Penambahan"></th>
+                                                                value="Proyeksi Penambahan Hasil Usaha"></th>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Masukan Nominal"></td>
                                                     </tr>
