@@ -35,9 +35,9 @@ use App\Models\Nasabah;
 */
 
 Route::get('/', function () {
-    // $role = Role::find(5);
-    // $role->givePermissionTo('pengajuan konfirmasi');
-    // dd($role);
+    $role = Role::find(7);
+    $role->givePermissionTo('analisa input');
+    dd($role);
     return view('welcome');
 });
 
@@ -149,5 +149,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/tanah', [CetakController::class, 'tanah'])->name('cetak.tanah');
     });
 });
+
+Route::view('/penjadwalan', 'analisa.penjadwalan')->name('analisa.penjadwalan');
 
 require __DIR__ . '/auth.php';
