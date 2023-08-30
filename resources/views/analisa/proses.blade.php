@@ -53,7 +53,7 @@
                                             <th class="text-center" width="11%">Kode Debitur</th>
                                             <th class="text-center">Nama Debitur</th>
                                             <th class="text-center">Alamat</th>
-                                            <th class="text-center">Plafon</th>
+                                            <th class="text-center">Wilayah</th>
                                             <th class="text-center">Status</th>
                                             <th class="text-center" width="4%">Aksi</th>
                                         </tr>
@@ -68,8 +68,7 @@
                                                 <td class="text-center">{{ $item->kode_nasabah }}</td>
                                                 <td>{{ $item->nama_nasabah }}</td>
                                                 <td>{{ $item->alamat_ktp }}</td>
-                                                <td>{{ $item->plafon = 'Rp. ' . number_format($item->plafon, 0, ',', '.') }}
-                                                </td>
+                                                <td>{{ $item->nama_kantor }}</td>
                                                 <td class="text-center">
                                                     <span class="badge bg-warning-lt">Proses Survey</span>
                                                 </td>
