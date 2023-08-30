@@ -36,10 +36,10 @@ use App\Models\Nasabah;
 */
 
 Route::get('/', function () {
-    $role = Role::find(7);
-    $role->givePermissionTo('analisa input');
-    dd($role);
-    return view('welcome');
+    // $role = Role::find(7);
+    // $role->givePermissionTo('analisa input');
+    // dd($role);
+    return redirect('login');
 });
 
 Route::get('/login', function () {
@@ -150,7 +150,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/tanah', [CetakController::class, 'tanah'])->name('cetak.tanah');
 
         //Penjadawlan
-        Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function(){
+        Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
             Route::get('/penjadwalan', 'index')->name('analisa.penjadwalan');
             Route::get('/penjadwalan/{id}', 'edit')->name('analisa.editpenjadwalan');
             Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
