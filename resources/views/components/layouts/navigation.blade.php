@@ -151,8 +151,8 @@
 
 
                     @can('analisa input')
-                    <li class="nav-item {{ request()->is('pengajuan', 'pendaftaran/edit') ? 'active' : '' }}">
-                        <a class="nav-link" href="/pengajuan">
+                    <li class="nav-item {{ request()->is('analisa/proses') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('analisa.proses') }}">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-clipboard-list" width="24" height="24"

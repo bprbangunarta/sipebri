@@ -152,4 +152,22 @@ Route::middleware('auth')->group(function () {
 
 Route::view('/penjadwalan', 'analisa.penjadwalan')->name('analisa.penjadwalan');
 
+
+Route::view('/analisa/proses', 'analisa.proses')->name('analisa.proses');
+
+Route::view('/analisa/usaha/perdagangan', 'analisa.usaha.perdagangan')->name('analisa.usaha.perdagangan');
+Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail')->name('analisa.usaha.perdagangan.detail');
+
+Route::view('/analisa/usaha/pertanian', 'analisa.usaha.pertanian')->name('analisa.usaha.pertanian');
+Route::view('/analisa/usaha/pertanian/detail', 'analisa.usaha.pertanian-detail')->name('analisa.usaha.pertanian.detail');
+
+Route::view('/analisa/usaha/jasa', 'analisa.usaha.jasa')->name('analisa.usaha.jasa');
+Route::view('/analisa/usaha/jasa/detail', 'analisa.usaha.jasa-detail')->name('analisa.usaha.jasa.detail');
+
+Route::view('/analisa/usaha/lainnya', 'analisa.usaha.lainnya')->name('analisa.usaha.lainnya');
+Route::view('/analisa/usaha/lainnya/detail', 'analisa.usaha.lainnya-detail')->name('analisa.usaha.lainnya.detail');
+
+Route::view('/analisa/keuangan', 'analisa.keuangan')->name('analisa.keuangan');
+
+
 require __DIR__ . '/auth.php';
