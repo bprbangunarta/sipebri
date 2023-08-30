@@ -161,7 +161,6 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
-// Route::view('/analisa/proses', 'analisa.proses')->name('analisa.proses');
 
 Route::view('/analisa/usaha/perdagangan', 'analisa.usaha.perdagangan')->name('analisa.usaha.perdagangan');
 Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail')->name('analisa.usaha.perdagangan.detail');
