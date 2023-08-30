@@ -289,7 +289,7 @@
 
                             <div class=" col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Kode Dati</label>
+                                    <label class="form-label">Kabupaten / Kota</label>
                                     <select type="text" class="form-select" placeholder="Kode Dati" name="kode_dati"
                                         id="select-dati">
                                         <option value="">Kode Dati</option>
