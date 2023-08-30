@@ -13,17 +13,17 @@
         Agunan</a>
     <a href="{{ route('survei.edit', ['nasabah' => $nasabah]) }}"
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('survei/edit') ? 'active' : '' }}">Data
-        Survayor</a>
+        Surveyor</a>
 
     @can('pengajuan konfirmasi')
-    <a href="{{ route('pengajuan.konfirmasi', ['nasabah' => $nasabah]) }}"
-        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">Konfirmasi
-        Data</a>
+        <a href="{{ route('pengajuan.konfirmasi', ['nasabah' => $nasabah]) }}"
+            class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">Konfirmasi
+            Data</a>
     @endcan
 
     @can('pengajuan otorisasi')
-    <a href="{{ route('pengajuan.otorisasi', ['nasabah' => $nasabah]) }}"
-        class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">Otorisasi
-        Data</a>
+        <a href="{{ route('pengajuan.otorisasi', ['nasabah' => $nasabah]) }}"
+            class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">Otorisasi
+            Data</a>
     @endcan
 </div>
