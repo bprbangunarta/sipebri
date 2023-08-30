@@ -112,7 +112,7 @@
                                                             placeholder="Pilih Survayor" name="surveyor_kode"
                                                             id="select-survayor">
                                                             @if (is_null($survey->surveyor_kode))
-                                                                <option value="">Pilih Survayor</option>
+                                                                <option value="">Pilih Surveyor</option>
                                                             @else
                                                                 <option value="{{ $survey->surveyor_kode }}">
                                                                     {{ $survey->nama_surveyor }}</option>
