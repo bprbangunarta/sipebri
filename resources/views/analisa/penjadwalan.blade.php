@@ -95,7 +95,7 @@
                                                 </td>
                                                 <td class="text-center">{{ $item->name }}</td>
                                                 <td class="text-center">
-                                                    <a href="#">
+                                                    <a href="#" class="text-decoration-none">
                                                         <span class="badge bg-success">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="icon icon-tabler icon-tabler-eye" width="24"
