@@ -73,7 +73,7 @@
                                                     <span class="badge bg-warning-lt">Proses Survey</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('analisa.usaha.perdagangan') }}"
+                                                    <a href="{{ route('analisa.usaha.perdagangan', ['pengajuan' => $item->kd_pengajuan]) }}"
                                                         title="Proses Analisa">
                                                         <span class="badge bg-warning">
                                                             <svg xmlns="http://www.w3.org/2000/svg"

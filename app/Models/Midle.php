@@ -184,4 +184,15 @@ class Midle extends Model
             'kab' => $kab,
         ];
     }
+
+    protected static function analisa_usaha($data)
+    {
+        $cek = DB::table('data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->where('data_pengajuan.kode_pengajuan', '=', $data)
+                ->select('data_nasabah.nama_nasabah', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu')->get();
+        $cek[0]->kd_pengajuan = Crypt::encrypt($data);
+        return $cek;
+    }
 }

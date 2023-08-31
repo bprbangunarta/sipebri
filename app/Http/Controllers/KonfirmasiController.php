@@ -26,6 +26,16 @@ class KonfirmasiController extends Controller
             $konfirmasi = DB::table('v_validasi_pengajuan')
                             ->where('kode_pengajuan', $enc)->get();   
             $cek[0]->kd_pengajuan = $nasabah;  
+
+            //Cek agunan
+            $agunan = DB::table('data_jaminan')
+                        ->where('pengajuan_kode', '=', $enc)->first();
+            
+            if (is_null($agunan)) {
+                $konfirmasi[0]->agunan = "0";
+            }else{
+                $konfirmasi[0]->agunan = "1";
+            }
             
             return view('pengajuan.konfirmasi', [
                 'data' => $cek[0],
@@ -96,12 +106,17 @@ class KonfirmasiController extends Controller
                     ->where('kode_pengajuan', '=', $enc)->get();
             
             //Cek data agunan apakah sudah otorisasi
-            $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->get();
-            foreach ($agunan as $value) {
-                    $otor = $value->otorisasi;
+            $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->first();
+            if (is_null($agunan)) {
+                $otor = 'N';
+            }else{
+                foreach ($agunan as $value) {
+                    $otor = $value;
+                }
             }
-            $otorisasi[0]->otoragunan = $otor;
             
+            $otorisasi[0]->otoragunan = $otor;
+           
             $cek[0]->kd_pengajuan = $nasabah;
             return view('pengajuan.otorisasi', [
                 'data' => $cek[0],

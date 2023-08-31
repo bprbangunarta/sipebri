@@ -93,7 +93,6 @@ class PermissionController extends Controller
     }
 
     // givePermissionTo
-
     public function givepermission(Request $request)
     {
         $query = Permission::query();
@@ -120,42 +119,25 @@ class PermissionController extends Controller
         $permission = $request->input('id1');
         $id = $request->input('id2');
         
-        $data = [
-            'permission_id' => $permission,
-            'role_id' => $id,
-        ];
-        
-        
         try {
-            // DB::table('role_has_permissions')
-            // ->givePermissionTo($data);
-
             $role = Role::find($id);
             $role->givePermissionTo($permission);
-            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+            return response()->json($permission);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
-
-        // return response()->json($data);
     }
 
     public function destroypermission(Request $request){
         $permission = $request->input('id1');
-        $role = $request->input('id2');
+        $id = $request->input('id2');
         
-        $cek = DB::table('permissions')
-                ->where('name', $permission)->get();
-
         try {
-            DB::table('role_has_permissions')
-                ->where('permission_id', '=', $cek[0]->id)
-                ->where('role_id', '=', $role)
-                ->delete();
-            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+            $role = Role::find($id);
+            $role->revokePermissionTo($permission);
+            return response()->json($permission);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
-        // return response()->json('Yandi');
     }
 }

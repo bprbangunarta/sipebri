@@ -52,7 +52,7 @@
                                             <th class="text-center" width="3%">No</th>
                                             <th class="text-center" width="11%">Kode Nasabah</th>
                                             <th class="text-center">Nama Nasabah</th>
-                                            {{-- <th class="text-center">Plafon</th> --}}
+                                            <th class="text-center">Alamat</th>
                                             <th class="text-center">Kantor</th>
                                             <th class="text-center" width="10%">Tgl. Survey</th>
                                             <th class="text-center" width="10%">Tgl. Resurvey 1</th>
@@ -70,8 +70,7 @@
                                                 <td class="text-center">{{ $no }}</td>
                                                 <td class="text-center">{{ $item->kode_nasabah }}</td>
                                                 <td>{{ $item->nama_nasabah }}</td>
-                                                {{-- <td>{{ $item->plafon = 'Rp. ' . number_format($item->plafon, 0, ',', '.') }}
-                                                </td> --}}
+                                                <td>{{ $item->alamat_ktp }}</td>
                                                 <td class="text-center">{{ $item->nama_kantor }}</td>
                                                 <td class="text-center">
                                                     @if (is_null($item->tgl_survei))
