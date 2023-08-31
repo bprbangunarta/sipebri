@@ -132,9 +132,12 @@
                                 '</span> berhasil diterapkan.';
 
                             Swal.fire({
+                                position: 'top-end',
                                 title: 'Success!',
                                 html: pesan,
-                                icon: 'success'
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1100,
                             });
                         },
                         error: function(xhr, status, error) {
@@ -167,9 +170,12 @@
                                 '</span> berhasil tidak dipasang.';
 
                             Swal.fire({
+                                position: 'top-end',
                                 title: 'Success!',
                                 html: pesan,
-                                icon: 'success'
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1100,
                             });
                         },
                         error: function(xhr, status, error) {
