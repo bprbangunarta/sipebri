@@ -70,6 +70,16 @@
                                             <th class="text-center" width="5%">Aksi</th>
                                         </tr>
                                     </thead>
+                                </table>
+                                <table class="table table-bordered table-vcenter">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" width="3%">No</th>
+                                            <th class="text-center">Permission Name</th>
+                                            <th class="text-center" width="5%">ID</th>
+                                            <th class="text-center" width="5%">Aksi</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @foreach ($permission as $data)
                                             <tr>
