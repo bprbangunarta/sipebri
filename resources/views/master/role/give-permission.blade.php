@@ -69,8 +69,7 @@
                                             <th class="text-center" width="5%">ID</th>
                                             <th class="text-center" width="5%">Aksi</th>
                                         </tr>
-                                    </thead>
-                                    {{-- cek --}}
+                                    </thead>                                    
                                 </table>
                                 <table class="table table-bordered table-vcenter">
                                     <thead>
