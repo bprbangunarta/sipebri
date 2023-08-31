@@ -121,6 +121,25 @@
                             id2: value2,
                             _token: "{{ csrf_token() }}",
                         },
+                        success: function(response) {
+                            // Panggil SweetAlert setelah permintaan AJAX berhasil
+                            var da = JSON.stringify(response);
+                            var data = JSON.parse(da);
+                            var convert = data.split(' ').map(function(word) {
+                                return word.charAt(0).toUpperCase() + word.slice(1);
+                            }).join(' ');
+                            var pesan = '<span style="color: blue;">' + convert +
+                                '</span> berhasil diterapkan.';
+
+                            Swal.fire({
+                                title: 'Success!',
+                                html: pesan,
+                                icon: 'success'
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle error if needed
+                        }
                     });
                 } else {
                     const value1 = $(this).data("id1");
@@ -136,7 +155,26 @@
                             id2: value2,
                             _token: "{{ csrf_token() }}",
                         },
+                        success: function(response) {
+                            // Panggil SweetAlert setelah permintaan AJAX berhasil
+                            var da = JSON.stringify(response);
+                            var data = JSON.parse(da);
 
+                            var convert = data.split(' ').map(function(word) {
+                                return word.charAt(0).toUpperCase() + word.slice(1);
+                            }).join(' ');
+                            var pesan = '<span style="color: blue;">' + convert +
+                                '</span> berhasil tidak dipasang.';
+
+                            Swal.fire({
+                                title: 'Success!',
+                                html: pesan,
+                                icon: 'success'
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle error if needed
+                        }
                     });
                 }
             });

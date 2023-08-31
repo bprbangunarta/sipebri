@@ -166,9 +166,12 @@ Route::controller(AnalisaController::class)->prefix('analisa')->group(function()
     Route::get('/analisa/usaha/jasa', 'analisa_usaha_jasa')->name('analisa.usaha.jasa');
     Route::get('/analisa/usaha/lainnya', 'analisa_usaha_lainnya')->name('analisa.usaha.lainnya');
     Route::get('/analisa/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
+
+    //Detail Usaha
+    Route::get('/analisa/usaha/perdagangan/detail','analisa_usaha_perdagangan_detail')->name('analisa.usaha.perdagangan.detail');
 });
 
-Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail')->name('analisa.usaha.perdagangan.detail');
+Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail');
 
 Route::view('/analisa/usaha/pertanian/detail', 'analisa.usaha.pertanian-detail')->name('analisa.usaha.pertanian.detail');
 
