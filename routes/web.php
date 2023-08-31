@@ -40,11 +40,7 @@ Route::get('/', function () {
     // $role = Role::find(7);
     // $role->givePermissionTo('analisa input');
     // dd($role);
-<<<<<<< HEAD
-    return redirect('login');
-=======
     return view('welcome');
->>>>>>> ad3e3cc177c64459225ad12e4e0ff27d3e683ae7
 });
 
 Route::get('/login', function () {
@@ -163,7 +159,7 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::controller(AnalisaController::class)->prefix('analisa')->group(function(){
+Route::controller(AnalisaController::class)->prefix('analisa')->group(function () {
     Route::get('/proses', 'index')->name('analisa.proses');
     Route::get('/usaha/perdagangan', 'analisa_usaha_perdagangan')->name('analisa.usaha.perdagangan');
     Route::get('/analisa/usaha/pertanian', 'analisa_usaha_pertanian')->name('analisa.usaha.pertanian');
@@ -172,7 +168,7 @@ Route::controller(AnalisaController::class)->prefix('analisa')->group(function()
     Route::get('/analisa/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
 
     //Detail Usaha
-    Route::get('/analisa/usaha/perdagangan/detail','analisa_usaha_perdagangan_detail')->name('analisa.usaha.perdagangan.detail');
+    Route::get('/analisa/usaha/perdagangan/detail', 'analisa_usaha_perdagangan_detail')->name('analisa.usaha.perdagangan.detail');
 });
 
 Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail');
