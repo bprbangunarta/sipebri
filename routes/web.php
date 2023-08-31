@@ -37,9 +37,9 @@ use App\Models\Nasabah;
 */
 
 Route::get('/', function () {
-    $role = Role::find(7);
-    $role->givePermissionTo('analisa input');
-    dd($role);
+    // $role = Role::find(7);
+    // $role->givePermissionTo('analisa input');
+    // dd($role);
     return view('welcome');
 });
 
