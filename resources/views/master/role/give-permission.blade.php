@@ -70,6 +70,7 @@
                                             <th class="text-center" width="5%">Aksi</th>
                                         </tr>
                                     </thead>
+                                    {{-- cek --}}
                                 </table>
                                 <table class="table table-bordered table-vcenter">
                                     <thead>
