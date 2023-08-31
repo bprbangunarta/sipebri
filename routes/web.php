@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\CetakController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\KonfirmasiController;
@@ -48,10 +49,7 @@ Route::get('/login', function () {
 });
 
 Route::get('/tabungan', [TabunganController::class, 'index'])->name('tabungan.index');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
