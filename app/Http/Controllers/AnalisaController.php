@@ -20,22 +20,23 @@ class AnalisaController extends Controller
                 ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
                 ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
                 ->where('data_survei.surveyor_kode', '=', $usr)
-                ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2','users.name')->get();
+                ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2','users.name');
         
         //Enkripsi kode pengajuan
-        $cek[0]->kd_pengajuan = Crypt::encrypt($cek[0]->kode_pengajuan);
+        $data = $cek->paginate(10);
+        $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
         
         return view('analisa.proses', [
-            'data' => $cek
+            'data' => $data
         ]);
     }
 
     public function analisa_usaha_perdagangan(Request $request)
     {
+    
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            
             
             return view('analisa.usaha.perdagangan', [
                 'data' => $cek[0]

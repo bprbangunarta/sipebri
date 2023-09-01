@@ -161,10 +161,10 @@ Route::controller(AnalisaController::class)->prefix('analisa')->group(function (
     Route::group(['middleware' => ['role:Staff Analis']], function () {
         Route::get('/proses', 'index')->name('analisa.proses');
         Route::get('/usaha/perdagangan', 'analisa_usaha_perdagangan')->name('analisa.usaha.perdagangan');
-        Route::get('/analisa/usaha/pertanian', 'analisa_usaha_pertanian')->name('analisa.usaha.pertanian');
-        Route::get('/analisa/usaha/jasa', 'analisa_usaha_jasa')->name('analisa.usaha.jasa');
-        Route::get('/analisa/usaha/lainnya', 'analisa_usaha_lainnya')->name('analisa.usaha.lainnya');
-        Route::get('/analisa/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
+        Route::get('/usaha/pertanian', 'analisa_usaha_pertanian')->name('analisa.usaha.pertanian');
+        Route::get('/usaha/jasa', 'analisa_usaha_jasa')->name('analisa.usaha.jasa');
+        Route::get('/usaha/lainnya', 'analisa_usaha_lainnya')->name('analisa.usaha.lainnya');
+        Route::get('/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
     });
 
     //Detail Usaha

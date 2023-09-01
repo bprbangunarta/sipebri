@@ -104,7 +104,7 @@
                                 </table>
                                 <p></p>
 
-                                {{-- {{ $kantor->links('vendor.pagination.bootstrap-5') }} --}}
+                                {{ $data->links('vendor.pagination.bootstrap-5') }}
 
                             </div>
                         </div>
