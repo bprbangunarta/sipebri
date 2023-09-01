@@ -122,7 +122,7 @@ class PermissionController extends Controller
         try {
             $role = Role::find($id);
             $role->givePermissionTo($permission);
-            return response()->json($permission);
+            return response()->json($permission);            
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }

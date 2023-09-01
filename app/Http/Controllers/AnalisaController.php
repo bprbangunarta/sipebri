@@ -27,7 +27,7 @@ class AnalisaController extends Controller
         $data = $cek->paginate(10);
         if ($data->isNotEmpty()) {
             $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
-        }
+        }   
        
         return view('analisa.proses', [
             'data' => $data
@@ -114,7 +114,7 @@ class AnalisaController extends Controller
 
     public function analisa_usaha_perdagangan_detail(Request $request)
     {   
-        return redirect()->back()->with('success', 'ok');
+        return redirect()->back()->with('toast_success', 'ok');
         dd($request);
         // try {
         //     $enc = Crypt::decrypt($request->query('pengajuan'));
