@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('has.role')->group(function () {
         // Admin
-        Route::prefix('admin')->group(function () {
+        Route::prefix('admin')->group(['middleware' => ['role:Administrator']], function () {
             // Data Role
             Route::get('/role', [RoleController::class, 'index'])->name('role.index');
             Route::post('/role/create', [RoleController::class, 'create'])->name('role.create');
