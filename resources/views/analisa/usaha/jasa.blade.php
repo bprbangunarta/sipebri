@@ -12,7 +12,7 @@
                             <div class="container-xl">
                                 <div class="row g-2 align-items-center">
 
-                                    @include('templates.header-analisa', [$data])
+                                    @include('templates.header-analisa', ['pengajuan' => $data->kd_pengajuan])
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
@@ -78,7 +78,7 @@
                                                         <td>Rp. 4.000.000</td>
                                                         <td>Rp. 6.000.000</td>
                                                         <td class="text-center">
-                                                            <a href="{{ route('analisa.usaha.jasa.detail') }}">
+                                                            <a href="{{ route('analisa.usaha.jasa.detail', ['pengajuan' => $data->kd_pengajuan]) }}">
                                                                 <span class="badge bg-warning">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         class="icon icon-tabler icon-tabler-edit"

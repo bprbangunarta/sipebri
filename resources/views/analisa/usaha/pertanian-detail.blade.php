@@ -11,7 +11,7 @@
             <div class="container-xl">
               <div class="row g-2 align-items-center">
 
-                @include('templates.header-analisa')
+                @include('templates.header-analisa', ['pengajuan'=>$data->kd_pengajuan])
 
                 <div class="col-auto ms-auto d-print-none">
                   <div class="btn-list">
@@ -36,7 +36,7 @@
             <div class="card">
               <div class="row g-0">
 
-                @include('templates.menu-analisa')
+                @include('templates.menu-analisa', ['pengajuan'=>$data->kd_pengajuan])
 
                 <div class="col d-flex flex-column">
                   <div class="card-body">

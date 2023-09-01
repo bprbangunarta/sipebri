@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="card-body border-bottom py-3">
                             <div class="card">
                                 <div class="row g-0">
@@ -79,7 +79,7 @@
                                                         <td>Rp. 4.000.000</td>
                                                         <td>Rp. 6.000.000</td>
                                                         <td class="text-center">
-                                                            <a href="{{ route('analisa.usaha.pertanian.detail') }}">
+                                                            <a href="{{ route('analisa.usaha.pertanian.detail', ['pengajuan' => $data->kd_pengajuan]) }}">
                                                                 <span class="badge bg-warning">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         class="icon icon-tabler icon-tabler-edit"

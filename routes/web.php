@@ -170,23 +170,14 @@ Route::controller(AnalisaController::class)->prefix('analisa')->group(function (
         Route::get('/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
 
         //Detail Usaha
-        Route::get('/analisa/usaha/perdagangan/detail', 'analisa_usaha_perdagangan_detail')->name('analisa.usaha.perdagangan.detail');
+        Route::get('/usaha/perdagangan/detail', 'analisa_usaha_perdagangan_detail')->name('analisa.usaha.perdagangan.detail');
+        Route::get('/usaha/pertanian/detail', 'analisa_usaha_pertanian_detail')->name('analisa.usaha.pertanian.detail');
+        Route::get('/usaha/jasa/detail', 'analisa_usaha_jasa_detail')->name('analisa.usaha.jasa.detail');
+        Route::get('/usaha/lainnya/detail', 'analisa_usaha_lainnya_detail')->name('analisa.usaha.lainnya.detail');
     });
 
     
 });
-
-Route::view('/analisa/usaha/perdagangan/detail', 'analisa.usaha.perdagangan-detail');
-
-Route::view('/analisa/usaha/pertanian/detail', 'analisa.usaha.pertanian-detail')->name('analisa.usaha.pertanian.detail');
-
-
-Route::view('/analisa/usaha/jasa/detail', 'analisa.usaha.jasa-detail')->name('analisa.usaha.jasa.detail');
-
-
-Route::view('/analisa/usaha/lainnya/detail', 'analisa.usaha.lainnya-detail')->name('analisa.usaha.lainnya.detail');
-
-
 
 
 require __DIR__ . '/auth.php';

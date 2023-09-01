@@ -62,6 +62,15 @@ class PenjadwalanController extends Controller
             'auth_user' => Auth::user()->code_user,
         ];
 
+        if ($field['tgl_survei'] == '-') {
+            $field['tgl_survei'] = null;
+        }
+        if ($field['tgl_jadul_1'] == '-') {
+            $field['tgl_jadul_1'] = null;
+        }
+        if ($field['tgl_jadul_2'] == "-") {
+            $field['tgl_jadul_2'] = null;
+        }
         
         try {
             $survei = Survei::where('pengajuan_kode', $request->kode_pengajuan)->get();

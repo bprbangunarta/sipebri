@@ -55,8 +55,8 @@ class AnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            $a = $request->query('pengajuan');
-            
+            // $a = $request->query('pengajuan');
+           
             return view('analisa.usaha.pertanian', [
                 'data' => $cek[0]
             ]);
@@ -114,19 +114,65 @@ class AnalisaController extends Controller
 
     public function analisa_usaha_perdagangan_detail(Request $request)
     {   
-        return redirect()->back()->with('toast_success', 'ok');
-        dd($request);
-        // try {
-        //     $enc = Crypt::decrypt($request->query('pengajuan'));
-        //     $cek = Midle::analisa_usaha($enc);
-
-        //     return view('analisa.usaha.perdagangan-detail', [
-        //         'data' => $cek[0],
-        //     ]);
-        // } catch (DecryptException $e) {
-        //     return abort(403, 'Permintaan anda di Tolak.');
-        // }
-        return view('analisa_usaha_perdagangan_detail');
         
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            
+            return view('analisa.usaha.perdagangan-detail', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+       
+    }
+
+    public function analisa_usaha_pertanian_detail(Request $request)
+    {   
+        
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            // dd($cek);
+            return view('analisa.usaha.pertanian-detail', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+       
+    }
+
+    public function analisa_usaha_jasa_detail(Request $request)
+    {   
+        
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            // dd($cek);
+            return view('analisa.usaha.jasa-detail', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+       
+    }
+
+    public function analisa_usaha_lainnya_detail(Request $request)
+    {   
+        
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            
+            return view('analisa.usaha.lainnya-detail', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+       
     }
 }

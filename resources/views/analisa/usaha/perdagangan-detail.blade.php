@@ -11,11 +11,11 @@
             <div class="container-xl">
               <div class="row g-2 align-items-center">
 
-                @include('templates.header-analisa')
+                @include('templates.header-analisa', ['pengajuan' => $data->kd_pengajuan])
 
                 <div class="col-auto ms-auto d-print-none">
                   <div class="btn-list">
-                    <a href="{{ route('analisa.usaha.perdagangan') }}" class="btn btn-primary">
+                    <a href="{{ route('analisa.usaha.perdagangan') }}" class="btn btn-primary">                    
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="24"
                         height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                         stroke-linecap="round" stroke-linejoin="round">
@@ -36,7 +36,7 @@
             <div class="card">
               <div class="row g-0">
 
-                @include('templates.menu-analisa')
+                @include('templates.menu-analisa', ['pengajuan' => $data->kd_pengajuan])
 
                 <div class="col d-flex flex-column">
                   <div class="card-body">
