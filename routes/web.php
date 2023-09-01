@@ -58,43 +58,46 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('has.role')->group(function () {
         // Admin
-        Route::prefix('admin')->group(['middleware' => ['role:Administrator']], function () {
-            // Data Role
-            Route::get('/role', [RoleController::class, 'index'])->name('role.index');
-            Route::post('/role/create', [RoleController::class, 'create'])->name('role.create');
-            Route::post('/role/edit', [RoleController::class, 'edit'])->name('role.edit');
-            Route::post('/role/{id}/update', [RoleController::class, 'update'])->name('role.update');
-            Route::post('/role/delete', [RoleController::class, 'delete'])->name('role.delete');
-            Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
+        Route::prefix('admin')->group(function () {
 
-            // Data Role
-            Route::get('/permission', [PermissionController::class, 'index'])->name('permission.index');
-            Route::post('/permission/create', [PermissionController::class, 'create'])->name('permission.create');
-            Route::get('/permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
-            Route::put('/permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
-            Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])->name('permission.delete');
+            Route::group(['middleware' => ['role:Administrator']], function () {
+                // Data Role
+                Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+                Route::post('/role/create', [RoleController::class, 'create'])->name('role.create');
+                Route::post('/role/edit', [RoleController::class, 'edit'])->name('role.edit');
+                Route::post('/role/{id}/update', [RoleController::class, 'update'])->name('role.update');
+                Route::post('/role/delete', [RoleController::class, 'delete'])->name('role.delete');
+                Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
 
-            // GivePermissionTo
-            Route::get('/give/permission', [PermissionController::class, 'givepermission'])->name('permission.to');
-            Route::post('/give/permission', [PermissionController::class, 'postpermission'])->name('permission.postpermission');
-            Route::post('/give/permission/destroy', [PermissionController::class, 'destroypermission'])->name('permission.destroypermission');
+                // Data Role
+                Route::get('/permission', [PermissionController::class, 'index'])->name('permission.index');
+                Route::post('/permission/create', [PermissionController::class, 'create'])->name('permission.create');
+                Route::get('/permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
+                Route::put('/permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
+                Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])->name('permission.delete');
 
-            // Data User
-            Route::resource('/user', UserController::class);
-            //Reset Password
-            Route::get('/user/reset/{user}/password', [PasswordController::class, 'datareset'])->name('datareset');
-            Route::put('/user/reset/reset', [PasswordController::class, 'update'])->name('reset.update');
-            // Data Akses
-            Route::get('/akses/{akses}/editakses', [HakAksesController::class, 'editakses'])->name('editakses');
-            Route::put('/akses/{akses}', [HakAksesController::class, 'updateakses'])->name('updateakses');
-            // Data Kantor
-            Route::resource('/kantor', KantorController::class);
-            // Data Produk
-            Route::resource('/produk', ProdukController::class);
-            // Data Pekerjaan
-            Route::resource('/pekerjaan', PekerjaanController::class);
-            // Data Pendidikan
-            Route::resource('/pendidikan', PendidikanController::class);
+                // GivePermissionTo
+                Route::get('/give/permission', [PermissionController::class, 'givepermission'])->name('permission.to');
+                Route::post('/give/permission', [PermissionController::class, 'postpermission'])->name('permission.postpermission');
+                Route::post('/give/permission/destroy', [PermissionController::class, 'destroypermission'])->name('permission.destroypermission');
+
+                // Data User
+                Route::resource('/user', UserController::class);
+                //Reset Password
+                Route::get('/user/reset/{user}/password', [PasswordController::class, 'datareset'])->name('datareset');
+                Route::put('/user/reset/reset', [PasswordController::class, 'update'])->name('reset.update');
+                // Data Akses
+                Route::get('/akses/{akses}/editakses', [HakAksesController::class, 'editakses'])->name('editakses');
+                Route::put('/akses/{akses}', [HakAksesController::class, 'updateakses'])->name('updateakses');
+                // Data Kantor
+                Route::resource('/kantor', KantorController::class);
+                // Data Produk
+                Route::resource('/produk', ProdukController::class);
+                // Data Pekerjaan
+                Route::resource('/pekerjaan', PekerjaanController::class);
+                // Data Pendidikan
+                Route::resource('/pendidikan', PendidikanController::class);
+            });
         });
 
         //======Pendaftaran Nasabah======//
