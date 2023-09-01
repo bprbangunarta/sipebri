@@ -23,9 +23,12 @@ class AnalisaController extends Controller
                 ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2','users.name');
         
         //Enkripsi kode pengajuan
-        $data = $cek->paginate(10);
-        $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
         
+        $data = $cek->paginate(10);
+        if ($data->isNotEmpty()) {
+            $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
+        }
+       
         return view('analisa.proses', [
             'data' => $data
         ]);
@@ -111,16 +114,19 @@ class AnalisaController extends Controller
 
     public function analisa_usaha_perdagangan_detail(Request $request)
     {   
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
+        return redirect()->back()->with('success', 'ok');
+        dd($request);
+        // try {
+        //     $enc = Crypt::decrypt($request->query('pengajuan'));
+        //     $cek = Midle::analisa_usaha($enc);
 
-            return view('analisa.usaha.perdagangan-detail', [
-                'data' => $cek[0],
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
+        //     return view('analisa.usaha.perdagangan-detail', [
+        //         'data' => $cek[0],
+        //     ]);
+        // } catch (DecryptException $e) {
+        //     return abort(403, 'Permintaan anda di Tolak.');
+        // }
+        return view('analisa_usaha_perdagangan_detail');
         
     }
 }

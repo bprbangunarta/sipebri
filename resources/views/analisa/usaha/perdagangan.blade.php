@@ -75,8 +75,8 @@
                                                         <td>Rp. 4.000.000</td>
                                                         <td>Rp. 6.000.000</td>
                                                         <td class="text-center">
-                                                            <a href="#">
-                                                            {{-- <a href="{{ route('analisa.usaha.perdagangan.detail') }}"> --}}
+                                                            {{-- <a href="#"> --}}
+                                                            <a href="{{ route('analisa.usaha.perdagangan.detail') }}">
                                                                 <span class="badge bg-warning">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         class="icon icon-tabler icon-tabler-edit"
