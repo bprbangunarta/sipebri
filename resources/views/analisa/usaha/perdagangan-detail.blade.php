@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Usaha Pergagangan')
-
+@yield('jquery')
 @section('content')
 <div class="page-body">
   <div class="container-xl">
@@ -44,12 +44,13 @@
                     <table class="table table-bordered table-vcenter fs-5">
                       <thead>
                         <tr>
-                          <th class="text-center" colspan="5">Informasi Barang Dagang</th>
+                          <th class="text-center" colspan="6">Informasi Barang Dagang</th>
                         </tr>
                         <tr>
                           <th class="text-center">Nama Barang</th>
                           <th class="text-center">Harga Beli</th>
-                          <th class="text-center">Harga Jual</th>
+                          <th class="text-center">Harga Jual</th>                          
+                          <th class="text-center">Laba</th>                          
                           <th class="text-center" width="15%">Stok</th>
                           <th class="text-center" width="15%">%</th>
                         </tr>
@@ -57,74 +58,84 @@
                       <tbody>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control input-harga" type="text" name="" id="hrg1" placeholder="Nominal"></td>
+                          <td><input class="form-control input-jual" type="text" name="" id="jual1" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba1" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock1"></td>
+                          <td><input class="form-control text-center input-persen" type="text" name="" id="persen1" disabled=""></td>
                         </tr>
 
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg2" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual2" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba2" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock2"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen2" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg3" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual3" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba3" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock3"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen3" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg4" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual4" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba4" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock4"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen4" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg5" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual5" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba5" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock5"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen5" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg6" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual6" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba6" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock6"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen6" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg7" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual7" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba7" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock7"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen7" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg8" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual8" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba8" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock8"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen8" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg9" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual9" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba9" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock9"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen9" disabled=""></td>
                         </tr>
                         <tr>
                           <td><input class="form-control" type="text" name="" id="" placeholder="Nama Item"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control" type="text" name="" id="" placeholder="Nominal"></td>
-                          <td><input class="form-control text-center" type="number" name="" id=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="hrg10" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="jual10" placeholder="Nominal"></td>
+                          <td><input class="form-control" type="text" name="" id="laba10" placeholder="Nominal" readonly></td>
+                          <td><input class="form-control text-center" type="number" name="" id="stock10"></td>
+                          <td><input class="form-control text-center" type="text" name="" id="persen10" disabled=""></td>
                         </tr>
                       </tbody>
                     </table>
@@ -140,11 +151,11 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input class="form-control" type="text" name="" id="" disabled="" value="Rp. "></td>
-                          <td><input class="form-control" type="text" name="" id="" disabled="" value="Rp. "></td>
-                          <td><input class="form-control" type="text" name="" id="" disabled="" value="Rp. "></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
-                          <td><input class="form-control text-center" type="text" name="" id="" disabled=""></td>
+                          <td><input class="form-control" type="text" name="" id="tbeli" disabled="" value="Rp."></td>
+                          <td><input class="form-control" type="text" name="" id="tjual" disabled="" value="Rp."></td>
+                          <td><input class="form-control" type="text" name="" id="tlaba" disabled="" value="Rp."></td>
+                          <td><input class="form-control text-center" type="text" name="" id="tstock" disabled=""></td>
+                          <td><input class="form-control text-center" type="text" name="" id="tpersen" disabled=""></td>
                         </tr>
                       </tbody>
                     </table>
@@ -272,4 +283,5 @@
     </div>
   </div>
 </div>
+<script src="{{ asset('assets/js/myscript/perdagangan.js') }}"></script>
 @endsection
