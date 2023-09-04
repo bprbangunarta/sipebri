@@ -357,9 +357,9 @@ $("#brdg").keyup(function () {
     var br = $("#brdg").val();
     var replace = parseFloat(br.replace(/[^\d]/g, "")) || 0;
 
-    // var persen = $("#tpersen").val();
-    var persen = 50;
-
+    var pers = $("#tpersen").val();
+    var persen = parseFloat(pers.replace("%", "").replace(/\.00/g, ""));
+    console.log(persen);
     //pendapatan harian
     var hpen = (replace * 30 + replace * 30 * (persen / 100)) / 30;
     var tpenhar = "Rp. " + hpen.toLocaleString("id-ID");
