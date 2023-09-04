@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Midle;
+use App\Models\Perdagangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +41,17 @@ class AnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
+            $au = Perdagangan::au_perdagangan($enc);
+
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
+            dd($au);
             
             return view('analisa.usaha.perdagangan', [
-                'data' => $cek[0]
+                'data' => $cek[0],
+                'perdagangan' => $au
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
