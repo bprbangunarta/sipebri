@@ -176,7 +176,10 @@ Route::controller(AnalisaController::class)->prefix('analisa')->group(function (
         Route::get('/usaha/lainnya/detail', 'analisa_usaha_lainnya_detail')->name('analisa.usaha.lainnya.detail');
     });
 
-    
+    // Add Layout
+    Route::prefix('layout')->group(function () {
+        Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
+    });
 });
 
 
