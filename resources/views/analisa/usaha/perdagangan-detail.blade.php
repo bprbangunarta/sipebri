@@ -174,8 +174,8 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="brdg"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="penhar"></td>
                         </tr>
                       </tbody>
                       <thead>
@@ -186,8 +186,8 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="popen"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="lahar"></td>
                         </tr>
                       </tbody>
                     </table>
@@ -206,8 +206,8 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="transport"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="bongkar"></td>
                         </tr>
                       </tbody>
                       <thead>
@@ -218,8 +218,8 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="pegawai"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="gatel"></td>
                         </tr>
                       </tbody>
                       <thead>
@@ -230,8 +230,8 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
-                          <td><input type="text" class="form-control" placeholder="Masukan Nominal"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="retri"></td>
+                          <td><input type="text" class="form-control" placeholder="Masukan Nominal" id="sewa"></td>
                         </tr>
                       </tbody>
                     </table>
@@ -245,7 +245,7 @@
                       <thead>
                         <tr>
                           <th><input class="form-control" disabled="" value="Laba Bulanan"></th>
-                          <td><input type="text" class="form-control" readonly="" value="Rp. "></td>
+                          <td><input type="text" class="form-control" readonly="" value="Rp. " id="lbulan"></td>
                         </tr>
                         <tr>
                           <th><input class="form-control" disabled="" value="Biaya Perdagangan"></th>
