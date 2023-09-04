@@ -176,11 +176,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/usaha/lainnya/detail', 'analisa_usaha_lainnya_detail')->name('analisa.usaha.lainnya.detail');
         });
 
-        
-    });
-    //Analisa Usaha Perdagangan
-    Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
-
+    
 });
 
 
