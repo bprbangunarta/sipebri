@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Usaha Lainnya')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -11,7 +11,9 @@
                             <div class="container-xl">
                                 <div class="row g-2 align-items-center">
 
-                                    @include('templates.header-analisa', ['pengajuan' => $data->kd_pengajuan])
+                                    @include('templates.header-analisa', [
+                                        'pengajuan' => $data->kd_pengajuan,
+                                    ])
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
@@ -38,7 +40,9 @@
                             <div class="card">
                                 <div class="row g-0">
 
-                                    @include('templates.menu-analisa', ['pengajuan' => $data->kd_pengajuan])
+                                    @include('templates.menu-analisa', [
+                                        'pengajuan' => $data->kd_pengajuan,
+                                    ])
 
                                     <div class="col d-flex flex-column">
                                         <div class="card-body">
@@ -81,31 +85,31 @@
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pendapatan"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="nominal1"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pendapatan"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="nominal2"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pendapatan"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="nominal3"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pendapatan"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="nominal4"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pendapatan"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="nominal5"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -127,31 +131,31 @@
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pengeluaran"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="pengeluaran1"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pengeluaran"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="pengeluaran2"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pengeluaran"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="pengeluaran3"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pengeluaran"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="pengeluaran4"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Pengeluaran"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="pengeluaran5"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -167,26 +171,27 @@
                                                         <th><input class="form-control" disabled=""
                                                                 value="Pendapatan Usaha"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="Rp. " id="penus"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Biaya Operasional"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="Rp. " id="biayaop"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Proyeksi Penambahan Hasil Usaha"></th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" value="Rp."
+                                                                id="pph"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control fw-bold" disabled=""
                                                                 value="Hasil Bersih Usaha"></th>
                                                         <td><input type="text"
                                                                 class="form-control bg-primary fw-bold text-white"
-                                                                disabled="" value="Rp. "></td>
+                                                                disabled="" value="Rp." id="hasilbersih"></td>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -211,4 +216,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/lainnya.js') }}"></script>
 @endsection
