@@ -21,10 +21,12 @@ use App\Http\Controllers\CetakController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
+use App\Http\Controllers\JasaController;
 use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\TabunganController;
+use App\Http\Controllers\PertanianController;
 use App\Models\Nasabah;
 
 /*
@@ -180,6 +182,10 @@ Route::middleware('auth')->group(function () {
     });
     //Analisa Usaha Perdagangan
     Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
+    //Analisa Usaha Pertanian
+    Route::resource('/analisa/usaha/pertanian/pertanian', PertanianController::class);
+    //Analisa Usaha Jasa
+    Route::resource('/analisa/usaha/jasa/jasa', JasaController::class);
 
     // Add Layout
     Route::prefix('layout')->group(function () {

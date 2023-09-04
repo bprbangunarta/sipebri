@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jasa;
 use App\Models\Midle;
 use App\Models\Perdagangan;
+use App\Models\Pertanian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -47,8 +49,7 @@ class AnalisaController extends Controller
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-            dd($au);
-            
+                        
             return view('analisa.usaha.perdagangan', [
                 'data' => $cek[0],
                 'perdagangan' => $au
@@ -64,10 +65,16 @@ class AnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            // $a = $request->query('pengajuan');
-           
+            $au = Pertanian::au_pertanian($enc); 
+            
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
+            
             return view('analisa.usaha.pertanian', [
-                'data' => $cek[0]
+                'data' => $cek[0],
+                'pertanian' => $au
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -80,9 +87,16 @@ class AnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
+            $au = Jasa::au_jasa($enc); 
+            
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
             
             return view('analisa.usaha.jasa', [
-                'data' => $cek[0]
+                'data' => $cek[0],
+                'jasa' => $au
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

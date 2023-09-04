@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Perdagangan;
+use App\Models\Jasa;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
-class PerdaganganController extends Controller
+class JasaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -40,9 +40,9 @@ class PerdaganganController extends Controller
         $req = $request->query('pengajuan');
         try {
             $enc = Crypt::decrypt($req);
-            $name = 'AUPG';
+            $name = 'AUJ';
             $length = 5;
-            $kode = Perdagangan::kodeacak($name, $length);
+            $kode = Jasa::kodeacak($name, $length);
             
             if ($kode !== null) {
                 $data = $request->validate([
@@ -51,16 +51,16 @@ class PerdaganganController extends Controller
                 $data['kode_usaha'] = $kode;
                 $data['pengajuan_kode'] = $enc;
                 $data['nama_usaha'] = ucwords($data['nama_usaha']); //Kapital depannya saja
-
+                
                 try {
-                    Perdagangan::create($data);
+                    Jasa::create($data);
                     return redirect()->back()->with('success', 'Nama usaha berhasil ditambahkan');
                 } catch (\Throwable $th) {
                     return redirect()->back()->with('error', 'Nama usaha gagal ditambahkan');
                 }
                 
             }else{
-                $kode = Perdagangan::kodeacak($name, $length);
+                $kode = Jasa::kodeacak($name, $length);
             }
 
 
@@ -72,10 +72,10 @@ class PerdaganganController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Perdagangan  $perdagangan
+     * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function show(Perdagangan $perdagangan)
+    public function show(Jasa $jasa)
     {
         //
     }
@@ -83,10 +83,10 @@ class PerdaganganController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Perdagangan  $perdagangan
+     * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function edit(Perdagangan $perdagangan)
+    public function edit(Jasa $jasa)
     {
         //
     }
@@ -95,10 +95,10 @@ class PerdaganganController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Perdagangan  $perdagangan
+     * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Perdagangan $perdagangan)
+    public function update(Request $request, Jasa $jasa)
     {
         //
     }
@@ -106,10 +106,10 @@ class PerdaganganController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Perdagangan  $perdagangan
+     * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Perdagangan $perdagangan)
+    public function destroy(Jasa $jasa)
     {
         //
     }
