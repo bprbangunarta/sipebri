@@ -131,6 +131,7 @@ var pegawai = document.getElementById("pegawai");
 var gatel = document.getElementById("gatel");
 var retri = document.getElementById("retri");
 var sewa = document.getElementById("sewa");
+var penambahan = document.getElementById("penambahan");
 
 if (br) {
     br.addEventListener("keyup", function (e) {
@@ -165,6 +166,11 @@ if (retri) {
 if (sewa) {
     sewa.addEventListener("keyup", function (e) {
         sewa.value = formatRupiah(this.value, "Rp. ");
+    });
+}
+if (penambahan) {
+    penambahan.addEventListener("keyup", function (e) {
+        penambahan.value = formatRupiah(this.value, "Rp. ");
     });
 }
 
@@ -351,7 +357,8 @@ $("#brdg").keyup(function () {
     var br = $("#brdg").val();
     var replace = parseFloat(br.replace(/[^\d]/g, "")) || 0;
 
-    var persen = $("#tpersen").val();
+    // var persen = $("#tpersen").val();
+    var persen = 50;
 
     //pendapatan harian
     var hpen = (replace * 30 + replace * 30 * (persen / 100)) / 30;
@@ -373,6 +380,15 @@ $("#brdg").keyup(function () {
     var lbulan = lh * 30;
     var hlaba = "Rp. " + lbulan.toLocaleString("id-ID");
     $("#lbulan").val(hlaba);
+
+    //Hasil bersih
+    var dg = $("#bdagang").val();
+    var pnb = $("#penambahan").val();
+    var rdg = parseFloat(dg.replace(/[^\d]/g, "")) || 0;
+    var rpnb = parseFloat(pnb.replace(/[^\d]/g, "")) || 0;
+    var hs = lbulan - rdg + rpnb;
+    var bhasil = "Rp. " + hs.toLocaleString("id-ID");
+    $("#hasilbersih").val(bhasil);
 });
 
 //Biaya Perdagangan
@@ -394,4 +410,26 @@ $("#transport, #bongkar, #pegawai, #gatel, #retri, #sewa").keyup(function () {
     var has = rtransport + rbongkar + rpegawai + rgatel + rretri + rsewa;
     var bp = "Rp. " + has.toLocaleString("id-ID");
     $("#bdagang").val(bp);
+
+    var pn = $("#penambahan").val();
+    var lbulan = $("#lbulan").val();
+    var rpn = parseFloat(pn.replace(/[^\d]/g, "")) || 0;
+    var rbulan = parseFloat(lbulan.replace(/[^\d]/g, "")) || 0;
+    var hsl = rbulan - parseFloat(has) + rpn;
+    var bs = "Rp. " + hsl.toLocaleString("id-ID");
+    $("#hasilbersih").val(bs);
+});
+
+//Proyeksi penambahan
+$("#penambahan").keyup(function () {
+    var pn = $("#penambahan").val();
+    var bln = $("#lbulan").val();
+    var dgn = $("#bdagang").val();
+    var rpn = parseFloat(pn.replace(/[^\d]/g, "")) || 0;
+    var rbulan = parseFloat(bln.replace(/[^\d]/g, "")) || 0;
+    var rdgn = parseFloat(dgn.replace(/[^\d]/g, "")) || 0;
+
+    var hsl = rbulan - parseFloat(rdgn) + rpn;
+    var bs = "Rp. " + hsl.toLocaleString("id-ID");
+    $("#hasilbersih").val(bs);
 });
