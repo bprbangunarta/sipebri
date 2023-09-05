@@ -150,11 +150,23 @@ class AnalisaController extends Controller
         try {
             $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
             
+            
             $cek = Midle::analisa_usaha($encpengajuan);
             $cek[0]->kd_nasabah = $request->query('usaha');
+
+            //Data perdagangan
+            $perdagangan = Midle::perdagangan_detail($request->query('usaha'));
+
+            //Jika data kosong maka ke view baru
+            if (count($perdagangan) == 0) {
+                return view('analisa.usaha.perdagangan-detail-kosong', [
+                'data' => $cek[0],
+            ]);
+            } 
             
             return view('analisa.usaha.perdagangan-detail', [
                 'data' => $cek[0],
+                'perdagangan' => $perdagangan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

@@ -195,4 +195,13 @@ class Midle extends Model
         $cek[0]->kd_pengajuan = Crypt::encrypt($data);
         return $cek;
     }
+
+    protected static function perdagangan_detail($data)
+    {
+        $enc = Crypt::decrypt($data);
+        $cek = DB::table('du_perdagangan')
+                ->where('usaha_kode', $enc)->get();
+
+        return $cek;
+    }
 }
