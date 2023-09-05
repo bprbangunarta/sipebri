@@ -53,6 +53,36 @@
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
                                                         <tr>
+                                                            <th class="text-center" colspan="2">Informasi Usaha
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center" width="36.5%">Lama Usaha</th>
+                                                            <th class="text-center">Alamat Usaha</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control" name="" id="">
+                                                                    <option value="">--Pilih--</option>
+                                                                    <option value="1 Tahun">1 Tahun</option>
+                                                                    <option value="2 Tahun">2 Tahun</option>
+                                                                    <option value="3 Tahun">3 Tahun</option>
+                                                                    <option value="4 Tahun">4 Tahun</option>
+                                                                    <option value=">5 Tahun">>5 Tahun</option>
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="text" class="form-control"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <table class="table table-bordered table-vcenter fs-5">
+                                                    <thead>
+                                                        <tr>
                                                             <th class="text-center" colspan="6">Informasi Barang Dagang
                                                             </th>
                                                         </tr>
@@ -378,7 +408,7 @@
                                                     </thead>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Barang Dagang</th>
+                                                            <th class="text-center">Belanja Harian</th>
                                                             <th class="text-center">Pendapatan Harian</th>
                                                         </tr>
                                                     </thead>
@@ -387,21 +417,21 @@
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="brdg"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="penhar"></td>
+                                                                    placeholder="Rp." id="penhar" readonly></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center">Pokok Penjualan</th>
-                                                            <th class="text-center">Laba Harian</th>
+                                                            <th class="text-center">Laba Bersih Harian</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="popen"></td>
+                                                                    placeholder="Rp. " id="popen" readonly></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="lahar"></td>
+                                                                    placeholder="Rp. " id="lahar" readonly></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
