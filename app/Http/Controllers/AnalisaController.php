@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jasa;
+use App\Models\Lain;
 use App\Models\Midle;
-use App\Models\Perdagangan;
+use App\Models\Pengajuan;
 use App\Models\Pertanian;
+use App\Models\Perdagangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -44,12 +46,12 @@ class AnalisaController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $au = Perdagangan::au_perdagangan($enc);
-
+            
             foreach($au as $item){
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-                        
+                     
             return view('analisa.usaha.perdagangan', [
                 'data' => $cek[0],
                 'perdagangan' => $au
@@ -110,9 +112,16 @@ class AnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
+            $au = Lain::au_lain($enc);
+
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
             
             return view('analisa.usaha.lainnya', [
-                'data' => $cek[0]
+                'data' => $cek[0],
+                'lain' => $au,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -139,8 +148,10 @@ class AnalisaController extends Controller
     {   
         
         try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
+            $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
+            
+            $cek = Midle::analisa_usaha($encpengajuan);
+            $cek[0]->kd_nasabah = $request->query('usaha');
             
             return view('analisa.usaha.perdagangan-detail', [
                 'data' => $cek[0],
@@ -157,7 +168,7 @@ class AnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            // dd($cek);
+            
             return view('analisa.usaha.pertanian-detail', [
                 'data' => $cek[0],
             ]);

@@ -23,10 +23,12 @@ use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
 use App\Http\Controllers\KonfirmasiController;
+use App\Http\Controllers\LainController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\PertanianController;
+use App\Models\Lain;
 use App\Models\Nasabah;
 
 /*
@@ -186,6 +188,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('/analisa/usaha/pertanian/pertanian', PertanianController::class);
     //Analisa Usaha Jasa
     Route::resource('/analisa/usaha/jasa/jasa', JasaController::class);
+    //Analisa Usaha LAinnya
+    Route::resource('/analisa/usaha/lain/lain', LainController::class);
 
     // Add Layout
     Route::prefix('layout')->group(function () {

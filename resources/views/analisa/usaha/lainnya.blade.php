@@ -12,7 +12,9 @@
                             <div class="container-xl">
                                 <div class="row g-2 align-items-center">
 
-                                    @include('templates.header-analisa', ['pengajuan' => $data->kd_pengajuan])
+                                    @include('templates.header-analisa', [
+                                        'pengajuan' => $data->kd_pengajuan,
+                                    ])
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
@@ -72,65 +74,69 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Pembuatan Boneka</td>
-                                                        <td>Rp. 10.000.000</td>
-                                                        <td>Rp. 4.000.000</td>
-                                                        <td>Rp. 6.000.000</td>
-                                                        <td class="text-center">
-                                                            <a href="{{ route('analisa.usaha.lainnya.detail', ['pengajuan' => $data->kd_pengajuan]) }}">
-                                                                <span class="badge bg-warning">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon icon-tabler icon-tabler-edit"
-                                                                        width="24" height="24" viewBox="0 0 24 24"
-                                                                        stroke-width="2" stroke="currentColor"
-                                                                        fill="none" stroke-linecap="round"
-                                                                        stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                            fill="none"></path>
-                                                                        <path
-                                                                            d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
-                                                                        </path>
-                                                                        <path d="M16 5l3 3"></path>
-                                                                    </svg>
-                                                                </span>
-                                                            </a>
-                                                        </td>
-
-                                                        <td class="text-center">
-                                                            <form action="#" method="POST">
-                                                                @method('delete')
-                                                                @csrf
-                                                                <button type="submit"
-                                                                    style="border: none; background: transparent;"
-                                                                    class="confirmdelete">
-                                                                    <span class=" badge bg-danger">
+                                                    @foreach ($lain as $item)
+                                                        <tr>
+                                                            <td>{{ $item->nama_usaha }}</td>
+                                                            <td>{{ $item->pendapatan }}</td>
+                                                            <td>{{ $item->pengeluaran }}</td>
+                                                            <td>{{ $item->laba_bersih }}</td>
+                                                            <td class="text-center">
+                                                                <a
+                                                                    href="{{ route('analisa.usaha.lainnya.detail', ['pengajuan' => $data->kd_pengajuan]) }}">
+                                                                    <span class="badge bg-warning">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            class="icon icon-tabler icon-tabler-trash"
+                                                                            class="icon icon-tabler icon-tabler-edit"
                                                                             width="24" height="24"
                                                                             viewBox="0 0 24 24" stroke-width="2"
                                                                             stroke="currentColor" fill="none"
                                                                             stroke-linecap="round" stroke-linejoin="round">
                                                                             <path stroke="none" d="M0 0h24v24H0z"
                                                                                 fill="none"></path>
-                                                                            <path d="M4 7l16 0"></path>
-                                                                            <path d="M10 11l0 6"></path>
-                                                                            <path d="M14 11l0 6"></path>
                                                                             <path
-                                                                                d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
+                                                                                d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
                                                                             </path>
                                                                             <path
-                                                                                d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
+                                                                                d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
                                                                             </path>
+                                                                            <path d="M16 5l3 3"></path>
                                                                         </svg>
                                                                     </span>
-                                                                </button>
-                                                            </form>
-                                                        </td>
-                                                    </tr>
+                                                                </a>
+                                                            </td>
+
+                                                            <td class="text-center">
+                                                                <form action="#" method="POST">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="submit"
+                                                                        style="border: none; background: transparent;"
+                                                                        class="confirmdelete">
+                                                                        <span class=" badge bg-danger">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                class="icon icon-tabler icon-tabler-trash"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24" stroke-width="2"
+                                                                                stroke="currentColor" fill="none"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round">
+                                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none"></path>
+                                                                                <path d="M4 7l16 0"></path>
+                                                                                <path d="M10 11l0 6"></path>
+                                                                                <path d="M14 11l0 6"></path>
+                                                                                <path
+                                                                                    d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
+                                                                                </path>
+                                                                                <path
+                                                                                    d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
+                                                                                </path>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -154,7 +160,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="#" method="POST">
+                <form action="{{ route('lain.store', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
