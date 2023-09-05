@@ -147,6 +147,66 @@ class PerdaganganController extends Controller
                 ];
                 DB::table('du_perdagangan')->insert($data);
             }
+            $data2 = [
+                'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
+                'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
+                'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
+                'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
+                'total_pl' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tpersen')),
+            ];
+            
+            Perdagangan::create($data2);
+
+            return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
+            
+        } catch (\Throwable $th) {
+            return redirect()->back()->withInput()->with('error', 'Data barang gagal ditambahkan');
+        }
+    }
+
+    public function detail_update(Request $request)
+    {
+        $request->validate([
+            'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
+            'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
+            'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
+            'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
+            'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
+            'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
+            'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
+            'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
+            'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
+            'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
+        ]);
+        
+        try {
+            $enc = Crypt::decrypt($request->query('usaha'));
+
+            for ($i=1; $i <= 10; $i++) { 
+                $data = [
+                    'usaha_kode' => $enc,
+                    'nama_barang' => ucwords($request->input('nama_barang'.$i)),
+                    'stok' => $request->input('stock'.$i),
+                    'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg'.$i)),
+                    'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual'.$i)),
+                    'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba'.$i)),
+                    'presentase_laba' => sprintf("%.2f", $request->input('persen'.$i), 2),
+                ];
+                DB::table('du_perdagangan')
+                    ->where('usaha_kode', '=', $enc)
+                    ->insert($data);
+            }
+
+            $data2 = [
+                'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
+                'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
+                'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
+                'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
+                'total_pl' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tpersen')),
+            ];
+            
+            Perdagangan::where('kode_usaha', $enc)->update($data2);
+            dd($data2);
 
             return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
             

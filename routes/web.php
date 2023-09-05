@@ -185,6 +185,7 @@ Route::middleware('auth')->group(function () {
     //Analisa Usaha Perdagangan
     Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
     Route::post('/analisa/usaha/perdagangan/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
+    Route::put('/analisa/usaha/perdagangan/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
     //Analisa Usaha Pertanian
     Route::resource('/analisa/usaha/pertanian/pertanian', PertanianController::class);
     //Analisa Usaha Jasa

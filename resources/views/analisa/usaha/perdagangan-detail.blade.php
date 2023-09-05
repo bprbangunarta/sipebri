@@ -45,8 +45,9 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <form action="{{ route('tambah.detail_store', ['usaha' => $data->kd_nasabah]) }}"
+                                        <form action="{{ route('tambah.detail_update', ['usaha' => $data->kd_nasabah]) }}"
                                             method="POST">
+                                            @method('put')
                                             @csrf
                                             <div class="card-body">
 
@@ -356,15 +357,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input class="form-control" type="text" name="tbeli"
-                                                                    id="tbeli" disabled="" value="Rp."></td>
+                                                                    id="tbeli" readonly value="Rp."></td>
                                                             <td><input class="form-control" type="text" name="tjual"
-                                                                    id="tjual" disabled="" value="Rp."></td>
+                                                                    id="tjual" readonly value="Rp."></td>
                                                             <td><input class="form-control" type="text" name="tlaba"
-                                                                    id="tlaba" disabled="" value="Rp."></td>
+                                                                    id="tlaba" readonly value="Rp."></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tstock" id="tstock" disabled=""></td>
+                                                                    name="tstock" id="tstock" readonly></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tpersen" id="tpersen" disabled=""></td>
+                                                                    name="tpersen" id="tpersen" readonly></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -421,9 +422,11 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="transport"></td>
+                                                                    placeholder="Masukan Nominal" id="transport"
+                                                                    name="transportasi"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="bongkar"></td>
+                                                                    placeholder="Masukan Nominal" id="bongkar"
+                                                                    name="bongkar_muat"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -435,9 +438,11 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="pegawai"></td>
+                                                                    placeholder="Masukan Nominal" id="pegawai"
+                                                                    name="pegawai"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="gatel"></td>
+                                                                    placeholder="Masukan Nominal" id="gatel"
+                                                                    name="gatel"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -449,9 +454,11 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="retri"></td>
+                                                                    placeholder="Masukan Nominal" id="retri"
+                                                                    name="retribusi"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="sewa"></td>
+                                                                    placeholder="Masukan Nominal" id="sewa"
+                                                                    name="sewa_tempat"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

@@ -168,6 +168,7 @@ class AnalisaController extends Controller
                 'data' => $cek[0],
                 'perdagangan' => $perdagangan,
             ]);
+            
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
