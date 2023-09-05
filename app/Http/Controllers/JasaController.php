@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jasa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -50,6 +51,7 @@ class JasaController extends Controller
                 ]);
                 $data['kode_usaha'] = $kode;
                 $data['pengajuan_kode'] = $enc;
+                $data['input_user'] = Auth::user()->code_user;
                 $data['nama_usaha'] = ucwords($data['nama_usaha']); //Kapital depannya saja
                 
                 try {
