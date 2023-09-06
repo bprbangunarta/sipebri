@@ -198,10 +198,15 @@ class AnalisaController extends Controller
         
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
+            $usaha = Crypt::decrypt($request->query('usaha'));
             $cek = Midle::analisa_usaha($enc);
-            // dd($cek);
+
+            $jasa = Midle::jasa_detail($usaha);
+            $jasa[0]->kd_usaha = Crypt::encrypt($jasa[0]->kode_usaha);
+            
             return view('analisa.usaha.jasa-detail', [
                 'data' => $cek[0],
+                'jasa' => $jasa[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

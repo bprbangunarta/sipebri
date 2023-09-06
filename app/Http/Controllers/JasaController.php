@@ -100,9 +100,35 @@ class JasaController extends Controller
      * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Jasa $jasa)
+    public function update(Request $request)
     {
-        //
+        try {
+            $cek = $request->validate([
+                'kode_usaha' => 'required',
+                'nama_usaha' => 'required',
+                'pendapatan' => '',
+                'b_pajak' => '',
+                'b_lainnya' => '',
+                'pengeluaran' => '',
+                'laba_bersih' => '',
+            ]);
+
+            $cek['kode_usaha'] = Crypt::decrypt($request->kode_usaha);
+            $cek['nama_usaha'] = ucwords($request->nama_usaha);
+            $cek['pendapatan'] = (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan'));
+            $cek['b_pajak'] = (int)str_replace(["Rp.", " ", "."], "", $request->input('b_pajak'));
+            $cek['b_lainnya'] = (int)str_replace(["Rp.", " ", "."], "", $request->input('b_lainnya'));
+            $cek['pengeluaran'] = (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran'));
+            $cek['laba_bersih'] = (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih'));
+            $cek['input_user'] = Auth::user()->code_user;
+            
+                $enc = Crypt::decrypt($request->kode_usaha);
+                Jasa::where('kode_usaha', $enc)->update($cek);
+                return redirect()->back()->with('success', 'Data usaha jasa berhasil ditambahkan');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Data usaha jasa gagal ditambahkan');
     }
 
     /**

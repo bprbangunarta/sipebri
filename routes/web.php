@@ -190,7 +190,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/analisa/usaha/pertanian/pertanian', PertanianController::class);
     //Analisa Usaha Jasa
     Route::resource('/analisa/usaha/jasa/jasa', JasaController::class);
-    //Analisa Usaha LAinnya
+    //Analisa Usaha Lainnya
     Route::resource('/analisa/usaha/lain/lain', LainController::class);
 
     // Add Layout

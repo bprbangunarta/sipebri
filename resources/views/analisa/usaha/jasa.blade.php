@@ -77,12 +77,15 @@
                                                     @foreach ($jasa as $item)
                                                         <tr>
                                                             <td>{{ $item->nama_usaha }}</td>
-                                                            <td>{{ $item->pendapatan }}</td>
-                                                            <td>{{ $item->pengeluaran }}</td>
-                                                            <td>{{ $item->laba_bersih }}</td>
+                                                            <td>{{ $item->pendapatan = 'Rp. ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ $item->pengeluaran = 'Rp. ' . number_format($item->pengeluaran, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ $item->laba_bersih = 'Rp. ' . number_format($item->laba_bersih, 0, ',', '.') }}
+                                                            </td>
                                                             <td class="text-center">
                                                                 <a
-                                                                    href="{{ route('analisa.usaha.jasa.detail', ['pengajuan' => $data->kd_pengajuan]) }}">
+                                                                    href="{{ route('analisa.usaha.jasa.detail', ['pengajuan' => $data->kd_pengajuan, 'usaha' => $item->kd_usaha]) }}">
                                                                     <span class="badge bg-warning">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon icon-tabler icon-tabler-edit"

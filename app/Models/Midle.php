@@ -209,4 +209,9 @@ class Midle extends Model
         
         return [$cek, $dusaha];
     }
+    protected static function jasa_detail($data)
+    {
+        $cek = Jasa::where('kode_usaha', $data)->get();
+        return $cek;
+    }
 }
