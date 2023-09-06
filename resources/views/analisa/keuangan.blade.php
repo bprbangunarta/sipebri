@@ -63,25 +63,29 @@
                                                         <th><input class="form-control" disabled=""
                                                                 value="Usaha Perdagangan"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="{{ old('perdagangan') ?? ($kemampuan->perdagangan = 'Rp. ' . number_format($kemampuan->perdagangan, 0, ',', '.')) }}">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Usaha Pertanian"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="{{ old('pertanian') ?? ($kemampuan->pertanian = 'Rp. ' . number_format($kemampuan->pertanian, 0, ',', '.')) }}">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Usaha Jasa">
                                                         </th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="{{ old('jasa') ?? ($kemampuan->jasa = 'Rp. ' . number_format($kemampuan->jasa, 0, ',', '.')) }}">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Usaha Lainnya"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="{{ old('lainnya') ?? ($kemampuan->lainnya = 'Rp. ' . number_format($kemampuan->lainnya, 0, ',', '.')) }}">
+                                                        </td>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -188,7 +192,8 @@
                                                         <th><input class="form-control" disabled=""
                                                                 value="Pendapatan Usaha"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="{{ $kemampuan->total = 'Rp. ' . number_format($kemampuan->total, 0, ',', '.') }}">
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""

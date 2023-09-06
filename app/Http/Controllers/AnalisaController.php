@@ -135,8 +135,25 @@ class AnalisaController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             
+            $kemampuan = Midle::kemampuan_keuangan($enc);
+
+            //buat array
+            $data = [
+              'perdagangan' => $kemampuan->perdagangan,  
+              'pertanian' => $kemampuan->pertanian,  
+              'jasa' => $kemampuan->jasa, 
+              'lainnya' => $kemampuan->lainnya,
+            ];
+            $filter = array_filter($data, function ($value) {
+                return $value !== null;
+            });
+            //Hasil penjumlahan analisa usaha
+            $total = array_sum($filter);
+            $kemampuan->total = $total;
+           
             return view('analisa.keuangan', [
-                'data' => $cek[0]
+                'data' => $cek[0],
+                'kemampuan' => $kemampuan
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

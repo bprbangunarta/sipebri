@@ -214,4 +214,17 @@ class Midle extends Model
         $cek = Jasa::where('kode_usaha', $data)->get();
         return $cek;
     }
+
+    protected static function kemampuan_keuangan($data)
+    {
+        $cek = DB::table('au_perdagangan')
+                ->leftJoin('au_pertanian', 'au_perdagangan.pengajuan_kode', '=', 'au_pertanian.pengajuan_kode')
+                ->leftJoin('au_jasa', 'au_perdagangan.pengajuan_kode', '=', 'au_jasa.pengajuan_kode')
+                ->leftJoin('au_lainnya', 'au_perdagangan.pengajuan_kode', '=', 'au_lainnya.pengajuan_kode')
+                ->select('au_perdagangan.laba_bersih as perdagangan', 'au_pertanian.laba_bersih as pertanian', 'au_jasa.laba_bersih as jasa', 'au_lainnya.laba_bersih as lainnya')
+                ->where('au_perdagangan.pengajuan_kode', '=', $data)
+                ->first();
+
+       return $cek;
+    }
 }
