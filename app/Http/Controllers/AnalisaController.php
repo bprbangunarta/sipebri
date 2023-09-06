@@ -144,6 +144,7 @@ class AnalisaController extends Controller
         
     }
 
+    //=====Function detail analisa=====//
     public function analisa_usaha_perdagangan_detail(Request $request)
     {   
         
@@ -156,9 +157,9 @@ class AnalisaController extends Controller
 
             //Data perdagangan
             $perdagangan = Midle::perdagangan_detail($request->query('usaha'));
-
+            
             //Jika data kosong maka ke view baru
-            if (count($perdagangan) == 0) {
+            if (count($perdagangan[1]) == 0) {
                 return view('analisa.usaha.perdagangan-detail-kosong', [
                 'data' => $cek[0],
             ]);
@@ -166,7 +167,8 @@ class AnalisaController extends Controller
             
             return view('analisa.usaha.perdagangan-detail', [
                 'data' => $cek[0],
-                'perdagangan' => $perdagangan,
+                'datausaha' => $perdagangan[0],
+                'perdagangan' => $perdagangan[1],
             ]);
             
         } catch (DecryptException $e) {

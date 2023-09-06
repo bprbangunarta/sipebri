@@ -53,6 +53,49 @@
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
                                                         <tr>
+                                                            <th class="text-center" colspan="2">Informasi Usaha
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center" width="36.5%">Lama Usaha</th>
+                                                            <th class="text-center">Alamat Usaha</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control" name="lama_usaha"
+                                                                    id="">
+                                                                    <option value="">--Pilih--</option>
+                                                                    <option value="1 Tahun"
+                                                                        {{ old('lama_usaha') == '1 Tahun' ? 'selected' : '' }}>
+                                                                        1 Tahun</option>
+                                                                    <option value="2 Tahun"
+                                                                        {{ old('lama_usaha') == '2 Tahun' ? 'selected' : '' }}>
+                                                                        2 Tahun</option>
+                                                                    <option value="3 Tahun"
+                                                                        {{ old('lama_usaha') == '3 Tahun' ? 'selected' : '' }}>
+                                                                        3 Tahun</option>
+                                                                    <option value="4 Tahun"
+                                                                        {{ old('lama_usaha') == '4 Tahun' ? 'selected' : '' }}>
+                                                                        4 Tahun</option>
+                                                                    <option value="5 Tahun"
+                                                                        {{ old('lama_usaha') == '5 Tahun' ? 'selected' : '' }}>
+                                                                        5 Tahun</option>
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="text" class="form-control"
+                                                                    name="lokasi_usaha" value="{{ old('lokasi_usaha') }}">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <table class="table table-bordered table-vcenter fs-5">
+                                                    <thead>
+                                                        <tr>
                                                             <th class="text-center" colspan="6">Informasi Barang Dagang
                                                             </th>
                                                         </tr>
@@ -276,15 +319,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input class="form-control" type="text" name="tbeli"
-                                                                    id="tbeli" disabled="" value="Rp."></td>
+                                                                    id="tbeli" value="Rp."></td>
                                                             <td><input class="form-control" type="text" name="tjual"
-                                                                    id="tjual" disabled="" value="Rp."></td>
+                                                                    id="tjual" value="Rp."></td>
                                                             <td><input class="form-control" type="text" name="tlaba"
-                                                                    id="tlaba" disabled="" value="Rp."></td>
+                                                                    id="tlaba" value="Rp."></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tstock" id="tstock" disabled=""></td>
+                                                                    name="tstock" id="tstock"></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tpersen" id="tpersen" disabled=""></td>
+                                                                    name="tpersen" id="tpersen"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -298,14 +341,16 @@
                                                     </thead>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Barang Dagang</th>
+                                                            <th class="text-center">Belanja Harian</th>
                                                             <th class="text-center">Pendapatan Harian</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="brdg"></td>
+                                                                    placeholder="Masukan Nominal" id="brdg"
+                                                                    name="belanja_harian"
+                                                                    value="{{ old('belanja_harian') }}"></td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="penhar"></td>
                                                         </tr>
@@ -313,7 +358,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center">Pokok Penjualan</th>
-                                                            <th class="text-center">Laba Harian</th>
+                                                            <th class="text-center">Laba Bersih Harian</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -341,23 +386,30 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="transport"></td>
+                                                                    placeholder="Masukan Nominal" id="transport"
+                                                                    name="transportasi"
+                                                                    value="{{ old('transportasi') }}"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="bongkar"></td>
+                                                                    placeholder="Masukan Nominal" id="bongkar"
+                                                                    name="bongkar_muat"
+                                                                    value="{{ old('bongkar_muat') }}></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Pegawai</th>
+                                                            <th class="text-center">Pegawai
+                                                                </th>
                                                             <th class="text-center">Gatel</th>
                                                         </tr>
-                                                    </thead>
+                                                        </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="pegawai"></td>
+                                                                    placeholder="Masukan Nominal" id="pegawai"
+                                                                    name="pegawai" value="{{ old('pegawai') }}"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="gatel"></td>
+                                                                    placeholder="Masukan Nominal" id="gatel"
+                                                                    name="gatel" value="{{ old('gatel') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -369,9 +421,12 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="retri"></td>
+                                                                    placeholder="Masukan Nominal" id="retri"
+                                                                    name="retribusi" value="{{ old('retribusi') }}"></td>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="sewa"></td>
+                                                                    placeholder="Masukan Nominal" id="sewa"
+                                                                    name="sewa_tempat" value="{{ old('sewa_tempat') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -387,26 +442,29 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Laba Bulanan"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " id="lbulan"></td>
+                                                                    value="Rp. " id="lbulan" name="pendapatan"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Biaya Perdagangan"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " id="bdagang"></td>
+                                                                    value="Rp. " id="bdagang" name="pengeluaran">
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Proyeksi Penambahan"></th>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="penambahan"></td>
+                                                                    placeholder="Masukan Nominal" id="penambahan"
+                                                                    name="penambahan"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    disabled="" value="Rp. " id="hasilbersih"></td>
+                                                                    value="Rp. " id="hasilbersih" name="laba_bersih">
+                                                            </td>
                                                         </tr>
                                                     </thead>
                                                 </table>

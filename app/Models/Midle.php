@@ -199,9 +199,14 @@ class Midle extends Model
     protected static function perdagangan_detail($data)
     {
         $enc = Crypt::decrypt($data);
-        $cek = DB::table('du_perdagangan')
+        $cek = DB::table('au_perdagangan')
+                ->leftJoin('bu_perdagangan','au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
+                ->select('au_perdagangan.*', 'bu_perdagangan.*')
+                ->where('au_perdagangan.kode_usaha', $enc)->get();
+        
+        $dusaha = DB::table('du_perdagangan')
                 ->where('usaha_kode', $enc)->get();
-
-        return $cek;
+        
+        return [$cek, $dusaha];
     }
 }

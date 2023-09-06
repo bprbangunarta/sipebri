@@ -67,8 +67,11 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <select class="form-control" name="" id="">
-                                                                    <option value="">--Pilih--</option>
+                                                                <select class="form-control" name="lama_usaha"
+                                                                    id="">
+
+                                                                    <option value="{{ $datausaha[0]->lama_usaha }}"
+                                                                        selected>{{ $datausaha[0]->lama_usaha }}</option>
                                                                     <option value="1 Tahun">1 Tahun</option>
                                                                     <option value="2 Tahun">2 Tahun</option>
                                                                     <option value="3 Tahun">3 Tahun</option>
@@ -76,7 +79,9 @@
                                                                     <option value=">5 Tahun">>5 Tahun</option>
                                                                 </select>
                                                             </td>
-                                                            <td><input type="text" class="form-control"></td>
+                                                            <td><input type="text" class="form-control"
+                                                                    name="lokasi_usaha"
+                                                                    value="{{ $datausaha[0]->lokasi_usaha }}"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -387,15 +392,24 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input class="form-control" type="text" name="tbeli"
-                                                                    id="tbeli" readonly value="Rp."></td>
+                                                                    id="tbeli" readonly
+                                                                    value="{{ $datausaha[0]->total_beli = 'Rp. ' . number_format($datausaha[0]->total_beli, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input class="form-control" type="text" name="tjual"
-                                                                    id="tjual" readonly value="Rp."></td>
+                                                                    id="tjual" readonly
+                                                                    value="{{ $datausaha[0]->total_jual = 'Rp. ' . number_format($datausaha[0]->total_jual, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input class="form-control" type="text" name="tlaba"
-                                                                    id="tlaba" readonly value="Rp."></td>
+                                                                    id="tlaba" readonly
+                                                                    value="{{ $datausaha[0]->total_laba = 'Rp. ' . number_format($datausaha[0]->total_laba, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tstock" id="tstock" readonly></td>
+                                                                    name="tstock" id="tstock"
+                                                                    value="{{ $datausaha[0]->total_stok }}" readonly></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tpersen" id="tpersen" readonly></td>
+                                                                    name="tpersen" id="tpersen"
+                                                                    value="{{ $datausaha[0]->total_pl . '%' }}" readonly>
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -416,7 +430,10 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="brdg"></td>
+                                                                    placeholder="Masukan Nominal" id="brdg"
+                                                                    name="belanja_harian"
+                                                                    value="{{ $datausaha[0]->belanja_harian = 'Rp. ' . number_format($datausaha[0]->belanja_harian, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Rp." id="penhar" readonly></td>
                                                         </tr>
@@ -453,10 +470,14 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="transport"
-                                                                    name="transportasi"></td>
+                                                                    name="transportasi"
+                                                                    value="{{ $datausaha[0]->transportasi = 'Rp. ' . number_format($datausaha[0]->transportasi, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="bongkar"
-                                                                    name="bongkar_muat"></td>
+                                                                    name="bongkar_muat"
+                                                                    value="{{ $datausaha[0]->bongkar_muat = 'Rp. ' . number_format($datausaha[0]->bongkar_muat, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -469,15 +490,20 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="pegawai"
-                                                                    name="pegawai"></td>
+                                                                    name="pegawai"
+                                                                    value="{{ $datausaha[0]->pegawai = 'Rp. ' . number_format($datausaha[0]->pegawai, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="gatel"
-                                                                    name="gatel"></td>
+                                                                    name="gatel"
+                                                                    value="{{ $datausaha[0]->gatel = 'Rp. ' . number_format($datausaha[0]->gatel, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Retribusi</th>
+                                                            <th class="text-center">Retribusi
+                                                            </th>
                                                             <th class="text-center">Sewa Tempat</th>
                                                         </tr>
                                                     </thead>
@@ -485,10 +511,14 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="retri"
-                                                                    name="retribusi"></td>
+                                                                    name="retribusi"
+                                                                    value="{{ $datausaha[0]->retribusi = 'Rp. ' . number_format($datausaha[0]->retribusi, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="sewa"
-                                                                    name="sewa_tempat"></td>
+                                                                    name="sewa_tempat"
+                                                                    value="{{ $datausaha[0]->sewa_tempat = 'Rp. ' . number_format($datausaha[0]->sewa_tempat, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -504,26 +534,34 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Laba Bulanan"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " id="lbulan"></td>
+                                                                    value="{{ $datausaha[0]->pendapatan = 'Rp. ' . number_format($datausaha[0]->pendapatan, 0, ',', '.') }}"
+                                                                    id="lbulan" name="pendapatan"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Biaya Perdagangan"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " id="bdagang"></td>
+                                                                    value="{{ $datausaha[0]->pengeluaran = 'Rp. ' . number_format($datausaha[0]->pengeluaran, 0, ',', '.') }}"
+                                                                    id="bdagang" name="pengeluaran">
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Proyeksi Penambahan"></th>
                                                             <td><input type="text" class="form-control"
-                                                                    placeholder="Masukan Nominal" id="penambahan"></td>
+                                                                    placeholder="Masukan Nominal" id="penambahan"
+                                                                    name="penambahan"
+                                                                    value="{{ $datausaha[0]->penambahan = 'Rp. ' . number_format($datausaha[0]->penambahan, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    disabled="" value="Rp. " id="hasilbersih"></td>
+                                                                    value="{{ $datausaha[0]->laba_bersih = 'Rp. ' . number_format($datausaha[0]->laba_bersih, 0, ',', '.') }}"
+                                                                    id="hasilbersih" name="laba_bersih">
+                                                            </td>
                                                         </tr>
                                                     </thead>
                                                 </table>

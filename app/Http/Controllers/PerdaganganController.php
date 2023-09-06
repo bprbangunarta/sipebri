@@ -134,7 +134,6 @@ class PerdaganganController extends Controller
 
         try {
             $enc = Crypt::decrypt($request->query('usaha'));
-
             for ($i=1; $i <= 10; $i++) { 
                 $data = [
                     'usaha_kode' => $enc,
@@ -147,15 +146,37 @@ class PerdaganganController extends Controller
                 ];
                 DB::table('du_perdagangan')->insert($data);
             }
+            
             $data2 = [
+                'lokasi_usaha' => ucwords($request->input('lokasi_usaha')),
+                'lama_usaha' => $request->input('lama_usaha'),
+                'belanja_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('belanja_harian')),
                 'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
                 'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
                 'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
                 'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
-                'total_pl' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tpersen')),
+                'total_pl' => sprintf("%.2f", $request->input('tpersen'), 2),
+                'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')),
+                'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')),
+                'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')),
+                'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih')),
             ];
             
-            Perdagangan::create($data2);
+
+            $data3 = [
+                'usaha_kode' => $enc,
+                'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
+                'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
+                'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
+                'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
+                'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
+                'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
+            ];
+            
+            DB::transaction(function() use ($enc, $data2, $data3){
+                Perdagangan::where('kode_usaha', $enc)->update($data2);
+                DB::table('bu_perdagangan')->insert($data3);
+            });
 
             return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
             
@@ -208,10 +229,10 @@ class PerdaganganController extends Controller
             Perdagangan::where('kode_usaha', $enc)->update($data2);
             dd($data2);
 
-            return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
+            return redirect()->back()->with('success', 'Data barang berhasil diupdate');
             
         } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('error', 'Data barang gagal ditambahkan');
+            return redirect()->back()->withInput()->with('error', 'Data barang gagal diupdate');
         }
     }
 }
