@@ -392,16 +392,16 @@
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="bongkar"
                                                                     name="bongkar_muat"
-                                                                    value="{{ old('bongkar_muat') }}></td>
+                                                                    value="{{ old('bongkar_muat') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center">Pegawai
-                                                                </th>
+                                                            </th>
                                                             <th class="text-center">Gatel</th>
                                                         </tr>
-                                                        </thead>
+                                                    </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"

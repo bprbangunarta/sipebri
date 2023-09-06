@@ -69,9 +69,13 @@
                                                             <td>
                                                                 <select class="form-control" name="lama_usaha"
                                                                     id="">
-
-                                                                    <option value="{{ $datausaha[0]->lama_usaha }}"
-                                                                        selected>{{ $datausaha[0]->lama_usaha }}</option>
+                                                                    @if (is_null($datausaha[0]->lama_usaha))
+                                                                        <option value="">--Pilih Waktu--</option>
+                                                                    @else
+                                                                        <option value="{{ $datausaha[0]->lama_usaha }}"
+                                                                            selected>{{ $datausaha[0]->lama_usaha }}
+                                                                        </option>
+                                                                    @endif
                                                                     <option value="1 Tahun">1 Tahun</option>
                                                                     <option value="2 Tahun">2 Tahun</option>
                                                                     <option value="3 Tahun">3 Tahun</option>
