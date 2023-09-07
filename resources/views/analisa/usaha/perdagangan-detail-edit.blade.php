@@ -86,7 +86,8 @@
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     name="lokasi_usaha"
-                                                                    value="{{ $datausaha[0]->lokasi_usaha }}"></td>
+                                                                    value="{{ old('lokasi_usaha') ?? $datausaha[0]->lokasi_usaha }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jasa;
 use App\Models\Midle;
 use App\Models\Perdagangan;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Js;
 
 class PerdaganganController extends Controller
 {
@@ -163,15 +165,22 @@ class PerdaganganController extends Controller
             $au = Perdagangan::where('kode_usaha', $enc)->get();
             $bu = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_perdagangan')->where('usaha_kode', $enc)->get();
+            $js = DB::table('au_jasa')->where('usaha_kode', $enc)->get();
             
             if (count($au) !== 0) {
                 Perdagangan::where('id', $au[0]->id)->delete();
+            } 
+            if (count($js) !== 0) {
+                Jasa::where('id', $js[0]->id)->delete();
             } 
             if (count($bu) !== 0) {
                 DB::table('bu_perdagangan')->where('id', $bu[0]->id)->delete();
             } 
             if (count($du) !== 0) {
-                DB::table('du_perdagangan')->where('id', $du[0]->id)->delete();
+
+                for ($i=0; $i < count($du); $i++) { 
+                    DB::table('du_perdagangan')->where('id', $du[$i]->id)->delete();
+                }
             }
             return redirect()->back()->with('success', 'Usaha perdagangan berhasil dihapus');
 

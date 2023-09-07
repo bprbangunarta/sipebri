@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Kemampuan Keuangan')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -63,28 +63,28 @@
                                                         <th><input class="form-control" disabled=""
                                                                 value="Usaha Perdagangan"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="{{ old('perdagangan') ?? ($kemampuan->perdagangan = 'Rp. ' . number_format($kemampuan->perdagangan, 0, ',', '.')) }}">
+                                                                value="{{ 'Rp ' . number_format($kemampuan['perdagangan'], 0, ',', '.') }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Usaha Pertanian"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="{{ old('pertanian') ?? ($kemampuan->pertanian = 'Rp. ' . number_format($kemampuan->pertanian, 0, ',', '.')) }}">
+                                                                value="{{ 'Rp ' . number_format($kemampuan['pertanian'], 0, ',', '.') }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Usaha Jasa">
                                                         </th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="{{ old('jasa') ?? ($kemampuan->jasa = 'Rp. ' . number_format($kemampuan->jasa, 0, ',', '.')) }}">
+                                                                value="{{ 'Rp ' . number_format($kemampuan['jasa'], 0, ',', '.') }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Usaha Lainnya"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="{{ old('lainnya') ?? ($kemampuan->lainnya = 'Rp. ' . number_format($kemampuan->lainnya, 0, ',', '.')) }}">
+                                                                value="{{ 'Rp ' . number_format($kemampuan['lain'], 0, ',', '.') }}">
                                                         </td>
                                                     </tr>
                                                 </thead>
@@ -107,42 +107,42 @@
                                                         <th><input class="form-control" disabled=""
                                                                 value="Biaya Konsumsi Pokok"></th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="konsumsi"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Kesehatan">
                                                         </th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="kesehatan"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Pendidikan">
                                                         </th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="pendidikan"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Gatel"></th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="gatel"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Jajan Anak">
                                                         </th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="jajan"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Sumbangan Sosial"></th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="sumbangan"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled="" value="Rokok">
                                                         </th>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="roko"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -164,19 +164,19 @@
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Kewajiban"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="kewajiban1"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Kewajiban"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="kewajiban2"></td>
                                                     </tr>
                                                     <tr>
                                                         <td><input type="text" class="form-control"
                                                                 placeholder="Nama Kewajiban"></td>
                                                         <td><input type="text" class="form-control"
-                                                                placeholder="Masukan Nominal"></td>
+                                                                placeholder="Masukan Nominal" id="kewajiban3"></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -192,27 +192,28 @@
                                                         <th><input class="form-control" disabled=""
                                                                 value="Pendapatan Usaha"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="{{ $kemampuan->total = 'Rp. ' . number_format($kemampuan->total, 0, ',', '.') }}">
+                                                                value="{{ 'Rp. ' . number_format($kemampuan['total'], 0, ',', '.') }}"
+                                                                id="pendapatan">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Biaya Rumah Tangga"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="Rp. " id="biaya"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control" disabled=""
                                                                 value="Kewajiban Lainnya"></th>
                                                         <td><input type="text" class="form-control" readonly=""
-                                                                value="Rp. "></td>
+                                                                value="Rp. " id="kewajiban_lain"></td>
                                                     </tr>
                                                     <tr>
                                                         <th><input class="form-control fw-bold" disabled=""
                                                                 value="Keuangan Perbulan"></th>
                                                         <td><input type="text"
                                                                 class="form-control bg-primary fw-bold text-white"
-                                                                disabled="" value="Rp. "></td>
+                                                                value="Rp. " id="hasilbersih"></td>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -235,4 +236,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/keuangan.js') }}"></script>
 @endsection

@@ -217,14 +217,25 @@ class Midle extends Model
 
     protected static function kemampuan_keuangan($data)
     {
-        $cek = DB::table('au_perdagangan')
-                ->leftJoin('au_pertanian', 'au_perdagangan.pengajuan_kode', '=', 'au_pertanian.pengajuan_kode')
-                ->leftJoin('au_jasa', 'au_perdagangan.pengajuan_kode', '=', 'au_jasa.pengajuan_kode')
-                ->leftJoin('au_lainnya', 'au_perdagangan.pengajuan_kode', '=', 'au_lainnya.pengajuan_kode')
-                ->select('au_perdagangan.laba_bersih as perdagangan', 'au_pertanian.laba_bersih as pertanian', 'au_jasa.laba_bersih as jasa', 'au_lainnya.laba_bersih as lainnya')
-                ->where('au_perdagangan.pengajuan_kode', '=', $data)
-                ->first();
+        
+        $perdagangan = Perdagangan::where('pengajuan_kode', $data)->get();
+        $jasa = Jasa::where('pengajuan_kode', $data)->get();
+        $pertanian = Pertanian::where('pengajuan_kode', $data)->get();
+        $lain = Lain::where('pengajuan_kode', $data)->get();
 
-       return $cek;
+        // Periksa dan ganti nilai yang kosong dengan 0
+        $per = $perdagangan->isEmpty() ? 0 : $perdagangan[0]->laba_bersih ?? 0;
+        $jas = $jasa->isEmpty() ? 0 : $jasa[0]->laba_bersih ?? 0;
+        $tani = $pertanian->isEmpty() ? 0 : $pertanian[0]->laba_bersih ?? 0;
+        $la = $lain->isEmpty() ? 0 : $lain[0]->laba_bersih ?? 0;
+
+        $hasil = [
+            'perdagangan' => $per,
+            'jasa' => $jas,
+            'pertanian' => $tani,
+            'lain' => $la,
+        ];
+    
+        return $hasil;
     }
 }
