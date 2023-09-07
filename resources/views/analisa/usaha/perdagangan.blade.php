@@ -105,9 +105,11 @@
                                                             </td>
 
                                                             <td class="text-center">
-                                                                <form action="#" method="POST">
-                                                                    @method('delete')
+                                                                <form
+                                                                    action="{{ route('tambah.destroy', ['tambah' => $item->kd_usaha]) }}"
+                                                                    method="POST">
                                                                     @csrf
+                                                                    @method('delete')
                                                                     <button type="submit"
                                                                         style="border: none; background: transparent;"
                                                                         class="confirmdelete">

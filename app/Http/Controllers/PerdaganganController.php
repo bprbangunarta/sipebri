@@ -154,9 +154,30 @@ class PerdaganganController extends Controller
      * @param  \App\Models\Perdagangan  $perdagangan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Perdagangan $perdagangan)
+    public function destroy(Request $request, $tambah)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($tambah);
+            $au = Perdagangan::where('kode_usaha', $enc)->get();
+            $bu = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
+            $du = DB::table('du_perdagangan')->where('usaha_kode', $enc)->get();
+            
+            if (count($au) !== 0) {
+                Perdagangan::where('id', $au[0]->id)->delete();
+            } 
+            if (count($bu) !== 0) {
+                DB::table('bu_perdagangan')->where('id', $bu[0]->id)->delete();
+            } 
+            if (count($du) !== 0) {
+                DB::table('du_perdagangan')->where('id', $du[0]->id)->delete();
+            }
+            return redirect()->back()->with('success', 'Usaha perdagangan berhasil dihapus');
+
+        } catch (DecryptException $th) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Usaha perdagangan gagal dihapus');
+        
     }
 
     public function detail_store(Request $request)

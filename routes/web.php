@@ -167,12 +167,9 @@ Route::middleware('auth')->group(function () {
     Route::controller(AnalisaController::class)->prefix('analisa')->group(function () {
         Route::group(['middleware' => ['role:Staff Analis']], function () {
             Route::get('/proses', 'index')->name('analisa.proses');
-            Route::get('/usaha/lainnya', 'analisa_usaha_lainnya')->name('analisa.usaha.lainnya');
             Route::get('/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
 
-            //Detail Usaha
-            Route::get('/usaha/pertanian/detail', 'analisa_usaha_pertanian_detail')->name('analisa.usaha.pertanian.detail');
-            Route::get('/usaha/lainnya/detail', 'analisa_usaha_lainnya_detail')->name('analisa.usaha.lainnya.detail');
+            
         });
 
         

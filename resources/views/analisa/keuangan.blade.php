@@ -16,7 +16,7 @@
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('analisa.usaha.lainnya', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                            <a href="{{ route('lain.index', ['pengajuan' => $data->kd_pengajuan]) }}"
                                                 class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
