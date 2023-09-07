@@ -39,27 +39,27 @@ class AnalisaController extends Controller
         ]);
     }
     
-    public function analisa_usaha_lainnya(Request $request)
-    {
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            $au = Lain::au_lain($enc);
+    // public function analisa_usaha_lainnya(Request $request)
+    // {
+    //     try {
+    //         $enc = Crypt::decrypt($request->query('pengajuan'));
+    //         $cek = Midle::analisa_usaha($enc);
+    //         $au = Lain::au_lain($enc);
 
-            foreach($au as $item){
-                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
-                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
-            }
+    //         foreach($au as $item){
+    //             $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+    //             $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+    //         }
             
-            return view('analisa.usaha.lainnya', [
-                'data' => $cek[0],
-                'lain' => $au,
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
+    //         return view('analisa.usaha.lainnya', [
+    //             'data' => $cek[0],
+    //             'lain' => $au,
+    //         ]);
+    //     } catch (DecryptException $e) {
+    //         return abort(403, 'Permintaan anda di Tolak.');
+    //     }
         
-    }
+    // }
     
     public function analisa_keuangan(Request $request)
     {
@@ -94,22 +94,6 @@ class AnalisaController extends Controller
     }
 
     //=====Function detail analisa=====//
-    public function analisa_usaha_pertanian_detail(Request $request)
-    {   
-        
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            
-            return view('analisa.usaha.pertanian-detail', [
-                'data' => $cek[0],
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-       
-    }
-
     public function analisa_usaha_lainnya_detail(Request $request)
     {   
         

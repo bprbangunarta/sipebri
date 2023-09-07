@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lain;
+use App\Models\Midle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\Auth;
 
 class LainController extends Controller
 {
@@ -15,9 +16,25 @@ class LainController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $au = Lain::au_lain($enc);
+
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
+            
+            return view('analisa.usaha.lainnya', [
+                'data' => $cek[0],
+                'lain' => $au,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**
@@ -88,9 +105,18 @@ class LainController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            
+            return view('analisa.usaha.lainnya-detail', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**
