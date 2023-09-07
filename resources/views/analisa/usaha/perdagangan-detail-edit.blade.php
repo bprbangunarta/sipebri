@@ -46,8 +46,7 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <form action="{{ route('tambah.detail_update', ['usaha' => $data->kd_nasabah]) }}"
-                                            method="POST">
+                                        <form action="{{ route('tambah.detail_update') }}" method="POST">
                                             @method('put')
                                             @csrf
                                             <div class="card-body">
@@ -67,7 +66,8 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>
+                                                            <td><input type="text" name="kode_usaha"
+                                                                    value="{{ $data->kd_usaha }}" hidden>
                                                                 <select class="form-control" name="lama_usaha"
                                                                     id="">
                                                                     @if (is_null($datausaha[0]->lama_usaha))
@@ -108,11 +108,15 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[0]->kode_barang }}"
+                                                                    name="kode_barang1" hidden>
+                                                                <input class="form-control" type="text"
                                                                     name="nama_barang1" id="nama_barang1"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang1') ?? $perdagangan[0]->nama_barang }}"
-                                                                    required></td>
+                                                                    required>
+                                                            </td>
                                                             <td><input class="form-control input-harga" type="text"
                                                                     name="hrg1" id="hrg1" placeholder="Nominal"
                                                                     value="{{ old('hrg1') ?? ($perdagangan[0]->harga_beli = 'Rp. ' . number_format($perdagangan[0]->harga_beli, 0, ',', '.')) }}"
@@ -139,8 +143,10 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang2" id="nama_barang2"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[1]->kode_barang }}"
+                                                                    name="kode_barang2" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang2" id="nama_barang2"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang2') ?? $perdagangan[1]->nama_barang }}"
                                                                     required></td>
@@ -166,8 +172,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang3" id="nama_barang3"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[2]->kode_barang }}"
+                                                                    name="kode_barang3" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang3" id="nama_barang3"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang3') ?? $perdagangan[2]->nama_barang }}"
                                                                     required></td>
@@ -193,8 +201,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang4" id="nama_barang4"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[4]->kode_barang }}"
+                                                                    name="kode_barang4" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang4" id="nama_barang4"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang4') ?? $perdagangan[3]->nama_barang }}"
                                                                     required></td>
@@ -220,8 +230,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang5" id="nama_barang5"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[4]->kode_barang }}"
+                                                                    name="kode_barang5" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang5" id="nama_barang5"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang5') ?? $perdagangan[4]->nama_barang }}"
                                                                     required></td>
@@ -247,8 +259,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang6" id="nama_barang6"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[5]->kode_barang }}"
+                                                                    name="kode_barang6" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang6" id="nama_barang6"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang6') ?? $perdagangan[5]->nama_barang }}"
                                                                     required></td>
@@ -274,8 +288,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang7" id="nama_barang7"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[6]->kode_barang }}"
+                                                                    name="kode_barang7" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang7" id="nama_barang7"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang7') ?? $perdagangan[6]->nama_barang }}"
                                                                     required></td>
@@ -301,8 +317,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang8" id="nama_barang8"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[7]->kode_barang }}"
+                                                                    name="kode_barang8" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang8" id="nama_barang8"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang8') ?? $perdagangan[7]->nama_barang }}"
                                                                     required></td>
@@ -328,8 +346,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
-                                                                    name="nama_barang9" id="nama_barang9"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[8]->kode_barang }}"
+                                                                    name="kode_barang9" hidden><input class="form-control"
+                                                                    type="text" name="nama_barang9" id="nama_barang9"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang9') ?? $perdagangan[8]->nama_barang }}"
                                                                     required></td>
@@ -355,7 +375,10 @@
                                                                     readonly></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input class="form-control" type="text"
+                                                            <td><input type="text"
+                                                                    value="{{ $perdagangan[9]->kode_barang }}"
+                                                                    name="kode_barang10" hidden><input
+                                                                    class="form-control" type="text"
                                                                     name="nama_barang10" id="nama_barang10"
                                                                     placeholder="Nama Item"
                                                                     value="{{ old('nama_barang10') ?? $perdagangan[9]->nama_barang }}"
@@ -413,7 +436,8 @@
                                                                     value="{{ $datausaha[0]->total_stok }}" readonly></td>
                                                             <td><input class="form-control text-center" type="text"
                                                                     name="tpersen" id="tpersen"
-                                                                    value="{{ $datausaha[0]->total_pl . '%' }}" readonly>
+                                                                    value="{{ number_format($datausaha[0]->total_pl, 2) . '%' }}"
+                                                                    readonly>
                                                             </td>
                                                         </tr>
                                                     </tbody>

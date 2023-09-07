@@ -120,11 +120,13 @@ class PerdaganganController extends Controller
             
             //Jika data kosong maka ke view baru
             if (count($perdagangan[1]) == 0) {
+                $cek[0]->kd_usaha = Crypt::encrypt($perdagangan[0][0]->kode_usaha);
                 return view('analisa.usaha.perdagangan-detail', [
                 'data' => $cek[0],
             ]);
             } 
-            
+
+            $cek[0]->kd_usaha = Crypt::encrypt($perdagangan[0][0]->kode_usaha);
             return view('analisa.usaha.perdagangan-detail-edit', [
                 'data' => $cek[0],
                 'datausaha' => $perdagangan[0],
@@ -194,12 +196,15 @@ class PerdaganganController extends Controller
             'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
             'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
         ]);
-
+        
         try {
-            $enc = Crypt::decrypt($request->query('usaha'));
+            $enc = Crypt::decrypt($request->kd_usaha);
             for ($i=1; $i <= 10; $i++) { 
+                $length = 10;
+                $kode = Perdagangan::du_kodeacak($length);
                 $data = [
                     'usaha_kode' => $enc,
+                    'kode_barang' => $kode,
                     'nama_barang' => ucwords($request->input('nama_barang'.$i)),
                     'stok' => $request->input('stock'.$i),
                     'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg'.$i)),
@@ -235,7 +240,7 @@ class PerdaganganController extends Controller
                 'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
                 'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
             ];
-            
+    
             DB::transaction(function() use ($enc, $data2, $data3){
                 Perdagangan::where('kode_usaha', $enc)->update($data2);
                 DB::table('bu_perdagangan')->insert($data3);
@@ -243,37 +248,34 @@ class PerdaganganController extends Controller
 
             return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
             
-        } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('error', 'Data barang gagal ditambahkan');
+        } catch (DecryptException $th) {
+            return abort(403, 'Permintaan anda di Tolak.');
         }
+        return redirect()->back()->withInput()->with('error', 'Data barang gagal ditambahkan');
     }
 
     public function detail_update(Request $request)
     {
         $request->validate([
-            'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
-            'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
-            'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
-            'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
-            'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
-            'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
-            'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
-            'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
-            'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
-            'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
+            'kode_barang1' => 'required', 'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
+            'kode_barang2' => 'required', 'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
+            'kode_barang3' => 'required', 'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
+            'kode_barang4' => 'required', 'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
+            'kode_barang5' => 'required', 'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
+            'kode_barang6' => 'required', 'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
+            'kode_barang7' => 'required', 'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
+            'kode_barang8' => 'required', 'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
+            'kode_barang9' => 'required', 'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
+            'kode_barang10' => 'required', 'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
         ]);
         
         try {
-            $enc = Crypt::decrypt($request->query('usaha'));
-            
+            $enc = Crypt::decrypt($request->kode_usaha);
+          
             for ($i=1; $i <= 10; $i++) { 
-                $per = DB::table('du_perdagangan')
-                        ->where('usaha_kode', '=', $enc)
-                        ->where('nama_barang', ucwords($request->input('nama_barang'.$i)))
-                        ->get();
-
                     $data = [
                         'usaha_kode' => $enc,
+                        'kode_barang' => ucwords($request->input('kode_barang'.$i)),
                         'nama_barang' => ucwords($request->input('nama_barang'.$i)),
                         'stok' => $request->input('stock'.$i),
                         'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg'.$i)),
@@ -282,32 +284,40 @@ class PerdaganganController extends Controller
                         'presentase_laba' => sprintf("%.2f", $request->input('persen'.$i), 2),
                     ];
                     
-                    DB::table('du_perdagangan')
-                        ->where('id', $per[0]->id)->update($data);
+                    $a = DB::table('du_perdagangan')->where('kode_barang', $request->input('kode_barang'.$i))->get();
+                    DB::table('du_perdagangan')->where('id', $a[0]->id)->update($data);
             }
 
-            // $data2 = [
-            //     'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
-            //     'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
-            //     'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
-            //     'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
-            //     'total_pl' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tpersen')),
-            // ];
+            $data2 = [
+                'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
+                'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
+                'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
+                'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
+                'total_pl' => sprintf("%.2f", $request->input('tpersen'), 2),
+                'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')),
+                'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')),
+                'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')),
+                'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih')),
+            ];
 
-            // $data3 = [
-            //     'usaha_kode' => $enc,
-            //     'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
-            //     'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
-            //     'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
-            //     'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
-            //     'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
-            //     'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
-            // ];
+            $data3 = [
+                'usaha_kode' => $enc,
+                'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
+                'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
+                'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
+                'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
+                'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
+                'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
+            ];
             
-            // DB::transaction(function() use ($enc, $data2, $data3){
-            //     Perdagangan::where('kode_usaha', $enc)->update($data2);
-            //     DB::table('bu_perdagangan')where('usaha_kode', $enc)->update($data3);
-            // });
+            DB::transaction(function() use ($enc, $data2, $data3){
+                $au = Perdagangan::where('kode_usaha', $enc)->get();
+                Perdagangan::where('id', $au[0]->id)->update($data2);
+
+                $du = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
+                DB::table('bu_perdagangan')->where('id', $du[0]->id)->update($data3);
+                
+            });
             
             return redirect()->back()->with('success', 'Data barang berhasil diupdate');
             

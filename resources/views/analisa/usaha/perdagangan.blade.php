@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Usaha Pergagangan')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -186,4 +186,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection

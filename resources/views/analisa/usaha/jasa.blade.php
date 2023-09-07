@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Usaha Jasa')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -108,7 +108,9 @@
                                                             </td>
 
                                                             <td class="text-center">
-                                                                <form action="#" method="POST">
+                                                                <form
+                                                                    action="{{ route('jasa.destroy', ['jasa' => $item->kd_usaha]) }}"
+                                                                    method="POST">
                                                                     @method('delete')
                                                                     @csrf
                                                                     <button type="submit"
@@ -187,4 +189,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection

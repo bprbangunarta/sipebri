@@ -46,8 +46,7 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <form action="{{ route('tambah.detail_store', ['usaha' => $data->kd_nasabah]) }}"
-                                            method="POST">
+                                        <form action="{{ route('tambah.detail_store') }}" method="POST">
                                             @csrf
                                             <div class="card-body">
 
@@ -79,6 +78,8 @@
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     name="lokasi_usaha" value="{{ old('lokasi_usaha') }}">
+                                                                <input type="text" class="form-control" name="kd_usaha"
+                                                                    value="{{ $data->kd_usaha }}" hidden>
                                                             </td>
                                                         </tr>
                                                     </tbody>

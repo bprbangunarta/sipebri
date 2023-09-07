@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Jasa;
 use App\Models\Midle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -168,8 +169,18 @@ class JasaController extends Controller
      * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Jasa $jasa)
+    public function destroy($jasa)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($jasa);
+            $au = Jasa::where('kode_usaha', $enc)->get();
+
+            Jasa::where('id', $au[0]->id)->delete();
+            return redirect()->back()->with('success', 'Usaha jasa berhasil dihapus');
+
+        } catch (DecryptException $th) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Usaha jasa gagal dihapus');
     }
 }
