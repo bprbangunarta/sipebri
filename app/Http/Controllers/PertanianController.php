@@ -105,9 +105,18 @@ class PertanianController extends Controller
      * @param  \App\Models\Pertanian  $pertanian
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pertanian $pertanian)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            
+            return view('analisa.usaha.pertanian-detail', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**

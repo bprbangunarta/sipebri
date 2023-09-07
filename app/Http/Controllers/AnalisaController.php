@@ -38,28 +38,6 @@ class AnalisaController extends Controller
             'data' => $data
         ]);
     }
-
-    public function analisa_usaha_pertanian(Request $request)
-    {
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            $au = Pertanian::au_pertanian($enc); 
-            
-            foreach($au as $item){
-                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
-                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
-            }
-            
-            return view('analisa.usaha.pertanian', [
-                'data' => $cek[0],
-                'pertanian' => $au
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-        
-    }
     
     public function analisa_usaha_lainnya(Request $request)
     {
