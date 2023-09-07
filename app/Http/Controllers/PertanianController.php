@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Midle;
 use App\Models\Pertanian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +16,25 @@ class PertanianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $au = Pertanian::au_pertanian($enc); 
+            
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
+            
+            return view('analisa.usaha.pertanian', [
+                'data' => $cek[0],
+                'pertanian' => $au
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**

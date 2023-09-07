@@ -16,7 +16,7 @@
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('analisa.usaha.perdagangan', [
+                                            <a href="{{ route('tambah.index', [
                                                 'pengajuan' => $data->kd_pengajuan,
                                             ]) }}"
                                                 class="btn btn-primary">

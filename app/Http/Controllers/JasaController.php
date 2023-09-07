@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jasa;
+use App\Models\Midle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -15,9 +16,25 @@ class JasaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $au = Jasa::au_jasa($enc); 
+            
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
+            
+            return view('analisa.usaha.jasa', [
+                'data' => $cek[0],
+                'jasa' => $au
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**
@@ -88,9 +105,23 @@ class JasaController extends Controller
      * @param  \App\Models\Jasa  $jasa
      * @return \Illuminate\Http\Response
      */
-    public function edit(Jasa $jasa)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $usaha = Crypt::decrypt($request->query('usaha'));
+            $cek = Midle::analisa_usaha($enc);
+
+            $jasa = Midle::jasa_detail($usaha);
+            $jasa[0]->kd_usaha = Crypt::encrypt($jasa[0]->kode_usaha);
+            
+            return view('analisa.usaha.jasa-detail', [
+                'data' => $cek[0],
+                'jasa' => $jasa[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**

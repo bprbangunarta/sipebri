@@ -18,7 +18,7 @@
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('analisa.usaha.pertanian', [
+                                            <a href="{{ route('pertanian.index', [
                                                 'pengajuan' => $data->kd_pengajuan,
                                             ]) }}"
                                                 class="btn btn-primary">
@@ -85,7 +85,7 @@
                                                             </td>
                                                             <td class="text-center">
                                                                 <a
-                                                                    href="{{ route('analisa.usaha.jasa.detail', ['pengajuan' => $data->kd_pengajuan, 'usaha' => $item->kd_usaha]) }}">
+                                                                    href="{{ route('jasa.edit', ['jasa' => $item->kd_usaha, 'pengajuan' => $data->kd_pengajuan, 'usaha' => $item->kd_usaha]) }}">
                                                                     <span class="badge bg-warning">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon icon-tabler icon-tabler-edit"

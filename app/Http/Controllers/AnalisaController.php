@@ -39,29 +39,6 @@ class AnalisaController extends Controller
         ]);
     }
 
-    public function analisa_usaha_perdagangan(Request $request)
-    {
-    
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            $au = Perdagangan::au_perdagangan($enc);
-            
-            foreach($au as $item){
-                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
-                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
-            }
-                     
-            return view('analisa.usaha.perdagangan', [
-                'data' => $cek[0],
-                'perdagangan' => $au
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-        
-    }
-
     public function analisa_usaha_pertanian(Request $request)
     {
         try {
@@ -83,29 +60,6 @@ class AnalisaController extends Controller
         }
         
     }
-     
-    public function analisa_usaha_jasa(Request $request)
-    {
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            $au = Jasa::au_jasa($enc); 
-            
-            foreach($au as $item){
-                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
-                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
-            }
-            
-            return view('analisa.usaha.jasa', [
-                'data' => $cek[0],
-                'jasa' => $au
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-        
-    }
-
     
     public function analisa_usaha_lainnya(Request $request)
     {
@@ -162,38 +116,6 @@ class AnalisaController extends Controller
     }
 
     //=====Function detail analisa=====//
-    public function analisa_usaha_perdagangan_detail(Request $request)
-    {   
-        
-        try {
-            $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
-            
-            
-            $cek = Midle::analisa_usaha($encpengajuan);
-            $cek[0]->kd_nasabah = $request->query('usaha');
-
-            //Data perdagangan
-            $perdagangan = Midle::perdagangan_detail($request->query('usaha'));
-            
-            //Jika data kosong maka ke view baru
-            if (count($perdagangan[1]) == 0) {
-                return view('analisa.usaha.perdagangan-detail-kosong', [
-                'data' => $cek[0],
-            ]);
-            } 
-            
-            return view('analisa.usaha.perdagangan-detail', [
-                'data' => $cek[0],
-                'datausaha' => $perdagangan[0],
-                'perdagangan' => $perdagangan[1],
-            ]);
-            
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-       
-    }
-
     public function analisa_usaha_pertanian_detail(Request $request)
     {   
         
@@ -203,27 +125,6 @@ class AnalisaController extends Controller
             
             return view('analisa.usaha.pertanian-detail', [
                 'data' => $cek[0],
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-       
-    }
-
-    public function analisa_usaha_jasa_detail(Request $request)
-    {   
-        
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $usaha = Crypt::decrypt($request->query('usaha'));
-            $cek = Midle::analisa_usaha($enc);
-
-            $jasa = Midle::jasa_detail($usaha);
-            $jasa[0]->kd_usaha = Crypt::encrypt($jasa[0]->kode_usaha);
-            
-            return view('analisa.usaha.jasa-detail', [
-                'data' => $cek[0],
-                'jasa' => $jasa[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

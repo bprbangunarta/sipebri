@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Midle;
 use App\Models\Perdagangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,9 +17,25 @@ class PerdaganganController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $au = Perdagangan::au_perdagangan($enc);
+            
+            foreach($au as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
+                     
+            return view('analisa.usaha.perdagangan', [
+                'data' => $cek[0],
+                'perdagangan' => $au
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**
@@ -89,9 +106,34 @@ class PerdaganganController extends Controller
      * @param  \App\Models\Perdagangan  $perdagangan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Perdagangan $perdagangan)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
+            
+            
+            $cek = Midle::analisa_usaha($encpengajuan);
+            $cek[0]->kd_nasabah = $request->query('tambah');
+
+            //Data perdagangan
+            $perdagangan = Midle::perdagangan_detail($request->query('usaha'));
+            
+            //Jika data kosong maka ke view baru
+            if (count($perdagangan[1]) == 0) {
+                return view('analisa.usaha.perdagangan-detail', [
+                'data' => $cek[0],
+            ]);
+            } 
+            
+            return view('analisa.usaha.perdagangan-detail-edit', [
+                'data' => $cek[0],
+                'datausaha' => $perdagangan[0],
+                'perdagangan' => $perdagangan[1],
+            ]);
+            
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**
@@ -202,33 +244,50 @@ class PerdaganganController extends Controller
         
         try {
             $enc = Crypt::decrypt($request->query('usaha'));
-
+            
             for ($i=1; $i <= 10; $i++) { 
-                $data = [
-                    'usaha_kode' => $enc,
-                    'nama_barang' => ucwords($request->input('nama_barang'.$i)),
-                    'stok' => $request->input('stock'.$i),
-                    'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg'.$i)),
-                    'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual'.$i)),
-                    'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba'.$i)),
-                    'presentase_laba' => sprintf("%.2f", $request->input('persen'.$i), 2),
-                ];
-                DB::table('du_perdagangan')
-                    ->where('usaha_kode', '=', $enc)
-                    ->insert($data);
+                $per = DB::table('du_perdagangan')
+                        ->where('usaha_kode', '=', $enc)
+                        ->where('nama_barang', ucwords($request->input('nama_barang'.$i)))
+                        ->get();
+
+                    $data = [
+                        'usaha_kode' => $enc,
+                        'nama_barang' => ucwords($request->input('nama_barang'.$i)),
+                        'stok' => $request->input('stock'.$i),
+                        'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg'.$i)),
+                        'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual'.$i)),
+                        'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba'.$i)),
+                        'presentase_laba' => sprintf("%.2f", $request->input('persen'.$i), 2),
+                    ];
+                    
+                    DB::table('du_perdagangan')
+                        ->where('id', $per[0]->id)->update($data);
             }
 
-            $data2 = [
-                'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
-                'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
-                'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
-                'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
-                'total_pl' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tpersen')),
-            ];
-            
-            Perdagangan::where('kode_usaha', $enc)->update($data2);
-            dd($data2);
+            // $data2 = [
+            //     'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
+            //     'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
+            //     'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
+            //     'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
+            //     'total_pl' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tpersen')),
+            // ];
 
+            // $data3 = [
+            //     'usaha_kode' => $enc,
+            //     'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
+            //     'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
+            //     'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
+            //     'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
+            //     'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
+            //     'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
+            // ];
+            
+            // DB::transaction(function() use ($enc, $data2, $data3){
+            //     Perdagangan::where('kode_usaha', $enc)->update($data2);
+            //     DB::table('bu_perdagangan')where('usaha_kode', $enc)->update($data3);
+            // });
+            
             return redirect()->back()->with('success', 'Data barang berhasil diupdate');
             
         } catch (\Throwable $th) {
