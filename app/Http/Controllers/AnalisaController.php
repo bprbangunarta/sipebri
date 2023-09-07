@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jasa;
-use App\Models\Lain;
 use App\Models\Midle;
-use App\Models\Pengajuan;
-use App\Models\Pertanian;
-use App\Models\Perdagangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +23,6 @@ class AnalisaController extends Controller
                 ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2','users.name');
         
         //Enkripsi kode pengajuan
-        
         $data = $cek->paginate(10);
         if ($data->isNotEmpty()) {
             $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
@@ -38,28 +32,6 @@ class AnalisaController extends Controller
             'data' => $data
         ]);
     }
-    
-    // public function analisa_usaha_lainnya(Request $request)
-    // {
-    //     try {
-    //         $enc = Crypt::decrypt($request->query('pengajuan'));
-    //         $cek = Midle::analisa_usaha($enc);
-    //         $au = Lain::au_lain($enc);
-
-    //         foreach($au as $item){
-    //             $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
-    //             $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
-    //         }
-            
-    //         return view('analisa.usaha.lainnya', [
-    //             'data' => $cek[0],
-    //             'lain' => $au,
-    //         ]);
-    //     } catch (DecryptException $e) {
-    //         return abort(403, 'Permintaan anda di Tolak.');
-    //     }
-        
-    // }
     
     public function analisa_keuangan(Request $request)
     {
@@ -79,6 +51,7 @@ class AnalisaController extends Controller
             $filter = array_filter($data, function ($value) {
                 return $value !== null;
             });
+            
             //Hasil penjumlahan analisa usaha
             $total = array_sum($filter);
             $kemampuan->total = $total;
@@ -91,22 +64,5 @@ class AnalisaController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
         
-    }
-
-    //=====Function detail analisa=====//
-    public function analisa_usaha_lainnya_detail(Request $request)
-    {   
-        
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            
-            return view('analisa.usaha.lainnya-detail', [
-                'data' => $cek[0],
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-       
     }
 }

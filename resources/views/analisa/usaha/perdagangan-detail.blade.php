@@ -17,7 +17,8 @@
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('analisa.usaha.perdagangan') }}" class="btn btn-primary">
+                                            <a href="{{ route('tambah.index', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -69,21 +70,11 @@
                                                                 <select class="form-control" name="lama_usaha"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="1 Tahun"
-                                                                        {{ old('lama_usaha') == '1 Tahun' ? 'selected' : '' }}>
-                                                                        1 Tahun</option>
-                                                                    <option value="2 Tahun"
-                                                                        {{ old('lama_usaha') == '2 Tahun' ? 'selected' : '' }}>
-                                                                        2 Tahun</option>
-                                                                    <option value="3 Tahun"
-                                                                        {{ old('lama_usaha') == '3 Tahun' ? 'selected' : '' }}>
-                                                                        3 Tahun</option>
-                                                                    <option value="4 Tahun"
-                                                                        {{ old('lama_usaha') == '4 Tahun' ? 'selected' : '' }}>
-                                                                        4 Tahun</option>
-                                                                    <option value="5 Tahun"
-                                                                        {{ old('lama_usaha') == '5 Tahun' ? 'selected' : '' }}>
-                                                                        5 Tahun</option>
+                                                                    <option value="1 Tahun">1 Tahun</option>
+                                                                    <option value="2 Tahun">2 Tahun</option>
+                                                                    <option value="3 Tahun">3 Tahun</option>
+                                                                    <option value="4 Tahun">4 Tahun</option>
+                                                                    <option value=">5 Tahun">>5 Tahun</option>
                                                                 </select>
                                                             </td>
                                                             <td><input type="text" class="form-control"
