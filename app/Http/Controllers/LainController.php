@@ -151,7 +151,8 @@ class LainController extends Controller
         try {
             $enc = Crypt::decrypt($lain);
             //Masuk ke tabel bu_lainnya
-            for ($i=1; $i <=5; $i++) { 
+            DB::transaction(function() use ($enc, $request){
+                for ($i=1; $i <=5; $i++) { 
                 $length = 10;
                 $kode = Lain::bu_kodeacak($length);
                 
@@ -162,32 +163,34 @@ class LainController extends Controller
                     'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran'.$i)),
                 ];
                 DB::table('bu_lainnya')->insert($data);
-            }
-            //Masuk ke tabel du_lainnya
-            for ($j=1; $j <=5; $j++) { 
-                $leng = 10;
-                $kode2 = Lain::du_kodeacak($leng);
-                
-                $data2 = [
-                    'usaha_kode' => $enc,
-                    'kode_lain' => $kode2,
-                    'penjualan' => ucwords($request->input('nama'.$j)),
-                    'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nominal'.$j)),
-                ];
-                DB::table('du_lainnya')->insert($data2);
-            }
+                }
+                //Masuk ke tabel du_lainnya
+                for ($j=1; $j <=5; $j++) { 
+                    $leng = 10;
+                    $kode2 = Lain::du_kodeacak($leng);
+                    
+                    $data2 = [
+                        'usaha_kode' => $enc,
+                        'kode_lain' => $kode2,
+                        'penjualan' => ucwords($request->input('nama'.$j)),
+                        'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nominal'.$j)),
+                    ];
+                    DB::table('du_lainnya')->insert($data2);
+                }
 
-            //Masuk ke tabel au_lainnya
-            $data3 = [
-                'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
-                'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
-                'proyeksi' => (int)str_replace(["Rp.", " ", "."], "", $request->proyeksi),
-                'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
-                'input_user' => Auth::user()->code_user,
-            ];
+                //Masuk ke tabel au_lainnya
+                $data3 = [
+                    'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
+                    'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
+                    'proyeksi' => (int)str_replace(["Rp.", " ", "."], "", $request->proyeksi),
+                    'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
+                    'input_user' => Auth::user()->code_user,
+                ];
+                
+                $cek = Lain::where('kode_usaha', $enc)->get();
+                Lain::where('id', $cek[0]->id)->update($data3);
+            });
             
-            $cek = Lain::where('kode_usaha', $enc)->get();
-            Lain::where('id', $cek[0]->id)->update($data3);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -206,7 +209,21 @@ class LainController extends Controller
         try {
             $enc = Crypt::decrypt($lain);
             $data = Lain::where('kode_usaha', $enc)->get();
+            $bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
+            $du = DB::table('du_lainnya')->where('usaha_kode', $enc)->get();
 
+            Lain::where('id', $data[0]->id)->delete();
+            if (count($bu) !== 0) {
+                for ($i=0; $i < count($bu); $i++) { 
+                    DB::table('bu_lainnya')->where('id', $bu[$i]->id)->delete();
+                }
+            }
+            if (count($du) !== 0) {
+                for ($j=0; $j < count($du); $j++) { 
+                    DB::table('du_lainnya')->where('id', $du[$j]->id)->delete();
+                }
+            }
+            
             Lain::where('id', $data[0]->id)->delete();
             return redirect()->back()->with('success', 'Usaha lainnya berhasil dihapus');
         } catch (DecryptException $th) {
@@ -222,39 +239,42 @@ class LainController extends Controller
         try {
             $enc = Crypt::decrypt($request->input('lain'));
             //Masuk ke tabel bu_lainnya
-            for ($i=1; $i <=5; $i++) { 
-                $data = [
-                    'usaha_kode' => $enc,
-                    'kode_lain' => $request->input('bu_kode'.$i),
-                    'pengeluaran' => ucwords($request->input('nampe'.$i)),
-                    'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran'.$i)),
-                ];
-                $a = DB::table('bu_lainnya')->where('kode_lain', $request->input('bu_kode'.$i))->get();
-                DB::table('bu_lainnya')->where('id', $a[0]->id)->update($data);
-            }
-            //Masuk ke tabel du_lainnya
-            for ($j=1; $j <=5; $j++) {
-                $data2 = [
-                    'usaha_kode' => $enc,
-                    'kode_lain' => $request->input('du_kode'.$j),
-                    'penjualan' => ucwords($request->input('nama'.$j)),
-                    'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nominal'.$j)),
-                ];
-                $b = DB::table('du_lainnya')->where('kode_lain', $request->input('du_kode'.$j))->get();
-                DB::table('du_lainnya')->where('id', $b[0]->id)->update($data2);
-            }
+            DB::transaction(function () use ($enc, $request) {   
             
-            //Masuk ke tabel au_lainnya
-            $data3 = [
-                'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
-                'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
-                'proyeksi' => (int)str_replace(["Rp.", " ", "."], "", $request->proyeksi),
-                'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
-                'input_user' => Auth::user()->code_user,
-            ];
-            
-            $cek = Lain::where('kode_usaha', $enc)->get();
-            Lain::where('id', $cek[0]->id)->update($data3);
+                for ($i=1; $i <=5; $i++) { 
+                    $data = [
+                        'usaha_kode' => $enc,
+                        'kode_lain' => $request->input('bu_kode'.$i),
+                        'pengeluaran' => ucwords($request->input('nampe'.$i)),
+                        'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran'.$i)),
+                    ];
+                    $a = DB::table('bu_lainnya')->where('kode_lain', $request->input('bu_kode'.$i))->get();
+                    DB::table('bu_lainnya')->where('id', $a[0]->id)->update($data);
+                }
+                //Masuk ke tabel du_lainnya
+                for ($j=1; $j <=5; $j++) {
+                    $data2 = [
+                        'usaha_kode' => $enc,
+                        'kode_lain' => $request->input('du_kode'.$j),
+                        'penjualan' => ucwords($request->input('nama'.$j)),
+                        'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nominal'.$j)),
+                    ];
+                    $b = DB::table('du_lainnya')->where('kode_lain', $request->input('du_kode'.$j))->get();
+                    DB::table('du_lainnya')->where('id', $b[0]->id)->update($data2);
+                }
+                
+                //Masuk ke tabel au_lainnya
+                $data3 = [
+                    'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
+                    'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
+                    'proyeksi' => (int)str_replace(["Rp.", " ", "."], "", $request->proyeksi),
+                    'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
+                    'input_user' => Auth::user()->code_user,
+                ];
+                
+                $cek = Lain::where('kode_usaha', $enc)->get();
+                Lain::where('id', $cek[0]->id)->update($data3);
+            });
             return redirect()->back()->with('success', 'Data berhasil diubah');
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');

@@ -30,8 +30,6 @@ class Lain extends Model
     public static function au_lain($data)
     {
         $cek = self::where('pengajuan_kode', $data)->get();
-        $cek[0]->kd_usaha = Crypt::encrypt($cek[0]->kode_usaha);
-        
         return $cek;
     }
 
