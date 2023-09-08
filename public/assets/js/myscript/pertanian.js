@@ -16,6 +16,7 @@ var iuran = document.getElementById("iuran_desa");
 var amortisasi = document.getElementById("amortisasi");
 var luas_tanah = document.getElementById("luas_tanah");
 var pinjaman_bank = document.getElementById("pinjaman_bank");
+var penambahan = document.getElementById("penambahan");
 
 if (sendiri) {
     sendiri.addEventListener("keyup", function (e) {
@@ -105,6 +106,11 @@ if (luas_tanah) {
 if (pinjaman_bank) {
     pinjaman_bank.addEventListener("keyup", function (e) {
         pinjaman_bank.value = formatRupiah(this.value, "Rp. ");
+    });
+}
+if (penambahan) {
+    penambahan.addEventListener("keyup", function (e) {
+        penambahan.value = formatRupiah(this.value, "Rp. ");
     });
 }
 
@@ -253,11 +259,13 @@ $("#penambahan").keyup(function () {
     var pin = $("#pinjaman").val();
     var pengeluaran = $("#pengeluaran").val();
     var pendapatan = $("#pendapatan").val();
+    var penambahan = $("#penambahan").val();
 
     var ramortisasi = parseFloat(amortisasi.replace(/[^\d]/g, "")) || 0;
     var rpin = parseFloat(pin.replace(/[^\d]/g, "")) || 0;
     var rpengeluaran = parseFloat(pengeluaran.replace(/[^\d]/g, "")) || 0;
     var rpendapatan = parseFloat(pendapatan.replace(/[^\d]/g, "")) || 0;
+    var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
 
     var jml = rpin + rpengeluaran + ramortisasi;
     var a = rpenambahan + rpendapatan - jml;

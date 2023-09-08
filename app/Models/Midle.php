@@ -217,8 +217,13 @@ class Midle extends Model
 
     protected static function pertanian_detail($data)
     {
-        $cek = Pertanian::where('kode_usaha', $data)->get();
-        return $cek;
+        $data = DB::table('au_pertanian')
+                ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
+                ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
+                ->select('au_pertanian.*','bu_pertanian.*', 'du_pertanian.*')
+                ->where('au_pertanian.kode_usaha', '=', $data)->get();
+        
+        return $data;
     }    
 
     protected static function kemampuan_keuangan($data)

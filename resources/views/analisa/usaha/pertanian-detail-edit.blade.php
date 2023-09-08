@@ -75,15 +75,18 @@
                                                         <tr>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sendiri" id="lsendiri"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->luas_sendiri = number_format($pertanian->luas_sendiri, 0, ',', '.') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sewa" id="lsewa"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->luas_sewa = number_format($pertanian->luas_sewa, 0, ',', '.') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_gadai" id="lgadai"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->luas_gadai = number_format($pertanian->luas_gadai, 0, ',', '.') }}">
                                                             </td>
                                                             <td width="25%">
                                                                 <select class="form-control" name="jenis_usaha"
@@ -102,7 +105,7 @@
                                                             </th>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
-                                                                    value="0M2">
+                                                                    value="{{ $pertanian->total_luas = number_format($pertanian->total_luas, 0, ',', '.') . ' ' . 'M2' }}">
                                                             </td>
                                                         </tr>
                                                     </thead>

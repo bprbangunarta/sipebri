@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Midle;
 use App\Models\Pertanian;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -115,13 +116,18 @@ class PertanianController extends Controller
             
             //Data pertanian
             $pertanian = Midle::pertanian_detail($ush);
-            
+            $du = DB::table('du_pertanian')->where('usaha_kode', $ush)->get();
+            if (count($du) == 0) {
+                dd($du);
+            }
+            $pertanian[0]->total_luas = $pertanian[0]->luas_sendiri + $pertanian[0]->luas_sewa + $pertanian[0]->luas_gadai;
+
             foreach($pertanian as $item){
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-            
-            return view('analisa.usaha.pertanian-detail', [
+            // dd($pertanian);
+            return view('analisa.usaha.pertanian-detail-edit', [
                 'data' => $cek[0],
                 'pertanian' => $pertanian[0],
             ]);
@@ -139,7 +145,56 @@ class PertanianController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request);
+        try {
+            $enc = Crypt::decrypt($request->query('usaha'));
+
+            DB::transaction(function () use ($enc, $request) {
+                $cek = Pertanian::where('kode_usaha', $enc)->get();
+                $data = [
+                    'jenis_usaha' => ucwords($request->jenis_usaha),
+                    'jumlah_musim' => $request->jumlah_musim,
+                    'lokasi_usaha' => '',
+                    'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
+                    'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
+                    'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->penambahan),
+                    'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
+                    'input_user' => Auth::user()->code_user,
+                ];
+                Pertanian::where('id', $cek[0]->id)->update($data);
+
+                $data2 = [
+                    'usaha_kode' => $enc,
+                    'pengolahan_tanah' => (int)str_replace(["Rp.", " ", "."], "", $request->pengolahan_tanah),
+                    'bibit' => (int)str_replace(["Rp.", " ", "."], "", $request->bibit),
+                    'pupuk' => (int)str_replace(["Rp.", " ", "."], "", $request->pupuk),
+                    'pestisida' => (int)str_replace(["Rp.", " ", "."], "", $request->pestisida),
+                    'pengairan' => (int)str_replace(["Rp.", " ", "."], "", $request->pengairan),
+                    'tenaga_kerja' => (int)str_replace(["Rp.", " ", "."], "", $request->tenaga_kerja),
+                    'panen' => (int)str_replace(["Rp.", " ", "."], "", $request->panen),
+                    'pajak' => (int)str_replace(["Rp.", " ", "."], "", $request->pajak),
+                    'iuran_desa' => (int)str_replace(["Rp.", " ", "."], "", $request->iuran_desa),
+                    'amortisasi' => (int)str_replace(["Rp.", " ", "."], "", $request->amortisasi),
+                    'pinjaman_bank' => (int)str_replace(["Rp.", " ", "."], "", $request->pinjaman_bank),
+                ];
+                DB::table('bu_pertanian')->insert($data2);
+
+                $data3 = [
+                    'usaha_kode' => $enc,
+                    'jenis_tanaman' => ucwords($request->jenis_tanaman),
+                    'luas_sendiri' => (int)str_replace(["Rp.", " ", "."], "", $request->luas_sendiri),
+                    'luas_sewa' => (int)str_replace(["Rp.", " ", "."], "", $request->luas_sewa),
+                    'luas_gadai' => (int)str_replace(["Rp.", " ", "."], "", $request->luas_gadai),
+                    'hasil_panen' => (int)str_replace(["Rp.", " ", "."], "", $request->hasil_panen),
+                    'harga' => (int)str_replace(["Rp.", " ", "."], "", $request->harga),
+                ];
+                DB::table('du_pertanian')->insert($data3);
+            
+            });
+           return redirect()->back()->with('success', 'Data usaha berhasil ditambahkan');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Data usaha gagal ditambahkan');
     }
 
     /**
