@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Perdagangan extends Model
 {
@@ -35,7 +36,7 @@ class Perdagangan extends Model
         }
         
         // Cek apakah kode sudah ada dalam database
-        if (!self::where('kode_usaha', $kode_acak)->exists()) {
+        if (DB::table('du_perdagangan')->where('kode_barang', $kode_acak)->exists()) {
             return $kode_acak;
         }else{
             return null;

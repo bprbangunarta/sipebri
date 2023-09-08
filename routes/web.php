@@ -186,6 +186,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/analisa/usaha/jasa/jasa', JasaController::class);
         //Analisa Usaha Lainnya
         Route::resource('/analisa/usaha/lain/lain', LainController::class);
+        Route::put('/analisa/usaha/lain/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
     });
     // Add Layout
     Route::prefix('layout')->group(function () {

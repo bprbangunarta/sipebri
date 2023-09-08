@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Usaha Lainnya')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -77,9 +77,11 @@
                                                     @foreach ($lain as $item)
                                                         <tr>
                                                             <td>{{ $item->nama_usaha }}</td>
-                                                            <td>{{ $item->pendapatan }}</td>
-                                                            <td>{{ $item->pengeluaran }}</td>
-                                                            <td>{{ $item->laba_bersih }}</td>
+                                                            <td>{{ $item->pendapatan = 'Rp. ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ $item->pengeluaran = 'Rp. ' . number_format($item->pengeluaran, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ $item->laba_bersih = 'Rp. ' . number_format($item->laba_bersih, 0, ',', '.') }}
                                                             <td class="text-center">
                                                                 <a
                                                                     href="{{ route('lain.edit', ['lain' => $item->kd_usaha, 'pengajuan' => $data->kd_pengajuan]) }}">
@@ -105,7 +107,9 @@
                                                             </td>
 
                                                             <td class="text-center">
-                                                                <form action="#" method="POST">
+                                                                <form
+                                                                    action="{{ route('lain.destroy', ['lain' => $item->kd_usaha]) }}"
+                                                                    method="POST">
                                                                     @method('delete')
                                                                     @csrf
                                                                     <button type="submit"
@@ -180,12 +184,12 @@
                                     <select type="text" class="form-select" placeholder="Pilih Jenis Usaha"
                                         name="jenis_usaha" id="select-usaha">
                                         <option value="">Pilih Jenis Usaha</option>
-                                        <option>Home Industri</option>
-                                        <option>Makanan</option>
-                                        <option>Pengolahan</option>
-                                        <option>Perikanan</option>
-                                        <option>Perkebunan</option>
-                                        <option>Peternakan</option>
+                                        <option value="Industri">Home Industri</option>
+                                        <option value="Makanan">Makanan</option>
+                                        <option value="Pengolahan">Pengolahan</option>
+                                        <option value="Perikanan">Perikanan</option>
+                                        <option value="Perkebunan">Perkebunan</option>
+                                        <option value="Peternakan">Peternakan</option>
                                     </select>
                                 </div>
                             </div>
@@ -201,6 +205,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection
 
 @push('myscript')
