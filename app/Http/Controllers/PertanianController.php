@@ -107,12 +107,23 @@ class PertanianController extends Controller
      */
     public function edit(Request $request)
     {
+
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
+            $ush = Crypt::decrypt($request->query('usaha'));
             $cek = Midle::analisa_usaha($enc);
+            
+            //Data pertanian
+            $pertanian = Midle::pertanian_detail($ush);
+            
+            foreach($pertanian as $item){
+                $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
+                $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
+            }
             
             return view('analisa.usaha.pertanian-detail', [
                 'data' => $cek[0],
+                'pertanian' => $pertanian[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -126,9 +137,9 @@ class PertanianController extends Controller
      * @param  \App\Models\Pertanian  $pertanian
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pertanian $pertanian)
+    public function update(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

@@ -113,7 +113,7 @@ class PerdaganganController extends Controller
         try {
             $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
             
-            
+
             $cek = Midle::analisa_usaha($encpengajuan);
             $cek[0]->kd_nasabah = $request->query('tambah');
 

@@ -215,6 +215,12 @@ class Midle extends Model
         return $cek;
     }
 
+    protected static function pertanian_detail($data)
+    {
+        $cek = Pertanian::where('kode_usaha', $data)->get();
+        return $cek;
+    }    
+
     protected static function kemampuan_keuangan($data)
     {
         

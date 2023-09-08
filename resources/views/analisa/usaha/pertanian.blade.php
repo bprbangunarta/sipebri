@@ -81,7 +81,7 @@
                                                             <td>{{ $item->laba_bersih }}</td>
                                                             <td class="text-center">
                                                                 <a
-                                                                    href="{{ route('pertanian.edit', ['pertanian' => $item->kd_usaha, 'pengajuan' => $data->kd_pengajuan]) }}">
+                                                                    href="{{ route('pertanian.edit', ['pengajuan' => $data->kd_pengajuan, 'pertanian' => $item->kd_usaha, 'usaha' => $item->kd_usaha]) }}">
                                                                     <span class="badge bg-warning">
                                                                         <svg xmlns="http://www.w3.org/2000/svg"
                                                                             class="icon icon-tabler icon-tabler-edit"
