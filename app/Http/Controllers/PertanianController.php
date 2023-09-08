@@ -213,7 +213,7 @@ class PertanianController extends Controller
      */
     public function destroy($pertanian)
     {
-        dd($pertanian);
+        
         try {
             $enc = Crypt::decrypt($pertanian);
             $au = Pertanian::where('kode_usaha', $enc)->pluck('id');
