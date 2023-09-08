@@ -26,7 +26,7 @@ class KonfirmasiController extends Controller
             $konfirmasi = DB::table('v_validasi_pengajuan')
                             ->where('kode_pengajuan', $enc)->get();   
             $cek[0]->kd_pengajuan = $nasabah;  
-
+            
             //Cek agunan
             $agunan = DB::table('data_jaminan')
                         ->where('pengajuan_kode', '=', $enc)->first();

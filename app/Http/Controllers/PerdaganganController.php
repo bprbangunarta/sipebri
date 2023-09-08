@@ -30,7 +30,7 @@ class PerdaganganController extends Controller
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-                     
+                    
             return view('analisa.usaha.perdagangan', [
                 'data' => $cek[0],
                 'perdagangan' => $au
