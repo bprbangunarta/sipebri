@@ -46,7 +46,7 @@
                                     ])
                                     <div class="col d-flex flex-column">
                                         <form
-                                            action="{{ route('pertanian.update', ['pertanian' => $pertanian->kd_usaha, 'usaha' => $pertanian->kd_usaha]) }}"
+                                            action="{{ route('pertanian.update_detail', ['pertanian' => $pertanian->kd_usaha, 'usaha' => $pertanian->kd_usaha]) }}"
                                             method="post">
                                             @csrf
                                             @method('put')
@@ -108,8 +108,25 @@
                                                     </tbody>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center" colspan="3">Total Luas Tanah (M2)
+                                                            <th class="text-center" colspan="3">Lokasi Pertanian
                                                             </th>
+                                                            <th class="text-center" colspan="1">Total Luas Tanah (M2)
+                                                            </th>
+
+                                                            {{-- <th class="text-center" colspan="3">Total Luas Tanah (M2)
+                                                            </th>
+                                                            <td rowspan="1"><input
+                                                                    class="form-control text-center fw-bold" type="text"
+                                                                    name="total_tanah" id="total_tanah"
+                                                                    value="{{ $pertanian->total_luas = number_format($pertanian->total_luas, 0, ',', '.') . ' ' . 'M2' }}">
+                                                            </td> --}}
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <input class="form-control text-center" type="text"
+                                                                    name="lokasi_usaha"
+                                                                    value="{{ $pertanian->lokasi_usaha }}">
+                                                            </td>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
                                                                     value="{{ $pertanian->total_luas = number_format($pertanian->total_luas, 0, ',', '.') . ' ' . 'M2' }}">
@@ -134,15 +151,15 @@
                                                             <td>
                                                                 <select class="form-control" name="jenis_tanaman"
                                                                     id="">
-                                                                    @if (!is_null($pertanian->jenis_tanaman))
-                                                                        <option value="{{ $pertanian->jenis_tanaman }}">
-                                                                            {{ $pertanian->jenis_tanaman }}</option>
-                                                                    @else
-                                                                        <option value="" class="text-center">--Pilih--
-                                                                    @endif
+                                                                    <option value="" class="text-center">
+                                                                        --Pilih--
                                                                     </option>
-                                                                    <option value="Padi Inpari">Padi Inpari</option>
-                                                                    <option value="Padi Ketan">Padi Ketan</option>
+                                                                    <option value="Padi Inpari"
+                                                                        @if ($pertanian->jenis_tanaman == 'Padi Inpari') selected @endif>
+                                                                        Padi Inpari</option>
+                                                                    <option value="Padi Ketan"
+                                                                        @if ($pertanian->jenis_tanaman == 'Padi Ketan') selected @endif>
+                                                                        Padi Ketan</option>
                                                                 </select>
                                                             </td>
                                                             <td><input class="form-control" type="text"
@@ -282,8 +299,12 @@
                                                                     <option value="" class="text-center">--Pilih
                                                                         Jumlah
                                                                         Musim--</option>
-                                                                    <option value="6">2 Musim</option>
-                                                                    <option value="3">3 Musim</option>
+                                                                    <option value="6"
+                                                                        @if ($pertanian->jumlah_musim == 6) selected @endif>2
+                                                                        Musim</option>
+                                                                    <option value="3"
+                                                                        @if ($pertanian->jumlah_musim == 3) selected @endif>3
+                                                                        Musim</option>
                                                                 </select>
                                                             </td>
                                                             <td><input type="text" class="form-control"

@@ -98,8 +98,14 @@
                                                     </tbody>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center" colspan="3">Total Luas Tanah (M2)
+                                                            <th class="text-center" colspan="3">Lokasi Pertanian
                                                             </th>
+                                                            <th class="text-center" colspan="1">Total Luas Tanah (M2)
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3"><input class="form-control text-center"
+                                                                    type="text" name="lokasi_usaha"></td>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
                                                                     value="0M2">
@@ -126,8 +132,8 @@
                                                                     id="">
                                                                     <option value="" class="text-center">--Pilih--
                                                                     </option>
-                                                                    <option value="">Padi Inpari</option>
-                                                                    <option value="">Padi Ketan</option>
+                                                                    <option value="Padi Inpari">Padi Inpari</option>
+                                                                    <option value="Padi Ketan">Padi Ketan</option>
                                                                 </select>
                                                             </td>
                                                             <td><input class="form-control" type="text"

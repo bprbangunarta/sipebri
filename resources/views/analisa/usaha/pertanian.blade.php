@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa Usaha Pertanian')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -76,9 +76,12 @@
                                                     @foreach ($pertanian as $item)
                                                         <tr>
                                                             <td>{{ $item->nama_usaha }}</td>
-                                                            <td>{{ $item->pendapatan }}</td>
-                                                            <td>{{ $item->pengeluaran }}</td>
-                                                            <td>{{ $item->laba_bersih }}</td>
+                                                            <td>{{ $item->pendapatan = 'Rp. ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ $item->pengeluaran = 'Rp. ' . number_format($item->pengeluaran, 0, ',', '.') }}
+                                                            </td>
+                                                            <td>{{ $item->laba_bersih = 'Rp. ' . number_format($item->laba_bersih, 0, ',', '.') }}
+                                                            </td>
                                                             <td class="text-center">
                                                                 <a
                                                                     href="{{ route('pertanian.edit', ['pengajuan' => $data->kd_pengajuan, 'pertanian' => $item->kd_usaha, 'usaha' => $item->kd_usaha]) }}">
@@ -104,7 +107,9 @@
                                                             </td>
 
                                                             <td class="text-center">
-                                                                <form action="#" method="POST">
+                                                                <form
+                                                                    action="{{ route('pertanian.destroy', ['pertanian' => $item->kd_usaha]) }}"
+                                                                    method="POST">
                                                                     @method('delete')
                                                                     @csrf
                                                                     <button type="submit"
@@ -183,4 +188,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endsection
