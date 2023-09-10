@@ -46,8 +46,10 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <form action="{{ route('keuangan.store', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                        <form
+                                            action="{{ route('keuangan.update_detail', ['keuangan' => $biaya[0]->kode_keuangan]) }}"
                                             method="post">
+                                            @method('put')
                                             @csrf
                                             <div class="card-body">
 
@@ -108,60 +110,89 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <th><input class="form-control" readonly
-                                                                    value="Biaya Konsumsi Pokok" name="nama1"></th>
+                                                            <th><input type="text" name="kode_biaya1"
+                                                                    value="{{ $biaya[0]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly
+                                                                    value="Biaya Konsumsi Pokok" name="nama1">
+                                                            </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya1"
-                                                                    id="konsumsi" value="{{ old('biaya1') }}" required>
+                                                                    id="konsumsi"
+                                                                    value="{{ old('biaya1') ?? ($biaya[0]->nominal = 'Rp ' . number_format($biaya[0]->nominal, 0, ',', '.')) }}"
+                                                                    required>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" readonly value="Kesehatan"
+                                                            <th><input type="text" name="kode_biaya2"
+                                                                    value="{{ $biaya[1]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly value="Kesehatan"
                                                                     name="nama2">
                                                             </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya2"
-                                                                    value="{{ old('biaya2') }}" id="kesehatan"></td>
+                                                                    value="{{ old('biaya2') ?? ($biaya[1]->nominal = 'Rp ' . number_format($biaya[1]->nominal, 0, ',', '.')) }}"
+                                                                    id="kesehatan"></td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" readonly value="Pendidikan"
+                                                            <th><input type="text" name="kode_biaya3"
+                                                                    value="{{ $biaya[2]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly value="Pendidikan"
                                                                     name="nama3">
                                                             </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya3"
-                                                                    id="pendidikan" value="{{ old('biaya3') }}"></td>
+                                                                    id="pendidikan"
+                                                                    value="{{ old('biaya3') ?? ($biaya[2]->nominal = 'Rp ' . number_format($biaya[2]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" readonly value="Gatel"
+                                                            <th><input type="text" name="kode_biaya4"
+                                                                    value="{{ $biaya[3]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly value="Gatel"
                                                                     name="nama4">
                                                             </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya4"
-                                                                    id="gatel" value="{{ old('biaya4') }}" required>
+                                                                    id="gatel"
+                                                                    value="{{ old('biaya4') ?? ($biaya[3]->nominal = 'Rp ' . number_format($biaya[3]->nominal, 0, ',', '.')) }}"
+                                                                    required>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" readonly value="Jajan Anak"
+                                                            <th><input type="text" name="kode_biaya5"
+                                                                    value="{{ $biaya[4]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly value="Jajan Anak"
                                                                     name="nama5">
                                                             </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya5"
-                                                                    id="jajan" value="{{ old('biaya5') }}"></td>
+                                                                    id="jajan"
+                                                                    value="{{ old('biaya5') ?? ($biaya[4]->nominal = 'Rp ' . number_format($biaya[4]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" readonly
-                                                                    value="Sumbangan Sosial" name="nama6"></th>
+                                                            <th><input type="text" name="kode_biaya6"
+                                                                    value="{{ $biaya[5]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly
+                                                                    value="Sumbangan Sosial" name="nama6">
+                                                            </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya6"
-                                                                    id="sumbangan" value="{{ old('biaya6') }}"></td>
+                                                                    id="sumbangan"
+                                                                    value="{{ old('biaya6') ?? ($biaya[5]->nominal = 'Rp ' . number_format($biaya[5]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" readonly name="nama7"
+                                                            <th><input type="text" name="kode_biaya7"
+                                                                    value="{{ $biaya[6]->kode_biaya }}" hidden>
+                                                                <input class="form-control" readonly name="nama7"
                                                                     value="Rokok">
                                                             </th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="biaya7"
-                                                                    id="roko" value="{{ old('biaya7') }}"></td>
+                                                                    id="roko"
+                                                                    value="{{ old('biaya7') ?? ($biaya[6]->nominal = 'Rp ' . number_format($biaya[6]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -180,25 +211,43 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Kewajiban" name="data1"></td>
+                                                            <td><input type="text" name="kd_biaya1"
+                                                                    value="{{ $biaya[7]->kode_biaya }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Kewajiban" name="data1"
+                                                                    value="{{ $biaya[7]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="kewajiban1"
-                                                                    id="kewajiban1" value="{{ old('kewajiban1') }}"></td>
+                                                                    id="kewajiban1"
+                                                                    value="{{ old('kewajiban1') ?? ($biaya[7]->nominal = 'Rp ' . number_format($biaya[7]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Kewajiban" name="data2"></td>
+                                                            <td><input type="text" name="kd_biaya2"
+                                                                    value="{{ $biaya[8]->kode_biaya }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Kewajiban" name="data2"
+                                                                    value="{{ $biaya[8]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="kewajiban2"
-                                                                    id="kewajiban2" value="{{ old('kewajiban2') }}"></td>
+                                                                    id="kewajiban2"
+                                                                    value="{{ old('kewajiban2') ?? ($biaya[8]->nominal = 'Rp ' . number_format($biaya[8]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Kewajiban" name="data3"></td>
+                                                            <td><input type="text" name="kd_biaya3"
+                                                                    value="{{ $biaya[9]->kode_biaya }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Kewajiban" name="data3"
+                                                                    value="{{ $biaya[9]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="kewajiban3"
-                                                                    id="kewajiban3" value="{{ old('kewajiban3') }}"></td>
+                                                                    id="kewajiban3"
+                                                                    value="{{ old('kewajiban3') ?? ($biaya[9]->nominal = 'Rp ' . number_format($biaya[9]->nominal, 0, ',', '.')) }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -215,7 +264,7 @@
                                                                     value="Pendapatan Usaha"></th>
                                                             <td><input type="text" class="form-control" name="p_usaha"
                                                                     readonly=""
-                                                                    value="{{ 'Rp. ' . number_format($kemampuan['total'], 0, ',', '.') }}"
+                                                                    value="{{ 'Rp ' . number_format($kemampuan['total'], 0, ',', '.') }}"
                                                                     id="pendapatan">
                                                             </td>
                                                         </tr>
@@ -223,23 +272,24 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Biaya Rumah Tangga"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="b_rumah_tangga" id="biaya">
+                                                                    value="{{ 'Rp ' . number_format($biaya[0]->b_rumah_tangga, 0, ',', '.') }}"
+                                                                    name="b_rumah_tangga" id="biaya">
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Kewajiban Lainnya"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="b_kewajiban_lainya"
-                                                                    id="kewajiban_lain"></td>
+                                                                    value="{{ 'Rp ' . number_format($biaya[0]->b_kewajiban_lainya, 0, ',', '.') }}"
+                                                                    name="b_kewajiban_lainya" id="kewajiban_lain"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Keuangan Perbulan"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp. " name="keuangan_perbulan"
-                                                                    id="hasilbersih"></td>
+                                                                    value="{{ 'Rp ' . number_format($biaya[0]->keuangan_perbulan, 0, ',', '.') }}"
+                                                                    name="keuangan_perbulan" id="hasilbersih"></td>
                                                         </tr>
                                                     </thead>
                                                 </table>

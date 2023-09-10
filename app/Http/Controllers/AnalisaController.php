@@ -32,30 +32,4 @@ class AnalisaController extends Controller
             'data' => $data
         ]);
     }
-    
-    public function analisa_keuangan(Request $request)
-    {
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
-            
-            $kemampuan = Midle::kemampuan_keuangan($enc);
-                        
-            $filter = array_filter($kemampuan, function ($value) {
-                return $value !== null ? $value : 0;
-            });
-            
-            //Hasil penjumlahan analisa usaha
-            $total = array_sum($filter);
-            $kemampuan['total'] = $total;
-            
-            return view('analisa.keuangan', [
-                'data' => $cek[0],
-                'kemampuan' => $kemampuan
-            ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-        
-    }
 }

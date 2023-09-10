@@ -22,6 +22,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
+use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\LainController;
 use App\Http\Controllers\PenjadwalanController;
@@ -167,7 +168,6 @@ Route::middleware('auth')->group(function () {
     Route::controller(AnalisaController::class)->prefix('analisa')->group(function () {
         Route::group(['middleware' => ['role:Staff Analis']], function () {
             Route::get('/proses', 'index')->name('analisa.proses');
-            Route::get('/keuangan', 'analisa_keuangan')->name('analisa.keuangan');
         });
     });
 
@@ -184,6 +184,9 @@ Route::middleware('auth')->group(function () {
         //Analisa Usaha Lainnya
         Route::resource('/analisa/usaha/lain/lain', LainController::class);
         Route::put('/analisa/usaha/lain/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
+        //Analisa Keuangan
+        Route::resource('/analisa/keuangan', KeuanganController::class);
+        Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
     });
     // Add Layout
     Route::prefix('layout')->group(function () {
