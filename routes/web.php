@@ -174,16 +174,16 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['role:Staff Analis']], function () {
         //Analisa Usaha Perdagangan
         Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
-        Route::post('/analisa/usaha/perdagangan/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
-        Route::put('/analisa/usaha/perdagangan/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
+        Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
+        Route::put('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
         //Analisa Usaha Pertanian
-        Route::resource('/analisa/usaha/pertanian/pertanian', PertanianController::class);
-        Route::put('/analisa/usaha/pertanian/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
+        Route::resource('/analisa/usaha/pertanian', PertanianController::class);
+        Route::put('/analisa/usaha/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
         //Analisa Usaha Jasa
-        Route::resource('/analisa/usaha/jasa/jasa', JasaController::class);
+        Route::resource('/analisa/usaha/jasa', JasaController::class);
         //Analisa Usaha Lainnya
-        Route::resource('/analisa/usaha/lain/lain', LainController::class);
-        Route::put('/analisa/usaha/lain/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
+        Route::resource('/analisa/usaha/lain', LainController::class);
+        Route::put('/analisa/usaha/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
         //Analisa Keuangan
         Route::resource('/analisa/keuangan', KeuanganController::class);
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
