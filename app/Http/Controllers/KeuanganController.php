@@ -69,13 +69,14 @@ class KeuanganController extends Controller
      */
     public function store(Request $request)
     {
+        
         try {
             DB::transaction(function () use ($request) {
                 $enc = Crypt::decrypt($request->query('pengajuan'));
                 $name = 'AUK';
                 $length = 5;
                 $kode = Keuangan::kodeacak($name, $length);
-                
+                //au_keuangan
                 $au = [
                     'kode_keuangan' => $kode,
                     'pengajuan_kode' => $enc,
@@ -87,11 +88,10 @@ class KeuanganController extends Controller
                 ];
                 Keuangan::create($au);
 
-                //Biaya Rumah Tangga ambil data yang diisi saja
+                //Biaya Rumah Tangga
                 for ($i = 1; $i <= 7; $i++) {
                     $length = 10;
                     $kod = Keuangan::du_kodeacak($length);
-                    //Simpan data yang ada nominalnya saja
                         $data = [
                             'keuangan_kode' => $kode,
                             'kode_biaya' => $kod,
@@ -105,7 +105,6 @@ class KeuanganController extends Controller
                 for ($j=1; $j <= 3; $j++) { 
                     $length = 10;
                     $k = Keuangan::du_kodeacak($length);
-                    //Simpan data yang ada nominalnya saja
                         $data1 = [
                             'keuangan_kode' => $kode,
                             'kode_biaya' => $k,
