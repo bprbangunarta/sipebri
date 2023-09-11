@@ -289,7 +289,7 @@ $(
 
     for (var i = 1; i <= 10; i++) {
         var hrg = $("#hrg" + i).val();
-        var hr = parseFloat(hrg.replace(/[^\d]/g, "")) || 0;
+        var hr = parseFloat(hrg.replace("Rp. ", "").replace(/\./g, "")) || 0;
         total += hr;
     }
     var totalFormatted = "Rp. " + total.toLocaleString("id-ID");
@@ -319,19 +319,22 @@ $(
     for (var j = 1; j <= 10; j++) {
         var laba = $("#laba" + j).val();
 
-        var lb = parseFloat(laba.replace(/[^\d]/g, "")) || 0;
+        var lb = parseFloat(laba.replace("Rp. ", "").replace(/\./g, "")) || 0;
         tl += lb;
     }
+
     var totallaba = "Rp. " + tl.toLocaleString("id-ID");
     $("#tlaba").val(totallaba);
 
-    //Total Laba
+    //Total persen
     for (var q = 1; q <= 10; q++) {
-        var persen = $("#persen" + q).val();
+        var ps = $("#persen" + q).val();
 
-        var pr = parseFloat(persen.replace("%", "")) || 0;
-        pers += parseFloat(pr);
+        // var pr = parseFloat(ps.replace("Rp. ", "").replace(/\./g, "")) || 0;
+        var angka = parseFloat(ps.replace("%", ""));
+        pers += angka || 0;
     }
+
     var has = pers / 10;
     $("#tpersen").val(has.toFixed(2) + "%");
 });
@@ -359,7 +362,7 @@ $("#brdg").keyup(function () {
 
     var pers = $("#tpersen").val();
     var persen = parseFloat(pers.replace("%", "").replace(/\.00/g, ""));
-    console.log(persen);
+
     //pendapatan harian
     var hpen = (replace * 30 + replace * 30 * (persen / 100)) / 30;
     var tpenhar = "Rp. " + hpen.toLocaleString("id-ID");

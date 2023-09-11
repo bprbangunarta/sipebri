@@ -46,7 +46,7 @@
                                     ])
                                     <div class="col d-flex flex-column">
                                         <form
-                                            action="{{ route('pertanian.update', ['pertanian' => $pertanian->kd_usaha, 'usaha' => $pertanian->kd_usaha]) }}"
+                                            action="{{ route('pertanian.update_detail', ['pertanian' => $pertanian->kd_usaha, 'usaha' => $pertanian->kd_usaha]) }}"
                                             method="post">
                                             @csrf
                                             @method('put')
@@ -75,21 +75,31 @@
                                                         <tr>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sendiri" id="lsendiri"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->luas_sendiri = number_format($pertanian->luas_sendiri, 0, ',', '.') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sewa" id="lsewa"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->luas_sewa = number_format($pertanian->luas_sewa, 0, ',', '.') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_gadai" id="lgadai"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->luas_gadai = number_format($pertanian->luas_gadai, 0, ',', '.') }}">
                                                             </td>
                                                             <td width="25%">
                                                                 <select class="form-control" name="jenis_usaha"
                                                                     id="">
-                                                                    <option value="" class="text-center">--Pilih--
-                                                                    </option>
+
+                                                                    @if (!is_null($pertanian->jenis_usaha))
+                                                                        <option value="{{ $pertanian->jenis_usaha }}"
+                                                                            selected>
+                                                                            {{ $pertanian->jenis_usaha }}</option>
+                                                                    @else
+                                                                        <option value="" class="text-center">--Pilih--
+                                                                        </option>
+                                                                    @endif
                                                                     <option value="pertanian">Pertanian</option>
                                                                     <option value="perkebunan">Perkebunan</option>
                                                                 </select>
@@ -102,13 +112,24 @@
                                                             </th>
                                                             <th class="text-center" colspan="1">Total Luas Tanah (M2)
                                                             </th>
+
+                                                            {{-- <th class="text-center" colspan="3">Total Luas Tanah (M2)
+                                                            </th>
+                                                            <td rowspan="1"><input
+                                                                    class="form-control text-center fw-bold" type="text"
+                                                                    name="total_tanah" id="total_tanah"
+                                                                    value="{{ $pertanian->total_luas = number_format($pertanian->total_luas, 0, ',', '.') . ' ' . 'M2' }}">
+                                                            </td> --}}
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="3"><input class="form-control text-center"
-                                                                    type="text" name="lokasi_usaha"></td>
+                                                            <td colspan="3">
+                                                                <input class="form-control text-center" type="text"
+                                                                    name="lokasi_usaha"
+                                                                    value="{{ $pertanian->lokasi_usaha }}">
+                                                            </td>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
-                                                                    value="0M2">
+                                                                    value="{{ $pertanian->total_luas = number_format($pertanian->total_luas, 0, ',', '.') . ' ' . 'M2' }}">
                                                             </td>
                                                         </tr>
                                                     </thead>
@@ -130,17 +151,26 @@
                                                             <td>
                                                                 <select class="form-control" name="jenis_tanaman"
                                                                     id="">
-                                                                    <option value="" class="text-center">--Pilih--
+                                                                    <option value="" class="text-center">
+                                                                        --Pilih--
                                                                     </option>
-                                                                    <option value="Padi Inpari">Padi Inpari</option>
-                                                                    <option value="Padi Ketan">Padi Ketan</option>
+                                                                    <option value="Padi Inpari"
+                                                                        @if ($pertanian->jenis_tanaman == 'Padi Inpari') selected @endif>
+                                                                        Padi Inpari</option>
+                                                                    <option value="Padi Ketan"
+                                                                        @if ($pertanian->jenis_tanaman == 'Padi Ketan') selected @endif>
+                                                                        Padi Ketan</option>
                                                                 </select>
                                                             </td>
                                                             <td><input class="form-control" type="text"
                                                                     name="hasil_panen" id="hpanen"
-                                                                    placeholder="Masukan Angka"></td>
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ $pertanian->hasil_panen = number_format($pertanian->hasil_panen, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input class="form-control" type="text" name="harga"
-                                                                    id="hrg" placeholder="Masukan Nominal"></td>
+                                                                    id="hrg" placeholder="Masukan Nominal"
+                                                                    value="{{ $pertanian->harga = 'Rp. ' . number_format($pertanian->harga, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
 
                                                     </tbody>
@@ -163,12 +193,17 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengolahan_tanah"
-                                                                    id="pengolahan">
+                                                                    id="pengolahan"
+                                                                    value="{{ $pertanian->pengolahan_tanah = 'Rp. ' . number_format($pertanian->pengolahan_tanah, 0, ',', '.') }}">
                                                             </td>
                                                             <td><input type="text" class="form-control" name="bibit"
-                                                                    placeholder="Masukan Nominal" id="bibit"></td>
+                                                                    placeholder="Masukan Nominal" id="bibit"
+                                                                    value="{{ $pertanian->bibit = 'Rp. ' . number_format($pertanian->bibit, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control" name="pupuk"
-                                                                    placeholder="Masukan Nominal" id="pupuk"></td>
+                                                                    placeholder="Masukan Nominal" id="pupuk"
+                                                                    value="{{ $pertanian->pupuk = 'Rp. ' . number_format($pertanian->pupuk, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -182,13 +217,19 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     name="pestisida" placeholder="Masukan Nominal"
-                                                                    name="pestisida" id="pestisida"></td>
+                                                                    name="pestisida" id="pestisida"
+                                                                    value="{{ $pertanian->pestisida = 'Rp. ' . number_format($pertanian->pestisida, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="tenaga_kerja"
-                                                                    id="tenaga_kerja"></td>
+                                                                    id="tenaga_kerja"
+                                                                    value="{{ $pertanian->tenaga_kerja = 'Rp. ' . number_format($pertanian->tenaga_kerja, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengairan"
-                                                                    id="pengairan"></td>
+                                                                    id="pengairan"
+                                                                    value="{{ $pertanian->pengairan = 'Rp. ' . number_format($pertanian->pengairan, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -202,13 +243,19 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="panen"
-                                                                    id="panen"></td>
+                                                                    id="panen"
+                                                                    value="{{ $pertanian->panen = 'Rp. ' . number_format($pertanian->panen, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="penggarap"
-                                                                    id="penggarap"></td>
+                                                                    id="penggarap"
+                                                                    value="{{ $pertanian->penggarap = 'Rp. ' . number_format($pertanian->penggarap, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pajak"
-                                                                    id="pajak"></td>
+                                                                    id="pajak"
+                                                                    value="{{ $pertanian->pajak = 'Rp. ' . number_format($pertanian->pajak, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -222,7 +269,9 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="iuran_desa"
-                                                                    id="iuran_desa"></td>
+                                                                    id="iuran_desa"
+                                                                    value="{{ $pertanian->iuran_desa = 'Rp. ' . number_format($pertanian->iuran_desa, 0, ',', '.') }}">
+                                                            </td>
                                                             <td></td>
                                                             <td></td>
                                                         </tr>
@@ -250,13 +299,19 @@
                                                                     <option value="" class="text-center">--Pilih
                                                                         Jumlah
                                                                         Musim--</option>
-                                                                    <option value="6">2 Musim</option>
-                                                                    <option value="3">3 Musim</option>
+                                                                    <option value="6"
+                                                                        @if ($pertanian->jumlah_musim == 6) selected @endif>2
+                                                                        Musim</option>
+                                                                    <option value="3"
+                                                                        @if ($pertanian->jumlah_musim == 3) selected @endif>3
+                                                                        Musim</option>
                                                                 </select>
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="amortisasi"
-                                                                    id="amortisasi"></td>
+                                                                    id="amortisasi"
+                                                                    value="{{ $pertanian->amortisasi = 'Rp. ' . number_format($pertanian->amortisasi, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -272,7 +327,9 @@
                                                                     id="luas_tanah"></td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pinjaman_bank"
-                                                                    id="pinjaman_bank"></td>
+                                                                    id="pinjaman_bank"
+                                                                    value="{{ $pertanian->pinjaman_bank = 'Rp. ' . number_format($pertanian->pinjaman_bank, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -288,34 +345,39 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pendapatan Hasil Panen"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pendapatan" id="pendapatan">
+                                                                    value="{{ $pertanian->pendapatan = 'Rp. ' . number_format($pertanian->pendapatan, 0, ',', '.') }}"
+                                                                    name="pendapatan" id="pendapatan">
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pengeluaran Biaya Usaha"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pengeluaran" id="pengeluaran">
+                                                                    value="{{ $pertanian->pengeluaran = 'Rp. ' . number_format($pertanian->pengeluaran, 0, ',', '.') }}"
+                                                                    name="pengeluaran" id="pengeluaran">
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Penambahan Hasil Usaha"></th>
-                                                            <td><input type="text" class="form-control" value="Rp. "
+                                                            <td><input type="text" class="form-control"
+                                                                    value="{{ $pertanian->penambahan = 'Rp. ' . number_format($pertanian->penambahan, 0, ',', '.') }}"
                                                                     name="penambahan" id="penambahan"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pinjaman Bank Lain"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pinjaman" id="pinjaman"></td>
+                                                                    value="{{ $pertanian->pinjaman_bank }}"
+                                                                    name="pinjaman" id="pinjaman"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp. " name="laba_bersih" id="laba_bersih">
+                                                                    value="{{ $pertanian->laba_bersih = 'Rp. ' . number_format($pertanian->laba_bersih, 0, ',', '.') }}"
+                                                                    name="laba_bersih" id="laba_bersih">
                                                             </td>
                                                         </tr>
                                                     </thead>

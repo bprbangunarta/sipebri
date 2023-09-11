@@ -195,4 +195,58 @@ class Midle extends Model
         $cek[0]->kd_pengajuan = Crypt::encrypt($data);
         return $cek;
     }
+
+    protected static function perdagangan_detail($data)
+    {
+        $enc = Crypt::decrypt($data);
+        $cek = DB::table('au_perdagangan')
+                ->leftJoin('bu_perdagangan','au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
+                ->select('au_perdagangan.*', 'bu_perdagangan.*')
+                ->where('au_perdagangan.kode_usaha', $enc)->get();
+        
+        $dusaha = DB::table('du_perdagangan')
+                ->where('usaha_kode', $enc)->get();
+        
+        return [$cek, $dusaha];
+    }
+    protected static function jasa_detail($data)
+    {
+        $cek = Jasa::where('kode_usaha', $data)->get();
+        return $cek;
+    }
+
+    protected static function pertanian_detail($data)
+    {
+        $data = DB::table('au_pertanian')
+                ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
+                ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
+                ->select('au_pertanian.*','bu_pertanian.*', 'du_pertanian.*')
+                ->where('au_pertanian.kode_usaha', '=', $data)->get();
+        
+        return $data;
+    }    
+
+    protected static function kemampuan_keuangan($data)
+    {
+        
+        $perdagangan = Perdagangan::where('pengajuan_kode', $data)->get();
+        $jasa = Jasa::where('pengajuan_kode', $data)->get();
+        $pertanian = Pertanian::where('pengajuan_kode', $data)->get();
+        $lain = Lain::where('pengajuan_kode', $data)->get();
+
+        // Periksa dan ganti nilai yang kosong dengan 0
+        $per = $perdagangan->isEmpty() ? 0 : $perdagangan[0]->laba_bersih ?? 0;
+        $jas = $jasa->isEmpty() ? 0 : $jasa[0]->laba_bersih ?? 0;
+        $tani = $pertanian->isEmpty() ? 0 : $pertanian[0]->laba_bersih ?? 0;
+        $la = $lain->isEmpty() ? 0 : $lain[0]->laba_bersih ?? 0;
+
+        $hasil = [
+            'perdagangan' => $per,
+            'jasa' => $jas,
+            'pertanian' => $tani,
+            'lain' => $la,
+        ];
+    
+        return $hasil;
+    }
 }

@@ -6,7 +6,7 @@
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
             <a href="/dashboard">
-                <img src="{{ asset('assets/img/logo.svg') }}" width="110" height="32" alt="Tabler"
+                <img src="{{ asset('assets/img/logo.png') }}" width="110" height="32" alt="Tabler"
                     class="navbar-brand-image">
             </a>
         </h1>

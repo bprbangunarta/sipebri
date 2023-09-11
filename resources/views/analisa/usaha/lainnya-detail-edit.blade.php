@@ -45,7 +45,7 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <form action="{{ route('lain.update', ['lain' => $lain->kd_usaha]) }}"
+                                        <form action="{{ route('lain.update_edit', ['lain' => $lain->kd_usaha]) }}"
                                             method="post">
                                             @csrf
                                             @method('put')
@@ -87,39 +87,69 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pendapatan" name="nama1"></td>
+                                                            <td><input type="text" name="du_kode1"
+                                                                    value="{{ $omset[0]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pendapatan" name="nama1"
+                                                                    value="{{ $omset[0]->penjualan }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="nominal1"
-                                                                    id="nominal1"></td>
+                                                                    id="nominal1"
+                                                                    value="{{ $omset[0]->nominal = 'Rp. ' . number_format($omset[0]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pendapatan" name="nama2"></td>
+                                                            <td><input type="text" name="du_kode2"
+                                                                    value="{{ $omset[1]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pendapatan" name="nama2"
+                                                                    value="{{ $omset[1]->penjualan }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="nominal2"
-                                                                    id="nominal2"></td>
+                                                                    id="nominal2"
+                                                                    value="{{ $omset[1]->nominal = 'Rp. ' . number_format($omset[1]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pendapatan" name="nama3"></td>
+                                                            <td><input type="text" name="du_kode3"
+                                                                    value="{{ $omset[2]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pendapatan" name="nama3"
+                                                                    value="{{ $omset[2]->penjualan }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="nominal3"
-                                                                    id="nominal3"></td>
+                                                                    id="nominal3"
+                                                                    value="{{ $omset[2]->nominal = 'Rp. ' . number_format($omset[2]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pendapatan" name="nama4"></td>
+                                                            <td><input type="text" name="du_kode4"
+                                                                    value="{{ $omset[3]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pendapatan" name="nama4"
+                                                                    value="{{ $omset[3]->penjualan }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="nominal4"
-                                                                    id="nominal4"></td>
+                                                                    id="nominal4"
+                                                                    value="{{ $omset[3]->nominal = 'Rp. ' . number_format($omset[3]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pendapatan" name="nama5"></td>
+                                                            <td><input type="text" name="du_kode5"
+                                                                    value="{{ $omset[4]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pendapatan" name="nama5"
+                                                                    value="{{ $omset[4]->penjualan }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="nominal5"
-                                                                    id="nominal5"></td>
+                                                                    id="nominal5"
+                                                                    value="{{ $omset[4]->nominal = 'Rp. ' . number_format($omset[4]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -138,39 +168,69 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pengeluaran" name="nampe1"></td>
+                                                            <td><input type="text" name="bu_kode1"
+                                                                    value="{{ $biaya[0]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pengeluaran" name="nampe1"
+                                                                    value="{{ $biaya[0]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengeluaran1"
-                                                                    id="pengeluaran1"></td>
+                                                                    id="pengeluaran1"
+                                                                    value="{{ $biaya[0]->nominal = 'Rp. ' . number_format($biaya[0]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pengeluaran" name="nampe2"></td>
+                                                            <td><input type="text" name="bu_kode2"
+                                                                    value="{{ $biaya[1]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pengeluaran" name="nampe2"
+                                                                    value="{{ $biaya[1]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengeluaran2"
-                                                                    id="pengeluaran2"></td>
+                                                                    id="pengeluaran2"
+                                                                    value="{{ $biaya[1]->nominal = 'Rp. ' . number_format($biaya[1]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pengeluaran" name="nampe3"></td>
+                                                            <td><input type="text" name="bu_kode3"
+                                                                    value="{{ $biaya[2]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pengeluaran" name="nampe3"
+                                                                    value="{{ $biaya[2]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengeluaran3"
-                                                                    id="pengeluaran3"></td>
+                                                                    id="pengeluaran3"
+                                                                    value="{{ $biaya[2]->nominal = 'Rp. ' . number_format($biaya[2]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pengeluaran" name="nampe4"></td>
+                                                            <td><input type="text" name="bu_kode4"
+                                                                    value="{{ $biaya[3]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pengeluaran" name="nampe4"
+                                                                    value="{{ $biaya[3]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengeluaran4"
-                                                                    id="pengeluaran4"></td>
+                                                                    id="pengeluaran4"
+                                                                    value="{{ $biaya[3]->nominal = 'Rp. ' . number_format($biaya[3]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" class="form-control"
-                                                                    placeholder="Nama Pengeluaran" name="nampe5"></td>
+                                                            <td><input type="text" name="bu_kode5"
+                                                                    value="{{ $biaya[4]->kode_lain }}" hidden>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Nama Pengeluaran" name="nampe5"
+                                                                    value="{{ $biaya[4]->pengeluaran }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengeluaran5"
-                                                                    id="pengeluaran5"></td>
+                                                                    id="pengeluaran5"
+                                                                    value="{{ $biaya[4]->nominal = 'Rp. ' . number_format($biaya[4]->nominal, 0, ',', '.') }}">
+                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -186,13 +246,15 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pendapatan Usaha"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pendapatan" id="penus"></td>
+                                                                    value="{{ $lain->pendapatan = 'Rp. ' . number_format($lain->pendapatan, 0, ',', '.') }}"
+                                                                    name="pendapatan" id="penus"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Biaya Operasional"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pengeluaran" id="biayaop">
+                                                                    value="{{ $lain->pengeluaran = 'Rp. ' . number_format($lain->pengeluaran, 0, ',', '.') }}"
+                                                                    name="pengeluaran" id="biayaop">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -200,14 +262,16 @@
                                                                     value="Proyeksi Penambahan Hasil Usaha"></th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="proyeksi"
-                                                                    value="Rp." id="pph"></td>
+                                                                    value="{{ $lain->proyeksi = 'Rp. ' . number_format($lain->proyeksi, 0, ',', '.') }}"
+                                                                    id="pph"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp." name="laba_bersih" id="hasilbersih">
+                                                                    value="{{ $lain->laba_bersih = 'Rp. ' . number_format($lain->laba_bersih, 0, ',', '.') }}"
+                                                                    name="laba_bersih" id="hasilbersih">
                                                             </td>
                                                         </tr>
                                                     </thead>
