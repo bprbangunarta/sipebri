@@ -32,10 +32,9 @@ class KeuanganController extends Controller
             });
             
             //Hasil penjumlahan analisa usaha
-            
             $total = array_sum($filter);
             $kemampuan['total'] = $total;
-            
+            // dd($data);
             if ($data === 0) {
                 return view('analisa.keuangan', [
                 'data' => $cek[0],

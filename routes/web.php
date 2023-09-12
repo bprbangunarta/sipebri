@@ -29,6 +29,8 @@ use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\PertanianController;
+use App\Http\Controllers\KepemilikanController;
+use App\Models\Kepemilikan;
 use App\Models\Lain;
 use App\Models\Nasabah;
 
@@ -187,11 +189,13 @@ Route::middleware('auth')->group(function () {
         //Analisa Keuangan
         Route::resource('/analisa/keuangan', KeuanganController::class);
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
+        //Analisa kepemilikan
+        Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
     });
     // Add Layout
-    Route::prefix('layout')->group(function () {
-        Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
-    });
+    // Route::prefix('layout')->group(function () {
+    //     Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
+    // });
 });
 
 

@@ -301,7 +301,7 @@ $("#jangka_waktu_panen").keyup(function () {
     var rbersih = parseFloat(bersih.replace(/[^\d]/g, "")) || 0;
 
     var jml = rbersih / rjangka;
-
-    var as = "Rp. " + jml.toLocaleString("id-ID");
+    var a = Math.floor(jml);
+    var as = "Rp. " + a.toLocaleString("id-ID");
     $("#lb_perbulan").val(as);
 });

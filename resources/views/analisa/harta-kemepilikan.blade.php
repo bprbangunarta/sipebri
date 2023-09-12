@@ -12,56 +12,12 @@
                             <div iv class="container-xl">
                                 <div div class="row g-2 align-items-center">
 
-                                    {{-- @include('templates.header-analisa') --}}
-
-                                    <div class="col">
-                                        <h1 class="fw-bold">YANDI ROSYANDI</h1>
-                                        <div class="my-2"></div>
-                                        <div class="list-inline list-inline-dots text-muted">
-                                            <div class="list-inline-item">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-database-dollar" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path
-                                                        d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3">
-                                                    </path>
-                                                    <path d="M4 6v6c0 1.657 3.582 3 8 3c.415 0 .822 -.012 1.22 -.035">
-                                                    </path>
-                                                    <path d="M20 10v-4"></path>
-                                                    <path d="M4 12v6c0 1.657 3.582 3 8 3c.352 0 .698 -.009 1.037 -.025">
-                                                    </path>
-                                                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"></path>
-                                                    <path d="M19 21v1m0 -8v1"></path>
-                                                </svg>
-                                                Rp. 1.000.000
-                                            </div>
-                                            <div class="list-inline-item">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-calendar-time" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path
-                                                        d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4">
-                                                    </path>
-                                                    <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                                    <path d="M15 3v4"></path>
-                                                    <path d="M7 3v4"></path>
-                                                    <path d="M3 11h16"></path>
-                                                    <path d="M18 16.496v1.504l1 1"></path>
-                                                </svg>
-                                                36 Bulan
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('templates.header-analisa', [$data])
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('pertanian.index') }}" class="btn btn-primary">
+                                            <a href="{{ route('keuangan.index', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -85,88 +41,13 @@
                             <div class="card">
                                 <div class="row g-0">
 
-                                    {{-- @include('templates.menu-analisa') --}}
-
-                                    <div class="col-3 d-none d-md-block border-end">
-                                        <div class="card-body">
-                                            <div class="list-group list-group-transparent">
-                                                <a href="{{ route('tambah.index') }}"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/perdagangan', 'analisa/usaha/perdagangan/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usaha Perdagangan
-                                                </a>
-                                                <a href="{{ route('pertanian.index') }}"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/pertanian', 'analisa/usaha/pertanian/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usah Pertanian
-                                                </a>
-                                                <a href="{{ route('jasa.index') }}"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/jasa', 'analisa/usaha/jasa/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usaha Jasa
-                                                </a>
-                                                <a href="{{ route('lain.index') }}"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/lainnya', 'analisa/usaha/lainnya/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usaha Lainnya
-                                                </a>
-                                                <a href="{{ route('analisa.keuangan') }}"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/keuangan') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Kemampuan Keuangan</a>
-                                                <a href="{{ route('analisa.harta.kepemilikan') }}"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center active">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Harta Kepemilikan</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    @include('templates.menu-analisa', [
+                                        'pengajuan' => $data->kd_pengajuan,
+                                    ])
                                     <div class="col d-flex flex-column">
                                         <div class="card-body">
-                                            <form action="#">
+                                            <form action="{{ route('kepemilikan.store') }}" method="POST">
+                                                @csrf
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
                                                         <tr>
@@ -184,45 +65,62 @@
                                                     <thead>
                                                         <tr>
                                                             <th>
-                                                                <input class="form-control" disabled=""
-                                                                    value="Rumah">
+                                                                <input class="form-control" disabled="" value="Rumah">
+                                                                <input class="form-control" name="kode_pengajuan"
+                                                                    value="{{ $data->kd_pengajuan }}" hidden>
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
-                                                                    id="">
+                                                                <select class="form-control" name="rumah" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Permanen">Permanen</option>
-                                                                    <option value="Sederhana">Sederhana</option>
-                                                                    <option value="Semi Permanen">Semi Permanen</option>
+                                                                    <option value="Permanen"
+                                                                        @if ($milik->rumah == 'Permanen') selected @endif>
+                                                                        Permanen</option>
+                                                                    <option value="Sederhana"
+                                                                        @if ($milik->rumah == 'Sederhana') selected @endif>
+                                                                        Sederhana</option>
+                                                                    <option value="Semi Permanen"
+                                                                        @if ($milik->rumah == 'Semi Permane') selected @endif>
+                                                                        Semi Permanen</option>
                                                                 </select>
                                                             </td>
                                                             <th>
-                                                                <input class="form-control" disabled=""
-                                                                    value="Komputer">
+                                                                <input class="form-control" disabled="" value="Komputer">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
-                                                                    id="">
+                                                                <select class="form-control" name="komputer" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada">Ada</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="Ada"
+                                                                        @if ($milik->komputer == 'Ada') selected @endif>
+                                                                        Ada</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->komputer == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th>
-                                                                <input class="form-control" disabled=""
-                                                                    value="Mobil">
+                                                                <input class="form-control" disabled="" value="Mobil">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
-                                                                    id="">
+                                                                <select class="form-control" name="mobil"
+                                                                    id=""{{ $milik->mobil == '1 Unit' }}>
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="1 Unit">1 Unit</option>
-                                                                    <option value="2 Unit">2 Unit</option>
-                                                                    <option value="3 Unit">3 Unit</option>
-                                                                    <option value="4 Unit">4 Unit</option>
-                                                                    <option value="5 Unit">5 Unit</option>
+                                                                    <option value="1 Unit"
+                                                                        @if ($milik->mobil == '1 Unit') selected @endif>1
+                                                                        Unit</option>
+                                                                    <option value="2 Unit"
+                                                                        @if ($milik->mobil == '2 Unit') selected @endif>2
+                                                                        Unit</option>
+                                                                    <option value="3 Unit"
+                                                                        @if ($milik->mobil == '3 Unit') selected @endif>3
+                                                                        Unit</option>
+                                                                    <option value="4 Unit"
+                                                                        @if ($milik->mobil == '4 Unit') selected @endif>4
+                                                                        Unit</option>
+                                                                    <option value="5 Unit"
+                                                                        @if ($milik->mobil == '5 Unit') selected @endif>5
+                                                                        Unit</option>
                                                                 </select>
                                                             </td>
                                                             <th>
@@ -230,28 +128,40 @@
                                                                     value="Mesin Cuci">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="mesin_cuci"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada">Ada</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="Ada"
+                                                                        @if ($milik->mesin_cuci == 'Ada') selected @endif>
+                                                                        Ada</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->mesin_cuci == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th>
-                                                                <input class="form-control" disabled=""
-                                                                    value="Motor">
+                                                                <input class="form-control" disabled="" value="Motor">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
-                                                                    id="">
+                                                                <select class="form-control" name="motor" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="1 Unit">1 Unit</option>
-                                                                    <option value="2 Unit">2 Unit</option>
-                                                                    <option value="3 Unit">3 Unit</option>
-                                                                    <option value="4 Unit">4 Unit</option>
-                                                                    <option value="5 Unit">5 Unit</option>
+                                                                    <option value="1 Unit"
+                                                                        @if ($milik->motor == '1 Unit') selected @endif>
+                                                                        1 Unit</option>
+                                                                    <option value="2 Unit"
+                                                                        @if ($milik->motor == '2 Unit') selected @endif>
+                                                                        2 Unit</option>
+                                                                    <option value="3 Unit"
+                                                                        @if ($milik->motor == '3 Unit') selected @endif>
+                                                                        3 Unit</option>
+                                                                    <option value="4 Unit"
+                                                                        @if ($milik->motor == '4 Unit') selected @endif>
+                                                                        4 Unit</option>
+                                                                    <option value="5 Unit"
+                                                                        @if ($milik->motor == '5 Unit') selected @endif>
+                                                                        5 Unit</option>
                                                                 </select>
                                                             </td>
                                                             <th>
@@ -259,11 +169,15 @@
                                                                     value="Kursi Tamu">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="kursi"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada">Ada</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="Ada"
+                                                                        @if ($milik->kursi_tamu == 'Ada') selected @endif>
+                                                                        Ada</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->kursi_tamu == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -273,14 +187,24 @@
                                                                     value="Televisi">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="tv"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="LCD">LCD</option>
-                                                                    <option value="LED">LED</option>
-                                                                    <option value="CRT Flat">CRT Flat</option>
-                                                                    <option value="CRT Cembung">CRT Cembung</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="LCD"
+                                                                        @if ($milik->televisi == 'LCD') selected @endif>
+                                                                        LCD</option>
+                                                                    <option value="LED"
+                                                                        @if ($milik->televisi == 'LED') selected @endif>
+                                                                        LED</option>
+                                                                    <option value="CRT Flat"
+                                                                        @if ($milik->televisi == 'CRT Flat') selected @endif>
+                                                                        CRT Flat</option>
+                                                                    <option value="CRT Cembung"
+                                                                        @if ($milik->televisi == 'CRT Cembung') selected @endif>
+                                                                        CRT Cembung</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->televisi == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                             <th>
@@ -288,38 +212,52 @@
                                                                     value="Lemari Panjang">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="lemari"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada">Ada</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="Ada"
+                                                                        @if ($milik->lemari_panjang == 'Ada') selected @endif>
+                                                                        Ada</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->lemari_panjang == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th>
-                                                                <input class="form-control" name="" id=""
-                                                                    placeholder="Isi Lainnya">
+                                                                <input class="form-control" name="nama_lain1"
+                                                                    id="" placeholder="Isi Lainnya"
+                                                                    value="{{ $milik->nama_lainnya1 }}">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="lainnya1"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada">Ada</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="Ada"
+                                                                        @if ($milik->isi_lainnya1 == 'Ada') selected @endif>
+                                                                        Ada</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->isi_lainnya1 == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                             <th>
-                                                                <input class="form-control" name="" id=""
-                                                                    placeholder="Isi Lainnya">
+                                                                <input class="form-control" name="nama_lain2"
+                                                                    id="" placeholder="Isi Lainnya"
+                                                                    value="{{ $milik->nama_lainnya2 }}">
 
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="lainnya2"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada">Ada</option>
-                                                                    <option value="Tidak Ada">Tidak Ada</option>
+                                                                    <option value="Ada"
+                                                                        @if ($milik->isi_lainnya2 == 'Ada') selected @endif>
+                                                                        Ada</option>
+                                                                    <option value="Tidak Ada"
+                                                                        @if ($milik->isi_lainnya2 == 'Tidak Ada') selected @endif>
+                                                                        Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -328,9 +266,9 @@
 
                                                 <div class="card-footer bg-transparent mt-auto">
                                                     <div class="btn-list justify-content-end">
-                                                        <a href="#" class="btn btn-primary">
+                                                        <button href="#" class="btn btn-primary">
                                                             Simpan
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </form>
