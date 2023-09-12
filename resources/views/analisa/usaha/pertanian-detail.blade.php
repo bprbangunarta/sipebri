@@ -121,7 +121,8 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="text-center" width="34%">Jenis Tanaman</th>
-                                                            <th class="text-center" width="33%">Hasil Panen</th>
+                                                            <th class="text-center" width="33%">Hasil Panen / Kwintal
+                                                            </th>
                                                             <th class="text-center" width="33%">Harga Per Kwintan</th>
                                                         </tr>
                                                     </thead>

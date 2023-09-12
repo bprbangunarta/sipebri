@@ -142,7 +142,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="text-center" width="34%">Jenis Tanaman</th>
-                                                            <th class="text-center" width="33%">Hasil Panen</th>
+                                                            <th class="text-center" width="33%">Hasil Panen / Kw</th>
                                                             <th class="text-center" width="33%">Harga Per Kwintan</th>
                                                         </tr>
                                                     </thead>
@@ -324,8 +324,7 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Angka" name="tambah_luas_tanah"
-                                                                    id="luas_tanah"
-                                                                    value="{{ $pertanian->pinjaman_bank = 'Rp. ' . number_format($pertanian->pinjaman_bank, 0, ',', '.') }}">
+                                                                    id="luas_tanah">
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pinjaman_bank"

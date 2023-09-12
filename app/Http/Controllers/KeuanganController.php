@@ -24,6 +24,8 @@ class KeuanganController extends Controller
             $cek = Midle::analisa_usaha($enc);
             
             $kemampuan = Midle::kemampuan_keuangan($enc);
+            $jml = $kemampuan['pertanian'] / 3;
+            $kemampuan['pertanian'] = intval($jml);
             $data = Keuangan::data_keuangan($enc);
             
             $filter = array_filter($kemampuan, function ($value) {
@@ -31,6 +33,7 @@ class KeuanganController extends Controller
             });
             
             //Hasil penjumlahan analisa usaha
+            
             $total = array_sum($filter);
             $kemampuan['total'] = $total;
             
