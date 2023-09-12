@@ -72,14 +72,11 @@
                                                             <td>
                                                                 <select class="form-control" name="rumah" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Permanen"
-                                                                        @if ($milik->rumah == 'Permanen') selected @endif>
+                                                                    <option value="Permanen">
                                                                         Permanen</option>
-                                                                    <option value="Sederhana"
-                                                                        @if ($milik->rumah == 'Sederhana') selected @endif>
+                                                                    <option value="Sederhana">
                                                                         Sederhana</option>
-                                                                    <option value="Semi Permanen"
-                                                                        @if ($milik->rumah == 'Semi Permane') selected @endif>
+                                                                    <option value="Semi Permanen">
                                                                         Semi Permanen</option>
                                                                 </select>
                                                             </td>
@@ -89,11 +86,9 @@
                                                             <td>
                                                                 <select class="form-control" name="komputer" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada"
-                                                                        @if ($milik->komputer == 'Ada') selected @endif>
+                                                                    <option value="Ada">
                                                                         Ada</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->komputer == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>
@@ -103,23 +98,17 @@
                                                                 <input class="form-control" disabled="" value="Mobil">
                                                             </th>
                                                             <td>
-                                                                <select class="form-control" name="mobil"
-                                                                    id=""{{ $milik->mobil == '1 Unit' }}>
+                                                                <select class="form-control" name="mobil" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="1 Unit"
-                                                                        @if ($milik->mobil == '1 Unit') selected @endif>1
+                                                                    <option value="1 Unit">1
                                                                         Unit</option>
-                                                                    <option value="2 Unit"
-                                                                        @if ($milik->mobil == '2 Unit') selected @endif>2
+                                                                    <option value="2 Unit">2
                                                                         Unit</option>
-                                                                    <option value="3 Unit"
-                                                                        @if ($milik->mobil == '3 Unit') selected @endif>3
+                                                                    <option value="3 Unit">3
                                                                         Unit</option>
-                                                                    <option value="4 Unit"
-                                                                        @if ($milik->mobil == '4 Unit') selected @endif>4
+                                                                    <option value="4 Unit">4
                                                                         Unit</option>
-                                                                    <option value="5 Unit"
-                                                                        @if ($milik->mobil == '5 Unit') selected @endif>5
+                                                                    <option value="5 Unit">5
                                                                         Unit</option>
                                                                 </select>
                                                             </td>
@@ -131,11 +120,9 @@
                                                                 <select class="form-control" name="mesin_cuci"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada"
-                                                                        @if ($milik->mesin_cuci == 'Ada') selected @endif>
+                                                                    <option value="Ada">
                                                                         Ada</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->mesin_cuci == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>
@@ -147,20 +134,15 @@
                                                             <td>
                                                                 <select class="form-control" name="motor" id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="1 Unit"
-                                                                        @if ($milik->motor == '1 Unit') selected @endif>
+                                                                    <option value="1 Unit">
                                                                         1 Unit</option>
-                                                                    <option value="2 Unit"
-                                                                        @if ($milik->motor == '2 Unit') selected @endif>
+                                                                    <option value="2 Unit">
                                                                         2 Unit</option>
-                                                                    <option value="3 Unit"
-                                                                        @if ($milik->motor == '3 Unit') selected @endif>
+                                                                    <option value="3 Unit">
                                                                         3 Unit</option>
-                                                                    <option value="4 Unit"
-                                                                        @if ($milik->motor == '4 Unit') selected @endif>
+                                                                    <option value="4 Unit">
                                                                         4 Unit</option>
-                                                                    <option value="5 Unit"
-                                                                        @if ($milik->motor == '5 Unit') selected @endif>
+                                                                    <option value="5 Unit">
                                                                         5 Unit</option>
                                                                 </select>
                                                             </td>
@@ -172,11 +154,9 @@
                                                                 <select class="form-control" name="kursi"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada"
-                                                                        @if ($milik->kursi_tamu == 'Ada') selected @endif>
+                                                                    <option value="Ada">
                                                                         Ada</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->kursi_tamu == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>
@@ -190,20 +170,15 @@
                                                                 <select class="form-control" name="tv"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="LCD"
-                                                                        @if ($milik->televisi == 'LCD') selected @endif>
+                                                                    <option value="LCD">
                                                                         LCD</option>
-                                                                    <option value="LED"
-                                                                        @if ($milik->televisi == 'LED') selected @endif>
+                                                                    <option value="LED">
                                                                         LED</option>
-                                                                    <option value="CRT Flat"
-                                                                        @if ($milik->televisi == 'CRT Flat') selected @endif>
+                                                                    <option value="CRT Flat">
                                                                         CRT Flat</option>
-                                                                    <option value="CRT Cembung"
-                                                                        @if ($milik->televisi == 'CRT Cembung') selected @endif>
+                                                                    <option value="CRT Cembung">
                                                                         CRT Cembung</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->televisi == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>
@@ -215,11 +190,9 @@
                                                                 <select class="form-control" name="lemari"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada"
-                                                                        @if ($milik->lemari_panjang == 'Ada') selected @endif>
+                                                                    <option value="Ada">
                                                                         Ada</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->lemari_panjang == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>
@@ -227,36 +200,30 @@
                                                         <tr>
                                                             <th>
                                                                 <input class="form-control" name="nama_lain1"
-                                                                    id="" placeholder="Isi Lainnya"
-                                                                    value="{{ $milik->nama_lainnya1 }}">
+                                                                    id="" placeholder="Isi Lainnya">
                                                             </th>
                                                             <td>
                                                                 <select class="form-control" name="lainnya1"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada"
-                                                                        @if ($milik->isi_lainnya1 == 'Ada') selected @endif>
+                                                                    <option value="Ada">
                                                                         Ada</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->isi_lainnya1 == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>
                                                             <th>
                                                                 <input class="form-control" name="nama_lain2"
-                                                                    id="" placeholder="Isi Lainnya"
-                                                                    value="{{ $milik->nama_lainnya2 }}">
+                                                                    id="" placeholder="Isi Lainnya">
 
                                                             </th>
                                                             <td>
                                                                 <select class="form-control" name="lainnya2"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
-                                                                    <option value="Ada"
-                                                                        @if ($milik->isi_lainnya2 == 'Ada') selected @endif>
+                                                                    <option value="Ada">
                                                                         Ada</option>
-                                                                    <option value="Tidak Ada"
-                                                                        @if ($milik->isi_lainnya2 == 'Tidak Ada') selected @endif>
+                                                                    <option value="Tidak Ada">
                                                                         Tidak Ada</option>
                                                                 </select>
                                                             </td>

@@ -23,8 +23,15 @@ class KepemilikanController extends Controller
             $cek = Midle::analisa_usaha($enc);
 
             $has = Kepemilikan::where('pengajuan_kode', $enc)->first();
+            // dd($has);
+            if (is_null($has)) {
+                return view('analisa.harta-kepemilikan', [
+                'data' => $cek[0],
+                'milik' => $has,
+            ]);
+            }
            
-            return view('analisa.harta-kemepilikan', [
+            return view('analisa.harta-kepemilikan-edit', [
                 'data' => $cek[0],
                 'milik' => $has,
             ]);
@@ -77,7 +84,7 @@ class KepemilikanController extends Controller
             ];
 
             if ($data) {
-                // DB::table('data_kepemilikan')->insert($data);
+                DB::table('data_kepemilikan')->insert($data);
                 return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan');
             }
 
@@ -115,9 +122,35 @@ class KepemilikanController extends Controller
      * @param  \App\Models\Kepemilikan  $kepemilikan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kepemilikan $kepemilikan)
+    public function update(Request $request, $kepemilikan)
     {
-        //
+        
+        try {
+            $enc = Crypt::decrypt($request->kode_pengajuan);
+            $data = [
+                'rumah' => ucwords($request->rumah),
+                'mobil' => ucwords($request->mobil),
+                'motor' => ucwords($request->motor),
+                'televisi' => ucwords($request->tv),
+                'komputer' => ucwords($request->komputer),
+                'mesin_cuci' => ucwords($request->mesin_cuci),
+                'kursi_tamu' => ucwords($request->kursi),
+                'lemari_panjang' => ucwords($request->lemari),
+                'nama_lainnya1' => ucwords($request->nama_lain1),
+                'isi_lainnya1' => ucwords($request->lainnya1),
+                'nama_lainnya2' => ucwords($request->nama_lain2),
+                'isi_lainnya2' => ucwords($request->lainnya2),
+            ];
+
+            if ($data) {
+                $pemilik = Kepemilikan::where('pengajuan_kode', $enc)->get();
+                DB::table('data_kepemilikan')->where('id', $pemilik[0]->id)->update($data);
+                return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan');
+            }
+
+        } catch (DecryptException $th) {
+             return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     /**
