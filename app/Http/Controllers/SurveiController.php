@@ -25,13 +25,16 @@ class SurveiController extends Controller
             //Data pengajuan
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();                
             $cek = Nasabah::where('kode_nasabah', $pengajuan->nasabah_kode)->first();
+            
             //Ambil data CGC        
             $cgc = CGC::select('*')->get();  
             $cek->kode_pengajuan = $pengajuan->kode_pengajuan;
+           
             //Data survey
             $survey = Survei::where('pengajuan_kode', $cek->kode_pengajuan)->first();        
             //Data kantor
             $ktr = Kantor::where('kode_kantor', $survey->kantor_kode)->first();
+            
             //inisialisasi variable ketika data null
             if (is_null($ktr)) {
                 $survey->nama_kantor = "";

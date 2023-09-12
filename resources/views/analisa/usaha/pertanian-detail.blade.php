@@ -108,7 +108,7 @@
                                                                     type="text" name="lokasi_usaha"></td>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
-                                                                    value="0M2">
+                                                                    value="0">
                                                             </td>
                                                         </tr>
                                                     </thead>

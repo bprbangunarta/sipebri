@@ -152,6 +152,11 @@ class PertanianController extends Controller
      */
     public function update(Request $request)
     {
+        
+        if ($request->jenis_usaha == null) {
+            return redirect()->back()->with('error', 'Jenis usaha harus dipilih salah satu');
+        }
+        
         try {
             $enc = Crypt::decrypt($request->query('usaha'));
 

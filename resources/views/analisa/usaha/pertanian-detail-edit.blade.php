@@ -324,7 +324,9 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Angka" name="tambah_luas_tanah"
-                                                                    id="luas_tanah"></td>
+                                                                    id="luas_tanah"
+                                                                    value="{{ $pertanian->pinjaman_bank = 'Rp. ' . number_format($pertanian->pinjaman_bank, 0, ',', '.') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pinjaman_bank"
                                                                     id="pinjaman_bank"
