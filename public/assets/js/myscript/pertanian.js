@@ -291,5 +291,17 @@ $("#lsendiri, #lsewa, #lgadai").keyup(function () {
     var bs = jml.toLocaleString("id-ID");
     var hasil = bs + " " + "M2";
     $("#total_tanah").val(hasil);
-    console.log(jml);
+});
+
+$("#jangka_waktu_panen").keyup(function () {
+    var jangka = $("#jangka_waktu_panen").val();
+    var bersih = $("#laba_bersih").val();
+
+    var rjangka = parseFloat(jangka.replace(/[^\d]/g, "")) || 0;
+    var rbersih = parseFloat(bersih.replace(/[^\d]/g, "")) || 0;
+
+    var jml = rbersih / rjangka;
+
+    var as = "Rp. " + jml.toLocaleString("id-ID");
+    $("#lb_perbulan").val(as);
 });

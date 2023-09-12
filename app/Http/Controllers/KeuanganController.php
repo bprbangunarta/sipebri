@@ -24,6 +24,7 @@ class KeuanganController extends Controller
             $cek = Midle::analisa_usaha($enc);
             
             $kemampuan = Midle::kemampuan_keuangan($enc);
+            
             $jml = $kemampuan['pertanian'] / 3;
             $kemampuan['pertanian'] = intval($jml);
             $data = Keuangan::data_keuangan($enc);

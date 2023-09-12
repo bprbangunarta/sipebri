@@ -239,21 +239,17 @@
                                                     </thead>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Jumlah Musim</th>
+                                                            <th class="text-center">Jumlah Waktu Panen</th>
                                                             <th class="text-center">Biaya Amortisasi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <select class="form-control" name="jumlah_musim"
-                                                                    id="jml_musim">
-                                                                    <option value="" class="text-center">--Pilih
-                                                                        Jumlah
-                                                                        Musim--</option>
-                                                                    <option value="6">2 Musim</option>
-                                                                    <option value="3">3 Musim</option>
-                                                                </select>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Masukan Jangka Waktu Panen"
+                                                                    name="jangka_waktu_panen" id="jangka_waktu_panen">
+                                                            </td>
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="amortisasi"
@@ -312,11 +308,19 @@
                                                                     value="Rp. " name="pinjaman" id="pinjaman"></td>
                                                         </tr>
                                                         <tr>
+                                                            <th><input class="form-control" disabled=""
+                                                                    value="Hasil Pendapatan Perbulan"></th>
+                                                            <td><input type="text" class="form-control" value="Rp. "
+                                                                    name="laba_perbulan" id="lb_perbulan" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
-                                                                    class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp. " name="laba_bersih" id="laba_bersih">
+                                                                    class="form-control bg-primary text-white"
+                                                                    value="Rp. " name="laba_bersih" id="laba_bersih"
+                                                                    readonly>
                                                             </td>
                                                         </tr>
                                                     </thead>

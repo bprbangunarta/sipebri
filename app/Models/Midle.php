@@ -239,7 +239,7 @@ class Midle extends Model
         $jas = $jasa->isEmpty() ? 0 : $jasa[0]->laba_bersih ?? 0;
         $tani = $pertanian->isEmpty() ? 0 : $pertanian[0]->laba_bersih ?? 0;
         $la = $lain->isEmpty() ? 0 : $lain[0]->laba_bersih ?? 0;
-
+        
         $hasil = [
             'perdagangan' => $per,
             'jasa' => $jas,
