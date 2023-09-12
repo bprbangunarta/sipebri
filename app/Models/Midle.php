@@ -234,17 +234,39 @@ class Midle extends Model
         $pertanian = Pertanian::where('pengajuan_kode', $data)->get();
         $lain = Lain::where('pengajuan_kode', $data)->get();
 
-        // Periksa dan ganti nilai yang kosong dengan 0
-        $per = $perdagangan->isEmpty() ? 0 : $perdagangan[0]->laba_bersih ?? 0;
-        $jas = $jasa->isEmpty() ? 0 : $jasa[0]->laba_bersih ?? 0;
-        $tani = $pertanian->isEmpty() ? 0 : $pertanian[0]->laba_bersih ?? 0;
-        $la = $lain->isEmpty() ? 0 : $lain[0]->laba_bersih ?? 0;
+        $tani = [];
+        for ($i=0; $i < count($pertanian); $i++) { 
+            $tani[] = $pertanian[$i]->laba_perbulan ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha pertanian
+        $totalpertanian = array_sum($tani);
+        
+        $dagang = [];
+        for ($j=0; $j < count($perdagangan); $j++) { 
+            $dagang[] = $perdagangan[$j]->laba_bersih ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha perdagangan
+        $totalperdagangan = array_sum($dagang);
+
+        $js = [];
+        for ($k=0; $k < count($jasa); $k++) { 
+            $js[] = $jasa[$k]->laba_bersih ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha jasa
+        $totaljasa = array_sum($js);
+
+        $la = [];
+        for ($l=0; $l < count($lain); $l++) { 
+            $la[] = $lain[$l]->laba_bersih ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha jasa
+        $totallain = array_sum($la);
         
         $hasil = [
-            'perdagangan' => $per,
-            'jasa' => $jas,
-            'pertanian' => $tani,
-            'lain' => $la,
+            'perdagangan' => $totalperdagangan,
+            'jasa' => $totaljasa,
+            'pertanian' => $totalpertanian,
+            'lain' => $totallain,
         ];
     
         return $hasil;

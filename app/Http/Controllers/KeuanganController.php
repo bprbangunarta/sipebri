@@ -25,8 +25,6 @@ class KeuanganController extends Controller
             
             $kemampuan = Midle::kemampuan_keuangan($enc);
             
-            $jml = $kemampuan['pertanian'] / 3;
-            $kemampuan['pertanian'] = intval($jml);
             $data = Keuangan::data_keuangan($enc);
             
             $filter = array_filter($kemampuan, function ($value) {
