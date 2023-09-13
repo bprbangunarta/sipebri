@@ -24,6 +24,7 @@ class KeuanganController extends Controller
             $cek = Midle::analisa_usaha($enc);
             
             $kemampuan = Midle::kemampuan_keuangan($enc);
+            
             $data = Keuangan::data_keuangan($enc);
             
             $filter = array_filter($kemampuan, function ($value) {
@@ -80,10 +81,10 @@ class KeuanganController extends Controller
                 $au = [
                     'kode_keuangan' => $kode,
                     'pengajuan_kode' => $enc,
-                    'p_usaha' => (int)str_replace(["Rp.", " ", "."], "", $request->p_usaha),
-                    'b_rumah_tangga' => (int)str_replace(["Rp.", " ", "."], "", $request->b_rumah_tangga),
-                    'b_kewajiban_lainya' => (int)str_replace(["Rp.", " ", "."], "", $request->b_kewajiban_lainya),
-                    'keuangan_perbulan' => (int)str_replace(["Rp.", " ", "."], "", $request->keuangan_perbulan),
+                    'p_usaha' => (int)str_replace(["Rp", " ", "."], "", $request->p_usaha),
+                    'b_rumah_tangga' => (int)str_replace(["Rp", " ", "."], "", $request->b_rumah_tangga),
+                    'b_kewajiban_lainya' => (int)str_replace(["Rp", " ", "."], "", $request->b_kewajiban_lainya),
+                    'keuangan_perbulan' => (int)str_replace(["Rp", " ", "."], "", $request->keuangan_perbulan),
                     'input_user' => Auth::user()->code_user,
                 ];
                 Keuangan::create($au);
@@ -202,8 +203,8 @@ class KeuanganController extends Controller
                 $au = [
                     'p_usaha' => (int)str_replace(["Rp", " ", "."], "", $request->p_usaha),
                     'b_rumah_tangga' => (int)str_replace(["Rp", " ", "."], "", $request->b_rumah_tangga),
-                    'b_kewajiban_lainya' => (int)str_replace(["Rp.", " ", "."], "", $request->b_kewajiban_lainya),
-                    'keuangan_perbulan' => (int)str_replace(["Rp.", " ", "."], "", $request->keuangan_perbulan),
+                    'b_kewajiban_lainya' => (int)str_replace(["Rp", " ", "."], "", $request->b_kewajiban_lainya),
+                    'keuangan_perbulan' => (int)str_replace(["Rp", " ", "."], "", $request->keuangan_perbulan),
                     'input_user' => Auth::user()->code_user,
                 ];
                 $au1 = Keuangan::where('kode_keuangan', $enc)->get();

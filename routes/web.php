@@ -29,6 +29,8 @@ use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\PertanianController;
+use App\Http\Controllers\KepemilikanController;
+use App\Models\Kepemilikan;
 use App\Models\Lain;
 use App\Models\Nasabah;
 
@@ -165,13 +167,9 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::controller(AnalisaController::class)->prefix('analisa')->group(function () {
-        Route::group(['middleware' => ['role:Staff Analis']], function () {
-            Route::get('/proses', 'index')->name('analisa.proses');
-        });
-    });
-
     Route::group(['middleware' => ['role:Staff Analis']], function () {
+        //Analisa Proses
+        Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
         //Analisa Usaha Perdagangan
         Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
         Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
@@ -187,12 +185,8 @@ Route::middleware('auth')->group(function () {
         //Analisa Keuangan
         Route::resource('/analisa/keuangan', KeuanganController::class);
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
-    });
-    // Add Layout
-    Route::prefix('layout')->group(function () {
-        Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
-        Route::view('/taksasi/jaminan', 'analisa.taksasi-jaminan')->name('analisa.taksasi.jaminan');
-        Route::view('/analisa/5c', 'analisa.5c')->name('analisa.5c');
+        //Analisa kepemilikan
+        Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
     });
 });
 
