@@ -192,10 +192,6 @@ Route::middleware('auth')->group(function () {
         //Analisa kepemilikan
         Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
     });
-    // Add Layout
-    // Route::prefix('layout')->group(function () {
-    //     Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
-    // });
 });
 
 
