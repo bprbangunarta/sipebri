@@ -166,14 +166,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
         });
     });
-
-    Route::controller(AnalisaController::class)->prefix('analisa')->group(function () {
-        Route::group(['middleware' => ['role:Staff Analis']], function () {
-            Route::get('/proses', 'index')->name('analisa.proses');
-        });
-    });
-
+    
     Route::group(['middleware' => ['role:Staff Analis']], function () {
+        //Analisa Proses
+        Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
         //Analisa Usaha Perdagangan
         Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
         Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
