@@ -11,56 +11,12 @@
                             <div iv class="container-xl">
                                 <div div class="row g-2 align-items-center">
 
-                                    {{-- @include('templates.header-analisa') --}}
-
-                                    <div class="col">
-                                        <h1 class="fw-bold">YANDI ROSYANDI</h1>
-                                        <div class="my-2"></div>
-                                        <div class="list-inline list-inline-dots text-muted">
-                                            <div class="list-inline-item">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-database-dollar" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path
-                                                        d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3">
-                                                    </path>
-                                                    <path d="M4 6v6c0 1.657 3.582 3 8 3c.415 0 .822 -.012 1.22 -.035">
-                                                    </path>
-                                                    <path d="M20 10v-4"></path>
-                                                    <path d="M4 12v6c0 1.657 3.582 3 8 3c.352 0 .698 -.009 1.037 -.025">
-                                                    </path>
-                                                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"></path>
-                                                    <path d="M19 21v1m0 -8v1"></path>
-                                                </svg>
-                                                Rp. 1.000.000
-                                            </div>
-                                            <div class="list-inline-item">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-calendar-time" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path
-                                                        d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4">
-                                                    </path>
-                                                    <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                                    <path d="M15 3v4"></path>
-                                                    <path d="M7 3v4"></path>
-                                                    <path d="M3 11h16"></path>
-                                                    <path d="M18 16.496v1.504l1 1"></path>
-                                                </svg>
-                                                36 Bulan
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('templates.header-analisa', [$data])
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('pertanian.index') }}" class="btn btn-primary">
+                                            <a href="{{ route('kepemilikan.index', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -84,86 +40,17 @@
                             <div class="card">
                                 <div class="row g-0">
 
-                                    {{-- @include('templates.menu-analisa') --}}
-
-                                    <div class="col-3 d-none d-md-block border-end">
-                                        <div class="card-body">
-                                            <div class="list-group list-group-transparent">
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/perdagangan', 'analisa/usaha/perdagangan/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usaha Perdagangan
-                                                </a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/pertanian', 'analisa/usaha/pertanian/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usah Pertanian
-                                                </a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/jasa', 'analisa/usaha/jasa/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usaha Jasa
-                                                </a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/lainnya', 'analisa/usaha/lainnya/detail') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Usaha Lainnya
-                                                </a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/keuangan') ? 'active' : '' }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Kemampuan Keuangan</a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action d-flex align-items-center active">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-chevrons-right" width="24"
-                                                        height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                        stroke="currentColor" fill="none" stroke-linecap="round"
-                                                        stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M7 7l5 5l-5 5"></path>
-                                                        <path d="M13 7l5 5l-5 5"></path>
-                                                    </svg> &nbsp;Harta Kepemilikan</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('templates.menu-analisa', [
+                                        'pengajuan' => $data->kd_pengajuan,
+                                    ])
 
                                     <div class="col d-flex flex-column">
+                                        <div class="card-header bg-transparent mt-auto">
+                                            <div class="btn-list justify-content">
+                                                <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#modal-tambah">Tambah</a>
+                                            </div>
+                                        </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered table-vcenter fs-5">
@@ -171,10 +58,51 @@
                                                         <tr>
                                                             <th class="text-center">Agunan</th>
                                                             <th class="text-center">No Dokumen</th>
-                                                            <th class="text-center">Atas Nama</th>
+                                                            <th class="text-center">Taksasi</th>
                                                             <th class="text-center" width="5%">Ubah</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
+                                                        @foreach ($taksasi as $item)
+                                                            <tr>
+                                                                <td>
+                                                                    <b>Jenis</b> : {{ $item->jenis_agunan }} <br>
+                                                                    <b>Dokumen</b> : {{ $item->jenis_dokumen }}
+                                                                </td>
+                                                                <td>
+                                                                    <b>No Doukumen</b> : {{ $item->no_dokumen }} <br>
+                                                                    <b>Atas Nama</b> : {{ $item->atas_nama }}
+                                                                </td>
+                                                                <td>{{ $item->nilai_taksasi = 'RP ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <a href="#" data-bs-toggle="modal"
+                                                                        data-bs-target="#modal-edit"
+                                                                        data-id="{{ $item->id }}">
+                                                                        <span class="badge bg-warning">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                class="icon icon-tabler icon-tabler-edit"
+                                                                                width="24" height="24"
+                                                                                viewBox="0 0 24 24" stroke-width="2"
+                                                                                stroke="currentColor" fill="none"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round">
+                                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                                    fill="none"></path>
+                                                                                <path
+                                                                                    d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
+                                                                                </path>
+                                                                                <path
+                                                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
+                                                                                </path>
+                                                                                <path d="M16 5l3 3"></path>
+                                                                            </svg>
+                                                                        </span>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>
@@ -188,4 +116,71 @@
             </div>
         </div>
     </div>
-@endsection
+
+    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Taksasi Jaminan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                @foreach ($taksasi as $item)
+                    <form action="{{ route('jaminan.update', ['jaminan' => $item->id]) }}" method="POST">
+                @endforeach
+                @method('put')
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Agunan</label>
+                                <input type="text" name="id" id="data" hidden>
+                                <input type="text" class="form-control" name="data" id="jenis" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Jenis Dokumen</label>
+                                <input type="text" class="form-control" name="jenis_dokumen_kode" id="dokumen"
+                                    readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">No Dokumen</label>
+                                <input type="text" class="form-control" name="no_dokumen" id="no_dok"
+                                    placeholder="No Dokumen" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Atas Nama</label>
+                                <input type="text" class="form-control" name="atas_nama" id="atas_nama"
+                                    placeholder="Nama Lengkap" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nilai Taksasi</label>
+                                <input type="text" class="form-control" name="nilai_taksasi" id="taksasi"
+                                    placeholder="Rp ">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
+                        <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="{{ asset('assets/js/myscript/taksasi.js') }}"></script>
+    @endsection

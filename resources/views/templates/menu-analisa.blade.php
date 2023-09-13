@@ -1,6 +1,6 @@
 <div class="col-3 d-none d-md-block border-end">
     <div class="card-body">
-        <div class="list-group list-group-transparent">
+        <div class="list-group list-group-transparent mt-0 mb-0">
             <a href="{{ route('tambah.index', ['pengajuan' => $pengajuan]) }}"
                 class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/usaha/perdagangan/tambah', 'analisa/usaha/perdagangan/*') ? 'active' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right" width="24"
@@ -59,6 +59,15 @@
                     <path d="M7 7l5 5l-5 5"></path>
                     <path d="M13 7l5 5l-5 5"></path>
                 </svg> &nbsp;Harta Kepemilikan</a>
+            <a href="{{ route('jaminan.index', ['pengajuan' => $pengajuan]) }}"
+                class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('layout/taksasi/jaminan') ? 'active' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right"
+                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M7 7l5 5l-5 5"></path>
+                    <path d="M13 7l5 5l-5 5"></path>
+                </svg> &nbsp;Taksasi Jaminan</a>
         </div>
     </div>
 </div>

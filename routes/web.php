@@ -30,6 +30,7 @@ use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\PertanianController;
 use App\Http\Controllers\KepemilikanController;
+use App\Http\Controllers\TaksasiJaminanController;
 use App\Models\Kepemilikan;
 use App\Models\Lain;
 use App\Models\Nasabah;
@@ -187,14 +188,15 @@ Route::middleware('auth')->group(function () {
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
         //Analisa kepemilikan
         Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
+        // Add Layout
+        Route::prefix('layout')->group(function () {
+            Route::resource('/taksasi/jaminan', TaksasiJaminanController::class);
+            Route::view('/analisa/5c', 'analisa.5c')->name('analisa.5c');
+        });
     });
 });
 
-// Add Layout
-Route::prefix('layout')->group(function () {
-    Route::view('/taksasi/jaminan', 'analisa.taksasi-jaminan')->name('analisa.taksasi.jaminan');
-    Route::view('/analisa/5c', 'analisa.5c')->name('analisa.5c');
-});
+
 
 
 require __DIR__ . '/auth.php';
