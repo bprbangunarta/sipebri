@@ -191,6 +191,8 @@ Route::middleware('auth')->group(function () {
     // Add Layout
     Route::prefix('layout')->group(function () {
         Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
+        Route::view('/taksasi/jaminan', 'analisa.taksasi-jaminan')->name('analisa.taksasi.jaminan');
+        Route::view('/analisa/5c', 'analisa.5c')->name('analisa.5c');
     });
 });
 
