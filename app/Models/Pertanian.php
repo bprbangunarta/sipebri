@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pertanian extends Model
 {
@@ -27,7 +28,17 @@ class Pertanian extends Model
 
     public static function au_pertanian($data)
     {
-        $cek = self::where('pengajuan_kode', $data)->get();
-        return $cek;
+        $c = self::where('pengajuan_kode', $data)->get();
+        
+        for ($k=0; $k < count($c); $k++) { 
+            $bu = DB::table('bu_pertanian')->where('usaha_kode', $c[$k]->kode_usaha)->first();
+            if (!is_null($bu)) {
+                $c[$k]->total_pengeluaran = $c[$k]->pengeluaran + $bu->amortisasi + $bu->pinjaman_bank;
+            }else{
+                $c[$k]->total_pengeluaran = 0;
+            }
+        }
+        
+        return $c;
     }
 }

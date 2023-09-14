@@ -75,23 +75,30 @@
                                                         <tr>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sendiri" id="lsendiri"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('luas_sendiri') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sewa" id="lsewa"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('luas_sewa') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_gadai" id="lgadai"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('luas_gadai') }}">
                                                             </td>
                                                             <td width="25%">
                                                                 <select class="form-control" name="jenis_usaha"
                                                                     id="">
                                                                     <option value="" class="text-center">--Pilih--
                                                                     </option>
-                                                                    <option value="pertanian">Pertanian</option>
-                                                                    <option value="perkebunan">Perkebunan</option>
+                                                                    <option value="pertanian"
+                                                                        {{ old('jenis_usaha') == 'pertanian' ? 'selected' : '' }}>
+                                                                        Pertanian</option>
+                                                                    <option value="perkebunan"
+                                                                        {{ old('jenis_usaha') == 'perkebunan' ? 'selected' : '' }}>
+                                                                        Perkebunan</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -105,7 +112,8 @@
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><input class="form-control text-center"
-                                                                    type="text" name="lokasi_usaha"></td>
+                                                                    type="text" name="lokasi_usaha"
+                                                                    value="{{ old('lokasi_usaha') }}"></td>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
                                                                     value="0">

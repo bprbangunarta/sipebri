@@ -78,7 +78,7 @@
                                                             <td>{{ $item->nama_usaha }}</td>
                                                             <td>{{ $item->pendapatan = 'Rp. ' . number_format($item->pendapatan, 0, ',', '.') }}
                                                             </td>
-                                                            <td>{{ $item->pengeluaran = 'Rp. ' . number_format($item->pengeluaran, 0, ',', '.') }}
+                                                            <td>{{ $item->pengeluaran = 'Rp. ' . number_format($item->total_pengeluaran, 0, ',', '.') }}
                                                             </td>
                                                             <td>{{ $item->laba_bersih = 'Rp. ' . number_format($item->laba_bersih, 0, ',', '.') }}
                                                             </td>
