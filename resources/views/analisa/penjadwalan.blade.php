@@ -62,12 +62,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $no = 1;
-                                        @endphp
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td class="text-center">{{ $no }}</td>
+                                                <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}
+                                                </td>
                                                 <td class="text-center">{{ $item->kode_nasabah }}</td>
                                                 <td>{{ $item->nama_nasabah }}</td>
                                                 <td>{{ $item->alamat_ktp }}</td>
@@ -135,7 +133,6 @@
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <input type="text" hidden value="{{ $no++ }}" readonly>
                                             </tr>
                                         @endforeach
                                     </tbody>
