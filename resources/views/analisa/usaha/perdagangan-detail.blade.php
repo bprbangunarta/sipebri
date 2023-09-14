@@ -311,15 +311,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input class="form-control" type="text" name="tbeli"
-                                                                    id="tbeli" value="Rp."></td>
+                                                                    id="tbeli" value="Rp." readonly></td>
                                                             <td><input class="form-control" type="text" name="tjual"
-                                                                    id="tjual" value="Rp."></td>
+                                                                    id="tjual" value="Rp." readonly></td>
                                                             <td><input class="form-control" type="text" name="tlaba"
-                                                                    id="tlaba" value="Rp."></td>
+                                                                    id="tlaba" value="Rp." readonly></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tstock" id="tstock"></td>
+                                                                    name="tstock" id="tstock" readonly></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tpersen" id="tpersen"></td>
+                                                                    name="tpersen" id="tpersen" readonly></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
