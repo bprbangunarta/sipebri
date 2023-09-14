@@ -129,7 +129,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="text-center" width="34%">Jenis Tanaman</th>
-                                                            <th class="text-center" width="33%">Hasil Panen / Kwintal
+                                                            <th class="text-center" width="33%">Hasil Panen / Kw
                                                             </th>
                                                             <th class="text-center" width="33%">Harga Per Kwintan</th>
                                                         </tr>
@@ -256,7 +256,7 @@
                                                             <td>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Masukan Jangka Waktu Panen"
-                                                                    name="jangka_waktu_panen" id="jangka_waktu_panen">
+                                                                    name="jangka_waktu_panen" id="jwp">
                                                             </td>
                                                             </td>
                                                             <td><input type="text" class="form-control"

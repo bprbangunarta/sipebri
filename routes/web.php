@@ -190,10 +190,8 @@ Route::middleware('auth')->group(function () {
         //Analisa kepemilikan
         Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
         // Add Layout
-        Route::prefix('layout')->group(function () {
-            Route::resource('/taksasi/jaminan', TaksasiJaminanController::class);
-            Route::get('/analisa/5c', [Analisa5cController::class, 'analisa5c'])->name('analisa.5c');
-        });
+        Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
+        Route::get('/analisa/analisa/5c', [Analisa5cController::class, 'analisa5c'])->name('analisa.5c');
     });
 });
 

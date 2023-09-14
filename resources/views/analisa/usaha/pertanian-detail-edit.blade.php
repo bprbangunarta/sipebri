@@ -296,7 +296,7 @@
                                                             <td>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Masukan Jangka Waktu Panen"
-                                                                    name="jangka_waktu_panen" id="jangka_waktu_panen"
+                                                                    name="jangka_waktu_panen" id="jwp"
                                                                     value="{{ $pertanian->jangka_waktu_panen }}">
                                                             </td>
                                                             <td><input type="text" class="form-control"
