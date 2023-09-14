@@ -154,7 +154,7 @@ class PertanianController extends Controller
     {
 
         if ($request->jenis_usaha == null) {
-            return redirect()->back()->with('error', 'Jenis usaha harus dipilih salah satu');
+            return redirect()->back()->withInput()->with(['error' => 'Jenis usaha harus dipilih salah satu']);
         }
         
         try {
