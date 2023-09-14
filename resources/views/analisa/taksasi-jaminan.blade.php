@@ -68,8 +68,8 @@
                                                                     <b>Dokumen</b> : {{ $item->jenis_dokumen }}
                                                                 </td>
                                                                 <td>
-                                                                    <b>No Doukumen</b> : {{ $item->no_dokumen }} <br>
-                                                                    <b>Atas Nama</b> : {{ $item->atas_nama }}
+                                                                    <b>Atas Nama</b> : {{ $item->atas_nama }}<br>
+                                                                    <b>No Doukumen</b> : {{ $item->no_dokumen }}
                                                                 </td>
                                                                 <td>{{ $item->nilai_taksasi = 'RP ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
                                                                 </td>
