@@ -1,5 +1,6 @@
 @extends('templates.app')
 @section('title', 'Analisa 5C')
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -66,11 +67,11 @@
                                                                 value="Gaya Hidup" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="gaya_hidup" id="select1">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -78,11 +79,11 @@
                                                                 value="Terbuka dan Konsisten" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="konsisten" id="select2">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="2">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -92,11 +93,11 @@
                                                                 value="Pengendalian Emosi" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="pengendalian" id="select3">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="2">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -104,11 +105,11 @@
                                                                 value="Kepatuhan Terhadap Kewajiban" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="kepatuhan" id="select4">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="2">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -118,11 +119,11 @@
                                                                 value="Melakukan Perbuatan Tercela" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="tercela" id="select5">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="2">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -130,11 +131,11 @@
                                                                 value="Hubungan Sosial dgn Lingkungan" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="sosial" id="select6">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="2">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -144,17 +145,18 @@
                                                                 value="Keharmonisan Rumah Tangga" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="" id="">
+                                                            <select class="form-control" name="harmonis" id="select7">
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="Baik">Baik</option>
-                                                                <option value="Cukup Baik">Cukup Baik</option>
-                                                                <option value="Kurang Baik">Kurang Baik</option>
+                                                                <option value="3">Baik</option>
+                                                                <option value="2">Cukup Baik</option>
+                                                                <option value="1">Kurang Baik</option>
                                                             </select>
                                                         </td>
                                                         <td colspan="2">
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="" value="BAIK/ CUKUP BAIK/ KURANG BAIK">
+                                                                name="nilai1" id="n1"
+                                                                value="BAIK/ CUKUP BAIK/ KURANG BAIK" readonly>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -322,4 +324,5 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/myscript/analisa5c.js') }}"></script>
 @endsection
