@@ -45,16 +45,14 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <div class="card-header bg-transparent mt-auto">
-                                            <div class="btn-list justify-content">
-                                                <a href="#" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-tambah">Tambah</a>
-                                            </div>
-                                        </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
+                                                        <tr>
+                                                            <th class="text-center" colspan="4">Informasi Taksasi Jaminan
+                                                            </th>
+                                                        </tr>
                                                         <tr>
                                                             <th class="text-center">Agunan</th>
                                                             <th class="text-center">No Dokumen</th>

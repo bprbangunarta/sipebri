@@ -1,39 +1,40 @@
 <?php
 
+use App\Models\Lain;
+use App\Models\Nasabah;
+use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DatiController;
+use App\Http\Controllers\JasaController;
+use App\Http\Controllers\LainController;
+use App\Http\Controllers\CetakController;
 use App\Http\Controllers\SurveiController;
+use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\TabunganController;
+use App\Http\Controllers\Analisa5cController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\PertanianController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\PendampingController;
+use App\Http\Controllers\KepemilikanController;
+use App\Http\Controllers\PenjadwalanController;
+use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
+use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AnalisaController;
-use App\Http\Controllers\CetakController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DataCetakController;
-use App\Http\Controllers\DatiController;
-use App\Http\Controllers\JasaController;
-use App\Http\Controllers\KeuanganController;
-use App\Http\Controllers\KonfirmasiController;
-use App\Http\Controllers\LainController;
-use App\Http\Controllers\PenjadwalanController;
-use App\Http\Controllers\PerdaganganController;
-use App\Http\Controllers\TabunganController;
-use App\Http\Controllers\PertanianController;
-use App\Http\Controllers\KepemilikanController;
-use App\Http\Controllers\TaksasiJaminanController;
-use App\Models\Kepemilikan;
-use App\Models\Lain;
-use App\Models\Nasabah;
 
 /*
 |--------------------------------------------------------------------------
@@ -191,7 +192,7 @@ Route::middleware('auth')->group(function () {
         // Add Layout
         Route::prefix('layout')->group(function () {
             Route::resource('/taksasi/jaminan', TaksasiJaminanController::class);
-            Route::view('/analisa/5c', 'analisa.5c')->name('analisa.5c');
+            Route::get('/analisa/5c', [Analisa5cController::class, 'analisa5c'])->name('analisa.5c');
         });
     });
 });
