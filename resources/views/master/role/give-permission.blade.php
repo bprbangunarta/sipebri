@@ -130,13 +130,15 @@
                                         <td class="text-center">3</td>
                                         <td>Modul Agunan</td>
                                         <td class="text-center">
-                                            <input type="checkbox" name="give-permission" id="give-permission" data-id1="agunan tambah" data-id2="21">
+                                            <input type="checkbox" name="give-permission" id="give-permission" data-id1="agunan tambah" data-id2="21" @foreach ($permission as $data) @foreach ($role as $item)
+                                            @if ($item->permission_id == $data->id && $item->role_id == $datas) checked @break @endif @endforeach @endforeach>
                                         </td>
                                         <td class="text-center">
                                             <input type="checkbox" name="give-permission" id="give-permission" disabled>
                                         </td>
                                         <td class="text-center">
-                                            <input type="checkbox" name="give-permission" id="give-permission" data-id1="agunan edit" data-id2="22">
+                                            <input type="checkbox" name="give-permission" id="give-permission" @foreach ($permission as $data) data-id1="{{ $data->name }}" data-id2="{{ $data->id }}"  @foreach ($role as $item)
+                                            @if ($item->permission_id == $data->id && $item->role_id == $datas) checked @break @endif @endforeach @endforeach>
                                         </td>
                                         <td class="text-center">
                                             <input type="checkbox" name="give-permission" id="give-permission" data-id1="agunan hapus" data-id2="23">
@@ -145,7 +147,8 @@
                                             <input type="checkbox" name="give-permission" id="give-permission" disabled>
                                         </td>
                                         <td class="text-center">
-                                            <input type="checkbox" name="give-permission" id="give-permission" data-id1="agunan otorisasi" data-id2="24">
+                                            <input type="checkbox" name="give-permission" id="give-permission" data-id1="agunan otorisasi" data-id2="24" @foreach ($permission as $data) @foreach ($role as $item)
+                                            @if ($item->permission_id == $data->id && $item->role_id == $datas) checked @break @endif @endforeach @endforeach>
                                         </td>
                                         <td class="text-center">
                                             <input type="checkbox" name="give-permission" id="give-permission" disabled>

@@ -28,7 +28,7 @@ class PermissionController extends Controller
         }
 
         $permission = $query->paginate(10);
-
+        
         return view('master.permission.index', compact('permission'));
     }
 
