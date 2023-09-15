@@ -112,9 +112,10 @@ $(document).ready(function () {
                 parseFloat(bo.replace("Rp. ", "").replace(/\./g, "")) || 0;
             var rpph =
                 parseFloat(pph.replace("Rp. ", "").replace(/\./g, "")) || 0;
-            var has = total - rpph + rbo;
-            var totalpen = "Rp. " + has.toLocaleString("id-ID");
-            $("#hasilbersih").val(totalpen);
+            var a = total + rpph;
+            var has = a - rbo;
+            var tpen = "Rp. " + has.toLocaleString("id-ID");
+            $("#hasilbersih").val(tpen);
         }
     );
 
