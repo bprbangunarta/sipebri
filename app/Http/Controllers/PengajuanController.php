@@ -45,7 +45,7 @@ class PengajuanController extends Controller
                     }elseif($role[0]->role_name == 'Head Teller'){
                         $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
                     }
-                    $pengajuan = $query->get();
+                    $pengajuan = $query->paginate(10);
         
         
         $auth = Auth::user()->code_user;
@@ -53,7 +53,7 @@ class PengajuanController extends Controller
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
         }
-        // dd($pengajuan);
+        
         return view('pengajuan.index', [
             'data' => $pengajuan,
             'auth' => $auth,

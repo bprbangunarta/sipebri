@@ -24,6 +24,7 @@ class KeuanganController extends Controller
             $cek = Midle::analisa_usaha($enc);
             
             $kemampuan = Midle::kemampuan_keuangan($enc);
+            
             $data = Keuangan::data_keuangan($enc);
             
             $filter = array_filter($kemampuan, function ($value) {
@@ -69,29 +70,29 @@ class KeuanganController extends Controller
      */
     public function store(Request $request)
     {
+        
         try {
             DB::transaction(function () use ($request) {
                 $enc = Crypt::decrypt($request->query('pengajuan'));
                 $name = 'AUK';
                 $length = 5;
                 $kode = Keuangan::kodeacak($name, $length);
-                
+                //au_keuangan
                 $au = [
                     'kode_keuangan' => $kode,
                     'pengajuan_kode' => $enc,
-                    'p_usaha' => (int)str_replace(["Rp.", " ", "."], "", $request->p_usaha),
-                    'b_rumah_tangga' => (int)str_replace(["Rp.", " ", "."], "", $request->b_rumah_tangga),
-                    'b_kewajiban_lainya' => (int)str_replace(["Rp.", " ", "."], "", $request->b_kewajiban_lainya),
-                    'keuangan_perbulan' => (int)str_replace(["Rp.", " ", "."], "", $request->keuangan_perbulan),
+                    'p_usaha' => (int)str_replace(["Rp", " ", "."], "", $request->p_usaha),
+                    'b_rumah_tangga' => (int)str_replace(["Rp", " ", "."], "", $request->b_rumah_tangga),
+                    'b_kewajiban_lainya' => (int)str_replace(["Rp", " ", "."], "", $request->b_kewajiban_lainya),
+                    'keuangan_perbulan' => (int)str_replace(["Rp", " ", "."], "", $request->keuangan_perbulan),
                     'input_user' => Auth::user()->code_user,
                 ];
                 Keuangan::create($au);
 
-                //Biaya Rumah Tangga ambil data yang diisi saja
+                //Biaya Rumah Tangga
                 for ($i = 1; $i <= 7; $i++) {
                     $length = 10;
                     $kod = Keuangan::du_kodeacak($length);
-                    //Simpan data yang ada nominalnya saja
                         $data = [
                             'keuangan_kode' => $kode,
                             'kode_biaya' => $kod,
@@ -105,7 +106,6 @@ class KeuanganController extends Controller
                 for ($j=1; $j <= 3; $j++) { 
                     $length = 10;
                     $k = Keuangan::du_kodeacak($length);
-                    //Simpan data yang ada nominalnya saja
                         $data1 = [
                             'keuangan_kode' => $kode,
                             'kode_biaya' => $k,
@@ -203,8 +203,8 @@ class KeuanganController extends Controller
                 $au = [
                     'p_usaha' => (int)str_replace(["Rp", " ", "."], "", $request->p_usaha),
                     'b_rumah_tangga' => (int)str_replace(["Rp", " ", "."], "", $request->b_rumah_tangga),
-                    'b_kewajiban_lainya' => (int)str_replace(["Rp.", " ", "."], "", $request->b_kewajiban_lainya),
-                    'keuangan_perbulan' => (int)str_replace(["Rp.", " ", "."], "", $request->keuangan_perbulan),
+                    'b_kewajiban_lainya' => (int)str_replace(["Rp", " ", "."], "", $request->b_kewajiban_lainya),
+                    'keuangan_perbulan' => (int)str_replace(["Rp", " ", "."], "", $request->keuangan_perbulan),
                     'input_user' => Auth::user()->code_user,
                 ];
                 $au1 = Keuangan::where('kode_keuangan', $enc)->get();

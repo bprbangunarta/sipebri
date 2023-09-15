@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Pengajuan Kredit')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -66,6 +66,7 @@
                                 </div>
                             </form>
 
+
                             <div class="table-responsive">
                                 <table class="table table-bordered table-vcenter fs-5">
                                     <thead>
@@ -92,12 +93,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $no = 1;
-                                        @endphp
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td class="text-center">{{ $no }}</td>
+                                                <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                                 <td>{{ $item->kode }}</td>
                                                 <td>{{ strtoupper($item->nama) }}</td>
                                                 @if (is_null($item->alamat))
@@ -252,13 +250,12 @@
                                                         </form>
                                                     </td>
                                                 @endcan
-
-                                                <input type="text" hidden value="{{ $no++ }}" readonly>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-
+                                <br>
+                                {{ $data->links('vendor.pagination.bootstrap-5') }}
                             </div>
                         </div>
                     </div>

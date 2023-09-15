@@ -289,7 +289,8 @@
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
                                                                     value="{{ 'Rp ' . number_format($biaya[0]->keuangan_perbulan, 0, ',', '.') }}"
-                                                                    name="keuangan_perbulan" id="hasilbersih"></td>
+                                                                    name="keuangan_perbulan" id="hasilbersih" readonly>
+                                                            </td>
                                                         </tr>
                                                     </thead>
                                                 </table>

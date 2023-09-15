@@ -75,23 +75,30 @@
                                                         <tr>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sendiri" id="lsendiri"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('luas_sendiri') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_sewa" id="lsewa"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('luas_sewa') }}">
                                                             </td>
                                                             <td width="25%"><input class="form-control" type="text"
                                                                     name="luas_gadai" id="lgadai"
-                                                                    placeholder="Masukan Angka">
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('luas_gadai') }}">
                                                             </td>
                                                             <td width="25%">
                                                                 <select class="form-control" name="jenis_usaha"
                                                                     id="">
                                                                     <option value="" class="text-center">--Pilih--
                                                                     </option>
-                                                                    <option value="pertanian">Pertanian</option>
-                                                                    <option value="perkebunan">Perkebunan</option>
+                                                                    <option value="pertanian"
+                                                                        {{ old('jenis_usaha') == 'pertanian' ? 'selected' : '' }}>
+                                                                        Pertanian</option>
+                                                                    <option value="perkebunan"
+                                                                        {{ old('jenis_usaha') == 'perkebunan' ? 'selected' : '' }}>
+                                                                        Perkebunan</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -105,10 +112,11 @@
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3"><input class="form-control text-center"
-                                                                    type="text" name="lokasi_usaha"></td>
+                                                                    type="text" name="lokasi_usaha"
+                                                                    value="{{ old('lokasi_usaha') }}"></td>
                                                             <td><input class="form-control text-center fw-bold"
                                                                     type="text" name="total_tanah" id="total_tanah"
-                                                                    value="0M2">
+                                                                    value="{{ old('lokasi_usaha') ?? 0 }}">
                                                             </td>
                                                         </tr>
                                                     </thead>
@@ -121,7 +129,8 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="text-center" width="34%">Jenis Tanaman</th>
-                                                            <th class="text-center" width="33%">Hasil Panen</th>
+                                                            <th class="text-center" width="33%">Hasil Panen / Kw
+                                                            </th>
                                                             <th class="text-center" width="33%">Harga Per Kwintan</th>
                                                         </tr>
                                                     </thead>
@@ -132,15 +141,21 @@
                                                                     id="">
                                                                     <option value="" class="text-center">--Pilih--
                                                                     </option>
-                                                                    <option value="Padi Inpari">Padi Inpari</option>
-                                                                    <option value="Padi Ketan">Padi Ketan</option>
+                                                                    <option value="Padi Inpari"
+                                                                        {{ old('jenis_tanaman') == 'Padi Inpari' ? 'selected' : '' }}>
+                                                                        Padi Inpari</option>
+                                                                    <option value="Padi Ketan"
+                                                                        {{ old('jenis_tanaman') == 'Padi Ketan' ? 'selected' : '' }}>
+                                                                        Padi Ketan</option>
                                                                 </select>
                                                             </td>
                                                             <td><input class="form-control" type="text"
                                                                     name="hasil_panen" id="hpanen"
-                                                                    placeholder="Masukan Angka"></td>
+                                                                    placeholder="Masukan Angka"
+                                                                    value="{{ old('hasil_panen') }}"></td>
                                                             <td><input class="form-control" type="text" name="harga"
-                                                                    id="hrg" placeholder="Masukan Nominal"></td>
+                                                                    id="hrg" placeholder="Masukan Nominal"
+                                                                    value="{{ old('harga') }}"></td>
                                                         </tr>
 
                                                     </tbody>
@@ -163,12 +178,15 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengolahan_tanah"
-                                                                    id="pengolahan">
+                                                                    id="pengolahan"
+                                                                    value="{{ old('pengolahan_tanah') }}">
                                                             </td>
                                                             <td><input type="text" class="form-control" name="bibit"
-                                                                    placeholder="Masukan Nominal" id="bibit"></td>
+                                                                    placeholder="Masukan Nominal" id="bibit"
+                                                                    value="{{ old('bibit') }}"></td>
                                                             <td><input type="text" class="form-control" name="pupuk"
-                                                                    placeholder="Masukan Nominal" id="pupuk"></td>
+                                                                    placeholder="Masukan Nominal" id="pupuk"
+                                                                    value="{{ old('pupuk') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -181,14 +199,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input type="text" class="form-control"
-                                                                    name="pestisida" placeholder="Masukan Nominal"
-                                                                    name="pestisida" id="pestisida"></td>
+                                                                    placeholder="Masukan Nominal" name="pestisida"
+                                                                    id="pestisida" value="{{ old('pestisida') }}"></td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="tenaga_kerja"
-                                                                    id="tenaga_kerja"></td>
+                                                                    id="tenaga_kerja" value="{{ old('tenaga_kerja') }}">
+                                                            </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pengairan"
-                                                                    id="pengairan"></td>
+                                                                    id="pengairan" value="{{ old('pengairan') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -202,13 +221,13 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="panen"
-                                                                    id="panen"></td>
+                                                                    id="panen" value="{{ old('panen') }}"></td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="penggarap"
-                                                                    id="penggarap"></td>
+                                                                    id="penggarap" value="{{ old('penggarap') }}"></td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pajak"
-                                                                    id="pajak"></td>
+                                                                    id="pajak" value="{{ old('pajak') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -222,7 +241,7 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="iuran_desa"
-                                                                    id="iuran_desa"></td>
+                                                                    id="iuran_desa" value="{{ old('iuran_desa') }}"></td>
                                                             <td></td>
                                                             <td></td>
                                                         </tr>
@@ -238,25 +257,22 @@
                                                     </thead>
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Jumlah Musim</th>
+                                                            <th class="text-center">Jumlah Waktu Panen</th>
                                                             <th class="text-center">Biaya Amortisasi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <select class="form-control" name="jumlah_musim"
-                                                                    id="jml_musim">
-                                                                    <option value="" class="text-center">--Pilih
-                                                                        Jumlah
-                                                                        Musim--</option>
-                                                                    <option value="6">2 Musim</option>
-                                                                    <option value="3">3 Musim</option>
-                                                                </select>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Masukan Jangka Waktu Panen"
+                                                                    name="jangka_waktu_panen" id="jwp"
+                                                                    value="{{ old('jangka_waktu_panen') }}">
+                                                            </td>
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="amortisasi"
-                                                                    id="amortisasi"></td>
+                                                                    id="amortisasi" value="{{ old('amortisasi') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -269,10 +285,12 @@
                                                         <tr>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Angka" name="tambah_luas_tanah"
-                                                                    id="luas_tanah"></td>
+                                                                    id="luas_tanah"
+                                                                    value="{{ old('tambah_luas_tanah') }}"></td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="pinjaman_bank"
-                                                                    id="pinjaman_bank"></td>
+                                                                    id="pinjaman_bank"
+                                                                    value="{{ old('pinjaman_bank') }}"></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -288,34 +306,47 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pendapatan Hasil Panen"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pendapatan" id="pendapatan">
+                                                                    value="Rp. {{ old('pendapatan') }}" name="pendapatan"
+                                                                    id="pendapatan">
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pengeluaran Biaya Usaha"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pengeluaran" id="pengeluaran">
+                                                                    value="Rp. {{ old('pengeluaran') }}"
+                                                                    name="pengeluaran" id="pengeluaran">
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Penambahan Hasil Usaha"></th>
-                                                            <td><input type="text" class="form-control" value="Rp. "
-                                                                    name="penambahan" id="penambahan"></td>
+                                                            <td><input type="text" class="form-control"
+                                                                    value="Rp. {{ old('penambahan') }}" name="penambahan"
+                                                                    id="penambahan"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Pinjaman Bank Lain"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="pinjaman" id="pinjaman"></td>
+                                                                    value="Rp. {{ old('pinjaman') }}" name="pinjaman"
+                                                                    id="pinjaman"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><input class="form-control" disabled=""
+                                                                    value="Hasil Pendapatan Perbulan"></th>
+                                                            <td><input type="text" class="form-control"
+                                                                    value="Rp. {{ old('laba_perbulan') }}"
+                                                                    name="laba_perbulan" id="lb_perbulan" readonly>
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
-                                                                    class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp. " name="laba_bersih" id="laba_bersih">
+                                                                    class="form-control bg-primary text-white"
+                                                                    value="Rp. {{ old('laba_bersih') }}"
+                                                                    name="laba_bersih" id="laba_bersih" readonly>
                                                             </td>
                                                         </tr>
                                                     </thead>

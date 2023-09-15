@@ -27,8 +27,10 @@ class PendampingController extends Controller
             //Ambil kode pengajuan
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
             $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
+            
             //Ambil kode pendamping
             $pendamping = Pendamping::where('pengajuan_kode',$pengajuan[0]->kode_pengajuan)->get();
+            
             //Ubah format masa identitas Ymd menjadi m-d-Y
             if (!is_null($pendamping[0]->masa_identitas)) {
                 $carbonid = Carbon::createFromFormat('Ymd', $pendamping[0]->masa_identitas);

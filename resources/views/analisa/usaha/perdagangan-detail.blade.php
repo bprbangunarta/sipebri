@@ -311,15 +311,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input class="form-control" type="text" name="tbeli"
-                                                                    id="tbeli" value="Rp."></td>
+                                                                    id="tbeli" value="Rp." readonly></td>
                                                             <td><input class="form-control" type="text" name="tjual"
-                                                                    id="tjual" value="Rp."></td>
+                                                                    id="tjual" value="Rp." readonly></td>
                                                             <td><input class="form-control" type="text" name="tlaba"
-                                                                    id="tlaba" value="Rp."></td>
+                                                                    id="tlaba" value="Rp." readonly></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tstock" id="tstock"></td>
+                                                                    name="tstock" id="tstock" readonly></td>
                                                             <td><input class="form-control text-center" type="text"
-                                                                    name="tpersen" id="tpersen"></td>
+                                                                    name="tpersen" id="tpersen" readonly></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -434,13 +434,15 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Laba Bulanan"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " id="lbulan" name="pendapatan"></td>
+                                                                    value="Rp. {{ old('pendapatan') }}" id="lbulan"
+                                                                    name="pendapatan"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Biaya Perdagangan"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " id="bdagang" name="pengeluaran">
+                                                                    value="Rp. {{ old('pengeluaran') }}" id="bdagang"
+                                                                    name="pengeluaran">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -448,14 +450,16 @@
                                                                     value="Proyeksi Penambahan"></th>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" id="penambahan"
-                                                                    name="penambahan"></td>
+                                                                    name="penambahan"
+                                                                    value="Rp. {{ old('penambahan') }}"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp. " id="hasilbersih" name="laba_bersih">
+                                                                    value="Rp. {{ old('laba_bersih') }}" id="hasilbersih"
+                                                                    name="laba_bersih">
                                                             </td>
                                                         </tr>
                                                     </thead>

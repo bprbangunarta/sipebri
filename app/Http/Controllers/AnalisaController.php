@@ -27,7 +27,7 @@ class AnalisaController extends Controller
         if ($data->isNotEmpty()) {
             $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
         }   
-       
+        
         return view('analisa.proses', [
             'data' => $data
         ]);

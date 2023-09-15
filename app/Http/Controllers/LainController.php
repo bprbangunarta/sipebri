@@ -113,6 +113,7 @@ class LainController extends Controller
      */
     public function edit(Request $request)
     {
+        
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);

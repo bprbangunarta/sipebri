@@ -1,36 +1,40 @@
 <?php
 
+use App\Models\Lain;
+use App\Models\Nasabah;
+use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DatiController;
+use App\Http\Controllers\JasaController;
+use App\Http\Controllers\LainController;
+use App\Http\Controllers\CetakController;
 use App\Http\Controllers\SurveiController;
+use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\TabunganController;
+use App\Http\Controllers\Analisa5cController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\PengajuanController;
+use App\Http\Controllers\PertanianController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\PendampingController;
+use App\Http\Controllers\KepemilikanController;
+use App\Http\Controllers\PenjadwalanController;
+use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
+use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AnalisaController;
-use App\Http\Controllers\CetakController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DataCetakController;
-use App\Http\Controllers\DatiController;
-use App\Http\Controllers\JasaController;
-use App\Http\Controllers\KeuanganController;
-use App\Http\Controllers\KonfirmasiController;
-use App\Http\Controllers\LainController;
-use App\Http\Controllers\PenjadwalanController;
-use App\Http\Controllers\PerdaganganController;
-use App\Http\Controllers\TabunganController;
-use App\Http\Controllers\PertanianController;
-use App\Models\Lain;
-use App\Models\Nasabah;
 
 /*
 |--------------------------------------------------------------------------
@@ -165,34 +169,33 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::controller(AnalisaController::class)->prefix('analisa')->group(function () {
-        Route::group(['middleware' => ['role:Staff Analis']], function () {
-            Route::get('/proses', 'index')->name('analisa.proses');
-        });
-    });
-
     Route::group(['middleware' => ['role:Staff Analis']], function () {
+        //Analisa Proses
+        Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
         //Analisa Usaha Perdagangan
         Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
-        Route::post('/analisa/usaha/perdagangan/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
-        Route::put('/analisa/usaha/perdagangan/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
+        Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
+        Route::put('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
         //Analisa Usaha Pertanian
-        Route::resource('/analisa/usaha/pertanian/pertanian', PertanianController::class);
-        Route::put('/analisa/usaha/pertanian/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
+        Route::resource('/analisa/usaha/pertanian', PertanianController::class);
+        Route::put('/analisa/usaha/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
         //Analisa Usaha Jasa
-        Route::resource('/analisa/usaha/jasa/jasa', JasaController::class);
+        Route::resource('/analisa/usaha/jasa', JasaController::class);
         //Analisa Usaha Lainnya
-        Route::resource('/analisa/usaha/lain/lain', LainController::class);
-        Route::put('/analisa/usaha/lain/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
+        Route::resource('/analisa/usaha/lain', LainController::class);
+        Route::put('/analisa/usaha/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
         //Analisa Keuangan
         Route::resource('/analisa/keuangan', KeuanganController::class);
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
-    });
-    // Add Layout
-    Route::prefix('layout')->group(function () {
-        Route::view('/harta/kepemilikan', 'analisa.harta-kemepilikan')->name('analisa.harta.kepemilikan');
+        //Analisa kepemilikan
+        Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
+        // Add Layout
+        Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
+        Route::get('/analisa/analisa/5c', [Analisa5cController::class, 'analisa5c'])->name('analisa.5c');
     });
 });
+
+
 
 
 require __DIR__ . '/auth.php';

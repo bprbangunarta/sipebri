@@ -132,7 +132,7 @@ class PertanianController extends Controller
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-
+            
             //jika data pertanian ada maka akan diarahkan ke view pertanian-detail-edit
             return view('analisa.usaha.pertanian-detail-edit', [
                 'data' => $cek[0],
@@ -152,6 +152,11 @@ class PertanianController extends Controller
      */
     public function update(Request $request)
     {
+
+        if ($request->jenis_usaha == null) {
+            return redirect()->back()->withInput()->with(['error' => 'Jenis usaha harus dipilih salah satu']);
+        }
+        
         try {
             $enc = Crypt::decrypt($request->query('usaha'));
 
@@ -159,11 +164,12 @@ class PertanianController extends Controller
                 $cek = Pertanian::where('kode_usaha', $enc)->get();
                 $data = [
                     'jenis_usaha' => ucwords($request->jenis_usaha),
-                    'jumlah_musim' => $request->jumlah_musim,
+                    'jangka_waktu_panen' => $request->jangka_waktu_panen,
                     'lokasi_usaha' => $request->lokasi_usaha,
                     'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
                     'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
                     'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->penambahan),
+                    'laba_perbulan' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_perbulan),
                     'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
                     'input_user' => Auth::user()->code_user,
                 ];
@@ -252,11 +258,12 @@ class PertanianController extends Controller
                 $cek = Pertanian::where('kode_usaha', $enc)->get();
                 $data = [
                     'jenis_usaha' => ucwords($request->jenis_usaha),
-                    'jumlah_musim' => $request->jumlah_musim,
+                    'jangka_waktu_panen' => $request->jangka_waktu_panen,
                     'lokasi_usaha' => $request->lokasi_usaha,
                     'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->pendapatan),
                     'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->pengeluaran),
                     'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->penambahan),
+                    'laba_perbulan' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_perbulan),
                     'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
                     'input_user' => Auth::user()->code_user,
                 ];

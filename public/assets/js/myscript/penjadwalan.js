@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $("#modal-penjadwalan").on("show.bs.modal", function (event) {
+        $("#kode_petugas").empty();
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
 

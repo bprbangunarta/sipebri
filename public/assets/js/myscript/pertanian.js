@@ -17,6 +17,7 @@ var amortisasi = document.getElementById("amortisasi");
 var luas_tanah = document.getElementById("luas_tanah");
 var pinjaman_bank = document.getElementById("pinjaman_bank");
 var penambahan = document.getElementById("penambahan");
+var hpanen = document.getElementById("hpanen");
 
 if (sendiri) {
     sendiri.addEventListener("keyup", function (e) {
@@ -103,6 +104,11 @@ if (luas_tanah) {
         luas_tanah.value = format(this.value, "Rp. ");
     });
 }
+if (hpanen) {
+    hpanen.addEventListener("keyup", function (e) {
+        hpanen.value = format(this.value, "Rp. ");
+    });
+}
 if (pinjaman_bank) {
     pinjaman_bank.addEventListener("keyup", function (e) {
         pinjaman_bank.value = formatRupiah(this.value, "Rp. ");
@@ -161,7 +167,6 @@ $(
     var iuran_desa = $("#iuran_desa").val();
     var pinjaman = $("#pinjaman").val();
     var penambahan = $("#penambahan").val();
-    var pengeluaran = $("#pengeluaran").val();
     var pendapatan = $("#pendapatan").val();
     var amortisasi = $("#amortisasi").val();
 
@@ -177,7 +182,6 @@ $(
     var riuran_desa = parseFloat(iuran_desa.replace(/[^\d]/g, "")) || 0;
     var rpinjaman = parseFloat(pinjaman.replace(/[^\d]/g, "")) || 0;
     var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
-    var rpengeluaran = parseFloat(pengeluaran.replace(/[^\d]/g, "")) || 0;
     var rpendapatan = parseFloat(pendapatan.replace(/[^\d]/g, "")) || 0;
     var ramortisasi = parseFloat(amortisasi.replace(/[^\d]/g, "")) || 0;
 
@@ -200,6 +204,16 @@ $(
     var bs = "Rp. " + has.toLocaleString("id-ID");
     $("#pengeluaran").val(bs);
 
+    //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
+    var waktupanen = $("#jwp").val();
+    if (waktupanen === "") {
+        waktupanen = 1;
+        $("#jwp").val(parseFloat(waktupanen));
+    }
+    var jmlpanen = hs / waktupanen;
+    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
+    $("#lb_perbulan").val(jpn);
+    //Total
     var hasil = "Rp. " + hs.toLocaleString("id-ID");
     $("#laba_bersih").val(hasil);
 });
@@ -226,6 +240,17 @@ $("#hpanen, #hrg").keyup(function () {
     var bs = "Rp. " + has.toLocaleString("id-ID");
     $("#pendapatan").val(bs);
 
+    //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
+    var waktupanen = $("#jwp").val();
+    if (waktupanen === "") {
+        waktupanen = 1;
+        $("#jwp").val(parseFloat(waktupanen));
+    }
+    var jmlpanen = jml / waktupanen;
+    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
+    $("#lb_perbulan").val(jpn);
+
+    //Total
     var as = "Rp. " + jml.toLocaleString("id-ID");
     $("#laba_bersih").val(as);
 });
@@ -250,6 +275,16 @@ $("#amortisasi, #pinjaman_bank").keyup(function () {
     var bs = "Rp. " + rpin.toLocaleString("id-ID");
     $("#pinjaman").val(bs);
 
+    //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
+    var waktupanen = $("#jwp").val();
+    if (waktupanen === "") {
+        waktupanen = 1;
+        $("#jwp").val(parseFloat(waktupanen));
+    }
+    var jmlpanen = a / waktupanen;
+    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
+    $("#lb_perbulan").val(jpn);
+    //Total
     var as = "Rp. " + a.toLocaleString("id-ID");
     $("#laba_bersih").val(as);
 });
@@ -273,6 +308,16 @@ $("#penambahan").keyup(function () {
     var bs = "Rp. " + rpenambahan.toLocaleString("id-ID");
     $("#penambahan").val(bs);
 
+    //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
+    var waktupanen = $("#jwp").val();
+    if (waktupanen === "") {
+        waktupanen = 1;
+        $("#jwp").val(parseFloat(waktupanen));
+    }
+    var jmlpanen = a / waktupanen;
+    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
+    $("#lb_perbulan").val(jpn);
+    //Total
     var as = "Rp. " + a.toLocaleString("id-ID");
     $("#laba_bersih").val(as);
 });
@@ -291,5 +336,17 @@ $("#lsendiri, #lsewa, #lgadai").keyup(function () {
     var bs = jml.toLocaleString("id-ID");
     var hasil = bs + " " + "M2";
     $("#total_tanah").val(hasil);
-    console.log(jml);
+});
+
+$("#jwp").keyup(function () {
+    var jangka = $("#jwp").val();
+    var bersih = $("#laba_bersih").val();
+
+    var rjangka = parseFloat(jangka.replace(/[^\d]/g, "")) || 0;
+    var rbersih = parseFloat(bersih.replace(/[^\d]/g, "")) || 0;
+
+    var jml = rbersih / rjangka;
+    var a = Math.floor(jml);
+    var as = "Rp. " + a.toLocaleString("id-ID");
+    $("#lb_perbulan").val(as);
 });

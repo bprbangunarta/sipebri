@@ -234,19 +234,55 @@ class Midle extends Model
         $pertanian = Pertanian::where('pengajuan_kode', $data)->get();
         $lain = Lain::where('pengajuan_kode', $data)->get();
 
-        // Periksa dan ganti nilai yang kosong dengan 0
-        $per = $perdagangan->isEmpty() ? 0 : $perdagangan[0]->laba_bersih ?? 0;
-        $jas = $jasa->isEmpty() ? 0 : $jasa[0]->laba_bersih ?? 0;
-        $tani = $pertanian->isEmpty() ? 0 : $pertanian[0]->laba_bersih ?? 0;
-        $la = $lain->isEmpty() ? 0 : $lain[0]->laba_bersih ?? 0;
+        $tani = [];
+        for ($i=0; $i < count($pertanian); $i++) { 
+            $tani[] = $pertanian[$i]->laba_perbulan ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha pertanian
+        $totalpertanian = array_sum($tani);
+        
+        $dagang = [];
+        for ($j=0; $j < count($perdagangan); $j++) { 
+            $dagang[] = $perdagangan[$j]->laba_bersih ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha perdagangan
+        $totalperdagangan = array_sum($dagang);
 
+        $js = [];
+        for ($k=0; $k < count($jasa); $k++) { 
+            $js[] = $jasa[$k]->laba_bersih ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha jasa
+        $totaljasa = array_sum($js);
+
+        $la = [];
+        for ($l=0; $l < count($lain); $l++) { 
+            $la[] = $lain[$l]->laba_bersih ?? 0;
+        }
+        //Hasil penjumlahan analisa usaha jasa
+        $totallain = array_sum($la);
+        
         $hasil = [
-            'perdagangan' => $per,
-            'jasa' => $jas,
-            'pertanian' => $tani,
-            'lain' => $la,
+            'perdagangan' => $totalperdagangan,
+            'jasa' => $totaljasa,
+            'pertanian' => $totalpertanian,
+            'lain' => $totallain,
         ];
     
         return $hasil;
+    }
+
+    protected static function taksasi_jaminan($data)
+    {
+        $jaminan = DB::table('data_pengajuan')
+                    ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                    ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+                    ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+                    ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                    ->where('data_pengajuan.kode_pengajuan', '=', $data)
+                    ->get();
+
+        //
+        return $jaminan;
     }
 }

@@ -223,23 +223,24 @@
                                                             <th><input class="form-control" disabled=""
                                                                     value="Biaya Rumah Tangga"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="b_rumah_tangga" id="biaya">
+                                                                    value="Rp. {{ old('b_rumah_tangga') }}"
+                                                                    name="b_rumah_tangga" id="biaya">
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control" disabled=""
                                                                     value="Kewajiban Lainnya"></th>
                                                             <td><input type="text" class="form-control" readonly=""
-                                                                    value="Rp. " name="b_kewajiban_lainya"
-                                                                    id="kewajiban_lain"></td>
+                                                                    value="Rp. {{ old('b_kewajiban_lainya') }}"
+                                                                    name="b_kewajiban_lainya" id="kewajiban_lain"></td>
                                                         </tr>
                                                         <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Keuangan Perbulan"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    value="Rp. " name="keuangan_perbulan"
-                                                                    id="hasilbersih"></td>
+                                                                    value="Rp. {{ old('keuangan_perbulan') }}"
+                                                                    name="keuangan_perbulan" id="hasilbersih"></td>
                                                         </tr>
                                                     </thead>
                                                 </table>

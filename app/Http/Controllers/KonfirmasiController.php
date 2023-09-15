@@ -15,7 +15,8 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class KonfirmasiController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $nasabah = $request->query('nasabah');
         
         //====Try Enkripsi Request====//
