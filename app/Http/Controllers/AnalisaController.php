@@ -23,10 +23,14 @@ class AnalisaController extends Controller
                 ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2','users.name');
         
         //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
         $data = $cek->paginate(10);
-        if ($data->isNotEmpty()) {
-            $data[0]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
-        }   
+        for ($i=0; $i < $count; $i++) { 
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
+            } 
+        }
         
         return view('analisa.proses', [
             'data' => $data
