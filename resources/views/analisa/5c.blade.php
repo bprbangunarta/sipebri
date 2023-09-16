@@ -388,8 +388,7 @@
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="1">Milik Sendiri</option>
                                                                     <option value="2">Orang Lain/Milik Sendiri dan
-                                                                        Orang
-                                                                        Lian (Wariasan)</option>
+                                                                        Orang Lian (Wariasan)</option>
                                                                 </select>
                                                             </td>
                                                             <td>
@@ -402,8 +401,7 @@
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="1">Milik Sendiri</option>
                                                                     <option value="2">Orang Lain/Milik Sendiri dan
-                                                                        Orang
-                                                                        Lian (Wariasan)</option>
+                                                                        Orang Lain (Wariasan)</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
@@ -475,7 +473,7 @@
                                                                     value="Kondisi Kendaraan" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name="mudah_diuangkan"
+                                                                <select class="form-control" name="kondisi_kendaraan"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="2">Original,
@@ -511,7 +509,7 @@
                                                                     value="Pengikatan / Aspek Hukum" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name="lokasi_shm"
+                                                                <select class="form-control" name="aspek_hukum"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="1">Emas dan deposito/tabungan yang
@@ -567,7 +565,7 @@
                                                                     value="Persaingan Usaha" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name="sumber_modal"
+                                                                <select class="form-control" name="persaingan_modal"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="1">Persaingan Usaha Tidak Ketat
@@ -584,7 +582,7 @@
                                                                     value="Kondisi Alam" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name="sumber_modal"
+                                                                <select class="form-control" name="kondisi_alam"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="1">Resiko Sangat Rendah</option>
@@ -592,6 +590,21 @@
                                                                     <option value="3">Resiko Sedang</option>
                                                                     <option value="4">Resiko Tinggi</option>
                                                                     <option value="5">Resiko Sangat Tinggi</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" name=""
+                                                                    value="Regulasi Pemerintah" readonly="">
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control" name="regulasi_pemerintah"
+                                                                    id="">
+                                                                    <option value="">--Pilih--</option>
+                                                                    <option value="1">Sangat Mendukung</option>
+                                                                    <option value="2">Mendukung</option>
+                                                                    <option value="3">Tidak Mendukung</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
