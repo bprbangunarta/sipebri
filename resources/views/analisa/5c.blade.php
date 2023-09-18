@@ -164,7 +164,7 @@
                                                             <td colspan="2">
                                                                 <input type="text"
                                                                     class="form-control bg-primary fw-bold text-white text-center"
-                                                                    name="nilai1" id="n1"
+                                                                    name="nilai_karakter" id="n1"
                                                                     value="BAIK/ CUKUP BAIK/ KURANG BAIK" readonly>
                                                             </td>
                                                         </tr>
@@ -200,8 +200,9 @@
                                                                 </select>
                                                             </td>
                                                             <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Kondisi SLIK" readonly="">
+                                                                <input type="text" class="form-control"
+                                                                    name="kondisi_slik" value="Kondisi SLIK"
+                                                                    readonly="">
                                                             </td>
                                                             <td>
                                                                 <select class="form-control" name="kondisi_slik"
@@ -293,7 +294,7 @@
                                                             <td colspan="2">
                                                                 <input type="text"
                                                                     class="form-control bg-primary fw-bold text-white text-center"
-                                                                    name="" value="RC : 59.00">
+                                                                    name="rc" value="RC : 59.00">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -316,7 +317,7 @@
                                                             <td colspan="2">
                                                                 <input type="text"
                                                                     class="form-control bg-primary fw-bold text-white text-center"
-                                                                    name="" value="DSR : 646.43">
+                                                                    name="dsr" value="DSR : 646.43">
                                                             </td>
                                                         </tr>
                                                     </tbody>

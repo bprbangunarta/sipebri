@@ -28,7 +28,7 @@ class Analisa5cController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+        dd($request);
     }
 
     public function edit(Request $request)
