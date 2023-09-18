@@ -357,9 +357,9 @@
                                                             </th>
                                                         </tr>
                                                         <tr>
-                                                            <th class="text-center" width="26%">Rawayat/ Aset</th>
+                                                            <th class="text-center" width="24%">Rawayat/ Aset</th>
                                                             <th class="text-center" width="24%">Keterangan</th>
-                                                            <th class="text-center" width="26%">Rawayat/ Aset</th>
+                                                            <th class="text-center" width="28%">Rawayat/ Aset</th>
                                                             <th class="text-center" width="24%">Keterangan</th>
                                                         </tr>
                                                     </thead>
