@@ -47,7 +47,7 @@
 
                                     <div class="col d-flex flex-column">
                                         <div class="card-body">
-                                            <form action="#" method="post">
+                                            <form action="{{ route('5c.store') }}" method="post">
                                                 @csrf
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
@@ -191,7 +191,7 @@
                                                                     value="Kontinuitas Usaha" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="kontinuitas"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Tidak Tentu">Tidak Tentu</option>
@@ -204,7 +204,7 @@
                                                                     value="Kondisi SLIK" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="kondisi_slik"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Lancar">Lancar</option>
@@ -219,7 +219,7 @@
                                                                     value="Pengalaman Usaha" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="pengalaman_usaha"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="0 Tahun">0 Tahun</option>
@@ -235,7 +235,7 @@
                                                                     value="Aset Diluar Usaha" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="Aset_diluar_usaha"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Liquid">Liquid</option>
@@ -250,7 +250,7 @@
                                                                     value="Pertumbuhan Usaha" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="pertumbuhan_usaha"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Tetap">Tetap</option>
@@ -263,7 +263,7 @@
                                                                     value="Aset Terkait Usaha" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="aset_terkait_usaha"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Mengcover">Mengcover</option>
@@ -280,7 +280,7 @@
                                                                     value="Catatan Laporan Keuangan" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="laporan_keuangan"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Tidak Ada">Tidak Ada</option>
@@ -302,7 +302,7 @@
                                                                     value="Catatan Kredit Masa Lalu" readonly="">
                                                             </td>
                                                             <td>
-                                                                <select class="form-control" name=""
+                                                                <select class="form-control" name="catatan_kredit"
                                                                     id="">
                                                                     <option value="">--Pilih--</option>
                                                                     <option value="Lancar">Lancar</option>
