@@ -261,7 +261,7 @@ class Midle extends Model
         }
         //Hasil penjumlahan analisa usaha jasa
         $totallain = array_sum($la);
-        
+
         $hasil = [
             'perdagangan' => $totalperdagangan,
             'jasa' => $totaljasa,

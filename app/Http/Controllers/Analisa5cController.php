@@ -11,7 +11,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class Analisa5cController extends Controller
 {
-    public function analisa5c(Request $request)
+    public function index(Request $request)
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
@@ -20,8 +20,29 @@ class Analisa5cController extends Controller
             return view('analisa.5c', [
                 'data' => $cek[0],
             ]);
+
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function store(Request $request)
+    {
+        // dd($request);
+    }
+
+    public function edit(Request $request)
+    {
+        //
+    }
+
+    public function update(Request $request)
+    {
+        //
+    }
+
+    public function destroy(Request $request)
+    {
+        //
     }
 }

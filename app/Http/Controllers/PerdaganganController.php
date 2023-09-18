@@ -164,14 +164,10 @@ class PerdaganganController extends Controller
             $enc = Crypt::decrypt($tambah);
             $au = Perdagangan::where('kode_usaha', $enc)->get();
             $bu = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
-            $du = DB::table('du_perdagangan')->where('usaha_kode', $enc)->get();
-            $js = DB::table('au_jasa')->where('usaha_kode', $enc)->get();
+            $du = DB::table('du_perdagangan')->where('usaha_kode', $enc)->get();            
             
             if (count($au) !== 0) {
                 Perdagangan::where('id', $au[0]->id)->delete();
-            } 
-            if (count($js) !== 0) {
-                Jasa::where('id', $js[0]->id)->delete();
             } 
             if (count($bu) !== 0) {
                 DB::table('bu_perdagangan')->where('id', $bu[0]->id)->delete();

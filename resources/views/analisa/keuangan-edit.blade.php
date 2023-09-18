@@ -288,7 +288,7 @@
                                                                     value="Keuangan Perbulan"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary fw-bold text-white"
-                                                                    value="{{ 'Rp ' . number_format($biaya[0]->keuangan_perbulan, 0, ',', '.') }}"
+                                                                    value="{{ 'Rp ' . number_format($kemampuan['keuangan_perbulan'], 0, ',', '.') }}"
                                                                     name="keuangan_perbulan" id="hasilbersih" readonly>
                                                             </td>
                                                         </tr>
@@ -315,4 +315,20 @@
         </div>
     </div>
     <script src="{{ asset('assets/js/myscript/keuangan.js') }}"></script>
+    <script>
+        // Mengambil data keuangan_perbulan dan data_perbulan dari PHP
+        var keuanganPerbulan = {!! json_encode($kemampuan['keuangan_perbulan']) !!};
+        var dataPerbulan = {!! json_encode($kemampuan['data_perbulan']) !!};
+
+        // Memeriksa apakah kedua nilai tidak sama
+        if (keuanganPerbulan !== dataPerbulan) {
+            // Menampilkan SweetAlert
+            Swal.fire({
+                title: 'Perhatian!',
+                text: 'Pilih Simpan terlebih dahulu, karena ada perubahan data Analisa Usaha',
+                icon: 'warning',
+                confirmButtonText: 'Tutup'
+            });
+        }
+    </script>
 @endsection
