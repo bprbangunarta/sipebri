@@ -37,10 +37,28 @@ class KeuanganController extends Controller
             
             if ($data === 0) {
                 return view('analisa.keuangan', [
-                'data' => $cek[0],
-                'kemampuan' => $kemampuan
-            ]);
+                    'data' => $cek[0],
+                    'kemampuan' => $kemampuan
+                ]);
             }
+
+            /**Ambil data keuangan dengan filed biaya rumah tanggga
+               biaya kewajiban lain dan keuangan perbulan untuk jadi pengurangan hasil
+               secara realtime ketika ada perubahan nominal dianalisa usaha**/
+            $keuangan = Keuangan::where('pengajuan_kode', $enc)->get();
+            $uang = [];
+            for ($m=0; $m < count($keuangan); $m++) { 
+                $uang['rumah'] = $keuangan[$m]->b_rumah_tangga ?? 0;
+                $uang['kewajiban'] = $keuangan[$m]->b_kewajiban_lainya ?? 0;
+                $uang['perbulan'] = $keuangan[$m]->keuangan_perbulan ?? 0;
+            }
+            //hasil pengurangan berubah secara realtime
+            $jml = $uang['rumah'] + $uang['kewajiban'];
+            $tb = $kemampuan['total'] - $jml;
+            $kemampuan['keuangan_perbulan'] = $tb;
+            //data keuangan perbulan
+            $kemampuan['data_perbulan'] = $uang['perbulan'];
+            
             // dd($kemampuan);
             return view('analisa.keuangan-edit', [
                 'data' => $cek[0],
