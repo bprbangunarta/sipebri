@@ -233,6 +233,7 @@ class Midle extends Model
         $jasa = Jasa::where('pengajuan_kode', $data)->get();
         $pertanian = Pertanian::where('pengajuan_kode', $data)->get();
         $lain = Lain::where('pengajuan_kode', $data)->get();
+        $keuangan = Keuangan::where('pengajuan_kode', $data)->get();
 
         $tani = [];
         for ($i=0; $i < count($pertanian); $i++) { 
@@ -261,7 +262,14 @@ class Midle extends Model
         }
         //Hasil penjumlahan analisa usaha jasa
         $totallain = array_sum($la);
-        
+
+        $uang = [];
+        for ($m=0; $m < count($keuangan); $m++) { 
+            $uang['rumah'] = $keuangan[$m]->b_rumah_tangga ?? 0;
+            $uang['kewajiban'] = $keuangan[$m]->b_kewajiban_lainya ?? 0;
+            $uang['perbulan'] = $keuangan[$m]->keuangan_perbulan ?? 0;
+        }
+        // dd($uang);
         $hasil = [
             'perdagangan' => $totalperdagangan,
             'jasa' => $totaljasa,

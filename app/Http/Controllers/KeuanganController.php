@@ -41,7 +41,7 @@ class KeuanganController extends Controller
                 'kemampuan' => $kemampuan
             ]);
             }
-            
+            // dd($kemampuan);
             return view('analisa.keuangan-edit', [
                 'data' => $cek[0],
                 'kemampuan' => $kemampuan,
