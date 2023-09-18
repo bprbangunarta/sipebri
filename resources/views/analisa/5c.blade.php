@@ -290,18 +290,10 @@
                                                                     </option>
                                                                 </select>
                                                             </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Sumber Permodalan" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <select class="form-control" name=""
-                                                                    id="">
-                                                                    <option value="">--Pilih--</option>
-                                                                    <option value="Pihak Lain">Pihak Lain</option>
-                                                                    <option value="Modal Sendiri">Modal Sendiri</option>
-                                                                    <option value="Modal Bersama">Modal Bersama</option>
-                                                                </select>
+                                                            <td colspan="2">
+                                                                <input type="text"
+                                                                    class="form-control bg-primary fw-bold text-white text-center"
+                                                                    name="" value="RC : 59.00">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -321,12 +313,7 @@
                                                                         2 Bulan</option>
                                                                 </select>
                                                             </td>
-                                                            <td>
-                                                                <input type="text"
-                                                                    class="form-control bg-primary fw-bold text-white text-center"
-                                                                    name="" value="RC : 59.00">
-                                                            </td>
-                                                            <td>
+                                                            <td colspan="2">
                                                                 <input type="text"
                                                                     class="form-control bg-primary fw-bold text-white text-center"
                                                                     name="" value="DSR : 646.43">
