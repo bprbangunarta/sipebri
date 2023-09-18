@@ -108,13 +108,13 @@ $(
         rsumbangan +
         rroko;
 
-    var bjml = "Rp. " + jml.toLocaleString("id-ID");
+    var bjml = "Rp " + jml.toLocaleString("id-ID");
     $("#biaya").val(bjml);
 
     var a = jml + rkewajiban;
     var has = rpendapatan - a;
 
-    var bs = "Rp. " + has.toLocaleString("id-ID");
+    var bs = "Rp " + has.toLocaleString("id-ID");
     $("#hasilbersih").val(bs);
 });
 
@@ -136,9 +136,9 @@ $("#kewajiban1, #kewajiban2, #kewajiban3").keyup(function () {
     var a = ts + rbiaya;
     var has = rpendapatan - a;
 
-    var bs = "Rp. " + ts.toLocaleString("id-ID");
+    var bs = "Rp " + ts.toLocaleString("id-ID");
     $("#kewajiban_lain").val(bs);
 
-    var hasil = "Rp. " + has.toLocaleString("id-ID");
+    var hasil = "Rp " + has.toLocaleString("id-ID");
     $("#hasilbersih").val(hasil);
 });

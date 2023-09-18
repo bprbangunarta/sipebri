@@ -46,12 +46,20 @@ class KeuanganController extends Controller
                biaya kewajiban lain dan keuangan perbulan untuk jadi pengurangan hasil
                secara realtime ketika ada perubahan nominal dianalisa usaha**/
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->get();
-            $uang = [];
-            for ($m=0; $m < count($keuangan); $m++) { 
-                $uang['rumah'] = $keuangan[$m]->b_rumah_tangga ?? 0;
-                $uang['kewajiban'] = $keuangan[$m]->b_kewajiban_lainya ?? 0;
-                $uang['perbulan'] = $keuangan[$m]->keuangan_perbulan ?? 0;
+            //cek ada datanya atau tidak
+            if ($keuangan->isEmpty()) {
+                $uang['rumah'] = 0;
+                $uang['kewajiban'] = 0;
+                $uang['perbulan'] = 0;
+            }else{
+                $uang = [];
+                for ($m=0; $m < count($keuangan); $m++) { 
+                    $uang['rumah'] = $keuangan[$m]->b_rumah_tangga ?? 0;
+                    $uang['kewajiban'] = $keuangan[$m]->b_kewajiban_lainya ?? 0;
+                    $uang['perbulan'] = $keuangan[$m]->keuangan_perbulan ?? 0;
+                }
             }
+            
             //hasil pengurangan berubah secara realtime
             $jml = $uang['rumah'] + $uang['kewajiban'];
             $tb = $kemampuan['total'] - $jml;
