@@ -113,6 +113,56 @@
                                                                     value="Cukup Baik" readonly="">
                                                             </td>
                                                         </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" name=""
+                                                                    value="Kekuatan (Strength)" readonly="">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="kekuatan"
+                                                                    value="" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" name=""
+                                                                    value="Kelemahan (Weakness)" readonly="">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control"
+                                                                    name="kelemahan" value="" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" name=""
+                                                                    value="Peluang (Opportunities)" readonly="">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="peluang"
+                                                                    value="" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" name=""
+                                                                    value="Ancaman (Treats)" readonly="">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="ancaman"
+                                                                    value="" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" name=""
+                                                                    value="Kesimpulan" readonly="">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control"
+                                                                    name="kesimpulan" value="" readonly>
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                                 <table class="table table-bordered table-vcenter fs-5">
