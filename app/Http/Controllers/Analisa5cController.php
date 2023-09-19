@@ -47,8 +47,7 @@ class Analisa5cController extends Controller
             if (is_null($a5conition)) {
                 $a5conition = Midle::conition();
             }
-            
-            
+                        
             //Menghitung RC
             $a = $keuangan * intval($cek[0]->jangka_waktu);
             $b = (intval($cek[0]->plafon) / $a) * 100;

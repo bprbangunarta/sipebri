@@ -69,7 +69,7 @@
                     <path d="M13 7l5 5l-5 5"></path>
                 </svg> &nbsp;Taksasi Jaminan</a>
             <a href="{{ route('a5c.index', ['pengajuan' => $pengajuan]) }}"
-                class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/analisa/5c') ? 'active' : '' }}">
+                class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/analisa/a5c') ? 'active' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right"
                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                     fill="none" stroke-linecap="round" stroke-linejoin="round">
