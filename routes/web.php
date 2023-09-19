@@ -35,6 +35,7 @@ use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\MemorandumController;
 
@@ -199,6 +200,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('/analisa/memorandum', MemorandumController::class);
         //Asuransi
         Route::resource('/analisa/asuransi', AsuransiController::class);
+        //Analisa Tambahan
+        Route::resource('/analisa/tambahan', AnalisaTambahan::class);
     });
 });
 
