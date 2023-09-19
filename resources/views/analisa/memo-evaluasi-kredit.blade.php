@@ -105,7 +105,7 @@
                                                         <tr>
                                                             <td>
                                                                 <input type="text" class="form-control" name=""
-                                                                    value="Analisa Kondisi dan Prospek Usaha (Condition) (Collateral)"
+                                                                    value="Analisa Kondisi dan Prospek Usaha (Condition)"
                                                                     readonly="">
                                                             </td>
                                                             <td>
