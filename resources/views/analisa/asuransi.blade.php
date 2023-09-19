@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Analisa Usaha Pergagangan')
+@section('title', 'Analisa Usaha Jasa')
 @yield('jquery')
 @section('content')
     <div class="page-body">
@@ -8,16 +8,17 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-
                             <div class="container-xl">
                                 <div class="row g-2 align-items-center">
+
                                     @include('templates.header-analisa', [
                                         'pengajuan' => $data->kd_pengajuan,
                                     ])
 
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <a href="{{ route('analisa.proses') }}" class="btn btn-primary">
+                                            <a href="{{ route('jasa.index', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                                class="btn btn-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                     class="icon icon-tabler icon-tabler-arrow-left" width="24"
                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -32,7 +33,6 @@
                                             </a>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -44,147 +44,245 @@
                                     @include('templates.menu-analisa', [
                                         'pengajuan' => $data->kd_pengajuan,
                                     ])
-
                                     <div class="col d-flex flex-column">
+                                        <form action="{{ route('asuransi.update', ['asuransi' => $data->kd_pengajuan]) }}"
+                                            method="POST">
+                                            @method('put')
+                                            @csrf
+                                            <div class="card-body">
 
-                                        <div class="card-header bg-transparent mt-auto">
-                                            <div class="btn-list justify-content">
-                                                <a href="#" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-tambah">Tambah</a>
+                                                <table class="table table-bordered table-vcenter fs-5">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center" colspan="4">Form Asuransi</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-center">Data Asuransi</th>
+                                                            <th class="text-center">Keterangan</th>
+                                                            <th class="text-center">Data Asuransi</th>
+                                                            <th class="text-center">Keterangan</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="nama_usaha"
+                                                                    id="" value="Jenis Tanggungan" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="jenis_tanggungan" value="Motor" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="tgl_lahir"
+                                                                    id="" value="Tanggal Lahir" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control mb-2" placeholder="Pilih Tanggal"
+                                                                    name="tgl_lahir" id="datepicker-masa-identitas"
+                                                                    value="{{ old('tgl_lahir') }}" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="no_bpkb"
+                                                                    id="" value="No Polisi" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="no_bpkb"
+                                                                    value="{{ old('no_bpkb') }}">
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="tgl_realisasi" id=""
+                                                                    value="Tanggal Realisasi" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control mb-2" placeholder="Pilih Tanggal"
+                                                                    name="tgl_realisasi" id="datepicker-realisasi"
+                                                                    value="{{ old('tgl_realisasi') }}" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="no_bpkb"
+                                                                    id="" value="Jangka Waktu" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="jangka_waktu" value="{{ old('jangka_waktu') }}">
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="tgl_realisasi" id=""
+                                                                    value="Nilai Pertanggungan" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="nilai_pertanggungan"
+                                                                    value="{{ old('nilai_pertanggungan') }}">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="no_bpkb"
+                                                                    id="" value="Maksimal" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="maksimal" value="{{ old('maksimal') }}"
+                                                                    readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    value="Jenis Asuransi" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-control" name="jenis_asuransi"
+                                                                    id="" required>
+                                                                    <option value="">--Pilih--</option>
+                                                                    <option value="1"
+                                                                        {{ old('jenis_asuransi') == '1' ? 'selected' : '' }}>
+                                                                        TLO</option>
+                                                                    <option value="2"
+                                                                        {{ old('jenis_asuransi') == '2' ? 'selected' : '' }}>
+                                                                        Bumida Menurun</option>
+                                                                    <option value="3"
+                                                                        {{ old('jenis_asuransi') == '3' ? 'selected' : '' }}>
+                                                                        Bumida Tetap</option>
+                                                                    <option value="4"
+                                                                        {{ old('jenis_asuransi') == '4' ? 'selected' : '' }}>
+                                                                        Jiwasraya</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="no_bpkb"
+                                                                    id="" value="Rate" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="rate"
+                                                                    value="{{ old('rate') }}" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="tgl_realisasi" id=""
+                                                                    value="Tanggal Akhir Asuransi" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="tgl_akhir_asuransi" id="datepicker-tgl-asuransi"
+                                                                    value="{{ old('tgl_akhir_asuransi') }}">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="no_bpkb"
+                                                                    id="" value="Usia" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="usia"
+                                                                    value="{{ old('usia') }}">
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" value="Premi"
+                                                                    readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="premi"
+                                                                    value="{{ old('premi') }}" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" id=""
+                                                                    value="Premi KP" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="premi_kp" value="{{ old('premi_kp') }}">
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    value="Biaya ADM" readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    name="biaya_adm" value="{{ old('biaya_adm') }}"
+                                                                    readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text" value="Total"
+                                                                    readonly>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" type="text" name="total"
+                                                                    value="{{ old('total') }}" readonly>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        </div>
-
-                                        <div class="card-body">
-                                            <table class="table table-bordered table-vcenter fs-5">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center" colspan="6">Informasi Usaha Perdagangan
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="text-center">Jenis Tanggungan</th>
-                                                        <th class="text-center">Tanggal Lahir</th>
-                                                        <th class="text-center">No Polisi</th>
-                                                        <th class="text-center">Tanggal Realisasi</th>
-                                                        <th class="text-center">Jangka Waktu</th>
-                                                        <th class="text-center" width="5%">Edit</th>
-                                                        <th class="text-center" width="5%">Hapus</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {{-- @foreach ($asuransi as $item) --}}
-                                                    <tr>
-                                                        <td>{{ $asuransi->jenis_tanggungan }}</td>
-                                                        <td>{{ $asuransi->tgl_lahir }}
-                                                        </td>
-                                                        <td>{{ $asuransi->no_polisi }}
-                                                        </td>
-                                                        <td>{{ $asuransi->tgl_realisasi }}
-                                                        <td>{{ $asuransi->jangka_waktu }}
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <a
-                                                                href="{{ route('asuransi.edit', ['asuransi' => $data->kd_pengajuan, 'pengajuan' => $data->kd_pengajuan]) }}">
-                                                                <span class="badge bg-warning">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon icon-tabler icon-tabler-edit"
-                                                                        width="24" height="24" viewBox="0 0 24 24"
-                                                                        stroke-width="2" stroke="currentColor"
-                                                                        fill="none" stroke-linecap="round"
-                                                                        stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                            fill="none"></path>
-                                                                        <path
-                                                                            d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
-                                                                        </path>
-                                                                        <path d="M16 5l3 3"></path>
-                                                                    </svg>
-                                                                </span>
-                                                            </a>
-                                                        </td>
-
-                                                        <td class="text-center">
-                                                            <form action="#" method="POST">
-                                                                @csrf
-                                                                @method('delete')
-                                                                <button type="submit"
-                                                                    style="border: none; background: transparent;"
-                                                                    class="confirmdelete">
-                                                                    <span class=" badge bg-danger">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            class="icon icon-tabler icon-tabler-trash"
-                                                                            width="24" height="24"
-                                                                            viewBox="0 0 24 24" stroke-width="2"
-                                                                            stroke="currentColor" fill="none"
-                                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                                            <path stroke="none" d="M0 0h24v24H0z"
-                                                                                fill="none"></path>
-                                                                            <path d="M4 7l16 0"></path>
-                                                                            <path d="M10 11l0 6"></path>
-                                                                            <path d="M14 11l0 6"></path>
-                                                                            <path
-                                                                                d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
-                                                                            </path>
-                                                                            <path
-                                                                                d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
-                                                                            </path>
-                                                                        </svg>
-                                                                    </span>
-                                                                </button>
-                                                            </form>
-                                                        </td>
-                                                    </tr>
-                                                    {{-- @endforeach --}}
-                                                </tbody>
-                                            </table>
-                                        </div>
-
+                                            <div class="card-footer bg-transparent mt-auto">
+                                                <div class="btn-list justify-content-end">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Simpan
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-
-    <div class="modal modal-blur fade" id="modal-tambah" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Jenis Tanggungan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form action="{{ route('asuransi.store', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Tanggungan</label>
-                                    <input type="text" class="form-control" name="nama_tanggungan"
-                                        id="nama_tanggungan" placeholder="Nama Usaha"
-                                        value="{{ old('nama_tanggungan') }}">
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/jasa.js') }}"></script>
 @endsection
+<script>
+    // JS Darepicker
+    document.addEventListener("DOMContentLoaded", function() {
+        window.Litepicker && (new Litepicker({
+            element: document.getElementById('datepicker-masa-identitas'),
+            buttonText: {
+                previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+        }));
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        window.Litepicker && (new Litepicker({
+            element: document.getElementById('datepicker-realisasi'),
+            buttonText: {
+                previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+        }));
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        window.Litepicker && (new Litepicker({
+            element: document.getElementById('datepicker-tgl-asuransi'),
+            buttonText: {
+                previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+        }));
+    });
+</script>
