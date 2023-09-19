@@ -285,4 +285,79 @@ class Midle extends Model
         //
         return $jaminan;
     }
+
+    public static function a5ckodeacak($name, $length)
+    {
+        
+        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+
+            // Cek apakah kode sudah ada dalam database
+            if (!DB::table('a5c_karakter')->where('kode_analisa', $acak)->exists()) {
+                return $acak;
+            }
+        }
+        
+        return null; // Jika tidak ada kode yang unik ditemukan
+    }
+
+    public static function karakter()
+    {   
+        $data = (object) [
+            'gaya_hidup' => null,
+            'pengendalian_emosi' => null,
+            'perbuatan_tercela' => null,
+            'harmonis' => null,
+            'konsisten' => null,
+            'kepatuhan' => null,
+            'hubungan_sosial' => null,
+            'nilai_karakter' => null,
+        ];
+        return $data;       
+    }
+
+    public static function capacity()
+    {   
+        $data = (object) [
+            'kontinuitas' => null,
+            'pengalaman_usaha' => null,
+            'pertumbuhan_usaha' => null,
+            'laporan_keuangan' => null,
+            'catatan_kredit' => null,
+            'kondisi_slik' => null,
+            'aset_diluar_usaha' => null,
+            'aset_terkait_usaha' => null,
+            'capital_sumber_modal' => null,
+            'rc' => null,
+            'dsr' => null,
+        ];
+        return $data;       
+    }
+
+    public static function collateral()
+    {   
+        $data = (object) [
+            'agunan_utama' => null,
+            'agunan_tambahan' => null,
+            'legalitas_agunan_tambahan' => null,
+            'legalitas_agunan' => null,
+            'mudah_diuangkan' => null,
+            'stabilitas_harga' => null,
+            'lokasi_shm' => null,
+            'kondisi_kendaraan' => null,
+            'aspek_hukum' => null,
+            'taksasi_agunan' => null,
+        ];
+        return $data;       
+    }
+
+    public static function conition()
+    {   
+        $data = (object) [
+            'persaingan_usaha' => null,
+            'kondisi_alam' => null,
+            'regulasi_pemerintah' => null,
+        ];
+        return $data;       
+    }
 }

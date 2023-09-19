@@ -191,7 +191,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
         // Add Layout
         Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
-        Route::resource('/analisa/analisa/5c', Analisa5cController::class);
+        Route::resource('/analisa/analisa/a5c', Analisa5cController::class);
     });
 });
 

@@ -67,7 +67,6 @@ class KeuanganController extends Controller
             //data keuangan perbulan
             $kemampuan['data_perbulan'] = $uang['perbulan'];
             
-            // dd($kemampuan);
             return view('analisa.keuangan-edit', [
                 'data' => $cek[0],
                 'kemampuan' => $kemampuan,
