@@ -22,7 +22,21 @@ class Analisa5cController extends Controller
             $a5collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
             $a5conition = DB::table('a5c_conition')->where('pengajuan_kode', $enc)->first();
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
+            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             
+            //total semua nilai taksasi
+            $tak = [];
+            for ($i=0; $i < count($taksasi); $i++) { 
+                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
+            }
+            $totaltaksasi = array_sum($tak);
+
+            //Cek Taksasi sudah terisi apa belum
+            if ($totaltaksasi == 0) {
+                return redirect()->back()->with('error', 'Taksasi tidak boleh kosong');
+            }
+            
+            //Cek kemampuan keuangan sudah terisi apa belum
             if (is_null($keuangan) || $keuangan == 0) {
                 return redirect()->back()->with('error', 'Keuangan perbulan tidak boleh kosong');
             }
@@ -51,8 +65,12 @@ class Analisa5cController extends Controller
             //Menghitung RC
             $a = $keuangan * intval($cek[0]->jangka_waktu);
             $b = (intval($cek[0]->plafon) / $a) * 100;
-            $a5capacity->RC = $b;          
-
+            $a5capacity->RC = number_format($b, 2);  
+            
+            //Menghitung Taksasi Agunan
+            $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+            $a5collateral->taksasi = number_format($c, 2);
+            // dd($a5collateral);
             return view('analisa.5c-edit', [
                 'data' => $cek[0],
                 'karakter' => $a5character,
