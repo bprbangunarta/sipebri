@@ -35,6 +35,7 @@ use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\MemorandumController;
 
 /*
 |--------------------------------------------------------------------------
@@ -189,9 +190,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
         //Analisa kepemilikan
         Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
-        // Add Layout
+        //Analisa Taksasi Kepemilikan
         Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
-        Route::resource('/analisa/analisa/a5c', Analisa5cController::class);
+        //Analisa 5C
+        Route::resource('/analisa/a5c', Analisa5cController::class);
+        //Memorandum
+        Route::resource('/analisa/memorandum', MemorandumController::class);
     });
 });
 

@@ -28,7 +28,7 @@ class AnalisaController extends Controller
         $data = $cek->paginate(10);
         for ($i=0; $i < $count; $i++) { 
             if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[0]->kode_pengajuan);
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             } 
         }
         
