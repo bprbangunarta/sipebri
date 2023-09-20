@@ -72,8 +72,8 @@ class Analisa5cController extends Controller
             $a5collateral->taksasi = number_format($c, 2);
             
             //Menghitung Analisa keseluruhan
-            $totala5c = Midle::jumlah_a5c($enc);
-            dd($a5character);
+            // $totala5c = Midle::jumlah_a5c($enc);
+            // dd($a5character);
 
             return view('analisa.5c-edit', [
                 'data' => $cek[0],
