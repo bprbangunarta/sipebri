@@ -147,7 +147,8 @@
                                                             <td></td>
                                                             <td>
                                                                 <input class="form-control" type="text"
-                                                                    name="nama_lain" value="{{ old('nama_lain') }}">
+                                                                    name="nama_lain" placeholder="Nama Analisa Kebutuhan"
+                                                                    value="{{ old('nama_lain') }}">
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="number"
