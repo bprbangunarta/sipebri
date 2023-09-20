@@ -94,7 +94,7 @@
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                     <path d="M7 7l5 5l-5 5"></path>
                     <path d="M13 7l5 5l-5 5"></path>
-                </svg> &nbsp;Form Asuransi</a>
+                </svg> &nbsp;Asuransi</a>
             <a href="{{ route('tambahan.index', ['pengajuan' => $pengajuan]) }}"
                 class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('analisa/tambahan') ? 'active' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right"

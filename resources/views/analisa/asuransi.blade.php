@@ -71,7 +71,7 @@
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text"
-                                                                    name="jenis_tanggungan" value="Motor" readonly>
+                                                                    name="jenis_tanggungan" value="">
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" name="tgl_lahir"
@@ -183,7 +183,7 @@
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" name="usia"
-                                                                    value="{{ old('usia') }}">
+                                                                    value="{{ old('usia') }}" readonly>
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" value="Premi"
