@@ -17,7 +17,7 @@ class Analisa5cController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
 
-            $a5character = DB::table('a5c_karakter')->where('pengajuan_kode', $enc)->first();
+            $a5character = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
             $a5capacity = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
             $a5collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
             $a5conition = DB::table('a5c_conition')->where('pengajuan_kode', $enc)->first();
@@ -30,7 +30,7 @@ class Analisa5cController extends Controller
                 $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
             }
             $totaltaksasi = array_sum($tak);
-
+ 
             //Cek Taksasi sudah terisi apa belum
             if ($totaltaksasi == 0) {
                 return redirect()->back()->with('error', 'Taksasi tidak boleh kosong');
@@ -70,7 +70,11 @@ class Analisa5cController extends Controller
             //Menghitung Taksasi Agunan
             $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
             $a5collateral->taksasi = number_format($c, 2);
-            // dd($a5collateral);
+            
+            //Menghitung Analisa keseluruhan
+            $totala5c = Midle::jumlah_a5c($enc);
+            dd($a5character);
+
             return view('analisa.5c-edit', [
                 'data' => $cek[0],
                 'karakter' => $a5character,
@@ -157,7 +161,7 @@ class Analisa5cController extends Controller
             $capacity['dsr'] = str_replace("DSR : ", "", $capacity['dsr']);
 
             DB::transaction(function () use ($character, $capacity, $collateral, $conition) {
-                DB::table('a5c_karakter')->insert($character);
+                DB::table('a5c_character')->insert($character);
                 DB::table('a5c_capacity')->insert($capacity);
                 DB::table('a5c_collateral')->insert($collateral);
                 DB::table('a5c_conition')->insert($conition);
@@ -235,7 +239,7 @@ class Analisa5cController extends Controller
             $capacity['dsr'] = str_replace("DSR : ", "", $capacity['dsr']);
             
             DB::transaction(function () use ($enc, $character, $capacity, $collateral, $conition) {
-                DB::table('a5c_karakter')->where('pengajuan_kode', $enc)->update($character);
+                DB::table('a5c_character')->where('pengajuan_kode', $enc)->update($character);
                 DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->update($capacity);
                 DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->update($collateral);
                 DB::table('a5c_conition')->where('pengajuan_kode', $enc)->update($conition);

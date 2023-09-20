@@ -52,122 +52,6 @@
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center" colspan="6">Analisa dan Evaluasi
-                                                                Kredit
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th class="text-center" width="25%">Analisa</th>
-                                                            <th class="text-center" width="25%">Keterangan</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Analisa Watak (Character)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Baik" readonly="">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Analisa Kemampuan (Capacity)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Baik" readonly="">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Analisa Modal (Capital)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Baik" readonly="">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Analisa Agunan (Collateral)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Cukup Baik" readonly="">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Analisa Kondisi dan Prospek Usaha (Condition)"
-                                                                    readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Cukup Baik" readonly="">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Kekuatan (Strength)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="kekuatan"
-                                                                    value="" readonly>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Kelemahan (Weakness)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control"
-                                                                    name="kelemahan" value="" readonly>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Peluang (Opportunities)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="peluang"
-                                                                    value="" readonly>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Ancaman (Treats)" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="ancaman"
-                                                                    value="" readonly>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Kesimpulan" readonly="">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control"
-                                                                    name="kesimpulan" value="" readonly>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <table class="table table-bordered table-vcenter fs-5">
-                                                    <thead>
-                                                        <tr>
                                                             <th class="text-center" colspan="6">Rekomendasi</th>
                                                         </tr>
                                                         <tr>
@@ -184,9 +68,8 @@
                                                                     value="Plafon maksimum" readonly="">
                                                             </td>
                                                             <td>
-                                                                <input type="text" class="form-control"
-                                                                    name="max_plafon" value="{{ old('max_plafon') }}"
-                                                                    readonly="">
+                                                                <input type="text" class="form-control" name="max_plafon"
+                                                                    value="{{ old('max_plafon') }}" readonly="">
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control" name=""
@@ -194,8 +77,7 @@
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
-                                                                    name="plafon_usulan"
-                                                                    value="{{ old('plafon_usulan') }}">
+                                                                    name="plafon_usulan" value="{{ old('plafon_usulan') }}">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -372,7 +254,7 @@
                                                                         APHT dan Fiducia</option>
                                                                     <option value="3"
                                                                         {{ old('Pengikatan_agunan') == '1.25' ? 'selected' : '' }}>
-                                                                        Tanpa Pengiktan</option>
+                                                                        Tanpa Pengikatan</option>
                                                                 </select>
                                                             </td>
                                                         </tr>
