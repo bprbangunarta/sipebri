@@ -360,31 +360,4 @@ class Midle extends Model
         ];
         return $data;       
     }
-
-    public static function jumlah_a5c($data)
-    {
-        $a5character = DB::table('a5c_character')->where('pengajuan_kode', $data)->first();
-        $a5capacity = DB::table('a5c_capacity')->where('pengajuan_kode', $data)->first();
-        $a5collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $data)->first();
-        $a5conition = DB::table('a5c_conition')->where('pengajuan_kode', $data)->first();
-        
-        //tidak digunakan
-        // unset($a5character->id);
-        // unset($a5character->kode_analisa);
-        // unset($a5character->pengajuan_kode);
-
-        // unset($a5capacity->id);
-        // unset($a5capacity->kode_analisa);
-        // unset($a5capacity->pengajuan_kode);
-
-        // unset($a5conition->id);
-        // unset($a5conition->kode_analisa);
-        // unset($a5conition->pengajuan_kode);
-
-        // unset($a5collateral->id);
-        // unset($a5collateral->kode_analisa);
-        // unset($a5collateral->pengajuan_kode);
-
-        // dd($a5collateral);
-    }
 }
