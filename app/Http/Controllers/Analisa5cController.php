@@ -107,7 +107,6 @@ class Analisa5cController extends Controller
             'laporan_keuangan' => 'required',
             'rc' => 'required',
             'catatan_kredit' => 'required',
-            'dsr' => 'required',
             'capital_sumber_modal' => 'required',
         ]);
 
@@ -154,7 +153,6 @@ class Analisa5cController extends Controller
             $conition['kode_analisa'] = $kode;
             $conition['pengajuan_kode'] = $enc;
             $capacity['rc'] = str_replace("RC : ", "", $capacity['rc']);
-            $capacity['dsr'] = str_replace("DSR : ", "", $capacity['dsr']);
 
             DB::transaction(function () use ($character, $capacity, $collateral, $conition) {
                 DB::table('a5c_character')->insert($character);
@@ -198,7 +196,6 @@ class Analisa5cController extends Controller
             'laporan_keuangan' => 'required',
             'rc' => 'required',
             'catatan_kredit' => 'required',
-            'dsr' => 'required',
             'capital_sumber_modal' => 'required',
         ]);
 
