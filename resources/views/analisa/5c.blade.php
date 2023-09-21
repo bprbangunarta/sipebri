@@ -45,10 +45,11 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-
                                         <form action="{{ route('a5c.store', ['pengajuan' => $data->kd_pengajuan]) }}"
                                             method="post">
                                             @csrf
+
+                                            {{-- Informasi Character --}}
                                             <table class="table table-bordered table-vcenter fs-5">
                                                 <thead>
                                                     <tr>
@@ -232,6 +233,7 @@
                                                 </tbody>
                                             </table>
 
+                                            {{-- Informasi Capacity --}}
                                             <table class="table table-bordered table-vcenter fs-5">
                                                 <thead>
                                                     <tr>
@@ -239,10 +241,10 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="text-center" width="26%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="24%">Keterangan</th>
-                                                        <th class="text-center" width="25%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="25%">Keterangan</th>
+                                                        <th class="text-center" width="30%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="20%">Keterangan</th>
+                                                        <th class="text-center" width="30%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="20%">Keterangan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -397,11 +399,13 @@
                                                                 </option>
                                                             </select>
                                                         </td>
-                                                        <td colspan="2">
-                                                            <input type="text"
-                                                                class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="rc"
-                                                                value="{{ 'RC :' . ' ' . old('rc') ?? '0' }}" readonly
+                                                        <td>
+                                                            <input type="text" class="form-control" name=""
+                                                                value="Repayment Capacity" readonly="">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" name="rc"
+                                                                value="{{ '0' . ' ' . old('rc') ?? '0' }}" readonly
                                                                 required>
                                                         </td>
                                                     </tr>
@@ -428,16 +432,20 @@
                                                                     2 Bulan</option>
                                                             </select>
                                                         </td>
-                                                        <td colspan="2">
+                                                        <td>
+                                                            <input type="text" class="form-control" name=""
+                                                                value="Evaluasi" readonly="">
+                                                        </td>
+                                                        <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="dsr"
-                                                                value="{{ 'DSR :' . ' ' . old('dsr') ?? 'DSR : 0' }}"
-                                                                readonly required>
+                                                                name="evaluasi_capacity" value="?" readonly required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
+
+                                            {{-- Informasi Capital --}}
                                             <table class="table table-bordered table-vcenter fs-5">
                                                 <thead>
                                                     <tr>
@@ -445,9 +453,9 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="text-center" width="34%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="33%">Keterangan</th>
-                                                        <th class="text-center" width="33%">Keterangan</th>
+                                                        <th class="text-center" width="40%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="40%">Keterangan</th>
+                                                        <th class="text-center" width="20%">Evaluasi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -474,12 +482,13 @@
                                                         <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="dsr" value="Baik/ Cukup Baik/ Kurang Baik"
-                                                                readonly required>
+                                                                name="evaluasi_capital" value="?" readonly required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
+
+                                            {{-- Informasi Collateral --}}
                                             <table class="table table-bordered table-vcenter fs-5">
                                                 <thead>
                                                     <tr>
@@ -487,10 +496,10 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="text-center" width="27%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="22%">Keterangan</th>
-                                                        <th class="text-center" width="28%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="22%">Keterangan</th>
+                                                        <th class="text-center" width="30%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="20%">Keterangan</th>
+                                                        <th class="text-center" width="30%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="20%">Keterangan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -705,50 +714,42 @@
                                                                 readonly="" required>
                                                         </td>
                                                         <td>
+                                                            <input type="text" class="form-control"
+                                                                name="taksasi_agunan"
+                                                                value="{{ old('taksasi_agunan') ?? '0' }}" required
+                                                                readonly>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"></td>
+                                                        <td>
+                                                            <input type="text" class="form-control" name=""
+                                                                value="Evaluasi" readonly="">
+                                                        </td>
+                                                        <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="taksasi_agunan"
-                                                                value="{{ old('taksasi_agunan') ?? 0 }}" required
-                                                                readonly>
+                                                                name="evaluasi_collateral" value="?" readonly
+                                                                required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
+
+                                            {{-- Informasi Condition --}}
                                             <table class="table table-bordered table-vcenter fs-5">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center" colspan="6">Informasi Conition
+                                                        <th class="text-center" colspan="6">Informasi Condition
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="text-center" width="26%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="24%">Keterangan</th>
+                                                        <th class="text-center" width="40%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="40%">Keterangan</th>
+                                                        <th class="text-center" width="20%">Evaluasi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" class="form-control" name=""
-                                                                value="Persaingan Usaha" readonly="">
-                                                        </td>
-                                                        <td>
-                                                            <select class="form-control" name="persaingan_usaha"
-                                                                id="" required>
-                                                                <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('persaingan_usaha') == 1 ? 'selected' : '' }}>
-                                                                    Persaingan Usaha Tidak Ketat
-                                                                </option>
-                                                                <option value="2"
-                                                                    {{ old('persaingan_usaha') == 2 ? 'selected' : '' }}>
-                                                                    Persaingan Usaha Kurang Ketat
-                                                                </option>
-                                                                <option value="3"
-                                                                    {{ old('persaingan_usaha') == 3 ? 'selected' : '' }}>
-                                                                    Persaingan Usaha Ketat</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
                                                     <tr>
                                                         <td>
                                                             <input type="text" class="form-control" name=""
@@ -775,6 +776,36 @@
                                                                     Resiko Sangat Tinggi</option>
                                                             </select>
                                                         </td>
+                                                        <td>
+                                                            <input type="text"
+                                                                class="form-control bg-primary fw-bold text-white text-center"
+                                                                name="evaluasi_condition" value="?" readonly
+                                                                required>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" class="form-control" name=""
+                                                                value="Persaingan Usaha" readonly="">
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control" name="persaingan_usaha"
+                                                                id="" required>
+                                                                <option value="">--Pilih--</option>
+                                                                <option value="1"
+                                                                    {{ old('persaingan_usaha') == 1 ? 'selected' : '' }}>
+                                                                    Persaingan Usaha Tidak Ketat
+                                                                </option>
+                                                                <option value="2"
+                                                                    {{ old('persaingan_usaha') == 2 ? 'selected' : '' }}>
+                                                                    Persaingan Usaha Kurang Ketat
+                                                                </option>
+                                                                <option value="3"
+                                                                    {{ old('persaingan_usaha') == 3 ? 'selected' : '' }}>
+                                                                    Persaingan Usaha Ketat</option>
+                                                            </select>
+                                                        </td>
+                                                        <td rowspan="2"></td>
                                                     </tr>
                                                     <tr>
                                                         <td>
@@ -799,6 +830,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+
                                             <div class="card-footer bg-transparent mt-auto">
                                                 <div class="btn-list justify-content-end">
                                                     <button href="#" class="btn btn-primary">

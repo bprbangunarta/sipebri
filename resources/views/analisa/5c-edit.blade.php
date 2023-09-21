@@ -530,10 +530,10 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="text-center" width="27%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="22%">Keterangan</th>
-                                                        <th class="text-center" width="28%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="22%">Keterangan</th>
+                                                        <th class="text-center" width="30%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="20%">Keterangan</th>
+                                                        <th class="text-center" width="30%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="20%">Keterangan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -795,8 +795,9 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="text-center" width="26%">Rawayat/ Aset</th>
-                                                        <th class="text-center" width="24%">Keterangan</th>
+                                                        <th class="text-center" width="40%">Rawayat/ Aset</th>
+                                                        <th class="text-center" width="40%">Keterangan</th>
+                                                        <th class="text-center" width="20%">Evaluasi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -828,6 +829,12 @@
                                                                     Resiko Sangat Tinggi</option>
                                                             </select>
                                                         </td>
+                                                        <td>
+                                                            <input type="text"
+                                                                class="form-control bg-primary fw-bold text-white text-center"
+                                                                name="evaluasi_condition" value="?" readonly
+                                                                required>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
@@ -853,6 +860,7 @@
                                                                     Persaingan Usaha Ketat</option>
                                                             </select>
                                                         </td>
+                                                        <td rowspan="2"></td>
                                                     </tr>
                                                     <tr>
                                                         <td>
@@ -879,6 +887,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+
                                             <div class="card-footer bg-transparent mt-auto">
                                                 <div class="btn-list justify-content-end">
                                                     <button href="#" class="btn btn-primary">
