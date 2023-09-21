@@ -95,7 +95,7 @@ function capacity() {
         var nilai = "Kurang Baik";
     } else if (jml === 9 || jml <= 16) {
         var nilai = "Cukup Baik";
-    } else if (jml === 17 || jml >= 24) {
+    } else if (jml === 17 || jml >= 30) {
         var nilai = "Baik";
     }
     console.log(nilai);
@@ -122,3 +122,7 @@ function capitals() {
     analisa3.value = nilai;
 }
 //====ANALISA CAPITAL====//
+
+//====ANALISA COLLATERAL====//
+// var collateral1 = document.getElementById("collateral1");
+//====ANALISA COLLATERAL====//

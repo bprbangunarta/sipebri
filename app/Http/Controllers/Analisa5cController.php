@@ -232,7 +232,6 @@ class Analisa5cController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $capacity['rc'] = str_replace(["RC : ", "%"],"", $capacity['rc']);
-            $capacity['dsr'] = str_replace("DSR : ", "", $capacity['dsr']);
             
             DB::transaction(function () use ($enc, $character, $capacity, $collateral, $conition) {
                 DB::table('a5c_character')->where('pengajuan_kode', $enc)->update($character);

@@ -512,7 +512,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="agunan_utama"
-                                                                id="" required>
+                                                                id="collateral1" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('agunan_utama') == 1 ? 'selected' : '' }}>
@@ -529,7 +529,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="agunan_tambahan"
-                                                                id="" required>
+                                                                id="collateral2" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('agunan_tambahan') == 1 ? 'selected' : '' }}>
@@ -548,7 +548,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="legalitas_agunan"
-                                                                id="" required>
+                                                                id="collateral3" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('legalitas_agunan') == 1 ? 'selected' : '' }}>
@@ -565,7 +565,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="legalitas_agunan_tambahan"
-                                                                id="" required>
+                                                                id="collateral4" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('legalitas_agunan_tambahan') == 1 ? 'selected' : '' }}>
@@ -584,7 +584,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="mudah_diuangkan"
-                                                                id="" required>
+                                                                id="collateral5" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('mudah_diuangkan') == 1 ? 'selected' : '' }}>
@@ -605,7 +605,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="stabilitas_harga"
-                                                                id="" required>
+                                                                id="collateral6" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('stabilitas_harga') == 1 ? 'selected' : '' }}>
@@ -626,7 +626,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="kondisi_kendaraan"
-                                                                id="" required>
+                                                                id="collateral7" required>
 
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
@@ -649,8 +649,8 @@
                                                                 value="Lokasi SHM" readonly="">
                                                         </td>
                                                         <td>
-                                                            <select class="form-control" name="lokasi_shm" id=""
-                                                                required>
+                                                            <select class="form-control" name="lokasi_shm"
+                                                                id="collateral8" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('lokasi_shm') == 1 ? 'selected' : '' }}>
@@ -673,7 +673,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="aspek_hukum"
-                                                                id="" required>
+                                                                id="collateral9" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('aspek_hukum') == 1 ? 'selected' : '' }}>
@@ -731,8 +731,8 @@
                                                         <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="evaluasi_collateral" value="?" readonly
-                                                                required>
+                                                                name="evaluasi_collateral" id="evaluasi_collateral"
+                                                                value="?" readonly required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
