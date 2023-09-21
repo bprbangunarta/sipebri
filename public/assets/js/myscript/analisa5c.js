@@ -111,5 +111,14 @@ var analisa3 = document.getElementById("evaluasi_capital");
 capital.addEventListener("change", capitals);
 function capitals() {
     var selectedcapital = parseInt(capital.value) || 0;
+
+    if (selectedcapital === 0 || selectedcapital == 1) {
+        var nilai = "Kurang Baik";
+    } else if (selectedcapital === 9 || selectedcapital == 2) {
+        var nilai = "Cukup Baik";
+    } else if (selectedcapital === 17 || selectedcapital == 3) {
+        var nilai = "Baik";
+    }
+    analisa3.value = nilai;
 }
 //====ANALISA CAPITAL====//
