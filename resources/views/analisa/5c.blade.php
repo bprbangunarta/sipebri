@@ -255,7 +255,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="kontinuitas"
-                                                                id="" required>
+                                                                id="capacity1" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('kontinuitas') == '1' ? 'selected' : '' }}>
@@ -274,7 +274,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="kondisi_slik"
-                                                                id="" required>
+                                                                id="capacity2" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('kondisi_slik') == '1' ? 'selected' : '' }}>
@@ -295,7 +295,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="pengalaman_usaha"
-                                                                id="" required>
+                                                                id="capacity3" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('pengalaman_usaha') == '1' ? 'selected' : '' }}>
@@ -321,7 +321,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="aset_diluar_usaha"
-                                                                id="" required>
+                                                                id="capacity4" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('aset_diluar_usaha') == '1' ? 'selected' : '' }}>
@@ -342,7 +342,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="pertumbuhan_usaha"
-                                                                id="" required>
+                                                                id="capacity5" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('pertumbuhan_usaha') == '1' ? 'selected' : '' }}>
@@ -361,7 +361,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="aset_terkait_usaha"
-                                                                id="" required>
+                                                                id="capacity6" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('aset_terkait_usaha') == '1' ? 'selected' : '' }}>
@@ -384,7 +384,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="laporan_keuangan"
-                                                                id="" required>
+                                                                id="capacity7" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('laporan_keuangan') == '1' ? 'selected' : '' }}>
@@ -416,7 +416,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="catatan_kredit"
-                                                                id="" required>
+                                                                id="capacity8" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('catatan_kredit') == '1' ? 'selected' : '' }}>
@@ -439,7 +439,8 @@
                                                         <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="evaluasi_capacity" value="?" readonly required>
+                                                                name="evaluasi_capacity" id="evaluasi_capacity"
+                                                                value="?" readonly required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -466,7 +467,7 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="capital_sumber_modal"
-                                                                id="" required>
+                                                                id="capital" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
                                                                     {{ old('capital_sumber_modal') == '1' ? 'selected' : '' }}>
@@ -482,7 +483,8 @@
                                                         <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="evaluasi_capital" value="?" readonly required>
+                                                                name="evaluasi_capital" id="evaluasi_capital"
+                                                                value="?" readonly required>
                                                         </td>
                                                     </tr>
                                                 </tbody>

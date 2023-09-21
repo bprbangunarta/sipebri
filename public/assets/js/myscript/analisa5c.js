@@ -57,7 +57,8 @@ var capacity4 = document.getElementById("capacity4");
 var capacity5 = document.getElementById("capacity5");
 var capacity6 = document.getElementById("capacity6");
 var capacity7 = document.getElementById("capacity7");
-// var analisa2 = document.getElementById("n1");
+var capacity8 = document.getElementById("capacity8");
+var analisa2 = document.getElementById("evaluasi_capacity");
 
 capacity1.addEventListener("change", capacity);
 capacity2.addEventListener("change", capacity);
@@ -66,37 +67,49 @@ capacity4.addEventListener("change", capacity);
 capacity5.addEventListener("change", capacity);
 capacity6.addEventListener("change", capacity);
 capacity7.addEventListener("change", capacity);
+capacity8.addEventListener("change", capacity);
 
 function capacity() {
     // Mendapatkan nilai yang dipilih dari ketiga elemen select
-    var selectedValue1 = parseInt(capacity1.value) || 0;
-    var selectedValue2 = parseInt(capacity2.value) || 0;
-    var selectedValue3 = parseInt(capacity3.value) || 0;
-    var selectedValue4 = parseInt(capacity4.value) || 0;
-    var selectedValue5 = parseInt(capacity5.value) || 0;
-    var selectedValue6 = parseInt(capacity6.value) || 0;
-    var selectedValue7 = parseInt(capacity7.value) || 0;
-    console.log(selectedValue7);
+    var selectedcapacity1 = parseInt(capacity1.value) || 0;
+    var selectedcapacity2 = parseInt(capacity2.value) || 0;
+    var selectedcapacity3 = parseInt(capacity3.value) || 0;
+    var selectedcapacity4 = parseInt(capacity4.value) || 0;
+    var selectedcapacity5 = parseInt(capacity5.value) || 0;
+    var selectedcapacity6 = parseInt(capacity6.value) || 0;
+    var selectedcapacity7 = parseInt(capacity7.value) || 0;
+    var selectedcapacity8 = parseInt(capacity8.value) || 0;
+
     // penjumlahan nilai perselect
     var jml =
-        selectedValue1 +
-        selectedValue2 +
-        selectedValue3 +
-        selectedValue4 +
-        selectedValue5 +
-        selectedValue6 +
-        selectedValue7;
+        selectedcapacity1 +
+        selectedcapacity2 +
+        selectedcapacity3 +
+        selectedcapacity4 +
+        selectedcapacity5 +
+        selectedcapacity6 +
+        selectedcapacity7 +
+        selectedcapacity8;
 
-    if (jml === 0 || jml <= 7) {
+    if (jml === 0 || jml <= 8) {
         var nilai = "Kurang Baik";
-    } else if (jml === 8 || jml <= 14) {
+    } else if (jml === 9 || jml <= 16) {
         var nilai = "Cukup Baik";
-    } else if (jml === 15 || jml <= 21) {
+    } else if (jml === 17 || jml >= 24) {
         var nilai = "Baik";
     }
-
+    console.log(nilai);
     // Menampilkan nilai yang digabungkan dalam elemen input
-    analisa1.value = nilai;
-    //====ANALISA CHARACTER====//
+    analisa2.value = nilai;
 }
 //====ANALISA CAPACITY====//
+
+//====ANALISA CAPITAL====//
+var capital = document.getElementById("capital");
+var analisa3 = document.getElementById("evaluasi_capital");
+
+capital.addEventListener("change", capitals);
+function capitals() {
+    var selectedcapital = parseInt(capital.value) || 0;
+}
+//====ANALISA CAPITAL====//
