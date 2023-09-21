@@ -910,16 +910,16 @@
     <script>
         // Mengambil data keuangan_perbulan dan data_perbulan dari PHP
         var a = {
-            !!json_encode($collateral - > taksasi_agunan) !!
+            !!json_encode($collateral->taksasi_agunan) !!
         };
         var b = {
-            !!json_encode($collateral - > taksasi) !!
+            !!json_encode($collateral->taksasi) !!
         };
         var c = {
-            !!json_encode($capacity - > rc) !!
+            !!json_encode($capacity->rc) !!
         };
         var d = {
-            !!json_encode($capacity - > RC) !!
+            !!json_encode($capacity->RC) !!
         };
 
         // Memeriksa apakah kedua nilai Taksasi tidak sama
