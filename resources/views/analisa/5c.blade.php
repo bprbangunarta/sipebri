@@ -258,13 +258,13 @@
                                                                 id="capacity1" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="1"
-                                                                    {{ old('kontinuitas') == '1' ? 'selected' : '' }}>
+                                                                    {{ old('kontinuitas') == 1 ? 'selected' : '' }}>
                                                                     Tidak Tentu</option>
-                                                                <option value="2"
-                                                                    {{ old('kontinuitas') == '2' ? 'selected' : '' }}>
-                                                                    Terus Menerus</option>
                                                                 <option value="3"
-                                                                    {{ old('kontinuitas') == '3' ? 'selected' : '' }}>
+                                                                    {{ old('kontinuitas') == 3 ? 'selected' : '' }}>
+                                                                    Terus Menerus</option>
+                                                                <option value="2"
+                                                                    {{ old('kontinuitas') == 2 ? 'selected' : '' }}>
                                                                     Kadang-Kadang</option>
                                                             </select>
                                                         </td>
@@ -276,14 +276,14 @@
                                                             <select class="form-control" name="kondisi_slik"
                                                                 id="capacity2" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('kondisi_slik') == '1' ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('kondisi_slik') == 3 ? 'selected' : '' }}>
                                                                     Lancar</option>
                                                                 <option value="2"
-                                                                    {{ old('kondisi_slik') == '2' ? 'selected' : '' }}>
+                                                                    {{ old('kondisi_slik') == 2 ? 'selected' : '' }}>
                                                                     Tidak Ada</option>
-                                                                <option value="3"
-                                                                    {{ old('kondisi_slik') == '3' ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('kondisi_slik') == 1 ? 'selected' : '' }}>
                                                                     Tidak Baik</option>
                                                             </select>
                                                         </td>
@@ -323,14 +323,14 @@
                                                             <select class="form-control" name="aset_diluar_usaha"
                                                                 id="capacity4" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('aset_diluar_usaha') == '1' ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('aset_diluar_usaha') == 3 ? 'selected' : '' }}>
                                                                     Liquid</option>
                                                                 <option value="2"
-                                                                    {{ old('aset_diluar_usaha') == '2' ? 'selected' : '' }}>
+                                                                    {{ old('aset_diluar_usaha') == 2 ? 'selected' : '' }}>
                                                                     Cukup Liquid</option>
-                                                                <option value="3"
-                                                                    {{ old('aset_diluar_usaha') == '3' ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('aset_diluar_usaha') == 1 ? 'selected' : '' }}>
                                                                     Tidak Liquid</option>
                                                             </select>
                                                         </td>
@@ -344,14 +344,14 @@
                                                             <select class="form-control" name="pertumbuhan_usaha"
                                                                 id="capacity5" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('pertumbuhan_usaha') == '1' ? 'selected' : '' }}>
-                                                                    Tetap</option>
                                                                 <option value="2"
-                                                                    {{ old('pertumbuhan_usaha') == '2' ? 'selected' : '' }}>
+                                                                    {{ old('pertumbuhan_usaha') == 2 ? 'selected' : '' }}>
+                                                                    Tetap</option>
+                                                                <option value="1"
+                                                                    {{ old('pertumbuhan_usaha') == 1 ? 'selected' : '' }}>
                                                                     Turun</option>
                                                                 <option value="3"
-                                                                    {{ old('pertumbuhan_usaha') == '3' ? 'selected' : '' }}>
+                                                                    {{ old('pertumbuhan_usaha') == 3 ? 'selected' : '' }}>
                                                                     Meningkat</option>
                                                             </select>
                                                         </td>
@@ -363,15 +363,15 @@
                                                             <select class="form-control" name="aset_terkait_usaha"
                                                                 id="capacity6" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('aset_terkait_usaha') == '1' ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('aset_terkait_usaha') == 3 ? 'selected' : '' }}>
                                                                     Mengcover</option>
                                                                 <option value="2"
-                                                                    {{ old('aset_terkait_usaha') == '2' ? 'selected' : '' }}>
+                                                                    {{ old('aset_terkait_usaha') == 2 ? 'selected' : '' }}>
                                                                     Cukup Mengcover
                                                                 </option>
-                                                                <option value="3"
-                                                                    {{ old('aset_terkait_usaha') == '3' ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('aset_terkait_usaha') == 1 ? 'selected' : '' }}>
                                                                     Tidak Mengcover
                                                                 </option>
                                                             </select>
@@ -405,8 +405,8 @@
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control" name="rc"
-                                                                value="{{ '0' . ' ' . old('rc') ?? '0' }}" readonly
-                                                                required>
+                                                                value="{{ old('rc') ?? ($analisa['rc'] ?? 0) }} %"
+                                                                readonly>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -418,15 +418,15 @@
                                                             <select class="form-control" name="catatan_kredit"
                                                                 id="capacity8" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('catatan_kredit') == '1' ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('catatan_kredit') == 3 ? 'selected' : '' }}>
                                                                     Lancar</option>
                                                                 <option value="2"
-                                                                    {{ old('catatan_kredit') == '2' ? 'selected' : '' }}>
+                                                                    {{ old('catatan_kredit') == 2 ? 'selected' : '' }}>
                                                                     Menunggak > 2 Bulan
                                                                 </option>
-                                                                <option value="3"
-                                                                    {{ old('catatan_kredit') == '3' ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('catatan_kredit') == '1' ? 'selected' : '' }}>
                                                                     Lancar
                                                                     Menunggak
                                                                     2 Bulan</option>
@@ -440,7 +440,8 @@
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
                                                                 name="evaluasi_capacity" id="evaluasi_capacity"
-                                                                value="?" readonly required>
+                                                                value="{{ old('evaluasi_capacity') ?? '?' }}" readonly
+                                                                required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -469,22 +470,23 @@
                                                             <select class="form-control" name="capital_sumber_modal"
                                                                 id="capital" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('capital_sumber_modal') == '1' ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('capital_sumber_modal') == 3 ? 'selected' : '' }}>
                                                                     Modal Sendiri</option>
                                                                 <option value="2"
-                                                                    {{ old('capital_sumber_modal') == '2' ? 'selected' : '' }}>
+                                                                    {{ old('capital_sumber_modal') == 2 ? 'selected' : '' }}>
                                                                     Kerjasama</option>
-                                                                <option value="3"
-                                                                    {{ old('capital_sumber_modal') == '3' ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('capital_sumber_modal') == 1 ? 'selected' : '' }}>
                                                                     Pihak Lain</option>
                                                             </select>
                                                         </td>
                                                         <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="evaluasi_capital" id="evaluasi_capital"
-                                                                value="?" readonly required>
+                                                                name="capital_evaluasi_capital" id="evaluasi_capital"
+                                                                value="{{ old('capital_evaluasi_capital') ?? '?' }}"
+                                                                readonly required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -514,11 +516,11 @@
                                                             <select class="form-control" name="agunan_utama"
                                                                 id="collateral1" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('agunan_utama') == 1 ? 'selected' : '' }}>
-                                                                    Milik Sendiri</option>
                                                                 <option value="2"
                                                                     {{ old('agunan_utama') == 2 ? 'selected' : '' }}>
+                                                                    Milik Sendiri</option>
+                                                                <option value="1"
+                                                                    {{ old('agunan_utama') == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
                                                                     Orang Lian (Wariasan)</option>
                                                             </select>
@@ -531,11 +533,11 @@
                                                             <select class="form-control" name="agunan_tambahan"
                                                                 id="collateral2" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('agunan_tambahan') == 1 ? 'selected' : '' }}>
-                                                                    Milik Sendiri</option>
                                                                 <option value="2"
                                                                     {{ old('agunan_tambahan') == 2 ? 'selected' : '' }}>
+                                                                    Milik Sendiri</option>
+                                                                <option value="1"
+                                                                    {{ old('agunan_tambahan') == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
                                                                     Orang Lain (Wariasan)</option>
                                                             </select>
@@ -550,11 +552,11 @@
                                                             <select class="form-control" name="legalitas_agunan"
                                                                 id="collateral3" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('legalitas_agunan') == 1 ? 'selected' : '' }}>
-                                                                    Milik Sendiri</option>
                                                                 <option value="2"
                                                                     {{ old('legalitas_agunan') == 2 ? 'selected' : '' }}>
+                                                                    Milik Sendiri</option>
+                                                                <option value="1"
+                                                                    {{ old('legalitas_agunan') == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
                                                                     Orang Lian (Wariasan)</option>
                                                             </select>
@@ -567,11 +569,11 @@
                                                             <select class="form-control" name="legalitas_agunan_tambahan"
                                                                 id="collateral4" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('legalitas_agunan_tambahan') == 1 ? 'selected' : '' }}>
-                                                                    Milik Sendiri</option>
                                                                 <option value="2"
                                                                     {{ old('legalitas_agunan_tambahan') == 2 ? 'selected' : '' }}>
+                                                                    Milik Sendiri</option>
+                                                                <option value="1"
+                                                                    {{ old('legalitas_agunan_tambahan') == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
                                                                     Orang Lain (Wariasan)</option>
                                                             </select>
@@ -586,16 +588,16 @@
                                                             <select class="form-control" name="mudah_diuangkan"
                                                                 id="collateral5" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('mudah_diuangkan') == 1 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('mudah_diuangkan') == 3 ? 'selected' : '' }}>
                                                                     Deposito,
                                                                     Tabungan, Emas
                                                                 </option>
                                                                 <option value="2"
                                                                     {{ old('mudah_diuangkan') == 2 ? 'selected' : '' }}>
                                                                     BPKB, SHM</option>
-                                                                <option value="3"
-                                                                    {{ old('mudah_diuangkan') == 3 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('mudah_diuangkan') == 1 ? 'selected' : '' }}>
                                                                     Lainnya</option>
                                                             </select>
                                                         </td>
@@ -607,14 +609,14 @@
                                                             <select class="form-control" name="stabilitas_harga"
                                                                 id="collateral6" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('stabilitas_harga') == 1 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('stabilitas_harga') == 3 ? 'selected' : '' }}>
                                                                     SHM</option>
                                                                 <option value="2"
                                                                     {{ old('stabilitas_harga') == 2 ? 'selected' : '' }}>
                                                                     Deposito,Tabungan, Emas</option>
-                                                                <option value="3"
-                                                                    {{ old('stabilitas_harga') == 3 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('stabilitas_harga') == 1 ? 'selected' : '' }}>
                                                                     BPKB</option>
                                                             </select>
                                                         </td>
@@ -629,8 +631,8 @@
                                                                 id="collateral7" required>
 
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('kondisi_kendaraan') == 1 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('kondisi_kendaraan') == 3 ? 'selected' : '' }}>
                                                                     Original,
                                                                     Lengkap, Tidak Cacat
                                                                 </option>
@@ -638,8 +640,8 @@
                                                                     {{ old('kondisi_kendaraan') == 2 ? 'selected' : '' }}>
                                                                     Original, Tidak
                                                                     Lengkap</option>
-                                                                <option value="3"
-                                                                    {{ old('kondisi_kendaraan') == 3 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('kondisi_kendaraan') == 1 ? 'selected' : '' }}>
                                                                     Tidak
                                                                     Original, Tidak Lengkap, Cacat</option>
                                                             </select>
@@ -652,16 +654,16 @@
                                                             <select class="form-control" name="lokasi_shm"
                                                                 id="collateral8" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('lokasi_shm') == 1 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('lokasi_shm') == 3 ? 'selected' : '' }}>
                                                                     Strategis dan
                                                                     atau Produktif</option>
                                                                 <option value="2"
                                                                     {{ old('lokasi_shm') == 2 ? 'selected' : '' }}>
                                                                     Strategis dan Produktif (Atau Sebaliknya)
                                                                 </option>
-                                                                <option value="3"
-                                                                    {{ old('lokasi_shm') == 3 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('lokasi_shm') == 1 ? 'selected' : '' }}>
                                                                     Kurang Strategis dan Kurang Produktif</option>
                                                             </select>
                                                         </td>
@@ -675,13 +677,13 @@
                                                             <select class="form-control" name="aspek_hukum"
                                                                 id="collateral9" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('aspek_hukum') == 1 ? 'selected' : '' }}>
+                                                                <option value="4"
+                                                                    {{ old('aspek_hukum') == 5 ? 'selected' : '' }}>
                                                                     Emas dan deposito/tabungan yang
                                                                     saldonya di blokir dan dilengkapi dengan surat kuasa
                                                                     pencairan</option>
-                                                                <option value="2"
-                                                                    {{ old('aspek_hukum') == 2 ? 'selected' : '' }}>
+                                                                <option value="4"
+                                                                    {{ old('aspek_hukum') == 4 ? 'selected' : '' }}>
                                                                     SHM
                                                                     (dilengkapi dengan SPPT
                                                                     tahun
@@ -696,16 +698,16 @@
                                                                     berjalan atau 1 tahun yang lalu) / BPKB tanpa
                                                                     pengikatan
                                                                 </option>
-                                                                <option value="4"
-                                                                    {{ old('aspek_hukum') == 4 ? 'selected' : '' }}>
+                                                                <option value="2"
+                                                                    {{ old('aspek_hukum') == 2 ? 'selected' : '' }}>
                                                                     AJB
                                                                     / SPOP (dilengkapi dengan
                                                                     SPPT
                                                                     tahun berjalan atau 1 tahun yang lalu) tanpa
                                                                     pengikatan
                                                                     hak</option>
-                                                                <option value="5"
-                                                                    {{ old('aspek_hukum') == 5 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('aspek_hukum') == 1 ? 'selected' : '' }}>
                                                                     Agunan lain yang tidak memenuhi
                                                                     syarat</option>
                                                             </select>
@@ -718,8 +720,8 @@
                                                         <td>
                                                             <input type="text" class="form-control"
                                                                 name="taksasi_agunan"
-                                                                value="{{ old('taksasi_agunan') ?? '0' }}" required
-                                                                readonly>
+                                                                value="{{ old('taksasi_agunan') ?? ($analisa['taksasi'] ?? 0) }} %"
+                                                                required readonly>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -732,7 +734,8 @@
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
                                                                 name="evaluasi_collateral" id="evaluasi_collateral"
-                                                                value="?" readonly required>
+                                                                value="{{ old('evaluasi_collateral') }}" readonly
+                                                                required>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -759,30 +762,30 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="kondisi_alam"
-                                                                id="" required>
+                                                                id="condition1" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('kondisi_alam') ? 'selected' : '' }}>
+                                                                <option value="5"
+                                                                    {{ old('kondisi_alam') == 5 ? 'selected' : '' }}>
                                                                     Resiko Sangat Rendah</option>
-                                                                <option value="2"
-                                                                    {{ old('kondisi_alam') == 2 ? 'selected' : '' }}>
+                                                                <option value="4"
+                                                                    {{ old('kondisi_alam') == 4 ? 'selected' : '' }}>
                                                                     Resiko Rendah</option>
                                                                 <option value="3"
                                                                     {{ old('kondisi_alam') == 3 ? 'selected' : '' }}>
                                                                     Resiko Sedang</option>
-                                                                <option value="4"
-                                                                    {{ old('kondisi_alam') == 4 ? 'selected' : '' }}>
+                                                                <option value="2"
+                                                                    {{ old('kondisi_alam') == 2 ? 'selected' : '' }}>
                                                                     Resiko Tinggi</option>
-                                                                <option value="5"
-                                                                    {{ old('kondisi_alam') == 5 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('kondisi_alam') == 1 ? 'selected' : '' }}>
                                                                     Resiko Sangat Tinggi</option>
                                                             </select>
                                                         </td>
                                                         <td>
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
-                                                                name="evaluasi_condition" value="?" readonly
-                                                                required>
+                                                                name="evaluasi_condition" id="evaluasi_condition"
+                                                                value="{{ old('evaluasi_condition') }}" readonly required>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -792,18 +795,18 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="persaingan_usaha"
-                                                                id="" required>
+                                                                id="condition2" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('persaingan_usaha') == 1 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('persaingan_usaha') == 3 ? 'selected' : '' }}>
                                                                     Persaingan Usaha Tidak Ketat
                                                                 </option>
                                                                 <option value="2"
                                                                     {{ old('persaingan_usaha') == 2 ? 'selected' : '' }}>
                                                                     Persaingan Usaha Kurang Ketat
                                                                 </option>
-                                                                <option value="3"
-                                                                    {{ old('persaingan_usaha') == 3 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('persaingan_usaha') == 1 ? 'selected' : '' }}>
                                                                     Persaingan Usaha Ketat</option>
                                                             </select>
                                                         </td>
@@ -816,16 +819,16 @@
                                                         </td>
                                                         <td>
                                                             <select class="form-control" name="regulasi_pemerintah"
-                                                                id="" required>
+                                                                id="condition3" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="1"
-                                                                    {{ old('regulasi_pemerintah') == 1 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('regulasi_pemerintah') == 3 ? 'selected' : '' }}>
                                                                     Sangat Mendukung</option>
                                                                 <option value="2"
                                                                     {{ old('regulasi_pemerintah') == 2 ? 'selected' : '' }}>
                                                                     Mendukung</option>
-                                                                <option value="3"
-                                                                    {{ old('regulasi_pemerintah') == 3 ? 'selected' : '' }}>
+                                                                <option value="1"
+                                                                    {{ old('regulasi_pemerintah') == 1 ? 'selected' : '' }}>
                                                                     Tidak Mendukung</option>
                                                             </select>
                                                         </td>

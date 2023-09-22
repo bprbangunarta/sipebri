@@ -95,10 +95,10 @@ function capacity() {
         var nilai = "Kurang Baik";
     } else if (jml === 9 || jml <= 16) {
         var nilai = "Cukup Baik";
-    } else if (jml === 17 || jml >= 30) {
+    } else if (jml === 17 || jml <= 27) {
         var nilai = "Baik";
     }
-    console.log(nilai);
+
     // Menampilkan nilai yang digabungkan dalam elemen input
     analisa2.value = nilai;
 }
@@ -124,5 +124,85 @@ function capitals() {
 //====ANALISA CAPITAL====//
 
 //====ANALISA COLLATERAL====//
-// var collateral1 = document.getElementById("collateral1");
+var collateral1 = document.getElementById("collateral1");
+var collateral2 = document.getElementById("collateral2");
+var collateral3 = document.getElementById("collateral3");
+var collateral4 = document.getElementById("collateral4");
+var collateral5 = document.getElementById("collateral5");
+var collateral6 = document.getElementById("collateral6");
+var collateral7 = document.getElementById("collateral7");
+var collateral8 = document.getElementById("collateral8");
+var collateral9 = document.getElementById("collateral9");
+var analisa4 = document.getElementById("evaluasi_collateral");
+
+collateral1.addEventListener("change", collateral);
+collateral2.addEventListener("change", collateral);
+collateral3.addEventListener("change", collateral);
+collateral4.addEventListener("change", collateral);
+collateral5.addEventListener("change", collateral);
+collateral6.addEventListener("change", collateral);
+collateral7.addEventListener("change", collateral);
+collateral8.addEventListener("change", collateral);
+collateral9.addEventListener("change", collateral);
+
+function collateral() {
+    var selectedcollateral1 = parseInt(collateral1.value) || 0;
+    var selectedcollateral2 = parseInt(collateral2.value) || 0;
+    var selectedcollateral3 = parseInt(collateral3.value) || 0;
+    var selectedcollateral4 = parseInt(collateral4.value) || 0;
+    var selectedcollateral5 = parseInt(collateral5.value) || 0;
+    var selectedcollateral6 = parseInt(collateral6.value) || 0;
+    var selectedcollateral7 = parseInt(collateral7.value) || 0;
+    var selectedcollateral8 = parseInt(collateral8.value) || 0;
+    var selectedcollateral9 = parseInt(collateral9.value) || 0;
+
+    var jml =
+        selectedcollateral1 +
+        selectedcollateral2 +
+        selectedcollateral3 +
+        selectedcollateral4 +
+        selectedcollateral5 +
+        selectedcollateral6 +
+        selectedcollateral7 +
+        selectedcollateral8 +
+        selectedcollateral9;
+
+    if (jml === 0 || jml <= 9) {
+        var nilai = "Kurang Baik";
+    } else if (jml === 10 || jml <= 18) {
+        var nilai = "Cukup Baik";
+    } else if (jml === 19 || jml <= 27) {
+        var nilai = "Baik";
+    }
+
+    analisa4.value = nilai;
+}
 //====ANALISA COLLATERAL====//
+
+//====ANALISA CONDITION====//
+var condition1 = document.getElementById("condition1");
+var condition2 = document.getElementById("condition2");
+var condition3 = document.getElementById("condition3");
+var analisa5 = document.getElementById("evaluasi_condition");
+
+condition1.addEventListener("change", condition);
+condition2.addEventListener("change", condition);
+condition3.addEventListener("change", condition);
+
+function condition() {
+    var selectedcondition1 = parseInt(condition1.value) || 0;
+    var selectedcondition2 = parseInt(condition2.value) || 0;
+    var selectedcondition3 = parseInt(condition3.value) || 0;
+
+    var jml = selectedcondition1 + selectedcondition2 + selectedcondition3;
+
+    if (jml === 0 || jml <= 4) {
+        var nilai = "Kurang Baik";
+    } else if (jml === 5 || jml <= 8) {
+        var nilai = "Cukup Baik";
+    } else if (jml === 9 || jml <= 12) {
+        var nilai = "Baik";
+    }
+    analisa5.value = nilai;
+}
+//====ANALISA CONDITION====//

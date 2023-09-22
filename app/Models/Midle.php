@@ -329,7 +329,8 @@ class Midle extends Model
             'aset_terkait_usaha' => null,
             'capital_sumber_modal' => null,
             'rc' => null,
-            'dsr' => null,
+            'capital_evaluasi_capital' => null,
+            'evaluasi_capacity' => null,
         ];
         return $data;       
     }

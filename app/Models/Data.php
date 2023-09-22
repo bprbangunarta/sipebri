@@ -134,4 +134,27 @@ class Data extends Model
             return 'Efektif Musiman';
         }
     }
+
+    public static function analisa5c_text($data)
+    {
+        if ($data == "Baik") {
+            return  "3";
+        } elseif($data == "Cukup Baik") {
+            return "2";
+        } elseif($data == "Kurang Baik") {
+            return "1";
+        }
+    }
+
+    public static function analisa5c_number($data)
+    {
+        if ($data == "3") {
+            return  "Baik";
+        } elseif($data == "2") {
+            return "Cukup Baik";
+        } elseif($data == "1") {
+            return "Kurang Baik";
+        }
+    }
+    
 }

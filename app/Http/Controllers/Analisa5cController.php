@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Data;
 use App\Models\Midle;
 use App\Models\Keuangan;
 use Illuminate\Http\Request;
@@ -20,31 +21,45 @@ class Analisa5cController extends Controller
             $a5character = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
             $a5capacity = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
             $a5collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
-            $a5conition = DB::table('a5c_condition')->where('pengajuan_kode', $enc)->first();
+            $a5condition = DB::table('a5c_condition')->where('pengajuan_kode', $enc)->first();
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             
+            //Cek kemampuan keuangan sudah terisi apa belum
+            if (is_null($keuangan) || $keuangan == 0) {
+                return redirect()->back()->with('error', 'Keuangan perbulan tidak boleh kosong');
+            }
+
             //total semua nilai taksasi
             $tak = [];
             for ($i=0; $i < count($taksasi); $i++) { 
                 $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
             }
             $totaltaksasi = array_sum($tak);
- 
+
             //Cek Taksasi sudah terisi apa belum
             if ($totaltaksasi == 0) {
                 return redirect()->back()->with('error', 'Taksasi tidak boleh kosong');
             }
+
+            //Menghitung RC
+            $a = $keuangan * intval($cek[0]->jangka_waktu);
+            $b = (intval($cek[0]->plafon) / $a) * 100;
+              
             
-            //Cek kemampuan keuangan sudah terisi apa belum
-            if (is_null($keuangan) || $keuangan == 0) {
-                return redirect()->back()->with('error', 'Keuangan perbulan tidak boleh kosong');
-            }
+            //Menghitung Taksasi Agunan
+            $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+            
+            $an = [
+                'rc' => number_format($b, 2),
+                'taksasi' => number_format($c, 2),
+            ];
             
             //Kode user jika tidak ada di tabel a5c_karakter maka dialihkan
             if (is_null($a5character)) {
                 return view('analisa.5c', [
                 'data' => $cek[0],
+                'analisa' => $an,
             ]);
             }
             
@@ -58,25 +73,25 @@ class Analisa5cController extends Controller
             if (is_null($a5collateral)) {
                 $a5collateral = Midle::collateral();
             }
-            if (is_null($a5conition)) {
-                $a5conition = Midle::conition();
+            if (is_null($a5condition)) {
+                $a5condition = Midle::conition();
             }
-                        
-            //Menghitung RC
-            $a = $keuangan * intval($cek[0]->jangka_waktu);
-            $b = (intval($cek[0]->plafon) / $a) * 100;
-            $a5capacity->RC = number_format($b, 2);  
-            
-            //Menghitung Taksasi Agunan
-            $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
-            $a5collateral->taksasi = number_format($c, 2);
 
+            $a5capacity->RC = number_format($b, 2);
+            $a5collateral->taksasi = number_format($c, 2);
+            
+            //parsing data number ke string
+            $a5capacity->evaluasi_capacity = Data::analisa5c_number($a5capacity->evaluasi_capacity);
+            $a5capacity->capital_evaluasi_capital = Data::analisa5c_number($a5capacity->capital_evaluasi_capital);
+            $a5condition->evaluasi_condition = Data::analisa5c_number($a5condition->evaluasi_condition);
+            $a5collateral->evaluasi_collateral = Data::analisa5c_number($a5collateral->evaluasi_collateral);
+            
             return view('analisa.5c-edit', [
                 'data' => $cek[0],
                 'karakter' => $a5character,
                 'capacity' => $a5capacity,
                 'collateral' => $a5collateral,
-                'conition' => $a5conition,
+                'conition' => $a5condition,
             ]);
 
         } catch (DecryptException $e) {
@@ -86,6 +101,15 @@ class Analisa5cController extends Controller
 
     public function store(Request $request)
     {
+       
+        if ($request->rc == 0) {
+            return redirect()->back()->withInput()->with('error', 'RC tidak boleh kosong');
+        }
+
+        if ($request->taksasi_agunan == 0) {
+            return redirect()->back()->withInput()->with('error', 'Taksasi Agunan tidak boleh kosong');
+        }
+       
         $character = $request->validate([
             'gaya_hidup' => 'required',
             'konsisten' => 'required',
@@ -105,9 +129,11 @@ class Analisa5cController extends Controller
             'aset_terkait_usaha' => 'required',
             'pertumbuhan_usaha' => 'required',
             'laporan_keuangan' => 'required',
-            'rc' => 'required',
+            'rc' => '',
             'catatan_kredit' => 'required',
             'capital_sumber_modal' => 'required',
+            'capital_evaluasi_capital' => 'required',
+            'evaluasi_capacity' => 'required',
         ]);
 
         $collateral = $request->validate([            
@@ -120,23 +146,24 @@ class Analisa5cController extends Controller
             'kondisi_kendaraan' => 'required',
             'lokasi_shm' => 'required',
             'aspek_hukum' => 'required',
-            'taksasi_agunan' => 'required',
+            'taksasi_agunan' => '',
+            'evaluasi_collateral' => 'required',
         ]);
 
-        $conition = $request->validate([
+        $condition = $request->validate([
             'persaingan_usaha' => 'required',
             'kondisi_alam' => 'required',
             'regulasi_pemerintah' => 'required',
+            'evaluasi_condition' => 'required',
         ]);
 
-        if ($request->nilai_karakter == "Baik") {
-            $character['nilai_karakter'] = "3";
-        } elseif($request->nilai_karakter == "Cukup Baik") {
-            $character['nilai_karakter'] = "2";
-        } elseif($request->nilai_karakter == "Kurang Baik") {
-            $character['nilai_karakter'] = "1";
-        }
-
+        //parsing data dari string ke number
+        $character['nilai_karakter'] = Data::analisa5c_text($request->nilai_karakter);
+        $capacity['evaluasi_capacity'] = Data::analisa5c_text($request->evaluasi_capacity);
+        $capacity['capital_evaluasi_capital'] = Data::analisa5c_text($request->capital_evaluasi_capital);
+        $collateral['evaluasi_collateral'] = Data::analisa5c_text($request->evaluasi_collateral);
+        $condition['evaluasi_condition'] = Data::analisa5c_text($request->evaluasi_condition);
+        
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             
@@ -150,15 +177,21 @@ class Analisa5cController extends Controller
             $capacity['pengajuan_kode'] = $enc;
             $collateral['kode_analisa'] = $kode;
             $collateral['pengajuan_kode'] = $enc;
-            $conition['kode_analisa'] = $kode;
-            $conition['pengajuan_kode'] = $enc;
-            $capacity['rc'] = str_replace("RC : ", "", $capacity['rc']);
-
-            DB::transaction(function () use ($character, $capacity, $collateral, $conition) {
+            $condition['kode_analisa'] = $kode;
+            $condition['pengajuan_kode'] = $enc;
+            $capacity['rc'] = str_replace([" ", "%"],"", $capacity['rc']);
+            $collateral['taksasi_agunan'] = str_replace([" ", "%"],"", $collateral['taksasi_agunan']);
+            // dd($character, $capacity, $collateral, $condition);
+            $keuangan = Keuangan::where('pengajuan_kode', $enc)->first();
+            if (is_null($keuangan)) {
+                return redirect()->back()->withInput()->with('error', 'Data Keuangan tidak boleh kosong');
+            }
+            
+            DB::transaction(function () use ($character, $capacity, $collateral, $condition) {
                 DB::table('a5c_character')->insert($character);
                 DB::table('a5c_capacity')->insert($capacity);
                 DB::table('a5c_collateral')->insert($collateral);
-                DB::table('a5c_condition')->insert($conition);
+                DB::table('a5c_condition')->insert($condition);
             });
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (DecryptException $th) {
@@ -197,6 +230,8 @@ class Analisa5cController extends Controller
             'rc' => 'required',
             'catatan_kredit' => 'required',
             'capital_sumber_modal' => 'required',
+            'capital_evaluasi_capital' => 'required',
+            'evaluasi_capacity' => 'required',
         ]);
 
         $collateral = $request->validate([            
@@ -210,31 +245,35 @@ class Analisa5cController extends Controller
             'lokasi_shm' => 'required',
             'aspek_hukum' => 'required',
             'taksasi_agunan' => 'required',
+            'evaluasi_collateral' => 'required',
         ]);
 
-        $conition = $request->validate([
+        $condition = $request->validate([
             'persaingan_usaha' => 'required',
             'kondisi_alam' => 'required',
             'regulasi_pemerintah' => 'required',
+            'evaluasi_condition' => 'required',
         ]);
 
-         if ($request->nilai_karakter == "Baik") {
-            $character['nilai_karakter'] = "3";
-        } elseif($request->nilai_karakter == "Cukup Baik") {
-            $character['nilai_karakter'] = "2";
-        } elseif($request->nilai_karakter == "Kurang Baik") {
-            $character['nilai_karakter'] = "1";
-        }
+        //parsing data dari string ke number
+        $character['nilai_karakter'] = Data::analisa5c_text($request->nilai_karakter);
+        $capacity['evaluasi_capacity'] = Data::analisa5c_text($request->evaluasi_capacity);
+        $capacity['capital_evaluasi_capital'] = Data::analisa5c_text($request->capital_evaluasi_capital);
+        $collateral['evaluasi_collateral'] = Data::analisa5c_text($request->evaluasi_collateral);
+        $condition['evaluasi_condition'] = Data::analisa5c_text($request->evaluasi_condition);
 
+        //Hapus karakter persen %
+        $capacity['rc'] = str_replace(["RC : ", "%"],"", $capacity['rc']);
+        $collateral['taksasi_agunan'] = str_replace([" ", "%"],"", $collateral['taksasi_agunan']);
+        
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-            $capacity['rc'] = str_replace(["RC : ", "%"],"", $capacity['rc']);
-            
-            DB::transaction(function () use ($enc, $character, $capacity, $collateral, $conition) {
+        
+            DB::transaction(function () use ($enc, $character, $capacity, $collateral, $condition) {
                 DB::table('a5c_character')->where('pengajuan_kode', $enc)->update($character);
                 DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->update($capacity);
                 DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->update($collateral);
-                DB::table('a5c_condition')->where('pengajuan_kode', $enc)->update($conition);
+                DB::table('a5c_condition')->where('pengajuan_kode', $enc)->update($condition);
             });
             return redirect()->back()->with('success', 'Data berhasil diubah');
         } catch (DecryptException $th) {
