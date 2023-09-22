@@ -181,7 +181,7 @@ class Analisa5cController extends Controller
             $condition['pengajuan_kode'] = $enc;
             $capacity['rc'] = str_replace([" ", "%"],"", $capacity['rc']);
             $collateral['taksasi_agunan'] = str_replace([" ", "%"],"", $collateral['taksasi_agunan']);
-            // dd($character, $capacity, $collateral, $condition);
+            
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->first();
             if (is_null($keuangan)) {
                 return redirect()->back()->withInput()->with('error', 'Data Keuangan tidak boleh kosong');

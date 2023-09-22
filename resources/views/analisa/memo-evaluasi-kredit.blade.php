@@ -55,10 +55,10 @@
                                                             <th class="text-center" colspan="6">Rekomendasi</th>
                                                         </tr>
                                                         <tr>
-                                                            <th class="text-center" width="25%">Analisa</th>
-                                                            <th class="text-center" width="24%">Keterangan</th>
                                                             <th class="text-center" width="27%">Analisa</th>
-                                                            <th class="text-center" width="24%">Keterangan</th>
+                                                            <th class="text-center" width="23%">Keterangan</th>
+                                                            <th class="text-center" width="27%">Analisa</th>
+                                                            <th class="text-center" width="23%">Keterangan</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
