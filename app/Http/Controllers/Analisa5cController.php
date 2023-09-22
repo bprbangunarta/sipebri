@@ -186,6 +186,7 @@ class Analisa5cController extends Controller
             if ($capacity['rc'] < 0) {
                return redirect()->back()->withInput()->with('error', 'RC tidak mencukupi');
             }
+            
             //Cek data keuangan
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->first();
             if (is_null($keuangan)) {

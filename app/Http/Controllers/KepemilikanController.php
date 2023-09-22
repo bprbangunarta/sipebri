@@ -23,7 +23,7 @@ class KepemilikanController extends Controller
             $cek = Midle::analisa_usaha($enc);
 
             $has = Kepemilikan::where('pengajuan_kode', $enc)->first();
-            // dd($has);
+            
             if (is_null($has)) {
                 return view('analisa.harta-kepemilikan', [
                 'data' => $cek[0],

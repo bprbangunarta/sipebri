@@ -211,7 +211,6 @@ class KeuanganController extends Controller
                     DB::table('bu_keuangan')->where('id', $cek[0]->id)->update($data);
                 }
                 
-
                 //Update Biaya Rumah Tangga
                 for ($j = 1; $j <= 3; $j++) {
                     $data1 = [
