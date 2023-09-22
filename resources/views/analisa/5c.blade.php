@@ -734,7 +734,7 @@
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
                                                                 name="evaluasi_collateral" id="evaluasi_collateral"
-                                                                value="{{ old('evaluasi_collateral') }}" readonly
+                                                                value="{{ old('evaluasi_collateral') ?? '?' }}" readonly
                                                                 required>
                                                         </td>
                                                     </tr>
@@ -785,7 +785,8 @@
                                                             <input type="text"
                                                                 class="form-control bg-primary fw-bold text-white text-center"
                                                                 name="evaluasi_condition" id="evaluasi_condition"
-                                                                value="{{ old('evaluasi_condition') }}" readonly required>
+                                                                value="{{ old('evaluasi_condition') ?? '?' }}" readonly
+                                                                required>
                                                         </td>
                                                     </tr>
                                                     <tr>

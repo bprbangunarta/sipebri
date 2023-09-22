@@ -19,10 +19,10 @@ class Analisa5cController extends Controller
             $cek = Midle::analisa_usaha($enc);
 
             $a5character = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
-            $a5capacity = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
-            $a5collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
+                        $a5capacity = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
+                        $a5collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
             $a5condition = DB::table('a5c_condition')->where('pengajuan_kode', $enc)->first();
-            $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
+                        $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             
             //Cek kemampuan keuangan sudah terisi apa belum
@@ -182,6 +182,11 @@ class Analisa5cController extends Controller
             $capacity['rc'] = str_replace([" ", "%"],"", $capacity['rc']);
             $collateral['taksasi_agunan'] = str_replace([" ", "%"],"", $collateral['taksasi_agunan']);
             
+            //Cek RC
+            if ($capacity['rc'] < 0) {
+               return redirect()->back()->withInput()->with('error', 'RC tidak mencukupi');
+            }
+            //Cek data keuangan
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->first();
             if (is_null($keuangan)) {
                 return redirect()->back()->withInput()->with('error', 'Data Keuangan tidak boleh kosong');
