@@ -220,9 +220,9 @@
                                         </tr>
                                         <tr>
                                             <td class="text-center">3</td>
-                                            <td>Surat pernyataan pengecekan NIK</td>
+                                            <td>Analisa 5C</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.nik', ['cetak' => $data->kd_pengajuan]) }}"
+                                                <a href="{{ route('cetakanalisa5c.analisa5c', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"

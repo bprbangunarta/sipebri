@@ -81,4 +81,19 @@ class CetakAnalisaController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+    public function cetakanalisa5c(Request $request)
+    {
+        $kode = $request->query('cetak');
+        
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($kode);
+            
+            return view('cetak.analisa.analisa5c');
+
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 }
