@@ -195,9 +195,9 @@
                                         </tr>
                                         <tr>
                                             <td class="text-center">2</td>
-                                            <td>Surat Persetujuan Pendamping</td>
+                                            <td>Kemampuan Keuangan</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.pendamping', ['cetak' => $data->kd_pengajuan]) }}"
+                                                <a href="{{ route('kemampuan.kemampuan_keuangan', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"

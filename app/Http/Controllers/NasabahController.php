@@ -64,7 +64,7 @@ class NasabahController extends Controller
 
                         $cif = Midle::cifedit($data);
                         $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
-                        // dd($cif);
+                        
                         $cif['nasabah']->kd_nasabah = Crypt::encrypt($cif['nasabah']->kode_nasabah);
                         
                         return view('nasabah.edit', [

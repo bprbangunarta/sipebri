@@ -58,9 +58,24 @@ class CetakAnalisaController extends Controller
             $hari = Carbon::today();
             $data[0]->hari = $hari->isoformat('D MMMM Y');
             
-            return view('cetak.layouts.usaha_jasa',[
+            return view('cetak.analisa.usaha_jasa',[
                 'data' => $data[0]
             ]);
+
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function kemampuan_keuangan(Request $request)
+    {
+        $kode = $request->query('cetak');
+        
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($kode);
+            
+            return view('cetak.analisa.kemampuan_keuangan');
 
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
