@@ -29,6 +29,12 @@ class Lain extends Model
 
     public static function au_lain($data)
     {
+        $cek = self::where('kode_usaha', $data)->get();
+        return $cek;
+    }
+
+    public static function index_lain($data)
+    {
         $cek = self::where('pengajuan_kode', $data)->get();
         return $cek;
     }

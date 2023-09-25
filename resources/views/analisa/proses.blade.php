@@ -55,7 +55,7 @@
                                             <th class="text-center">Alamat</th>
                                             <th class="text-center">Wilayah</th>
                                             <th class="text-center">Status</th>
-                                            <th class="text-center" width="4%">Aksi</th>
+                                            <th class="text-center" width="10%">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,7 +75,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="{{ route('tambah.index', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        title="Proses Analisa">
+                                                        title="Proses Analisa" style="text-decoration: none;">
                                                         <span class="badge bg-warning">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="icon icon-tabler icon-tabler-clipboard-list"
@@ -94,6 +94,27 @@
                                                                 <path d="M13 12l2 0"></path>
                                                                 <path d="M9 16l.01 0"></path>
                                                                 <path d="M13 16l2 0"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </a>
+                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        title="Print Data">
+                                                        <span class="badge bg-info">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="icon icon-tabler icon-tabler-printer" width="24"
+                                                                height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                                stroke="currentColor" fill="none" stroke-linecap="round"
+                                                                stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                                                </path>
+                                                                <path
+                                                                    d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
+                                                                </path>
+                                                                <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4">
+                                                                </path>
+                                                                <path
+                                                                    d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z">
+                                                                </path>
                                                             </svg>
                                                         </span>
                                                     </a>

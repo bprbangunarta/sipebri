@@ -25,7 +25,7 @@ class LainController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            $au = Lain::au_lain($enc);
+            $au = Lain::index_lain($enc);
 
             foreach($au as $item){
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
@@ -116,8 +116,9 @@ class LainController extends Controller
         
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
+            $usaha = Crypt::decrypt($request->query('usaha'));
             $cek = Midle::analisa_usaha($enc);
-            $au = Lain::au_lain($enc);
+            $au = Lain::au_lain($usaha);
             $data = Lain::editlainnya($au[0]->kode_usaha);
             
             $au[0]->kd_usaha = Crypt::encrypt($au[0]->kode_usaha);
