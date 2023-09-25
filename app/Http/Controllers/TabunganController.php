@@ -12,10 +12,7 @@ class TabunganController extends Controller
 {
     public function index()
     {
-        $query = Tabungan::query();
-        $query->select('*');
-
-        $tabungan = $query->paginate(10);
+        $tabungan = Tabungan::orderBy('inptgljam', 'desc')->paginate(10);
         return view('tabungan', compact('tabungan'));
     }
 }
