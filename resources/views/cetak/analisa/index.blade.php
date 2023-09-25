@@ -270,9 +270,9 @@
                                         </tr>
                                         <tr>
                                             <td class="text-center">5</td>
-                                            <td>BA Pemerikasaan Sertifikat Tanah</td>
+                                            <td>Analisa Tambahan</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.tanah', ['cetak' => $data->kd_pengajuan]) }}"
+                                                <a href="{{ route('tambahan.tambahan', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"

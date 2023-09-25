@@ -14,7 +14,7 @@
         body {
             margin: 0;
             /* font-family: 'Calibri', serif; */
-            font-family: "calibri", serif;
+            font-family: "Times New Roman", Times, serif;
         }
 
         table {

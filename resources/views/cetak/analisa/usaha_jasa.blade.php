@@ -85,7 +85,7 @@
 
         <h4 style="text-align: center;">ANALISA USAHA JASA</h4>
 
-        <table style="font-size: 12px;">
+        <table style="font-size: 13px;">
             <tr>
                 <td style="width: 14%;">Staff Analis</td>
                 <td style="width: 2%;">:</td>

@@ -210,6 +210,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/analisa/kemampuan', [CetakAnalisaController::class, 'kemampuan_keuangan'])->name('kemampuan.kemampuan_keuangan');
         Route::get('/cetak/analisa/analisa5c', [CetakAnalisaController::class, 'cetakanalisa5c'])->name('cetakanalisa5c.analisa5c');
         Route::get('/cetak/analisa/crr', [CetakAnalisaController::class, 'crr'])->name('crr.crr');
+        Route::get('/cetak/analisa/tambahan', [CetakAnalisaController::class, 'tambahan'])->name('tambahan.tambahan');
         //===Cetak Analisa===//
     });
 });
