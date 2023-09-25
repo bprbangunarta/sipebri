@@ -245,9 +245,9 @@
                                         </tr>
                                         <tr>
                                             <td class="text-center">4</td>
-                                            <td>Surat pernyataan pengecekan IDEB</td>
+                                            <td>Penilaian Credit Risk Rating (CRR)</td>
                                             <td class="text-center">
-                                                <a href="{{ route('data.slik', ['cetak' => $data->kd_pengajuan]) }}"
+                                                <a href="{{ route('crr.crr', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"

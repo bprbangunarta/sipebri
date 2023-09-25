@@ -96,4 +96,19 @@ class CetakAnalisaController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+    public function crr(Request $request)
+    {
+        $kode = $request->query('cetak');
+        
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($kode);
+            
+            return view('cetak.analisa.credit_risk_rating');
+
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 }
