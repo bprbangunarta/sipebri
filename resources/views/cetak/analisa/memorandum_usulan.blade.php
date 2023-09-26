@@ -263,12 +263,6 @@
                         <td style="width: 2px;">:</td>
                         <td colspan="3">Cuukup Baik</td>
                     </tr>
-                    {{-- <tr>
-                        <td style="width: 2px;"></td>
-                        <td style="width: 40%;">6. Analisa SWOT</td>
-                        <td style="width: 2px;">:</td>
-                        <td colspan="3">Cuukup Baik</td>
-                    </tr> --}}
                     <tr>
                         <td style="width: 2px;"></td>
                         <td style="width: 40%;">6. CRR</td>

@@ -89,17 +89,17 @@
             <tr>
                 <td style="width: 14%;">Staff Analis</td>
                 <td style="width: 2%;">:</td>
-                <td>DIDI JUNEIDI</td>
+                <td>{{ $data->surveyor }}</td>
             </tr>
             <tr>
                 <td style="width: 14%;">Kode Analis</td>
                 <td style="width: 2%;">:</td>
-                <td>RDI</td>
+                <td>{{ $data->kode_surveyor }}</td>
             </tr>
             <tr>
                 <td style="width: 14%;">Kasi Analis</td>
                 <td style="width: 2%;">:</td>
-                <td>RIAN DESTILA</td>
+                <td>{{ $data->kasi }}</td>
             </tr>
         </table>
 
@@ -109,31 +109,31 @@
                 <td style="width: 1%;"></td>
                 <td style="width: 16%;">Kode Nasabah</td>
                 <td style="width: 2%;">:</td>
-                <td>0823737830</td>
+                <td>{{ $data->kode_nasabah }}</td>
             </tr>
             <tr>
                 <td style="width: 1%;"></td>
                 <td style="width: 16%;">Nama Lengkap</td>
                 <td style="width: 2%;">:</td>
-                <td>Yandi</td>
+                <td>{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td style="width: 1%;"></td>
                 <td style="width: 16%;">Alamat</td>
                 <td style="width: 2%;">:</td>
-                <td>Dengan ini saya menyatakan dan menyetujui untuk dilakukan pengecekan NIK</td>
+                <td>{{ $data->alamat_ktp }}</td>
             </tr>
             <tr>
                 <td style="width: 1%;"></td>
                 <td style="width: 16%;">No Telepon</td>
                 <td style="width: 2%;">:</td>
-                <td>087828046711</td>
+                <td>{{ $data->no_telp }}</td>
             </tr>
             <tr>
                 <td style="width: 1%;"></td>
                 <td style="width: 19%;">Penggunaan Kredit</td>
                 <td style="width: 2%;">:</td>
-                <td>Modal Usaha</td>
+                <td>{{ $data->penggunaan }}</td>
             </tr>
         </table>
 
@@ -142,59 +142,24 @@
         <div class="border-1">
             <div class="penghasilan">
                 <table style="border: 1px black; width: 70%;">
-                    <tr>
-                        <td style="width: 15px;">a. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
-                        <td>Rp. 10.000.000</td>
+                    @foreach ($jasa as $item)
+                        <tr>
+                            <td style="width: 15px;">{{ $loop->iteration . '.' }}</td>
+                            <td style="width: 200px;">{{ $item->nama_usaha }}</td>
+                            <td>{{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') ?? 0 }}</td>
+                        </tr>
+                        <tr style="position:absolute; margin-top: -18px; margin-left: 18px;">
+                            <td></td>
+                            <td>________________________________________</td>
+                        </tr>
+                    @endforeach
+                    <tr style="position:absolute; margin-top: 30px; margin-left: 0px;">
+                        <td style="width: 30%;">Jumlah</td>
+                        <td style="width: 123px;"></td>
+                        <td>{{ 'Rp. ' . number_format($jasa->totalpendapatan, 0, ',', '.') ?? 0 }}</td>
                     </tr>
-                    <tr style="position:absolute; margin-top: -20px; margin-left: 18px;">
+                    <tr style="position:absolute; margin-top: 30px; margin-left: 218px;">
                         <td></td>
-                        <td>________________________________________</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 15px;">b. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
-                        <td>Rp. 10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: -20px; margin-left: 18px;">
-                        <td></td>
-                        <td>________________________________________</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 15px;">c. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
-                        <td>Rp. 10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: -20px; margin-left: 18px;">
-                        <td></td>
-                        <td>________________________________________</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 15px;">d. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
-                        <td>Rp. 10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: -20px; margin-left: 18px;">
-                        <td></td>
-                        <td>________________________________________</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 15px;">e. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
-                        <td>Rp. 10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: -20px; margin-left: 18px;">
-                        <td></td>
-                        <td>________________________________________</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: 40px; margin-left: 70px;">
-                        <td style="width: 15px;">Jumlah</td>
-                        <td style="width: 200px;"></td>
-                        <td style="width: 30px;"></td>
-                        <td>Rp. 10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: 40px; margin-left: 352px;">
-
                         <td>_______________</td>
                     </tr>
                 </table>
@@ -209,7 +174,7 @@
                     <tr>
                         <td style="width: 15px;">a. </td>
                         <td style="width: 200px;">Pajak Kendaraan (Produktif)</td>
-                        <td>Rp. 10.000.000</td>
+                        <td>{{ 'Rp. ' . number_format($jasa->totalpajak, 0, ',', '.') ?? 0 }}</td>
                     </tr>
                     <tr style="position:absolute; margin-top: -20px; margin-left: 218px;">
                         <td></td>
@@ -218,35 +183,28 @@
                     <tr>
                         <td style="width: 15px;">b. </td>
                         <td style="width: 200px;">Pengeluaran lain-lain</td>
-                        <td>Rp. 10.000.000</td>
+                        <td>{{ 'Rp. ' . number_format($jasa->totallain, 0, ',', '.') ?? 0 }}</td>
                     </tr>
-                    <tr style="position:absolute; margin-top: -20px; margin-left: 218px;">
+                    <tr style="position:absolute; margin-top: 20px; margin-left: 0px;">
+                        <td style="width: 30%;">Jumlah</td>
+                        <td style="width: 128px;"></td>
+                        <td>{{ 'Rp. ' . number_format($jasa->totalpengeluaran, 0, ',', '.') }}</td>
+                    </tr>
+                    <tr style="position:absolute; margin-top: 20px; margin-left: 218px;">
                         <td></td>
                         <td>_______________</td>
                     </tr>
-                    <tr style="position:absolute; margin-top: 40px; margin-left: 70px;">
-                        <td style="width: 15px;">Jumlah</td>
-                        <td style="width: 200px;"></td>
-                        <td style="width: 30px;"></td>
-                        <td>Rp. 10.000.000</td>
+                    <tr style="position:absolute; margin-top: 70px; margin-left: 0px;">
+                        <td style="width: 30%;"><b>Pendapatan Jasa</b></td>
+                        <td style="width: 100px;"></td>
+                        <td>{{ 'Rp. ' . number_format($jasa->lababersih, 0, ',', '.') }}</td>
                     </tr>
-                    <tr style="position:absolute; margin-top: 40px; margin-left: 352px;">
-
-                        <td>_______________</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: 80px; margin-left: 19px;">
-                        <td style="width: 200px;"><b></b></td>
-                        <td style="width: 200px;"><b>Pendapatan Jasa</b></td>
-                        <td style="width: 30px;"></td>
-                        <td>Rp. 10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: 80px; margin-left: 455px;">
+                    <tr style="position:absolute; margin-top: 70px; margin-left: 219px;">
 
                         <td>_______________</td>
                     </tr>
                 </table>
             </div>
-
         </div>
         <br><br><br><br>
 

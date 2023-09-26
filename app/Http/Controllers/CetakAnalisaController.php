@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jasa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,22 +45,20 @@ class CetakAnalisaController extends Controller
     public function usaha_jasa(Request $request)
     {
         $kode = $request->query('pengajuan');
-        
+
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($kode);
-            // dd($kode);
-            $data = DB::table('data_pengajuan')
-                    ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                    ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah')
-                    ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
+            
+            $data = Jasa::cetak_jasa($enc);
 
             //Hari ini
             $hari = Carbon::today();
-            $data[0]->hari = $hari->isoformat('D MMMM Y');
-            
+            $data[0][0]->hari = $hari->isoformat('D MMMM Y');
+            // dd($data[1]);
             return view('cetak.analisa.usaha_jasa',[
-                'data' => $data[0]
+                'data' => $data[0][0],
+                'jasa' => $data[1],
             ]);
 
         } catch (DecryptException $e) {
