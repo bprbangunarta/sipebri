@@ -184,7 +184,7 @@
                                     <select type="text" class="form-select" placeholder="Pilih Jenis Usaha"
                                         name="jenis_usaha" id="select-usaha">
                                         <option value="">Pilih Jenis Usaha</option>
-                                        <option value="Industri">Home Industri</option>
+                                        <option value="Home Industri">Home Industri</option>
                                         <option value="Makanan">Makanan</option>
                                         <option value="Pengolahan">Pengolahan</option>
                                         <option value="Perikanan">Perikanan</option>
