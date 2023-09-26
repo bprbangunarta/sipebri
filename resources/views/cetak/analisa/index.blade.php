@@ -295,9 +295,9 @@
                                         </tr>
                                         <tr>
                                             <td class="text-center">6</td>
-                                            <td>BA Pemerikasaan Agunan Kendaraan Motor</td>
+                                            <td>Memorandum Usulan Kredit (MUK)</td>
                                             <td class="text-center">
-                                                <a href="{{ route('cetak.motor', ['cetak' => $data->kd_pengajuan]) }}"
+                                                <a href="{{ route('memorandum.memorandum', ['cetak' => $data->kd_pengajuan]) }}"
                                                     title="Cetak Berkas" target="_blank">
                                                     <span class="badge bg-info">
                                                         <svg xmlns="http://www.w3.org/2000/svg"
