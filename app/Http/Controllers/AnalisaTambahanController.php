@@ -134,7 +134,6 @@ class AnalisaTambahanController extends Controller
                 'nilai_lain' => (int)str_replace(["Rp", " ", "."], "", $request->nilai_lain),
             ];
         
-            // dd($tambah);
             $tambah = Tambahan::where('pengajuan_kode', $enc)->first();
             Tambahan::where('id', $tambah->id)->update($data);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');

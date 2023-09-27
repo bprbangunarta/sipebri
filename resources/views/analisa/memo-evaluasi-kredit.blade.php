@@ -333,7 +333,7 @@
                                                         <tr>
                                                             <td>
                                                                 <input type="text" class="form-control" name=""
-                                                                    value="Syarta-syarat tambahan" readonly>
+                                                                    value="Syarat-syarat tambahan" readonly>
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
@@ -341,7 +341,7 @@
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control" name=""
-                                                                    value="Syarta tambahan lainnya" readonly>
+                                                                    value="Syarat tambahan lainnya" readonly>
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
