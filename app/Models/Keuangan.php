@@ -66,4 +66,21 @@ class Keuangan extends Model
             return $cek;
         }
     }
+
+    public static function cetak_keuangan($data)
+    {
+        $cek = DB::table('data_pengajuan')
+                    ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                    ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                    ->select('data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.no_telp', 'data_pengajuan.penggunaan', 'data_survei.kasi_kode', 'data_survei.surveyor_kode')
+                    ->where('data_pengajuan.kode_pengajuan', '=', $data)->get();
+        //
+        $kasi = DB::table('v_users')->where('code_user', $cek[0]->kasi_kode)->first();
+        $surveyor = DB::table('v_users')->where('code_user', $cek[0]->surveyor_kode)->first();       
+        $cek[0]->kasi = $kasi->nama_user;
+        $cek[0]->surveyor = $surveyor->nama_user;
+        $cek[0]->kode_surveyor = $surveyor->code_user;
+        // dd($cek);
+        return $cek;
+    }
 }

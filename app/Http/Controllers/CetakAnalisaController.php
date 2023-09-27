@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Jasa;
+use App\Models\Data;
 use Carbon\Carbon;
+use App\Models\Jasa;
+use App\Models\Midle;
+use App\Models\Keuangan;
+use App\Models\Kepemilikan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -55,7 +59,7 @@ class CetakAnalisaController extends Controller
             //Hari ini
             $hari = Carbon::today();
             $data[0][0]->hari = $hari->isoformat('D MMMM Y');
-            // dd($data[1]);
+            
             return view('cetak.analisa.usaha_jasa',[
                 'data' => $data[0][0],
                 'jasa' => $data[1],
@@ -73,8 +77,37 @@ class CetakAnalisaController extends Controller
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($kode);
+            $data = Keuangan::cetak_keuangan($enc);
+            $biaya = Keuangan::data_keuangan($enc);
+            $usaha = Midle::kemampuan_keuangan($enc);
+            $kepemilikan = Kepemilikan::where('pengajuan_kode', $enc)->first();
+            $taksasi = Midle::taksasi($enc);
             
-            return view('cetak.analisa.kemampuan_keuangan');
+            $filter = array_filter($usaha, function ($value) {
+                return $value !== null ? $value : 0;
+            });
+
+            //jumlah hasil pengeluaran kemampuan keuangan
+            $tbiaya = [];
+            for ($i=0; $i < count($biaya); $i++) { 
+                $tbiaya [] += $biaya[$i]->nominal;
+            }
+            $totalbiaya = array_sum($tbiaya);
+            
+            //Hasil penjumlahan analisa usaha
+            $total = array_sum($filter);
+            $usaha['total'] = $total;
+            $kemampuanperbulan = $usaha['total'] - $totalbiaya;
+
+            return view('cetak.analisa.kemampuan_keuangan',[
+                'data' => $data[0],
+                'usaha' => $usaha,
+                'biaya' => $biaya,
+                'totalbiaya' => $totalbiaya,
+                'kemampuanperbulan' => $kemampuanperbulan,
+                'kepemilikan' => $kepemilikan,
+                'taksasi' => $taksasi,
+            ]);
 
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

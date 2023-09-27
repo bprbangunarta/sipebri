@@ -156,5 +156,23 @@ class Data extends Model
             return "Kurang Baik";
         }
     }
+
+    public static function namaharta($data)
+    {
+        $harta = [
+            'rumah' => 'Rumah',
+            'mobil' => 'Mobil',
+            'motor' => 'Motor',
+            'televisi' => 'Televisi',
+            'komputer' => 'Komputer',
+            'mesin_cuci' => 'Mesin Cuci',
+            'kursi_tamu' => 'Kursi Tamu',
+            'lemari_panjang' => 'Lemari Panjang',
+            'nama_lainnya1' => $data->nama_lainnya1 ?? null,
+            'nama_lainnya2' => $data->nama_lainnya2 ?? null,
+        ];
+
+        return $harta;
+    }
     
 }

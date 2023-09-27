@@ -95,21 +95,21 @@
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
-        <table style="font-size: 12px;">
+        <table style="font-size: 13px;">
             <tr>
                 <td style="width: 14%;">Nama SK</td>
                 <td style="width: 2%;">:</td>
-                <td>Sutrisno</td>
+                <td>{{ $data->kasi }}</td>
             </tr>
             <tr>
                 <td style="width: 14%;">Kode Sales</td>
                 <td style="width: 2%;">:</td>
-                <td>RDI</td>
+                <td>{{ $data->kode_surveyor }}</td>
             </tr>
             <tr>
                 <td style="width: 14%;">Nama Sales</td>
                 <td style="width: 2%;">:</td>
-                <td>RIAN DESTILA</td>
+                <td>{{ $data->surveyor }}</td>
             </tr>
         </table>
 
@@ -119,15 +119,27 @@
                 <table style="border: 1px black; width: 70%;">
                     <tr>
                         <td style="width: 15px;">a. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
+                        <td style="width: 200px;">Hasil Usaha Perdagangan</td>
                         <td>Rp</td>
-                        <td>10.000.000</td>
+                        <td>{{ number_format($usaha['perdagangan'], 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td style="width: 15px;">a. </td>
-                        <td style="width: 200px;">Gaji Suami Perawat</td>
+                        <td style="width: 15px;">b. </td>
+                        <td style="width: 200px;">Hasil Usaha Pertanian</td>
                         <td>Rp</td>
-                        <td>10.000.000</td>
+                        <td>{{ number_format($usaha['pertanian'], 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">c. </td>
+                        <td style="width: 200px;">Hasil Usaha Jasa</td>
+                        <td>Rp</td>
+                        <td>{{ number_format($usaha['jasa'], 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">d. </td>
+                        <td style="width: 200px;">Hasil Usaha Pengolahan</td>
+                        <td>Rp</td>
+                        <td>{{ number_format($usaha['lain'], 0, ',', '.') }}</td>
                     </tr>
                     <tr style="position:absolute; margin-left: 352px;">
 
@@ -137,7 +149,7 @@
                         <td style="width: 200px;">Jumlah Hasil Usaha</td>
                         <td style="width: 45px;"></td>
                         <td></td>
-                        <td><b>Rp. 10.000.000</b></td>
+                        <td><b>{{ 'Rp. ' . ' ' . number_format($usaha['total'], 0, ',', '.') }}</b></td>
                     </tr>
                 </table>
             </div>
@@ -148,59 +160,106 @@
         <div>
             <div class="penghasilan" style="margin-left: 47px;">
                 <table style="border: 1px black; width: 70%;">
-                    <tr>
-                        <td style="width: 10px;">-</td>
-                        <td style="width: 183px;">Gaji Suami Perawat</td>
-                        <td>Rp</td>
-                        <td>10.000.000</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 10px;">-</td>
-                        <td style="width: 183px;">Gaji Suami Perawat</td>
-                        <td>Rp</td>
-                        <td>10.000.000</td>
-                    </tr>
-                    <tr style="position:absolute; margin-top: 20px; margin-left: 80px;">
-                        <td style="width: 200px;">Jumlah Biaya Rumah Tangga</td>
+                    @foreach ($biaya as $item)
+                        <tr>
+                            <td style="width: 10px;">-</td>
+                            <td style="width: 183px;">{{ $item->pengeluaran }}</td>
+                            <td>Rp</td>
+                            <td>{{ number_format($item->nominal, 0, ',', '.') }}</td>
+                        </tr>
+                    @endforeach
+                    <tr style="position:absolute; margin-top: 30px; margin-left: 80px;">
+                        <td style="width: 200px; font-size:14px;">Jumlah Biaya Rumah Tangga</td>
                         <td style="width: 45px;"></td>
                         <td></td>
-                        <td><b>Rp. 10.000.000</b></td>
+                        <td>{{ 'Rp.' . ' ' . number_format($totalbiaya, 0, ',', '.') }}</td>
                     </tr>
-                    <tr style="position:absolute; margin-top: 20px; margin-left: 331px;">
+                    <tr style="position:absolute; margin-top: 30px; margin-left: 331px;">
 
                         <td>_______________</td>
                     </tr>
-                    <tr style="position:absolute; margin-top: 37px; margin-left: 80px;">
-                        <td style="width: 200px; font-size:14px;"><b>Kemampuan keuangan perbulan</b></td>
+                    <tr style="position:absolute; margin-top: 47px; margin-left: 80px;">
+                        <td style="width: 200px; font-size:13px;"><b>Kemampuan keuangan per bulan</b></td>
                         <td style="width: 45px;"></td>
                         <td></td>
-                        <td><b>Rp. 10.000.000</b></td>
+                        <td><b>{{ 'Rp.' . ' ' . number_format($kemampuanperbulan, 0, ',', '.') }}</b></td>
                     </tr>
                 </table>
             </div>
 
         </div>
-        <br><br><br>
+        <br><br><br><br>
         <p style="font-weight: bold;">IV. HARTA KEMPEMILIKAN</p>
         <div class="border-1">
             <div class="penghasilan">
                 <table style="border: 1px black; width: 70%;">
                     <tr>
                         <td style="width: 15px;">1. </td>
-                        <td style="width: 100px;">Rumah</td>
-                        <td>:</td>
-                        <td>Permanen</td>
+                        <td style="width: 200px;">Rumah</td>
+
+                        <td style="width: 50px;">:</td>
+                        <td>{{ $kepemilikan['rumah'] }}</td>
                     </tr>
                     <tr>
                         <td style="width: 15px;">2. </td>
-                        <td style="width: 100px;">Mobil</td>
-                        <td>:</td>
-                        <td>1 Unit</td>
+                        <td style="width: 200px;">Mobil</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['mobil'] }}</td>
                     </tr>
+                    <tr>
+                        <td style="width: 15px;">3. </td>
+                        <td style="width: 200px;">Motor</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['motor'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">4. </td>
+                        <td style="width: 200px;">Televisi</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['televisi'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">5. </td>
+                        <td style="width: 200px;">Komputer</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['komputer'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">6. </td>
+                        <td style="width: 200px;">Mesin Cuci</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['mesin_cuci'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">7. </td>
+                        <td style="width: 200px;">Kuris Tamu</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['kursi_tamu'] }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">8. </td>
+                        <td style="width: 200px;">Lemari Panjang</td>
+                        <td style="width: 45px;">:</td>
+                        <td>{{ $kepemilikan['lemari_panjang'] }}</td>
+                    </tr>
+                    @if (!is_null($kepemilikan['nama_lainnya1']))
+                        <tr>
+                            <td style="width: 15px;">9. </td>
+                            <td style="width: 200px;">{{ $kepemilikan['nama_lainnya1'] }}</td>
+                            <td style="width: 45px;">:</td>
+                            <td>{{ $kepemilikan['isi_lainnya1'] }}</td>
+                        </tr>
+                    @elseif (!is_null($kepemilikan['nama_lainnya2']))
+                        <tr>
+                            <td style="width: 15px;">10. </td>
+                            <td style="width: 200px;">{{ $kepemilikan['nama_lainnya2'] }}</td>
+                            <td style="width: 45px;">:</td>
+                            <td>{{ $kepemilikan['isi_lainnya2'] }}</td>
+                        </tr>
+                    @endif
                 </table>
             </div>
         </div>
-        <br>
         <p style="font-weight: bold;">V. TAKSASI JAMINAN</p>
         <div>
             <div class="taksasi">
@@ -210,14 +269,29 @@
                         <th style="width: 200px;">AGUNAN</th>
                         <th style="width: 60px;">NILAI TAKSASI</th>
                     </tr>
+                    @php $no = 1 @endphp
+                    @foreach ($taksasi as $item)
+                        <tr>
+                            <td style="width: 15px; text-align:center;">{{ $no }}</td>
+                            <td tyle="width: 200px;">
+                                {{ $item->jenis_agunan . ',' . ' ' . $item->jenis_dokumen . ',' . ' ' . $item->no_dokumen . ',' . ' ' . $item->atas_nama . ',' . ' ' . $item->lokasi }}
+                            </td>
+                            <td style="width: 60px;">
+                                {{ 'Rp.' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                        @php $no++ @endphp
+                    @endforeach
                     <tr>
-                        <td style="width: 15px; text-align:center;">1</td>
-                        <td tyle="width: 200px;">Mobil</td>
-                        <td style="width: 60px;">Rp. 100.000.000</td>
-                    </tr>
-                    <tr>
-                        <td tyle="width: 200px; text-align: center;" colspan="2"><b>Jumlah Nilai Taksasi</b></td>
-                        <td style="width: 60px;">Rp. 100.000.000</td>
+                        <td tyle="width: 200px; text-align: center;" colspan="2">
+                            <center><b>Jumlah
+                                    Nilai Taksasi</b></center>
+                        </td>
+                        <td style="width: 60px;">
+                            @if (!is_null($taksasi))
+                                {{ 'Rp.' . ' ' . number_format($item->total, 0, ',', '.') }}
+                            @endif
+                        </td>
                     </tr>
                 </table>
             </div>

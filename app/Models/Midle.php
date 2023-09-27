@@ -361,4 +361,25 @@ class Midle extends Model
         ];
         return $data;       
     }
+
+    public static function taksasi($data)
+    {
+        $cek = DB::table('data_jaminan')
+                ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+                ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_dokumen.kode')
+                ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
+                ->where('pengajuan_kode', $data)->get();
+        //
+        $merge = [];
+        for ($i=0; $i < count($cek); $i++) { 
+            $merge[] = $cek[$i]->nilai_taksasi;
+        }
+        $total = array_sum($merge);
+
+        for ($j=0; $j < count($cek); $j++) { 
+            $cek[$j]->total = $total;
+        }
+
+        return $cek;
+    }   
 }
