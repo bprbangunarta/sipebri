@@ -114,43 +114,50 @@
                     <td class="rg" style="width: 250px;">
                         &ensp;&ensp;a. Tidak Melakukan hal-hal tercela
                     </td>
-                    <td class="rg" tyle="width: 150px;">Mobil</td>
-                    <td style="width: 200px;">Rp. 100.000.000</td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['perbuatan_tercela'] }}</td>
+                    <td style="width: 200px;"></td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Tidak Melakukan hal-hal tercela
+                        &ensp;&ensp;b. Terbuka dan konsisten
                     </td>
-                    <td class="rg" tyle="width: 150px;">Mobil</td>
-                    <td style="width: 200px;">Rp. 100.000.000</td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['konsisten'] }}</td>
+                    <td style="width: 200px;"></td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Tidak Melakukan hal-hal tercela
+                        &ensp;&ensp;c. Gaya Hidup
                     </td>
-                    <td class="rg" tyle="width: 150px;">Mobil</td>
-                    <td style="width: 200px;">Rp. 100.000.000</td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['gaya_hidup'] }}</td>
+                    <td style="width: 200px;"></td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Tidak Melakukan hal-hal tercela
+                        &ensp;&ensp;d. Kepatuhan Terhadap Kewajiba
                     </td>
-                    <td class="rg" tyle="width: 150px;">Mobil</td>
-                    <td style="width: 200px;">Rp. 100.000.000</td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['kepatuhan'] }}</td>
+                    <td style="width: 200px;"></td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Tidak Melakukan hal-hal tercela
+                        &ensp;&ensp;e. Keharmonisan Rumah Tangga
                     </td>
-                    <td class="rg" tyle="width: 150px;">Mobil</td>
-                    <td style="width: 200px;">Rp. 100.000.000</td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['harmonis'] }}</td>
+                    <td style="width: 200px;"></td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Tidak Melakukan hal-hal tercela
+                        &ensp;&ensp;f. Hubungan Sosial dengan Lingkungan
                     </td>
-                    <td class="rg" tyle="width: 150px;">Mobil</td>
-                    <td style="width: 200px;">Rp. 100.000.000</td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['hubungan_sosial'] }}</td>
+                    <td style="width: 200px;"></td>
+                </tr>
+                <tr>
+                    <td class="rg" style="width: 250px;">
+                        &ensp;&ensp;g. Pengendalian Emosi
+                    </td>
+                    <td class="rg" tyle="width: 150px;">{{ $analisa['pengendalian_emosi'] }}</td>
+                    <td style="width: 200px;"></td>
                 </tr>
                 <tr>
                     <td class="rg" style="displpay-flex; font-size: 12px;"><b>2. CAPACITY</b></td>
@@ -162,60 +169,60 @@
                         &ensp;&ensp;a. Pengalaman usaha
                     </td>
                     <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
-                    <td style="width: 200px;">Sangat baik</td>
+                    <td style="width: 200px;">{{ $capacity->pengalaman_usaha }}</td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
                         &ensp;&ensp;b. Pertumbuhan usaha
                     </td>
                     <td class="rg" tyle="width: 150px;">Meningkat</td>
-                    <td style="width: 200px;">Baik</td>
+                    <td style="width: 200px;">{{ $capacity->pertumbuhan_usaha }}</td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Pengalaman usaha
+                        &ensp;&ensp;c. Kontinuitas usaha
+                    </td>
+                    <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
+                    <td style="width: 200px;">{{ $capacity->kontinuitas }}</td>
+                </tr>
+                <tr>
+                    <td class="rg" style="width: 250px;">
+                        &ensp;&ensp;d. Aset terkait usaha
+                    </td>
+                    <td class="rg" tyle="width: 150px;">Meningkat</td>
+                    <td style="width: 200px;">{{ $capacity->aset_terkait_usaha }}</td>
+                </tr>
+                <tr>
+                    <td class="rg" style="width: 250px;">
+                        &ensp;&ensp;e. Aset diluar usaha
+                    </td>
+                    <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
+                    <td style="width: 200px;">{{ $capacity->aset_diluar_usaha }}</td>
+                </tr>
+                <tr>
+                    <td class="rg" style="width: 250px;">
+                        &ensp;&ensp;f. Repayment Capacity
+                    </td>
+                    <td class="rg" tyle="width: 150px;">Meningkat</td>
+                    <td style="width: 200px;">{{ $capacity->rc }}</td>
+                </tr>
+                <tr>
+                    <td class="rg" style="width: 250px;">
+                        &ensp;&ensp;g. Pendatatan Laporan Keuangan
                     </td>
                     <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
                     <td style="width: 200px;">Sangat baik</td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;b. Pertumbuhan usaha
+                        &ensp;&ensp;h. Pengalaman Kredit Masa Lalu
                     </td>
                     <td class="rg" tyle="width: 150px;">Meningkat</td>
                     <td style="width: 200px;">Baik</td>
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Pengalaman usaha
-                    </td>
-                    <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
-                    <td style="width: 200px;">Sangat baik</td>
-                </tr>
-                <tr>
-                    <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;b. Pertumbuhan usaha
-                    </td>
-                    <td class="rg" tyle="width: 150px;">Meningkat</td>
-                    <td style="width: 200px;">Baik</td>
-                </tr>
-                <tr>
-                    <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Pengalaman usaha
-                    </td>
-                    <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
-                    <td style="width: 200px;">Sangat baik</td>
-                </tr>
-                <tr>
-                    <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;b. Pertumbuhan usaha
-                    </td>
-                    <td class="rg" tyle="width: 150px;">Meningkat</td>
-                    <td style="width: 200px;">Baik</td>
-                </tr>
-                <tr>
-                    <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Pengalaman usaha
+                        &ensp;&ensp;i. BI Checking
                     </td>
                     <td class="rg" tyle="width: 150px;"> > 5 Tahun</td>
                     <td style="width: 200px;">Sangat baik</td>
@@ -234,7 +241,7 @@
                 </tr>
                 <tr>
                     <td class="rg" style="width: 250px;">
-                        &ensp;&ensp;a. Sumber Pemodala
+                        &ensp;&ensp;a. Sumber Pemodalan
                     </td>
                     <td class="rg" tyle="width: 150px;">Modal Sendiri</td>
                     <td style="width: 200px;">Baik</td>

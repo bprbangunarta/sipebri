@@ -46,8 +46,9 @@
                                     ])
                                     <div class="col d-flex flex-column">
                                         <form
-                                            action="{{ route('tambahan.store', ['tambahan' => $data->kd_pengajuan, 'pengajuan' => $data->kd_pengajuan]) }}"
+                                            action="{{ route('tambahan.update', ['tambahan' => $data->kd_pengajuan, 'pengajuan' => $data->kd_pengajuan]) }}"
                                             method="POST">
+                                            @method('put')
                                             @csrf
                                             <div class="card-body">
 
@@ -72,7 +73,7 @@
                                                             <td>
                                                                 <input class="form-control" type="text"
                                                                     name="modal_kerja" id="modal"
-                                                                    value="{{ old('modal_kerja') ?? 0 }}">
+                                                                    value="{{ old('modal_kerja') ?? ('Rp. ' . number_format($tambahan->modal_kerja, 0, ',', '.') ?? 'Rp. 0') }}">
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" id=""
@@ -81,7 +82,7 @@
                                                             <td>
                                                                 <input class="form-control mb-2" type="text"
                                                                     name="investasi" id="inves"
-                                                                    value="{{ old('investasi') ?? 0 }}" />
+                                                                    value="{{ old('investasi') ?? ('Rp. ' . number_format($tambahan->investasi, 0, ',', '.') ?? 'Rp. 0') }}" />
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -91,7 +92,8 @@
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" name="konsumtif"
-                                                                    value="{{ old('konsumtif') ?? 0 }}" id="konsumtif">
+                                                                    value="{{ old('konsumtif') ?? ('Rp. ' . number_format($tambahan->konsumtif, 0, ',', '.') ?? 'Rp. 0') }}"
+                                                                    id="konsumtif">
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text"
@@ -100,7 +102,7 @@
                                                             <td>
                                                                 <input class="form-control mb-2" type="text"
                                                                     name="pelunasan_kredit"
-                                                                    value="{{ old('pelunasan_kredit') ?? 0 }}"
+                                                                    value="{{ old('pelunasan_kredit') ?? ('Rp. ' . number_format($tambahan->pelunasan_kredit, 0, ',', '.') ?? 'Rp. 0') }}"
                                                                     id="pelunasan" />
                                                             </td>
                                                         </tr>
@@ -111,7 +113,8 @@
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" name="take_over"
-                                                                    value="{{ old('take_over') ?? 0 }}" id="take_over">
+                                                                    value="{{ old('take_over') ?? ('Rp. ' . number_format($tambahan->take_over, 0, ',', '.') ?? 'Rp. 0') }}"
+                                                                    id="take_over">
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" value="Administrasi"
@@ -120,7 +123,7 @@
                                                             <td>
                                                                 <input class="form-control" type="text"
                                                                     name="administrasi" id="administrasi"
-                                                                    value="{{ old('administrasi') ?? 0 }}">
+                                                                    value="{{ old('administrasi') ?? ('Rp. ' . number_format($tambahan->administrasi, 0, ',', '.') ?? 'Rp. 0') }}">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -130,7 +133,8 @@
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text" name="asuransi"
-                                                                    id="asuransi" value="{{ old('asuransi') ?? 0 }}">
+                                                                    id="asuransi"
+                                                                    value="{{ old('asuransi') ?? ('Rp. ' . number_format($tambahan->asuransi, 0, ',', '.') ?? 'Rp. 0') }}">
                                                             </td>
 
                                                             <td>
@@ -140,7 +144,7 @@
                                                             <td>
                                                                 <input class="form-control" type="text"
                                                                     name="kebutuhan_dana" id="dana"
-                                                                    value="{{ old('kebutuhan_dana') ?? 0 }}">
+                                                                    value="{{ old('kebutuhan_dana') ?? ('Rp. ' . number_format($tambahan->kebutuhan_dana, 0, ',', '.') ?? 'Rp. 0') }}">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -152,12 +156,12 @@
                                                             <td>
                                                                 <input class="form-control" type="text"
                                                                     name="nama_lain" placeholder="Nama Analisa Kebutuhan"
-                                                                    value="{{ old('nama_lain') }}">
+                                                                    value="{{ old('nama_lain') ?? $tambahan->nama_lain }}">
                                                             </td>
                                                             <td>
                                                                 <input class="form-control" type="text"
                                                                     name="nilai_lain" id="nilai_lain"
-                                                                    value="{{ old('nilai_lain') ?? 0 }}">
+                                                                    value="{{ old('nilai_lain') ?? ('Rp. ' . number_format($tambahan->nilai_lain, 0, ',', '.') ?? 'Rp. 0') }}">
                                                             </td>
                                                         </tr>
                                                     </tbody>

@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\AnalisaTambahan;
+use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\CetakAnalisaController;
 use App\Http\Controllers\MemorandumController;
@@ -202,7 +203,7 @@ Route::middleware('auth')->group(function () {
         //Asuransi
         Route::resource('/analisa/asuransi', AsuransiController::class);
         //Analisa Tambahan
-        Route::resource('/analisa/tambahan', AnalisaTambahan::class);
+        Route::resource('/analisa/tambahan', AnalisaTambahanController::class);
 
         //===Cetak Analisa===//
         Route::get('/cetak/analisa', [CetakAnalisaController::class, 'analisa5c'])->name('analisa5c.analisa');

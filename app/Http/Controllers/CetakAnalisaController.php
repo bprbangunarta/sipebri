@@ -121,8 +121,16 @@ class CetakAnalisaController extends Controller
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($kode);
-            
-            return view('cetak.analisa.analisa5c');
+            $data = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
+            $capa = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
+            $character = Data::cetak_a5c_character($data);
+            $capacity = Data::cetak_a5c_capacity($capa);
+
+            return view('cetak.analisa.analisa5c', [
+                'data' => $data,
+                'analisa' => $character,
+                'capacity' => $capacity,
+            ]);
 
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

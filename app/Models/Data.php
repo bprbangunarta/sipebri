@@ -175,4 +175,53 @@ class Data extends Model
         return $harta;
     }
     
+    public static function cetak_a5c_character($cek)
+    {
+        $data = [
+            'gaya_hidup' => self::analisa5c_number($cek->gaya_hidup),
+            'pengendalian_emosi' => self::analisa5c_number($cek->pengendalian_emosi),
+            'perbuatan_tercela' => self::analisa5c_number($cek->perbuatan_tercela),
+            'harmonis' => self::analisa5c_number($cek->harmonis),
+            'konsisten' => self::analisa5c_number($cek->konsisten),
+            'gaya_hidup' => self::analisa5c_number($cek->gaya_hidup),
+            'kepatuhan' => self::analisa5c_number($cek->kepatuhan),
+            'hubungan_sosial' => self::analisa5c_number($cek->hubungan_sosial),
+            'nilai_karakter' => self::analisa5c_number($cek->nilai_karakter),
+        ];
+
+       return $data;
+    }
+
+    public static function cetak_a5c_capacity($cek)
+    {
+
+        if ($cek->pengalaman_usaha == 1) {
+            $pu = 'Tidak Baik';
+        }elseif($cek->pengalaman_usaha == 2){
+            $pu = 'Kurang Baik';
+        }elseif($cek->pengalaman_usaha == 3){
+            $pu = 'Cukup Baik';
+        }elseif($cek->pengalaman_usaha == 4){
+            $pu = 'Baik';
+        }elseif($cek->pengalaman_usaha == 5){
+            $pu = 'Sangat Baik';
+        }
+        
+        $data = [
+            'kontinuitas' => self::analisa5c_number($cek->kontinuitas),
+            'pengalaman_usaha' => $pu,
+            'pertumbuhan_usaha' => self::analisa5c_number($cek->pertumbuhan_usaha),
+            'laporan_keuangan' => self::analisa5c_number($cek->laporan_keuangan),
+            'catatan_kredit' => self::analisa5c_number($cek->catatan_kredit),
+            'kondisi_slik' => self::analisa5c_number($cek->kondisi_slik),
+            'aset_diluar_usaha' => self::analisa5c_number($cek->aset_diluar_usaha),
+            'aset_terkait_usaha' => self::analisa5c_number($cek->aset_terkait_usaha),
+            'capital_sumber_modal' => self::analisa5c_number($cek->capital_sumber_modal),
+            'capital_evaluasi_capital' => self::analisa5c_number($cek->capital_evaluasi_capital),
+            'rc' => $cek->rc,
+            'evaluasi_capacity' => self::analisa5c_number($cek->evaluasi_capacity),
+        ];
+        dd($data);
+       return $data;
+    }
 }

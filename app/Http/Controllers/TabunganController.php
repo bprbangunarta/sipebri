@@ -12,7 +12,8 @@ class TabunganController extends Controller
 {
     public function index()
     {
-        $tabungan = Tabungan::orderBy('inptgljam', 'desc')->paginate(10);
+        // $tabungan = Tabungan::orderBy('inptgljam', 'desc')->paginate(10);
+        $tabungan = Tabungan::paginate(10);
         return view('tabungan', compact('tabungan'));
     }
 }
