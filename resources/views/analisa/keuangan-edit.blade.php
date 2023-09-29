@@ -315,20 +315,4 @@
         </div>
     </div>
     <script src="{{ asset('assets/js/myscript/keuangan.js') }}"></script>
-    <script>
-        // Mengambil data keuangan_perbulan dan data_perbulan dari PHP
-        var keuanganPerbulan = {!! json_encode($kemampuan['keuangan_perbulan']) !!};
-        var dataPerbulan = {!! json_encode($kemampuan['data_perbulan']) !!};
-
-        // Memeriksa apakah kedua nilai tidak sama
-        if (keuanganPerbulan !== dataPerbulan) {
-            // Menampilkan SweetAlert
-            Swal.fire({
-                title: 'Perhatian!',
-                text: 'Pilih Simpan terlebih dahulu, karena ada perubahan data Analisa Usaha',
-                icon: 'warning',
-                confirmButtonText: 'Tutup'
-            });
-        }
-    </script>
 @endsection

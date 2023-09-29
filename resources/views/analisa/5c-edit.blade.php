@@ -913,33 +913,4 @@
         </div>
     </div>
     <script src="{{ asset('assets/js/myscript/analisa5c.js') }}"></script>
-    <script>
-        // Mengambil data keuangan_perbulan dan data_perbulan dari PHP
-        var a = {!! json_encode($collateral->taksasi_agunan) !!};
-        var b = {!! json_encode($collateral->taksasi) !!};
-        var c = {!! json_encode($capacity->rc) !!};
-        var d = {!! json_encode($capacity->RC) !!};
-
-        // Memeriksa apakah kedua nilai Taksasi tidak sama
-        if (a !== b) {
-            // Menampilkan SweetAlert
-            Swal.fire({
-                title: 'Perhatian!',
-                text: 'Pilih Simpan, ada perubahan data Taksasi agunan',
-                icon: 'warning',
-                confirmButtonText: 'Tutup'
-            });
-        }
-
-        // Memeriksa apakah kedua nilai RC tidak sama
-        if (c !== d) {
-            // Menampilkan SweetAlert
-            Swal.fire({
-                title: 'Perhatian!',
-                text: 'Pilih Simpan, ada perubahan data RC',
-                icon: 'warning',
-                confirmButtonText: 'Tutup'
-            });
-        }
-    </script>
 @endsection
