@@ -43,9 +43,8 @@ class Analisa5cController extends Controller
             }
 
             //Menghitung RC
-            $a = $keuangan * intval($cek[0]->jangka_waktu);
-            $b = (intval($cek[0]->plafon) / $a) * 100;
-
+            $a = $keuangan * (int)$cek[0]->jangka_waktu;
+            $b = ((int)$cek[0]->plafon / $a) * 100;
 
             //Menghitung Taksasi Agunan
             $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
