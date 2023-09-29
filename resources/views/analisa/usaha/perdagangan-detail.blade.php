@@ -327,7 +327,7 @@
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center" colspan="2">Informasi Perdagangan
+                                                            <th class="text-center" colspan="2">Informasi Perdagangan Harian
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -366,7 +366,7 @@
                                                 <table class="table table-bordered table-vcenter fs-5">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center" colspan="2">Biaya Perdagangan</th>
+                                                            <th class="text-center" colspan="2">Biaya Perdagangan Perbulan</th>
                                                         </tr>
                                                     </thead>
                                                     <thead>
