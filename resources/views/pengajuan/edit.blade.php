@@ -1,6 +1,6 @@
 @extends('templates.app')
 @section('title', 'Data Pengajuan')
-
+@yield('jquery')
 @section('content')
     <div class="page-body">
         <div class="container-xl">
@@ -75,8 +75,8 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Produk</div>
                                                         <select type="text" class="form-select"
-                                                            placeholder="Pilih Produk" name="produk_kode"
-                                                            id="select-produk">
+                                                            placeholder="Pilih Produk" name="produk_kode" id="select-produk"
+                                                            required>
                                                             @if (is_null($pengajuan->produk_kode))
                                                                 <option value="">Pilih Produk</option>
                                                             @else
@@ -188,12 +188,12 @@
                                                         <select type="text" class="form-select"
                                                             placeholder="Pilih CGC" name="tabungan_cgc" id="select-cgc"
                                                             value="">
-                                                            {{-- @if (is_null($survey->tabungan_cgc))
+                                                            @if (is_null($pengajuan->tabungan_cgc))
                                                                 <option value="">Pilih CGC</option>
                                                             @else
-                                                                <option value="{{ $survey->tabungan_cgc }}">
-                                                                    {{ $survey->tabungan_cgc }}</option>
-                                                            @endif --}}
+                                                                <option value="{{ $pengajuan->tabungan_cgc }}">
+                                                                    {{ $pengajuan->tabungan_cgc }}</option>
+                                                            @endif
 
                                                             @foreach ($cgc as $item)
                                                                 <option value="{{ $item->noacc }}">{{ $item->noacc }} -
@@ -250,6 +250,39 @@
             </div>
         </div>
     </div>
+    <script>
+        // Ketika pilihan sistem berubah
+        $("#select-metode").change(function() {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === "Flat") {
+                // Jika dipilih "Sistem Flat Terelect"
+                $("#jangka_pokok").val("1").prop("readonly", true);
+                $("#jangka_bunga").val("1").prop("readonly", true);
+            } else {
+                // Jika dipilih "Sistem Lainnya"
+                $("#jangka_pokok").val("").prop("readonly", false);
+                $("#jangka_bunga").val("").prop("readonly", false);
+            }
+        });
+
+        //Validasi jangka poko dan jangka bunga tidak boleh lebih besar dari jangka kredit
+        $("#jangka_pokok, #jangka_bunga").on("input", function() {
+            var jangkaPoko = parseInt($("#jangka_pokok").val()) || 0;
+            var jangkabunga = parseInt($("#jangka_bunga").val()) || 0;
+            var jangkaKredit = parseInt($("#jangka_waktu").val()) || 0;
+
+            if (jangkaPoko > jangkaKredit) {
+                // Jika jangkaPoko lebih besar dari jangkaKredit
+                $("#jangka_pokok").val(jangkaKredit);
+            }
+
+            if (jangkabunga > jangkaKredit) {
+                // Jika jangkaPoko lebih besar dari jangkaKredit
+                $("#jangka_bunga").val(jangkaKredit);
+            }
+        });
+    </script>
 @endsection
 
 @push('myscript')

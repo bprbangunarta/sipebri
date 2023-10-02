@@ -69,8 +69,11 @@ class NasabahController extends Controller
 
                     $cif = Midle::cifedit($data);
                     $cif['nasabah']->kode_nasabah = $cek->kode_nasabah;
+                    $peng = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->first();
 
                     $cif['nasabah']->kd_nasabah = Crypt::encrypt($cif['nasabah']->kode_nasabah);
+                    $cif['nasabah']->kd_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
+
                     $cek = Midle::analisa_usaha($enc);
 
                     return view('nasabah.edit', [
@@ -105,7 +108,6 @@ class NasabahController extends Controller
 
     public function store(Request $request)
     {
-
         $ceknasabah = $request->validate([
             'kode_nasabah' => '',
             'identitas' => 'required',

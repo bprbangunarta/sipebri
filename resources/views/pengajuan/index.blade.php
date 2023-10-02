@@ -118,7 +118,6 @@
                                                         <span class="badge bg-success-lt">{{ $item->status }}</span>
                                                     @endif
                                                 </td>
-
                                                 @can('pengajuan otorisasi')
                                                     <td class="text-center">
                                                         <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
