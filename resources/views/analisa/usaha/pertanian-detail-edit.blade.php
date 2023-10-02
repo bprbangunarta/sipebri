@@ -302,7 +302,8 @@
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="amortisasi"
                                                                     id="amortisasi"
-                                                                    value="{{ $pertanian->amortisasi = 'Rp. ' . number_format($pertanian->amortisasi, 0, ',', '.') }}">
+                                                                    value="{{ $pertanian->amortisasi = 'Rp. ' . number_format($pertanian->amortisasi, 0, ',', '.') }}"
+                                                                    readonly>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -406,4 +407,19 @@
         </div>
     </div>
     <script src="{{ asset('assets/js/myscript/pertanian.js') }}"></script>
+    <script>
+        $("#lsewa").on('input', function() {
+            var lsewaValue = $(this).val();
+            var amortisasiInput = $("#amortisasi");
+
+            if (lsewaValue === "") {
+                // Jika input "lsewa" kosong, nonaktifkan dan kosongkan input "amortisasi"
+                amortisasiInput.prop("readonly", true);
+                amortisasiInput.val("");
+            } else {
+                // Jika input "lsewa" tidak kosong, aktifkan input "amortisasi"
+                amortisasiInput.prop("readonly", false);
+            }
+        });
+    </script>
 @endsection

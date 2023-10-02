@@ -102,7 +102,7 @@
 
                                                 <div class="row g-3">
                                                     <div class="col-md">
-                                                        <div class="form-label">JK Kredit</div>
+                                                        <div class="form-label">JW Kredit (Bulan)</div>
                                                         <input type="number" class="form-control" name="jangka_waktu"
                                                             id="jangka_waktu" placeholder="Jangka Waktu"
                                                             value="{{ $pengajuan->jangka_waktu }}">

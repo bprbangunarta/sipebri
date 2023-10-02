@@ -142,11 +142,23 @@
                                                                     <option value="" class="text-center">--Pilih--
                                                                     </option>
                                                                     <option value="Padi Inpari"
-                                                                        {{ old('jenis_tanaman') == 'Padi Inpari' ? 'selected' : '' }}>
-                                                                        Padi Inpari</option>
-                                                                    <option value="Padi Ketan"
                                                                         {{ old('jenis_tanaman') == 'Padi Ketan' ? 'selected' : '' }}>
                                                                         Padi Ketan</option>
+                                                                    <option value="Padi Ketan"
+                                                                        {{ old('jenis_tanaman') == 'Padi 42' ? 'selected' : '' }}>
+                                                                        Padi 42</option>
+                                                                    <option value="Padi Ketan"
+                                                                        {{ old('jenis_tanaman') == 'Padi IR64' ? 'selected' : '' }}>
+                                                                        Padi IR64</option>
+                                                                    <option value="Padi Ketan"
+                                                                        {{ old('jenis_tanaman') == 'Padi Muncul' ? 'selected' : '' }}>
+                                                                        Padi Muncul</option>
+                                                                    <option value="Padi Ketan"
+                                                                        {{ old('jenis_tanaman') == 'Padi Pandan Wangi' ? 'selected' : '' }}>
+                                                                        Padi Pandan Wangi</option>
+                                                                    <option value="Padi Ketan"
+                                                                        {{ old('jenis_tanaman') == 'Lainnya' ? 'selected' : '' }}>
+                                                                        Lainnya</option>
                                                                 </select>
                                                             </td>
                                                             <td><input class="form-control" type="text"
@@ -272,7 +284,8 @@
                                                             </td>
                                                             <td><input type="text" class="form-control"
                                                                     placeholder="Masukan Nominal" name="amortisasi"
-                                                                    id="amortisasi" value="{{ old('amortisasi') }}"></td>
+                                                                    id="amortisasi" value="{{ old('amortisasi') }}"
+                                                                    readonly></td>
                                                         </tr>
                                                     </tbody>
                                                     <thead>
@@ -374,4 +387,19 @@
         </div>
     </div>
     <script src="{{ asset('assets/js/myscript/pertanian.js') }}"></script>
+    <script>
+        $("#lsewa").on('input', function() {
+            var lsewaValue = $(this).val();
+            var amortisasiInput = $("#amortisasi");
+
+            if (lsewaValue === "") {
+                // Jika input "lsewa" kosong, nonaktifkan dan kosongkan input "amortisasi"
+                amortisasiInput.prop("readonly", true);
+                amortisasiInput.val("");
+            } else {
+                // Jika input "lsewa" tidak kosong, aktifkan input "amortisasi"
+                amortisasiInput.prop("readonly", false);
+            }
+        });
+    </script>
 @endsection
