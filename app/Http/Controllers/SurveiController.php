@@ -27,8 +27,6 @@ class SurveiController extends Controller
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();
             $cek = Nasabah::where('kode_nasabah', $pengajuan->nasabah_kode)->first();
 
-            //Ambil data CGC        
-            $cgc = CGC::select('*')->get();
             $cek->kode_pengajuan = $pengajuan->kode_pengajuan;
 
             //Data survey
@@ -94,7 +92,6 @@ class SurveiController extends Controller
 
             return view('survei.edit', [
                 'data' => $cek,
-                'cgc' => $cgc,
                 'kasi' => $kasi,
                 'staff' => $staff,
                 'survey' => $survey,

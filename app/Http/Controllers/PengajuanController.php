@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Throwable;
 use Carbon\Carbon;
+use App\Models\CGC;
 use App\Models\Data;
-use App\Models\Agunan;
 use App\Models\Midle;
+use App\Models\Agunan;
 use App\Models\Produk;
 use App\Models\Resort;
 use App\Models\Survei;
@@ -14,12 +15,12 @@ use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
 use Illuminate\Http\Request;
-use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 
+use function Pest\Laravel\delete;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -146,8 +147,12 @@ class PengajuanController extends Controller
             $pro = Produk::all();
             $dt = Midle::analisa_usaha($enc);
 
+            //Ambil data CGC        
+            $cgc = CGC::select('*')->get();
+
             return view('pengajuan.edit', [
                 'data' => $dt[0],
+                'cgc' => $cgc,
                 'pengajuan' => $peng,
                 'resort' => $resort,
                 'produk' => $pro,
