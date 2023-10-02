@@ -13,12 +13,9 @@
                                 <div class="row g-2 align-items-center">
                                     <div class="col">
                                         <!-- Page pre-title -->
-                                        <div class="page-pretitle">
-                                            Pendaftaran
-                                        </div>
-                                        <h2 class="page-title">
-                                            Data Pendamping
-                                        </h2>
+                                        @include('templates.header-analisa', [
+                                            'pengajuan' => $data->kd_pengajuan,
+                                        ])
                                     </div>
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">
@@ -126,9 +123,8 @@
                                                                 id="tempat_lahir" placeholder="Tempat Lahir"
                                                                 value="{{ old('tempat_lahir') }}">
                                                         @else
-                                                            <input type="text" class="form-control"
-                                                                name="tempat_lahir" id="tempat_lahir"
-                                                                placeholder="Tempat Lahir"
+                                                            <input type="text" class="form-control" name="tempat_lahir"
+                                                                id="tempat_lahir" placeholder="Tempat Lahir"
                                                                 value="{{ old('tempat_lahir', $pendamping[0]->tempat_lahir) }}">
                                                         @endif
 

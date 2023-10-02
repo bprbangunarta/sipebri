@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CGC;
+use App\Models\Midle;
 use App\Models\Kantor;
 use App\Models\Survei;
 use App\Models\Nasabah;
@@ -23,71 +24,74 @@ class SurveiController extends Controller
         try {
             $enc = Crypt::decrypt($req);
             //Data pengajuan
-            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();                
+            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();
             $cek = Nasabah::where('kode_nasabah', $pengajuan->nasabah_kode)->first();
-            
+
             //Ambil data CGC        
-            $cgc = CGC::select('*')->get();  
+            $cgc = CGC::select('*')->get();
             $cek->kode_pengajuan = $pengajuan->kode_pengajuan;
-           
+
             //Data survey
-            $survey = Survei::where('pengajuan_kode', $cek->kode_pengajuan)->first();        
+            $survey = Survei::where('pengajuan_kode', $cek->kode_pengajuan)->first();
             //Data kantor
             $ktr = Kantor::where('kode_kantor', $survey->kantor_kode)->first();
-            
+
             //inisialisasi variable ketika data null
             if (is_null($ktr)) {
                 $survey->nama_kantor = "";
             } else {
                 $survey->nama_kantor = $ktr->nama_kantor;
             }
-                    
+
             //Data kasi ambil
             $ks = DB::table('v_users')
-                    ->select('nama_user')
-                    ->where('code_user', $survey->kasi_kode)->first();
+                ->select('nama_user')
+                ->where('code_user', $survey->kasi_kode)->first();
             if (is_null($ks)) {
                 $survey->nama_kasi = null;
             } else {
                 $survey->nama_kasi = $ks->nama_user;
-            }  
-        
+            }
+
             //Data surveyor
             $st = DB::table('v_users')
-                    ->select('nama_user')
-                    ->where('code_user', $survey->surveyor_kode)->first();
+                ->select('nama_user')
+                ->where('code_user', $survey->surveyor_kode)->first();
             if (is_null($st)) {
                 $survey->nama_surveyor = null;
             } else {
                 $survey->nama_surveyor = $st->nama_user;
-            }       
-        
+            }
+
             //Inisialisasi data        
-            $survey->tabungan_cgc = $pengajuan->tabungan_cgc;   
-            
+            $survey->tabungan_cgc = $pengajuan->tabungan_cgc;
+
             //Data kasi
             $kasi = DB::table('v_users')
-                        ->select('code_user', 'nama_user as nama')
-                        ->where('role_name', '=', 'Kasi Analis')->get();  
-            
+                ->select('code_user', 'nama_user as nama')
+                ->where('role_name', '=', 'Kasi Analis')->get();
+
             //Data Staff Analis
             $staff = DB::table('v_users')
-                        ->select('code_user', 'nama_user as nama')
-                        ->where('role_name', '=', 'Staff Analis')->get();
-            
+                ->select('code_user', 'nama_user as nama')
+                ->where('role_name', '=', 'Staff Analis')->get();
+
             //Data Kantor
             $kantor = Kantor::all();
 
             //Data Auth
             $us = Auth::user()->id;
             $user = DB::table('users')
-                        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                        ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                        ->select('users.code_user')
-                        ->where('users.id', '=', $us)->get();
+                ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->select('users.code_user')
+                ->where('users.id', '=', $us)->get();
             $cek->auth = $user[0]->code_user;
             $cek->kd_pengajuan = $req;
-            
+            $dt = Midle::analisa_usaha($enc);
+            $cek->plafon = $dt[0]->plafon;
+            $cek->jangka_waktu = $dt[0]->jangka_waktu;
+
             return view('survei.edit', [
                 'data' => $cek,
                 'cgc' => $cgc,
@@ -99,10 +103,10 @@ class SurveiController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
     }
-    
-    public function update(Request $request){                
+
+    public function update(Request $request)
+    {
         $cek = $request->validate([
             'kantor_kode' => 'required',
             'kasi_kode' => 'required',
@@ -111,20 +115,19 @@ class SurveiController extends Controller
         ]);
 
         $cek['is_entry'] = 1;
-        $cek['otorisasi'] ='N';
+        $cek['otorisasi'] = 'N';
         $cgc = $request->validate(['tabungan_cgc' => '']);
-    
-        $kode_pengajuan = $request->pengajuan_kode;    
-        
+
+        $kode_pengajuan = $request->pengajuan_kode;
+
         if ($cek) {
-            DB::transaction(function () use ($cek, $kode_pengajuan, $cgc) {                
-                Survei::where('pengajuan_kode', $kode_pengajuan)->update($cek);                        
-                Pengajuan::where('kode_pengajuan', $kode_pengajuan)->update($cgc);                        
-            });            
+            DB::transaction(function () use ($cek, $kode_pengajuan, $cgc) {
+                Survei::where('pengajuan_kode', $kode_pengajuan)->update($cek);
+                Pengajuan::where('kode_pengajuan', $kode_pengajuan)->update($cgc);
+            });
             return redirect()->back()->with('success', 'Data berhasil diupdate');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Data gagal diupdate');
         }
-
     }
 }

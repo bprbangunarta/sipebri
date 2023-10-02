@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Midle;
 use App\Models\Agunan;
+use App\Models\Survei;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
 use App\Models\Pendamping;
-use App\Models\Survei;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -18,26 +19,30 @@ class KonfirmasiController extends Controller
     public function index(Request $request)
     {
         $nasabah = $request->query('nasabah');
-        
+
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($nasabah);
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
             $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
             $konfirmasi = DB::table('v_validasi_pengajuan')
-                            ->where('kode_pengajuan', $enc)->get();   
-            $cek[0]->kd_pengajuan = $nasabah;  
-            
+                ->where('kode_pengajuan', $enc)->get();
+            $cek[0]->kd_pengajuan = $nasabah;
+
             //Cek agunan
             $agunan = DB::table('data_jaminan')
-                        ->where('pengajuan_kode', '=', $enc)->first();
-            
+                ->where('pengajuan_kode', '=', $enc)->first();
+
             if (is_null($agunan)) {
                 $konfirmasi[0]->agunan = "0";
-            }else{
+            } else {
                 $konfirmasi[0]->agunan = "1";
             }
-            
+
+            $dt = Midle::analisa_usaha($enc);
+            $cek[0]->plafon = $dt[0]->plafon;
+            $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
+
             return view('pengajuan.konfirmasi', [
                 'data' => $cek[0],
                 'konfirmasi' => $konfirmasi[0],
@@ -45,12 +50,12 @@ class KonfirmasiController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
     }
 
-    public function konfirmasi(Request $request){
+    public function konfirmasi(Request $request)
+    {
         $nasabah = $request->query('konfirmasi');
-        
+
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($nasabah);
@@ -73,7 +78,7 @@ class KonfirmasiController extends Controller
                 'auth_user' => Auth::user()->code_user,
                 'status' => 'Minta Otorisasi',
             ];
-            
+
             try {
                 $nas = Pengajuan::where('kode_pengajuan', $enc)->get();
                 Pengajuan::where('id', $nas[0]->id)->update($data);
@@ -84,41 +89,45 @@ class KonfirmasiController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
     }
 
-    public function otorisasi(Request $request){
+    public function otorisasi(Request $request)
+    {
         $nasabah = $request->query('nasabah');
-        
+
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($nasabah);
-        
+
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
             $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->get();
             // $otorisasi = DB::table('v_validasi_pengajuan')
             //                 ->where('kode_pengajuan', $enc)->get();
 
             $otorisasi = DB::table('data_pengajuan')
-                    ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                    ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
-                    ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                    ->select('data_pengajuan.otorisasi as otorpengajuan', 'data_nasabah.otorisasi as otornasabah', 'data_pendamping.otorisasi as otorpendamping', 'data_survei.otorisasi as otorsurvei')
-                    ->where('kode_pengajuan', '=', $enc)->get();
-            
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->select('data_pengajuan.otorisasi as otorpengajuan', 'data_nasabah.otorisasi as otornasabah', 'data_pendamping.otorisasi as otorpendamping', 'data_survei.otorisasi as otorsurvei')
+                ->where('kode_pengajuan', '=', $enc)->get();
+
             //Cek data agunan apakah sudah otorisasi
             $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->first();
             if (is_null($agunan)) {
                 $otor = 'N';
-            }else{
+            } else {
                 foreach ($agunan as $value) {
                     $otor = $value;
                 }
             }
-            
+
             $otorisasi[0]->otoragunan = $otor;
-           
+
             $cek[0]->kd_pengajuan = $nasabah;
+            $dt = Midle::analisa_usaha($enc);
+            $cek[0]->plafon = $dt[0]->plafon;
+            $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
+
             return view('pengajuan.otorisasi', [
                 'data' => $cek[0],
                 'otorisasi' => $otorisasi[0],
@@ -126,17 +135,17 @@ class KonfirmasiController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
     }
 
-    public function validasiotor(Request $request){
+    public function validasiotor(Request $request)
+    {
         $nasabah = $request->query('validasiotor');
-        
+
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($nasabah);
             $data = Pengajuan::where('kode_pengajuan', $enc)->get();
-            
+
             $cek = [
                 'nasabah' => $request->nasabah,
                 'pendamping' => $request->pendamping,
@@ -156,7 +165,7 @@ class KonfirmasiController extends Controller
                 'auth_user' => Auth::user()->code_user,
                 'status' => 'Sudah Otorisasi',
             ];
-            
+
             //Cek data apakah sudah ceklis semua apa belum
             foreach ($cek as $value) {
                 if ($value == "N") {
@@ -174,15 +183,15 @@ class KonfirmasiController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
     }
 
-    public function otornasabah(Request $request){
+    public function otornasabah(Request $request)
+    {
         $req = $request->query('otorisasi');
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($req);
-        
+
             $data = [
                 'otorisasi' => $request->otorisasi,
                 'auth_user' => Auth::user()->code_user,
@@ -195,20 +204,18 @@ class KonfirmasiController extends Controller
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', 'Data Nasabah gagal diotorisasi');
             }
-
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
-
     }
 
-    public function otorpendamping(Request $request){
+    public function otorpendamping(Request $request)
+    {
         $req = $request->query('otorisasi');
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($req);
-            
+
             $data = [
                 'otorisasi' => $request->otorisasi,
                 'auth_user' => Auth::user()->code_user,
@@ -226,12 +233,13 @@ class KonfirmasiController extends Controller
         }
     }
 
-    public function otorpengajuan(Request $request){
+    public function otorpengajuan(Request $request)
+    {
         $req = $request->query('otorisasi');
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($req);
-            
+
             $data = [
                 'otorisasi' => $request->otorisasi,
                 'auth_user' => Auth::user()->code_user,
@@ -249,12 +257,13 @@ class KonfirmasiController extends Controller
         }
     }
 
-    public function otorsurvei(Request $request){
+    public function otorsurvei(Request $request)
+    {
         $req = $request->query('otorisasi');
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($req);
-            
+
             $data = [
                 'otorisasi' => $request->otorisasi,
                 'auth_user' => Auth::user()->code_user,

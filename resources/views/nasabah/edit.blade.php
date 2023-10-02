@@ -12,13 +12,9 @@
                             <div class="container-xl">
                                 <div class="row g-2 align-items-center">
                                     <div class="col">
-                                        <!-- Page pre-title -->
-                                        <div class="page-pretitle">
-                                            Pendaftaran
-                                        </div>
-                                        <h2 class="page-title">
-                                            Data Nasabah
-                                        </h2>
+                                        @include('templates.header-analisa', [
+                                            'pengajuan' => $data->kd_pengajuan,
+                                        ])
                                     </div>
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">

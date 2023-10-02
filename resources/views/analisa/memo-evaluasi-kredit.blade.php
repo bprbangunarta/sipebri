@@ -65,42 +65,44 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input type="text" class="form-control" name=""
-                                                                    value="Rp 130.000.000" disabled>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="max_plafon"
-                                                                    value="Rp 91.000.000">
-                                                            </td>
-                                                            <td>
-                                                                <input type="number" class="form-control text-center" name=""
-                                                                    value="36">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control text-center"
-                                                                    name="plafon_usulan" value="49.00%" disabled>
+                                                                <input type="text" class="form-control" name="">
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
-                                                                    name="plafon_usulan" value="Rp 130.000.000" disabled>
+                                                                    name="max_plafon">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" class="form-control text-center"
+                                                                    name="" value="24">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control text-center"
+                                                                    name="plafon_usulan" value="">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control"
+                                                                    name="plafon_usulan">
                                                             </td>
                                                         </tr>
                                                         <thead>
                                                             <th class="text-center" width="25%">Sebelum Realisasi</th>
                                                             <td colspan="4" class="text-center">
-                                                                <input type="text" class="form-control" name="" id="">
+                                                                <input type="text" class="form-control" name=""
+                                                                    id="">
                                                             </td>
                                                         </thead>
                                                         <thead>
                                                             <th class="text-center" width="25%">Syarat Tambahan</th>
                                                             <td colspan="4" class="text-center">
-                                                                <input type="text" class="form-control" name="" id="">
+                                                                <input type="text" class="form-control" name=""
+                                                                    id="">
                                                             </td>
                                                         </thead>
                                                         <thead>
                                                             <th class="text-center" width="25%">Syarat Lainnya</th>
                                                             <td colspan="4" class="text-center">
-                                                                <input type="text" class="form-control" name="" id="">
+                                                                <input type="text" class="form-control" name=""
+                                                                    id="">
                                                             </td>
                                                         </thead>
                                                     </tbody>

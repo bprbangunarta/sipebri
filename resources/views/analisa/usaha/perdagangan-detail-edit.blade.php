@@ -77,11 +77,21 @@
                                                                             selected>{{ $datausaha[0]->lama_usaha }}
                                                                         </option>
                                                                     @endif
-                                                                    <option value="1 Tahun">1 Tahun</option>
-                                                                    <option value="2 Tahun">2 Tahun</option>
-                                                                    <option value="3 Tahun">3 Tahun</option>
-                                                                    <option value="4 Tahun">4 Tahun</option>
-                                                                    <option value=">5 Tahun">>5 Tahun</option>
+                                                                    <option value="1 Tahun"
+                                                                        {{ old('lama_usaha') == '1 Tahun' ? 'selected' : '' }}>
+                                                                        1 Tahun</option>
+                                                                    <option value="2 Tahun"
+                                                                        {{ old('lama_usaha') == '2 Tahun' ? 'selected' : '' }}>
+                                                                        2 Tahun</option>
+                                                                    <option value="3 Tahun"
+                                                                        {{ old('lama_usaha') == '3 Tahun' ? 'selected' : '' }}>
+                                                                        3 Tahun</option>
+                                                                    <option value="4 Tahun"
+                                                                        {{ old('lama_usaha') == '4 Tahun' ? 'selected' : '' }}>
+                                                                        4 Tahun</option>
+                                                                    <option value=">5 Tahun"
+                                                                        {{ old('lama_usaha') == '5 Tahun' ? 'selected' : '' }}>
+                                                                        >5 Tahun</option>
                                                                 </select>
                                                             </td>
                                                             <td><input type="text" class="form-control"
@@ -203,7 +213,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><input type="text"
-                                                                    value="{{ $perdagangan[4]->kode_barang }}"
+                                                                    value="{{ $perdagangan[3]->kode_barang }}"
                                                                     name="kode_barang4" hidden><input class="form-control"
                                                                     type="text" name="nama_barang4" id="nama_barang4"
                                                                     placeholder="Nama Item"

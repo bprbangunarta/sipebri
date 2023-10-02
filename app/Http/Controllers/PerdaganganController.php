@@ -124,7 +124,7 @@ class PerdaganganController extends Controller
                     'data' => $cek[0],
                 ]);
             }
-
+            // dd($perdagangan[1]);
             $cek[0]->kd_usaha = Crypt::encrypt($perdagangan[0][0]->kode_usaha);
             return view('analisa.usaha.perdagangan-detail-edit', [
                 'data' => $cek[0],
@@ -198,6 +198,7 @@ class PerdaganganController extends Controller
 
         try {
             $enc = Crypt::decrypt($request->kd_usaha);
+            $data = [];
             for ($i = 1; $i <= 10; $i++) {
                 $length = 10;
                 $kode = Perdagangan::du_kodeacak($length);
@@ -211,7 +212,6 @@ class PerdaganganController extends Controller
                     'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba' . $i)),
                     'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
                 ];
-
                 DB::table('du_perdagangan')->insert($data);
             }
 
@@ -270,7 +270,7 @@ class PerdaganganController extends Controller
 
         try {
             $enc = Crypt::decrypt($request->kode_usaha);
-
+            // dd($request);
             for ($i = 1; $i <= 10; $i++) {
                 $data = [
                     'usaha_kode' => $enc,
@@ -282,12 +282,13 @@ class PerdaganganController extends Controller
                     'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba' . $i)),
                     'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
                 ];
-
                 $a = DB::table('du_perdagangan')->where('kode_barang', $request->input('kode_barang' . $i))->get();
                 DB::table('du_perdagangan')->where('id', $a[0]->id)->update($data);
             }
 
             $data2 = [
+                'lokasi_usaha' => ucwords($request->input('lokasi_usaha')),
+                'lama_usaha' => $request->input('lama_usaha'),
                 'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
                 'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
                 'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
