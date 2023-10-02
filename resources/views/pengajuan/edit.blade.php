@@ -192,7 +192,8 @@
                                                                 <option value="">Pilih CGC</option>
                                                             @else
                                                                 <option value="{{ $pengajuan->tabungan_cgc }}">
-                                                                    {{ $pengajuan->tabungan_cgc }}</option>
+                                                                    {{ $pengajuan->tabungan_cgc . ' ' . '-' . ' ' . $pengajuan->namacgc }}
+                                                                </option>
                                                             @endif
 
                                                             @foreach ($cgc as $item)

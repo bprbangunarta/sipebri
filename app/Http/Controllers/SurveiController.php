@@ -84,6 +84,8 @@ class SurveiController extends Controller
                 ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('users.code_user')
                 ->where('users.id', '=', $us)->get();
+
+
             $cek->auth = $user[0]->code_user;
             $cek->kd_pengajuan = $req;
             $dt = Midle::analisa_usaha($enc);
@@ -113,15 +115,11 @@ class SurveiController extends Controller
 
         $cek['is_entry'] = 1;
         $cek['otorisasi'] = 'N';
-        $cgc = $request->validate(['tabungan_cgc' => '']);
-
+        // dd($cek);
         $kode_pengajuan = $request->pengajuan_kode;
 
         if ($cek) {
-            DB::transaction(function () use ($cek, $kode_pengajuan, $cgc) {
-                Survei::where('pengajuan_kode', $kode_pengajuan)->update($cek);
-                Pengajuan::where('kode_pengajuan', $kode_pengajuan)->update($cgc);
-            });
+            Survei::where('pengajuan_kode', $kode_pengajuan)->update($cek);
             return redirect()->back()->with('success', 'Data berhasil diupdate');
         } else {
             return redirect()->back()->with('error', 'Data gagal diupdate');

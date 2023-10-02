@@ -69,7 +69,7 @@ class PengajuanController extends Controller
             'jangka_waktu' => 'required', 'metode_rps' => 'required', 'jangka_pokok' => 'required', 'jangka_bunga' => 'required',
             'resort_kode' => '', 'penggunaan' => 'required', 'tabungan_cgc' => '', 'keterangan' => 'required', 'input_user' => 'required',
         ]);
-        dd($request);
+        // dd($request);
         $cek['is_entry'] = 1;
         $cek['kode_pengajuan'] = Crypt::decrypt($cek['kode_pengajuan']);
 
@@ -140,6 +140,8 @@ class PengajuanController extends Controller
 
             //Ambil data CGC        
             $cgc = CGC::select('*')->get();
+            $namacgc = CGC::where('noacc', $peng->tabungan_cgc)->first();
+            $peng->namacgc = $namacgc->fnama;
 
             return view('pengajuan.edit', [
                 'data' => $dt[0],
