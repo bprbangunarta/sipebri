@@ -137,6 +137,10 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
+                                                                <input type="text" id="plafon"
+                                                                    value="{{ $data->plafon }}" hidden>
+                                                                <input type="text" id="jangka_waktu"
+                                                                    value="{{ $data->jangka_waktu }}" hidden>
                                                                 <select class="form-control" name="jenis_tanaman"
                                                                     id="">
                                                                     <option value="" class="text-center">--Pilih--
@@ -279,7 +283,7 @@
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Masukan Jangka Waktu Panen"
                                                                     name="jangka_waktu_panen" id="jwp"
-                                                                    value="{{ old('jangka_waktu_panen') }}">
+                                                                    value="{{ old('jangka_waktu_panen') ?? 6 }}">
                                                             </td>
                                                             </td>
                                                             <td><input type="text" class="form-control"

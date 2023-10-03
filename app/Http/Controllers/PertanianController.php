@@ -22,13 +22,13 @@ class PertanianController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            $au = Pertanian::au_pertanian($enc); 
-            
-            foreach($au as $item){
+            $au = Pertanian::au_pertanian($enc);
+
+            foreach ($au as $item) {
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-            
+
             return view('analisa.usaha.pertanian', [
                 'data' => $cek[0],
                 'pertanian' => $au
@@ -62,7 +62,7 @@ class PertanianController extends Controller
             $name = 'AUP';
             $length = 5;
             $kode = Pertanian::kodeacak($name, $length);
-            
+
             if ($kode !== null) {
                 $data = $request->validate([
                     'nama_usaha' => 'required'
@@ -78,12 +78,9 @@ class PertanianController extends Controller
                 } catch (\Throwable $th) {
                     return redirect()->back()->with('error', 'Nama usaha gagal ditambahkan');
                 }
-                
-            }else{
+            } else {
                 $kode = Pertanian::kodeacak($name, $length);
             }
-
-
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
@@ -113,26 +110,26 @@ class PertanianController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $ush = Crypt::decrypt($request->query('usaha'));
             $cek = Midle::analisa_usaha($enc);
-            
+
             //Data pertanian
             $pertanian = Midle::pertanian_detail($ush);
             $du = DB::table('du_pertanian')->where('usaha_kode', $ush)->get();
-            
-            //jika data pertanian kosong maka akan diarahkan ke view pertanian-detail
+
+            //jika tidak data pertanian maka akan diarahkan ke view pertanian-detail
             if (count($du) == 0) {
                 $pertanian[0]->kd_usaha = Crypt::encrypt($pertanian[0]->kode_usaha);
                 return view('analisa.usaha.pertanian-detail', [
-                'data' => $cek[0],
-                'pertanian' => $pertanian[0],
-            ]);
+                    'data' => $cek[0],
+                    'pertanian' => $pertanian[0],
+                ]);
             }
             $pertanian[0]->total_luas = $pertanian[0]->luas_sendiri + $pertanian[0]->luas_sewa + $pertanian[0]->luas_gadai;
 
-            foreach($pertanian as $item){
+            foreach ($pertanian as $item) {
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-            
+            // dd($cek[0]);
             //jika data pertanian ada maka akan diarahkan ke view pertanian-detail-edit
             return view('analisa.usaha.pertanian-detail-edit', [
                 'data' => $cek[0],
@@ -156,7 +153,7 @@ class PertanianController extends Controller
         if ($request->jenis_usaha == null) {
             return redirect()->back()->withInput()->with(['error' => 'Jenis usaha harus dipilih salah satu']);
         }
-        
+
         try {
             $enc = Crypt::decrypt($request->query('usaha'));
 
@@ -202,9 +199,8 @@ class PertanianController extends Controller
                     'harga' => (int)str_replace(["Rp.", " ", "."], "", $request->harga),
                 ];
                 DB::table('du_pertanian')->insert($data3);
-            
             });
-           return redirect()->back()->with('success', 'Data usaha berhasil ditambahkan');
+            return redirect()->back()->with('success', 'Data usaha berhasil ditambahkan');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
@@ -219,30 +215,29 @@ class PertanianController extends Controller
      */
     public function destroy($pertanian)
     {
-        
+
         try {
             $enc = Crypt::decrypt($pertanian);
             $au = Pertanian::where('kode_usaha', $enc)->pluck('id');
-            
+
             $bu = DB::table('bu_pertanian')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_pertanian')->where('usaha_kode', $enc)->get();
-            
+
             DB::transaction(function () use ($au, $bu, $du) {
                 if (count($au) !== 0) {
                     Pertanian::where('id', $au[0])->delete();
-                } 
-                
+                }
+
                 if (count($bu) !== 0) {
                     DB::table('bu_pertanian')->where('id', $bu[0]->id)->delete();
-                } 
+                }
 
                 if (count($du) !== 0) {
                     DB::table('du_pertanian')->where('id', $du[0]->id)->delete();
                 }
             });
-            
-            return redirect()->back()->with('success', 'Usaha pertanian berhasil dihapus');
 
+            return redirect()->back()->with('success', 'Usaha pertanian berhasil dihapus');
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
@@ -251,7 +246,7 @@ class PertanianController extends Controller
 
     public function update_detail(Request $request)
     {
-        
+
         try {
             $enc = Crypt::decrypt($request->query('usaha'));
             DB::transaction(function () use ($enc, $request) {
@@ -298,9 +293,8 @@ class PertanianController extends Controller
                 ];
                 $du = DB::table('du_pertanian')->where('usaha_kode', $enc)->get();
                 DB::table('du_pertanian')->where('id', $du[0]->id)->update($data3);
-            
             });
-           return redirect()->back()->with('success', 'Data usaha berhasil diubah');
+            return redirect()->back()->with('success', 'Data usaha berhasil diubah');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }

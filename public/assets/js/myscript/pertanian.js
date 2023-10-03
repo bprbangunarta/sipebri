@@ -169,6 +169,8 @@ $(
     var penambahan = $("#penambahan").val();
     var pendapatan = $("#pendapatan").val();
     var amortisasi = $("#amortisasi").val();
+    var plafon = $("#plafon").val();
+    var jk_waktu = $("#jangka_waktu").val();
 
     var rpengolahan = parseFloat(pengolahan.replace(/[^\d]/g, "")) || 0;
     var rbibit = parseFloat(bibit.replace(/[^\d]/g, "")) || 0;
@@ -184,6 +186,7 @@ $(
     var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
     var rpendapatan = parseFloat(pendapatan.replace(/[^\d]/g, "")) || 0;
     var ramortisasi = parseFloat(amortisasi.replace(/[^\d]/g, "")) || 0;
+    var rplafon = parseFloat(plafon.replace(/[^\d]/g, "")) || 0;
 
     var has =
         rpengolahan +
@@ -206,13 +209,19 @@ $(
 
     //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
     var waktupanen = $("#jwp").val();
-    if (waktupanen === "") {
-        waktupanen = 1;
-        $("#jwp").val(parseFloat(waktupanen));
-    }
-    var jmlpanen = hs / waktupanen;
-    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
-    $("#lb_perbulan").val(jpn);
+    var pembagi = jk_waktu / waktupanen;
+    //70% (Plafond Permusim)
+    var p_musim = (hs * 70) / 100;
+    //Cadangkan untuk BPR
+    var cd = rplafon / pembagi;
+    // Sisa Pendapatan Setelah dikurangi Setoran Pokok
+    var sisa = p_musim - cd;
+    //Pendapatan Bersih Bulanan
+    var pendapatan_bersih = sisa / waktupanen;
+    var idr = Math.ceil(parseFloat(pendapatan_bersih));
+    var nilaiIDRFormatted = "Rp. " + idr.toLocaleString("id-ID");
+    $("#lb_perbulan").val(nilaiIDRFormatted);
+
     //Total
     var hasil = "Rp. " + hs.toLocaleString("id-ID");
     $("#laba_bersih").val(hasil);
@@ -225,6 +234,8 @@ $("#hpanen, #hrg").keyup(function () {
     var penambahan = $("#penambahan").val();
     var pengeluaran = $("#pengeluaran").val();
     var amortisasi = $("#amortisasi").val();
+    var plafon = $("#plafon").val();
+    var jk_waktu = $("#jangka_waktu").val();
 
     var rpanen = parseFloat(panen.replace(/[^\d]/g, "")) || 0;
     var rharga = parseFloat(harga.replace(/[^\d]/g, "")) || 0;
@@ -232,6 +243,7 @@ $("#hpanen, #hrg").keyup(function () {
     var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
     var rpengeluaran = parseFloat(pengeluaran.replace(/[^\d]/g, "")) || 0;
     var ramortisasi = parseFloat(amortisasi.replace(/[^\d]/g, "")) || 0;
+    var rplafon = parseFloat(plafon.replace(/[^\d]/g, "")) || 0;
 
     var has = rpanen * rharga;
     var a = rpinjaman + rpengeluaran + ramortisasi;
@@ -242,13 +254,18 @@ $("#hpanen, #hrg").keyup(function () {
 
     //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
     var waktupanen = $("#jwp").val();
-    if (waktupanen === "") {
-        waktupanen = 1;
-        $("#jwp").val(parseFloat(waktupanen));
-    }
-    var jmlpanen = jml / waktupanen;
-    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
-    $("#lb_perbulan").val(jpn);
+    var pembagi = jk_waktu / waktupanen;
+    //70% (Plafond Permusim)
+    var p_musim = (jml * 70) / 100;
+    //Cadangkan untuk BPR
+    var cd = rplafon / pembagi;
+    // Sisa Pendapatan Setelah dikurangi Setoran Pokok
+    var sisa = p_musim - cd;
+    //Pendapatan Bersih Bulanan
+    var pendapatan_bersih = sisa / waktupanen;
+    var idr = Math.ceil(parseFloat(pendapatan_bersih));
+    var nilaiIDRFormatted = "Rp. " + idr.toLocaleString("id-ID");
+    $("#lb_perbulan").val(nilaiIDRFormatted);
 
     //Total
     var as = "Rp. " + jml.toLocaleString("id-ID");
@@ -261,12 +278,15 @@ $("#amortisasi, #pinjaman_bank").keyup(function () {
     var penambahan = $("#penambahan").val();
     var pengeluaran = $("#pengeluaran").val();
     var pendapatan = $("#pendapatan").val();
+    var plafon = $("#plafon").val();
+    var jk_waktu = $("#jangka_waktu").val();
 
     var ramortisasi = parseFloat(amortisasi.replace(/[^\d]/g, "")) || 0;
     var rpin = parseFloat(pin.replace(/[^\d]/g, "")) || 0;
     var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
     var rpengeluaran = parseFloat(pengeluaran.replace(/[^\d]/g, "")) || 0;
     var rpendapatan = parseFloat(pendapatan.replace(/[^\d]/g, "")) || 0;
+    var rplafon = parseFloat(plafon.replace(/[^\d]/g, "")) || 0;
 
     // var has = ramortisasi + rpin;
     var jml = rpin + rpengeluaran + ramortisasi;
@@ -277,13 +297,19 @@ $("#amortisasi, #pinjaman_bank").keyup(function () {
 
     //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
     var waktupanen = $("#jwp").val();
-    if (waktupanen === "") {
-        waktupanen = 1;
-        $("#jwp").val(parseFloat(waktupanen));
-    }
-    var jmlpanen = a / waktupanen;
-    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
-    $("#lb_perbulan").val(jpn);
+    var pembagi = jk_waktu / waktupanen;
+    //70% (Plafond Permusim)
+    var p_musim = (a * 70) / 100;
+    //Cadangkan untuk BPR
+    var cd = rplafon / pembagi;
+    // Sisa Pendapatan Setelah dikurangi Setoran Pokok
+    var sisa = p_musim - cd;
+    //Pendapatan Bersih Bulanan
+    var pendapatan_bersih = sisa / waktupanen;
+    var idr = Math.ceil(parseFloat(pendapatan_bersih));
+    var nilaiIDRFormatted = "Rp. " + idr.toLocaleString("id-ID");
+    $("#lb_perbulan").val(nilaiIDRFormatted);
+
     //Total
     var as = "Rp. " + a.toLocaleString("id-ID");
     $("#laba_bersih").val(as);
@@ -295,12 +321,15 @@ $("#penambahan").keyup(function () {
     var pengeluaran = $("#pengeluaran").val();
     var pendapatan = $("#pendapatan").val();
     var penambahan = $("#penambahan").val();
+    var plafon = $("#plafon").val();
+    var jk_waktu = $("#jangka_waktu").val();
 
     var ramortisasi = parseFloat(amortisasi.replace(/[^\d]/g, "")) || 0;
     var rpin = parseFloat(pin.replace(/[^\d]/g, "")) || 0;
     var rpengeluaran = parseFloat(pengeluaran.replace(/[^\d]/g, "")) || 0;
     var rpendapatan = parseFloat(pendapatan.replace(/[^\d]/g, "")) || 0;
     var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
+    var rplafon = parseFloat(plafon.replace(/[^\d]/g, "")) || 0;
 
     var jml = rpin + rpengeluaran + ramortisasi;
     var a = rpenambahan + rpendapatan - jml;
@@ -310,13 +339,19 @@ $("#penambahan").keyup(function () {
 
     //Hasil panen perbulan nilai 1 diberikan ketika kondisi kosong
     var waktupanen = $("#jwp").val();
-    if (waktupanen === "") {
-        waktupanen = 1;
-        $("#jwp").val(parseFloat(waktupanen));
-    }
-    var jmlpanen = a / waktupanen;
-    var jpn = "Rp. " + jmlpanen.toLocaleString("id-ID");
-    $("#lb_perbulan").val(jpn);
+    var pembagi = jk_waktu / waktupanen;
+    //70% (Plafond Permusim)
+    var p_musim = (a * 70) / 100;
+    //Cadangkan untuk BPR
+    var cd = rplafon / pembagi;
+    // Sisa Pendapatan Setelah dikurangi Setoran Pokok
+    var sisa = p_musim - cd;
+    //Pendapatan Bersih Bulanan
+    var pendapatan_bersih = sisa / waktupanen;
+    var idr = Math.ceil(parseFloat(pendapatan_bersih));
+    var nilaiIDRFormatted = "Rp. " + idr.toLocaleString("id-ID");
+    $("#lb_perbulan").val(nilaiIDRFormatted);
+
     //Total
     var as = "Rp. " + a.toLocaleString("id-ID");
     $("#laba_bersih").val(as);
@@ -336,17 +371,4 @@ $("#lsendiri, #lsewa, #lgadai").keyup(function () {
     var bs = jml.toLocaleString("id-ID");
     var hasil = bs + " " + "M2";
     $("#total_tanah").val(hasil);
-});
-
-$("#jwp").keyup(function () {
-    var jangka = $("#jwp").val();
-    var bersih = $("#laba_bersih").val();
-
-    var rjangka = parseFloat(jangka.replace(/[^\d]/g, "")) || 0;
-    var rbersih = parseFloat(bersih.replace(/[^\d]/g, "")) || 0;
-
-    var jml = rbersih / rjangka;
-    var a = Math.floor(jml);
-    var as = "Rp. " + a.toLocaleString("id-ID");
-    $("#lb_perbulan").val(as);
 });

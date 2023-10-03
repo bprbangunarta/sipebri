@@ -112,14 +112,6 @@
                                                             </th>
                                                             <th class="text-center" colspan="1">Total Luas Tanah (M2)
                                                             </th>
-
-                                                            {{-- <th class="text-center" colspan="3">Total Luas Tanah (M2)
-                                                            </th>
-                                                            <td rowspan="1"><input
-                                                                    class="form-control text-center fw-bold" type="text"
-                                                                    name="total_tanah" id="total_tanah"
-                                                                    value="{{ $pertanian->total_luas = number_format($pertanian->total_luas, 0, ',', '.') . ' ' . 'M2' }}">
-                                                            </td> --}}
                                                         </tr>
                                                         <tr>
                                                             <td colspan="3">
@@ -149,6 +141,10 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
+                                                                <input type="text" id="plafon"
+                                                                    value="{{ $data->plafon }}" hidden>
+                                                                <input type="text" id="jangka_waktu"
+                                                                    value="{{ $data->jangka_waktu }}" hidden>
                                                                 <select class="form-control" name="jenis_tanaman"
                                                                     id="">
                                                                     <option value="" class="text-center">
