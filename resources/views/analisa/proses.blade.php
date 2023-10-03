@@ -68,7 +68,10 @@
                                                 <td class="text-center">1</td>
                                                 <td class="text-center">{{ $item->kode_nasabah }}</td>
                                                 <td>{{ $item->nama_nasabah }}</td>
-                                                <td>{{ $item->alamat_ktp }}</td>
+                                                <td>
+                                                    <b>Desa</b> : {{ $item->kelurahan }} <br>
+                                                    <b>Kecamatan</b> : {{ $item->kecamatan }}
+                                                </td>
                                                 <td>{{ $item->nama_kantor }}</td>
                                                 <td class="text-center">
                                                     <span class="badge bg-warning-lt">Proses Survey</span>
