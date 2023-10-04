@@ -129,7 +129,7 @@ class PertanianController extends Controller
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-            // dd($cek[0]);
+
             //jika data pertanian ada maka akan diarahkan ke view pertanian-detail-edit
             return view('analisa.usaha.pertanian-detail-edit', [
                 'data' => $cek[0],

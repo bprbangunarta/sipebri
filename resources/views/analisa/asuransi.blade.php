@@ -1,5 +1,5 @@
 @extends('templates.app')
-@section('title', 'Analisa Usaha Jasa')
+@section('title', 'Analisa Asuransi')
 @yield('jquery')
 @section('content')
     <div class="page-body">

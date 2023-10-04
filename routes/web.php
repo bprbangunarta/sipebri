@@ -39,6 +39,7 @@ use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\CetakAnalisaController;
+use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
 
 /*
@@ -200,6 +201,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('/analisa/a5c', Analisa5cController::class);
         //Memorandum
         Route::resource('/analisa/memorandum', MemorandumController::class);
+        //Analisa Kualitatif
+        Route::resource('/analisa/kualitatif', KualitatifController::class);
         //Asuransi
         Route::resource('/analisa/asuransi', AsuransiController::class);
         //Analisa Tambahan
