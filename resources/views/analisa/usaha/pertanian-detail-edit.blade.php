@@ -362,20 +362,21 @@
                                                                     name="pinjaman" id="pinjaman"></td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" disabled=""
-                                                                    value="Hasil Pendapatan Perbulan"></th>
-                                                            <td><input type="text" class="form-control"
-                                                                    value="{{ $pertanian->laba_perbulan = 'Rp. ' . number_format($pertanian->laba_perbulan, 0, ',', '.') }}"
-                                                                    name="laba_perbulan" id="lb_perbulan" readonly>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary text-white"
                                                                     value="{{ $pertanian->laba_bersih = 'Rp. ' . number_format($pertanian->laba_bersih, 0, ',', '.') }}"
                                                                     name="laba_bersih" id="laba_bersih" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><input class="form-control fw-bold" disabled=""
+                                                                    value="Hasil Pendapatan Perbulan"></th>
+                                                            <td><input type="text"
+                                                                    class="form-control bg-primary text-white"
+                                                                    value="{{ $pertanian->laba_perbulan = 'Rp. ' . number_format($pertanian->laba_perbulan, 0, ',', '.') }}"
+                                                                    name="laba_perbulan" id="lb_perbulan" readonly>
                                                             </td>
                                                         </tr>
                                                     </thead>

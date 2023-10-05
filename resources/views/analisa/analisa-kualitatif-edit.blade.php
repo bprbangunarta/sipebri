@@ -45,8 +45,10 @@
                                     ])
 
                                     <div class="col d-flex flex-column">
-                                        <form action="{{ route('kualitatif.store', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                        <form
+                                            action="{{ route('kualitatif.update', ['kualitatif' => $data->kd_pengajuan, 'pengajuan' => $data->kd_pengajuan]) }}"
                                             method="post">
+                                            @method('put')
                                             @csrf
 
                                             {{-- Karakter Debitur --}}
@@ -74,17 +76,17 @@
                                                                 required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="4"
-                                                                    {{ old('bi_checking') == 4 ? 'selected' : '' }}>
+                                                                    {{ old('bi_checking') == 4 || $kualitatif->bi_checking == 4 ? 'selected' : '' }}>
                                                                     Lancar
                                                                 </option>
                                                                 <option value="3"
-                                                                    {{ old('bi_checking') == 3 ? 'selected' : '' }}>
+                                                                    {{ old('bi_checking') == 3 || $kualitatif->bi_checking == 3 ? 'selected' : '' }}>
                                                                     Kurang Lancar</option>
                                                                 <option value="2"
-                                                                    {{ old('bi_checking') == 2 ? 'selected' : '' }}>
+                                                                    {{ old('bi_checking') == 2 || $kualitatif->bi_checking == 2 ? 'selected' : '' }}>
                                                                     Diragukan</option>
                                                                 <option value="1"
-                                                                    {{ old('bi_checking') == 1 ? 'selected' : '' }}>
+                                                                    {{ old('bi_checking') == 1 || $kualitatif->bi_checking == 1 ? 'selected' : '' }}>
                                                                     Macet</option>
                                                             </select>
                                                         </td>
@@ -97,20 +99,20 @@
                                                                 id="select2" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="5"
-                                                                    {{ old('kewajiban_pihak_lain') == 5 ? 'selected' : '' }}>
+                                                                    {{ old('kewajiban_pihak_lain') == 5 || $kualitatif->kewajiban_pihak_lain == 5 ? 'selected' : '' }}>
                                                                     Bank Umum
                                                                 </option>
                                                                 <option value="4"
-                                                                    {{ old('kewajiban_pihak_lain') == 4 ? 'selected' : '' }}>
+                                                                    {{ old('kewajiban_pihak_lain') == 4 || $kualitatif->kewajiban_pihak_lain == 4 ? 'selected' : '' }}>
                                                                     BPR</option>
                                                                 <option value="3"
-                                                                    {{ old('kewajiban_pihak_lain') == 3 ? 'selected' : '' }}>
+                                                                    {{ old('kewajiban_pihak_lain') == 3 || $kualitatif->kewajiban_pihak_lain == 3 ? 'selected' : '' }}>
                                                                     Koperasi</option>
-                                                                <option value="1"
-                                                                    {{ old('kewajiban_pihak_lain') == 1 ? 'selected' : '' }}>
+                                                                <option value="2"
+                                                                    {{ old('kewajiban_pihak_lain') == 2 || $kualitatif->kewajiban_pihak_lain == 2 ? 'selected' : '' }}>
                                                                     Leasing</option>
                                                                 <option value="1"
-                                                                    {{ old('kewajiban_pihak_lain') == 1 ? 'selected' : '' }}>
+                                                                    {{ old('kewajiban_pihak_lain') == 1 || $kualitatif->kewajiban_pihak_lain == 1 ? 'selected' : '' }}>
                                                                     lainnya</option>
                                                             </select>
                                                         </td>
@@ -126,11 +128,11 @@
                                                                 id="select3" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="2"
-                                                                    {{ old('pihak_berwajib') == 2 ? 'selected' : '' }}>
+                                                                    {{ old('pihak_berwajib') == 2 || $kualitatif->pihak_berwajib == 2 ? 'selected' : '' }}>
                                                                     Pernah
                                                                 </option>
                                                                 <option value="1"
-                                                                    {{ old('pihak_berwajib') == 1 ? 'selected' : '' }}>
+                                                                    {{ old('pihak_berwajib') == 1 || $kualitatif->pihak_berwajib == 1 ? 'selected' : '' }}>
                                                                     Tidak Pernah</option>
                                                             </select>
                                                         </td>
@@ -143,15 +145,15 @@
                                                                 id="select4" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="3"
-                                                                    {{ old('hubungan_tetangga') == 3 ? 'selected' : '' }}>
+                                                                    {{ old('hubungan_tetangga') == 3 || $kualitatif->hubungan_tetangga == 3 ? 'selected' : '' }}>
                                                                     Baik
                                                                 </option>
                                                                 <option value="2"
-                                                                    {{ old('hubungan_tetangga') == 2 ? 'selected' : '' }}>
+                                                                    {{ old('hubungan_tetangga') == 2 || $kualitatif->hubungan_tetangga == 2 ? 'selected' : '' }}>
                                                                     Cukup
                                                                     Baik</option>
                                                                 <option value="1"
-                                                                    {{ old('hubungan_tetangga') == 1 ? 'selected' : '' }}>
+                                                                    {{ old('hubungan_tetangga') == 1 || $kualitatif->hubungan_tetangga == 1 ? 'selected' : '' }}>
                                                                     Kurang Baik</option>
                                                             </select>
                                                         </td>
@@ -166,11 +168,11 @@
                                                                 id="select5" required>
                                                                 <option value="">--Pilih--</option>
                                                                 <option value="2"
-                                                                    {{ old('pengalaman_tki') == 2 ? 'selected' : '' }}>
+                                                                    {{ old('pengalaman_tki') == 2 || $kualitatif->pengalaman_tki == 2 ? 'selected' : '' }}>
                                                                     Pernah
                                                                 </option>
                                                                 <option value="1"
-                                                                    {{ old('pengalaman_tki') == 1 ? 'selected' : '' }}>
+                                                                    {{ old('pengalaman_tki') == 1 || $kualitatif->pengalaman_tki == 1 ? 'selected' : '' }}>
                                                                     Tidak Pernah</option>
                                                             </select>
                                                         </td>
@@ -198,7 +200,8 @@
                                                         </td>
                                                         <td>
                                                             <input class="form-control" type="text"
-                                                                name="sumber_bahan" value="{{ old('sumber_bahan') }}">
+                                                                name="sumber_bahan"
+                                                                value="{{ old('sumber_bahan') ?? $kualitatif->sumber_bahan }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -209,7 +212,7 @@
                                                         <td>
                                                             <input class="form-control" type="text"
                                                                 name="aktivitas_usaha"
-                                                                value="{{ old('aktivitas_usaha') }}">
+                                                                value="{{ old('aktivitas_usaha') ?? $kualitatif->aktivitas_usaha }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -220,7 +223,7 @@
                                                         <td>
                                                             <input class="form-control" type="text"
                                                                 name="wilayah_operasional"
-                                                                value="{{ old('wilayah_operasional') }}">
+                                                                value="{{ old('wilayah_operasional') ?? $kualitatif->wilayah_operasional }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -231,7 +234,7 @@
                                                         </td>
                                                         <td>
                                                             <input class="form-control" type="text" name="pembayaran"
-                                                                value="{{ old('pembayaran') }}">
+                                                                value="{{ old('pembayaran') ?? $kualitatif->pembayaran }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -242,7 +245,7 @@
                                                         <td>
                                                             <input class="form-control" type="text"
                                                                 name="pendukung_usaha"
-                                                                value="{{ old('pendukung_usaha') }}">
+                                                                value="{{ old('pendukung_usaha') ?? $kualitatif->pendukung_usaha }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -253,7 +256,7 @@
                                                         <td>
                                                             <input class="form-control" type="text"
                                                                 name="pengurang_usaha"
-                                                                value="{{ old('pengurang_usaha') }}">
+                                                                value="{{ old('pengurang_usaha') ?? $kualitatif->pengurang_usaha }}">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -264,7 +267,7 @@
                                                         <td>
                                                             <input class="form-control" type="text"
                                                                 name="trade_checking"
-                                                                value="{{ old('trade_checking') }}">
+                                                                value="{{ old('trade_checking') ?? $kualitatif->trade_checking }}">
                                                         </td>
                                                     </tr>
                                                 </tbody>

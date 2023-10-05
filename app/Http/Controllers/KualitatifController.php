@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Midle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -16,20 +18,79 @@ class KualitatifController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
 
-            $data = (object) [
-                'jenis_tanggungan' => 'Motor',
-                'tgl_lahir' => '12-01-1994',
-                'no_polisi' => '123456789',
-                'tgl_realisasi' => Carbon::now()->format('d-m-Y'),
-                'jangka_waktu' => '36',
-            ];
-            // dd($data);
-            return view('analisa.analisa-kualitatif', [
+            //Cek data ada atau tidak
+            $table = DB::table('au_kualitatif')->where('pengajuan_kode', $enc)->first();
+
+            if (is_null($table)) {
+                return view('analisa.analisa-kualitatif', [
+                    'data' => $cek[0],
+                ]);
+            }
+
+            return view('analisa.analisa-kualitatif-edit', [
                 'data' => $cek[0],
-                'asuransi' => $data,
+                'kualitatif' => $table,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function store(Request $request)
+    {
+
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+
+            $req = $request->validate([
+                'bi_checking' => 'required',
+                'kewajiban_pihak_lain' => 'required',
+                'pihak_berwajib' => 'required',
+                'hubungan_tetangga' => 'required',
+                'pengalaman_tki' => 'required',
+                'sumber_bahan' => '',
+                'aktivitas_usaha' => '',
+                'wilayah_operasional' => '',
+                'pembayaran' => '',
+                'pendukung_usaha' => '',
+                'pengurang_usaha' => '',
+                'trade_checking' => '',
+            ]);
+            $req['pengajuan_kode'] = $enc;
+            DB::table('au_kualitatif')->insert($req);
+            return redirect()->back()->with('success', 'Data berhasil disimpan');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Data gagal disimpan');
+    }
+
+    public function update(Request $request)
+    {
+
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+
+            $req = $request->validate([
+                'bi_checking' => 'required',
+                'kewajiban_pihak_lain' => 'required',
+                'pihak_berwajib' => 'required',
+                'hubungan_tetangga' => 'required',
+                'pengalaman_tki' => 'required',
+                'sumber_bahan' => '',
+                'aktivitas_usaha' => '',
+                'wilayah_operasional' => '',
+                'pembayaran' => '',
+                'pendukung_usaha' => '',
+                'pengurang_usaha' => '',
+                'trade_checking' => '',
+            ]);
+            $table = DB::table('au_kualitatif')->where('pengajuan_kode', $enc)->first();
+            DB::table('au_kualitatif')->where('id', $table->id)->update($req);
+            return redirect()->back()->with('success', 'Data berhasil diubah');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Data gagal diubah');
     }
 }

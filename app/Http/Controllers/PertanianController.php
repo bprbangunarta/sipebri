@@ -123,6 +123,7 @@ class PertanianController extends Controller
                     'pertanian' => $pertanian[0],
                 ]);
             }
+
             $pertanian[0]->total_luas = $pertanian[0]->luas_sendiri + $pertanian[0]->luas_sewa + $pertanian[0]->luas_gadai;
 
             foreach ($pertanian as $item) {

@@ -350,20 +350,21 @@
                                                                     id="pinjaman"></td>
                                                         </tr>
                                                         <tr>
-                                                            <th><input class="form-control" disabled=""
-                                                                    value="Hasil Pendapatan Perbulan"></th>
-                                                            <td><input type="text" class="form-control"
-                                                                    value="Rp. {{ old('laba_perbulan') }}"
-                                                                    name="laba_perbulan" id="lb_perbulan" readonly>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
                                                             <th><input class="form-control fw-bold" disabled=""
                                                                     value="Hasil Bersih Usaha"></th>
                                                             <td><input type="text"
                                                                     class="form-control bg-primary text-white"
                                                                     value="Rp. {{ old('laba_bersih') }}"
                                                                     name="laba_bersih" id="laba_bersih" readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><input class="form-control fw-bold" disabled=""
+                                                                    value="Hasil Pendapatan Perbulan"></th>
+                                                            <td><input type="text"
+                                                                    class="form-control bg-primary text-white"
+                                                                    value="Rp. {{ old('laba_perbulan') }}"
+                                                                    name="laba_perbulan" id="lb_perbulan" readonly>
                                                             </td>
                                                         </tr>
                                                     </thead>
