@@ -65,23 +65,28 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input type="text" class="form-control" name="">
+                                                                <input type="text" class="form-control" name="max_plafon"
+                                                                    id="maxp"
+                                                                    value="{{ 'Rp. ' . ' ' . number_format($memorandum['max_plafon'], 0, ',', '.') ?? 00 }}"
+                                                                    readonly>
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
-                                                                    name="max_plafon">
+                                                                    name="usulan_plafon" id="usualanp">
                                                             </td>
                                                             <td>
                                                                 <input type="number" class="form-control text-center"
-                                                                    name="" value="24">
+                                                                    name="jangka_waktu"
+                                                                    value="{{ $memorandum['jangka_waktu'] }}">
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control text-center"
-                                                                    name="plafon_usulan" value="">
+                                                                    name="rc" value="{{ $memorandum['rc'] . ' ' . '%' }}">
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
-                                                                    name="plafon_usulan">
+                                                                    name="total_jaminan"
+                                                                    value="{{ 'Rp. ' . ' ' . number_format($memorandum['total_taksasi'], 0, ',', '.') ?? 00 }}">
                                                             </td>
                                                         </tr>
                                                         <thead>
@@ -126,5 +131,42 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/js/myscript/analisa5c.js') }}"></script>
+    <script>
+        var usualanp = document.getElementById("usualanp");
+        if (usualanp) {
+            usualanp.addEventListener("keyup", function(e) {
+                usualanp.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+        }
+
+        //validasi agar usulan plafon tidak lebih besar dari max plafon
+        $(document).ready(function() {
+            $('#usualanp').on('input', function() {
+                var usulanplafon = $('#usualanp').val()
+                var maxp = $('#maxp').val()
+                var rmaxp = parseFloat(maxp.replace(/[^\d]/g, "")) || 0;
+                var rusulanplafon = parseFloat(usulanplafon.replace(/[^\d]/g, "")) || 0;
+
+                if (rusulanplafon > rmaxp) {
+                    $('#usualanp').val(maxp)
+                }
+            })
+        })
+    </script>
 @endsection
