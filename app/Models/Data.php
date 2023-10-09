@@ -9,128 +9,138 @@ class Data extends Model
 {
     use HasFactory;
 
-    public static function agama($cek){
+    public static function agama($cek)
+    {
         if ($cek == "1") {
             return 'Islam';
-        }elseif ($cek == "2") {
+        } elseif ($cek == "2") {
             return 'Katolik';
-        }elseif ($cek == "3"){
+        } elseif ($cek == "3") {
             return 'Kristen';
-        }elseif ($cek == "4"){
+        } elseif ($cek == "4") {
             return 'Hindu';
-        }elseif ($cek == "5"){
+        } elseif ($cek == "5") {
             return 'Budha';
-        }elseif ($cek == "6"){
+        } elseif ($cek == "6") {
             return 'Kong Hu Cu';
         }
     }
 
-    public static function identitas($identitas){
+    public static function identitas($identitas)
+    {
         if ($identitas == "1") {
             return 'KTP';
-        }elseif ($identitas == "2") {
+        } elseif ($identitas == "2") {
             return 'SIM';
-        }elseif ($identitas == "3"){
+        } elseif ($identitas == "3") {
             return 'Passport';
-        }elseif ($identitas == "9"){
+        } elseif ($identitas == "9") {
             return 'Lainnya';
         }
     }
 
-    public static function jk($jk){
+    public static function jk($jk)
+    {
         if ($jk == "1") {
             return 'Pria';
-        }elseif ($jk == "2") {
+        } elseif ($jk == "2") {
             return 'Wanita';
         }
     }
 
-    public static function warganegara($wn){
+    public static function warganegara($wn)
+    {
         if ($wn == "WNI") {
             return 'Warga Negara Indonesia';
-        }elseif ($wn == "WNA") {
+        } elseif ($wn == "WNA") {
             return 'Warga Negara Asing';
         }
     }
 
-    public static function status($status){
+    public static function status($status)
+    {
         if ($status == "M") {
             return 'Menikah';
-        }elseif ($status == "L") {
+        } elseif ($status == "L") {
             return 'Lajang';
-        }elseif ($status == "D") {
+        } elseif ($status == "D") {
             return 'Duda';
-        }elseif ($status == "J") {
+        } elseif ($status == "J") {
             return 'Janda';
         }
     }
 
-    public static function dana($dana){
+    public static function dana($dana)
+    {
         if ($dana == "1") {
             return 'Hibah';
-        }elseif ($dana == "2") {
+        } elseif ($dana == "2") {
             return 'Lain2';
-        }elseif ($dana == "3") {
+        } elseif ($dana == "3") {
             return 'Penghasilan';
-        }elseif ($dana == "4") {
+        } elseif ($dana == "4") {
             return 'Warisan';
         }
     }
 
-    public static function penghasilanutama($utama){
+    public static function penghasilanutama($utama)
+    {
         if ($utama == "1") {
             return 's/d 2,5 jt';
-        }elseif ($utama == "2") {
+        } elseif ($utama == "2") {
             return 's/d 2,5 - 5 jt';
-        }elseif ($utama == "3"){
+        } elseif ($utama == "3") {
             return 's/d 5 - 7,5 jt';
-        }elseif ($utama == "4"){
+        } elseif ($utama == "4") {
             return 's/d 7,5 - 10 jt';
-        }elseif ($utama == "5"){
+        } elseif ($utama == "5") {
             return '10 jt';
         }
     }
 
-    public static function penghasilanlain($lain){
+    public static function penghasilanlain($lain)
+    {
         if ($lain == "1") {
             return 's/d 2,5 jt';
-        }elseif ($lain == "2") {
+        } elseif ($lain == "2") {
             return 's/d 2,5 - 5 jt';
-        }elseif ($lain == "3"){
+        } elseif ($lain == "3") {
             return 's/d 5 - 7,5 jt';
-        }elseif ($lain == "4"){
+        } elseif ($lain == "4") {
             return 's/d 7,5 - 10 jt';
-        }elseif ($lain == "5"){
+        } elseif ($lain == "5") {
             return '10 jt';
         }
     }
 
-    public static function tanggungan($tanggungan){
+    public static function tanggungan($tanggungan)
+    {
         if ($tanggungan == "0") {
             return 'Tidak Ada';
-        }elseif ($tanggungan == "1") {
+        } elseif ($tanggungan == "1") {
             return '1 Orang';
-        }elseif ($tanggungan == "2") {
+        } elseif ($tanggungan == "2") {
             return '2 Orang';
-        }elseif ($tanggungan == "3"){
+        } elseif ($tanggungan == "3") {
             return '3 Orang';
-        }elseif ($tanggungan == "4"){
+        } elseif ($tanggungan == "4") {
             return '4 Orang';
-        }elseif ($tanggungan == "5"){
+        } elseif ($tanggungan == "5") {
             return '5 Orang';
         }
     }
 
-    public static function metode($metode){
+    public static function metode($metode)
+    {
         if ($metode == "FLAT") {
             return 'Flat';
-        }elseif ($metode == "PRK") {
+        } elseif ($metode == "PRK") {
             return 'PRK';
-        }elseif ($metode == "Efektif") {
+        } elseif ($metode == "Efektif") {
             return 'Efektif';
-        }elseif ($metode == "Efektif Anuitas") {
+        } elseif ($metode == "Efektif Anuitas") {
             return 'Efektif Anuitas';
-        }elseif ($metode == "Efektif Musiman") {
+        } elseif ($metode == "Efektif Musiman") {
             return 'Efektif Musiman';
         }
     }
@@ -139,9 +149,9 @@ class Data extends Model
     {
         if ($data == "Baik") {
             return  "3";
-        } elseif($data == "Cukup Baik") {
+        } elseif ($data == "Cukup Baik") {
             return "2";
-        } elseif($data == "Kurang Baik") {
+        } elseif ($data == "Kurang Baik") {
             return "1";
         }
     }
@@ -150,9 +160,9 @@ class Data extends Model
     {
         if ($data == "3") {
             return  "Baik";
-        } elseif($data == "2") {
+        } elseif ($data == "2") {
             return "Cukup Baik";
-        } elseif($data == "1") {
+        } elseif ($data == "1") {
             return "Kurang Baik";
         }
     }
@@ -174,7 +184,7 @@ class Data extends Model
 
         return $harta;
     }
-    
+
     public static function cetak_a5c_character($cek)
     {
         $data = [
@@ -189,7 +199,7 @@ class Data extends Model
             'nilai_karakter' => self::analisa5c_number($cek->nilai_karakter),
         ];
 
-       return $data;
+        return $data;
     }
 
     public static function cetak_a5c_capacity($cek)
@@ -197,16 +207,16 @@ class Data extends Model
 
         if ($cek->pengalaman_usaha == 1) {
             $pu = 'Tidak Baik';
-        }elseif($cek->pengalaman_usaha == 2){
+        } elseif ($cek->pengalaman_usaha == 2) {
             $pu = 'Kurang Baik';
-        }elseif($cek->pengalaman_usaha == 3){
+        } elseif ($cek->pengalaman_usaha == 3) {
             $pu = 'Cukup Baik';
-        }elseif($cek->pengalaman_usaha == 4){
+        } elseif ($cek->pengalaman_usaha == 4) {
             $pu = 'Baik';
-        }elseif($cek->pengalaman_usaha == 5){
+        } elseif ($cek->pengalaman_usaha == 5) {
             $pu = 'Sangat Baik';
         }
-        
+
         $data = [
             'kontinuitas' => self::analisa5c_number($cek->kontinuitas),
             'pengalaman_usaha' => $pu,
@@ -222,6 +232,6 @@ class Data extends Model
             'evaluasi_capacity' => self::analisa5c_number($cek->evaluasi_capacity),
         ];
         dd($data);
-       return $data;
+        return $data;
     }
 }
