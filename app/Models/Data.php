@@ -485,4 +485,57 @@ class Data extends Model
         ];
         return $data;
     }
+
+    public static function cekkualitatif($cek)
+    {
+        if ($cek->bi_checking == 1) {
+            $bi = 'Macet';
+        } else if ($cek->bi_checking == 2) {
+            $bi = 'Diragukan';
+        } else if ($cek->bi_checking == 3) {
+            $bi = 'Kurang Lancar';
+        } else if ($cek->bi_checking == 4) {
+            $bi = 'Lancar';
+        }
+
+        if ($cek->kewajiban_pihak_lain == 1) {
+            $kwj = 'Lainnya';
+        } else if ($cek->bi_checking == 2) {
+            $kwj = 'Leasing';
+        } else if ($cek->bi_checking == 3) {
+            $kwj = 'Koperasi';
+        } else if ($cek->bi_checking == 4) {
+            $kwj = 'Bank Umum';
+        }
+
+        if ($cek->pihak_berwajib == 1 || $cek->pengalaman_tki == 1) {
+            $jd = 'Tidak Pernah';
+        } else if ($cek->bi_checking == 2) {
+            $jd = 'Pernah';
+        }
+
+        if ($cek->hubungan_tetangga == 1) {
+            $dt = 'Kurang Baik';
+        } else if ($cek->hubungan_tetangga == 2) {
+            $dt = 'Cukup Baik';
+        } else if ($cek->hubungan_tetangga == 3) {
+            $dt = 'Baik';
+        }
+
+        if ($cek->pengalaman_tki == 1) {
+            $pt = 'Tidak Pernah';
+        } else if ($cek->bi_checking == 2) {
+            $pt = 'Pernah';
+        }
+
+        $data = [
+            'bi_checking' => $bi,
+            'kewajiban_pihak_lain' => $kwj,
+            'pihak_berwajib' => $jd,
+            'hubungan_tetangga' => $dt,
+            'pengalaman_tki' => $pt,
+        ];
+
+        return $data;
+    }
 }

@@ -90,31 +90,16 @@
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
-        <h4 style="text-align: center;">ANALISA TAMBAHAN</h4>
+        <h4 style="text-align: center;">ANALISA KUALITATIF</h4>
         <br>
         <table style="font-size: 13px;">
-            <tr>
-                <td style="width: 20%;">Nama SK</td>
-                <td style="width: 2%;">:</td>
-                <td>{{ $data->nama_surveyor }}</td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">Kode Analis</td>
-                <td style="width: 2%;">:</td>
-                <td>{{ $data->kasi_kode }}</td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">Kasi Analis</td>
-                <td style="width: 2%;">:</td>
-                <td>{{ $data->nama_kasi }}</td>
-            </tr>
             <tr>
                 <td style="width: 20%;">Kode Nasabah</td>
                 <td>:</td>
                 <td>{{ $data->kode_nasabah }}</td>
             </tr>
             <tr>
-                <td style="width: 20%;">Nama Lengkap</td>
+                <td style="width: 20%;">Nama Pemohon</td>
                 <td>:</td>
                 <td>{{ $data->nama_nasabah }}</td>
             </tr>
@@ -123,87 +108,93 @@
                 <td>:</td>
                 <td>{{ $data->alamat_ktp }}</td>
             </tr>
-            <tr>
-                <td style="width: 20%;">No Telepon</td>
-                <td>:</td>
-                <td>{{ $data->no_telp }}</td>
-            </tr>
-            <tr>
-                <td style="width: 20%;">Penggunaan Kredit</td>
-                <td>:</td>
-                <td>{{ $data->penggunaan }}</td>
-            </tr>
         </table>
 
-        <p style="margin-top: 20px;"><b>1. Penghasilan</b></p>
+        <p style="margin-top: 15px;">1. Karakter Debitur (Sumber Informasi dari Bank Indonesia dan Masyarakat)</p>
         <div class="border-1">
             <div class="penghasilan">
-                <table style="border: 1px black; width: 70%;">
+                <table style="border: 1px black; width: 80%;">
                     <tr>
                         <td style="width: 15px;">a. </td>
-                        <td style="width: 200px;">Modal Kerja</td>
+                        <td style="width: 500px;">BI Checking (Sumber Informasi SID Bank Indonesia)</td>
                         <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->modal_kerja, 0, ',', '.') }}</td>
+                        <td style="width: 200px;">{{ $kualitatif->bi_checking }}</td>
                     </tr>
                     <tr>
                         <td style="width: 15px;">b. </td>
-                        <td style="width: 200px;">Investasi</td>
+                        <td style="width: 500px;">Kewajiban Kepada Pihak Lain</td>
                         <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->investasi, 0, ',', '.') }}</td>
+                        <td style="width: 200px;">{{ $kualitatif->kewajiban_pihak_lain }}</td>
                     </tr>
                     <tr>
                         <td style="width: 15px;">c. </td>
-                        <td style="width: 200px;">Konsumtif</td>
+                        <td style="width: 500px;">Judi / Urusan Dengan Pihak Berwajib</td>
                         <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->konsumtif, 0, ',', '.') }}</td>
+                        <td style="width: 200px;">{{ $kualitatif->pihak_berwajib }}</td>
                     </tr>
                     <tr>
                         <td style="width: 15px;">d. </td>
-                        <td style="width: 200px;">Pelunasan Kredit</td>
+                        <td style="width: 500px;">Hubungan Dengan Tetangga / Masyarakat</td>
                         <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->pelunasan_kredit, 0, ',', '.') }}</td>
+                        <td style="width: 200px;">{{ $kualitatif->hubungan_tetangga }}</td>
                     </tr>
                     <tr>
                         <td style="width: 15px;">e. </td>
-                        <td style="width: 200px;">Take Over</td>
+                        <td style="width: 500px;">Pengalaman Menjadi Tenaga Kerja Indonesia (TKI)</td>
                         <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->take_over, 0, ',', '.') }}</td>
+                        <td style="width: 200px;">{{ $kualitatif->pengalaman_tki }}</td>
                     </tr>
-                    <tr>
-                        <td style="width: 15px;">f. </td>
-                        <td style="width: 200px;">Administrasi</td>
-                        <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->administrasi, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 15px;">g. </td>
-                        <td style="width: 200px;">Asuransi</td>
-                        <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->asuransi, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 15px;">h. </td>
-                        <td style="width: 200px;">Kebutuhan Dana</td>
-                        <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->kebutuhan_dana, 0, ',', '.') }}</td>
-                    </tr>
-                    @if (!empty($tambah->nama_lain))
-                        <tr>
-                            <td style="width: 15px;">i. </td>
-                            <td style="width: 200px;">{{ $tambah->nama_lain }}</td>
-                            <td>:</td>
-                            <td>{{ 'Rp. ' . ' ' . number_format($tambah->nilai_lain, 0, ',', '.') }}</td>
-                        </tr>
-                    @endif
                 </table>
             </div>
         </div>
-        <p style="margin-top: 20px;"><b>2. Catatan Lain</b></p>
+        <p style="margin-top: 20px;">2. Usaha Calon Debitur Saat Ini</p>
         <br>
         <div class="border-1">
             <div class="penghasilan">
-                <textarea name="catatan" id="" cols="80" rows="10"
-                    style="border: none; font-family: 'Times New Roman', Times, serif; font-size: 12px;" readonly>{{ $tambah->catatan }}</textarea>
+                <table style="border: 1px black; width: 90%; margin-top: -30px;">
+                    <tr>
+                        <td style="width: 15px;">a. </td>
+                        <td style="width: 490px;">Sumber Bahan Baku / Barang Dagangan</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->sumber_bahan }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">b. </td>
+                        <td style="width: 490px;">Proses Aktivitas Usaha</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->aktivitas_usaha }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">c. </td>
+                        <td style="width: 490px;">Wilayah Operasional</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->wilayah_operasional }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">d. </td>
+                        <td style="width: 490px;">Sitem Pembayaran ( Tunai/Tempo/Transfer )</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->pembayaran }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">e. </td>
+                        <td style="width: 490px;">Faktor Pendukung Usaha</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->pendukung_usaha }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">f. </td>
+                        <td style="width: 490px;">Faktor Pengurang / Kendala Usaha</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->pengurang_usaha }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15px;">g. </td>
+                        <td style="width: 490px;">Trade Checking</td>
+                        <td>:</td>
+                        <td style="width: 300px;">{{ $kualitatif->trade_checking }}</td>
+                    </tr>
+                </table>
             </div>
             <p style="text-align: center; position:relative; float: right;">Pamanukan, {{ ' ' . $data->hari }} <br>
                 Surveyor <br>

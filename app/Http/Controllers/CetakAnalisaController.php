@@ -163,6 +163,45 @@ class CetakAnalisaController extends Controller
         }
     }
 
+    public function kualitatif(Request $request)
+    {
+        $kode = $request->query('cetak');
+
+        //====Try Enkripsi Request====//
+        try {
+            $enc = Crypt::decrypt($kode);
+            $data = DB::table('data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->select('data_nasabah.nama_nasabah', 'data_nasabah.kode_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.no_telp', 'data_survei.kasi_kode', 'data_survei.surveyor_kode', 'data_pengajuan.penggunaan')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->first();
+            //
+            $kasi = DB::table('v_users')->select('nama_user')->where('code_user', $data->kasi_kode)->first();
+            $surveyor = DB::table('v_users')->select('nama_user')->where('code_user', $data->surveyor_kode)->first();
+            $data->nama_kasi = $kasi->nama_user;
+            $data->nama_surveyor = $surveyor->nama_user;
+
+            //Hari
+            $hari = Carbon::today();
+            $data->hari = $hari->isoformat('D MMMM Y');
+
+            $kualitatif = DB::table('au_kualitatif')->where('pengajuan_kode', $enc)->first();
+            $cekkualitatif = Data::cekkualitatif($kualitatif);
+            $kualitatif->bi_checking = $cekkualitatif['bi_checking'];
+            $kualitatif->kewajiban_pihak_lain = $cekkualitatif['kewajiban_pihak_lain'];
+            $kualitatif->pihak_berwajib = $cekkualitatif['pihak_berwajib'];
+            $kualitatif->hubungan_tetangga = $cekkualitatif['hubungan_tetangga'];
+            $kualitatif->pengalaman_tki = $cekkualitatif['pengalaman_tki'];
+            // dd($kualitatif);
+            return view('cetak.analisa.kualitatif', [
+                'data' => $data,
+                'kualitatif' => $kualitatif,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
     public function tambahan(Request $request)
     {
         $kode = $request->query('cetak');
@@ -170,9 +209,27 @@ class CetakAnalisaController extends Controller
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($kode);
+            $data = DB::table('data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->select('data_nasabah.nama_nasabah', 'data_nasabah.kode_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.no_telp', 'data_survei.kasi_kode', 'data_survei.surveyor_kode', 'data_pengajuan.penggunaan')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->first();
+            //
+            $kasi = DB::table('v_users')->select('nama_user')->where('code_user', $data->kasi_kode)->first();
+            $surveyor = DB::table('v_users')->select('nama_user')->where('code_user', $data->surveyor_kode)->first();
+            $data->nama_kasi = $kasi->nama_user;
+            $data->nama_surveyor = $surveyor->nama_user;
+
+            //Hari
+            $hari = Carbon::today();
+            $data->hari = $hari->isoformat('D MMMM Y');
+
             $tambahan = DB::table('au_tambahan')->where('pengajuan_kode', $enc)->first();
-            // dd($tambahan);
-            return view('cetak.analisa.tambahan');
+
+            return view('cetak.analisa.tambahan', [
+                'data' => $data,
+                'tambah' => $tambahan,
+            ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
