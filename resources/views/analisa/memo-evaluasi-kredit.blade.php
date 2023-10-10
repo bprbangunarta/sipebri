@@ -81,7 +81,8 @@
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control text-center"
-                                                                    name="rc" value="{{ $memorandum['rc'] . ' ' . '%' }}">
+                                                                    name="rc"
+                                                                    value="{{ $memorandum['rc'] . ' ' . '%' }}">
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
