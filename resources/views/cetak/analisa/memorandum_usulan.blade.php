@@ -392,19 +392,19 @@
                         <td style="width: 2px;"></td>
                         <td style="width: 40%; margin-right: 20px;">&ensp;&ensp;a. Sebelum Kredit direalisasi</td>
                         <td style="width: 2px;">:</td>
-                        <td>KTP asli, BUKTAB, SPPT Terbaru Asli</td>
+                        <td colspan="2">KTP asli, BUKTAB, SPPT Terbaru Asli</td>
                     </tr>
                     <tr>
                         <td style="width: 2px;"></td>
                         <td style="width: 40%; margin-right: 20px;">&ensp;&ensp;b. Syarat-syarat Tambahan</td>
                         <td style="width: 2px;">:</td>
-                        <td>POT Pelunasan, TTD Pendamping du Berkas</td>
+                        <td colspan="3">POT Pelunasan, TTD Pendamping du Berkas</td>
                     </tr>
                     <tr>
                         <td style="width: 2px;"></td>
                         <td style="width: 40%; margin-right: 20px;">&ensp;&ensp;c. Syarat Tambahan Lainnya</td>
                         <td style="width: 2px;">:</td>
-                        <td>FC SHM (Minta Ke Legal)</td>
+                        <td colspan="2">FC SHM (Minta Ke Legal)</td>
                     </tr>
                 </table>
             </div>
