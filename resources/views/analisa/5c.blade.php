@@ -516,13 +516,13 @@
                                                             <select class="form-control" name="agunan_utama"
                                                                 id="collateral1" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="2"
-                                                                    {{ old('agunan_utama') == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('agunan_utama') == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('agunan_utama') == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
-                                                                    Orang Lian (Wariasan)</option>
+                                                                    Orang Lain (Wariasan)</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -533,8 +533,8 @@
                                                             <select class="form-control" name="agunan_tambahan"
                                                                 id="collateral2" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="2"
-                                                                    {{ old('agunan_tambahan') == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('agunan_tambahan') == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('agunan_tambahan') == 1 ? 'selected' : '' }}>
@@ -552,13 +552,13 @@
                                                             <select class="form-control" name="legalitas_agunan"
                                                                 id="collateral3" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="2"
-                                                                    {{ old('legalitas_agunan') == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('legalitas_agunan') == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('legalitas_agunan') == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
-                                                                    Orang Lian (Wariasan)</option>
+                                                                    Orang Lain (Wariasan)</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -569,8 +569,8 @@
                                                             <select class="form-control" name="legalitas_agunan_tambahan"
                                                                 id="collateral4" required>
                                                                 <option value="">--Pilih--</option>
-                                                                <option value="2"
-                                                                    {{ old('legalitas_agunan_tambahan') == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('legalitas_agunan_tambahan') == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('legalitas_agunan_tambahan') == 1 ? 'selected' : '' }}>
