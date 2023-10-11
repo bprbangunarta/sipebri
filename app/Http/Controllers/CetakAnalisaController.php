@@ -243,6 +243,7 @@ class CetakAnalisaController extends Controller
         try {
             $enc = Crypt::decrypt($kode);
             $data = Midle::memorandum($enc);
+
             return view('cetak.analisa.memorandum_usulan');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
