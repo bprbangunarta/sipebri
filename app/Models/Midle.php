@@ -382,4 +382,15 @@ class Midle extends Model
 
         return $cek;
     }
+
+    public static function memorandum($data)
+    {
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('au_perdagangan', 'data_pengajuan.kode_pengajuan', '=', 'au_perdagangan.pengajuan_kode')
+            ->leftJoin('au_pertanian', 'data_pengajuan.kode_pengajuan', '=', 'au_pertanian.pengajuan_kode')
+            ->select('data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.no_telp', 'au_perdagangan.lokasi_usaha as dg_lokasi', 'au_pertanian.lokasi_usaha as pt_lokasi')
+            ->where('data_pengajuan.kode_pengajuan', '=', $data)->get();
+        // dd($cek);
+    }
 }

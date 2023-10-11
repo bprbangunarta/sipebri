@@ -109,8 +109,8 @@
                     <tr>
                         <td style="width: 2px;"></td>
                         <td style="width: 40%;">2. Alamat</td>
-                        <td style="width: 2px;">:</td>
-                        <td colspan="3">3 (Sedang)</td>
+                        <td style="width: 2px;"></td>
+                        <td colspan="3"></td>
                     </tr>
                     <tr>
                         <td style="width: 2px;"></td>
