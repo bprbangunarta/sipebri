@@ -43,7 +43,6 @@ class Analisa5cController extends Controller
             }
 
             //Menghitung RC
-
             if ($cek[0]->metode_rps == 'Efektif Musiman') {
                 $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
                 $pp = $plafon_permusim / 6;
@@ -204,7 +203,7 @@ class Analisa5cController extends Controller
 
             //Cek RC
             if ($capacity['rc'] < 0) {
-                return redirect()->back()->withInput()->with('error', 'RC tidak memnuhi');
+                return redirect()->back()->withInput()->with('error', 'RC tidak masuk dalam persyaratan');
             }
 
             //Cek data keuangan
