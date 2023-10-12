@@ -37,8 +37,10 @@ class PengajuanController extends Controller
 
         $query = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
+            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
+            ->where('data_pengajuan.status', '!=', 'Batal')
             ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%');
+        //
 
         if ($role[0]->role_name == 'Administrator') {
             $pengajuan = $query->get();
@@ -47,6 +49,7 @@ class PengajuanController extends Controller
         } elseif ($role[0]->role_name == 'Head Teller') {
             $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
         }
+
         $pengajuan = $query->paginate(10);
 
         $auth = Auth::user()->code_user;
@@ -343,38 +346,16 @@ class PengajuanController extends Controller
         }
     }
 
-    public function destroy(Request $request, $pengajuan)
+    public function destroy($pengajuan)
     {
-        //====Try Enkripsi Request====//
         try {
-            $enc = Crypt::decrypt($request->query('peng'));
-
-            $pengajuans = Pengajuan::where('kode_pengajuan', $enc)->get();
-            $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
-            $survei = Survei::where('pengajuan_kode', $enc)->get();
-
-            $agunan = DB::table('data_jaminan')
-                ->where('pengajuan_kode', $enc)->first();
-
-            if (!is_null($agunan)) {
-                DB::table('data_jaminan')
-                    ->where('id', $agunan->id)
-                    ->delete();
-            }
-
-            try {
-
-                DB::transaction(function () use ($pengajuans, $pendamping, $survei) {
-                    Pengajuan::where('id', $pengajuans[0]->id)->delete();
-                    Pendamping::where('id', $pendamping[0]->id)->delete();
-                    Survei::where('id', $survei[0]->id)->delete();
-                });
-                return redirect()->back()->with('success', 'Data berhasil dihapus');
-            } catch (\Throwable $th) {
-                return redirect()->back()->with('error', 'Data gagal dihapus');
-            }
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
+            $data = [
+                'status' => 'Batal',
+            ];
+            Pengajuan::where('id', $pengajuan)->update($data);
+            return redirect()->back()->with('success', 'Data berhasil dibatalkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal dibatalkan');
         }
     }
 }
