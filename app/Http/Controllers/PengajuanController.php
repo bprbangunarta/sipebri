@@ -162,6 +162,7 @@ class PengajuanController extends Controller
         //====Try Enkripsi Request====//
         try {
             $enc = Crypt::decrypt($req);
+
             $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
             $cek = Nasabah::where('kode_nasabah', $pengajuan[0]->nasabah_kode)->first();
             $jaminan = DB::table('data_pengajuan')
@@ -189,6 +190,10 @@ class PengajuanController extends Controller
             $dt = Midle::analisa_usaha($enc);
             $cek->plafon = $dt[0]->plafon;
             $cek->jangka_waktu = $dt[0]->jangka_waktu;
+
+            for ($i = 0; $i < count($jaminan); $i++) {
+                $jaminan[$i]->kd_pengajuan = Crypt::encrypt($jaminan[$i]->kode_pengajuan);
+            }
 
             return view('pengajuan.agunan', [
                 'agunan' => $agunan,
@@ -219,6 +224,7 @@ class PengajuanController extends Controller
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
+        $cek['created_at'] = now();
 
         // Merubah tanggal 
         $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
@@ -292,6 +298,7 @@ class PengajuanController extends Controller
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
+        $cek['updated_at'] = now();
         // Merubah tanggal 
         $carbonDate = Carbon::createFromFormat('Y-m-d', $cek['masa_agunan']);
         $cek['masa_agunan'] = $carbonDate->format('Ymd');
@@ -323,15 +330,29 @@ class PengajuanController extends Controller
         }
     }
 
-    public function destroy($pengajuan)
+    public function deleteagunan($pengajuan)
+    {
+
+        try {
+
+            DB::table('data_jaminan')->where('id', $pengajuan)->delete();
+
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal dihapus');
+        }
+    }
+
+    public function destroy(Request $request, $pengajuan)
     {
         //====Try Enkripsi Request====//
         try {
-            $enc = Crypt::decrypt($pengajuan);
+            $enc = Crypt::decrypt($request->query('peng'));
 
-            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
+            $pengajuans = Pengajuan::where('kode_pengajuan', $enc)->get();
             $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
             $survei = Survei::where('pengajuan_kode', $enc)->get();
+
             $agunan = DB::table('data_jaminan')
                 ->where('pengajuan_kode', $enc)->first();
 
@@ -343,8 +364,8 @@ class PengajuanController extends Controller
 
             try {
 
-                DB::transaction(function () use ($pengajuan, $pendamping, $survei) {
-                    Pengajuan::where('id', $pengajuan[0]->id)->delete();
+                DB::transaction(function () use ($pengajuans, $pendamping, $survei) {
+                    Pengajuan::where('id', $pengajuans[0]->id)->delete();
                     Pendamping::where('id', $pendamping[0]->id)->delete();
                     Survei::where('id', $survei[0]->id)->delete();
                 });

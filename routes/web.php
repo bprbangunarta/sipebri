@@ -124,6 +124,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
             Route::get('/pengajuan/agunan', 'agunan')->name('pengajuan.agunan');
             Route::get('/pengajuan/editagunan/{id}/edit', 'editagunan')->name('pengajuan.editagunan');
+            Route::delete('/pengajuan/editagunan/{id}/delete', 'deleteagunan')->name('pengajuan.deleteagunan');
             Route::put('/pengajuan/editagunan/update', 'updateagunan')->name('pengajuan.updateagunan');
             Route::put('/pengajuan/editagunan/validasi', 'validasiagunan')->name('pengajuan.validasiagunan');
             Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');

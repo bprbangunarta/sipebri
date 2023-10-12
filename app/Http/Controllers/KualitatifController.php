@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Auth;
 
 class KualitatifController extends Controller
 {
@@ -55,8 +56,13 @@ class KualitatifController extends Controller
                 'pendukung_usaha' => '',
                 'pengurang_usaha' => '',
                 'trade_checking' => '',
+                'trade_checking' => '',
             ]);
+
             $req['pengajuan_kode'] = $enc;
+            $req['input_user'] = Auth::user()->code_user;
+            $req['created_at'] = now();
+
             DB::table('au_kualitatif')->insert($req);
             return redirect()->back()->with('success', 'Data berhasil disimpan');
         } catch (DecryptException $e) {
@@ -85,6 +91,8 @@ class KualitatifController extends Controller
                 'pengurang_usaha' => '',
                 'trade_checking' => '',
             ]);
+            $req['input_user'] = Auth::user()->code_user;
+            $req['updated_at'] = now();
             $table = DB::table('au_kualitatif')->where('pengajuan_kode', $enc)->first();
             DB::table('au_kualitatif')->where('id', $table->id)->update($req);
             return redirect()->back()->with('success', 'Data berhasil diubah');

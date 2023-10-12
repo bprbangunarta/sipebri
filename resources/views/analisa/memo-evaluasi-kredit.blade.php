@@ -77,17 +77,18 @@
                                                             <td>
                                                                 <input type="number" class="form-control text-center"
                                                                     name="jangka_waktu"
-                                                                    value="{{ $memorandum['jangka_waktu'] }}">
+                                                                    value="{{ $memorandum['jangka_waktu'] }}" readonly>
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control text-center"
                                                                     name="rc"
-                                                                    value="{{ $memorandum['rc'] . ' ' . '%' }}">
+                                                                    value="{{ $memorandum['rc'] . ' ' . '%' }}" readonly>
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control"
                                                                     name="total_jaminan"
-                                                                    value="{{ 'Rp. ' . ' ' . number_format($memorandum['total_taksasi'], 0, ',', '.') ?? 00 }}">
+                                                                    value="{{ 'Rp. ' . ' ' . number_format($memorandum['total_taksasi'], 0, ',', '.') ?? 00 }}"
+                                                                    readonly>
                                                             </td>
                                                         </tr>
                                                         <thead>

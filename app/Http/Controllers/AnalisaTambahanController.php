@@ -7,6 +7,7 @@ use App\Models\Tambahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Auth;
 
 class AnalisaTambahanController extends Controller
 {
@@ -75,6 +76,7 @@ class AnalisaTambahanController extends Controller
                 'nama_lain' => ucwords($request->nama_lain),
                 'nilai_lain' => (int)str_replace(["Rp", " ", "."], "", $request->nilai_lain),
                 'catatan' => $request->catatan,
+                'input_user' => Auth::user()->code_user,
             ];
 
             // dd($data);
@@ -132,6 +134,7 @@ class AnalisaTambahanController extends Controller
                 'kebutuhan_dana' => (int)str_replace(["Rp", " ", "."], "", $request->kebutuhan_dana),
                 'nama_lain' => ucwords($request->nama_lain),
                 'nilai_lain' => (int)str_replace(["Rp", " ", "."], "", $request->nilai_lain),
+                'input_user' => Auth::user()->code_user,
             ];
 
             $tambah = Tambahan::where('pengajuan_kode', $enc)->first();
