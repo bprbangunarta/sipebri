@@ -220,7 +220,6 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
-
+Route::view('/analisa/index', 'analisa.index');
 
 require __DIR__ . '/auth.php';
