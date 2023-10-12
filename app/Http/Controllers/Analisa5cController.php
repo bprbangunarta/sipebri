@@ -43,14 +43,23 @@ class Analisa5cController extends Controller
             }
 
             //Menghitung RC
-            $a = $keuangan * (int)$cek[0]->jangka_waktu;
-            $b = ((int)$cek[0]->plafon / $a) * 100;
+            if ($cek[0]->metode_rps == 'Efektif Musiman') {
+                $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
+                $pp = $plafon_permusim / 6;
+                $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
+                $rc = ($bg / $pp) * 100;
+            } else {
+                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
+                $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
+                $angsuran = $bunga + $pokok;
+                $rc = ($angsuran / $keuangan) * 100;
+            }
 
             //Menghitung Taksasi Agunan
             $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
 
             $an = [
-                'rc' => number_format($b, 2),
+                'rc' => number_format($rc, 2),
                 'taksasi' => number_format($c, 2),
             ];
 
@@ -76,7 +85,7 @@ class Analisa5cController extends Controller
                 $a5condition = Midle::conition();
             }
 
-            $a5capacity->RC = number_format($b, 2);
+            $a5capacity->RC = number_format($rc, 2);
             $a5collateral->taksasi = number_format($c, 2);
 
             //cek RC jika ada perubahan analisa usaha
@@ -194,7 +203,7 @@ class Analisa5cController extends Controller
 
             //Cek RC
             if ($capacity['rc'] < 0) {
-                return redirect()->back()->withInput()->with('error', 'RC tidak memnuhi');
+                return redirect()->back()->withInput()->with('error', 'RC tidak masuk dalam persyaratan');
             }
 
             //Cek data keuangan

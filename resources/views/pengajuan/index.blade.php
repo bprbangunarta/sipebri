@@ -93,9 +93,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $no = 0;
+                                        @endphp
                                         @foreach ($data as $item)
                                             <tr>
-                                                <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                                <td class="text-center">{{ $no }}</td>
                                                 <td>{{ $item->kode }}</td>
                                                 <td>{{ strtoupper($item->nama) }}</td>
                                                 @if (is_null($item->alamat))
@@ -175,8 +178,7 @@
                                                                         width="24" height="24" viewBox="0 0 24 24"
                                                                         stroke-width="2" stroke="currentColor" fill="none"
                                                                         stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                            fill="none">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
                                                                         </path>
                                                                         <path
                                                                             d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
@@ -199,8 +201,7 @@
                                                                         width="24" height="24" viewBox="0 0 24 24"
                                                                         stroke-width="2" stroke="currentColor" fill="none"
                                                                         stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                            fill="none">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
                                                                         </path>
                                                                         <path
                                                                             d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
@@ -220,21 +221,21 @@
                                                 @can('pengajuan hapus')
                                                     <td class="text-center">
                                                         <form
-                                                            action="{{ route('pengajuan.destroy', ['pengajuan' => $item->kd]) }}"
+                                                            action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
                                                             method="POST">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="submit"
                                                                 style="border: none; background: transparent;"
-                                                                class="confirmdelete">
+                                                                class="confirmbatal">
                                                                 <span class=" badge bg-danger">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         class="icon icon-tabler icon-tabler-trash"
                                                                         width="24" height="24" viewBox="0 0 24 24"
                                                                         stroke-width="2" stroke="currentColor" fill="none"
                                                                         stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z"
-                                                                            fill="none"></path>
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
+                                                                        </path>
                                                                         <path d="M4 7l16 0"></path>
                                                                         <path d="M10 11l0 6"></path>
                                                                         <path d="M14 11l0 6"></path>
@@ -357,7 +358,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
 @endsection
 
 @push('myscript')

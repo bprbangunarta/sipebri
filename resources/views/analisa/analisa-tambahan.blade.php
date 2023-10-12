@@ -160,6 +160,19 @@
                                                                     value="{{ old('nilai_lain') ?? 0 }}">
                                                             </td>
                                                         </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    value="Catatan" readonly>
+                                                            </td>
+                                                            <td colspan=3>
+                                                                <textarea class="form-control" name="catatan">{{ old('catatan') }}</textarea>
+                                                            </td>
+                                                            {{-- <td colspan=3>
+                                                                <input class="form-control" type="text" name="catatan"
+                                                                    value="{{ old('catatan') }}">
+                                                            </td> --}}
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>

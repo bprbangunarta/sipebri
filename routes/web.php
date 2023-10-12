@@ -39,6 +39,7 @@ use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\CetakAnalisaController;
+use App\Http\Controllers\KomiteController;
 use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
 
@@ -123,6 +124,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
             Route::get('/pengajuan/agunan', 'agunan')->name('pengajuan.agunan');
             Route::get('/pengajuan/editagunan/{id}/edit', 'editagunan')->name('pengajuan.editagunan');
+            Route::delete('/pengajuan/editagunan/{id}/delete', 'deleteagunan')->name('pengajuan.deleteagunan');
             Route::put('/pengajuan/editagunan/update', 'updateagunan')->name('pengajuan.updateagunan');
             Route::put('/pengajuan/editagunan/validasi', 'validasiagunan')->name('pengajuan.validasiagunan');
             Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');
@@ -214,10 +216,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/analisa/kemampuan', [CetakAnalisaController::class, 'kemampuan_keuangan'])->name('kemampuan.kemampuan_keuangan');
         Route::get('/cetak/analisa/analisa5c', [CetakAnalisaController::class, 'cetakanalisa5c'])->name('cetakanalisa5c.analisa5c');
         Route::get('/cetak/analisa/crr', [CetakAnalisaController::class, 'crr'])->name('crr.crr');
+        Route::get('/cetak/analisa/kualitatif', [CetakAnalisaController::class, 'kualitatif'])->name('kualitatif.kualitatif');
         Route::get('/cetak/analisa/tambahan', [CetakAnalisaController::class, 'tambahan'])->name('tambahan.tambahan');
         Route::get('/cetak/analisa/cetakmemorandum', [CetakAnalisaController::class, 'cetak_memorandum'])->name('memorandum.memorandum');
         //===Cetak Analisa===//
     });
+
+    //Komite
+    Route::get('/komite', [KomiteController::class, 'index'])->name('komite.komite');
 });
 
 Route::view('/analisa/index', 'analisa.index');

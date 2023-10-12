@@ -15,7 +15,7 @@ class Midle extends Model
 
     protected static function cifedit($data)
     {
-    
+
         //Cek data Current CIF
         $query = Tabungan::where('noid', $data['no_identitas'])
             ->where('jttempoid', $data['tanggal_lahir'])
@@ -72,13 +72,13 @@ class Midle extends Model
         //Auth user
         $us = Auth::user()->id;
         $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
+            ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.code_user')
+            ->where('users.id', '=', $us)->get();
         $query->kode_user = $user[0]->code_user;
         $query->tempat_kerja = $query->tempat_bekerja;
-        
+
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
@@ -94,9 +94,9 @@ class Midle extends Model
     {
         $enc = Crypt::decrypt($data);
         $kd_pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
-        
+
         $cek = Nasabah::where('kode_nasabah', $kd_pengajuan[0]->nasabah_kode)->first();
-                
+
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {
             $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
@@ -167,14 +167,14 @@ class Midle extends Model
         //Auth user
         $us = Auth::user()->id;
         $user = DB::table('users')
-                    ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.code_user')
-                    ->where('users.id', '=', $us)->get();
+            ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.code_user')
+            ->where('users.id', '=', $us)->get();
         $cek['kode_user'] = $user[0]->code_user;
         $cek['sname'] = $cek['nama_panggilan'];
         $cek['kd_pengajuan'] = $kd_pengajuan[0]->kode_pengajuan;
-        
+
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
         return [
@@ -188,10 +188,10 @@ class Midle extends Model
     protected static function analisa_usaha($data)
     {
         $cek = DB::table('data_pengajuan')
-                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                ->where('data_pengajuan.kode_pengajuan', '=', $data)
-                ->select('data_nasabah.nama_nasabah', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu')->get();
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->where('data_pengajuan.kode_pengajuan', '=', $data)
+            ->select('data_nasabah.nama_nasabah', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu', 'data_pengajuan.metode_rps', 'data_pengajuan.suku_bunga')->get();
         $cek[0]->kd_pengajuan = Crypt::encrypt($data);
         return $cek;
     }
@@ -200,13 +200,13 @@ class Midle extends Model
     {
         $enc = Crypt::decrypt($data);
         $cek = DB::table('au_perdagangan')
-                ->leftJoin('bu_perdagangan','au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
-                ->select('au_perdagangan.*', 'bu_perdagangan.*')
-                ->where('au_perdagangan.kode_usaha', $enc)->get();
-        
+            ->leftJoin('bu_perdagangan', 'au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
+            ->select('au_perdagangan.*', 'bu_perdagangan.*')
+            ->where('au_perdagangan.kode_usaha', $enc)->get();
+
         $dusaha = DB::table('du_perdagangan')
-                ->where('usaha_kode', $enc)->get();
-        
+            ->where('usaha_kode', $enc)->get();
+
         return [$cek, $dusaha];
     }
     protected static function jasa_detail($data)
@@ -218,45 +218,45 @@ class Midle extends Model
     protected static function pertanian_detail($data)
     {
         $data = DB::table('au_pertanian')
-                ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
-                ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
-                ->select('au_pertanian.*','bu_pertanian.*', 'du_pertanian.*')
-                ->where('au_pertanian.kode_usaha', '=', $data)->get();
-        
+            ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
+            ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
+            ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*')
+            ->where('au_pertanian.kode_usaha', '=', $data)->get();
+
         return $data;
-    }    
+    }
 
     protected static function kemampuan_keuangan($data)
     {
-        
+
         $perdagangan = Perdagangan::where('pengajuan_kode', $data)->get();
         $jasa = Jasa::where('pengajuan_kode', $data)->get();
         $pertanian = Pertanian::where('pengajuan_kode', $data)->get();
         $lain = Lain::where('pengajuan_kode', $data)->get();
 
         $tani = [];
-        for ($i=0; $i < count($pertanian); $i++) { 
+        for ($i = 0; $i < count($pertanian); $i++) {
             $tani[] = $pertanian[$i]->laba_perbulan ?? 0;
         }
         //Hasil penjumlahan analisa usaha pertanian
         $totalpertanian = array_sum($tani);
-        
+
         $dagang = [];
-        for ($j=0; $j < count($perdagangan); $j++) { 
+        for ($j = 0; $j < count($perdagangan); $j++) {
             $dagang[] = $perdagangan[$j]->laba_bersih ?? 0;
         }
         //Hasil penjumlahan analisa usaha perdagangan
         $totalperdagangan = array_sum($dagang);
 
         $js = [];
-        for ($k=0; $k < count($jasa); $k++) { 
+        for ($k = 0; $k < count($jasa); $k++) {
             $js[] = $jasa[$k]->laba_bersih ?? 0;
         }
         //Hasil penjumlahan analisa usaha jasa
         $totaljasa = array_sum($js);
 
         $la = [];
-        for ($l=0; $l < count($lain); $l++) { 
+        for ($l = 0; $l < count($lain); $l++) {
             $la[] = $lain[$l]->laba_bersih ?? 0;
         }
         //Hasil penjumlahan analisa usaha jasa
@@ -268,19 +268,19 @@ class Midle extends Model
             'pertanian' => $totalpertanian,
             'lain' => $totallain,
         ];
-    
+
         return $hasil;
     }
 
     protected static function taksasi_jaminan($data)
     {
         $jaminan = DB::table('data_pengajuan')
-                    ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
-                    ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
-                    ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-                    ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
-                    ->where('data_pengajuan.kode_pengajuan', '=', $data)
-                    ->get();
+            ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+            ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+            ->where('data_pengajuan.kode_pengajuan', '=', $data)
+            ->get();
 
         //
         return $jaminan;
@@ -288,7 +288,7 @@ class Midle extends Model
 
     public static function a5ckodeacak($name, $length)
     {
-        
+
         for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
             $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
 
@@ -297,12 +297,12 @@ class Midle extends Model
                 return $acak;
             }
         }
-        
+
         return null; // Jika tidak ada kode yang unik ditemukan
     }
 
     public static function karakter()
-    {   
+    {
         $data = (object) [
             'gaya_hidup' => null,
             'pengendalian_emosi' => null,
@@ -313,11 +313,11 @@ class Midle extends Model
             'hubungan_sosial' => null,
             'nilai_karakter' => null,
         ];
-        return $data;       
+        return $data;
     }
 
     public static function capacity()
-    {   
+    {
         $data = (object) [
             'kontinuitas' => null,
             'pengalaman_usaha' => null,
@@ -332,11 +332,11 @@ class Midle extends Model
             'capital_evaluasi_capital' => null,
             'evaluasi_capacity' => null,
         ];
-        return $data;       
+        return $data;
     }
 
     public static function collateral()
-    {   
+    {
         $data = (object) [
             'agunan_utama' => null,
             'agunan_tambahan' => null,
@@ -349,37 +349,47 @@ class Midle extends Model
             'aspek_hukum' => null,
             'taksasi_agunan' => null,
         ];
-        return $data;       
+        return $data;
     }
 
     public static function conition()
-    {   
+    {
         $data = (object) [
             'persaingan_usaha' => null,
             'kondisi_alam' => null,
             'regulasi_pemerintah' => null,
         ];
-        return $data;       
+        return $data;
     }
 
     public static function taksasi($data)
     {
         $cek = DB::table('data_jaminan')
-                ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
-                ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_dokumen.kode')
-                ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
-                ->where('pengajuan_kode', $data)->get();
+            ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_dokumen.kode')
+            ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
+            ->where('pengajuan_kode', $data)->get();
         //
         $merge = [];
-        for ($i=0; $i < count($cek); $i++) { 
+        for ($i = 0; $i < count($cek); $i++) {
             $merge[] = $cek[$i]->nilai_taksasi;
         }
         $total = array_sum($merge);
 
-        for ($j=0; $j < count($cek); $j++) { 
+        for ($j = 0; $j < count($cek); $j++) {
             $cek[$j]->total = $total;
         }
 
         return $cek;
-    }   
+    }
+
+    public static function memorandum($data)
+    {
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('au_perdagangan', 'data_pengajuan.kode_pengajuan', '=', 'au_perdagangan.pengajuan_kode')
+            ->leftJoin('au_pertanian', 'data_pengajuan.kode_pengajuan', '=', 'au_pertanian.pengajuan_kode')
+            ->select('data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.no_telp', 'au_perdagangan.lokasi_usaha as dg_lokasi', 'au_pertanian.lokasi_usaha as pt_lokasi')
+            ->where('data_pengajuan.kode_pengajuan', '=', $data)->get();
+    }
 }

@@ -109,10 +109,10 @@
                                                             </svg>
                                                         </span>
                                                     </a>
-
                                                     <a href="#" data-bs-toggle="modal"
                                                         data-bs-target="#modal-penjadwalan"
-                                                        data-id="{{ $item->kode_pengajuan }}">
+                                                        data-id="{{ $item->kode_pengajuan }}"
+                                                        style="text-decoration: none;">
                                                         <span class="badge bg-warning">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="icon icon-tabler icon-tabler-calendar-stats"
@@ -132,6 +132,7 @@
                                                             </svg>
                                                         </span>
                                                     </a>
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -236,7 +237,7 @@
 @endsection
 
 <script>
-    // JS Darepicker
+    // JS Litepicker
     document.addEventListener("DOMContentLoaded", function() {
         window.Litepicker && (new Litepicker({
             element: document.getElementById('datepicker-tanggal-survei'),

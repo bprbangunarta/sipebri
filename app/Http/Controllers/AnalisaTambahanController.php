@@ -7,6 +7,7 @@ use App\Models\Tambahan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Auth;
 
 class AnalisaTambahanController extends Controller
 {
@@ -21,18 +22,17 @@ class AnalisaTambahanController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $data = Tambahan::where('pengajuan_kode', $enc)->first();
-            
+
             if (is_null($data)) {
-               return view('analisa.analisa-tambahan', [
+                return view('analisa.analisa-tambahan', [
                     'data' => $cek[0],
                 ]);
             }
-            
+
             return view('analisa.analisa-tambahan-edit', [
                 'data' => $cek[0],
                 'tambahan' => $data,
             ]);
-
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
@@ -61,7 +61,7 @@ class AnalisaTambahanController extends Controller
             $name = 'AUT';
             $length = 5;
             $kode = Tambahan::kodeacak($name, $length);
-            
+
             $data = [
                 'kode_analisa' => $kode,
                 'pengajuan_kode' => $enc,
@@ -75,8 +75,10 @@ class AnalisaTambahanController extends Controller
                 'kebutuhan_dana' => (int)str_replace(["Rp", " ", "."], "", $request->kebutuhan_dana),
                 'nama_lain' => ucwords($request->nama_lain),
                 'nilai_lain' => (int)str_replace(["Rp", " ", "."], "", $request->nilai_lain),
+                'catatan' => $request->catatan,
+                'input_user' => Auth::user()->code_user,
             ];
-        
+
             // dd($data);
             Tambahan::create($data);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -117,10 +119,10 @@ class AnalisaTambahanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-            
+
             $data = [
                 'modal_kerja' => (int)str_replace(["Rp", " ", "."], "", $request->modal_kerja),
                 'investasi' => (int)str_replace(["Rp", " ", "."], "", $request->investasi),
@@ -132,8 +134,9 @@ class AnalisaTambahanController extends Controller
                 'kebutuhan_dana' => (int)str_replace(["Rp", " ", "."], "", $request->kebutuhan_dana),
                 'nama_lain' => ucwords($request->nama_lain),
                 'nilai_lain' => (int)str_replace(["Rp", " ", "."], "", $request->nilai_lain),
+                'input_user' => Auth::user()->code_user,
             ];
-        
+
             $tambah = Tambahan::where('pengajuan_kode', $enc)->first();
             Tambahan::where('id', $tambah->id)->update($data);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');

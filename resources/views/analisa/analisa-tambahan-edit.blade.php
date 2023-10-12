@@ -164,6 +164,15 @@
                                                                     value="{{ old('nilai_lain') ?? ('Rp. ' . number_format($tambahan->nilai_lain, 0, ',', '.') ?? 'Rp. 0') }}">
                                                             </td>
                                                         </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="form-control" type="text"
+                                                                    value="Catatan" readonly>
+                                                            </td>
+                                                            <td colspan=3>
+                                                                <textarea class="form-control" name="catatan">{{ old('catatan') ?? $tambahan->catatan }}</textarea>
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>

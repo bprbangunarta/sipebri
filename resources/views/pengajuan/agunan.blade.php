@@ -163,7 +163,7 @@
                                                                 @can('agunan hapus')
                                                                     <td class="text-center">
                                                                         <form
-                                                                            action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
+                                                                            action="{{ route('pengajuan.deleteagunan', ['id' => $item->id]) }}"
                                                                             method="POST">
                                                                             @method('delete')
                                                                             @csrf

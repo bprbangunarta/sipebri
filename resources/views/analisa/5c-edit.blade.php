@@ -552,13 +552,13 @@
                                                                 @if ($collateral->agunan_utama === null)
                                                                     <option value="">--Pilih--</option>
                                                                 @endif
-                                                                <option value="2"
-                                                                    {{ old('agunan_utama') == 2 || $collateral->agunan_utama == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('agunan_utama') == 3 || $collateral->agunan_utama == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('agunan_utama') == 1 || $collateral->agunan_utama == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
-                                                                    Orang Lian (Wariasan)</option>
+                                                                    Orang Lain (Wariasan)</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -571,8 +571,8 @@
                                                                 @if ($collateral->agunan_tambahan === null)
                                                                     <option value="">--Pilih--</option>
                                                                 @endif
-                                                                <option value="2"
-                                                                    {{ old('agunan_tambahan') == 2 || $collateral->agunan_tambahan == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('agunan_tambahan') == 3 || $collateral->agunan_tambahan == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('agunan_tambahan') == 1 || $collateral->agunan_tambahan == 1 ? 'selected' : '' }}>
@@ -592,13 +592,13 @@
                                                                 @if ($collateral->legalitas_agunan === null)
                                                                     <option value="">--Pilih--</option>
                                                                 @endif
-                                                                <option value="2"
-                                                                    {{ old('legalitas_agunan') == 2 || $collateral->legalitas_agunan == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('legalitas_agunan') == 3 || $collateral->legalitas_agunan == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('legalitas_agunan') == 1 || $collateral->legalitas_agunan == 1 ? 'selected' : '' }}>
                                                                     Orang Lain/Milik Sendiri dan
-                                                                    Orang Lian (Wariasan)</option>
+                                                                    Orang Lain (Wariasan)</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -611,8 +611,8 @@
                                                                 @if ($collateral->legalitas_agunan_tambahan === null)
                                                                     <option value="">--Pilih--</option>
                                                                 @endif
-                                                                <option value="2"
-                                                                    {{ old('legalitas_agunan_tambahan') == 2 || $collateral->legalitas_agunan_tambahan == 2 ? 'selected' : '' }}>
+                                                                <option value="3"
+                                                                    {{ old('legalitas_agunan_tambahan') == 3 || $collateral->legalitas_agunan_tambahan == 3 ? 'selected' : '' }}>
                                                                     Milik Sendiri</option>
                                                                 <option value="1"
                                                                     {{ old('legalitas_agunan_tambahan') == 1 || $collateral->legalitas_agunan_tambahan == 1 ? 'selected' : '' }}>
