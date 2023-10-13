@@ -31,7 +31,6 @@
                                             <span class="fw-bold">KONSUMSI POKOK</span>
                                             <input value="KONSUMSI POKOK" name="nama1" hidden>
                                             <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya1" id="konsumsi" value="{{ old('biaya1') }}" required>
-                                            </select>
                                         </div>
                                         <div style="width: 49.5%;float:right;">
                                             <span class="fw-bold">KESEHATAN</span>
@@ -100,7 +99,6 @@
                                         <div style="width: 49.5%;float:left;">
                                             <span class="fw-bold">USAHA PERDAGANGAN</span>
                                             <input class="form-control input-sm form-border" type="text" value="Rp." readonly>
-                                            </select>
                                         </div>
                                         <div style="width: 49.5%;float:right;">
                                             <span class="fw-bold">USAHA PERTANIAN</span>

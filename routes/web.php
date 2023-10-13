@@ -254,4 +254,8 @@ Route::prefix('theme')->group(function () {
 
     Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
     Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
+
+    Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
+    Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');
+    Route::view('/analisa/jaminan/lainnya', 'staff.analisa.jaminan.lainnya');
 });

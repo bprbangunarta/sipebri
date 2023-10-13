@@ -14,8 +14,17 @@
                         <span class="fw-bold">KODE USAHA</span>
                         <input class="form-control input-sm form-border" type="text" name="kode_usaha" value="AUPG00001" readonly>
                     </div>
+
                     
-                    <div style="margin-top:5px;width: 49.5%;float:left;">
+                    
+                    <div style="margin-top:5px;width: 100%;float:left;">
+                        <span class="fw-bold">NAMA USAHA</span>
+                        <input class="form-control input-sm form-border" type="text" name="nama_usaha" id="" value="NAMA USAHA" >
+                    </div>
+                </div>
+
+                <div class="div-right">
+                    <div style="width: 49.5%;float:left;">
                         <span class="fw-bold">JENIS USAHA</span>
                         <select  class="form-control input-sm form-border" name="jenis_usaha" id="select-usaha">
                             <option value="MAKANAN">MAKANAN</option>
@@ -26,7 +35,7 @@
                             <option value="HOME INDUSTRI">HOME INDUSTRI</option>
                         </select>
                     </div>
-                    <div style="margin-top:5px;width: 49.5%;float:right;">
+                    <div style="width: 49.5%;float:right;">
                         <span class="fw-bold">LAMA USAHA</span>
                         <select  class="form-control input-sm form-border" name="lama_usaha" id="">
                             <option value="">--PILIH--</option>
@@ -37,14 +46,8 @@
                             <option value=">5 TAHUN">>5 TAHUN</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="div-right">
-                    <div>
-                        <span class="fw-bold">NAMA USAHA</span>
-                        <input class="form-control input-sm form-border" type="text" name="nama_usaha" id="" value="NAMA USAHA" >
-                    </div>
-                    <div style="margin-top: 5px;">
+                    <div style="margin-top:5px;width: 100%;float:right;">
                         <span class="fw-bold">ALAMAT USAHA</span>
                         <input class="form-control input-sm form-border" type="text" name="lokasi_usaha" value="LOKASI USAHA">
                     </div>

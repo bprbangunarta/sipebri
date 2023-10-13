@@ -26,120 +26,120 @@
                                 @csrf
                                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
                     
+                                    {{-- <input name="kode_pengajuan" value="{{ $data->kd_pengajuan }}" hidden> --}}
+
                                     <div class="div-left">
                                         <div style="width: 49.5%;float:left;">
-                                            <span class="fw-bold">KONSUMSI POKOK</span>
-                                            <input value="KONSUMSI POKOK" name="nama1" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya1" id="konsumsi" value="{{ old('biaya1') }}" required>
+                                            <span class="fw-bold">RUMAH</span>
+                                            <select class="form-control input-sm form-border" name="rumah" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="PERMANEN">PERMANEN</option>
+                                                <option value="SEDERHANA">SEDERHANA</option>
+                                                <option value="SEMI PERMANEN">SEMI PERMANEN</option>
                                             </select>
                                         </div>
                                         <div style="width: 49.5%;float:right;">
-                                            <span class="fw-bold">KESEHATAN</span>
-                                            <input value="KESEHATAN" name="nama2" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya2" value="{{ old('biaya2') }}" id="kesehatan">
+                                            <span class="fw-bold">MOBIL</span>
+                                            <select class="form-control input-sm form-border" name="mobil" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="1 UNIT">1 UNIT</option>
+                                                <option value="2 UNIT">2 UNIT</option>
+                                                <option value="3 UNIT">3 UNIT</option>
+                                                <option value="4 UNIT">4 UNIT</option>
+                                                <option value="5 UNIT">5 UNIT</option>
+                                            </select>
                                         </div>
                                         
                                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">PENDIDIKAN</span>
-                                            <input value="PENDIDIKAN" name="nama3" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya3" id="pendidikan" value="{{ old('biaya3') }}">
+                                            <span class="fw-bold">MOTOR</span>
+                                            <select class="form-control input-sm form-border" name="motor" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="1 UNIT">1 UNIT</option>
+                                                <option value="2 UNIT">2 UNIT</option>
+                                                <option value="3 UNIT">3 UNIT</option>
+                                                <option value="4 UNIT">4 UNIT</option>
+                                                <option value="5 UNIT">5 UNIT</option>
+                                            </select>
                                         </div>
                                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">GATEL</span>
-                                            <input value="GAS TELEPON LISTRIK" name="nama4" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya4" id="gatel" value="{{ old('biaya4') }}" required>
+                                            <span class="fw-bold">TELEVISI</span>
+                                            <select class="form-control input-sm form-border" name="tv" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="LCD">LCD</option>
+                                                <option value="LED">LED</option>
+                                                <option value="CRT FLAT">CRT FLAT</option>
+                                                <option value="CRT CEMBUNG">CRT CEMBUNG</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
+                                            </select>
                                         </div>
 
                                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">JAJAN ANAK</span>
-                                            <input value="JAJAN ANAK" name="nama5" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya5" id="jajan" value="{{ old('biaya5') }}">
+                                            <span class="fw-bold">KOMPUTER</span>
+                                            <select class="form-control input-sm form-border" name="komputer" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="ADA">ADA</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
+                                            </select>
                                         </div>
                                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">SUMBANGAN SOSIAL</span>
-                                            <input value="SUMBANGAN SOSIAL" name="nama6" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya6" id="sumbangan" value="{{ old('biaya6') }}">
-                                        </div>
-
-                                        <div style="margin-top:5px;width: 100%;float:left;">
-                                            <span class="fw-bold">ROKOK</span>
-                                            <input value="ROKOK" name="nama7" hidden>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="biaya7" id="roko" value="{{ old('biaya7') }}">
-                                        </div>
-
-                                        <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">KEWAJIBAN UNTUK</span>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI" name="data1">
-                                        </div>
-                                        <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="kewajiban1" id="kewajiban1" value="{{ old('kewajiban1') }}">
-                                        </div>
-
-                                        <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">KEWAJIBAN UNTUK</span>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI" name="data2">
-                                        </div>
-                                        <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="kewajiban2" id="kewajiban2" value="{{ old('kewajiban2') }}">
-                                        </div>
-
-                                        <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">KEWAJIBAN UNTUK</span>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI" name="data3">
-                                        </div>
-                                        <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
-                                            <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="kewajiban3" id="kewajiban3" value="{{ old('kewajiban3') }}">
+                                            <span class="fw-bold">MESIN CUCI</span>
+                                            <select class="form-control input-sm form-border" name="mesin_cuci" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="ADA">ADA</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
+                                            </select>
                                         </div>
                                     </div>
                     
 
                                     <div class="div-right">
                                         <div style="width: 49.5%;float:left;">
-                                            <span class="fw-bold">USAHA PERDAGANGAN</span>
-                                            <input class="form-control input-sm form-border" type="text" value="Rp." readonly>
+                                            <span class="fw-bold">KURSI TAMU</span>
+                                            <select class="form-control input-sm form-border" name="kursi" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="ADA">ADA</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
                                             </select>
                                         </div>
                                         <div style="width: 49.5%;float:right;">
-                                            <span class="fw-bold">USAHA PERTANIAN</span>
-                                            <input class="form-control input-sm form-border" type="text" value="Rp." readonly>
+                                            <span class="fw-bold">LEMARI PANJANG</span>
+                                            <select class="form-control input-sm form-border" name="lemari" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="ADA">ADA</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
+                                            </select>
                                         </div>
                                         
                                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">USAHA JASA</span>
-                                            <input class="form-control input-sm form-border" type="text" value="Rp." readonly>
+                                            <span class="fw-bold">HARTA LAIN</span>
+                                            <input class="form-control input-sm form-border" type="text" name="nama_lain1" placeholder="ENTRI">
                                         </div>
                                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">USAHA LAINNYA</span>
-                                            <input class="form-control input-sm form-border" type="text" value="Rp." readonly>
-                                        </div>
-
-                                        <div style="margin-top:5px;width: 100%;float:left;">
-                                            <span class="fw-bold">PENDAPATAN USAHA</span>
-                                            <input class="form-control input-sm form-border" type="text" name="p_usaha" value="Rp" id="pendapatan" readonly>
+                                            <span class="fw-bold">KEPEMILIKAN</span>
+                                            <select class="form-control input-sm form-border" name="lainnya1" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="ADA">ADA</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
+                                            </select>
                                         </div>
 
                                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                                            <span class="fw-bold">BIAYA RUMAH TANGGA</span>
-                                            <input class="form-control input-sm form-border" type="text" value="Rp." name="b_rumah_tangga" id="biaya" readonly>
+                                            <span class="fw-bold">HARTA LAIN</span>
+                                            <input class="form-control input-sm form-border" type="text" name="nama_lain2" placeholder="ENTRI">
                                         </div>
                                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                                            <span class="fw-bold">KEWAJIBAN LAINNYA</span>
-                                            <input class="form-control input-sm form-border" type="text" value="Rp." name="b_kewajiban_lainya" id="kewajiban_lain" readonly>
-                                        </div>
-
-                                        <div style="margin-top:5px;width: 100%;float:left;">
-                                            <span class="fw-bold">KEUANGAN PERBULAN</span>
-                                            <input class="form-control input-sm form-border bg-blue" type="text" value="Rp." name="keuangan_perbulan" id="hasilbersih" readonly>
+                                            <span class="fw-bold">KEPEMILIKAN</span>
+                                            <select class="form-control input-sm form-border" name="lainnya2" id="">
+                                                <option value="">--PILIH--</option>
+                                                <option value="ADA">ADA</option>
+                                                <option value="TIDAK ADA">TIDAK ADA</option>
+                                            </select>
                                         </div>
                                     </div>
                     
                                     <a href="#" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</a>
                                 </div>
                             </form>
-                    
                     
                         </div>
                     </div>

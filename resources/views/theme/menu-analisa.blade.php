@@ -47,43 +47,43 @@
                 </a>
             </li>
             
-            <li {{ request()->is('theme/analisa/kepemilikan') ? 'active' : '' }}>
+            <li class="{{ request()->is('theme/analisa/kepemilikan') ? 'active' : '' }}">
                 <a href="/theme/analisa/kepemilikan">
                     <i class="fa fa-folder-o"></i> Kepemilikan
                 </a>
             </li>
 
-            <li {{ request()->is('theme/analisa/keuangan') ? 'jaminan' : '' }}>
-                <a href="#">
+            <li class="{{ request()->is('theme/analisa/jaminan/kendaraan', 'theme/analisa/jaminan/tananh', 'theme/analisa/jaminan/lainnya') ? 'active' : '' }}">
+                <a href="/theme/analisa/jaminan/kendaraan">
                     <i class="fa fa-folder-o"></i> Jaminan
                 </a>
             </li>
 
-            <li {{ request()->is('theme/analisa/5c') ? 'active' : '' }}>
+            <li class="{{ request()->is('theme/analisa/5c') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Analisa 5C
                 </a>
             </li>
 
-            <li {{ request()->is('theme/analisa/kualitatif') ? 'active' : '' }}>
+            <li class="{{ request()->is('theme/analisa/kualitatif') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Kualitatif
                 </a>
             </li>
             
-            <li {{ request()->is('theme/analisa/momorandum') ? 'active' : '' }}>
+            <li class="{{ request()->is('theme/analisa/momorandum') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Memorandum
                 </a>
             </li>
 
-            <li {{ request()->is('theme/analisa/administrasi') ? 'active' : '' }}>
+            <li class="{{ request()->is('theme/analisa/administrasi') ? 'active' : '' }}">
             <a href="#">
                 <i class="fa fa-folder-o"></i> Administrasi
                 </a>
             </li>
 
-            <li {{ request()->is('theme/analisa/tambahan') ? 'active' : '' }}>
+            <li class="{{ request()->is('theme/analisa/tambahan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Tambahan
                 </a>

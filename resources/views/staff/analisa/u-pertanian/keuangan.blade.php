@@ -13,12 +13,12 @@
                     <div style="width: 49.5%;float:left;">
                         <span class="fw-bold">PENDAPATAN HASIL PANEN</span>
                         <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="pengolahan_tanah"
-                        id="pengolahan" value="{{ old('pengolahan_tanah') }}">
+                        id="pengolahan" value="{{ old('pengolahan_tanah') }}" readonly>
                     </div>
                     <div style="width: 49.5%;float:right;">
                         <span class="fw-bold">PENGELUARAN BIAYA USAHA</span>
                         <input class="form-control input-sm form-border" type="text" name="bibit"
-                        placeholder="Rp." id="bibit" value="{{ old('bibit') }}">
+                        placeholder="Rp." id="bibit" value="{{ old('bibit') }}" readonly>
                     </div>
                     
                     <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -29,7 +29,7 @@
                     <div style="margin-top:5px;width: 49.5%;float:right;">
                         <span class="fw-bold">PINJAMAN BANK LAIN</span>
                         <input class="form-control input-sm form-border" type="text" placeholder="Rp." name="pestisida"
-                        id="pestisida" value="{{ old('pestisida') }}">
+                        id="pestisida" value="{{ old('pestisida') }}" readonly>
                     </div>
                 </div>
 

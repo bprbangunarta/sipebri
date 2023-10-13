@@ -45,7 +45,7 @@
                                         KANTOR KAS JALANCAGAK
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <span class="label label-warning">PROSES ANALISA</span>
+                                        <span class="label label-warning">PROSES SURVEY</span>
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
                                         <a href="/theme/analisa/usaha/perdagangan" class="btn-circle btn-sm btn-warning" title="Input Analisa"><i class="fa fa-file-text-o"></i></a>
