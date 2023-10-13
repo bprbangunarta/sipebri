@@ -1,23 +1,36 @@
 @extends('staff.analisa.usaha')
-@section('title', 'Analisa Usaha Pertanian')
+@section('title', 'Analisa Usaha Lainnya')
 
 @section('content')
 <div class="tab-content">
     <div class="tab-pane active">
-        <table class="table table-striped table-hover table-bordered">
+        <table class="table table-striped table-hover table-bordered table-condensed">
             <thead>
                 <tr>
                     <th class="text-center">Nama Usaha</th>
                     <th class="text-center">Pendapatan</th>
                     <th class="text-center">Pengeluaran</th>
                     <th class="text-center">Laba Bersih</th>
-                    <th class="text-center" style="width: 100px">Aksi</th>
+                    <th class="text-center" style="width: 78px">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="5" class="text-center">
-                    Tidak ada data
+                    <td style="vertical-align: middle;text-transform:uppercase;">SAWAH PADI KETAN</td>
+                    <td style="vertical-align: middle;">Rp. 66.000.000</td>
+                    <td style="vertical-align: middle;">Rp. 5.400.000</td>
+                    <td style="vertical-align: middle;">Rp. 60.600.000</td>
+                    <td class="text-center">
+                        <a href="/theme/analisa/informasi/usaha/pertanian/" class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
+                            <i class="fa fa-file-text-o"></i></a>
+
+                        <form action="#" method="POST">
+                            @csrf
+                            @method('delete')
+                            <button type="button" class="btn btn-sm btn-danger" style="float: right" title="Hapus Usaha">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             </tbody>
@@ -52,3 +65,7 @@
     </div>
 </div>
 @endsection
+
+@push('myscript')
+<script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+@endpush

@@ -244,11 +244,13 @@ Route::prefix('theme')->group(function () {
 
     Route::view('/analisa/usaha/pertanian', 'staff.analisa.u-pertanian.index');
     Route::view('/analisa/usaha/pertanian/detail', 'staff.analisa.u-pertanian.detail');
+    Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
+    Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
+    Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
 
     Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
     Route::view('/analisa/usaha/jasa/detail', 'staff.analisa.u-jasa.detail');
     Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
-
 
     Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
     Route::view('/analisa/usaha/lainnya/detail', 'staff.analisa.u-lainnya.detail');
