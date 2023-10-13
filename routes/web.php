@@ -232,28 +232,26 @@ require __DIR__ . '/auth.php';
 
 Route::prefix('theme')->group(function () {
     Route::view('/dashboard', 'dashboard.index');
+
     Route::view('/data-analisa', 'staff.analisa.index');
 
     Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
-    Route::view('/analisa/usaha/perdagangan/detail', 'staff.analisa.u-perdagangan.detail');
-    // POIN ANALISA
     Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
     Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
     Route::view('/analisa/keuangan/usaha/perdagangan', 'staff.analisa.u-perdagangan.keuangan');
 
-
     Route::view('/analisa/usaha/pertanian', 'staff.analisa.u-pertanian.index');
-    Route::view('/analisa/usaha/pertanian/detail', 'staff.analisa.u-pertanian.detail');
     Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
     Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
     Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
 
     Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
-    Route::view('/analisa/usaha/jasa/detail', 'staff.analisa.u-jasa.detail');
     Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
 
     Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
-    Route::view('/analisa/usaha/lainnya/detail', 'staff.analisa.u-lainnya.detail');
     Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
     Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
+
+    Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
+    Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
 });
