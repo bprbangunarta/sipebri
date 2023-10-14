@@ -22,7 +22,7 @@
         <div class="login-logo">
             <a href="/"><b>SIPEBRI</b></a>
         </div>
-        
+
         @yield('content')
 
     </div>

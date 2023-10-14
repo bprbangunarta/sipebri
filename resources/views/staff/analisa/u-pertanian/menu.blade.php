@@ -31,28 +31,30 @@
 
     <style>
         .fw-bold {
-        font-weight: bold;
+            font-weight: bold;
         }
-        .form-border
-        {
-        border:1px solid black;
+
+        .form-border {
+            border: 1px solid black;
         }
+
         .div-left {
-        /* border:1px solid black; */
-        width: 49.5%;
-        float: left;
+            /* border:1px solid black; */
+            width: 49.5%;
+            float: left;
         }
+
         .div-right {
-        /* border:1px solid black; */
-        width: 49.5%;
-        float: right;
+            /* border:1px solid black; */
+            width: 49.5%;
+            float: right;
         }
     </style>
 </head>
 
 <body class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
-
+        @include('sweetalert::alert')
         @include('theme.header')
 
         <x-navigation></x-navigation>
@@ -61,26 +63,31 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        @include('theme.menu-analisa')
+                        @include('theme.menu-analisa', [$data])
                     </div>
-        
+
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="{{ request()->is('theme/analisa/informasi/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/informasi/usaha/pertanian/" class="{{ request()->is('theme/analisa/informasi/usaha/pertanian') ? 'text-bold' : '' }}">
+                                <li
+                                    class="{{ request()->is('theme/analisa/informasi/usaha/pertanian') ? 'active' : '' }}">
+                                    <a href="/theme/analisa/informasi/usaha/pertanian/"
+                                        class="{{ request()->is('theme/analisa/informasi/usaha/pertanian') ? 'text-bold' : '' }}">
                                         INFORMASI
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('theme/analisa/biaya/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/biaya/usaha/pertanian/" class="{{ request()->is('theme/analisa/biaya/usaha/pertanian') ? 'text-bold' : '' }}">
+                                    <a href="/theme/analisa/biaya/usaha/pertanian/"
+                                        class="{{ request()->is('theme/analisa/biaya/usaha/pertanian') ? 'text-bold' : '' }}">
                                         BIAYA PERTANIAN
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/keuangan/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/keuangan/usaha/pertanian/" class="{{ request()->is('theme/analisa/keuangan/usaha/pertanian') ? 'text-bold' : '' }}">
+                                <li
+                                    class="{{ request()->is('theme/analisa/keuangan/usaha/pertanian') ? 'active' : '' }}">
+                                    <a href="/theme/analisa/keuangan/usaha/pertanian/"
+                                        class="{{ request()->is('theme/analisa/keuangan/usaha/pertanian') ? 'text-bold' : '' }}">
                                         ANALISA KEUANGAN
                                     </a>
                                 </li>
@@ -91,7 +98,7 @@
                                     </a>
                                 </li>
                             </ul>
-        
+
                             @yield('content')
                         </div>
                     </div>
@@ -112,8 +119,8 @@
     @stack('myscript')
 
     <script>
-        $(document).ready(function () {
-        $('.sidebar-menu').tree()
+        $(document).ready(function() {
+            $('.sidebar-menu').tree()
         })
     </script>
 </body>

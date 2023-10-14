@@ -31,28 +31,30 @@
 
     <style>
         .fw-bold {
-        font-weight: bold;
+            font-weight: bold;
         }
-        .form-border
-        {
-        border:1px solid black;
+
+        .form-border {
+            border: 1px solid black;
         }
+
         .div-left {
-        /* border:1px solid black; */
-        width: 49.5%;
-        float: left;
+            /* border:1px solid black; */
+            width: 49.5%;
+            float: left;
         }
+
         .div-right {
-        /* border:1px solid black; */
-        width: 49.5%;
-        float: right;
+            /* border:1px solid black; */
+            width: 49.5%;
+            float: right;
         }
     </style>
 </head>
 
 <body class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
-
+        @include('sweetalert::alert')
         @include('theme.header')
 
         <x-navigation></x-navigation>
@@ -61,37 +63,43 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        @include('theme.menu-analisa')
+                        @include('theme.menu-analisa', [$data])
                     </div>
-        
+
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="{{ request()->is('theme/analisa/usaha/perdagangan') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/usaha/perdagangan" class="{{ request()->is('theme/analisa/usaha/perdagangan') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/usaha/perdagangan') ? 'active' : '' }}">
+                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $pengajuan]) }}"
+                                        {{-- <a href="/themess/analisa/usaha/perdagangan" --}}
+                                        class="{{ request()->is('themess/analisa/usaha/perdagangan') ? 'text-bold' : '' }}">
                                         USAHA PERDAGANGAN
                                     </a>
                                 </li>
-        
-                                <li class="{{ request()->is('theme/analisa/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/usaha/pertanian" class="{{ request()->is('theme/analisa/usaha/pertanian') ? 'text-bold' : '' }}">
+
+                                <li class="{{ request()->is('themes/analisa/usaha/pertanian') ? 'active' : '' }}">
+                                    <a href="{{ route('pertanian.ind', ['pengajuan' => $pengajuan]) }}"
+                                        {{-- <a href="/themes/analisa/usaha/pertanian" --}}
+                                        class="{{ request()->is('themes/analisa/usaha/pertanian') ? 'text-bold' : '' }}">
                                         USAHA PERTANIAN
                                     </a>
                                 </li>
-        
-                                <li class="{{ request()->is('theme/analisa/usaha/jasa') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/usaha/jasa" class="{{ request()->is('theme/analisa/usaha/jasa') ? 'text-bold' : '' }}">
+
+                                <li class="{{ request()->is('themes/analisa/usaha/jasa') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/usaha/jasa"
+                                        class="{{ request()->is('themes/analisa/usaha/jasa') ? 'text-bold' : '' }}">
                                         USAHA JASA
                                     </a>
                                 </li>
-        
-                                <li class="{{ request()->is('theme/analisa/usaha/lainnya') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/usaha/lainnya" class="{{ request()->is('theme/analisa/usaha/lainnya') ? 'text-bold' : '' }}">
+
+                                <li class="{{ request()->is('themes/analisa/usaha/lainnya') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/usaha/lainnya"
+                                        class="{{ request()->is('themes/analisa/usaha/lainnya') ? 'text-bold' : '' }}">
                                         USAHA LAINNYA
                                     </a>
                                 </li>
                             </ul>
-        
+
                             @yield('content')
                         </div>
                     </div>
@@ -112,8 +120,8 @@
     @stack('myscript')
 
     <script>
-        $(document).ready(function () {
-        $('.sidebar-menu').tree()
+        $(document).ready(function() {
+            $('.sidebar-menu').tree()
         })
     </script>
 </body>

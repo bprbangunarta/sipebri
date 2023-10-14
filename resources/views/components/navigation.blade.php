@@ -25,14 +25,14 @@
             <li class="header">MAIN MENU</li>
 
             @hasanyrole($roles)
-            <li class="{{ request()->is('dashboard') ? 'active' :'' }}">
-                <a href="/theme/dashboard" title="Dashboard">
-                    <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-            </li>
+                <li class="{{ request()->is('/themes/dashboard') ? 'active' : '' }}">
+                    <a href="/themes/dashboard" title="Dashboard">
+                        <i class="fa fa-laptop"></i> <span>Dashboard</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                </li>
             @endhasanyrole
 
             <li class="treeview">
@@ -45,7 +45,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="/theme/data-analisa" title="Wilayah Kalijati">
+                        <a href="/themes/data-analisa" title="Wilayah Kalijati">
                             <i class="fa fa-circle-o"></i>
                             Input Analisa
                         </a>

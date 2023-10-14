@@ -181,11 +181,11 @@ Route::middleware('auth')->group(function () {
         //Analisa Proses
         Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
         //Analisa Usaha Perdagangan
-        Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
-        Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
-        Route::put('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
+        // Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
+        // Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
+        // Route::put('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
         //Analisa Usaha Pertanian
-        Route::resource('/analisa/usaha/pertanian', PertanianController::class);
+        // Route::resource('/analisa/usaha/pertanian', PertanianController::class);
         Route::put('/analisa/usaha/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
         //Analisa Usaha Jasa
         Route::resource('/analisa/usaha/jasa', JasaController::class);
@@ -224,38 +224,58 @@ Route::middleware('auth')->group(function () {
 
     //Komite
     Route::get('/komite', [KomiteController::class, 'index'])->name('komite.komite');
+
+
+    Route::prefix('themes')->group(function () {
+        Route::view('/dashboard', 'dashboard.index');
+
+        Route::get('/data-analisa', [AnalisaController::class, 'index']);
+        //Analisa Usaha Perdagangan
+        Route::controller(PerdaganganController::class)->group(function () {
+            // Route::get('/analisa/usaha/perdagangan', [PerdaganganController::class, 'index'])->name('perdagangan.in');
+            Route::get('/analisa/usaha/perdagangan', 'index')->name('perdagangan.in');
+            Route::post('/analisa/usaha/perdagangan', 'store')->name('perdagangan.store');
+            Route::get('/analisa/identitas/usaha/perdagangan/', 'identitas')->name('perdagangan.identitas');
+            Route::post('/analisa/identitas/usaha/perdagangan', 'simpanidentitas')->name('perdagangan.simpanidentitas');
+            Route::get('/analisa/barang/usaha/perdagangan', 'barang')->name('perdagangan.barang');
+            Route::Post('/analisa/barang/usaha/perdagangan', 'simpanbarang')->name('perdagangan.simpanbarang');
+            Route::put('/analisa/barang/usaha/perdagangan', 'updatebarang')->name('perdagangan.updatebarang');
+            Route::get('/analisa/keuangan/usaha/perdagangan', 'keuangan')->name('perdagangan.keuangan');
+            Route::post('/analisa/keuangan/usaha/perdagangan', 'simpankeuangan')->name('perdagangan.simpankeuangan');
+            Route::put('/analisa/keuangan/usaha/perdagangan', 'updatekeuangan')->name('perdagangan.updatekeuangan');
+            // Route::get('/analisa/usaha/{perdagangan}/edit', 'edit')->name('perdagangan.edit');
+        });
+
+        Route::controller(PertanianController::class)->group(function () {
+            Route::get('/analisa/usaha/pertanian', 'index')->name('pertanian.ind');
+        });
+
+        // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
+        // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
+        // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
+        // Route::view('/analisa/keuangan/usaha/perdagangan', 'staff.analisa.u-perdagangan.keuangan');
+
+        // Route::view('/analisa/usaha/pertanian', 'staff.analisa.u-pertanian.index');
+        Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
+        Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
+        Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
+
+        Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
+        Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
+
+        Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
+        Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
+        Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
+
+        Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
+        Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
+
+        Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
+        Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');
+        Route::view('/analisa/jaminan/lainnya', 'staff.analisa.jaminan.lainnya');
+    });
 });
 
 Route::view('/analisa/index', 'analisa.index');
 
 require __DIR__ . '/auth.php';
-
-Route::prefix('theme')->group(function () {
-    Route::view('/dashboard', 'dashboard.index');
-
-    Route::view('/data-analisa', 'staff.analisa.index');
-
-    Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
-    Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
-    Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
-    Route::view('/analisa/keuangan/usaha/perdagangan', 'staff.analisa.u-perdagangan.keuangan');
-
-    Route::view('/analisa/usaha/pertanian', 'staff.analisa.u-pertanian.index');
-    Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
-    Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
-    Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
-
-    Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
-    Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
-
-    Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
-    Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
-    Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
-
-    Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
-    Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
-
-    Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
-    Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');
-    Route::view('/analisa/jaminan/lainnya', 'staff.analisa.jaminan.lainnya');
-});

@@ -1,21 +1,22 @@
 <div class="box box-solid">
     <div class="box-header with-border">
-    <h3 class="box-title">Info Nasabah</h3>
+        <h3 class="box-title">Info Nasabah</h3>
 
-    <div class="box-tools">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse">
-        <i class="fa fa-minus"></i>
-        </button>
-    </div>
+        <div class="box-tools">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
     </div>
     <div class="box-body no-padding">
         <ul class="nav nav-pills nav-stacked">
             <li>
-                <a href="#"><i class="fa fa-user"></i> ZULFADLI RIZAL</a>
+                <a href="#"><i class="fa fa-user"></i> {{ $data->nama_nasabah }}</a>
             </li>
             <li>
                 <a href="#">
-                    <i class="fa fa-bitcoin"></i> RP. 2.500.000.000 (24 BULAN)
+                    <i class="fa fa-bitcoin"></i>
+                    {{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') . ' ' . '(' . $data->jangka_waktu . ' ' . 'BULAN)' }}
                 </a>
             </li>
         </ul>
@@ -24,66 +25,68 @@
 
 <div class="box box-solid">
     <div class="box-header with-border">
-    <h3 class="box-title">Menu Analisa</h3>
+        <h3 class="box-title">Menu Analisa</h3>
 
-    <div class="box-tools">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse">
-        <i class="fa fa-minus"></i>
-        </button>
-    </div>
+        <div class="box-tools">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
     </div>
 
     <div class="box-body no-padding">
         <ul class="nav nav-pills nav-stacked">
-            <li class="{{ request()->is('theme/analisa/usaha/perdagangan', 'theme/analisa/usaha/pertanian', 'theme/analisa/usaha/jasa', 'theme/analisa/usaha/lainnya', 'theme/analisa/identitas/usaha/perdagangan', 'theme/analisa/barang/usaha/perdagangan', 'theme/analisa/keuangan/usaha/perdagangan', 'theme/analisa/informasi/usaha/pertanian', 'theme/analisa/biaya/usaha/pertanian', 'theme/analisa/keuangan/usaha/pertanian', 'theme/analisa/keuangan/usaha/jasa', 'theme/analisa/identitas/usaha/lainnya', 'theme/analisa/identitas/usaha/lainnya', 'theme/analisa/keuangan/usaha/lainnya') ? 'active' : '' }}">
-                <a href="/theme/analisa/usaha/perdagangan">
+            <li
+                class="{{ request()->is('themes/analisa/usaha/perdagangan', 'themes/analisa/usaha/pertanian', 'themes/analisa/usaha/jasa', 'themes/analisa/usaha/lainnya', 'themes/analisa/identitas/usaha/perdagangan', 'themes/analisa/barang/usaha/perdagangan', 'themes/analisa/keuangan/usaha/perdagangan', 'themes/analisa/informasi/usaha/pertanian', 'themes/analisa/biaya/usaha/pertanian', 'themes/analisa/keuangan/usaha/pertanian', 'themes/analisa/keuangan/usaha/jasa', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/keuangan/usaha/lainnya') ? 'active' : '' }}">
+                <a href="/themes/analisa/usaha/perdagangan">
                     <i class="fa fa-folder-o"></i> Usaha
                 </a>
             </li>
 
-            <li class="{{ request()->is('theme/analisa/keuangan') ? 'active' : '' }}">
-                <a href="/theme/analisa/keuangan">
+            <li class="{{ request()->is('themes/analisa/keuangan') ? 'active' : '' }}">
+                <a href="/themes/analisa/keuangan">
                     <i class="fa fa-folder-o"></i> Keuangan
                 </a>
             </li>
-            
-            <li class="{{ request()->is('theme/analisa/kepemilikan') ? 'active' : '' }}">
-                <a href="/theme/analisa/kepemilikan">
+
+            <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
+                <a href="/themes/analisa/kepemilikan">
                     <i class="fa fa-folder-o"></i> Kepemilikan
                 </a>
             </li>
 
-            <li class="{{ request()->is('theme/analisa/jaminan/kendaraan', 'theme/analisa/jaminan/tananh', 'theme/analisa/jaminan/lainnya') ? 'active' : '' }}">
-                <a href="/theme/analisa/jaminan/kendaraan">
+            <li
+                class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tananh', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
+                <a href="/themes/analisa/jaminan/kendaraan">
                     <i class="fa fa-folder-o"></i> Jaminan
                 </a>
             </li>
 
-            <li class="{{ request()->is('theme/analisa/5c') ? 'active' : '' }}">
+            <li class="{{ request()->is('themes/analisa/5c') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Analisa 5C
                 </a>
             </li>
 
-            <li class="{{ request()->is('theme/analisa/kualitatif') ? 'active' : '' }}">
+            <li class="{{ request()->is('themes/analisa/kualitatif') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Kualitatif
                 </a>
             </li>
-            
-            <li class="{{ request()->is('theme/analisa/momorandum') ? 'active' : '' }}">
+
+            <li class="{{ request()->is('themes/analisa/momorandum') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Memorandum
                 </a>
             </li>
 
-            <li class="{{ request()->is('theme/analisa/administrasi') ? 'active' : '' }}">
-            <a href="#">
-                <i class="fa fa-folder-o"></i> Administrasi
+            <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i> Administrasi
                 </a>
             </li>
 
-            <li class="{{ request()->is('theme/analisa/tambahan') ? 'active' : '' }}">
+            <li class="{{ request()->is('themes/analisa/tambahan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Tambahan
                 </a>
