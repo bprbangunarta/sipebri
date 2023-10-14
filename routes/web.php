@@ -243,6 +243,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/keuangan/usaha/perdagangan', 'keuangan')->name('perdagangan.keuangan');
             Route::post('/analisa/keuangan/usaha/perdagangan', 'simpankeuangan')->name('perdagangan.simpankeuangan');
             Route::put('/analisa/keuangan/usaha/perdagangan', 'updatekeuangan')->name('perdagangan.updatekeuangan');
+            Route::delete('/analisa/keuangan/usaha/perdagangan/{id}', 'destroy')->name('perdagangan.hapus');
             // Route::get('/analisa/usaha/{perdagangan}/edit', 'edit')->name('perdagangan.edit');
         });
 

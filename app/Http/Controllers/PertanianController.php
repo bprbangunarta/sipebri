@@ -28,7 +28,7 @@ class PertanianController extends Controller
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-            // dd($cek);
+
             return view('staff.analisa.u-pertanian.index', [
                 'data' => $cek[0],
                 'pertanian' => $au

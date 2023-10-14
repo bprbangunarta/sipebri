@@ -15,26 +15,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="vertical-align: middle;text-transform:uppercase;">SAWAH PADI KETAN</td>
-                        <td style="vertical-align: middle;">Rp. 66.000.000</td>
-                        <td style="vertical-align: middle;">Rp. 5.400.000</td>
-                        <td style="vertical-align: middle;">Rp. 60.600.000</td>
-                        <td class="text-center">
-                            <a href="/theme/analisa/informasi/usaha/pertanian/" class="btn btn-sm btn-warning"
-                                style="float: left" title="Input Analisa">
-                                <i class="fa fa-file-text-o"></i></a>
+                    @foreach ($pertanian as $item)
+                        <tr>
+                            <td style="vertical-align: middle;text-transform:uppercase;">SAWAH PADI KETAN</td>
+                            <td style="vertical-align: middle;">Rp. 66.000.000</td>
+                            <td style="vertical-align: middle;">Rp. 5.400.000</td>
+                            <td style="vertical-align: middle;">Rp. 60.600.000</td>
+                            <td class="text-center">
+                                <a href="/theme/analisa/informasi/usaha/pertanian/" class="btn btn-sm btn-warning"
+                                    style="float: left" title="Input Analisa">
+                                    <i class="fa fa-file-text-o"></i></a>
 
-                            <form action="#" method="POST">
-                                @csrf
-                                @method('delete')
-                                <button type="button" class="btn btn-sm btn-danger" style="float: right"
-                                    title="Hapus Usaha">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
+                                <form action="#" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="button" class="btn btn-sm btn-danger" style="float: right"
+                                        title="Hapus Usaha">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
 

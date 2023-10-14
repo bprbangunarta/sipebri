@@ -20,6 +20,11 @@
     <meta property="og:image:height" content="400" />
     <meta property="og:image:type" content="image/png" />
 
+    @section('jquery')
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @endsection
+
     <link rel="stylesheet" href="{{ asset('theme/assets/bootstrap/dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/assets/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('theme/assets/Ionicons/css/ionicons.min.css') }}">

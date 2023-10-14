@@ -393,7 +393,6 @@ class PerdaganganController extends Controller
         return redirect()->back()->with('error', 'Gagal menambahkan data');
     }
 
-
     /**
      * Update the specified resource in storage.
      *
@@ -412,14 +411,16 @@ class PerdaganganController extends Controller
      * @param  \App\Models\Perdagangan  $perdagangan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $tambah)
+    public function destroy(Request $request)
     {
+
         try {
-            $enc = Crypt::decrypt($tambah);
+            $enc = Crypt::decrypt($request->query('kode_usaha'));
+
             $au = Perdagangan::where('kode_usaha', $enc)->get();
             $bu = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_perdagangan')->where('usaha_kode', $enc)->get();
-
+            // dd($au, $bu, $du);
             if (count($au) !== 0) {
                 Perdagangan::where('id', $au[0]->id)->delete();
             }
@@ -439,146 +440,146 @@ class PerdaganganController extends Controller
         return redirect()->back()->with('error', 'Usaha perdagangan gagal dihapus');
     }
 
-    public function detail_store(Request $request)
-    {
-        $request->validate([
-            'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
-            'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
-            'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
-            'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
-            'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
-            'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
-            'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
-            'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
-            'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
-            'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
-        ]);
+    // public function detail_store(Request $request)
+    // {
+    //     $request->validate([
+    //         'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
+    //         'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
+    //         'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
+    //         'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
+    //         'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
+    //         'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
+    //         'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
+    //         'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
+    //         'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
+    //         'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
+    //     ]);
 
-        try {
-            $enc = Crypt::decrypt($request->kd_usaha);
-            $data = [];
-            for ($i = 1; $i <= 10; $i++) {
-                $length = 10;
-                $kode = Perdagangan::du_kodeacak($length);
-                $data = [
-                    'usaha_kode' => $enc,
-                    'kode_barang' => $kode,
-                    'nama_barang' => ucwords($request->input('nama_barang' . $i)),
-                    'stok' => $request->input('stock' . $i),
-                    'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg' . $i)),
-                    'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual' . $i)),
-                    'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba' . $i)),
-                    'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
-                ];
-                DB::table('du_perdagangan')->insert($data);
-            }
+    //     try {
+    //         $enc = Crypt::decrypt($request->kd_usaha);
+    //         $data = [];
+    //         for ($i = 1; $i <= 10; $i++) {
+    //             $length = 10;
+    //             $kode = Perdagangan::du_kodeacak($length);
+    //             $data = [
+    //                 'usaha_kode' => $enc,
+    //                 'kode_barang' => $kode,
+    //                 'nama_barang' => ucwords($request->input('nama_barang' . $i)),
+    //                 'stok' => $request->input('stock' . $i),
+    //                 'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg' . $i)),
+    //                 'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual' . $i)),
+    //                 'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba' . $i)),
+    //                 'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
+    //             ];
+    //             DB::table('du_perdagangan')->insert($data);
+    //         }
 
-            $data2 = [
-                'lokasi_usaha' => ucwords($request->input('lokasi_usaha')),
-                'lama_usaha' => $request->input('lama_usaha'),
-                'belanja_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('belanja_harian')),
-                'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
-                'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
-                'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
-                'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
-                'total_pl' => sprintf("%.2f", $request->input('tpersen'), 2),
-                'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')),
-                'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')),
-                'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')),
-                'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih')),
-            ];
+    //         $data2 = [
+    //             'lokasi_usaha' => ucwords($request->input('lokasi_usaha')),
+    //             'lama_usaha' => $request->input('lama_usaha'),
+    //             'belanja_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('belanja_harian')),
+    //             'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
+    //             'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
+    //             'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
+    //             'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
+    //             'total_pl' => sprintf("%.2f", $request->input('tpersen'), 2),
+    //             'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')),
+    //             'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')),
+    //             'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')),
+    //             'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih')),
+    //         ];
 
 
-            $data3 = [
-                'usaha_kode' => $enc,
-                'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
-                'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
-                'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
-                'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
-                'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
-                'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
-            ];
+    //         $data3 = [
+    //             'usaha_kode' => $enc,
+    //             'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
+    //             'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
+    //             'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
+    //             'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
+    //             'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
+    //             'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
+    //         ];
 
-            DB::transaction(function () use ($enc, $data2, $data3) {
-                Perdagangan::where('kode_usaha', $enc)->update($data2);
-                DB::table('bu_perdagangan')->insert($data3);
-            });
+    //         DB::transaction(function () use ($enc, $data2, $data3) {
+    //             Perdagangan::where('kode_usaha', $enc)->update($data2);
+    //             DB::table('bu_perdagangan')->insert($data3);
+    //         });
 
-            return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
-        } catch (DecryptException $th) {
-            return abort(403, 'Permintaan anda di Tolak.');
-        }
-        return redirect()->back()->withInput()->with('error', 'Data barang gagal ditambahkan');
-    }
+    //         return redirect()->back()->with('success', 'Data barang berhasil ditambahkan');
+    //     } catch (DecryptException $th) {
+    //         return abort(403, 'Permintaan anda di Tolak.');
+    //     }
+    //     return redirect()->back()->withInput()->with('error', 'Data barang gagal ditambahkan');
+    // }
 
-    public function detail_update(Request $request)
-    {
-        $request->validate([
-            'kode_barang1' => 'required', 'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
-            'kode_barang2' => 'required', 'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
-            'kode_barang3' => 'required', 'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
-            'kode_barang4' => 'required', 'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
-            'kode_barang5' => 'required', 'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
-            'kode_barang6' => 'required', 'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
-            'kode_barang7' => 'required', 'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
-            'kode_barang8' => 'required', 'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
-            'kode_barang9' => 'required', 'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
-            'kode_barang10' => 'required', 'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
-        ]);
+    // public function detail_update(Request $request)
+    // {
+    //     $request->validate([
+    //         'kode_barang1' => 'required', 'nama_barang1' => 'required', 'hrg1' => 'required', 'jual1' => 'required', 'stock1' => 'required',
+    //         'kode_barang2' => 'required', 'nama_barang2' => 'required', 'hrg2' => 'required', 'jual2' => 'required', 'stock2' => 'required',
+    //         'kode_barang3' => 'required', 'nama_barang3' => 'required', 'hrg3' => 'required', 'jual3' => 'required', 'stock3' => 'required',
+    //         'kode_barang4' => 'required', 'nama_barang4' => 'required', 'hrg4' => 'required', 'jual4' => 'required', 'stock4' => 'required',
+    //         'kode_barang5' => 'required', 'nama_barang5' => 'required', 'hrg5' => 'required', 'jual5' => 'required', 'stock5' => 'required',
+    //         'kode_barang6' => 'required', 'nama_barang6' => 'required', 'hrg6' => 'required', 'jual6' => 'required', 'stock6' => 'required',
+    //         'kode_barang7' => 'required', 'nama_barang7' => 'required', 'hrg7' => 'required', 'jual7' => 'required', 'stock7' => 'required',
+    //         'kode_barang8' => 'required', 'nama_barang8' => 'required', 'hrg8' => 'required', 'jual8' => 'required', 'stock8' => 'required',
+    //         'kode_barang9' => 'required', 'nama_barang9' => 'required', 'hrg9' => 'required', 'jual9' => 'required', 'stock9' => 'required',
+    //         'kode_barang10' => 'required', 'nama_barang10' => 'required', 'hrg10' => 'required', 'jual10' => 'required', 'stock10' => 'required',
+    //     ]);
 
-        try {
-            $enc = Crypt::decrypt($request->kode_usaha);
-            // dd($request);
-            for ($i = 1; $i <= 10; $i++) {
-                $data = [
-                    'usaha_kode' => $enc,
-                    'kode_barang' => ucwords($request->input('kode_barang' . $i)),
-                    'nama_barang' => ucwords($request->input('nama_barang' . $i)),
-                    'stok' => $request->input('stock' . $i),
-                    'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg' . $i)),
-                    'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual' . $i)),
-                    'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba' . $i)),
-                    'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
-                ];
-                $a = DB::table('du_perdagangan')->where('kode_barang', $request->input('kode_barang' . $i))->get();
-                DB::table('du_perdagangan')->where('id', $a[0]->id)->update($data);
-            }
+    //     try {
+    //         $enc = Crypt::decrypt($request->kode_usaha);
+    //         // dd($request);
+    //         for ($i = 1; $i <= 10; $i++) {
+    //             $data = [
+    //                 'usaha_kode' => $enc,
+    //                 'kode_barang' => ucwords($request->input('kode_barang' . $i)),
+    //                 'nama_barang' => ucwords($request->input('nama_barang' . $i)),
+    //                 'stok' => $request->input('stock' . $i),
+    //                 'harga_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg' . $i)),
+    //                 'harga_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('jual' . $i)),
+    //                 'laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba' . $i)),
+    //                 'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
+    //             ];
+    //             $a = DB::table('du_perdagangan')->where('kode_barang', $request->input('kode_barang' . $i))->get();
+    //             DB::table('du_perdagangan')->where('id', $a[0]->id)->update($data);
+    //         }
 
-            $data2 = [
-                'lokasi_usaha' => ucwords($request->input('lokasi_usaha')),
-                'lama_usaha' => $request->input('lama_usaha'),
-                'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
-                'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
-                'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
-                'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
-                'total_pl' => sprintf("%.2f", $request->input('tpersen'), 2),
-                'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')),
-                'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')),
-                'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')),
-                'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih')),
-            ];
+    //         $data2 = [
+    //             'lokasi_usaha' => ucwords($request->input('lokasi_usaha')),
+    //             'lama_usaha' => $request->input('lama_usaha'),
+    //             'total_beli' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tbeli')),
+    //             'total_jual' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tjual')),
+    //             'total_laba' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tlaba')),
+    //             'total_stok' => (int)str_replace(["Rp.", " ", "."], "", $request->input('tstock')),
+    //             'total_pl' => sprintf("%.2f", $request->input('tpersen'), 2),
+    //             'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')),
+    //             'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')),
+    //             'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')),
+    //             'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_bersih')),
+    //         ];
 
-            $data3 = [
-                'usaha_kode' => $enc,
-                'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
-                'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
-                'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
-                'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
-                'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
-                'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
-            ];
+    //         $data3 = [
+    //             'usaha_kode' => $enc,
+    //             'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')),
+    //             'bongkar_muat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('bongkar_muat')),
+    //             'pegawai' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pegawai')),
+    //             'gatel' => (int)str_replace(["Rp.", " ", "."], "", $request->input('gatel')),
+    //             'retribusi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('retribusi')),
+    //             'sewa_tempat' => (int)str_replace(["Rp.", " ", "."], "", $request->input('sewa_tempat')),
+    //         ];
 
-            DB::transaction(function () use ($enc, $data2, $data3) {
-                $au = Perdagangan::where('kode_usaha', $enc)->get();
-                Perdagangan::where('id', $au[0]->id)->update($data2);
+    //         DB::transaction(function () use ($enc, $data2, $data3) {
+    //             $au = Perdagangan::where('kode_usaha', $enc)->get();
+    //             Perdagangan::where('id', $au[0]->id)->update($data2);
 
-                $du = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
-                DB::table('bu_perdagangan')->where('id', $du[0]->id)->update($data3);
-            });
+    //             $du = DB::table('bu_perdagangan')->where('usaha_kode', $enc)->get();
+    //             DB::table('bu_perdagangan')->where('id', $du[0]->id)->update($data3);
+    //         });
 
-            return redirect()->back()->with('success', 'Data barang berhasil diupdate');
-        } catch (\Throwable $th) {
-            return redirect()->back()->withInput()->with('error', 'Data barang gagal diupdate');
-        }
-    }
+    //         return redirect()->back()->with('success', 'Data barang berhasil diupdate');
+    //     } catch (\Throwable $th) {
+    //         return redirect()->back()->withInput()->with('error', 'Data barang gagal diupdate');
+    //     }
+    // }
 }
