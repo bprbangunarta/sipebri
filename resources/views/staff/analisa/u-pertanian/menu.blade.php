@@ -70,30 +70,32 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li
-                                    class="{{ request()->is('theme/analisa/informasi/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/informasi/usaha/pertanian/"
-                                        class="{{ request()->is('theme/analisa/informasi/usaha/pertanian') ? 'text-bold' : '' }}">
+                                    class="{{ request()->is('themes/analisa/informasi/usaha/pertanian*') ? 'active' : '' }}">
+                                    <a href="{{ route('pertanian.informasi', ['analisa' => $pengajuan, 'pengajuan' => $pengajuan, 'kode_usaha' => $kode_usaha]) }}"
+                                        class="{{ request()->is('themes/analisa/informasi/usaha/pertanian*') ? 'text-bold' : '' }}">
                                         INFORMASI
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/biaya/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/biaya/usaha/pertanian/"
-                                        class="{{ request()->is('theme/analisa/biaya/usaha/pertanian') ? 'text-bold' : '' }}">
+                                <li
+                                    class="{{ request()->is('themes/analisa/biaya/usaha/pertanian*') ? 'active' : '' }}">
+                                    <a href="{{ route('pertanian.biaya', ['analisa' => $pengajuan, 'pengajuan' => $pengajuan, 'kode_usaha' => $kode_usaha]) }}"
+                                        class="{{ request()->is('themes/analisa/biaya/usaha/pertanian*') ? 'text-bold' : '' }}">
                                         BIAYA PERTANIAN
                                     </a>
                                 </li>
 
                                 <li
-                                    class="{{ request()->is('theme/analisa/keuangan/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/keuangan/usaha/pertanian/"
-                                        class="{{ request()->is('theme/analisa/keuangan/usaha/pertanian') ? 'text-bold' : '' }}">
+                                    class="{{ request()->is('themes/analisa/keuangan/usaha/pertanian') ? 'active' : '' }}">
+                                    <a href="{{ route('pertanian.keuangan', ['analisa' => $pengajuan, 'pengajuan' => $pengajuan, 'kode_usaha' => $kode_usaha]) }}"
+                                        class="{{ request()->is('themes/analisa/keuangan/usaha/pertanian') ? 'text-bold' : '' }}">
                                         ANALISA KEUANGAN
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="/theme/analisa/usaha/pertanian/">
+                                    <a
+                                        href="{{ route('pertanian.ind', ['analisa' => $pengajuan, 'pengajuan' => $pengajuan, 'kode_usaha' => $kode_usaha]) }}">
                                         <i class="fa fa-arrow-left"></i> KEMBALI
                                     </a>
                                 </li>

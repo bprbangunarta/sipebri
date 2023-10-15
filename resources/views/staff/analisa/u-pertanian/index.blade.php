@@ -1,4 +1,5 @@
-@extends('staff.analisa.usaha', [$data, 'pengajuan' => $data->kd_pengajuan])
+@extends('staff.analisa.usaha', [$data, 'pengajuan' => $pertanian[0]->kd_pengajuan])
+{{-- @extends('staff.analisa.usaha', [$data, 'pengajuan' => $pertanian[0]->kd_pengajuan, 'kode_usaha' => $pertanian[0]->kd_usaha]) --}}
 @section('title', 'Analisa Usaha Lainnya')
 
 @section('content')
@@ -17,13 +18,16 @@
                 <tbody>
                     @foreach ($pertanian as $item)
                         <tr>
-                            <td style="vertical-align: middle;text-transform:uppercase;">SAWAH PADI KETAN</td>
-                            <td style="vertical-align: middle;">Rp. 66.000.000</td>
-                            <td style="vertical-align: middle;">Rp. 5.400.000</td>
-                            <td style="vertical-align: middle;">Rp. 60.600.000</td>
+                            <td style="vertical-align: middle;text-transform:uppercase;">{{ $item->nama_usaha }}</td>
+                            <td style="vertical-align: middle;">
+                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }}</td>
+                            <td style="vertical-align: middle;">
+                                {{ 'Rp.' . ' ' . number_format($item->pengeluaran, 0, ',', '.') }}</td>
+                            <td style="vertical-align: middle;">
+                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</td>
                             <td class="text-center">
-                                <a href="/theme/analisa/informasi/usaha/pertanian/" class="btn btn-sm btn-warning"
-                                    style="float: left" title="Input Analisa">
+                                <a href="{{ route('pertanian.informasi', ['analisa' => $item->kode_id, 'pengajuan' => $item->kd_pengajuan, 'kode_usaha' => $item->kd_usaha]) }}"
+                                    class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
                                     <i class="fa fa-file-text-o"></i></a>
 
                                 <form action="#" method="POST">
@@ -53,7 +57,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAMBAH USAHA</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('pertanian.simpan', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

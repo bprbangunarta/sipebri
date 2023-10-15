@@ -249,6 +249,15 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(PertanianController::class)->group(function () {
             Route::get('/analisa/usaha/pertanian', 'index')->name('pertanian.ind');
+            Route::post('/analisa/usaha/pertanian', 'store')->name('pertanian.simpan');
+            Route::get('/analisa/informasi/usaha/pertanian', 'informasi')->name('pertanian.informasi');
+            Route::post('/analisa/informasi/usaha/pertanian', 'simpaninformasi')->name('pertanian.simpaninformasi');
+            Route::put('/analisa/informasi/usaha/pertanian', 'updateinformasi')->name('pertanian.updateinformasi');
+            Route::get('/analisa/biaya/usaha/pertanian', 'biaya')->name('pertanian.biaya');
+            Route::post('/analisa/biaya/usaha/pertanian', 'simpanbiaya')->name('pertanian.simpanbiaya');
+            Route::put('/analisa/biaya/usaha/pertanian', 'updatebiaya')->name('pertanian.updatebiaya');
+            Route::get('/analisa/keuangan/usaha/pertanian', 'keuangan')->name('pertanian.keuangan');
+            Route::post('/analisa/keuangan/usaha/pertanian', 'simpankeuangan')->name('pertanian.simpankeuangan');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
@@ -257,9 +266,9 @@ Route::middleware('auth')->group(function () {
         // Route::view('/analisa/keuangan/usaha/perdagangan', 'staff.analisa.u-perdagangan.keuangan');
 
         // Route::view('/analisa/usaha/pertanian', 'staff.analisa.u-pertanian.index');
-        Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
-        Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
-        Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
+        // Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
+        // Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
+        // Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
 
         Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
         Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');

@@ -29,16 +29,40 @@ class Pertanian extends Model
     public static function au_pertanian($data)
     {
         $c = self::where('pengajuan_kode', $data)->get();
-        
-        for ($k=0; $k < count($c); $k++) { 
+
+        for ($k = 0; $k < count($c); $k++) {
             $bu = DB::table('bu_pertanian')->where('usaha_kode', $c[$k]->kode_usaha)->first();
             if (!is_null($bu)) {
                 $c[$k]->total_pengeluaran = $c[$k]->pengeluaran + $bu->amortisasi + $bu->pinjaman_bank;
-            }else{
+            } else {
                 $c[$k]->total_pengeluaran = 0;
             }
         }
-        
+
         return $c;
+    }
+
+    public static function total_biaya($data)
+    {
+        $bu = DB::table('bu_pertanian')->where('usaha_kode', $data)->first();
+        if ($bu) {
+            $total = array_sum(array_slice([
+                (int)$bu->pengolahan_tanah,
+                (int)$bu->bibit,
+                (int)$bu->pupuk,
+                (int)$bu->pestisida,
+                (int)$bu->pengairan,
+                (int)$bu->tenaga_kerja,
+                (int)$bu->panen,
+                (int)$bu->penggarap,
+                (int)$bu->pajak,
+                (int)$bu->iuran_desa,
+                (int)$bu->amortisasi,
+                (int)$bu->pinjaman_bank
+            ], 0, 13));
+        } else {
+            return 0;
+        }
+        return $total;
     }
 }
