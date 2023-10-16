@@ -97,6 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var input7 = document.getElementById("pengeluaran3");
     var input8 = document.getElementById("pengeluaran4");
 
+    var pro = document.getElementById("pph");
+
     // Menyimpan referensi ke elemen total
     var totalpendapatan = document.getElementById("penus");
     var totalbiaya = document.getElementById("biayaop");
@@ -113,24 +115,31 @@ document.addEventListener("DOMContentLoaded", function () {
     input7.addEventListener("input", semuabiaya);
     input8.addEventListener("input", semuabiaya);
 
+    pro.addEventListener("input", proyeksi);
+
     function pendapatan() {
         // Mengambil nilai dari input dan menghapus simbol "Rp." serta karakter pemisah ribuan
         var value1 = input1.value.replace("Rp. ", "").replace(/\./g, "");
         var value2 = input2.value.replace("Rp. ", "").replace(/\./g, "");
         var value3 = input3.value.replace("Rp. ", "").replace(/\./g, "");
         var value4 = input4.value.replace("Rp. ", "").replace(/\./g, "");
+        var tb = totalbiaya.value.replace("Rp. ", "").replace(/\./g, "");
+        var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
 
         // Mengubah nilai ke angka float
         value1 = parseFloat(value1) || 0;
         value2 = parseFloat(value2) || 0;
         value3 = parseFloat(value3) || 0;
         value4 = parseFloat(value4) || 0;
+        tb = parseFloat(tb) || 0;
+        tpro = parseFloat(tpro) || 0;
 
         // Melakukan perhitungan total
         var total = value1 + value2 + value3 + value4;
-
+        var hs = total + tpro - tb;
         // Memperbarui elemen total
         totalpendapatan.value = "Rp. " + total.toLocaleString("id-ID");
+        hasilbersih.value = "Rp. " + hs.toLocaleString("id-ID");
     }
 
     function semuabiaya() {
@@ -139,95 +148,41 @@ document.addEventListener("DOMContentLoaded", function () {
         var value6 = input6.value.replace("Rp. ", "").replace(/\./g, "");
         var value7 = input7.value.replace("Rp. ", "").replace(/\./g, "");
         var value8 = input8.value.replace("Rp. ", "").replace(/\./g, "");
+        var tp = totalpendapatan.value.replace("Rp. ", "").replace(/\./g, "");
+        var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
 
         // Mengubah nilai ke angka float
         value5 = parseFloat(value5) || 0;
         value6 = parseFloat(value6) || 0;
         value7 = parseFloat(value7) || 0;
         value8 = parseFloat(value8) || 0;
+        tp = parseFloat(tp) || 0;
+        tpro = parseFloat(tpro) || 0;
 
         // Melakukan perhitungan total
         var total = value5 + value6 + value7 + value8;
+        var hs = tp + tpro - total;
 
         // Memperbarui elemen total
         totalbiaya.value = "Rp. " + total.toLocaleString("id-ID");
+        hasilbersih.value = "Rp. " + hs.toLocaleString("id-ID");
+    }
+
+    function proyeksi() {
+        // Mengambil nilai dari input dan menghapus simbol "Rp." serta karakter pemisah ribuan
+        var rpph = pro.value.replace("Rp. ", "").replace(/\./g, "");
+        var tb = totalbiaya.value.replace("Rp. ", "").replace(/\./g, "");
+        var tp = totalpendapatan.value.replace("Rp. ", "").replace(/\./g, "");
+
+        // Mengubah nilai ke angka float
+        rpph = parseFloat(rpph) || 0;
+        tb = parseFloat(tb) || 0;
+        tp = parseFloat(tp) || 0;
+
+        // Melakukan perhitungan total
+        var hs = rpph + tp - tb;
+
+        // Memperbarui elemen total
+        hasilbersih.value = "Rp. " + hs.toLocaleString("id-ID");
     }
 });
-
-// $(document).ready(function () {
-//     //Jumlah Nominal
-//     var total = 0;
-//     $("#nominal1, #nominal2, #nominal3, #nominal4, #nominal5").on(
-//         "input",
-//         function () {
-//             total = 0; // Reset total ke 0 setiap kali salah satu input berubah
-
-//             for (var i = 1; i <= 5; i++) {
-//                 var nom = parseFloat(
-//                     $("#nominal" + i)
-//                         .val()
-//                         .replace(/[^\d]/g, "")
-//                 );
-
-//                 // var rnom = parseFloat(nom.replace(/\D/g, "")) || 0;
-//                 // var rnom = parseFloat(nom.replace(/[Rp.,]/g, "")) || 0;
-//                 total += nom;
-//                 console.log(nom);
-//             }
-
-//             var totalFormatted = "Rp. " + total.toLocaleString("id-ID");
-//             $("#penus").val(totalFormatted);
-
-//             var bo = $("#biayaop").val();
-//             var pph = $("#pph").val();
-//             var rbo =
-//                 parseFloat(bo.replace("Rp. ", "").replace(/\./g, "")) || 0;
-//             var rpph =
-//                 parseFloat(pph.replace("Rp. ", "").replace(/\./g, "")) || 0;
-//             var a = total + rpph;
-//             var has = a - rbo;
-//             var tpen = "Rp. " + has.toLocaleString("id-ID");
-//             $("#hasilbersih").val(tpen);
-//         }
-//     );
-
-//     //Biaya Operasional
-//     var tot = 0;
-//     $(
-//         "#pengeluaran1, #pengeluaran2, #pengeluaran3, #pengeluaran4, #pengeluaran5"
-//     ).on("input", function () {
-//         tot = 0; // Reset total ke 0 setiap kali salah satu input berubah
-
-//         for (var i = 1; i <= 5; i++) {
-//             var nom = $("#pengeluaran" + i).val();
-//             var rnom = parseFloat(nom.replace(/[^\d]/g, "")) || 0;
-//             tot += rnom;
-//         }
-
-//         var a = $("#penus").val();
-//         var b = $("#pph").val();
-//         var ra = parseFloat(a.replace(/[^\d]/g, "")) || 0;
-//         var rb = parseFloat(b.replace(/[^\d]/g, "")) || 0;
-
-//         var tbo = "Rp. " + tot.toLocaleString("id-ID");
-//         $("#biayaop").val(tbo);
-
-//         var hasil = ra - tot + rb;
-//         var tb = "Rp. " + hasil.toLocaleString("id-ID");
-//         $("#hasilbersih").val(tb);
-//     });
-
-//     //Proyeksi Penambahan Hasil Usaha
-//     $("#pph").on("input", function () {
-//         var penus = $("#penus").val();
-//         var biaya = $("#biayaop").val();
-//         var pph = $("#pph").val();
-//         var rpph = parseFloat(pph.replace(/[^\d]/g, "")) || 0;
-//         var rpenus = parseFloat(penus.replace(/[^\d]/g, "")) || 0;
-//         var rbiaya = parseFloat(biaya.replace(/[^\d]/g, "")) || 0;
-
-//         var hpph = rpenus - rbiaya + rpph;
-//         var tb = "Rp. " + hpph.toLocaleString("id-ID");
-//         $("#hasilbersih").val(tb);
-//     });
-// });

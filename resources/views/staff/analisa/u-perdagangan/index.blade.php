@@ -1,4 +1,4 @@
-@extends('staff.analisa.usaha', [$data, 'pengajuan' => $data->kd_pengajuan, 'perdagangan' => $perdagangan[0]->kd_usaha])
+@extends('staff.analisa.usaha', [$data, 'pengajuan' => $data->kd_pengajuan])
 @section('title', 'Analisa Usaha Perdagangan')
 
 @section('content')

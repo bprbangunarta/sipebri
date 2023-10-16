@@ -17,8 +17,6 @@
                                 value="{{ $lain->kode_usaha }}" readonly>
                         </div>
 
-
-
                         <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">NAMA USAHA</span>
                             <input class="form-control input-sm form-border" type="text" name="nama_usaha" id=""

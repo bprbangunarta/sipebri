@@ -5,15 +5,15 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="">
+            <form action="{{ route('lain.simpankeuangan', ['kode_usaha' => $lain->kd_usaha]) }}" method="post">
                 @csrf
                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
                     <div class="div-left">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">NAMA PENDAPATAN</span>
-                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI" name="nama1"
-                                value="{{ old('nama1') }}">
+                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
+                                name="nama1" value="{{ old('nama1') }}">
                         </div>
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">NOMINAL PENDAPATAN</span>
@@ -124,7 +124,8 @@
                         </div>
                     </div>
 
-                    <a href="#" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</a>
+                    <button type="submit" class="btn btn-sm btn-primary"
+                        style="margin-top:10px;width:100%">SIMPAN</button>
                 </div>
             </form>
 
