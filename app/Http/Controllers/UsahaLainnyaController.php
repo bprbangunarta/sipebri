@@ -236,4 +236,33 @@ class UsahaLainnyaController extends Controller
         }
         return redirect()->back()->with('error', 'Data gagal menambahkan data');
     }
+
+    public function destroy(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('kode_usaha'));
+
+            $data = Lain::where('kode_usaha', $enc)->get();
+            $bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
+            $du = DB::table('du_lainnya')->where('usaha_kode', $enc)->get();
+
+            Lain::where('id', $data[0]->id)->delete();
+            if (count($bu) !== 0) {
+                for ($i = 0; $i < count($bu); $i++) {
+                    DB::table('bu_lainnya')->where('id', $bu[$i]->id)->delete();
+                }
+            }
+            if (count($du) !== 0) {
+                for ($j = 0; $j < count($du); $j++) {
+                    DB::table('du_lainnya')->where('id', $du[$j]->id)->delete();
+                }
+            }
+
+            Lain::where('id', $data[0]->id)->delete();
+            return redirect()->back()->with('success', 'Usaha lainnya berhasil dihapus');
+        } catch (DecryptException $th) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Usaha lainnya gagal dihapus');
+    }
 }

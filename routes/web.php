@@ -40,11 +40,14 @@ use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\TaksasiJaminanController;
+use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
+use App\Http\Controllers\AnalisaKeuanganController;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AnalisaKeuanganController;
+use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\UsahaPerdaganganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -196,10 +199,10 @@ Route::middleware('auth')->group(function () {
         // Route::resource('/analisa/usaha/lain', LainController::class);
         // Route::put('/analisa/usaha/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
         //Analisa Keuangan
-        Route::resource('/analisa/keuangan', KeuanganController::class);
-        Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
+        // Route::resource('/analisa/keuangan', KeuanganController::class);
+        // Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
         //Analisa kepemilikan
-        Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
+        // Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
         //Analisa Taksasi Kepemilikan
         Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
         //Analisa 5C
@@ -234,7 +237,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/data-analisa', [AnalisaController::class, 'index']);
         //Analisa Usaha Perdagangan
-        Route::controller(PerdaganganController::class)->group(function () {
+        Route::controller(UsahaPerdaganganController::class)->group(function () {
             // Route::get('/analisa/usaha/perdagangan', [PerdaganganController::class, 'index'])->name('perdagangan.in');
             Route::get('/analisa/usaha/perdagangan', 'index')->name('perdagangan.in');
             Route::post('/analisa/usaha/perdagangan', 'store')->name('perdagangan.store');
@@ -250,7 +253,7 @@ Route::middleware('auth')->group(function () {
             // Route::get('/analisa/usaha/{perdagangan}/edit', 'edit')->name('perdagangan.edit');
         });
 
-        Route::controller(PertanianController::class)->group(function () {
+        Route::controller(UsahaPertanianController::class)->group(function () {
             Route::get('/analisa/usaha/pertanian', 'index')->name('pertanian.ind');
             Route::post('/analisa/usaha/pertanian', 'store')->name('pertanian.simpan');
             Route::get('/analisa/informasi/usaha/pertanian', 'informasi')->name('pertanian.informasi');
@@ -261,6 +264,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/biaya/usaha/pertanian', 'updatebiaya')->name('pertanian.updatebiaya');
             Route::get('/analisa/keuangan/usaha/pertanian', 'keuangan')->name('pertanian.keuangan');
             Route::post('/analisa/keuangan/usaha/pertanian', 'simpankeuangan')->name('pertanian.simpankeuangan');
+            Route::delete('/analisa/keuangan/usaha/pertanian/{id}', 'destroy')->name('pertanian.destroy');
         });
 
         Route::controller(UsahaJasaController::class)->group(function () {
@@ -268,6 +272,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/usaha/jasa', 'store')->name('usahajasa.store');
             Route::get('/analisa/keuangan/usaha/jasa', 'keuangan')->name('usahajasa.keuangan');
             Route::post('/analisa/keuangan/usaha/jasa', 'simpankeuangan')->name('usahajasa.simpankeuangan');
+            Route::delete('/analisa/usaha/jasa/{id}', 'destroy')->name('usahajasa.destroy');
         });
 
         Route::controller(UsahaLainnyaController::class)->group(function () {
@@ -278,10 +283,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/keuangan/usaha/lainnya', 'keuangan')->name('lain.keuangan');
             Route::post('/analisa/keuangan/usaha/lainnya', 'simpankeuangan')->name('lain.simpankeuangan');
             Route::put('/analisa/keuangan/usaha/lainnya', 'updatekeuangan')->name('lain.updatekeuangan');
+            Route::delete('/analisa/usaha/lainnya', 'destroy')->name('lain.destroy');
         });
 
         Route::controller(AnalisaKeuanganController::class)->group(function () {
-            Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
+            Route::get('/analisa/keuangan', 'index')->name('keuangan.index');
+            Route::post('/analisa/keuangan', 'store')->name('keuangan.simpan');
+            Route::put('/analisa/keuangan', 'update')->name('keuangan.update');
+        });
+
+        Route::controller(AnalisaKepemilikanController::class)->group(function () {
+            Route::get('/analisa/kepemilikan', 'index')->name('kepemilikan.index');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
@@ -301,8 +313,8 @@ Route::middleware('auth')->group(function () {
         // Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
         // Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
 
-        Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
-        Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
+        // Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
+        // Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
 
         Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
         Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');

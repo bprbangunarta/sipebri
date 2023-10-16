@@ -121,4 +121,16 @@ class UsahaJasaController extends Controller
         }
         return redirect()->back()->with('error', 'Data usaha jasa gagal ditambahkan');
     }
+
+    public function destroy($id)
+    {
+        try {
+
+            Jasa::where('id', $id)->delete();
+            return redirect()->back()->with('success', 'Usaha jasa berhasil dihapus');
+        } catch (DecryptException $th) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Usaha jasa gagal dihapus');
+    }
 }
