@@ -69,7 +69,7 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        @include('theme.menu-analisa', [$data])
+                        @include('theme.menu-analisa', [$data, 'pengajuan' => $pengajuan])
                     </div>
 
                     <div class="col-xs-9">

@@ -38,7 +38,7 @@
         <ul class="nav nav-pills nav-stacked">
             <li
                 class="{{ request()->is('themes/analisa/usaha/perdagangan', 'themes/analisa/usaha/pertanian', 'themes/analisa/usaha/jasa', 'themes/analisa/usaha/lainnya', 'themes/analisa/identitas/usaha/perdagangan', 'themes/analisa/barang/usaha/perdagangan', 'themes/analisa/keuangan/usaha/perdagangan', 'themes/analisa/informasi/usaha/pertanian', 'themes/analisa/biaya/usaha/pertanian', 'themes/analisa/keuangan/usaha/pertanian', 'themes/analisa/keuangan/usaha/jasa', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/keuangan/usaha/lainnya') ? 'active' : '' }}">
-                <a href="/themes/analisa/usaha/perdagangan">
+                <a href="{{ route('perdagangan.in', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Usaha
                 </a>
             </li>

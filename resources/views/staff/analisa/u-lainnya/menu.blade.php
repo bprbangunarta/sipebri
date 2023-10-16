@@ -54,7 +54,7 @@
 
 <body class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
-
+        @include('sweetalert::alert')
         @include('theme.header')
 
         <x-navigation></x-navigation>
@@ -86,7 +86,8 @@
                                 </li>
 
                                 <li>
-                                    <a href="/themes/analisa/usaha/lainnya/">
+                                    <a
+                                        href="{{ route('lain.index', ['pengajuan' => $pengajuan, 'kode_usaha' => $kode_usaha]) }}">
                                         <i class="fa fa-arrow-left"></i> KEMBALI
                                     </a>
                                 </li>
