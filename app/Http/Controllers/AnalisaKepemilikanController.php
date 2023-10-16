@@ -89,8 +89,8 @@ class AnalisaKepemilikanController extends Controller
                 'isi_lainnya2' => strtoupper($request->lainnya2) ?? null,
             ];
 
-            $pemilik = Kepemilikan::where('pengajuan_kode', $enc)->get();
-            dd($pemilik);
+            $pemilik = Kepemilikan::where('kode_kepemilikan', $request->kode_kepemilikan)->get();
+
             DB::table('data_kepemilikan')->where('id', $pemilik[0]->id)->update($data);
 
             return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan');

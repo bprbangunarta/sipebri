@@ -13,7 +13,7 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
-                                <a href="{{ route('kepemilikan.index', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                <a href="{{ route('kepemilikan.index', ['pengajuan' => $data->kd_pengajuan, 'kode_kepemilikan' => $milik->kode_kepemilikan]) }}"
                                     class="{{ request()->is('theme/analisa/kepemilikan') ? 'text-bold' : '' }}">
                                     HARTA KEPEMILIKAN
                                 </a>
