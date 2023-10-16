@@ -42,13 +42,28 @@ class AnalisaJaminanController extends Controller
 
     public function tanah(Request $request)
     {
-        dd($request);
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $au = Midle::taksasi_jaminan($enc);
 
             return view('staff.analisa.jaminan.tanah', [
+                'data' => $cek[0],
+                'jaminan' => $au,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function lain(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $au = Midle::taksasi_jaminan($enc);
+
+            return view('staff.analisa.jaminan.lainnya', [
                 'data' => $cek[0],
                 'jaminan' => $au,
             ]);

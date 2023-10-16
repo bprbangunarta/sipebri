@@ -56,7 +56,7 @@
             </li>
 
             <li
-                class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tananh', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
+                class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tanah', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
                 <a href="{{ route('taksasi.kendaraan', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Jaminan
                 </a>
