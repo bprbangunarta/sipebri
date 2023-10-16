@@ -44,6 +44,7 @@ use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\AnalisaKeuanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -277,6 +278,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/keuangan/usaha/lainnya', 'keuangan')->name('lain.keuangan');
             Route::post('/analisa/keuangan/usaha/lainnya', 'simpankeuangan')->name('lain.simpankeuangan');
             Route::put('/analisa/keuangan/usaha/lainnya', 'updatekeuangan')->name('lain.updatekeuangan');
+        });
+
+        Route::controller(AnalisaKeuanganController::class)->group(function () {
+            Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');

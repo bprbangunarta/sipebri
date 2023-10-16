@@ -34,7 +34,7 @@
                                     method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="btn btn-sm btn-danger" style="float: right"
+                                    <button type="submit" class="btn btn-sm btn-danger confirmdelete" style="float: right"
                                         title="Hapus Usaha">
                                         <i class="fa fa-trash"></i>
                                     </button>
@@ -75,5 +75,9 @@
             </div>
         </div>
     </div>
-    {{-- <script src="{{ asset('assets/js/myscript/delete.js') }}"></script> --}}
+
+
 @endsection
+@push('myscript')
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+@endpush

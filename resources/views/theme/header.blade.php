@@ -1,47 +1,54 @@
-<header class="main-header">
-    <a href="/dashboard" class="logo">
-        <span class="logo-mini"><b>PBA</b></span>
-        <span class="logo-lg"><b>SIPEBRI</b></span>
-    </a>
+<meta charset="utf-8">
+<title>@yield('title')</title>
+<link rel="icon" type="image/x-icon" href="{{ asset('theme/favicon.png') }}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <nav class="navbar navbar-static-top">
-        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </a>
+<meta name="description" content="Sistem Informasi Pemberitan Kredit BPR Bangunarta" />
+<meta property="og:locale" content="id_ID" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="SIPEBRI - Pemberian Kredit" />
+<meta property="og:description" content="Sistem Informasi Pemberian Kredit BPR Bangunarta" />
+<meta property="og:url" content="https://sipebri.bprbangunarta.co.id/" />
+<meta property="og:site_name" content="Indiepers" />
+<meta property="og:image" content="https://sipebri.bprbangunarta.co.id/simontok.png" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="400" />
+<meta property="og:image:type" content="image/png" />
 
-        <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-                <li class="dropdown user user-menu active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{ asset('theme/favicon.png') }}" class="user-image" alt="User Image">
-                        <span class="hidden-xs">{{ Auth::user()->name }}</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="user-header">
-                            <img src="{{ asset('theme/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
-                            <p>
-                                Web Developer
-                                <small>{{ Auth::user()->email }}</small>
-                            </p>
-                        </li>
-                        <li class="user-footer">
-                            <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profil</a>
-                            </div>
-                            <div class="pull-right">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <a href="" class="btn btn-default btn-flat"
-                                        onclick="event.preventDefault(); this.closest('form').submit();">Keluar</a>
-                                </form>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+@section('jquery')
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+        crossorigin="anonymous"></script>
+@endsection
+
+<link rel="stylesheet" href="{{ asset('theme/assets/bootstrap/dist/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('theme/assets/font-awesome/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('theme/assets/Ionicons/css/ionicons.min.css') }}">
+<link rel="stylesheet" href="{{ asset('theme/dist/css/AdminLTE.min.css') }}">
+<link rel="stylesheet" href="{{ asset('theme/dist/css/skins/_all-skins.min.css') }}">
+
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+<style>
+    .fw-bold {
+        font-weight: bold;
+    }
+
+    .form-border {
+        border: 1px solid black;
+    }
+
+    .div-left {
+        /* border:1px solid black; */
+        width: 49.5%;
+        float: left;
+    }
+
+    .div-right {
+        /* border:1px solid black; */
+        width: 49.5%;
+        float: right;
+    }
+</style>

@@ -4,3 +4,5 @@
 <script src="{{ asset('theme/assets/fastclick/lib/fastclick.js') }}"></script>
 <script src="{{ asset('theme/dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('theme/dist/js/demo.js') }}"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
