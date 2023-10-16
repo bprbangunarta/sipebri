@@ -23,14 +23,14 @@ class KepemilikanController extends Controller
             $cek = Midle::analisa_usaha($enc);
 
             $has = Kepemilikan::where('pengajuan_kode', $enc)->first();
-            
+
             if (is_null($has)) {
                 return view('analisa.harta-kepemilikan', [
-                'data' => $cek[0],
-                'milik' => $has,
-            ]);
+                    'data' => $cek[0],
+                    'milik' => $has,
+                ]);
             }
-           
+
             return view('analisa.harta-kepemilikan-edit', [
                 'data' => $cek[0],
                 'milik' => $has,
@@ -38,7 +38,6 @@ class KepemilikanController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        
     }
 
     /**
@@ -59,7 +58,7 @@ class KepemilikanController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         try {
             $enc = Crypt::decrypt($request->kode_pengajuan);
             $name = 'HRK';
@@ -87,9 +86,8 @@ class KepemilikanController extends Controller
                 DB::table('data_kepemilikan')->insert($data);
                 return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan');
             }
-
         } catch (DecryptException $th) {
-             return abort(403, 'Permintaan anda di Tolak.');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
     }
 
@@ -124,7 +122,7 @@ class KepemilikanController extends Controller
      */
     public function update(Request $request, $kepemilikan)
     {
-        
+        dd($request);
         try {
             $enc = Crypt::decrypt($request->kode_pengajuan);
             $data = [
@@ -147,9 +145,8 @@ class KepemilikanController extends Controller
                 DB::table('data_kepemilikan')->where('id', $pemilik[0]->id)->update($data);
                 return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan');
             }
-
         } catch (DecryptException $th) {
-             return abort(403, 'Permintaan anda di Tolak.');
+            return abort(403, 'Permintaan anda di Tolak.');
         }
     }
 

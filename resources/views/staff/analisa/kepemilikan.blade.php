@@ -12,7 +12,7 @@
                 <div class="col-xs-9">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li class="{{ request()->is('theme/analisa/kepemilikan') ? 'active' : '' }}">
+                            <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
                                 <a href="{{ route('kepemilikan.index', ['pengajuan' => $data->kd_pengajuan]) }}"
                                     class="{{ request()->is('theme/analisa/kepemilikan') ? 'text-bold' : '' }}">
                                     HARTA KEPEMILIKAN
@@ -23,7 +23,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active">
 
-                                <form action="">
+                                <form action="{{ route('kepemilikan.store') }}" method="post">
                                     @csrf
                                     <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
@@ -32,6 +32,8 @@
                                         <div class="div-left">
                                             <div style="width: 49.5%;float:left;">
                                                 <span class="fw-bold">RUMAH</span>
+                                                <input type="text" value="{{ $data->kd_pengajuan }}"
+                                                    name="kode_pengajuan" hidden>
                                                 <select class="form-control input-sm form-border" name="rumah"
                                                     id="">
                                                     <option value="">--PILIH--</option>
@@ -150,8 +152,8 @@
                                             </div>
                                         </div>
 
-                                        <a href="#" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;width:100%">SIMPAN</a>
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            style="margin-top:10px;width:100%">SIMPAN</button>
                                     </div>
                                 </form>
 

@@ -50,7 +50,7 @@
             </li>
 
             <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
-                <a href="/themes/analisa/kepemilikan">
+                <a href="{{ route('kepemilikan.index', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Kepemilikan
                 </a>
             </li>

@@ -294,6 +294,8 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(AnalisaKepemilikanController::class)->group(function () {
             Route::get('/analisa/kepemilikan', 'index')->name('kepemilikan.index');
+            Route::post('/analisa/kepemilikan', 'store')->name('kepemilikan.store');
+            Route::put('/analisa/kepemilikan', 'update')->name('kepemilikan.update');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
