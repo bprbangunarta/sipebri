@@ -89,11 +89,11 @@ class AnalisaKepemilikanController extends Controller
                 'isi_lainnya2' => strtoupper($request->lainnya2) ?? null,
             ];
 
-            if ($data) {
-                $pemilik = Kepemilikan::where('pengajuan_kode', $enc)->get();
-                DB::table('data_kepemilikan')->where('id', $pemilik[0]->id)->update($data);
-                return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan')->with('pengajuan', $request->query('pengajuan'));;
-            }
+            $pemilik = Kepemilikan::where('pengajuan_kode', $enc)->get();
+            dd($pemilik);
+            DB::table('data_kepemilikan')->where('id', $pemilik[0]->id)->update($data);
+
+            return redirect()->back()->with('success', 'Harta Kepemilikan berhasil ditambahkan');
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
