@@ -35,7 +35,7 @@
                 </li>
             @endhasanyrole
 
-            <li class="treeview">
+            <li class="treeview active">
                 <a href="#" title="Data Debitur">
                     <i class="fa fa-file-text-o"></i>
                     <span>Permohonan</span>
