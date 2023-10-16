@@ -16,43 +16,48 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        @include('theme.menu-analisa')
+                        @include('theme.menu-analisa', [$data])
                     </div>
-        
+
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="{{ request()->is('theme/analisa/5c/character') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/5c/character" class="{{ request()->is('theme/analisa/5c/character') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/5c/character') ? 'active' : '' }}">
+                                    <a href="{{ route('analisa5c.character', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/5c/character') ? 'text-bold' : '' }}">
                                         CHARACTER
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/5c/capacity') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/5c/capacity" class="{{ request()->is('theme/analisa/5c/capacity') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/5c/capacity') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/5c/capacity"
+                                        class="{{ request()->is('themes/analisa/5c/capacity') ? 'text-bold' : '' }}">
                                         CAPACITY
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/5c/capital') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/5c/capital" class="{{ request()->is('theme/analisa/5c/capital') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/5c/capital') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/5c/capital"
+                                        class="{{ request()->is('themes/analisa/5c/capital') ? 'text-bold' : '' }}">
                                         CAPITAL
                                     </a>
                                 </li>
-                                
-                                <li class="{{ request()->is('theme/analisa/5c/collateral') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/5c/collateral" class="{{ request()->is('theme/analisa/5c/collateral') ? 'text-bold' : '' }}">
+
+                                <li class="{{ request()->is('themes/analisa/5c/collateral') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/5c/collateral"
+                                        class="{{ request()->is('themes/analisa/5c/collateral') ? 'text-bold' : '' }}">
                                         COLLATERAL
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/5c/condition') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/5c/condition" class="{{ request()->is('theme/analisa/5c/condition') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/5c/condition') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/5c/condition"
+                                        class="{{ request()->is('themes/analisa/5c/condition') ? 'text-bold' : '' }}">
                                         CONDITION
                                     </a>
                                 </li>
                             </ul>
-        
+
                             @yield('content')
                         </div>
                     </div>
@@ -73,8 +78,8 @@
     @stack('myscript')
 
     <script>
-        $(document).ready(function () {
-        $('.sidebar-menu').tree()
+        $(document).ready(function() {
+            $('.sidebar-menu').tree()
         })
     </script>
 </body>

@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\UsahaPerdaganganController;
 
 /*
@@ -207,7 +208,7 @@ Route::middleware('auth')->group(function () {
         //Analisa Taksasi Kepemilikan
         // Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
         //Analisa 5C
-        Route::resource('/analisa/a5c', Analisa5cController::class);
+        // Route::resource('/analisa/a5c', Analisa5cController::class);
         //Memorandum
         Route::resource('/analisa/memorandum', MemorandumController::class);
         //Analisa Kualitatif
@@ -301,9 +302,15 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(AnalisaJaminanController::class)->group(function () {
             Route::get('/analisa/jaminan/kendaraan', 'kendaraan')->name('taksasi.kendaraan');
-            Route::post('/analisa/jaminan/kendaraan', 'simpankendaraan')->name('taksasi.simpankendaraan');
+            Route::post('/analisa/jaminan/kendaraan', 'updatekendaraan')->name('taksasi.updatekendaraan');
+            Route::post('/analisa/jaminan/fhoto/kendaraan', 'fhotokendaraan')->name('taksasi.fhotokendaraan');
+            Route::get('/analisa/jaminan/kendaraan/{id}/edit', 'editkendaraan')->name('taksasi.editkendaraan');
             Route::get('/analisa/jaminan/tanah', 'tanah')->name('taksasi.tanah');
             Route::get('/analisa/jaminan/lainnya', 'lain')->name('taksasi.lain');
+        });
+
+        Route::controller(DataAnalisa5CController::class)->group(function () {
+            Route::get('/analisa/5c/character', 'character')->name('analisa5c.character');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');

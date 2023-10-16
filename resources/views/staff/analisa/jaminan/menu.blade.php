@@ -3,6 +3,7 @@
 
 <head>
     @include('theme.header')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="hold-transition skin-blue fixed sidebar-mini">
