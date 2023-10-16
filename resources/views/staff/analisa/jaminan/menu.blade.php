@@ -16,29 +16,29 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        @include('theme.menu-analisa')
+                        @include('theme.menu-analisa', [$data])
                     </div>
 
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="{{ request()->is('theme/analisa/jaminan/kendaraan') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/jaminan/kendaraan"
-                                        class="{{ request()->is('theme/analisa/jaminan/kendaraan') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/jaminan/kendaraan*') ? 'active' : '' }}">
+                                    <a href="{{ route('taksasi.kendaraan', ['analisa' => $pengajuan, 'pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/jaminan/kendaraan*') ? 'text-bold' : '' }}">
                                         KENDARAAN
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/jaminan/tanah') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/jaminan/tanah"
-                                        class="{{ request()->is('theme/analisa/jaminan/tanah') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/jaminan/tanah') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/jaminan/tanah"
+                                        class="{{ request()->is('themes/analisa/jaminan/tanah') ? 'text-bold' : '' }}">
                                         TANAH
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('theme/analisa/jaminan/lainnya') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/jaminan/lainnya"
-                                        class="{{ request()->is('theme/analisa/jaminan/lainnya') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
+                                    <a href="/themes/analisa/jaminan/lainnya"
+                                        class="{{ request()->is('themes/analisa/jaminan/lainnya') ? 'text-bold' : '' }}">
                                         LAINNYA
                                     </a>
                                 </li>

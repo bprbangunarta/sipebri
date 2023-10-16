@@ -46,6 +46,7 @@ use App\Http\Controllers\AnalisaKeuanganController;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\UsahaPerdaganganController;
 
@@ -204,7 +205,7 @@ Route::middleware('auth')->group(function () {
         //Analisa kepemilikan
         // Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
         //Analisa Taksasi Kepemilikan
-        Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
+        // Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
         //Analisa 5C
         Route::resource('/analisa/a5c', Analisa5cController::class);
         //Memorandum
@@ -298,6 +299,12 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/kepemilikan', 'update')->name('kepemilikan.update');
         });
 
+        Route::controller(AnalisaJaminanController::class)->group(function () {
+            Route::get('/analisa/jaminan/kendaraan', 'kendaraan')->name('taksasi.kendaraan');
+            Route::post('/analisa/jaminan/kendaraan', 'simpankendaraan')->name('taksasi.simpankendaraan');
+            Route::get('/analisa/jaminan/tanah', 'tanah')->name('taksasi.tanah')->name('taksasi.tanah');
+        });
+
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
         // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
         // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
@@ -318,7 +325,7 @@ Route::middleware('auth')->group(function () {
         // Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
         // Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
 
-        Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
+        // Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
         Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');
         Route::view('/analisa/jaminan/lainnya', 'staff.analisa.jaminan.lainnya');
     });
