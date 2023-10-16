@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
 use App\Http\Controllers\LainController;
+use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
+use App\Http\Controllers\KomiteController;
 use App\Http\Controllers\SurveiController;
 use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\Analisa5cController;
@@ -20,28 +23,27 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PertanianController;
+use App\Http\Controllers\UsahaJasaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\KonfirmasiController;
+use App\Http\Controllers\KualitatifController;
+use App\Http\Controllers\MemorandumController;
 use App\Http\Controllers\PendampingController;
 use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\CetakAnalisaController;
+use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\Admin\PekerjaanController;
+use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AnalisaTambahan;
-use App\Http\Controllers\AnalisaTambahanController;
-use App\Http\Controllers\AsuransiController;
-use App\Http\Controllers\CetakAnalisaController;
-use App\Http\Controllers\KomiteController;
-use App\Http\Controllers\KualitatifController;
-use App\Http\Controllers\MemorandumController;
 
 /*
 |--------------------------------------------------------------------------
@@ -186,12 +188,12 @@ Route::middleware('auth')->group(function () {
         // Route::put('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
         //Analisa Usaha Pertanian
         // Route::resource('/analisa/usaha/pertanian', PertanianController::class);
-        Route::put('/analisa/usaha/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
+        // Route::put('/analisa/usaha/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
         //Analisa Usaha Jasa
-        Route::resource('/analisa/usaha/jasa', JasaController::class);
+        // Route::resource('/analisa/usaha/jasa', JasaController::class);
         //Analisa Usaha Lainnya
-        Route::resource('/analisa/usaha/lain', LainController::class);
-        Route::put('/analisa/usaha/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
+        // Route::resource('/analisa/usaha/lain', LainController::class);
+        // Route::put('/analisa/usaha/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
         //Analisa Keuangan
         Route::resource('/analisa/keuangan', KeuanganController::class);
         Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
@@ -260,6 +262,21 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/keuangan/usaha/pertanian', 'simpankeuangan')->name('pertanian.simpankeuangan');
         });
 
+        Route::controller(UsahaJasaController::class)->group(function () {
+            Route::get('/analisa/usaha/jasa', 'index')->name('usahajasa.ind');
+            Route::post('/analisa/usaha/jasa', 'store')->name('usahajasa.store');
+            Route::get('/analisa/keuangan/usaha/jasa', 'keuangan')->name('usahajasa.keuangan');
+            Route::post('/analisa/keuangan/usaha/jasa', 'simpankeuangan')->name('usahajasa.simpankeuangan');
+        });
+
+        Route::controller(UsahaLainnyaController::class)->group(function () {
+            Route::get('/analisa/usaha/lainnya', 'index')->name('lain.index');
+            Route::post('/analisa/usaha/lainnya', 'simpanlain')->name('lain.simpanlain');
+            Route::get('/analisa/identitas/usaha/lainnya', 'identitas')->name('lain.identitas');
+            Route::put('/analisa/identitas/usaha/lainnya', 'simpanidentitas')->name('lain.simpanidentitas');
+            Route::get('/analisa/keuangan/usaha/lainnya', 'keuangan')->name('lain.keuangan');
+        });
+
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
         // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
         // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
@@ -270,12 +287,12 @@ Route::middleware('auth')->group(function () {
         // Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
         // Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
 
-        Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
-        Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
+        // Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
+        // Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
 
-        Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
-        Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
-        Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
+        // Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
+        // Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
+        // Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
 
         Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
         Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');

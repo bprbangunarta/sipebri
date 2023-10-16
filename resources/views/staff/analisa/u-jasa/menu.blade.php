@@ -31,21 +31,23 @@
 
     <style>
         .fw-bold {
-        font-weight: bold;
+            font-weight: bold;
         }
-        .form-border
-        {
-        border:1px solid black;
+
+        .form-border {
+            border: 1px solid black;
         }
+
         .div-left {
-        /* border:1px solid black; */
-        width: 49.5%;
-        float: left;
+            /* border:1px solid black; */
+            width: 49.5%;
+            float: left;
         }
+
         .div-right {
-        /* border:1px solid black; */
-        width: 49.5%;
-        float: right;
+            /* border:1px solid black; */
+            width: 49.5%;
+            float: right;
         }
     </style>
 </head>
@@ -61,25 +63,26 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        @include('theme.menu-analisa')
+                        @include('theme.menu-analisa', [$data])
                     </div>
-        
+
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="{{ request()->is('theme/analisa/keuangan/usaha/jasa') ? 'active' : '' }}">
-                                    <a href="/theme/analisa/identitas/usaha/perdagangan/" class="{{ request()->is('theme/analisa/keuangan/usaha/jasa') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/analisa/keuangan/usaha/jasa*') ? 'active' : '' }}">
+                                    <a href="{{ route('usahajasa.keuangan', ['analisa' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/keuangan/usaha/jasa*') ? 'text-bold' : '' }}">
                                         IDENTITAS DAN KEUANGAN
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="/theme/analisa/usaha/jasa/">
+                                    <a href="{{ route('usahajasa.ind', ['pengajuan' => $pengajuan]) }}">
                                         <i class="fa fa-arrow-left"></i> KEMBALI
                                     </a>
                                 </li>
                             </ul>
-        
+
                             @yield('content')
                         </div>
                     </div>
@@ -100,8 +103,8 @@
     @stack('myscript')
 
     <script>
-        $(document).ready(function () {
-        $('.sidebar-menu').tree()
+        $(document).ready(function() {
+            $('.sidebar-menu').tree()
         })
     </script>
 </body>

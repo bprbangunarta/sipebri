@@ -76,7 +76,6 @@
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/analisa/usaha/perdagangan') ? 'active' : '' }}">
                                     <a href="{{ route('perdagangan.in', ['pengajuan' => $pengajuan]) }}"
-                                        {{-- <a href="/themess/analisa/usaha/perdagangan" --}}
                                         class="{{ request()->is('themess/analisa/usaha/perdagangan') ? 'text-bold' : '' }}">
                                         USAHA PERDAGANGAN
                                     </a>
@@ -84,21 +83,20 @@
 
                                 <li class="{{ request()->is('themes/analisa/usaha/pertanian') ? 'active' : '' }}">
                                     <a href="{{ route('pertanian.ind', ['pengajuan' => $pengajuan]) }}"
-                                        {{-- <a href="/themes/analisa/usaha/pertanian" --}}
                                         class="{{ request()->is('themes/analisa/usaha/pertanian') ? 'text-bold' : '' }}">
                                         USAHA PERTANIAN
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/usaha/jasa') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/usaha/jasa"
+                                    <a href="{{ route('usahajasa.ind', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/usaha/jasa') ? 'text-bold' : '' }}">
                                         USAHA JASA
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/usaha/lainnya') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/usaha/lainnya"
+                                    <a href="{{ route('lain.index', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/usaha/lainnya') ? 'text-bold' : '' }}">
                                         USAHA LAINNYA
                                     </a>
