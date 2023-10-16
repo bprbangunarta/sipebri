@@ -46,7 +46,8 @@
                                     <i class="fa fa-file-text-o"></i>
                                 </button>
 
-                                <button data-toggle="modal" data-target="#modal-foto" class="btn btn-sm btn-primary">
+                                <button id="{{ $item->id }}" data-toggle="modal" data-target="#modal-foto"
+                                    class="btn btn-sm btn-primary">
                                     <i class="fa fa-image"></i>
                                 </button>
                             </td>
@@ -178,7 +179,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">FOTO AGUNAN</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('taksasi.fhotokendaraan') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
@@ -188,15 +189,18 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">
                                             TAMPAK DEPAN
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" target="_blank" id="prevdepan"
+                                                data-target="depan">PREVIEW</a>
                                         </span>
+                                        <input type="text" id="nid" name="id" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto1" accept="image/*">
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">
                                             TAMPAK KIRI
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" target="_blank" id="prevkiri"
+                                                data-target="kiri">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto3" accept="image/*">
@@ -207,7 +211,8 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">
                                             TAMPAK BELAKANG
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" target="_blank" id="prevbelakang"
+                                                data-target="belakang">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto2" accept="image/*">
@@ -216,7 +221,8 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">
                                             TAMPAK KANAN
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" target="_blank" id="prevkanan"
+                                                data-target="kanan">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto4" accept="image/*">
@@ -237,4 +243,13 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/jaminan_kendaraan.js') }}"></script>
+    <script>
+        $("button[data-target='#modal-foto']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var nilaiid = $(this).attr('id');
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#nid').val(nilaiid);
+        });
+    </script>
 @endpush

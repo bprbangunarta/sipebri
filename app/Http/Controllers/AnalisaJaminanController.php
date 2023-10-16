@@ -90,19 +90,49 @@ class AnalisaJaminanController extends Controller
 
     public function fhotokendaraan(Request $request)
     {
-        dd($request);
         try {
-            $nilai = [
-                'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_pasar')) ?? 0,
-                'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_taksasi')) ?? 0,
-                'updated_at' => now(),
-            ];
-            DB::table('data_jaminan')->where('id', $request->id)->update($nilai);
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
+            $cek = $request->validate([
+                'foto1' => 'image|mimes:jpeg,png,jpg|max:5120',
+                'foto2' => 'image|mimes:jpeg,png,jpg|max:5120',
+                'foto3' => 'image|mimes:jpeg,png,jpg|max:5120',
+                'foto4' => 'image|mimes:jpeg,png,jpg|max:5120',
+            ]);
+
+            $tanggalSekarang = Carbon::now();
+            $tanggal = $tanggalSekarang->format('dmY');
+
+            if ($request->file('foto1')) {
+                $ekstensi = $cek['foto1']->getClientOriginalExtension();
+                $new1 = 'depan' . '_' . $tanggal . '.' . $ekstensi;
+                $cek['foto1'] = $request->file('foto1')->storeAs('image/photo_agunan', $new1, 'public');
+                $cek['foto1'] = $new1;
+            }
+
+            if ($request->file('foto2')) {
+                $ekstensi = $cek['foto2']->getClientOriginalExtension();
+                $new2 = 'belakang' . '_' . $tanggal . '.' . $ekstensi;
+                $cek['foto2'] = $request->file('foto2')->storeAs('image/photo_agunan', $new2, 'public');
+                $cek['foto2'] = $new2;
+            }
+
+            if ($request->file('foto3')) {
+                $ekstensi = $cek['foto3']->getClientOriginalExtension();
+                $new3 = 'kiri' . '_' . $tanggal . '.' . $ekstensi;
+                $cek['foto3'] = $request->file('foto3')->storeAs('image/photo_agunan', $new3, 'public');
+                $cek['foto3'] = $new3;
+            }
+
+            if ($request->file('foto4')) {
+                $ekstensi = $cek['foto4']->getClientOriginalExtension();
+                $new4 = 'kanan' . '_' . $tanggal . '.' . $ekstensi;
+                $cek['foto4'] = $request->file('foto4')->storeAs('image/photo_agunan', $new4, 'public');
+                $cek['foto4'] = $new4;
+            }
+            DB::table('data_jaminan')->where('id', $request->id)->update($cek);
+            return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menambahkan fhoto');
         }
-        return redirect()->back()->with('succeserrors', 'Gagal menambahkan data');
     }
 
     public function tanah(Request $request)
@@ -111,7 +141,7 @@ class AnalisaJaminanController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $au = Midle::taksasi_jaminan($enc);
-
+            // dd($au);
             return view('staff.analisa.jaminan.tanah', [
                 'data' => $cek[0],
                 'jaminan' => $au,
