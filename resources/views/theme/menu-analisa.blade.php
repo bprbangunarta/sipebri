@@ -90,7 +90,7 @@
             </li>
 
             <li class="{{ request()->is('themes/analisa/konfirmasi/analisa') ? 'active' : '' }}">
-                <a href="/themes/analisa/konfirmasi/analisa">
+                <a href="{{ route('konfirmasi.dokumen', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Konfirmasi
                 </a>
             </li>

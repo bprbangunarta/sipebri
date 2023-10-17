@@ -16,15 +16,15 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        {{-- @include('theme.menu-static', [$data]) --}}
-                        @include('theme.menu-static')
+                        @include('theme.menu-analisa', [$data])
                     </div>
 
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/analisa/konfirmasi') ? 'active' : '' }}">
-                                    <a href="{{ route('konfirmasi.analisa') }}" class="{{ request()->is('themes/analisa/konfirmasi') ? 'text-bold' : '' }}">
+                                    <a href="{{ route('konfirmasi.analisa', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/konfirmasi') ? 'text-bold' : '' }}">
                                         HASIL ANALISA
                                     </a>
                                 </li>

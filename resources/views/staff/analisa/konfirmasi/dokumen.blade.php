@@ -1,5 +1,4 @@
-{{-- @extends('staff.analisa.kualitatif.menu', [$data, 'pengajuan' => $data->kd_pengajuan]) --}}
-@extends('staff.analisa.konfirmasi.menu')
+@extends('staff.analisa.konfirmasi.menu', [$data, 'pengajuan' => $data->kd_pengajuan])
 @section('title', 'Konfirmasi Analisa')
 
 @section('content')
@@ -14,9 +13,11 @@
                             <thead>
                                 <tr class="bg-blue">
                                     <th class="text-center" rowspan="2" style="width: 10px;vertical-align:middle;">NO</th>
-                                    <th class="text-center" rowspan="2" style="vertical-align:middle;">DAFTAR DOKUMEN</th>
+                                    <th class="text-center" rowspan="2" style="vertical-align:middle;">DAFTAR DOKUMEN
+                                    </th>
                                     <th class="text-center" colspan="5">QC PETUGAS</th>
-                                    <th class="text-center" rowspan="2" style="width: 150px;vertical-align:middle;">CATATAN</th>
+                                    <th class="text-center" rowspan="2" style="width: 150px;vertical-align:middle;">
+                                        CATATAN</th>
                                 </tr>
                                 <tr class="bg-blue">
                                     <th class="text-center" style="width: 50px;">SAA</td>
@@ -61,5 +62,5 @@
 @endsection
 
 @push('myscript')
-<script src="{{ asset('assets/js/myscript/tambahan.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/tambahan.js') }}"></script>
 @endpush

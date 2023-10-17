@@ -282,9 +282,19 @@ class KonfirmasiController extends Controller
     }
 
 
-    public function dokumen_nasabah()
+    public function dokumen_nasabah(Request $request)
     {
-        return view('staff.analisa.konfirmasi.dokumen');
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+
+
+            return view('staff.analisa.konfirmasi.dokumen', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     public function konfirmasi_analisa()
