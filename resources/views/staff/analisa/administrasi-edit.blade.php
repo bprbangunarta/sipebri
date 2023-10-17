@@ -23,8 +23,9 @@
                         <div class="tab-content">
                             <div class="tab-pane active">
 
-                                <form action="{{ route('administrasi.simpan', ['pengajuan' => $data->kd_pengajuan]) }}"
+                                <form action="{{ route('administrasi.update', ['pengajuan' => $data->kd_pengajuan]) }}"
                                     method="post">
+                                    @method('put')
                                     @csrf
                                     <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
@@ -43,14 +44,16 @@
                                                 <span class="fw-bold">PROVISI</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase" name="privisi"
-                                                    placeholder="Rp." id="provisi">
+                                                    placeholder="Rp." id="provisi"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->privisi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">MATERAI</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase" name="materai"
-                                                    placeholder="Rp." id="materai">
+                                                    placeholder="Rp." id="materai"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->materai, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -58,7 +61,8 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="asuransi_jiwa_menurun1" placeholder="Rp."
-                                                    id="asuransi_jiwa_menurun1">
+                                                    id="asuransi_jiwa_menurun1"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun1, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -66,7 +70,8 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="asuransi_jiwa_menurun2" placeholder="Rp."
-                                                    id="asuransi_jiwa_menurun2">
+                                                    id="asuransi_jiwa_menurun2"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun2, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -74,21 +79,24 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="asuransi_jiwa_menurun3" placeholder="Rp."
-                                                    id="asuransi_jiwa_menurun3">
+                                                    id="asuransi_jiwa_menurun3"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun3, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">ASR. JIWA TETAP 1</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="asuransi_jiwa_tetap1" placeholder="Rp." id="asuransi_jiwa_tetap1">
+                                                    name="asuransi_jiwa_tetap1" placeholder="Rp." id="asuransi_jiwa_tetap1"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_tetap1, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">ASR. JIWA TETAP 2</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="asuransi_jiwa_tetap2" placeholder="Rp." id="asuransi_jiwa_tetap2">
+                                                    name="asuransi_jiwa_tetap2" placeholder="Rp." id="asuransi_jiwa_tetap2"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_tetap2, 0, ',', '.') }}">
                                             </div>
                                         </div>
 
@@ -97,7 +105,8 @@
                                                 <span class="fw-bold">PERTANGGUNGAN ASR. JIWA</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="asuransi_jiwa" placeholder="Rp." id="asuransi_jiwa">
+                                                    name="asuransi_jiwa" placeholder="Rp." id="asuransi_jiwa"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="width: 49.5%;float:right;">
@@ -105,49 +114,56 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="asuransi_kendaraan_motor" placeholder="Rp."
-                                                    id="asuransi_kendaraan_motor">
+                                                    id="asuransi_kendaraan_motor"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_kendaraan_motor, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">TRANSAKSI KREDIT</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="transaksi_kredit" placeholder="Rp." id="transaksi_kredit">
+                                                    name="transaksi_kredit" placeholder="Rp." id="transaksi_kredit"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->transaksi_kredit, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PROSES SHM</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="proses_shm" placeholder="Rp." id="proses_shm">
+                                                    name="proses_shm" placeholder="Rp." id="proses_shm"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->proses_shm, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">POLIS DAN MATERAI</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="polis_materai" placeholder="Rp." id="polis_materai">
+                                                    name="polis_materai" placeholder="Rp." id="polis_materai"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->polis_materai, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PAJAK STNK</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="pajak_stnk" placeholder="Rp." id="pajak_stnk">
+                                                    name="pajak_stnk" placeholder="Rp." id="pajak_stnk"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->pajak_stnk, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">PROSES APHT</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="proses_apht" placeholder="Rp." id="proses_apht">
+                                                    name="proses_apht" placeholder="Rp." id="proses_apht"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->proses_apht, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">LAINNYA</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="lainnya" placeholder="Rp." id="lainnya">
+                                                    name="lainnya" placeholder="Rp." id="lainnya"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->lainnya, 0, ',', '.') }}">
                                             </div>
                                         </div>
 

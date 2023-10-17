@@ -351,6 +351,8 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(AdministrasiController::class)->group(function () {
             Route::get('/analisa/administrasi', 'index')->name('administrasi.index');
+            Route::post('/analisa/administrasi', 'simpan')->name('administrasi.simpan');
+            Route::put('/analisa/administrasi', 'update')->name('administrasi.update');
         });
 
         Route::controller(KonfirmasiController::class)->group(function () {

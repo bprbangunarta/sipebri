@@ -191,8 +191,10 @@ class Midle extends Model
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->where('data_pengajuan.kode_pengajuan', '=', $data)
-            ->select('data_nasabah.nama_nasabah', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.temp_plafon', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu', 'data_pengajuan.metode_rps', 'data_pengajuan.suku_bunga')->get();
+            ->select('data_nasabah.nama_nasabah', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.temp_plafon', 'data_pengajuan.produk_kode', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu', 'data_pengajuan.metode_rps', 'data_pengajuan.suku_bunga')->get();
         $cek[0]->kd_pengajuan = Crypt::encrypt($data);
+        $produk = DB::table('data_produk')->where('kode_produk', $cek[0]->produk_kode)->first('admin');
+        $cek[0]->admin = $produk->admin;
         return $cek;
     }
 
@@ -400,6 +402,20 @@ class Midle extends Model
 
             // Cek apakah kode sudah ada dalam database
             if (!DB::table('a_memorandum')->where('kode_analisa', $acak)->exists()) {
+                return $acak;
+            }
+        }
+
+        return null; // Jika tidak ada kode yang unik ditemukan
+    }
+
+    public static function kodeacak_adm($name, $length)
+    {
+        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+
+            // Cek apakah kode sudah ada dalam database
+            if (!DB::table('a_administrasi')->where('kode_analisa', $acak)->exists()) {
                 return $acak;
             }
         }
