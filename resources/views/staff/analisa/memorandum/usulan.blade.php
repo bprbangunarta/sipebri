@@ -65,19 +65,4 @@
 
 @push('myscript')
 <script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script>
-
-<script>
-    $(function () {
-        //Initialize Select2 Elements
-      $('.bi_sifat_kode').select2()
-      $('.bi_penggunaan_kode').select2()
-      $('.bi_gol_penjamin_kode').select2()
-      $('.bi_sumber_pelunasan_kode').select2()
-      $('.bi_jenis_usaha_kode').select2()
-      $('.bi_sek_ekonomi_kode').select2()
-      $('.bi_sek_ekonomi_slik').select2()
-      $('.bi_gol_debitur_kode').select2()
-      $('.bi_gol_debitur_slik').select2()
-    })
-</script>
 @endpush

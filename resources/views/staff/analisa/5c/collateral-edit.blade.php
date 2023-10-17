@@ -14,7 +14,7 @@
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">KEPEMILIKAN AGUNAN UTAMA</span>
                             <input type="text" name="kode_analisa" value="{{ $collateral->kode_analisa }}" hidden>
-                            <select class="form-control input-sm form-border text-uppercase" name="agunan_utama"
+                            <select class="form-control input-sm form-border text-uppercase agunan_utama" name="agunan_utama"
                                 id="collateral1" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -30,7 +30,7 @@
 
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">LEGALITAS AGUNAN UTAMA</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="legalitas_agunan"
+                            <select class="form-control input-sm form-border text-uppercase legalitas_agunan" name="legalitas_agunan"
                                 id="collateral3" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -46,7 +46,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">MUDAH DIUANGKAN</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="mudah_diuangkan"
+                            <select class="form-control input-sm form-border text-uppercase mudah_diuangkan" name="mudah_diuangkan"
                                 id="collateral5" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -64,7 +64,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KONDISI KENDARAAN</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="kondisi_kendaraan"
+                            <select class="form-control input-sm form-border text-uppercase kondisi_kendaraan" name="kondisi_kendaraan"
                                 id="collateral7" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -85,7 +85,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">PENGIKATAN / ASPEK HUKUM</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="aspek_hukum"
+                            <select class="form-control input-sm form-border text-uppercase aspek_hukum" name="aspek_hukum"
                                 id="collateral9" required>
                                 <option value="">--Pilih--</option>
                                 <option value="4"
@@ -117,7 +117,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KEPEMILIKAN AGUNAN TAMBAHAN</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="agunan_tambahan"
+                            <select class="form-control input-sm form-border text-uppercase agunan_tambahan" name="agunan_tambahan"
                                 id="collateral2" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -136,8 +136,7 @@
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">LEGALITAS AGUNAN TAMBAHAN</span>
-                            <select class="form-control input-sm form-border text-uppercase"
-                                name="legalitas_agunan_tambahan" id="collateral4" required>
+                            <select class="form-control input-sm form-border text-uppercase legalitas_agunan_tambahan" name="legalitas_agunan_tambahan" id="collateral4" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
                                     {{ old('legalitas_agunan_tambahan') == 3 || $collateral->legalitas_agunan_tambahan == '3' ? 'selected' : '' }}>
@@ -152,7 +151,7 @@
 
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">STABILITAS HARGA</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="stabilitas_harga"
+                            <select class="form-control input-sm form-border text-uppercase stabilitas_harga" name="stabilitas_harga"
                                 id="collateral6" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -169,7 +168,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">LOKASI SHM</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="lokasi_shm"
+                            <select class="form-control input-sm form-border text-uppercase lokasi_shm" name="lokasi_shm"
                                 id="collateral8" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
@@ -189,15 +188,13 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">PERMOHONAN TAKSASI AGUNAN</span>
-                            <input class="form-control input-sm form-border text-uppercase" name="taksasi_agunan"
+                            <input class="form-control text-uppercase" name="taksasi_agunan"
                                 value="{{ $collateral->taksasi_agunan ?? 0 }} %" required readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:right;">
                             <span class="fw-bold">EVALUASI</span>
-                            <input class="form-control input-sm form-border bg-blue text-uppercase" type="text"
-                                name="evaluasi_collateral" id="evaluasi_collateral"
-                                value="{{ $collateral->evaluasi_collateral ?? 'KOSONG' }}" readonly required>
+                            <input class="form-control bg-blue text-uppercase" type="text" name="evaluasi_collateral" id="evaluasi_collateral" value="{{ $collateral->evaluasi_collateral ?? 'KOSONG' }}" readonly required>
                         </div>
                     </div>
 
@@ -267,5 +264,20 @@
             analisa4.value = nilai;
         }
         //====ANALISA COLLATERAL====//
+    </script>
+
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+        $('.agunan_utama').select2()
+        $('.agunan_tambahan').select2()
+        $('.legalitas_agunan').select2()
+        $('.legalitas_agunan_tambahan').select2()
+        $('.mudah_diuangkan').select2()
+        $('.stabilitas_harga').select2()
+        $('.lokasi_shm').select2()
+        $('.kondisi_kendaraan').select2()
+        $('.aspek_hukum').select2()
+        })
     </script>
 @endpush
