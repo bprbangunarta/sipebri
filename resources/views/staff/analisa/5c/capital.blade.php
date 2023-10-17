@@ -38,7 +38,7 @@
                             <span class="fw-bold">EVALUASI</span>
                             <input class="form-control input-sm form-border bg-blue" type="text"
                                 name="capital_evaluasi_capital" id="evaluasi_capital"
-                                value="{{ $capita->capital_evaluasi_capital ?? 'KOSONG' }}" readonly required>
+                                value="{{ $capital->capital_evaluasi_capital ?? 'KOSONG' }}" readonly required>
                         </div>
                     </div>
 

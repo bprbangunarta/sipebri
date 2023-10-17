@@ -212,7 +212,10 @@ class DataAnalisa5CController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $cap = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
-            // dd($cap);
+
+            $nilai = Data::analisa5c_number($cap->capital_evaluasi_capital);
+            $cap->capital_evaluasi_capital = $nilai;
+
             return view('staff.analisa.5c.capital', [
                 'data' => $cek[0],
                 'capital' => $cap,
