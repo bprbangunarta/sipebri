@@ -88,6 +88,16 @@ class AnalisaJaminanController extends Controller
         return redirect()->back()->with('succeserrors', 'Gagal menambahkan data');
     }
 
+    public function previewkendaraan($id)
+    {
+        $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
+        $foto1 = asset('storage/image/photo_agunan/' . $jaminan->foto1);
+        $foto2 = asset('storage/image/photo_agunan/' . $jaminan->foto2);
+        $foto3 = asset('storage/image/photo_agunan/' . $jaminan->foto3);
+        $foto4 = asset('storage/image/photo_agunan/' . $jaminan->foto4);
+        return response()->json([$foto1, $foto2, $foto3, $foto4]);
+    }
+
     public function fhotokendaraan(Request $request)
     {
         try {

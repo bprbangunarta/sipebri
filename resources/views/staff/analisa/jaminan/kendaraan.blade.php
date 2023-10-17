@@ -47,7 +47,7 @@
                                 </button>
 
                                 <button id="{{ $item->id }}" data-toggle="modal" data-target="#modal-foto"
-                                    class="btn btn-sm btn-primary">
+                                    class="btn btn-sm btn-primary" data-id="{{ $item->id }}">
                                     <i class="fa fa-image"></i>
                                 </button>
                             </td>
@@ -243,6 +243,7 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/jaminan_kendaraan.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/preview_fhoto.js') }}"></script>
     <script>
         $("button[data-target='#modal-foto']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
