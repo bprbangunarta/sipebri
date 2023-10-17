@@ -215,6 +215,7 @@ class AnalisaMemorandumController extends Controller
             $cek = Midle::analisa_usaha($enc);
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             $rc = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first('rc');
+
             //total semua nilai taksasi
             $tak = [];
             for ($i = 0; $i < count($taksasi); $i++) {
@@ -229,9 +230,13 @@ class AnalisaMemorandumController extends Controller
             $taksasiagunan = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
             $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
 
+            //kebutuhan dana
+            $dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
+
             //Cek data usulan
             $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-            // dd($usulan);
+            $usulan->kebutuhan_dana = $dana->kebutuhan_dana ?? null;
+            // dd($dana, $usulan);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,

@@ -13,7 +13,8 @@
                     <div class="div-left">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">KEBUTUHAN DANA</span>
-                            <input type="text" class="form-control text-uppercase" value="RP." readonly>
+                            <input type="text" class="form-control text-uppercase"
+                                value="{{ 'Rp.' . ' ' . number_format($usulan->kebutuhan_dana, 0, ',', '.') }}" readonly>
                         </div>
 
                         <div style="width: 49.5%;float:right;">
