@@ -29,17 +29,17 @@
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'active' : '' }}">
-                                    <a href="{{ route('memorandum.sandi', ['pengajuan' => $pengajuan]) }}"
-                                        class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'text-bold' : '' }}">
-                                        SANDI BI
-                                    </a>
-                                </li>
-
                                 <li class="{{ request()->is('themes/analisa/memorandum/usulan') ? 'active' : '' }}">
                                     <a href="{{ route('memorandum.usulan', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/memorandum/usulan') ? 'text-bold' : '' }}">
                                         USULAN KREDIT
+                                    </a>
+                                </li>
+
+                                <li class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'active' : '' }}">
+                                    <a href="{{ route('memorandum.sandi', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'text-bold' : '' }}">
+                                        SANDI BI
                                     </a>
                                 </li>
                             </ul>

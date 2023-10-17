@@ -359,6 +359,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/konfirmasi/dokumen', 'dokumen_nasabah')->name('konfirmasi.dokumen');
         });
 
+        Route::controller(KomiteController::class)->group(function () {
+            Route::get('/komite/kredit', 'index')->name('komite.kredit');
+        });
+
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
         // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
         // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
