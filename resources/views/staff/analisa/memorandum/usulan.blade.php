@@ -72,7 +72,7 @@
 @endsection
 
 @push('myscript')
-    {{-- <script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script>
 
     <script>
         $(function() {

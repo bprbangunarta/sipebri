@@ -82,7 +82,7 @@
             </li>
 
             <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
-                <a href="#">
+                <a href="/themes/analisa/administrasi">
                     <i class="fa fa-folder-o"></i> Administrasi
                 </a>
             </li>

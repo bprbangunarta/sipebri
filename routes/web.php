@@ -48,6 +48,7 @@ use App\Http\Controllers\AnalisaKeuanganController;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
@@ -346,6 +347,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/memorandum/sandi', 'updatesandi')->name('memorandum.updatesandi');
             Route::get('/analisa/memorandum/usulan', 'usulan')->name('memorandum.usulan');
             Route::put('/analisa/memorandum/usulan', 'updateusulan')->name('memorandum.updateusulan');
+        });
+
+        Route::controller(AdministrasiController::class)->group(function () {
+            Route::get('/analisa/administrasi', 'index')->name('administrasi.index');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
