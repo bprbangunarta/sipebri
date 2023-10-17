@@ -1,12 +1,11 @@
-{{-- @extends('staff.analisa.kualitatif.menu', [$data, 'pengajuan' => $data->kd_pengajuan]) --}}
-@extends('staff.analisa.konfirmasi.menu')
+@extends('staff.analisa.konfirmasi.menu', [$data, 'pengajuan' => $data->kd_pengajuan])
 @section('title', 'Konfirmasi Analisa')
 
 @section('content')
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('analisa5c.simpancharacter') }}" method="post">
+            <form action="{{ route('konfirmasi.ubah_analisa', ['pengajuan' => $data->kd_pengajuan]) }}" method="post">
                 @csrf
                 <div class="box-body" style="margin-top: -10px;">
 
@@ -17,7 +16,8 @@
                     </div>
 
 
-                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">KONFIRMASI</button>
+                    <button type="submit" class="btn btn-sm btn-primary"
+                        style="margin-top:10px;width:100%">KONFIRMASI</button>
                 </div>
             </form>
 
@@ -26,5 +26,5 @@
 @endsection
 
 @push('myscript')
-<script src="{{ asset('assets/js/myscript/tambahan.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/tambahan.js') }}"></script>
 @endpush

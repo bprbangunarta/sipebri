@@ -356,7 +356,8 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(KonfirmasiController::class)->group(function () {
-            Route::get('/analisa/konfirmasi', 'konfirmasi_analisa')->name('konfirmasi.analisa');
+            Route::get('/analisa/konfirmasi/analisa', 'konfirmasi_analisa')->name('konfirmasi.analisa');
+            Route::post('/analisa/konfirmasi/analisa', 'ubah_analisa')->name('konfirmasi.ubah_analisa');
             // Jangan digunakan dulu
             Route::get('/analisa/konfirmasi/dokumen', 'dokumen_nasabah')->name('konfirmasi.dokumen');
         });
