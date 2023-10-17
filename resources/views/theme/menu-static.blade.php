@@ -86,12 +86,6 @@
                     <i class="fa fa-folder-o"></i> Administrasi
                 </a>
             </li>
-
-            <li class="{{ request()->is('themes/analisa/tambahan') ? 'active' : '' }}">
-                <a href="#">
-                    <i class="fa fa-folder-o"></i> Tambahan
-                </a>
-            </li>
         </ul>
     </div>
 </div>
