@@ -15,4 +15,14 @@ class NotifikasiController extends Controller
     {
         return view('notifikasi.penolakan.tambah');
     }
+
+    public function edit_penolakan()
+    {
+        return view('notifikasi.penolakan.edit');
+    }
+
+    public function cetak_penolakan()
+    {
+        return view('notifikasi.penolakan.cetak');
+    }
 }
