@@ -62,7 +62,8 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('themes/analisa/5c') ? 'active' : '' }}">
+            <li
+                class="{{ request()->is('themes/analisa/5c/character*', 'themes/analisa/5c/capacity*', 'themes/analisa/5c/capital*', 'themes/analisa/5c/collateral*', 'themes/analisa/5c/condition*') ? 'active' : '' }}">
                 <a href="{{ route('analisa5c.character', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Analisa 5C
                 </a>

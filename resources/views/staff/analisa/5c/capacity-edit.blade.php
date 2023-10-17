@@ -5,13 +5,15 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('analisa5c.simpancapacity', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
+            <form action="{{ route('analisa5c.updatecapacity', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
+                @method('put')
                 @csrf
                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
                     <div class="div-left">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">KONTINUITAS USAHA</span>
+                            <input type="text" name="kode_analisa" value="{{ $capacity->kode_analisa }}" hidden>
                             <select class="form-control input-sm form-border text-uppercase" name="kontinuitas"
                                 id="capacity1" required>
                                 <option value="">--Pilih--</option>

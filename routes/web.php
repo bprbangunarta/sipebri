@@ -311,6 +311,13 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(DataAnalisa5CController::class)->group(function () {
             Route::get('/analisa/5c/character', 'character')->name('analisa5c.character');
+            Route::post('/analisa/5c/character', 'simpancharacter')->name('analisa5c.simpancharacter');
+            Route::put('/analisa/5c/character', 'updatecharacter')->name('analisa5c.updatecharacter');
+            Route::get('/analisa/5c/capacity', 'capacity')->name('analisa5c.capacity');
+            Route::post('/analisa/5c/capacity', 'simpancapacity')->name('analisa5c.simpancapacity');
+            Route::put('/analisa/5c/capacity', 'updatecapacity')->name('analisa5c.updatecapacity');
+            Route::get('/analisa/5c/capital', 'capital')->name('analisa5c.capital');
+            Route::post('/analisa/5c/capital', 'simpancapital')->name('analisa5c.simpancapital');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');

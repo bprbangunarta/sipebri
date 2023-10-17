@@ -30,14 +30,14 @@
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/5c/capacity') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/5c/capacity"
+                                    <a href="{{ route('analisa5c.capacity', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/5c/capacity') ? 'text-bold' : '' }}">
                                         CAPACITY
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/5c/capital') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/5c/capital"
+                                    <a href="{{ route('analisa5c.capital', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/5c/capital') ? 'text-bold' : '' }}">
                                         CAPITAL
                                     </a>
