@@ -392,4 +392,19 @@ class Midle extends Model
             ->select('data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.no_telp', 'au_perdagangan.lokasi_usaha as dg_lokasi', 'au_pertanian.lokasi_usaha as pt_lokasi')
             ->where('data_pengajuan.kode_pengajuan', '=', $data)->get();
     }
+
+    public static function jaminan_tanah($data)
+    {
+        $jaminan = DB::table('data_pengajuan')
+            ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+            ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+            ->where('data_pengajuan.kode_pengajuan', '=', $data)
+            ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
+            ->get();
+
+        //
+        return $jaminan;
+    }
 }
