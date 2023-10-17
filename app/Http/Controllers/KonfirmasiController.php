@@ -297,8 +297,34 @@ class KonfirmasiController extends Controller
         }
     }
 
-    public function konfirmasi_analisa()
+    public function konfirmasi_analisa(Request $request)
     {
-        return view('staff.analisa.konfirmasi.analisa');
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+
+
+            return view('staff.analisa.konfirmasi.analisa', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function ubah_analisa(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+
+            $data = ['tracking' => 'Persetujuan Komite'];
+
+            Pengajuan::where('kode_pengajuan', $enc)->update($data);
+
+            return redirect()->back()->with('success', 'Konfirmasi berhasil');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Konfirmasi gagal');
     }
 }
