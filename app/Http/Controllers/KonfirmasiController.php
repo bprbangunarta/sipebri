@@ -280,4 +280,15 @@ class KonfirmasiController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+
+    public function dokumen_nasabah()
+    {
+        return view('staff.analisa.konfirmasi.dokumen');
+    }
+
+    public function konfirmasi_analisa()
+    {
+        return view('staff.analisa.konfirmasi.analisa');
+    }
 }
