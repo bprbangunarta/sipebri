@@ -86,6 +86,12 @@
                     <i class="fa fa-folder-o"></i> Administrasi
                 </a>
             </li>
+
+            <li class="{{ request()->is('themes/analisa/konfirmasi') ? 'active' : '' }}">
+                <a href="/themes/analisa/konfirmasi">
+                    <i class="fa fa-folder-o"></i> Konfirmasi
+                </a>
+            </li>
         </ul>
     </div>
 </div>

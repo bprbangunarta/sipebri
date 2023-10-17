@@ -347,6 +347,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/administrasi', 'index')->name('administrasi.index');
         });
 
+        Route::controller(KonfirmasiController::class)->group(function () {
+            Route::get('/analisa/konfirmasi', 'konfirmasi_analisa')->name('konfirmasi.analisa');
+            // Jangan digunakan dulu
+            Route::get('/analisa/konfirmasi/dokumen', 'dokumen_nasabah')->name('konfirmasi.dokumen');
+        });
+
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
         // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
         // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
