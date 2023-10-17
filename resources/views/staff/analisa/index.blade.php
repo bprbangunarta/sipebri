@@ -38,7 +38,7 @@
                                             </td>
                                             <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->nama_nasabah }} <br>
-                                                <b>Kaetegori:</b> RELOAN
+                                                <b>Kategori:</b> {{ $item->kategori }}
 
                                             </td>
                                             <td style="text-transform: uppercase;">
@@ -53,16 +53,16 @@
                                                 <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->tracking == 'Proses Survei')
+                                                @if ($item->tracking == 'Proses Analisa')
+                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        class="btn-circle btn-sm btn-warning" title="Input Analisa">
+                                                        <i class="fa fa-file-text-o"></i>
+                                                    </a>
+                                                @else
                                                     <a href="#" class="btn-circle btn-sm btn-grey"
                                                         title="Input Analisa"
                                                         style="pointer-events: none; text-decoration: none; cursor: default;">
                                                         <i class="fa fa-file-text-o" disabled="disabled"></i>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        class="btn-circle btn-sm btn-warning" title="Input Analisa">
-                                                        <i class="fa fa-file-text-o"></i>
                                                     </a>
                                                 @endif
                                                 &nbsp;

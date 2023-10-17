@@ -15,6 +15,7 @@
 <meta property="og:image:width" content="600" />
 <meta property="og:image:height" content="400" />
 <meta property="og:image:type" content="image/png" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 @section('jquery')
     <!-- Jquery -->
