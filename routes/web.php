@@ -318,6 +318,12 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/5c/capacity', 'updatecapacity')->name('analisa5c.updatecapacity');
             Route::get('/analisa/5c/capital', 'capital')->name('analisa5c.capital');
             Route::post('/analisa/5c/capital', 'simpancapital')->name('analisa5c.simpancapital');
+            Route::get('/analisa/5c/collateral', 'collateral')->name('analisa5c.collateral');
+            Route::post('/analisa/5c/collateral', 'simpancollateral')->name('analisa5c.simpancollateral');
+            Route::put('/analisa/5c/collateral', 'updatecollateral')->name('analisa5c.updatecollateral');
+            Route::get('/analisa/5c/condition', 'condition')->name('analisa5c.condition');
+            Route::post('/analisa/5c/condition', 'simpancondition')->name('analisa5c.simpancondition');
+            Route::post('/analisa/5c/condition', 'updatecondition')->name('analisa5c.updatecondition');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');

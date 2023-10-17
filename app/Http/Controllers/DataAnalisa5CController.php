@@ -238,4 +238,166 @@ class DataAnalisa5CController extends Controller
         }
         return redirect()->back()->with('error', 'Gagal menambahkan data');
     }
+
+    public function collateral(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $cap = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
+
+            //Taksasi
+            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
+            //total semua nilai taksasi
+            $tak = [];
+            for ($i = 0; $i < count($taksasi); $i++) {
+                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
+            }
+            $totaltaksasi = array_sum($tak);
+            //Menghitung Taksasi Agunan
+            $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+
+            if (is_null($cap)) {
+                $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
+                return view('staff.analisa.5c.collateral', [
+                    'data' => $cek[0],
+                    'collateral' => $data,
+                ]);
+            }
+            $nilai = Data::analisa5c_number($cap->evaluasi_collateral);
+            $cap->evaluasi_collateral = $nilai;
+            // dd($cap);
+            return view('staff.analisa.5c.collateral-edit', [
+                'data' => $cek[0],
+                'collateral' => $cap,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpancollateral(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $nilai = Data::analisa5c_text($request->evaluasi_collateral);
+            $cap = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
+
+            $data = [
+                'kode_analisa' => $cap->kode_analisa,
+                'pengajuan_kode' => $enc,
+                'agunan_utama' => $request->agunan_utama,
+                'legalitas_agunan' => $request->legalitas_agunan,
+                'mudah_diuangkan' => $request->mudah_diuangkan,
+                'kondisi_kendaraan' => $request->kondisi_kendaraan,
+                'aspek_hukum' => $request->aspek_hukum,
+                'agunan_tambahan' => $request->agunan_tambahan,
+                'legalitas_agunan_tambahan' => $request->legalitas_agunan_tambahan,
+                'stabilitas_harga' => $request->stabilitas_harga,
+                'lokasi_shm' => $request->lokasi_shm,
+                'taksasi_agunan' => str_replace(array(' ', '%'), '', $request->taksasi_agunan),
+                'evaluasi_collateral' => $nilai,
+            ];
+            DB::table('a5c_collateral')->insert($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Gagal menambahkan data');
+    }
+
+    public function updatecollateral(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $nilai = Data::analisa5c_text($request->evaluasi_collateral);
+
+            $data = [
+                'agunan_utama' => $request->agunan_utama,
+                'legalitas_agunan' => $request->legalitas_agunan,
+                'mudah_diuangkan' => $request->mudah_diuangkan,
+                'kondisi_kendaraan' => $request->kondisi_kendaraan,
+                'aspek_hukum' => $request->aspek_hukum,
+                'agunan_tambahan' => $request->agunan_tambahan,
+                'legalitas_agunan_tambahan' => $request->legalitas_agunan_tambahan,
+                'stabilitas_harga' => $request->stabilitas_harga,
+                'lokasi_shm' => $request->lokasi_shm,
+                'taksasi_agunan' => str_replace(array(' ', '%'), '', $request->taksasi_agunan),
+                'evaluasi_collateral' => $nilai,
+            ];
+            // dd($data, $request->all());
+            DB::table('a5c_collateral')->where('kode_analisa', $request->kode_analisa)->update($data);
+            return redirect()->back()->with('success', 'Berhasil melakukan perubahan data');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Gagal melakukan perubahan data');
+    }
+
+    public function condition(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+            $condition = DB::table('a5c_condition')->where('pengajuan_kode', $enc)->first();
+
+            if (is_null($condition)) {
+                return view('staff.analisa.5c.condition', [
+                    'data' => $cek[0],
+                ]);
+            }
+
+            $nilai = Data::analisa5c_number($condition->evaluasi_condition);
+            $condition->evaluasi_condition = $nilai;
+
+            return view('staff.analisa.5c.condition-edit', [
+                'data' => $cek[0],
+                'condition' => $condition,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpancondition(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $nilai = Data::analisa5c_text($request->evaluasi_condition);
+            $cek = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
+            $data = [
+                'kode_analisa' => $cek->kode_analisa,
+                'pengajuan_kode' => $enc,
+                'persaingan_usaha' => $request->persaingan_usaha,
+                'kondisi_alam' => $request->kondisi_alam,
+                'regulasi_pemerintah' => $request->regulasi_pemerintah,
+                'evaluasi_condition' => $nilai,
+            ];
+            DB::table('a5c_condition')->insert($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Gagal menambahkan data');
+    }
+
+    public function updatecondition(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $nilai = Data::analisa5c_text($request->evaluasi_condition);
+            $data = [
+                'persaingan_usaha' => $request->persaingan_usaha,
+                'kondisi_alam' => $request->kondisi_alam,
+                'regulasi_pemerintah' => $request->regulasi_pemerintah,
+                'evaluasi_condition' => $nilai,
+            ];
+
+            DB::table('a5c_condition')->where('kode_analisa', $request->kode_analisa)->update($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Gagal menambahkan data');
+    }
 }

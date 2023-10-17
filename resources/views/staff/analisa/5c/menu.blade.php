@@ -44,14 +44,14 @@
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/5c/collateral') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/5c/collateral"
+                                    <a href="{{ route('analisa5c.collateral', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/5c/collateral') ? 'text-bold' : '' }}">
                                         COLLATERAL
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/5c/condition') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/5c/condition"
+                                    <a href="{{ route('analisa5c.condition', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/5c/condition') ? 'text-bold' : '' }}">
                                         CONDITION
                                     </a>
