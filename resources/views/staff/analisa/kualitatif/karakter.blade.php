@@ -36,7 +36,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KETERANGAN</span>
-                            <input class="form-control input-sm form-border text-uppercase" name="ket_kewajiban1" id="" placeholder="ENTRI">
+                            <input type="text" class="form-control input-sm form-border text-uppercase" name="ket_kewajiban1" id="" placeholder="ENTRI">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -53,7 +53,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KETERANGAN</span>
-                            <input class="form-control input-sm form-border text-uppercase" name="ket_kewajiban2" id="" placeholder="ENTRI">
+                            <input type="text" class="form-control input-sm form-border text-uppercase" name="ket_kewajiban2" id="" placeholder="ENTRI">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -70,7 +70,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KETERANGAN</span>
-                            <input class="form-control input-sm form-border text-uppercase" name="ket_kewajiban3" id="" placeholder="ENTRI">
+                            <input type="text" class="form-control input-sm form-border text-uppercase" name="ket_kewajiban3" id="" placeholder="ENTRI">
                         </div>
                     </div>
 
@@ -115,12 +115,12 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">PENDAMPING ADA DI JAM</span>
-                            <input class="form-control input-sm form-border text-uppercase" name="pendamping_ada" id="" placeholder="00:00">
+                            <input type="text" class="form-control input-sm form-border text-uppercase pemohon_ada" name="pemohon_ada" id="" placeholder="00:00 AM">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">PENDAMPING ADA DI JAM</span>
-                            <input class="form-control input-sm form-border text-uppercase" name="pendamping_ada" id="" placeholder="00:00">
+                            <input type="text" class="form-control input-sm form-border text-uppercase pendamping_ada" name="pendamping_ada" id="" placeholder="00:00 AM">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:right;">
@@ -138,5 +138,18 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script>
+<script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script>
+
+<script>
+    $(function () {
+        //Timepicker
+        $('.pemohon_ada').timepicker({
+        showInputs: false
+        })
+
+        $('.pendamping_ada').timepicker({
+        showInputs: false
+        })
+    })
+</script>
 @endpush
