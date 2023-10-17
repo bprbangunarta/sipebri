@@ -121,4 +121,19 @@ class MemorandumController extends Controller
     {
         //
     }
+
+    public function sandi (Request $request)
+    {
+        return view('staff.analisa.memorandum.sandi-bi');
+    }
+
+    public function usulan (Request $request)
+    {
+        return view('staff.analisa.memorandum.usulan');
+    }
+
+    public function kebutuhan (Request $request)
+    {
+        return view('staff.analisa.memorandum.kebutuhan');
+    }
 }

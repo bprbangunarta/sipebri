@@ -76,8 +76,8 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('themes/analisa/momorandum') ? 'active' : '' }}">
-                <a href="#">
+            <li class="{{ request()->is('themes/analisa/memorandum/kebutuhan', 'themes/analisa/memorandum/sandi', 'themes/analisa/memorandum/usulan') ? 'active' : '' }}">
+                <a href="{{ route('memorandum.kebutuhan') }}">
                     <i class="fa fa-folder-o"></i> Memorandum
                 </a>
             </li>
@@ -85,12 +85,6 @@
             <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-o"></i> Administrasi
-                </a>
-            </li>
-
-            <li class="{{ request()->is('themes/analisa/tambahan') ? 'active' : '' }}">
-                <a href="#">
-                    <i class="fa fa-folder-o"></i> Tambahan
                 </a>
             </li>
         </ul>

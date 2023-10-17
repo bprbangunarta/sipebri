@@ -336,6 +336,12 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/kualitatif/usaha', 'updateusaha')->name('kualitatif.updateusaha');
         });
 
+        Route::controller(MemorandumController::class)->group(function () {
+            Route::get('/analisa/memorandum/kebutuhan', 'kebutuhan')->name('memorandum.kebutuhan');
+            Route::get('/analisa/memorandum/sandi', 'sandi')->name('memorandum.sandi');
+            Route::get('/analisa/memorandum/usulan', 'usulan')->name('memorandum.usulan');
+        });
+
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
         // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
         // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
