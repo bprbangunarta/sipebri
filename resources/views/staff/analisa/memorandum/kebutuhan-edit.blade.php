@@ -5,7 +5,8 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('memorandum.simpankebutuhan', ['pengajuan' => $data->kd_pengajuan]) }}" method="post">
+            <form action="{{ route('memorandum.updatekebutuhan', ['pengajuan' => $data->kd_pengajuan]) }}" method="post">
+                @method('put')
                 @csrf
                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
@@ -13,19 +14,22 @@
                         <div style="width: 100%;float:left;">
                             <span class="fw-bold">MODAL KERJA</span>
                             <input type="text" class="form-control text-uppercase" name="modal_kerja" id="modal"
-                                placeholder="Rp.">
+                                placeholder="Rp."
+                                value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->modal_kerja, 0, ',', '.') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">INVESTASI</span>
                             <input type="text" class="form-control text-uppercase" name="investasi" id="inves"
-                                placeholder="Rp.">
+                                placeholder="Rp."
+                                value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->investasi, 0, ',', '.') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">KONSUMTIF</span>
                             <input type="text" class="form-control text-uppercase" name="konsumtif" id="konsumtif"
-                                placeholder="Rp.">
+                                placeholder="Rp."
+                                value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->konsumtif, 0, ',', '.') }}">
                         </div>
                     </div>
 
@@ -34,19 +38,23 @@
                         <div style="width: 100%;float:left;">
                             <span class="fw-bold">PELUNASAN KREDIT</span>
                             <input type="text" class="form-control text-uppercase" name="pelunasan_kredit" id="pelunasan"
-                                placeholder="Rp.">
+                                placeholder="Rp."
+                                value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->pelunasan_kredit, 0, ',', '.') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">TAKE OVER</span>
                             <input type="text" class="form-control text-uppercase" name="take_over" id="take_over"
-                                placeholder="Rp.">
+                                placeholder="Rp."
+                                value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->take_over, 0, ',', '.') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">JUMLAH KEBUTUHAN DANA</span>
                             <input type="text" class="form-control text-uppercase bg-blue" name="kebutuhan_dana"
-                                id="kebutuhan_dana" value="Rp." readonly>
+                                id="kebutuhan_dana"
+                                value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->kebutuhan_dana, 0, ',', '.') }}"
+                                readonly>
                         </div>
                     </div>
 
