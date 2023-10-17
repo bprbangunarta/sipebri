@@ -57,16 +57,11 @@
                             Input Persetujuan
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
+
+                    <li class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah') ? 'active' : '' }}">
+                        <a href="{{ route('penolakan.pengajuan') }}">
                             <i class="fa fa-circle-o"></i>
                             Input Penolakan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-circle-o"></i>
-                            Input Reschedule
                         </a>
                     </li>
                 </ul>

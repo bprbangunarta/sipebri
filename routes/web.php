@@ -53,6 +53,7 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\NotifikasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -241,6 +242,7 @@ Route::middleware('auth')->group(function () {
         Route::view('/dashboard', 'dashboard.index');
 
         Route::get('/permohonan/analisa', [AnalisaController::class, 'index'])->name('permohonan.analisa');
+
         //Analisa Usaha Perdagangan
         Route::controller(UsahaPerdaganganController::class)->group(function () {
             // Route::get('/analisa/usaha/perdagangan', [PerdaganganController::class, 'index'])->name('perdagangan.in');
@@ -364,6 +366,11 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(KomiteController::class)->group(function () {
             Route::get('/komite/kredit', 'index')->name('komite.kredit');
+        });
+
+        Route::controller(NotifikasiController::class)->group(function () {
+            Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
+            Route::get('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
