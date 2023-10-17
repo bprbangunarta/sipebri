@@ -10,7 +10,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">Permohonan Analisa</h3>
+                            <h3 class="box-title">PERMOHONAN ANALISA</h3>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">

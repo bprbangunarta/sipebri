@@ -240,7 +240,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('themes')->group(function () {
         Route::view('/dashboard', 'dashboard.index');
 
-        Route::get('/data-analisa', [AnalisaController::class, 'index']);
+        Route::get('/permohonan/analisa', [AnalisaController::class, 'index'])->name('permohonan.analisa');
         //Analisa Usaha Perdagangan
         Route::controller(UsahaPerdaganganController::class)->group(function () {
             // Route::get('/analisa/usaha/perdagangan', [PerdaganganController::class, 'index'])->name('perdagangan.in');

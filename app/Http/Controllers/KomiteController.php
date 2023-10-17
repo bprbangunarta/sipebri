@@ -15,6 +15,6 @@ class KomiteController extends Controller
         //     'data' => $data,
         // ]);
 
-        return view('.index');
+        return view('komite.index');
     }
 }

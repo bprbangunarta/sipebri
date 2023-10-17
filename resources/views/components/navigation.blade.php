@@ -45,26 +45,26 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="/themes/data-analisa" title="Wilayah Kalijati">
+                        <a href="{{ route('permohonan.analisa') }}">
                             <i class="fa fa-circle-o"></i>
                             Input Analisa
                         </a>
                     </li>
 
                     <li>
-                        <a href="#" title="Wilayah Pagaden">
+                        <a href="{{ route('komite.kredit') }}">
                             <i class="fa fa-circle-o"></i>
                             Input Persetujuan
                         </a>
                     </li>
                     <li>
-                        <a href="#" title="Wilayah Sukamandi">
+                        <a href="#">
                             <i class="fa fa-circle-o"></i>
                             Input Penolakan
                         </a>
                     </li>
                     <li>
-                        <a href="#" title="Wilayah Sukamandi">
+                        <a href="#">
                             <i class="fa fa-circle-o"></i>
                             Input Reschedule
                         </a>

@@ -1,148 +1,130 @@
-@extends('templates.app')
-@section('title', 'Penjadwalan')
+@extends('theme.app')
+@section('title', 'Putusan Komite')
 
 @section('content')
-    <div class="page-body">
-        <div class="container-xl">
-            <div class="row row-deck row-cards">
+<div class="content-wrapper">
 
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="container-xl">
-                                <div class="row g-2 align-items-center">
-                                    <div class="col">
-                                        <!-- Page pre-title -->
-                                        <div class="page-pretitle">
-                                            Analisa
-                                        </div>
-                                        <h2 class="page-title">
-                                            Keputusan Komite
-                                        </h2>
-                                    </div>
-                                </div>
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-file-text-o"></i>
+                        <h3 class="box-title">PUTUSAN KOMITE</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th class="text-center" style="width: 10px">#</th>
+                                    <th class="text-center" style="width: 150px">PENGAJUAN</th>
+                                    <th class="text-center" style="width: 200px">NASABAH</th>
+                                    <th class="text-center">ALAMAT</th>
+                                    <th class="text-center" style="width: 100px">WILAYAH</th>
+                                    <th class="text-center">STATUS</th>
+                                    <th class="text-center" style="width: 90px">AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center" style="vertical-align: middle;">1</td>
+                                    <td style="vertical-align: middle;">
+                                        <b>KODE: </b>0823737830 <br>
+                                        <b>TANGGAL</b> : 2023-10-27
+                                    </td>
+                                    <td style="text-transform: uppercase;vertical-align: middle;">
+                                        ZULFADLI RIZAL <br>
+                                        <b>Kaetegori:</b> RELOAN
+                                    </td>
+
+                                    <td style="text-transform: uppercase;">
+                                        KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG <br>
+                                        <b>Desa: </b>SUKAMULYA | <b>Kecamatan:
+                                        </b>PAGADEN
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        KANTOR KAS SUBANG
+                                    </td>
+                                        <td class="text-center" style="vertical-align: middle;">
+                                        <span class="label label-warning">Proses Analisa</span>
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <a data-toggle="modal" data-target="#modal-edit" class="btn-circle btn-sm btn-warning">
+                                            <i class="fa fa-file-text-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {{-- @empty
+                                <tr>
+                                    <td class="text-center" colspan="7">Tidak ada permohonan analisa.</td>
+                                </tr>
+                            @endforelse --}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div class="modal fade" id="modal-edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-yellow">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">PUTUSAN KOMITE</h4>
+            </div>
+            <form action="#" method="POST">
+                @csrf
+                <div class="modal-body">
+
+                    <div class="box-body">
+                        <div class="row">
+
+                            <div style="margin-top: -15px;">
+                                <span class="fw-bold">KODE PENGAJUAN</span>
+                                <input type="text" id="id" name="id" hidden>
+                                <input class="form-control text-uppercase" type="text" value="123456789S" readonly>
                             </div>
-                        </div>
 
-                        <div class="card-body border-bottom py-3" style="margin-top:-7px;">
+                            <div style="margin-top: 5px;">
+                                <span class="fw-bold">NAMA NASABAH</span>
+                                <input class="form-control text-uppercase" type="text" value="ZULFADLI RIZAL" readonly>
+                            </div>
 
-                            <form action="/contoh" method="GET">
-                                <div class="input-group mb-2">
-                                    <input type="text" class="form-control" name="" id=""
-                                        placeholder="Cari Data">
-                                    <button class="btn" type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z">
-                                            </path>
-                                        </svg>
-                                        Filter
-                                    </button>
-                                </div>
-                            </form>
+                            <div style="margin-top: 5px;">
+                                <span class="fw-bold">USULAN PLAFOND</span>
+                                <input class="form-control text-uppercase" type="text" value="RP. 20.000.000" readonly>
+                            </div>
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-vcenter fs-5">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" width="3%">No</th>
-                                            <th class="text-center" width="11%">Kode Debitur</th>
-                                            <th class="text-center">Nama Debitur</th>
-                                            <th class="text-center">Alamat</th>
-                                            <th class="text-center">Wilayah</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center" width="10%">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <div style="margin-top: 5px;">
+                                <span class="fw-bold">PUTUSAN KOMOTE</span>
+                                <select class="form-control text-uppercase" style="width:100%;" name="putusan_komite" id="" required>
+                                    <option value="">--Pilih--</option>
+                                    <option value="Disetujui">Disetujui</option>
+                                    <option value="Ditolak">Ditolak</option>
+                                    <option value="Dibatalkan">Dibatalkan</option>
+                                    <option value="Naik Kasi">Naik Kasi</option>
+                                    <option value="Proses Analisa">Proses Analisa</option>
+                            </select>
+                            </div>
 
-                                        @php
-                                            $no = 1;
-                                        @endphp
-                                        @forelse ($data as $item)
-                                            <tr>
-                                                <td class="text-center">{{ $no }}</td>
-                                                <td class="text-center">{{ $item->nasabah_kode }}</td>
-                                                <td>{{ $item->nama_nasabah }}</td>
-                                                <td>
-                                                    <b>Desa</b> : {{ $item->kelurahan }} <br>
-                                                    <b>Kecamatan</b> : {{ $item->kecamatan }}
-                                                </td>
-                                                <td>{{ $item->nama_kantor }}</td>
-                                                <td class="text-center">
-                                                    <span class="badge bg-warning-lt">Proses Survey</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('tambah.index', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        title="Proses Analisa" style="text-decoration: none;">
-                                                        <span class="badge bg-warning">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-clipboard-list"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                stroke-width="2" stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                </path>
-                                                                <path
-                                                                    d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                                                </path>
-                                                                <path
-                                                                    d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
-                                                                </path>
-                                                                <path d="M9 12l.01 0"></path>
-                                                                <path d="M13 12l2 0"></path>
-                                                                <path d="M9 16l.01 0"></path>
-                                                                <path d="M13 16l2 0"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        title="Print Data">
-                                                        <span class="badge bg-info">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-printer" width="24"
-                                                                height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                                stroke="currentColor" fill="none" stroke-linecap="round"
-                                                                stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                </path>
-                                                                <path
-                                                                    d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
-                                                                </path>
-                                                                <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4">
-                                                                </path>
-                                                                <path
-                                                                    d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z">
-                                                                </path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                </td>
-                                                @php
-                                                    $no++;
-                                                @endphp
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td class="text-center" colspan="7">Tidak ada permohonan analisa.</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                                <p></p>
-
-                                {{ $data->links('vendor.pagination.bootstrap-5') }}
-
+                            <div style="margin-top: 5px;">
+                                <span class="fw-bold">KETERANGAN</span>
+                                <textarea class="form-control text-uppercase" name="" id=""></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                    <button type="submit" class="btn btn-warning">SIMPAN</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 @endsection
