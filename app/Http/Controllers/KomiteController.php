@@ -9,10 +9,12 @@ class KomiteController extends Controller
 {
     public function index()
     {
-        $data = Pengajuan::where('tracking', 'Pengajuan')->paginate(5);
-        // dd($data);
-        return view('komite.index', [
-            'data' => $data,
-        ]);
+        // $data = Pengajuan::where('tracking', 'Pengajuan')->paginate(5);
+        // // dd($data);
+        // return view('komite.index', [
+        //     'data' => $data,
+        // ]);
+
+        return view('.index');
     }
 }

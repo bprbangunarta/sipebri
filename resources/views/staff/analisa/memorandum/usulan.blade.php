@@ -11,7 +11,12 @@
                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
                     <div class="div-left">
-                        <div style="width: 100%;float:left;">
+                        <div style="width: 49.5%;float:left;">
+                            <span class="fw-bold">PENGAJUAN KREDIT</span>
+                            <input type="text" class="form-control text-uppercase" value="{{ 'Rp.' . ' ' . number_format($data->temp_plafon, 0, ',', '.') }}" readonly>
+                        </div>
+
+                        <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">MAX PLAFOND</span>
                             <input type="text" class="form-control text-uppercase" name="max_plafond" id="max"
                                 value="{{ 'Rp.' . ' ' . number_format($data->maxplafon, 0, ',', '.') }}" readonly>
