@@ -16,21 +16,22 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        {{-- @include('theme.menu-static', [$data]) --}}
-                        @include('theme.menu-static')
+                        @include('theme.menu-analisa', [$data])
+                        {{-- @include('theme.menu-static') --}}
                     </div>
-
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/analisa/kualitatif/karakter') ? 'active' : '' }}">
-                                    <a href="{{ route('kualitatif.karakter') }}" class="{{ request()->is('themes/analisa/kualitatif/karakter') ? 'text-bold' : '' }}">
+                                    <a href="{{ route('kualitatif.karakter', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/kualitatif/karakter') ? 'text-bold' : '' }}">
                                         KARAKTER NASABAH
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/kualitatif/usaha') ? 'active' : '' }}">
-                                    <a href="{{ route('kualitatif.usaha') }}" class="{{ request()->is('themes/analisa/kualitatif/usaha') ? 'text-bold' : '' }}">
+                                    <a href="{{ route('kualitatif.usaha', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/kualitatif/usaha') ? 'text-bold' : '' }}">
                                         USAHA NASABAH
                                     </a>
                                 </li>

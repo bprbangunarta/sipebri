@@ -37,8 +37,10 @@ use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\CetakAnalisaController;
 use App\Http\Controllers\UsahaLainnyaController;
+use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
+use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
@@ -46,10 +48,9 @@ use App\Http\Controllers\AnalisaKeuanganController;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AnalisaJaminanController;
-use App\Http\Controllers\AnalisaKepemilikanController;
-use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\UsahaPerdaganganController;
+use App\Http\Controllers\AnalisaKualitatifController;
+use App\Http\Controllers\AnalisaKepemilikanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -212,7 +213,7 @@ Route::middleware('auth')->group(function () {
         //Memorandum
         Route::resource('/analisa/memorandum', MemorandumController::class);
         //Analisa Kualitatif
-        Route::resource('/analisa/kualitatif', KualitatifController::class);
+        // Route::resource('/analisa/kualitatif', KualitatifController::class);
         //Asuransi
         Route::resource('/analisa/asuransi', AsuransiController::class);
         //Analisa Tambahan
@@ -327,9 +328,12 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/5c/condition', 'updatecondition')->name('analisa5c.updatecondition');
         });
 
-        Route::controller(KualitatifController::class)->group(function () {
+        Route::controller(AnalisaKualitatifController::class)->group(function () {
             Route::get('/analisa/kualitatif/karakter', 'karakter')->name('kualitatif.karakter');
+            Route::post('/analisa/kualitatif/karakter', 'simpankarakter')->name('kualitatif.simpankarakter');
+            Route::put('/analisa/kualitatif/karakter', 'updatekarakter')->name('kualitatif.updatekarakter');
             Route::get('/analisa/kualitatif/usaha', 'usaha')->name('kualitatif.usaha');
+            Route::put('/analisa/kualitatif/usaha', 'updateusaha')->name('kualitatif.updateusaha');
         });
 
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
