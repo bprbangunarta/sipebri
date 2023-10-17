@@ -195,7 +195,7 @@
 
                         <div style="margin-top:5px;width: 100%;float:right;">
                             <span class="fw-bold">EVALUASI</span>
-                            <input class="form-control input-sm form-border bg-blue" type="text"
+                            <input class="form-control input-sm form-border bg-blue text-uppercase" type="text"
                                 name="evaluasi_collateral" id="evaluasi_collateral"
                                 value="{{ $collateral->evaluasi_collateral ?? 'KOSONG' }}" readonly required>
                         </div>

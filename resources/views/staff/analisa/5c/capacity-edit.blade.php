@@ -184,8 +184,9 @@
 
                         <div style="margin-top:5px;width: 100%;float:right;">
                             <span class="fw-bold">EVALUASI</span>
-                            <input class="form-control input-sm form-border bg-blue" type="text" name="evaluasi_capacity"
-                                id="evaluasi_capacity" value="{{ $capacity->evaluasi_capacity }}" readonly required>
+                            <input class="form-control input-sm form-border text-uppercase bg-blue" type="text"
+                                name="evaluasi_capacity" id="evaluasi_capacity" value="{{ $capacity->evaluasi_capacity }}"
+                                readonly required>
                         </div>
                     </div>
 

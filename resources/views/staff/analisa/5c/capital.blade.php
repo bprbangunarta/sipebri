@@ -36,7 +36,7 @@
                     <div class="div-right">
                         <div style="width: 100%;float:right;">
                             <span class="fw-bold">EVALUASI</span>
-                            <input class="form-control input-sm form-border bg-blue" type="text"
+                            <input class="form-control input-sm form-border bg-blue text-uppercase" type="text"
                                 name="capital_evaluasi_capital" id="evaluasi_capital"
                                 value="{{ $capital->capital_evaluasi_capital ?? 'KOSONG' }}" readonly required>
                         </div>

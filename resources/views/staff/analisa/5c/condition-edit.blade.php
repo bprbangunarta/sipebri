@@ -78,7 +78,7 @@
 
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">EVALUASI</span>
-                            <input class="form-control input-sm form-border bg-blue" type="text"
+                            <input class="form-control input-sm form-border bg-blue text-uppercase" type="text"
                                 name="evaluasi_condition" id="evaluasi_condition"
                                 value="{{ $condition->evaluasi_condition ?? 'KOSONG' }}" readonly required>
                         </div>
