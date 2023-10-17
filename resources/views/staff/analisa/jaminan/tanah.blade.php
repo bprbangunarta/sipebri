@@ -193,5 +193,14 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/myscript/delete.js') }}"></script> --}}
+    <script>
+        $("button[data-target='#modal-foto']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var nilaiid = $(this).attr('id');
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#nid').val(nilaiid);
+        });
+    </script>
 @endpush
