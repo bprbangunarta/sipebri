@@ -10,7 +10,7 @@ class Tambahan extends Model
 {
     use HasFactory;
     // protected $connection = 'sqlsrv';
-    protected $table = 'au_tambahan';
+    protected $table = 'a_kebutuhan_dana';
     protected $guarded = ['id'];
 
     public static function kodeacak($name, $length)
@@ -19,11 +19,11 @@ class Tambahan extends Model
             $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
 
             // Cek apakah kode sudah ada dalam database
-            if (!DB::table('au_tambahan')->where('kode_analisa', $acak)->exists()) {
+            if (!DB::table('a_kebutuhan_dana')->where('kode_analisa', $acak)->exists()) {
                 return $acak;
             }
         }
-        
+
         return null; // Jika tidak ada kode yang unik ditemukan
     }
 }

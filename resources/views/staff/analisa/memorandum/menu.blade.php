@@ -16,27 +16,29 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        {{-- @include('theme.menu-static', [$data]) --}}
-                        @include('theme.menu-static')
+                        @include('theme.menu-analisa', [$data])
                     </div>
 
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/analisa/memorandum/kebutuhan') ? 'active' : '' }}">
-                                    <a href="{{ route('memorandum.kebutuhan') }}" class="{{ request()->is('themes/analisa/memorandum/kebutuhan') ? 'text-bold' : '' }}">
+                                    <a href="{{ route('memorandum.kebutuhan', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/memorandum/kebutuhan') ? 'text-bold' : '' }}">
                                         KEBUTUHAN DANA
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'active' : '' }}">
-                                    <a href="{{ route('memorandum.sandi') }}" class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'text-bold' : '' }}">
+                                    <a href="{{ route('memorandum.sandi', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'text-bold' : '' }}">
                                         SANDI BI
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/analisa/memorandum/usulan') ? 'active' : '' }}">
-                                    <a href="{{ route('memorandum.usulan') }}" class="{{ request()->is('themes/analisa/memorandum/usulan') ? 'text-bold' : '' }}">
+                                    <a href="{{ route('memorandum.usulan', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/memorandum/usulan') ? 'text-bold' : '' }}">
                                         USULAN KREDIT
                                     </a>
                                 </li>

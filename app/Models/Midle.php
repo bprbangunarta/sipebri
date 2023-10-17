@@ -393,18 +393,54 @@ class Midle extends Model
             ->where('data_pengajuan.kode_pengajuan', '=', $data)->get();
     }
 
-    public static function jaminan_tanah($data)
+    public static function kodeacak_memorandum($name, $length)
     {
-        $jaminan = DB::table('data_pengajuan')
-            ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
-            ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
-            ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-            ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
-            ->where('data_pengajuan.kode_pengajuan', '=', $data)
-            ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
-            ->get();
+        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
 
-        //
-        return $jaminan;
+            // Cek apakah kode sudah ada dalam database
+            if (!DB::table('a_memorandum')->where('kode_analisa', $acak)->exists()) {
+                return $acak;
+            }
+        }
+
+        return null; // Jika tidak ada kode yang unik ditemukan
+    }
+
+    public static function sandibi($data)
+    {
+        $sifat = DB::table('bi_sifat')->where('sandi', $data->bi_sifat_kode)->get();
+        $bi_penggunaan = DB::table('bi_penggunaan_debitur')->where('sandi', $data->bi_penggunaan_kode)->get();
+        $bi_gol_penjamin = DB::table('bi_golongan_penjamin')->where('sandi', $data->bi_gol_penjamin_kode)->get();
+        $sumber_pelunasan = DB::table('bi_sumber_dana_pelunasan')->where('sandi', $data->bi_sumber_pelunasan_kode)->get();
+        $jenis_usaha = DB::table('bi_jenis_usaha')->where('sandi', $data->bi_jenis_usaha_kode)->get();
+        $sek_ekonomi = DB::table('bi_sektor_ekonomi')->where('sandi', $data->bi_sek_ekonomi_kode)->get();
+        $sek_ekonomi_slik = DB::table('bi_sektor_ekonomi_slik')->where('sandi', $data->bi_sek_ekonomi_slik)->get();
+        $bi_gol_debitur = DB::table('bi_golongan_debitur')->where('sandi', $data->bi_gol_debitur_kode)->get();
+        $bi_gol_debitur_slik = DB::table('bi_golongan_debitur_slik')->where('sandi', $data->bi_gol_debitur_slik)->get();
+
+        $hasil = (object) [
+            'sifat_kode' => $sifat[0]->sandi,
+            'sifat_nama' => $sifat[0]->keterangan,
+            'bi_penggunaan_debitur_kode' => $bi_penggunaan[0]->sandi,
+            'bi_penggunaan_debitur_nama' => $bi_penggunaan[0]->keterangan,
+            'bi_gol_penjamin_kode' => $bi_gol_penjamin[0]->sandi,
+            'bi_gol_penjamin_nama' => $bi_gol_penjamin[0]->keterangan,
+            'fiducia' => $data->by_fiducia,
+            'bagian_dijaminkan' => $data->bagian_dijaminkan,
+            'sumber_pelunasan_kode' => $sumber_pelunasan[0]->sandi,
+            'sumber_pelunasan_nama' => $sumber_pelunasan[0]->keterangan,
+            'jenis_usaha_kode' => $jenis_usaha[0]->sandi,
+            'jenis_usaha_nama' => $jenis_usaha[0]->keterangan,
+            'sek_ekonomi_kode' => $sek_ekonomi[0]->sandi,
+            'sek_ekonomi_nama' => $sek_ekonomi[0]->keterangan,
+            'sek_ekonomi_slik_kode' => $sek_ekonomi_slik[0]->sandi,
+            'sek_ekonomi_slik_nama' => $sek_ekonomi_slik[0]->keterangan,
+            'bi_gol_debitur_kode' => $bi_gol_debitur[0]->sandi,
+            'bi_gol_debitur_nama' => $bi_gol_debitur[0]->keterangan,
+            'bi_gol_debitur_slik_kode' => $bi_gol_debitur_slik[0]->sandi,
+            'bi_gol_debitur_slik_slik_nama' => $bi_gol_debitur_slik[0]->keterangan,
+        ];
+        return $hasil;
     }
 }

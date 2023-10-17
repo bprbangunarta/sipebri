@@ -2,6 +2,7 @@ $(document).ready(function () {
     $("#modal-foto").on("show.bs.modal", function (event) {
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
+        console.log(id);
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
             url: "/themes/analisa/jaminan/fhoto/kendaraan/" + id + "/edit",

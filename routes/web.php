@@ -51,6 +51,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
+use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
 
 /*
@@ -337,10 +338,15 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/kualitatif/usaha', 'updateusaha')->name('kualitatif.updateusaha');
         });
 
-        Route::controller(MemorandumController::class)->group(function () {
+        Route::controller(AnalisaMemorandumController::class)->group(function () {
             Route::get('/analisa/memorandum/kebutuhan', 'kebutuhan')->name('memorandum.kebutuhan');
+            Route::post('/analisa/memorandum/kebutuhan', 'simpankebutuhan')->name('memorandum.simpankebutuhan');
+            Route::put('/analisa/memorandum/kebutuhan', 'updatekebutuhan')->name('memorandum.updatekebutuhan');
             Route::get('/analisa/memorandum/sandi', 'sandi')->name('memorandum.sandi');
+            Route::post('/analisa/memorandum/sandi', 'simpansandi')->name('memorandum.simpansandi');
+            Route::put('/analisa/memorandum/sandi', 'updatesandi')->name('memorandum.updatesandi');
             Route::get('/analisa/memorandum/usulan', 'usulan')->name('memorandum.usulan');
+            Route::put('/analisa/memorandum/usulan', 'updateusulan')->name('memorandum.updateusulan');
         });
 
         Route::controller(AdministrasiController::class)->group(function () {
