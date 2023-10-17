@@ -228,10 +228,13 @@ class AnalisaMemorandumController extends Controller
             //Menghitung Taksasi Agunan
             $taksasiagunan = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
             $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
-            // dd($cek[0]);
 
+            //Cek data usulan
+            $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
+            // dd($usulan);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
+                'usulan' => $usulan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

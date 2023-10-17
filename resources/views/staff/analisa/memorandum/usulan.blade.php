@@ -20,7 +20,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">USULAN PLAFOND</span>
                             <input type="text" class="form-control text-uppercase" name="usulan_plafond"
-                                id="usulan_plafon" placeholder="RP.">
+                                id="usulan_plafon" placeholder="RP." value="">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -47,19 +47,19 @@
                         <div style="width: 100%;float:left;">
                             <span class="fw-bold">SEBELUM REALISASI</span>
                             <input type="text" class="form-control text-uppercase" name="sebelum_realisasi"
-                                id="" placeholder="ENTRI">
+                                id="" placeholder="ENTRI" value="{{ $usulan->sebelum_realisasi }}">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:right;">
                             <span class="fw-bold">SYARAT TAMBAHAN</span>
                             <input type="text" class="form-control text-uppercase" name="syarat_tambahan" id=""
-                                placeholder="ENTRI">
+                                placeholder="ENTRI" value="{{ $usulan->syarat_tambahan }}">
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">SYARAT LAINNYA</span>
                             <input type="text" class="form-control text-uppercase" name="syarat_lainnya" id=""
-                                placeholder="ENTRI">
+                                placeholder="ENTRI" value="{{ $usulan->syarat_lainnya }}">
                         </div>
                     </div>
 
