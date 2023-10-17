@@ -84,7 +84,7 @@
             </li>
 
             <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
-                <a href="/themes/analisa/administrasi">
+                <a href="{{ route('administrasi.index', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Administrasi
                 </a>
             </li>
