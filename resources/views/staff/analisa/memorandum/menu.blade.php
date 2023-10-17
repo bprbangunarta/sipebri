@@ -23,6 +23,12 @@
                     <div class="col-xs-9">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
+                                <li class="{{ request()->is('themes/analisa/memorandum/kebutuhan') ? 'active' : '' }}">
+                                    <a href="{{ route('memorandum.kebutuhan') }}" class="{{ request()->is('themes/analisa/memorandum/kebutuhan') ? 'text-bold' : '' }}">
+                                        KEBUTUHAN DANA
+                                    </a>
+                                </li>
+
                                 <li class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'active' : '' }}">
                                     <a href="{{ route('memorandum.sandi') }}" class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'text-bold' : '' }}">
                                         SANDI BI

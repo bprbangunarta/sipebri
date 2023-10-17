@@ -75,8 +75,8 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('themes/analisa/memorandum/sandi', 'themes/analisa/memorandum/usulan') ? 'active' : '' }}">
-                <a href="{{ route('memorandum.sandi') }}">
+            <li class="{{ request()->is('themes/analisa/memorandum/kebutuhan', 'themes/analisa/memorandum/sandi', 'themes/analisa/memorandum/usulan') ? 'active' : '' }}">
+                <a href="{{ route('memorandum.kebutuhan') }}">
                     <i class="fa fa-folder-o"></i> Memorandum
                 </a>
             </li>

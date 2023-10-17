@@ -333,6 +333,7 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(MemorandumController::class)->group(function () {
+            Route::get('/analisa/memorandum/kebutuhan', 'kebutuhan')->name('memorandum.kebutuhan');
             Route::get('/analisa/memorandum/sandi', 'sandi')->name('memorandum.sandi');
             Route::get('/analisa/memorandum/usulan', 'usulan')->name('memorandum.usulan');
         });

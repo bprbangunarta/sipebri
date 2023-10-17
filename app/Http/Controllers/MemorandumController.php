@@ -131,4 +131,9 @@ class MemorandumController extends Controller
     {
         return view('staff.analisa.memorandum.usulan');
     }
+
+    public function kebutuhan (Request $request)
+    {
+        return view('staff.analisa.memorandum.kebutuhan');
+    }
 }
