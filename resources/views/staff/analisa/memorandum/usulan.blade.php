@@ -12,8 +12,8 @@
 
                     <div class="div-left">
                         <div style="width: 49.5%;float:left;">
-                            <span class="fw-bold">PENGAJUAN KREDIT</span>
-                            <input type="text" class="form-control text-uppercase" value="{{ 'Rp.' . ' ' . number_format($data->temp_plafon, 0, ',', '.') }}" readonly>
+                            <span class="fw-bold">KEBUTUHAN DANA</span>
+                            <input type="text" class="form-control text-uppercase" value="RP." readonly>
                         </div>
 
                         <div style="width: 49.5%;float:right;">
@@ -25,7 +25,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">USULAN PLAFOND</span>
                             <input type="text" class="form-control text-uppercase" name="usulan_plafond"
-                                id="usulan_plafon" placeholder="RP." value="">
+                                id="usulan_plafon" placeholder="RP." value="" required>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
