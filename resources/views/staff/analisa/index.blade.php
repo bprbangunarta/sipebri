@@ -22,7 +22,7 @@
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center" style="width: 100px">WILAYAH</th>
                                         <th class="text-center">STATUS</th>
-                                        <th class="text-center" style="width: 90px">AKSI</th>
+                                        <th class="text-center" style="width: 130px">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,6 +53,11 @@
                                                 <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
+                                                <a data-toggle="modal" data-target="#jadwal-ulang"  class="btn-circle btn-sm btn-danger" title="Reschedule">
+                                                    <i class="fa fa-history"></i>
+                                                </a>
+
+                                                &nbsp;
                                                 @if ($item->tracking == 'Proses Survei')
                                                     <a href="#" class="btn-circle btn-sm btn-grey"
                                                         title="Input Analisa"
@@ -65,9 +70,11 @@
                                                         <i class="fa fa-file-text-o"></i>
                                                     </a>
                                                 @endif
+                                                
                                                 &nbsp;
-                                                <a href="#" class="btn-circle btn-sm btn-primary"><i
-                                                        class="fa fa-print"></i></a>
+                                                <a href="#" class="btn-circle btn-sm btn-primary" title="Cetak Analisa">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php
@@ -86,5 +93,47 @@
             </div>
         </section>
 
+    </div>
+
+    <div class="modal fade" id="jadwal-ulang">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PERMINTAAN RESCHEDULE</h4>
+                </div>
+                <form action="#" method="POST">
+                    @csrf
+                    <div class="modal-body">
+    
+                        <div class="box-body">
+                            <div class="row">
+    
+                                <div style="margin-top: -15px;">
+                                    <span class="fw-bold">KODE PENGAJUAN</span>
+                                    <input type="text" id="id" name="id" hidden>
+                                    <input class="form-control text-uppercase" type="text" value="123456789S" readonly>
+                                </div>
+    
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">NAMA NASABAH</span>
+                                    <input class="form-control text-uppercase" type="text" value="ZULFADLI RIZAL" readonly>
+                                </div>
+    
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">KETERANGAN</span>
+                                    <textarea class="form-control text-uppercase" name="" id=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection

@@ -52,6 +52,11 @@
                                         <a data-toggle="modal" data-target="#modal-edit" class="btn-circle btn-sm btn-warning">
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
+
+                                        &nbsp;
+                                        <a data-toggle="modal" data-target="#send-broadcase" class="btn-circle btn-sm btn-success">
+                                            <i class="fa fa-whatsapp"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             {{-- @empty
@@ -109,7 +114,7 @@
                                     <option value="Dibatalkan">Dibatalkan</option>
                                     <option value="Naik Kasi">Naik Kasi</option>
                                     <option value="Proses Analisa">Proses Analisa</option>
-                            </select>
+                                </select>
                             </div>
 
                             <div style="margin-top: 5px;">
@@ -122,6 +127,44 @@
                 <div class="modal-footer" style="margin-top: -10px;">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
                     <button type="submit" class="btn btn-warning">SIMPAN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="send-broadcase">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">KIRIM BROADCASE</h4>
+            </div>
+            <form action="#" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <div>
+                                {{-- <blockquote style="font-size: 15px;">
+                                    <p>Yth Bapak/ Ibu <b>ZULFADLI RIZAL</b></p>
+                                    <p>Kami dari BPR Bangunarta, Status permohonan kredit Anda saat ini "<b>Dalam Proses Analisa</b>"</p>
+                                    <p>Terimakasih</p>
+                                </blockquote> --}}
+
+                                <blockquote style="font-size: 15px;">
+                                    Yth Bapak/ Ibu <b>ZULFADLI RIZAL</b><br>
+                                    Kami dari BPR Bangunarta, Status permohonan kredit Anda saat ini "<b>Telah Disetujui</b>"</br><br>
+                                    <p>Terimakasih</p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                    <button type="submit" class="btn btn-success">KIRIM</button>
                 </div>
             </form>
         </div>
