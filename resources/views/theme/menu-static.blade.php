@@ -11,12 +11,12 @@
     <div class="box-body no-padding">
         <ul class="nav nav-pills nav-stacked">
             <li>
-                <a href="#"><i class="fa fa-user"></i> {{ $data->nama_nasabah }}</a>
+                <a href="#"><i class="fa fa-user"></i> ZULFADLI RIZAL</a>
             </li>
             <li>
                 <a href="#">
                     <i class="fa fa-bitcoin"></i>
-                    {{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') . ' ' . '(' . $data->jangka_waktu . ' ' . 'BULAN)' }}
+                    Rp. 20.000.000 (24 BULAN)
                 </a>
             </li>
         </ul>
@@ -38,39 +38,39 @@
         <ul class="nav nav-pills nav-stacked">
             <li
                 class="{{ request()->is('themes/analisa/usaha/perdagangan', 'themes/analisa/usaha/pertanian', 'themes/analisa/usaha/jasa', 'themes/analisa/usaha/lainnya', 'themes/analisa/identitas/usaha/perdagangan', 'themes/analisa/barang/usaha/perdagangan', 'themes/analisa/keuangan/usaha/perdagangan', 'themes/analisa/informasi/usaha/pertanian', 'themes/analisa/biaya/usaha/pertanian', 'themes/analisa/keuangan/usaha/pertanian', 'themes/analisa/keuangan/usaha/jasa', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/keuangan/usaha/lainnya') ? 'active' : '' }}">
-                <a href="{{ route('perdagangan.in', ['pengajuan' => $pengajuan]) }}">
+                <a href="{{ route('perdagangan.in') }}">
                     <i class="fa fa-folder-o"></i> Usaha
                 </a>
             </li>
 
             <li class="{{ request()->is('themes/analisa/keuangan') ? 'active' : '' }}">
-                <a href="{{ route('keuangan.index', ['pengajuan' => $pengajuan]) }}">
+                <a href="{{ route('keuangan.index') }}">
                     <i class="fa fa-folder-o"></i> Keuangan
                 </a>
             </li>
 
             <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
-                <a href="{{ route('kepemilikan.index', ['pengajuan' => $pengajuan]) }}">
+                <a href="{{ route('kepemilikan.index') }}">
                     <i class="fa fa-folder-o"></i> Kepemilikan
                 </a>
             </li>
 
             <li
                 class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tanah', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
-                <a href="{{ route('taksasi.kendaraan', ['pengajuan' => $pengajuan]) }}">
+                <a href="{{ route('taksasi.kendaraan') }}">
                     <i class="fa fa-folder-o"></i> Jaminan
                 </a>
             </li>
 
             <li
                 class="{{ request()->is('themes/analisa/5c/character*', 'themes/analisa/5c/capacity*', 'themes/analisa/5c/capital*', 'themes/analisa/5c/collateral*', 'themes/analisa/5c/condition*') ? 'active' : '' }}">
-                <a href="{{ route('analisa5c.character', ['pengajuan' => $pengajuan]) }}">
+                <a href="{{ route('analisa5c.character') }}">
                     <i class="fa fa-folder-o"></i> Analisa 5C
                 </a>
             </li>
 
-            <li class="{{ request()->is('analisa/kualitatif/karakter') ? 'active' : '' }}">
-                <a href="{{ route('kualitatif.karakter', ['pengajuan' => $pengajuan]) }}">
+            <li class="{{ request()->is('themes/analisa/kualitatif/karakter', 'themes/analisa/kualitatif/usaha') ? 'active' : '' }}">
+                <a href="{{ route('kualitatif.karakter') }}">
                     <i class="fa fa-folder-o"></i> Kualitatif
                 </a>
             </li>

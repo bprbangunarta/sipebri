@@ -327,6 +327,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/5c/condition', 'updatecondition')->name('analisa5c.updatecondition');
         });
 
+        Route::controller(KualitatifController::class)->group(function () {
+            Route::get('/analisa/kualitatif/karakter', 'karakter')->name('kualitatif.karakter');
+            Route::get('/analisa/kualitatif/usaha', 'usaha')->name('kualitatif.usaha');
+        });
+
         // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
         // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
         // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');

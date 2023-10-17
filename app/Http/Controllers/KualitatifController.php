@@ -101,4 +101,14 @@ class KualitatifController extends Controller
         }
         return redirect()->back()->with('error', 'Data gagal diubah');
     }
+
+    public function karakter (Request $request)
+    {
+        return view('staff.analisa.kualitatif.karakter');
+    }
+
+    public function usaha (Request $request)
+    {
+        return view('staff.analisa.kualitatif.usaha');
+    }
 }
