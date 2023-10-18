@@ -167,7 +167,7 @@ class AnalisaJaminanController extends Controller
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-            dd($au);
+            // dd($au);
             return view('staff.analisa.jaminan.tanah', [
                 'data' => $cek[0],
                 'jaminan' => $au,
