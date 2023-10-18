@@ -574,7 +574,7 @@
                                                             required>
                                                     </div>
                                                     <div class="col-md">
-                                                        <div class="form-label">Nomor Karyawan</div>
+                                                        <div class="form-label">Nomor Induk Karyawan</div>
                                                         <input type="text" class="form-control" name="no_karyawan"
                                                             id="no_karyawan" placeholder="NIK Karyawan"
                                                             value="{{ old('no_karyawan', $nasabah->no_karyawan) }}"
