@@ -327,6 +327,13 @@ $(
     $("#tlaba").val(totallaba);
 
     //Total persen
+    var laba = $("#tlaba").val();
+    var tlb = parseFloat(laba.replace("Rp. ", "").replace(/\./g, "")) || 0;
+    var beli = $("#tbeli").val();
+    var tbeli = parseFloat(beli.replace("Rp. ", "").replace(/\./g, "")) || 0;
+    var lb = (tlb / tbeli) * 100;
+
+    //Total persen
     // for (var q = 1; q <= 10; q++) {
     //     var ps = $("#persen" + q).val();
 
@@ -334,9 +341,9 @@ $(
     //     var angka = parseFloat(ps.replace("%", ""));
     //     pers += angka || 0;
     // }
+    // var has = pers / 10;
 
-    var has = pers / 10;
-    $("#tpersen").val(has.toFixed(2) + "%");
+    $("#tpersen").val(lb.toFixed(2) + "%");
 });
 
 //Total Stock
