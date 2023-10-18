@@ -194,7 +194,7 @@ class Midle extends Model
             ->select('data_nasabah.nama_nasabah', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.temp_plafon', 'data_pengajuan.produk_kode', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu', 'data_pengajuan.metode_rps', 'data_pengajuan.suku_bunga')->get();
         $cek[0]->kd_pengajuan = Crypt::encrypt($data);
         $produk = DB::table('data_produk')->where('kode_produk', $cek[0]->produk_kode)->first('admin');
-        $cek[0]->admin = $produk->admin;
+        // $cek[0]->admin = $produk->admin;
         return $cek;
     }
 

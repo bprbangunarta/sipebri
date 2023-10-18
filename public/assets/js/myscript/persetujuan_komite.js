@@ -23,13 +23,31 @@ $(document).ready(function () {
                 $("#nama").val(hasil.nama_nasabah);
 
                 var pal = hasil.plafon;
-                var pl = "Rp. " + pal.toLocaleString("id-ID");
+                // var pl = "Rp. " + pal.toLocaleString("id-ID");
+                var pl = formatRupiah(pal);
                 $("#plafon").val(pl);
+                console.log(pal);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
                 console.error("Error:", xhr.responseText);
             },
         });
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+        }
     });
 });

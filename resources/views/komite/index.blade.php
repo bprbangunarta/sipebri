@@ -101,7 +101,7 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">USULAN PLAFOND</span>
-                                    <input class="form-control text-uppercase" type="text" value="RP. 20.000.000"
+                                    <input class="form-control text-uppercase" type="text" value="RP. 10.000.000"
                                         id="plafon" readonly>
                                 </div>
 
