@@ -146,7 +146,7 @@
                 <td></td>
                 <td>Pekerjaan</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->pendidikan_kode }}</td>
+                <td>-</td>
             </tr>
             <tr>
                 <td></td>
@@ -166,12 +166,12 @@
             Saya telah mengetahui terkait syarat dan ketentuan premi asuransi jiwa yang didaftarkan oleh (Suami/ Istri/
             Orang Tua/ Kakak/ Adik/ Anak) Saya dan apabila dikemudian hari (Suami/ Istri/ Orang Tua/ Kakak/ Adik/ Anak)
             Saya meninggal dunia sebelum 45 (Empat Puluh Lima) Hari setelah kredit direalisasikan atau setelah lewat
-            jatuh tempo pinjaman maka seluruh kewajiban menjadi tanggungjawab ahli waris.
+            jatuh tempo pinjaman maka seluruh kewajiban menjadi tanggung jawab ahli waris.
         </p>
 
         <p>
             Apabila dikemudian hari (Suami/ Istri/ Orang Tua/ Kakak/ Adik/ Anak) Saya melakukan tindakan yang merugikan
-            PT. BPR Bangunarta dalam hal pembayaran angsuran, Saya bertanggungjawab untuk membayar angsuran tersebut
+            PT. BPR Bangunarta dalam hal pembayaran angsuran, Saya bertanggung jawab untuk membayar angsuran tersebut
             sampai dinyatakan lunas oleh PT. BPR Bangunarta.
         </p>
 
