@@ -18,7 +18,15 @@ class AnalisaJaminanController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            $au = Midle::taksasi_jaminan($enc);
+            // $au = Midle::taksasi_jaminan($enc);
+            $au = DB::table('data_pengajuan')
+                ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+                ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->orWhere('data_jaminan.jenis_jaminan', '=', 'Kendaraan')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                ->get();
             // dd($au);
             return view('staff.analisa.jaminan.kendaraan', [
                 'data' => $cek[0],
@@ -150,7 +158,15 @@ class AnalisaJaminanController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            $au = Midle::taksasi_jaminan($enc);
+            // $au = Midle::taksasi_jaminan($enc);
+            $au = DB::table('data_pengajuan')
+                ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+                ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                ->get();
             // dd($au);
             return view('staff.analisa.jaminan.tanah', [
                 'data' => $cek[0],
