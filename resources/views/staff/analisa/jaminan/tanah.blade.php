@@ -63,7 +63,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAKSASI AGUNAN</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="#">
                     @csrf
                     <div class="modal-body">
 
