@@ -45,7 +45,7 @@
                                         KANTOR KAS SUBANG
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <a data-toggle="modal" data-target="#modal-edit" class="btn-circle btn-sm btn-warning">
+                                        <a href="{{ route('penolakan.edit') }}" class="btn-circle btn-sm btn-warning">
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
 

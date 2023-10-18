@@ -14,10 +14,66 @@
                     </div>
                     <div class="box-body">
                         <form action="">
-                            <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
 
-                            <button type="submit" class="btn btn-primary">SIMPAN</button>
-                            <A href="{{ route('penolakan.pengajuan') }}" class="btn btn-default pull-right">BATAL</A>
+                            <div class="form-group">
+                                <label>PILIH DEBITUR</label>
+                                <select class="form-control select2" style="width: 100%;">
+                                  <option value="">--PILIH--</option>
+                                  <option>Alaska</option>
+                                  <option>California</option>
+                                  <option>Delaware</option>
+                                  <option>Tennessee</option>
+                                  <option>Texas</option>
+                                  <option>Washington</option>
+                                </select>
+                            </div>
+
+                            <div class="row" style="margin-top: -5px;">
+                                <div class="col-lg-3">
+                                  <div class="input-group">
+                                        <span class="input-group-addon">
+                                          <input type="checkbox">
+                                        </span>
+                                    <input type="text" class="form-control" value="BERMASALAH SLIK">
+                                  </div>
+                                </div>
+                                
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                          <span class="input-group-addon">
+                                            <input type="checkbox">
+                                          </span>
+                                      <input type="text" class="form-control" value="PARAMETER LAIN">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                          <span class="input-group-addon">
+                                            <input type="checkbox">
+                                          </span>
+                                      <input type="text" class="form-control" value="PARAMETER LAIN">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                          <span class="input-group-addon">
+                                            <input type="checkbox">
+                                          </span>
+                                      <input type="text" class="form-control" value="PARAMETER LAIN">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 10px;">
+                                <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                            </div>
+
+                            <div style="margin-top: -10px;">
+                                <button type="submit" class="btn btn-primary">SIMPAN</button>
+                            <a href="{{ route('penolakan.pengajuan') }}" class="btn btn-default pull-right">BATAL</a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -33,6 +89,16 @@
 <script>
   $(function () {
     $('.textarea').wysihtml5()
+
+    //Initialize Select2 Elements
+    $('.select2').select2()
+    
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+    })
+
   })
 </script>
 @endpush
