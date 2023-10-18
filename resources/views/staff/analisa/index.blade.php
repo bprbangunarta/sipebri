@@ -54,7 +54,8 @@
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a data-toggle="modal" data-target="#jadwal-ulang"
-                                                    class="btn-circle btn-sm btn-danger" title="Reschedule">
+                                                    class="btn-circle btn-sm btn-danger"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}" title="Reschedule">
                                                     <i class="fa fa-history"></i>
                                                 </a>
 

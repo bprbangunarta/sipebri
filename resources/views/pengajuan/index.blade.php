@@ -332,7 +332,9 @@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Jangka Waktu</label>
-                                    <select type="text" class="form-select" placeholder="Jengka Waktu"
+                                    <input type="text" class="form-control" placeholder="60" name="jangka_waktu"
+                                        id="select-jk">
+                                    {{-- <select type="text" class="form-select" placeholder="Jengka Waktu"
                                         name="jangka_waktu" id="select-jk">
                                         <option value="">Pilih JK</option>
                                         <option value="6" {{ old('jangka_waktu') === '6' ? 'selected' : '' }}>6 Bulan
@@ -343,7 +345,7 @@
                                             Bulan</option>
                                         <option value="36" {{ old('jangka_waktu') === '36' ? 'selected' : '' }}>36
                                             Bulan</option>
-                                    </select>
+                                    </select> --}}
                                 </div>
                             </div>
 

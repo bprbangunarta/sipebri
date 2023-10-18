@@ -180,7 +180,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
-                                                        <div class="form-label">Kota</div>
+                                                        <div class="form-label">Wilayah Dati II</div>
                                                         @if (is_null($nasabah->kota))
                                                             <input class="form-control" type="text" name="kota"
                                                                 id="kota" placeholder="Kota"
