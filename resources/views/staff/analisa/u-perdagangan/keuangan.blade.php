@@ -69,12 +69,12 @@
 
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
-                            <span class="fw-bold">LABA PERBULAN</span>
+                            <span class="fw-bold">LABA HARIAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="Rp. {{ old('pendapatan') }}" id="lbulan" name="pendapatan" readonly>
                         </div>
                         <div style="width: 49.5%;float:right;">
-                            <span class="fw-bold">BIAYA PERBULAN</span>
+                            <span class="fw-bold">BIAYA HARIAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="Rp. {{ old('pengeluaran') }}" id="bdagang" name="pengeluaran" readonly>
                         </div>

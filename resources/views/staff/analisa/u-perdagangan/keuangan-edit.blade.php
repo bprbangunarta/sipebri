@@ -77,13 +77,13 @@
 
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
-                            <span class="fw-bold">LABA PERBULAN</span>
+                            <span class="fw-bold">LABA HARIAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="{{ old('pendapatan') ?? ($perdagangan->pendapatan = 'Rp. ' . number_format($perdagangan->pendapatan, 0, ',', '.')) }}"
                                 id="lbulan" name="pendapatan" readonly>
                         </div>
                         <div style="width: 49.5%;float:right;">
-                            <span class="fw-bold">BIAYA PERBULAN</span>
+                            <span class="fw-bold">BIAYA HARIAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="{{ old('pengeluaran') ?? ($perdagangan->pengeluaran = 'Rp. ' . number_format($perdagangan->pengeluaran, 0, ',', '.')) }}"
                                 id="bdagang" name="pengeluaran" readonly>
