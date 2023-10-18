@@ -95,7 +95,7 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Motor Metik" readonly>
+                                            value="{{ $jaminan[0]->luas }}" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
