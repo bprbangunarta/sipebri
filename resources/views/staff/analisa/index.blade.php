@@ -38,7 +38,7 @@
                                             </td>
                                             <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->nama_nasabah }} <br>
-                                                <b>Kategori:</b> {{ $item->kategori }}
+                                                <b>Kaetegori:</b> RELOAN
 
                                             </td>
                                             <td style="text-transform: uppercase;">
@@ -53,31 +53,30 @@
                                                 <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->tracking == 'Proses Analisa')
+                                                <a data-toggle="modal" data-target="#jadwal-ulang"
+                                                    class="btn-circle btn-sm btn-danger" title="Reschedule">
+                                                    <i class="fa fa-history"></i>
+                                                </a>
+
+                                                &nbsp;
+                                                @if ($item->tracking == 'Proses Survei')
+                                                    <a href="#" class="btn-circle btn-sm btn-grey"
+                                                        title="Input Analisa"
+                                                        style="pointer-events: none; text-decoration: none; cursor: default;">
+                                                        <i class="fa fa-file-text-o" disabled="disabled"></i>
+                                                    </a>
+                                                @else
                                                     <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
                                                         class="btn-circle btn-sm btn-warning" title="Input Analisa">
                                                         <i class="fa fa-file-text-o"></i>
                                                     </a>
-                                                @else
-                                                    <a data-toggle="modal" data-target="#jadwal-ulang"
-                                                        class="btn-circle btn-sm btn-danger" title="Reschedule">
-                                                        <i class="fa fa-history"></i>
-                                                    </a>
+                                                @endif
 
-                                                    &nbsp;
-                                                    @if ($item->tracking == 'Proses Survei')
-                                                        <a href="#" class="btn-circle btn-sm btn-grey"
-                                                            title="Input Analisa"
-                                                            style="pointer-events: none; text-decoration: none; cursor: default;">
-                                                            <i class="fa fa-file-text-o" disabled="disabled"></i>
-                                                        </a>
-                                                    @endif
-
-                                                    &nbsp;
-                                                    <a href="#" class="btn-circle btn-sm btn-primary"
-                                                        title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
+                                                &nbsp;
+                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    class="btn-circle btn-sm btn-primary" title="Cetak Analisa">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php

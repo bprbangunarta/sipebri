@@ -224,8 +224,8 @@ class CetakAnalisaController extends Controller
             $hari = Carbon::today();
             $data->hari = $hari->isoformat('D MMMM Y');
 
-            $tambahan = DB::table('au_tambahan')->where('pengajuan_kode', $enc)->first();
-
+            $tambahan = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
+            // dd($tambahan);
             return view('cetak.analisa.tambahan', [
                 'data' => $data,
                 'tambah' => $tambahan,
