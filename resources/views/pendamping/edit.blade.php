@@ -177,6 +177,11 @@
                                                             <option value="3">3 Orang</option>
                                                             <option value="4">4 Orang</option>
                                                             <option value="5">5 Orang</option>
+                                                            <option value="6">6 Orang</option>
+                                                            <option value="7">7 Orang</option>
+                                                            <option value="8">8 Orang</option>
+                                                            <option value="9">9 Orang</option>
+                                                            <option value="10">10 Orang</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
@@ -191,7 +196,7 @@
                                                                     {{ $pendamping[0]['pisah'] }}</option>
                                                             @endif
 
-                                                            <option value="Y">Iya</option>
+                                                            <option value="Y">Ya</option>
                                                             <option value="T">Tidak</option>
                                                         </select>
                                                     </div>
