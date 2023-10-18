@@ -58,7 +58,7 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah') ? 'active' : '' }}">
+                    <li class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah', 'themes/penolakan/edit') ? 'active' : '' }}">
                         <a href="{{ route('penolakan.pengajuan') }}">
                             <i class="fa fa-circle-o"></i>
                             Input Penolakan

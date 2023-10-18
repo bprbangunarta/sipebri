@@ -21,14 +21,14 @@
                     <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Baki Debit</span>
-                        <span class="info-box-number">174.835.045.319</span>
+                        <span class="info-box-text">PERMOHONAN</span>
+                        <span class="info-box-number">174 ORANG</span>
 
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
                         </div>
                         <span class="progress-description">
-                            15 Agustus 2023
+                            OKTOBER 2023
                         </span>
                     </div>
                 </div>
@@ -39,14 +39,14 @@
                     <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Tgk Pokok</span>
-                        <span class="info-box-number">18.978.321.997</span>
+                        <span class="info-box-text">ANALISA</span>
+                        <span class="info-box-number">18 ORANGA</span>
 
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
                         </div>
                         <span class="progress-description">
-                            15 Agustus 2023
+                            OKTOBER 2023
                         </span>
                     </div>
                 </div>
@@ -57,14 +57,14 @@
                     <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Tgk Denda</span>
-                        <span class="info-box-number">28.403.286.391</span>
+                        <span class="info-box-text">REALISASI</span>
+                        <span class="info-box-number">28 ORANG</span>
 
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
                         </div>
                         <span class="progress-description">
-                            15 Agustus 2023
+                            OKTOBER 2023
                         </span>
                     </div>
                 </div>
@@ -75,14 +75,14 @@
                     <span class="info-box-icon"><i class="fa fa-warning"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">Tgk Bunga</span>
-                        <span class="info-box-number">13.841.090.899</span>
+                        <span class="info-box-text">PENOLAKAN</span>
+                        <span class="info-box-number">13 ORANG</span>
 
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
                         </div>
                         <span class="progress-description">
-                            15 Agustus 2023
+                            OKTOBER 2023
                         </span>
                     </div>
                 </div>
@@ -90,6 +90,46 @@
         </div>
 
         <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-calendar"></i>
+                        <h3 class="box-title">REALISASI HARI INI</h3>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-blue">2</small>
+                        </span>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered text-uppercase">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th class="text-center" style="width: 15px;">#</th>
+                                    <th class="text-center">NAMA DEBITUR</th>
+                                    <th class="text-center">ALAMAT</th>
+                                    <th class="text-center">SURVEYOR</th>
+                                    <th class="text-center">PLAFOND</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-info">
+                                    <td class="text-center" style="vertical-align: middle;">1</td>
+                                    <td style="vertical-align: middle;">ZULFADLI RIZAL</td>
+                                    <td>Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat</td>
+                                    <td class="text-center" style="vertical-align: middle;">MUHIDIN</td>
+                                    <td class="text-right" style="vertical-align: middle;">Rp. 20.000.000</td>
+                                </tr>
+                                <tr class="bg-blue">
+                                    <td class="text-center" colspan="4"><b>TOTAL</b></td>
+                                    <td class="text-right"><b>Rp. 20.000.000</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- <div class="row">
             <div class="col-md-6">
                 <div class="box box-danger">
                     <div class="box-header with-border">
@@ -169,7 +209,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </section>
 
 </div>
