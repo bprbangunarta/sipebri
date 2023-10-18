@@ -83,7 +83,7 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KEWAJIBAN UNTUK</span>
+                                                <span class="fw-bold">KEWAJIBAN LAINNYA</span>
                                                 <input class="form-control input-sm form-border" type="text"
                                                     placeholder="ENTRI" name="data1">
                                             </div>
@@ -95,7 +95,7 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KEWAJIBAN UNTUK</span>
+                                                <span class="fw-bold">KEWAJIBAN LAINNYA</span>
                                                 <input class="form-control input-sm form-border" type="text"
                                                     placeholder="ENTRI" name="data2">
                                             </div>
@@ -107,7 +107,7 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KEWAJIBAN UNTUK</span>
+                                                <span class="fw-bold">KEWAJIBAN LAINNYA</span>
                                                 <input class="form-control input-sm form-border" type="text"
                                                     placeholder="ENTRI" name="data3">
                                             </div>
