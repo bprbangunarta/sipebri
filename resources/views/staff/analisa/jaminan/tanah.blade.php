@@ -71,23 +71,23 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">JENIS AGUNAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Kendaraan Bermotor Roda 2" readonly>
+                                            value="{{ $jaminan[0]->jenis_agunan }}" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="BPKB Motor Non Fiducia" readonly>
+                                            value="{{ $jaminan[0]->jenis_dokumen }}" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="P007772168" readonly>
+                                            value="{{ $jaminan[0]->no_dokumen }}" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="ZULFADLI RIZAL" readonly>
+                                            value="{{ $jaminan[0]->atas_nama }}" readonly>
                                     </div>
                                 </div>
 
@@ -101,8 +101,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI TANAH</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat"
-                                            readonly>
+                                            value="{{ $jaminan[0]->lokasi }}" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
