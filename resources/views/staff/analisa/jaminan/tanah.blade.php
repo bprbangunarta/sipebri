@@ -10,7 +10,7 @@
                         <th class="text-center" style="width: 200px">Agunan</th>
                         <th class="text-center" style="width: 150px">Informasi</th>
                         <th class="text-center">Detail</th>
-                        <th class="text-center" style="width: 100px">Taksasi</th>
+                        <th class="text-center" style="width: 120px">Taksasi</th>
                         <th class="text-center" style="width: 100px">Aksi</th>
                     </tr>
                 </thead>
@@ -36,7 +36,9 @@
                                 <b>Lokasi: </b> <br>
                                 {{ $item->lokasi }}
                             </td>
-                            <td style="vertical-align: middle;">Rp8.000.000</td>
+                            <td style="vertical-align: middle;">
+                                {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
+                            </td>
                             <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
                                 <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
                                     <i class="fa fa-file-text-o"></i>
@@ -107,13 +109,15 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI PASAR</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_pasar" id="" placeholder="Rp.">
+                                            name="nilai_pasar" id="" placeholder="Rp."
+                                            value="{{ 'RP. ' . ' ' . number_format($item->nilai_pasar, 0, ',', '.') }}">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI TAKSASI</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_taksasi" id="" placeholder="Rp.">
+                                            name="" id="" placeholder="Rp."
+                                            value="{{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}">
                                     </div>
                                 </div>
                             </div>
