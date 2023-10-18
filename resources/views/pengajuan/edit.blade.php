@@ -108,13 +108,13 @@
                                                             value="{{ $pengajuan->jangka_waktu }}">
                                                     </div>
                                                     <div class="col-md">
-                                                        <div class="form-label">JK Pokok</div>
+                                                        <div class="form-label">JK Pokok (Bulan)</div>
                                                         <input type="number" class="form-control" name="jangka_pokok"
                                                             id="jangka_pokok" placeholder="Jangka Pokok"
                                                             value="{{ old('jangka_pokok', $pengajuan->jangka_pokok) }}">
                                                     </div>
                                                     <div class="col-md">
-                                                        <div class="form-label">JK Bunga</div>
+                                                        <div class="form-label">JK Bunga (Bulan)</div>
                                                         <input type="number" class="form-control" name="jangka_bunga"
                                                             id="jangka_bunga" placeholder="Jangka Bunga"
                                                             value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}">
@@ -126,19 +126,28 @@
                                                     <div class="col-md">
                                                         <div class="form-label">Metode RPS</div>
                                                         <select type="text" class="form-select"
-                                                            placeholder="Pilih Metode" name="metode_rps"
-                                                            id="select-metode">
+                                                            placeholder="Pilih Metode" name="metode_rps" id="select-metode">
                                                             @if (is_null($pengajuan->metode_rps))
                                                                 <option value="">Metode RPS</option>
                                                             @else
                                                                 <option value="{{ $pengajuan->metode_rps }}">
                                                                     {{ $pengajuan->metode_rps }}</option>
                                                             @endif
-                                                            <option value="Flat">Flat</option>
-                                                            <option value="PRK">PRK</option>
-                                                            <option value="Efektif">Efektif</option>
-                                                            <option value="Efektif Anuitas">Efektif Anuitas</option>
-                                                            <option value="Efektif Musiman">Efektif Musiman</option>
+                                                            <option value="Flat"
+                                                                {{ old('metode_rps') == 'Flat' ? 'selected' : '' }}>Flat
+                                                            </option>
+                                                            <option value="PRK"
+                                                                {{ old('metode_rps') == 'PRK' ? 'selected' : '' }}>PRK
+                                                            </option>
+                                                            <option value="Efektif"
+                                                                {{ old('metode_rps') == 'Efektif' ? 'selected' : '' }}>
+                                                                Efektif</option>
+                                                            <option value="Efektif Anuitas"
+                                                                {{ old('metode_rps') == 'Efektif Anuitas' ? 'selected' : '' }}>
+                                                                Efektif Anuitas</option>
+                                                            <option value="Efektif Musiman"
+                                                                {{ old('metode_rps') == 'Efektif Musiman' ? 'selected' : '' }}>
+                                                                Efektif Musiman</option>
                                                         </select>
                                                     </div>
 
@@ -153,10 +162,18 @@
                                                                 <option value="{{ $pengajuan->penggunaan }}">
                                                                     {{ $pengajuan->penggunaan }}</option>
                                                             @endif
-                                                            <option value="Modal Usaha">Modal Usaha</option>
-                                                            <option value="Investasi">Investasi</option>
-                                                            <option value="Konsumtif">Konsumtif</option>
-                                                            <option value="Lainnya">Lainnya</option>
+                                                            <option value="Modal Usaha"
+                                                                {{ old('penggunaan') == 'Modal Usaha' ? 'selected' : '' }}>
+                                                                Modal Usaha</option>
+                                                            <option value="Investasi"
+                                                                {{ old('penggunaan') == 'Investasi' ? 'selected' : '' }}>
+                                                                Investasi</option>
+                                                            <option value="Konsumtif"
+                                                                {{ old('penggunaan') == 'Konsumtif' ? 'selected' : '' }}>
+                                                                Konsumtif</option>
+                                                            <option value="Lainnya"
+                                                                {{ old('penggunaan') == 'Lainnya' ? 'selected' : '' }}>
+                                                                Lainnya</option>
                                                         </select>
                                                     </div>
 
