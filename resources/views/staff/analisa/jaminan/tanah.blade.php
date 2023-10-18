@@ -22,7 +22,7 @@
                                 {{ $item->jenis_agunan }}
                                 <p></p>
                                 <b>Dokumen: </b><br>
-                                {{ $item->no_dokumen }}
+                                {{ $item->jenis_dokumen }}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Atas Nama: </b><br>
