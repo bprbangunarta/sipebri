@@ -15,37 +15,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            <b>Jenis: </b><br>
-                            Kendaraan Bermotor Roda 2
-                            <p></p>
-                            <b>Dokumen: </b><br>
-                            BPKB Motor Non Fiducia
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <b>Atas Nama: </b><br>
-                            NINIS NURANISA <br>
-                            <p></p>
-                            <b>No Doukumen: </b><br>
-                            P007772168
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <b>Luas: </b> 500 M2 <br>
-                            <b>Lokasi: </b> <br>
-                            Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat 41254
-                        </td>
-                        <td style="vertical-align: middle;">Rp8.000.000</td>
-                        <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                            <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
-                                <i class="fa fa-file-text-o"></i>
-                            </button>
+                    @foreach ($janminan as $item)
+                        <tr>
+                            <td style="vertical-align: middle;">
+                                <b>Jenis: </b><br>
+                                {{ $item->jenis_agunan }}
+                                <p></p>
+                                <b>Dokumen: </b><br>
+                                {{ $item->no_dokumen }}
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <b>Atas Nama: </b><br>
+                                {{ $item->atas_nama }} <br>
+                                <p></p>
+                                <b>No Doukumen: </b><br>
+                                {{ $item->no_dokumen }}
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <b>Luas: </b> 500 M2 <br>
+                                <b>Lokasi: </b> <br>
+                                Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat 41254
+                            </td>
+                            <td style="vertical-align: middle;">Rp8.000.000</td>
+                            <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
+                                <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
+                                    <i class="fa fa-file-text-o"></i>
+                                </button>
 
-                            <button data-toggle="modal" data-target="#modal-foto" class="btn btn-sm btn-primary">
-                                <i class="fa fa-image"></i>
-                            </button>
-                        </td>
-                    </tr>
+                                <button data-toggle="modal" data-target="#modal-foto" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-image"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
