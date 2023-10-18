@@ -34,6 +34,7 @@
 <link rel="stylesheet" href="{{ asset('theme/assets/select2/dist/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('theme/dist/css/AdminLTE.min.css') }}">
 <link rel="stylesheet" href="{{ asset('theme/dist/css/skins/_all-skins.min.css') }}">
+<link rel="stylesheet" href="{{ asset('theme/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 
 <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
