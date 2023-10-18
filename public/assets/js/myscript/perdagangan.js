@@ -327,13 +327,13 @@ $(
     $("#tlaba").val(totallaba);
 
     //Total persen
-    for (var q = 1; q <= 10; q++) {
-        var ps = $("#persen" + q).val();
+    // for (var q = 1; q <= 10; q++) {
+    //     var ps = $("#persen" + q).val();
 
-        // var pr = parseFloat(ps.replace("Rp. ", "").replace(/\./g, "")) || 0;
-        var angka = parseFloat(ps.replace("%", ""));
-        pers += angka || 0;
-    }
+    //     // var pr = parseFloat(ps.replace("Rp. ", "").replace(/\./g, "")) || 0;
+    //     var angka = parseFloat(ps.replace("%", ""));
+    //     pers += angka || 0;
+    // }
 
     var has = pers / 10;
     $("#tpersen").val(has.toFixed(2) + "%");

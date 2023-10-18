@@ -17,7 +17,7 @@
                                 id="brdg" name="belanja_harian" value="{{ old('belanja_harian') }}">
                         </div>
                         <div style="width: 49.5%;float:right;">
-                            <span class="fw-bold">PENDAPATAN HARIAN</span>
+                            <span class="fw-bold">OMSET HARIAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="penhar" readonly>
                         </div>
