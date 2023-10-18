@@ -34,34 +34,34 @@
                         </div>
 
                         <div style="margin-top:20px;width: 49.5%;float:left;">
-                            <span class="fw-bold">TRANSPORTASI</span>
+                            <span class="fw-bold">TRANSPORTASI (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="transport" name="transportasi" value="{{ old('transportasi') }}" required>
                         </div>
                         <div style="margin-top:20px;width: 49.5%;float:right;">
-                            <span class="fw-bold">BONGKAR MUAT</span>
+                            <span class="fw-bold">BONGKAR MUAT (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="bongkar" name="bongkar_muat" value="{{ old('bongkar_muat') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PEGAWAI</span>
+                            <span class="fw-bold">PEGAWAI (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="pegawai" name="pegawai" value="{{ old('pegawai') }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">GATEL</span>
+                            <span class="fw-bold">GATEL (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="gatel" name="gatel" value="{{ old('gatel') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">RETRIBUSI</span>
+                            <span class="fw-bold">RETRIBUSI (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="retri" name="retribusi" value="{{ old('retribusi') }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">SEWA TEMPAT</span>
+                            <span class="fw-bold">SEWA TEMPAT (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="sewa" name="sewa_tempat" value="{{ old('sewa_tempat') }}">
                         </div>
@@ -69,12 +69,12 @@
 
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
-                            <span class="fw-bold">LABA HARIAN</span>
+                            <span class="fw-bold">LABA BULANAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="Rp. {{ old('pendapatan') }}" id="lbulan" name="pendapatan" readonly>
                         </div>
                         <div style="width: 49.5%;float:right;">
-                            <span class="fw-bold">BIAYA HARIAN</span>
+                            <span class="fw-bold">BIAYA BULANAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="Rp. {{ old('pengeluaran') }}" id="bdagang" name="pengeluaran" readonly>
                         </div>

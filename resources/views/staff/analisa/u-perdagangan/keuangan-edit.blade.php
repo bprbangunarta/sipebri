@@ -36,39 +36,39 @@
                         </div>
 
                         <div style="margin-top:20px;width: 49.5%;float:left;">
-                            <span class="fw-bold">TRANSPORTASI</span>
+                            <span class="fw-bold">TRANSPORTASI (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="transport" name="transportasi"
                                 value="{{ old('transportasi') ?? ($keuangan->transportasi = 'Rp. ' . number_format($keuangan->transportasi, 0, ',', '.')) }}">
                         </div>
                         <div style="margin-top:20px;width: 49.5%;float:right;">
-                            <span class="fw-bold">BONGKAR MUAT</span>
+                            <span class="fw-bold">BONGKAR MUAT (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="bongkar" name="bongkar_muat"
                                 value="{{ old('bongkar_muat') ?? ($keuangan->bongkar_muat = 'Rp. ' . number_format($keuangan->bongkar_muat, 0, ',', '.')) }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PEGAWAI</span>
+                            <span class="fw-bold">PEGAWAI (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="pegawai" name="pegawai"
                                 value="{{ old('pegawai') ?? ($keuangan->pegawai = 'Rp. ' . number_format($keuangan->pegawai, 0, ',', '.')) }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">GATEL</span>
+                            <span class="fw-bold">GATEL (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="gatel" name="gatel"
                                 value="{{ old('gatel') ?? ($keuangan->gatel = 'Rp. ' . number_format($keuangan->gatel, 0, ',', '.')) }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">RETRIBUSI</span>
+                            <span class="fw-bold">RETRIBUSI (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="retri" name="retribusi"
                                 value="{{ old('retribusi') ?? ($keuangan->retribusi = 'Rp. ' . number_format($keuangan->retribusi, 0, ',', '.')) }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">SEWA TEMPAT</span>
+                            <span class="fw-bold">SEWA TEMPAT (HARIAN)</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
                                 id="sewa" name="sewa_tempat"
                                 value="{{ old('sewa_tempat') ?? ($keuangan->sewa_tempat = 'Rp. ' . number_format($keuangan->sewa_tempat, 0, ',', '.')) }}">
@@ -77,13 +77,13 @@
 
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
-                            <span class="fw-bold">LABA HARIAN</span>
+                            <span class="fw-bold">LABA BULANAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="{{ old('pendapatan') ?? ($perdagangan->pendapatan = 'Rp. ' . number_format($perdagangan->pendapatan, 0, ',', '.')) }}"
                                 id="lbulan" name="pendapatan" readonly>
                         </div>
                         <div style="width: 49.5%;float:right;">
-                            <span class="fw-bold">BIAYA HARIAN</span>
+                            <span class="fw-bold">BIAYA BULANAN</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="{{ old('pengeluaran') ?? ($perdagangan->pengeluaran = 'Rp. ' . number_format($perdagangan->pengeluaran, 0, ',', '.')) }}"
                                 id="bdagang" name="pengeluaran" readonly>
