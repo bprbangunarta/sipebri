@@ -35,7 +35,7 @@
                                             </td>
                                             <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->nama_nasabah }} <br>
-                                                <b>Kaetegori:</b> {{ $item->kategori }}
+                                                <b>Kategori:</b> {{ $item->kategori }}
                                             </td>
                                             <td style="text-transform: uppercase;">
                                                 {{ $item->alamat_ktp }} <br>

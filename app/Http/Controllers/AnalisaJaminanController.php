@@ -14,7 +14,6 @@ class AnalisaJaminanController extends Controller
 {
     public function kendaraan(Request $request)
     {
-
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
