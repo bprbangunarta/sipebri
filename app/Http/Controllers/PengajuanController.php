@@ -144,8 +144,8 @@ class PengajuanController extends Controller
             //Ambil data CGC        
             $cgc = CGC::select('*')->get();
             $namacgc = CGC::where('noacc', $peng->tabungan_cgc)->first();
-            $peng->namacgc = $namacgc->fnama;
-
+            $peng->namacgc = $namacgc->fnama ?? null;
+            // dd($)
             return view('pengajuan.edit', [
                 'data' => $dt[0],
                 'cgc' => $cgc,
