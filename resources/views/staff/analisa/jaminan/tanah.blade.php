@@ -63,7 +63,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAKSASI AGUNAN</h4>
                 </div>
-                <form action="#">
+                <form action="{{ route('taksasi.simpantanah') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -73,23 +73,23 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">JENIS AGUNAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="{{ $jaminan[0]->jenis_agunan }}" readonly>
+                                            value="" name="jenis_agunan" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="{{ $jaminan[0]->jenis_dokumen }}" readonly>
+                                            value="" name="jenis_dokumen" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="{{ $jaminan[0]->no_dokumen }}" readonly>
+                                            value="" name="no_dok" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="{{ $jaminan[0]->atas_nama }}" readonly>
+                                            value="" name="atas_nama" readonly>
                                     </div>
                                 </div>
 
@@ -97,27 +97,25 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="{{ $jaminan[0]->luas }}" readonly>
+                                            value="" name="luas" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI TANAH</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="{{ $jaminan[0]->lokasi }}" readonly>
+                                            name="lokasi" value="" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI PASAR</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_pasar" id="" placeholder="Rp."
-                                            value="{{ 'RP. ' . ' ' . number_format($item->nilai_pasar, 0, ',', '.') }}">
+                                            name="nilai_pasar" id="" placeholder="Rp." value="">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI TAKSASI</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="" id="" placeholder="Rp."
-                                            value="{{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}">
+                                            name="nilai_taksasi" id="" placeholder="Rp." value="#">
                                     </div>
                                 </div>
                             </div>

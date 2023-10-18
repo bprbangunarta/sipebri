@@ -175,6 +175,23 @@ class AnalisaJaminanController extends Controller
         }
     }
 
+    public function simpantanah(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $data = [
+                'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
+                'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
+            ];
+            dd($data);
+            DB::table('data_jaminan')->where('pengajuan_kode', $enc)->update($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Gagal menambahkan fhoto');
+    }
+
     public function lain(Request $request)
     {
         try {
