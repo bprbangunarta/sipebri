@@ -75,7 +75,6 @@ class AnalisaJaminanController extends Controller
         ];
 
         return response()->json($data_agunan);
-        // return response()->json([$data, $agn, $dokumen]);
     }
 
     public function updatekendaraan(Request $request)
@@ -164,7 +163,7 @@ class AnalisaJaminanController extends Controller
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-            // dd($au);
+
             return view('staff.analisa.jaminan.tanah', [
                 'data' => $cek[0],
                 'jaminan' => $au,
@@ -182,7 +181,7 @@ class AnalisaJaminanController extends Controller
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
             ];
-            dd($data);
+
             DB::table('data_jaminan')->where('pengajuan_kode', $enc)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
         } catch (DecryptException $e) {
