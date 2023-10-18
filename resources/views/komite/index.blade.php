@@ -38,6 +38,7 @@
                                                 <b>Kaetegori:</b> {{ $item->kategori }}
                                             </td>
 
+<<<<<<< HEAD
                                             <td style="text-transform: uppercase;">
                                                 {{ $item->alamat_ktp }} <br>
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
@@ -87,6 +88,25 @@
                                 </a>
                             </td>
                             </tr>
+=======
+                                    <td style="text-transform: uppercase;">
+                                        KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG <br>
+                                        <b>Desa: </b>SUKAMULYA | <b>Kecamatan:
+                                        </b>PAGADEN
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        KANTOR KAS SUBANG
+                                    </td>
+                                        <td class="text-center" style="vertical-align: middle;">
+                                        <span class="label label-warning">Proses Analisa</span>
+                                    </td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <a data-toggle="modal" data-target="#modal-edit" class="btn-circle btn-sm btn-warning">
+                                            <i class="fa fa-file-text-o"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+>>>>>>> 0b183121ab1f1e23dfd7f485e100c5668404bc64
                             {{-- @empty
                                 <tr>
                                     <td class="text-center" colspan="7">Tidak ada permohonan analisa.</td>
@@ -230,6 +250,7 @@
     @endpush
 
 </div>
+<<<<<<< HEAD
 
 <div class="modal fade" id="send-broadcase">
     <div class="modal-dialog">
@@ -270,3 +291,6 @@
     </div>
 </div>
 @endsection
+=======
+@endsection
+>>>>>>> 0b183121ab1f1e23dfd7f485e100c5668404bc64
