@@ -366,6 +366,8 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(KomiteController::class)->group(function () {
             Route::get('/komite/kredit', 'index')->name('komite.kredit');
+            Route::post('/komite/kredit', 'getdata')->name('komite.getdata');
+            Route::post('/komite/kredit', 'simpan')->name('komite.simpan');
         });
 
         Route::controller(NotifikasiController::class)->group(function () {

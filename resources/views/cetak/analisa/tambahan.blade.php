@@ -170,12 +170,6 @@
                         <td>{{ 'Rp. ' . ' ' . number_format($tambah->take_over, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td style="width: 15px;">f. </td>
-                        <td style="width: 200px;">Administrasi</td>
-                        <td>:</td>
-                        <td>{{ 'Rp. ' . ' ' . number_format($tambah->administrasi, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
                         <td style="width: 15px;">g. </td>
                         <td style="width: 200px;">Asuransi</td>
                         <td>:</td>

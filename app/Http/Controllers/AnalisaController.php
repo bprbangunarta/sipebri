@@ -37,8 +37,5 @@ class AnalisaController extends Controller
         return view('staff.analisa.index', [
             'data' => $data
         ]);
-        // return view('analisa.proses', [
-        //     'data' => $data
-        // ]);
     }
 }

@@ -267,7 +267,7 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        {{-- <tr>
                                             <td class="text-center">4</td>
                                             <td>Analisa Kualitatif</td>
                                             <td class="text-center">
@@ -316,9 +316,9 @@
                                                     </span>
                                                 </a>
                                             </td>
-                                        </tr>
+                                        </tr> --}}
                                         <tr>
-                                            <td class="text-center">6</td>
+                                            <td class="text-center">5</td>
                                             <td>Memorandum Usulan Kredit (MUK)</td>
                                             <td class="text-center">
                                                 <a href="{{ route('memorandum.memorandum', ['cetak' => $data->kd_pengajuan]) }}"

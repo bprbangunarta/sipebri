@@ -53,7 +53,8 @@
                                                 <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#jadwal-ulang"  class="btn-circle btn-sm btn-danger" title="Reschedule">
+                                                <a data-toggle="modal" data-target="#jadwal-ulang"
+                                                    class="btn-circle btn-sm btn-danger" title="Reschedule">
                                                     <i class="fa fa-history"></i>
                                                 </a>
 
@@ -70,9 +71,10 @@
                                                         <i class="fa fa-file-text-o"></i>
                                                     </a>
                                                 @endif
-                                                
+
                                                 &nbsp;
-                                                <a href="#" class="btn-circle btn-sm btn-primary" title="Cetak Analisa">
+                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    class="btn-circle btn-sm btn-primary" title="Cetak Analisa">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                             </td>
@@ -106,21 +108,22 @@
                 <form action="#" method="POST">
                     @csrf
                     <div class="modal-body">
-    
+
                         <div class="box-body">
                             <div class="row">
-    
+
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">KODE PENGAJUAN</span>
                                     <input type="text" id="id" name="id" hidden>
                                     <input class="form-control text-uppercase" type="text" value="123456789S" readonly>
                                 </div>
-    
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NAMA NASABAH</span>
-                                    <input class="form-control text-uppercase" type="text" value="ZULFADLI RIZAL" readonly>
+                                    <input class="form-control text-uppercase" type="text" value="ZULFADLI RIZAL"
+                                        readonly>
                                 </div>
-    
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
                                     <textarea class="form-control text-uppercase" name="" id=""></textarea>
