@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($janminan as $item)
+                    @foreach ($jaminan as $item)
                         <tr>
                             <td style="vertical-align: middle;">
                                 <b>Jenis: </b><br>
@@ -28,13 +28,13 @@
                                 <b>Atas Nama: </b><br>
                                 {{ $item->atas_nama }} <br>
                                 <p></p>
-                                <b>No Doukumen: </b><br>
+                                <b>No Dokumen: </b><br>
                                 {{ $item->no_dokumen }}
                             </td>
                             <td style="vertical-align: middle;">
-                                <b>Luas: </b> 500 M2 <br>
+                                <b>Luas: </b> {{ $item->luas }} M2 <br>
                                 <b>Lokasi: </b> <br>
-                                Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat 41254
+                                {{ $item->lokasi }}
                             </td>
                             <td style="vertical-align: middle;">Rp8.000.000</td>
                             <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
