@@ -2,11 +2,11 @@
     <section class="sidebar">
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ asset('theme/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                <img src="{{ asset('theme/dist/img/user2-160x160.jpg') }}" class="img-square" style="border-radius: 3px;" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p style="text-transform: uppercase;">{{ Auth::user()->username }}</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <span class="label label-success">Verified</span>
             </div>
         </div>
 
@@ -25,18 +25,49 @@
             <li class="header">MAIN MENU</li>
 
             @hasanyrole($roles)
-                <li class="{{ request()->is('/themes/dashboard') ? 'active' : '' }}">
-                    <a href="/themes/dashboard" title="Dashboard">
-                        <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                </li>
+            <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
+                <a href="/dashboard" title="Dashboard">
+                    <i class="fa fa-laptop"></i> <span>Dashboard</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+            </li>
             @endhasanyrole
 
-            <li class="treeview active">
-                <a href="#" title="Data Debitur">
+            {{-- MENU ADMIN --}}
+            <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-cube"></i>
+                    <span>Data Master</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-blue">3</small>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                        <a href="{{ route('user.index') }}">
+                            <i class="fa fa-circle-o"></i>
+                            Data User
+                        </a>
+                    </li>
+                    <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
+                        <a href="{{ route('role.index') }}">
+                            <i class="fa fa-circle-o"></i>
+                            Data Role
+                        </a>
+                    </li>
+                    <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
+                        <a href="{{ route('permission.index') }}">
+                            <i class="fa fa-circle-o"></i>
+                            Permission
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ request()->is('themes/permohonan/analisa', 'themes/analisa/usaha/perdagangan', 'themes/analisa/usaha/pertanian', 'themes/analisa/usaha/jasa', 'themes/analisa/usaha/lainnya', 'themes/analisa/identitas/usaha/perdagangan', 'themes/analisa/barang/usaha/perdagangan', 'themes/analisa/keuangan/usaha/perdagangan', 'themes/analisa/informasi/usaha/pertanian', 'themes/analisa/biaya/usaha/pertanian', 'themes/analisa/keuangan/usaha/pertanian', 'themes/analisa/keuangan/usaha/jasa', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/identitas/usaha/lainnya', 'themes/analisa/keuangan/usaha/lainnya', 'themes/analisa/keuangan', 'themes/analisa/kepemilikan', 'themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tanah', 'themes/analisa/jaminan/lainnya', 'themes/analisa/5c/character*', 'themes/analisa/5c/capacity*', 'themes/analisa/5c/capital*', 'themes/analisa/5c/collateral*', 'themes/analisa/5c/condition*', 'themes/analisa/kualitatif/karakter*', 'themes/analisa/kualitatif/usaha*', 'themes/analisa/memorandum/kebutuhan', 'themes/analisa/memorandum/sandi', 'themes/analisa/memorandum/usulan', 'themes/analisa/administrasi', 'themes/analisa/konfirmasi/analisa', 'themes/komite/kredit') ? 'active' : '' }}">
+                <a href="#">
                     <i class="fa fa-file-text-o"></i>
                     <span>Permohonan</span>
                     <span class="pull-right-container">

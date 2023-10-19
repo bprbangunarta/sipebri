@@ -1,268 +1,139 @@
-@extends('templates.app')
+@extends('theme.app')
 @section('title', 'Data User')
 @yield('jquery')
 @section('content')
-    <div class="page-body">
-        <div class="container-xl">
-            <div class="row row-deck row-cards">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-user"></i>
+                            <h3 class="box-title">DATA USER</h3>
 
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="container-xl">
-                                <div class="row g-2 align-items-center">
-                                    <div class="col">
-                                        <!-- Page pre-title -->
-                                        <div class="page-pretitle">
-                                            Master
-                                        </div>
-                                        <h2 class="page-title">
-                                            Data User
-                                        </h2>
-                                    </div>
-                                    <!-- Page title actions -->
-                                    <div class="col-auto ms-auto d-print-none">
-                                        <div class="btn-list">
-                                            <a href="#" class="btn btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#modal-tambah">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-plus" width="24" height="24"
-                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M12 5l0 14"></path>
-                                                    <path d="M5 12l14 0"></path>
-                                                </svg>
-                                                Tambah
-                                            </a>
+                            <div class="box-tools">
+                                <form {{ route('user.index') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
+                                        <input type="text" class="form-control pull-right" name="name" id="name" value="{{ Request('name') }}" placeholder="Search">
+                    
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
 
-                        <div class="card-body border-bottom py-3" style="margin-top:-7px;">
-
-                            <form action="{{ route('user.index') }}" method="GET">
-                                <div class="input-group mb-2">
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Nama Pengguna" value="{{ Request('name') }}">
-                                    <button class="btn" type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z">
-                                            </path>
-                                        </svg>
-                                        Filter
-                                    </button>
-                                </div>
-                            </form>
-
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-vcenter">
-                                    <thead>
+                        <div class="box-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-blue">
                                         <tr>
-                                            <th class="text-center" width="3%">No</th>
-                                            <th class="text-center">Nama User</th>
-                                            <th class="text-center">Email</th>
-                                            <th class="text-center">Username</th>
-                                            <th class="text-center">Kode</th>
-                                            <th class="text-center">Kantor</th>
-                                            <th class="text-center">Hak Akses</th>
-                                            <th class="text-center" width="8%">Status</th>
-                                            <th class="text-center" width="10%">Aksi</th>
-                                            <th class="text-center" width="5%">Hapus</th>
+                                            <th class="text-center" width="3%">NO</th>
+                                            <th class="text-center">NAMA LENGKAP</th>
+                                            <th class="text-center">EMAIL</th>
+                                            <th class="text-center">USERNAME</th>
+                                            <th class="text-center">KODE</th>
+                                            <th class="text-center">KANTOR</th>
+                                            <th class="text-center">HAK AKSES</th>
+                                            <th class="text-center" width="5%">AKTIF</th>
+                                            <th class="text-center" width="10%">AKSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $no = 1;
+                                    @endphp
+                                    @forelse ($users as $data)
+                                        <tr>
+                                            <td class="text-center">{{ $loop->iteration + $users->firstItem() - 1 }}</td>
+                                            <td>{{ $data->name }}</td>
+                                            <td>{{ $data->email }}</td>
+                                            <td>{{ $data->username }}</td>
+                                            <td class="text-center">{{ $data->code_user }}</td>
+                                            <td class="text-center">{{ $data->kode_kantor }}</td>
+                                            <td>
+                                                @if (empty($data->position))
+                                                    -
+                                                @else
+                                                    {{ $data->position }}
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($data->is_active == 1)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @else
+                                                    <i class="fa fa-circle text-danger"></i>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="#" class="btn-circle btn-sm btn-warning">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+
+                                                &nbsp;
+
+                                                <a href="#" class="btn-circle btn-sm btn-primary">
+                                                    <i class="fa fa-unlock-alt"></i>
+                                                </a>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($users as $data)
-                                            <tr>
-                                                <td class="text-center">{{ $loop->iteration + $users->firstItem() - 1 }}
-                                                </td>
-                                                <td>{{ $data->name }}</td>
-                                                <td>{{ $data->email }}</td>
-                                                <td>{{ $data->username }}</td>
-                                                <td class="text-center">{{ $data->code_user }}</td>
-                                                <td>{{ $data->nama_kantor }}</td>
-                                                <td>
-                                                    @if (empty($data->position))
-                                                        <font>-</font>
-                                                    @else
-                                                        {{ $data->position }}
-                                                    @endif
-
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($data->is_active == 1)
-                                                        <span class="badge bg-success-lt">Aktif</span>
-                                                    @else
-                                                        <span class="badge bg-danger-lt">Tidak Aktif</span>
-                                                    @endif
-
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="#" title="Hak Akses" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-akses" data-id="{{ $data->code_user }}"
-                                                        class="text-decoration-none">
-                                                        <span class="badge bg-success">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-lock-access"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                stroke-width="2" stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                </path>
-                                                                <path d="M4 8v-2a2 2 0 0 1 2 -2h2"></path>
-                                                                <path d="M4 16v2a2 2 0 0 0 2 2h2"></path>
-                                                                <path d="M16 4h2a2 2 0 0 1 2 2v2"></path>
-                                                                <path d="M16 20h2a2 2 0 0 0 2 -2v-2"></path>
-                                                                <path
-                                                                    d="M8 11m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z">
-                                                                </path>
-                                                                <path d="M10 11v-2a2 2 0 1 1 4 0v2"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-
-                                                    <a href="#" title="Ubah Data" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-edit" data-id="{{ $data->code_user }}"
-                                                        class="text-decoration-none">
-                                                        <span class="badge bg-warning">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-edit" width="24"
-                                                                height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                                stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                </path>
-                                                                <path
-                                                                    d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
-                                                                </path>
-                                                                <path
-                                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
-                                                                </path>
-                                                                <path d="M16 5l3 3"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-
-                                                    <a href="#" title="Reset Password" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-password"
-                                                        data-user="{{ $data->code_user }}">
-                                                        <span class="badge bg-info">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="icon icon-tabler icon-tabler-history"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                stroke-width="2" stroke="currentColor" fill="none"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                </path>
-                                                                <path d="M12 8l0 4l2 2"></path>
-                                                                <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <form
-                                                        action="{{ route('user.destroy', ['user' => $data->code_user]) }}"
-                                                        method="POST">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button style="border: none; background: transparent;"
-                                                            class="confirmdelete">
-                                                            <span class="badge bg-danger">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="icon icon-tabler icon-tabler-trash"
-                                                                    width="24" height="24" viewBox="0 0 24 24"
-                                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z"
-                                                                        fill="none"></path>
-                                                                    <path d="M4 7l16 0"></path>
-                                                                    <path d="M10 11l0 6"></path>
-                                                                    <path d="M14 11l0 6"></path>
-                                                                    <path
-                                                                        d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
-                                                                    </path>
-                                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
-                                                                    </path>
-                                                                </svg>
-                                                            </span>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <p></p>
-
-                                {{ $users->links('vendor.pagination.bootstrap-5') }}
-
-                            </div>
+                                        @php
+                                            $no++;
+                                        @endphp
+                                    @empty
+                                        <tr>
+                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            <button data-toggle="modal" data-target="#modal-tambah" class="btn btn-primary btn-sm pull-left">TAMBAH</button>
+
+                            {{ $users->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
-
             </div>
-        </div>
+        </section>
     </div>
 
-    <div class="modal modal-blur fade" id="modal-tambah" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal fade" id="modal-tambah">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">TAMBAH USER</h4>
                 </div>
-
                 <form action="{{ route('user.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Nama Lengkap">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>NAMA LENGKAP</label>
+                                    <input class="form-control" type="text" name="name" id="name" placeholder="ENTRI" required>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="example@app.com">
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>EMAIL ADDRESS</label>
+                                    <input class="form-control" type="email" name="email" id="email" placeholder="ENTRI" required>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" name="username" id="username"
-                                        placeholder="Username">
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>USERNAME</label>
+                                    <input class="form-control" type="text" name="username" id="username" placeholder="ENTRI" required>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Kode User</label>
-                                    <input type="text" class="form-control" name="code_user" id="code_user"
-                                        placeholder="ZFR">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Kantor</label>
-                                    <select class="form-control" name="kantor_kode" id="kantor_kode">
-                                        <option value="">--Pilih Kantor--</option>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="kode_kantor" id="kode_kantor" required>
+                                        <option value="">--PILIH--</option>
                                         @foreach ($kantor as $data)
                                             <option value="{{ $data->kode_kantor }}">{{ $data->nama_kantor }}</option>
                                         @endforeach
@@ -270,192 +141,44 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Status</label>
-                                    <select class="form-control" name="is_active" id="is_active">
-                                        <option value="">--Pilih Status--</option>
-                                        <option value="1">Aktif</option>
-                                        <option value="0">Tidak Aktif</option>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>KODE USER</label>
+                                    <input class="form-control" type="text" name="user_kode" id="user_kode" minlength="3" maxlength="3" placeholder="ENTRI">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KODE SURVEYOR</label>
+                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KODE KOLEKTOR</label>
+                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>IS ACTIVE?</label>
+                                    <select class="form-control" name="is_active" id="is_active" required>
+                                        <option value="1">AKTIF</option>
+                                        <option value="0">TIDAK AKTIF</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">SIMPAN</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+@endsection
 
-    <div class="modal modal-blur fade" id="modal-edit" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form action="{{ route('user.update', ['user' => $users[0]->code_user]) }}" method="post">
-                    @method('put')
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="name" id="nama"
-                                        placeholder="Nama Lengkap">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" name="email" id="emails"
-                                        placeholder="example@app.com">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" name="username" id="usernames"
-                                        placeholder="Username">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Kode User</label>
-                                    <input type="text" class="form-control" name="code_user" id="code_users"
-                                        placeholder="ZFR">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Kantor</label>
-                                    <select class="form-control" name="kantor_kode" id="kantor_kodes">
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Status</label>
-                                    <select class="form-control" name="is_active" id="is_actives">
-
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal modal-blur fade" id="modal-akses" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Hak Akses</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form action="" method="post" id="myForm">
-                    @method('put')
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">ID User</label>
-                                    <input type="text" class="form-control" name="model_id" id="model_id" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="name" id="names" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Hak Akses</label>
-                                    <select class="form-control" name="role_id" id="roles_id">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary text-white ms-auto">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal modal-blur fade" id="modal-password" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Reset Password User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form action="{{ route('reset.update', ['reset' => $users[0]->code_user]) }}" method="post"
-                    id="reset-password">
-                    @method('put')
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama User</label>
-                                    <input type="text" class="form-control" name="code_user" id="code" hidden>
-                                    <input type="text" class="form-control" name="name" id="name_user" readonly>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Reset Password</label>
-                                    <input type="password" class="form-control" name="reset" id="reset"
-                                        value="123456" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary text-white ms-auto confirmupdate">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
+@push('myscript')
     <script src="{{ asset('assets/js/myscript/user.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/update.js') }}"></script>
-@endsection
+@endpush

@@ -1,195 +1,216 @@
-@extends('templates.app')
+@extends('theme.app')
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="page-body">
-        <div class="container-xl">
-            <div class="row row-deck row-cards">
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Dashboard
+            <small>Monitoring</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-laptop"></i> Dashboard</a></li>
+            <li class="active">Index</li>
+        </ol>
+    </section>
 
-                <div class="col-12">
-                    <div class="row row-cards">
+    <section class="content">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-green">
+                    <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-primary text-white avatar">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-users" width="24" height="24"
-                                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="font-weight-medium">
-                                                {{ $pengajuan }}
-                                            </div>
-                                            <div class="text-muted">
-                                                Pendaftaran
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="info-box-content">
+                        <span class="info-box-text">PERMOHONAN</span>
+                        <span class="info-box-number">{{ $pengajuan }} USER</span>
+
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 100%"></div>
                         </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-warning text-white avatar">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-user-search" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h1.5"></path>
-                                                    <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
-                                                    <path d="M20.2 20.2l1.8 1.8"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="font-weight-medium">
-                                                {{ $survei }}
-                                            </div>
-                                            <div class="text-muted">
-                                                Analisa
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-success text-white avatar">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-user-check" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
-                                                    <path d="M15 19l2 2l4 -4"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="font-weight-medium">
-                                                0
-                                            </div>
-                                            <div class="text-muted">
-                                                Realisasi
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card card-sm">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-auto">
-                                            <span class="bg-danger text-white avatar">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-user-x" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5"></path>
-                                                    <path d="M22 22l-5 -5"></path>
-                                                    <path d="M17 22l5 -5"></path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <div class="col">
-                                            <div class="font-weight-medium">
-                                                0
-                                            </div>
-                                            <div class="text-muted">
-                                                Penolakan
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <span class="progress-description">
+                            OKTOBER 2023
+                        </span>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-12">
-                    <div class="card card-md">
-                        <div class="card-stamp card-stamp-lg">
-                            <div class="card-stamp-icon bg-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-clipboard-list" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path
-                                        d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                    </path>
-                                    <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
-                                    </path>
-                                    <path d="M9 12l.01 0"></path>
-                                    <path d="M13 12l2 0"></path>
-                                    <path d="M9 16l.01 0"></path>
-                                    <path d="M13 16l2 0"></path>
-                                </svg>
-                            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-aqua">
+                    <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">ANALISA</span>
+                        <span class="info-box-number">{{ $survei }} USER</span>
+
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 100%"></div>
                         </div>
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-10">
-                                    <h3 class="h1">SIPEBRI</h3>
-                                    <div class="markdown text-muted">
-                                        Sistem informasi pemberian kredit adalah aplikasi yang mewadahi semua alur preses
-                                        pemberian
-                                        kredit, mulai dari pendaftaran sampai dengan realisasi.
-                                    </div>
-                                    <div class="mt-3">
-                                        <a href="https://tabler-icons.io" class="btn btn-primary" target="_blank"
-                                            rel="noopener">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="icon icon-tabler icon-tabler-download" width="24"
-                                                height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                stroke="currentColor" fill="none" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                <path d="M7 11l5 5l5 -5"></path>
-                                                <path d="M12 4l0 12"></path>
-                                            </svg>
-                                            Download APK</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <span class="progress-description">
+                            OKTOBER 2023
+                        </span>
                     </div>
                 </div>
+            </div>
 
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-yellow">
+                    <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">REALISASI</span>
+                        <span class="info-box-number">28 USER</span>
+
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                        <span class="progress-description">
+                            OKTOBER 2023
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box bg-red">
+                    <span class="info-box-icon"><i class="fa fa-warning"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">PENOLAKAN</span>
+                        <span class="info-box-number">13 USER</span>
+
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                        <span class="progress-description">
+                            OKTOBER 2023
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-calendar"></i>
+                        <h3 class="box-title">REALISASI HARI INI</h3>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-blue">2</small>
+                        </span>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered text-uppercase">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th class="text-center" style="width: 15px;">#</th>
+                                    <th class="text-center">NAMA DEBITUR</th>
+                                    <th class="text-center">ALAMAT</th>
+                                    <th class="text-center">SURVEYOR</th>
+                                    <th class="text-center">PLAFOND</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-info">
+                                    <td class="text-center" style="vertical-align: middle;">1</td>
+                                    <td style="vertical-align: middle;">ZULFADLI RIZAL</td>
+                                    <td>Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat</td>
+                                    <td class="text-center" style="vertical-align: middle;">MUHIDIN</td>
+                                    <td class="text-right" style="vertical-align: middle;">Rp. 20.000.000</td>
+                                </tr>
+                                <tr class="bg-blue">
+                                    <td class="text-center" colspan="4"><b>TOTAL</b></td>
+                                    <td class="text-right"><b>Rp. 20.000.000</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- <div class="row">
+            <div class="col-md-6">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <i class="fa fa-calendar"></i>
+                        <h3 class="box-title">Janji Bayar</h3>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-red">2</small>
+                        </span>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="bg-red">
+                                    <th class="text-center" style="width: 10px">#</th>
+                                    <th class="text-center">Nama Debitur</th>
+                                    <th class="text-center" style="width: 40px">Petugas</th>
+                                    <th class="text-center" style="width: 130px">Tunggakan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-danger">
+                                    <td class="text-center">1</td>
+                                    <td>Zulfadli Rizal</td>
+                                    <td class="text-center">ZFR</td>
+                                    <td class="text-right">Rp. 18.189.987</td>
+                                </tr>
+                                <tr class="bg-danger">
+                                    <td class="text-center">2</td>
+                                    <td>Zulfadli Rizal</td>
+                                    <td class="text-center">ZFR</td>
+                                    <td class="text-right">Rp. 18.189.987</td>
+                                </tr>
+                                <tr class="bg-red">
+                                    <td class="text-center" colspan="3"><b>Total</b></td>
+                                    <td class="text-right"><b>Rp. 85.168.648</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <i class="fa fa-user"></i>
+                        <h3 class="box-title">Debitur NPL</h3>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-yellow">58</small>
+                        </span>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="bg-yellow">
+                                    <th class="text-center" style="width: 10px">#</th>
+                                    <th class="text-center">Nama Debitur</th>
+                                    <th class="text-center">Tunggakan</th>
+                                    <th class="text-center" style="width: 40px">Petugas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-warning">
+                                    <td class="text-center">1</td>
+                                    <td>Zulfadli Rizal</td>
+                                    <td>Rp. 18.189.987</td>
+                                    <td class="text-center">ZFR</td>
+                                </tr>
+                                <tr class="bg-warning">
+                                    <td class="text-center">2</td>
+                                    <td>Zulfadli Rizal</td>
+                                    <td>Rp. 18.189.987</td>
+                                    <td class="text-center">ZFR</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+    </section>
+
+</div>
 @endsection
