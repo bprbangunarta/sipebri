@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($jaminan as $item)
+                    @forelse ($jaminan as $item)
                         <tr>
                             <td style="vertical-align: middle;">
                                 <b>Jenis: </b><br>
@@ -50,7 +50,8 @@
                                 </button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -73,6 +74,7 @@
                                 <div class="div-left">
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">JENIS AGUNAN</span>
+                                        <input type="text" name="id" id="id" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
                                             value="" name="jenis_agunan" id="jenis_agunan" readonly>
                                     </div>

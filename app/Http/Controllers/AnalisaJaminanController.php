@@ -192,7 +192,7 @@ class AnalisaJaminanController extends Controller
             ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
             ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
             ->where('data_jaminan.id', $id)->first();
-
+        $tanah->jaminan_id = $id;
         return response()->json($tanah);
     }
 
@@ -205,7 +205,7 @@ class AnalisaJaminanController extends Controller
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
             ];
 
-            DB::table('data_jaminan')->where('pengajuan_kode', $enc)->update($data);
+            DB::table('data_jaminan')->where('id', $request->id)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -222,11 +222,11 @@ class AnalisaJaminanController extends Controller
                 ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
                 ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
                 ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.lokasi', 'data_jaminan.luas', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jaminan.nilai_pasar', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.lokasi', 'data_jaminan.luas', 'data_jaminan.catatan', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jaminan.nilai_pasar', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Lainnya')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-
+            // dd($au);
             return view('staff.analisa.jaminan.lainnya', [
                 'data' => $cek[0],
                 'jaminan' => $au,
@@ -234,5 +234,34 @@ class AnalisaJaminanController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function editlain($id)
+    {
+        $lain = DB::table('data_jaminan')
+            ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->where('data_jaminan.id', $id)->first();
+        //
+        $lain->jaminan_id = $id;
+        return response()->json($lain);
+    }
+
+    public function simpanlain(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $data = [
+                'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
+                'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
+                'catatan' => $request->catatan,
+            ];
+
+            DB::table('data_jaminan')->where('id', $request->id)->update($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('error', 'Gagal menambahkan data');
     }
 }

@@ -33,34 +33,26 @@ $(document).ready(function () {
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/themes/analisa/jaminan/tanah/" + id + "/edit",
+            url: "/themes/analisa/jaminan/lainnya/" + id + "/edit",
             type: "GET",
             dataType: "json",
             cache: false,
             success: function (response) {
                 $("#id").val(response.jaminan_id);
                 $("#jenis_agunan").val(response.jenis_agunan);
-                $("#jenis_dokumen").val(response.jenis_dokumen);
+                $("#dokumen").val(response.jenis_dokumen);
                 $("#no_dok").val(response.no_dokumen);
-                $("#atas_nama").val(response.atas_nama);
-                $("#luas").val(response.luas);
+                $("#nama").val(response.atas_nama);
                 $("#lokasi").val(response.lokasi);
-                console.log(response);
-                if (response.nilai_pasar == null) {
-                    return 0;
-                } else {
-                    var np = response.nilai_pasar;
-                    var ps = formatRupiah(np);
-                    $("#nilai_pasar").val("RP. " + " " + ps);
-                }
+                $("#catatan").val(response.catatan);
 
-                if (response.nilai_taksasi == null) {
-                    return 0;
-                } else {
-                    var nt = response.nilai_taksasi;
-                    var ts = formatRupiah(nt);
-                    $("#nilai_taksasi").val("Rp. " + " " + ts);
-                }
+                var np = response.nilai_pasar;
+                var ps = formatRupiah(np);
+                $("#nilai_pasar").val("RP. " + " " + ps);
+
+                var nt = response.nilai_taksasi;
+                var ts = formatRupiah(nt);
+                $("#nilai_taksasi").val("Rp. " + " " + ts);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

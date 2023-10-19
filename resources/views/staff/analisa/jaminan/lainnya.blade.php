@@ -15,39 +15,48 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            <b>Jenis: </b><br>
-                            Kendaraan Bermotor Roda 2
-                            <p></p>
-                            <b>Dokumen: </b><br>
-                            BPKB Motor Non Fiducia
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <b>Atas Nama: </b><br>
-                            NINIS NURANISA <br>
-                            <p></p>
-                            <b>No Doukumen: </b><br>
-                            P007772168
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <b>Lokasi: </b> <br>
-                            Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan
-                            <p></p>
-                            <b>Catatan: </b><br>
-                            BPJS mudah dicairkan
-                        </td>
-                        <td style="vertical-align: middle;">Rp8.000.000</td>
-                        <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                            <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
-                                <i class="fa fa-file-text-o"></i>
-                            </button>
+                    @forelse ($jaminan as $item)
+                        <tr>
+                            <td style="vertical-align: middle;">
+                                <b>Jenis: </b><br>
+                                {{ $item->jenis_agunan }}
+                                <p></p>
+                                <b>Dokumen: </b><br>
+                                {{ $item->jenis_dokumen }}
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <b>Atas Nama: </b><br>
+                                {{ $item->atas_nama }} <br>
+                                <p></p>
+                                <b>No Doukumen: </b><br>
+                                {{ $item->no_dokumen }}
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <b>Lokasi: </b> <br>
+                                {{ $item->lokasi }}
+                                <p></p>
+                                <b>Catatan: </b><br>
+                                {{ $item->catatan }}
+                            </td>
+                            <td style="vertical-align: middle;">
+                                {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
+                            <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
+                                <button data-toggle="modal" data-target="#modal-edit" data-id="{{ $item->id }}"
+                                    class="btn btn-sm btn-warning">
+                                    <i class="fa fa-file-text-o"></i>
+                                </button>
 
-                            <button data-toggle="modal" data-target="#modal-foto" class="btn btn-sm btn-primary">
-                                <i class="fa fa-image"></i>
-                            </button>
-                        </td>
-                    </tr>
+                                <button data-toggle="modal" data-target="#modal-foto" class="btn btn-sm btn-primary">
+                                    <i class="fa fa-image"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td class="text-center" colspan="7">Tidak ada analisa usaha pertania.</td>
+                        </tr>
+                    @endforelse
+
                 </tbody>
             </table>
         </div>
@@ -61,7 +70,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAKSASI AGUNAN</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('taksasi.simpanlain', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -70,24 +79,26 @@
                                 <div class="div-left">
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">JENIS AGUNAN</span>
+                                        <input type="text" name="id" id="id" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Kendaraan Bermotor Roda 2" readonly>
+                                            value="Kendaraan Bermotor Roda 2" name="jenis_agunan" id="jenis_agunan"
+                                            readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="BPKB Motor Non Fiducia" readonly>
+                                            value="BPKB Motor Non Fiducia" name="dokumen" id="dokumen" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="P007772168" readonly>
+                                            value="P007772168" name="no_dok" id="" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NAMA PEMILIK</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="ZULFADLI RIZAL" readonly>
+                                            value="ZULFADLI RIZAL" name="nama" id="nama" readonly>
                                     </div>
                                 </div>
 
@@ -95,25 +106,25 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Motor Metik" readonly>
+                                            value="Motor Metik" name="lokasi" id="lokasi" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI PASAR</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            placeholder="Rp.">
+                                            placeholder="Rp." name="nilai_pasar" id="nilai_pasar">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI TAKSASI</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_pasar" id="" placeholder="Rp.">
+                                            name="nilai_taksasi" id="nilai_taksasi" placeholder="Rp.">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_taksasi" id="" placeholder="ENTRI">
+                                            name="catatan" id="catatan" placeholder="ENTRI">
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +147,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">FOTO AGUNAN</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -194,5 +205,5 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/jaminan_lainnya.js') }}"></script>
 @endpush

@@ -112,15 +112,20 @@ class KonfirmasiController extends Controller
                 ->where('kode_pengajuan', '=', $enc)->get();
 
             //Cek data agunan apakah sudah otorisasi
-            $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->first();
+            $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->get();
             if (is_null($agunan)) {
                 $otor = 'N';
             } else {
                 foreach ($agunan as $value) {
-                    $otor = $value;
+                    // $otor["otorisasi"] = $value;
+                    $otor = 'A';
+                    if ($value->otorisasi === "N") {
+                        $otor = "N";
+                        break; // Keluar dari loop jika sudah ditemukan "N"
+                    }
                 }
             }
-
+            // dd($otor);
             $otorisasi[0]->otoragunan = $otor;
 
             $cek[0]->kd_pengajuan = $nasabah;

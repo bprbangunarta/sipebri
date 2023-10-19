@@ -315,6 +315,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/jaminan/tanah/{id}/edit', 'edittanah')->name('taksasi.edittanah');
             Route::post('/analisa/jaminan/tanah', 'simpantanah')->name('taksasi.simpantanah');
             Route::get('/analisa/jaminan/lainnya', 'lain')->name('taksasi.lain');
+            Route::get('/analisa/jaminan/lainnya/{id}/edit', 'editlain')->name('taksasi.editlain');
+            Route::post('/analisa/jaminan/lainnya', 'simpanlain')->name('taksasi.simpanlain');
         });
 
         Route::controller(DataAnalisa5CController::class)->group(function () {

@@ -55,13 +55,13 @@ $(document).ready(function () {
                 $("#warna").val(response.warna_kendaraan);
                 $("#lok").val(response.lokasi_kendaraan);
 
-                var np = parseFloat(response.nilai_pasar) || 0;
-                var rnp = "Rp. " + np.toLocaleString("id-ID");
-                $("#nilai_pasar").val(rnp);
+                var np = response.nilai_pasar;
+                var ps = formatRupiah(np);
+                $("#nilai_pasar").val("RP. " + " " + ps);
 
-                var nt = parseFloat(response.nilai_taksasi) || 0;
-                var rnt = "Rp. " + nt.toLocaleString("id-ID");
-                $("#nilai_taksasi").val(rnt);
+                var nt = response.nilai_taksasi;
+                var ts = formatRupiah(nt);
+                $("#nilai_taksasi").val("Rp. " + " " + ts);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
