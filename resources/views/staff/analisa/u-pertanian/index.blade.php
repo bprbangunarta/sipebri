@@ -1,4 +1,4 @@
-@extends('staff.analisa.usaha', [$data, 'pengajuan' => $pertanian[0]->kd_pengajuan])
+@extends('staff.analisa.usaha', [$data, 'pengajuan' => $data->kd_pengajuan])
 {{-- @extends('staff.analisa.usaha', [$data, 'pengajuan' => $pertanian[0]->kd_pengajuan, 'kode_usaha' => $pertanian[0]->kd_usaha]) --}}
 @section('title', 'Analisa Usaha Lainnya')
 
@@ -16,15 +16,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($pertanian as $item)
+                    @forelse ($pertanian as $item)
                         <tr>
-                            <td style="vertical-align: middle;text-transform:uppercase;">{{ $item->nama_usaha }}</td>
+                            <td style="vertical-align: middle;text-transform:uppercase;">{{ $item->nama_usaha ?? null }}</td>
                             <td style="vertical-align: middle;">
-                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }}</td>
+                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') ?? null }}</td>
                             <td style="vertical-align: middle;">
-                                {{ 'Rp.' . ' ' . number_format($item->pengeluaran, 0, ',', '.') }}</td>
+                                {{ 'Rp.' . ' ' . number_format($item->pengeluaran, 0, ',', '.') ?? null }}</td>
                             <td style="vertical-align: middle;">
-                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</td>
+                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') ?? null }}</td>
                             <td class="text-center">
                                 <a href="{{ route('pertanian.informasi', ['analisa' => $item->kode_id, 'pengajuan' => $item->kd_pengajuan, 'kode_usaha' => $item->kd_usaha]) }}"
                                     class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
@@ -43,7 +43,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td class="text-center" colspan="7">Tidak ada analisa usaha pertania.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 

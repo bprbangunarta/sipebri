@@ -40,7 +40,8 @@
                                 {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
                             </td>
                             <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                                <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
+                                <button data-toggle="modal" data-target="#modal-edit" data-id="{{ $item->id }}"
+                                    class="btn btn-sm btn-warning">
                                     <i class="fa fa-file-text-o"></i>
                                 </button>
 
@@ -63,7 +64,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAKSASI AGUNAN</h4>
                 </div>
-                <form action="{{ route('taksasi.simpantanah') }}" method="POST">
+                <form action="{{ route('taksasi.simpantanah', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -73,23 +74,23 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">JENIS AGUNAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="jenis_agunan" readonly>
+                                            value="" name="jenis_agunan" id="jenis_agunan" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="jenis_dokumen" readonly>
+                                            value="" name="jenis_dokumen" id="jenis_dokumen" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="no_dok" readonly>
+                                            value="" name="no_dok" id="no_dok" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="atas_nama" readonly>
+                                            value="" name="atas_nama" id="atas_nama" readonly>
                                     </div>
                                 </div>
 
@@ -97,25 +98,25 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="luas" readonly>
+                                            value="" name="luas" id="luas" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI TANAH</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="lokasi" value="" readonly>
+                                            name="lokasi" id="lokasi" value="" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI PASAR</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_pasar" id="" placeholder="Rp." value="">
+                                            name="nilai_pasar" id="nilai_pasar" placeholder="Rp." value="">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI TAKSASI</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_taksasi" id="" placeholder="Rp." value="#">
+                                            name="nilai_taksasi" id="nilai_taksasi" placeholder="Rp." value="">
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +197,7 @@
 @endsection
 
 @push('myscript')
-    {{-- <script src="{{ asset('assets/js/myscript/delete.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/myscript/jaminan_tanah.js') }}"></script>
     <script>
         $("button[data-target='#modal-foto']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik

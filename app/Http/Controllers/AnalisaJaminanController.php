@@ -95,12 +95,25 @@ class AnalisaJaminanController extends Controller
 
     public function previewkendaraan($id)
     {
+        // $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
+        // $foto1 = asset('storage/image/photo_agunan/' . $jaminan->foto1 ?? null);
+        // $foto2 = asset('storage/image/photo_agunan/' . $jaminan->foto2 ?? null);
+        // $foto3 = asset('storage/image/photo_agunan/' . $jaminan->foto3 ?? null);
+        // $foto4 = asset('storage/image/photo_agunan/' . $jaminan->foto4 ?? null);
+
         $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
-        $foto1 = asset('storage/image/photo_agunan/' . $jaminan->foto1);
-        $foto2 = asset('storage/image/photo_agunan/' . $jaminan->foto2);
-        $foto3 = asset('storage/image/photo_agunan/' . $jaminan->foto3);
-        $foto4 = asset('storage/image/photo_agunan/' . $jaminan->foto4);
-        return response()->json([$foto1, $foto2, $foto3, $foto4]);
+        $foto1 = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->foto1) : null;
+        $foto2 = $jaminan->foto2 ? asset('storage/image/photo_agunan/' . $jaminan->foto2) : null;
+        $foto3 = $jaminan->foto3 ? asset('storage/image/photo_agunan/' . $jaminan->foto3) : null;
+        $foto4 = $jaminan->foto4 ? asset('storage/image/photo_agunan/' . $jaminan->foto4) : null;
+        $img = [
+            'gambar1' => $foto1,
+            'gambar2' => $foto2,
+            'gambar3' => $foto3,
+            'gambar4' => $foto4,
+        ];
+        // return response()->json([$foto1, $foto2, $foto3, $foto4]);
+        return response()->json($img);
     }
 
     public function fhotokendaraan(Request $request)
@@ -163,7 +176,7 @@ class AnalisaJaminanController extends Controller
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-
+            // dd($au);
             return view('staff.analisa.jaminan.tanah', [
                 'data' => $cek[0],
                 'jaminan' => $au,
@@ -171,6 +184,16 @@ class AnalisaJaminanController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function edittanah($id)
+    {
+        $tanah = DB::table('data_jaminan')
+            ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->where('data_jaminan.id', $id)->first();
+
+        return response()->json($tanah);
     }
 
     public function simpantanah(Request $request)
@@ -195,7 +218,14 @@ class AnalisaJaminanController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-            $au = Midle::taksasi_jaminan($enc);
+            $au = DB::table('data_pengajuan')
+                ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+                ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.lokasi', 'data_jaminan.luas', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jaminan.nilai_pasar', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->orWhere('data_jaminan.jenis_jaminan', '=', 'Lainnya')
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                ->get();
 
             return view('staff.analisa.jaminan.lainnya', [
                 'data' => $cek[0],

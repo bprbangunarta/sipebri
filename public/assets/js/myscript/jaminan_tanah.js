@@ -28,44 +28,38 @@ function formatRupiah(angka, prefix) {
 
 $(document).ready(function () {
     $("#modal-edit").on("show.bs.modal", function (event) {
-        $("#jenis").empty();
-        $("#dokumen").empty();
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/themes/analisa/jaminan/kendaraan/" + id + "/edit",
+            url: "/themes/analisa/jaminan/tanah/" + id + "/edit",
             type: "GET",
             dataType: "json",
             cache: false,
             success: function (response) {
-                $("#id").val(response.id);
-                $("#jenis").val(response.jenis_agunan);
-                $("#dokumen").val(response.jenis_dokumen);
+                $("#jenis_agunan").val(response.jenis_agunan);
+                $("#jenis_dokumen").val(response.jenis_dokumen);
                 $("#no_dok").val(response.no_dokumen);
-                $("#nama").val(response.atas_nama);
-                $("#no_mesin").val(response.no_mesin);
-                $("#no_polisi").val(response.no_polisi);
-                $("#no_rangka").val(response.no_rangka);
-                $("#tipe").val(response.tipe_kendaraan);
-                $("#merk").val(response.merek_kendaraan);
-                $("#tahun_kendaraan").val(response.tahun_kendaraan);
-                $("#warna").val(response.warna_kendaraan);
-                $("#lok").val(response.lokasi_kendaraan);
-
-                var np = parseFloat(response.nilai_pasar) || 0;
-                var rnp = "Rp. " + np.toLocaleString("id-ID");
-                $("#nilai_pasar").val(rnp);
-
-                var nt = parseFloat(response.nilai_taksasi) || 0;
-                var rnt = "Rp. " + nt.toLocaleString("id-ID");
-                $("#nilai_taksasi").val(rnt);
+                $("#atas_nama").val(response.atas_nama);
+                $("#luas").val(response.luas);
+                $("#lokasi").val(response.lokasi);
+                var np = response.nilai_pasar;
+                $("#nilai_pasar").val(formatRupiah(np));
+                var nt = response.nilai_taksasi;
+                $("#nilai_taksasi").val(formatRupiah(nt));
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
                 console.error("Error:", xhr.responseText);
             },
         });
+
+        function formatRupiah(angka) {
+            var reverse = angka.toString().split("").reverse().join("");
+            var ribuan = reverse.match(/\d{1,3}/g);
+            var formatted = ribuan.join(".").split("").reverse().join("");
+            return "Rp. " + formatted;
+        }
     });
 });

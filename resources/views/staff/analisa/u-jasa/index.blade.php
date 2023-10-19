@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($jasa as $item)
+                    @forelse ($jasa as $item)
                         <tr>
                             <td style="vertical-align: middle;text-transform:uppercase;">{{ $item->nama_usaha }}</td>
                             <td style="vertical-align: middle;">
@@ -42,7 +42,11 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td class="text-center" colspan="7">Tidak ada analisa usaha jasa.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 

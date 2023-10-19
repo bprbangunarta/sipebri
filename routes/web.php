@@ -312,6 +312,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/jaminan/fhoto/kendaraan/{id}/edit', 'previewkendaraan')->name('taksasi.previewkendaraan');
             Route::get('/analisa/jaminan/kendaraan/{id}/edit', 'editkendaraan')->name('taksasi.editkendaraan');
             Route::get('/analisa/jaminan/tanah', 'tanah')->name('taksasi.tanah');
+            Route::get('/analisa/jaminan/tanah/{id}/edit', 'edittanah')->name('taksasi.edittanah');
             Route::post('/analisa/jaminan/tanah', 'simpantanah')->name('taksasi.simpantanah');
             Route::get('/analisa/jaminan/lainnya', 'lain')->name('taksasi.lain');
         });

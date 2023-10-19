@@ -189,7 +189,7 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">
                                             TAMPAK DEPAN
-                                            <a href="#" class="pull-right" target="_blank" id="prevdepan"
+                                            <a href="#" class="pull-right" id="prevdepan"
                                                 data-target="depan">PREVIEW</a>
                                         </span>
                                         <input type="text" id="nid" name="id" hidden>
@@ -199,7 +199,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">
                                             TAMPAK KIRI
-                                            <a href="#" class="pull-right" target="_blank" id="prevkiri"
+                                            <a href="#" class="pull-right" id="prevkiri"
                                                 data-target="kiri">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"

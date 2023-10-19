@@ -24,10 +24,10 @@ class UsahaPertanianController extends Controller
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
                 $item->kode_id = Crypt::encrypt($item->id);
             }
-            // dd($cek[0]);
+            // dd($cek[0], $au);
             return view('staff.analisa.u-pertanian.index', [
                 'data' => $cek[0],
-                'pertanian' => $au
+                'pertanian' => $au,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
