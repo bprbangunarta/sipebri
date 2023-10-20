@@ -131,31 +131,52 @@ class AnalisaJaminanController extends Controller
             $tanggal = $tanggalSekarang->format('dmY');
 
             if ($request->file('foto1')) {
+                if ($request->name_img_1) {
+                    Storage::delete('public/image/photo_agunan/' . $request->name_img_1);
+                }
+                dd($request);
                 $ekstensi = $cek['foto1']->getClientOriginalExtension();
                 $new1 = $request->nama . '_' . 'depan' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto1'] = $request->file('foto1')->storeAs('image/photo_agunan', $new1, 'public');
                 $cek['foto1'] = $new1;
+            } else {
+                $cek['foto1'] = $request->name_img_1;
             }
 
             if ($request->file('foto2')) {
+                if ($request->name_img_2) {
+                    Storage::delete('public/image/photo_agunan/' . $request->name_img_2);
+                }
                 $ekstensi = $cek['foto2']->getClientOriginalExtension();
                 $new2 = $request->nama . '_' . 'belakang' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto2'] = $request->file('foto2')->storeAs('image/photo_agunan', $new2, 'public');
                 $cek['foto2'] = $new2;
+            } else {
+                $cek['foto2'] = $request->name_img_2;
             }
 
             if ($request->file('foto3')) {
+                if ($request->name_img_3) {
+                    Storage::delete('public/image/photo_agunan/' . $request->name_img_3);
+                }
                 $ekstensi = $cek['foto3']->getClientOriginalExtension();
                 $new3 = $request->nama . '_' . 'kiri' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto3'] = $request->file('foto3')->storeAs('image/photo_agunan', $new3, 'public');
                 $cek['foto3'] = $new3;
+            } else {
+                $cek['foto3'] = $request->name_img_3;
             }
 
             if ($request->file('foto4')) {
+                if ($request->name_img_4) {
+                    Storage::delete('public/image/photo_agunan/' . $request->name_img_4);
+                }
                 $ekstensi = $cek['foto4']->getClientOriginalExtension();
                 $new4 = $request->nama . '_' . 'kanan' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto4'] = $request->file('foto4')->storeAs('image/photo_agunan', $new4, 'public');
                 $cek['foto4'] = $new4;
+            } else {
+                $cek['foto4'] = $request->name_img_4;
             }
 
             DB::table('data_jaminan')->where('id', $request->id)->update($cek);

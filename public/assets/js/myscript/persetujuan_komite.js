@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $("#modal-edit").on("show.bs.modal", function (event) {
+        $("#komite").empty();
         var button = $(event.relatedTarget);
         var pengajuan = button.data("pengajuan");
         var token = $('meta[name="csrf-token"]').attr("content");

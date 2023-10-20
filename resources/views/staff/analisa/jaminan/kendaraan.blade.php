@@ -194,6 +194,7 @@
                                         </span>
                                         <input type="text" id="nid" name="id" hidden>
                                         <input type="text" id="ats_nama" name="nama" hidden>
+                                        <input type="text" name="name_img_1" id="name_img_1" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto1" accept="image/*">
                                     </div>
@@ -203,6 +204,7 @@
                                             <a href="#" class="pull-right" id="prevkiri"
                                                 data-target="kiri">PREVIEW</a>
                                         </span>
+                                        <input type="text" name="name_img_2" id="name_img_2" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto3" accept="image/*">
                                     </div>
@@ -215,6 +217,7 @@
                                             <a href="#" class="pull-right" id="prevbelakang"
                                                 data-target="belakang">PREVIEW</a>
                                         </span>
+                                        <input type="text" name="name_img_3" id="name_img_3" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto2" accept="image/*">
                                     </div>
@@ -225,6 +228,7 @@
                                             <a href="#" class="pull-right" id="prevkanan"
                                                 data-target="kanan">PREVIEW</a>
                                         </span>
+                                        <input type="text" name="name_img_4" id="name_img_4" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto4" accept="image/*">
                                     </div>

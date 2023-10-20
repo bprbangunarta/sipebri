@@ -14,7 +14,10 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
-                console.log(response);
+                $("#name_img_1").val(response.foto1);
+                $("#name_img_2").val(response.foto2);
+                $("#name_img_3").val(response.foto3);
+                $("#name_img_4").val(response.foto4);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
