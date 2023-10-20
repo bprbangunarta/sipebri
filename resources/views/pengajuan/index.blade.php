@@ -94,7 +94,7 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $no = 0;
+                                            $no = 1;
                                         @endphp
                                         @foreach ($data as $item)
                                             <tr>
@@ -251,6 +251,9 @@
                                                     </td>
                                                 @endcan
                                             </tr>
+                                            @php
+                                                $no++;
+                                            @endphp
                                         @endforeach
                                     </tbody>
                                 </table>
