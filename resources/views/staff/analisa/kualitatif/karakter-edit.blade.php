@@ -13,7 +13,7 @@
 
                     <div class="div-left">
                         <div style="width: 100%;float:left;">
-                            <span class="fw-bold">BI CHECKING (SID BANK INDONESIA)</span>
+                            <span class="fw-bold">SLIK (SID BANK INDONESIA)</span>
                             <select class="form-control input-sm form-border text-uppercase" name="bi_checking"
                                 id="" required>
                                 <option value="">--Pilih--</option>
@@ -178,14 +178,14 @@
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PEMOHON ADA DI JAM</span>
+                            <span class="fw-bold">PEMOHON WAKTU DI RUMAH</span>
                             <input type="text" class="form-control input-sm form-border text-uppercase pemohon_ada"
                                 name="pemohon_ada" id="" placeholder="00:00 AM"
                                 value="{{ $karakter->pemohon_ada }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">PENDAMPING ADA DI JAM</span>
+                            <span class="fw-bold">PENDAMPING WAKTU DI RUMAH</span>
                             <input type="text" class="form-control input-sm form-border text-uppercase pendamping_ada"
                                 name="pendamping_ada" id="" placeholder="00:00 AM"
                                 value="{{ $karakter->pendamping_ada }}">
