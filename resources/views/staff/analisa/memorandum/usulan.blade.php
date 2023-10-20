@@ -13,6 +13,9 @@
                     <div class="div-left">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">KEBUTUHAN DANA</span>
+                            <input type="text" id="metode" value="{{ $data->metode_rps }}" hidden>
+                            <input type="text" id="suku_bunga" value="{{ $data->suku_bunga }}" hidden>
+                            <input type="text" id="keuangan" value="{{ $data->keuangan }}" hidden>
                             <input type="text" class="form-control text-uppercase"
                                 value="{{ 'Rp.' . ' ' . number_format($usulan->kebutuhan_dana, 0, ',', '.') }}" readonly>
                         </div>
@@ -31,14 +34,14 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">JANGKA WAKTU</span>
-                            <input type="number" class="form-control text-uppercase" name="jangka_waktu" id=""
+                            <input type="number" class="form-control text-uppercase" name="jangka_waktu" id="jw"
                                 placeholder="0" value="{{ $data->jangka_waktu }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">REPAYMENT CAPACITY</span>
-                            <input type="text" class="form-control text-uppercase" value="{{ $data->rc . ' ' . '%' }}"
-                                readonly>
+                            <input type="text" class="form-control text-uppercase" id='rc'
+                                value="{{ $data->rc . ' ' . '%' }}" readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -78,7 +81,8 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/myscript/kualitatif.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/myscript/usulan_kredit_rc.js') }}"></script>
 
     <script>
         $(function() {

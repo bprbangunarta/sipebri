@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Midle;
-use App\Models\Pengajuan;
+use App\Models\Keuangan;
 use App\Models\Tambahan;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -214,7 +215,13 @@ class AnalisaMemorandumController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
-            $rc = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first('rc');
+            $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
+            $RC = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first('rc');
+
+            //Cek kemampuan keuangan sudah terisi apa belum
+            if (is_null($keuangan) || $keuangan == 0) {
+                return redirect()->back()->with('error', 'Keuangan perbulan tidak boleh kosong');
+            }
 
             //total semua nilai taksasi
             $tak = [];
@@ -224,7 +231,7 @@ class AnalisaMemorandumController extends Controller
             $totaltaksasi = array_sum($tak);
             //Menghitung Max Plafon
             $cek[0]->maxplafon = ($totaltaksasi * 70) / 100;
-            $cek[0]->rc = $rc->rc;
+
 
             //Menghitung Taksasi Agunan
             $taksasiagunan = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
@@ -236,7 +243,28 @@ class AnalisaMemorandumController extends Controller
             //Cek data usulan
             $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
             $usulan->kebutuhan_dana = $dana->kebutuhan_dana ?? null;
-            // dd($dana, $usulan);
+
+            //Menghitung RC
+            if ($cek[0]->metode_rps == 'Efektif Musiman') {
+                $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
+                $pp = $plafon_permusim / 6;
+                $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
+                $rc = ($bg / $pp) * 100;
+            } else {
+                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
+                $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
+                $angsuran = $bunga + $pokok;
+                $rc = ($angsuran / $keuangan) * 100;
+            }
+
+            //cek RC jika ada perubahan analisa usaha
+            if ($RC->rc !== number_format($rc, 2)) {
+                $data = ['rc' => number_format($rc, 2)];
+                DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->update($data);
+            }
+            $cek[0]->rc = number_format($rc, 2);
+            $cek[0]->keuangan = $keuangan;
+            // dd($cek[0]);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
