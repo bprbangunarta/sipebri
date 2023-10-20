@@ -126,33 +126,6 @@
                                                         TIDAK ADA</option>
                                                 </select>
                                             </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KOMPUTER</span>
-                                                <select class="form-control input-sm form-border" name="komputer"
-                                                    id="">
-                                                    <option value="ADA"
-                                                        {{ old('komputer') == 'ADA' || $milik->komputer == 'ADA' ? 'selected' : '' }}>
-                                                        ADA</option>
-                                                    <option value="TIDAK ADA"
-                                                        {{ old('komputer') == 'TIDAK ADA' || $milik->komputer == 'TIDAK ADA' ? 'selected' : '' }}>
-                                                        TIDAK ADA
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">MESIN CUCI</span>
-                                                <select class="form-control input-sm form-border" name="mesin_cuci"
-                                                    id="">
-                                                    <option value="ADA"
-                                                        {{ old('mesin_cuci') == 'ADA' || $milik->mesin_cuci == 'ADA' ? 'selected' : '' }}>
-                                                        ADA</option>
-                                                    <option value="TIDAK ADA"
-                                                        {{ old('mesin_cuci') == 'TIDAK ADA' || $milik->mesin_cuci == 'TIDAK ADA' ? 'selected' : '' }}>
-                                                        TIDAK ADA
-                                                    </option>
-                                                </select>
-                                            </div>
                                         </div>
 
 
@@ -185,43 +158,27 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">HARTA LAIN</span>
-                                                <input class="form-control input-sm form-border" type="text"
-                                                    name="nama_lain1" placeholder="ENTRI"
-                                                    value="{{ $milik->nama_lainnya1 ?? null }}">
-                                            </div>
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">KEPEMILIKAN</span>
-                                                <select class="form-control input-sm form-border" name="lainnya1"
+                                                <span class="fw-bold">KOMPUTER</span>
+                                                <select class="form-control input-sm form-border" name="komputer"
                                                     id="">
                                                     <option value="ADA"
-                                                        {{ old('lainnya1') == 'ADA' || $milik->isi_lainnya1 == 'ADA' ? 'selected' : '' }}>
+                                                        {{ old('komputer') == 'ADA' || $milik->komputer == 'ADA' ? 'selected' : '' }}>
                                                         ADA</option>
                                                     <option value="TIDAK ADA"
-                                                        {{ old('lainnya1') == 'TIDAK ADA' || $milik->isi_lainnya1 == 'TIDAK ADA' ? 'selected' : '' }}>
+                                                        {{ old('komputer') == 'TIDAK ADA' || $milik->komputer == 'TIDAK ADA' ? 'selected' : '' }}>
                                                         TIDAK ADA
                                                     </option>
                                                 </select>
                                             </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">HARTA LAIN</span>
-                                                <input class="form-control input-sm form-border" type="text"
-                                                    name="nama_lain2" placeholder="ENTRI"
-                                                    value="{{ $milik->nama_lain2 ?? null }}">
-                                            </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">KEPEMILIKAN</span>
-                                                <select class="form-control input-sm form-border" name="lainnya2"
+                                                <span class="fw-bold">MESIN CUCI</span>
+                                                <select class="form-control input-sm form-border" name="mesin_cuci"
                                                     id="">
-                                                    <option value=""
-                                                        {{ is_null($milik->isi_lainnya2) ? 'selected' : '' }}>--Pilih--
-                                                    </option>
                                                     <option value="ADA"
-                                                        {{ old('lainnya2') == 'ADA' || $milik->isi_lainnya2 == 'ADA' ? 'selected' : '' }}>
+                                                        {{ old('mesin_cuci') == 'ADA' || $milik->mesin_cuci == 'ADA' ? 'selected' : '' }}>
                                                         ADA</option>
                                                     <option value="TIDAK ADA"
-                                                        {{ old('lainnya2') == 'TIDAK ADA' || $milik->isi_lainnya2 == 'TIDAK ADA' ? 'selected' : '' }}>
+                                                        {{ old('mesin_cuci') == 'TIDAK ADA' || $milik->mesin_cuci == 'TIDAK ADA' ? 'selected' : '' }}>
                                                         TIDAK ADA
                                                     </option>
                                                 </select>

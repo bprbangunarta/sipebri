@@ -54,10 +54,10 @@ class AnalisaKepemilikanController extends Controller
                 'mesin_cuci' => strtoupper($request->mesin_cuci),
                 'kursi_tamu' => strtoupper($request->kursi),
                 'lemari_panjang' => strtoupper($request->lemari),
-                'nama_lainnya1' => strtoupper($request->nama_lain1) ?? null,
-                'isi_lainnya1' => strtoupper($request->lainnya1) ?? null,
-                'nama_lainnya2' => strtoupper($request->nama_lain2) ?? null,
-                'isi_lainnya2' => strtoupper($request->lainnya2) ?? null,
+                // 'nama_lainnya1' => strtoupper($request->nama_lain1) ?? null,
+                // 'isi_lainnya1' => strtoupper($request->lainnya1) ?? null,
+                // 'nama_lainnya2' => strtoupper($request->nama_lain2) ?? null,
+                // 'isi_lainnya2' => strtoupper($request->lainnya2) ?? null,
             ];
             // dd($data);
             if ($data) {
@@ -83,10 +83,10 @@ class AnalisaKepemilikanController extends Controller
                 'mesin_cuci' => strtoupper($request->mesin_cuci),
                 'kursi_tamu' => strtoupper($request->kursi),
                 'lemari_panjang' => strtoupper($request->lemari),
-                'nama_lainnya1' => strtoupper($request->nama_lain1) ?? null,
-                'isi_lainnya1' => strtoupper($request->lainnya1) ?? null,
-                'nama_lainnya2' => strtoupper($request->nama_lain2) ?? null,
-                'isi_lainnya2' => strtoupper($request->lainnya2) ?? null,
+                // 'nama_lainnya1' => strtoupper($request->nama_lain1) ?? null,
+                // 'isi_lainnya1' => strtoupper($request->lainnya1) ?? null,
+                // 'nama_lainnya2' => strtoupper($request->nama_lain2) ?? null,
+                // 'isi_lainnya2' => strtoupper($request->lainnya2) ?? null,
             ];
 
             $pemilik = Kepemilikan::where('kode_kepemilikan', $request->kode_kepemilikan)->get();

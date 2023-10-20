@@ -80,24 +80,7 @@
                                                 </select>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KOMPUTER</span>
-                                                <select class="form-control input-sm form-border" name="komputer"
-                                                    id="">
-                                                    <option value="">--PILIH--</option>
-                                                    <option value="ADA">ADA</option>
-                                                    <option value="TIDAK ADA">TIDAK ADA</option>
-                                                </select>
-                                            </div>
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">MESIN CUCI</span>
-                                                <select class="form-control input-sm form-border" name="mesin_cuci"
-                                                    id="">
-                                                    <option value="">--PILIH--</option>
-                                                    <option value="ADA">ADA</option>
-                                                    <option value="TIDAK ADA">TIDAK ADA</option>
-                                                </select>
-                                            </div>
+
                                         </div>
 
 
@@ -120,8 +103,25 @@
                                                     <option value="TIDAK ADA">TIDAK ADA</option>
                                                 </select>
                                             </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">KOMPUTER</span>
+                                                <select class="form-control input-sm form-border" name="komputer"
+                                                    id="">
+                                                    <option value="">--PILIH--</option>
+                                                    <option value="ADA">ADA</option>
+                                                    <option value="TIDAK ADA">TIDAK ADA</option>
+                                                </select>
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">MESIN CUCI</span>
+                                                <select class="form-control input-sm form-border" name="mesin_cuci"
+                                                    id="">
+                                                    <option value="">--PILIH--</option>
+                                                    <option value="ADA">ADA</option>
+                                                    <option value="TIDAK ADA">TIDAK ADA</option>
+                                                </select>
+                                            </div>
+                                            {{-- <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">HARTA LAIN</span>
                                                 <input class="form-control input-sm form-border" type="text"
                                                     name="nama_lain1" placeholder="ENTRI">
@@ -149,7 +149,7 @@
                                                     <option value="ADA">ADA</option>
                                                     <option value="TIDAK ADA">TIDAK ADA</option>
                                                 </select>
-                                            </div>
+                                            </div> --}}
                                         </div>
 
                                         <button type="submit" class="btn btn-sm btn-primary"
