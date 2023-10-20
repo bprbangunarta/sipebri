@@ -46,6 +46,10 @@ class KomiteController extends Controller
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)
             ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_nasabah.nama_nasabah')->get();
 
+        //User
+        $usr = Auth::user()->code_user;
+        $user = DB::table('v_users')->where('code_user', $usr)->get();
+        $cek[0]->role_user = $user[0]->role_name;
         return response()->json($cek);
     }
 

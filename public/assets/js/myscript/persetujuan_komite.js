@@ -21,12 +21,87 @@ $(document).ready(function () {
                 var hasil = data[0];
                 $("#kode").val(hasil.kode_pengajuan);
                 $("#nama").val(hasil.nama_nasabah);
+                var komite = $("#komite");
+                var role = hasil.role_user;
 
                 var pal = hasil.plafon;
-                // var pl = "Rp. " + pal.toLocaleString("id-ID");
                 var pl = formatRupiah(pal);
-                $("#plafon").val(pl);
-                console.log(pal);
+                $("#plafon").val("Rp. " + " " + pl);
+
+                if (role === "Staff Analis" && pal <= 10000000) {
+                    var options = [
+                        { value: "Disetujui", text: "Disetujui" },
+                        { value: "Ditolak", text: "Ditolak" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Proses Analisa", text: "Proses Analisa" },
+                    ];
+                } else if (role == "Staff Analis" && pal > 1000000) {
+                    var options = [
+                        { value: "Ditolak", text: "Ditolak" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Proses Analisa", text: "Proses Analisa" },
+                    ];
+                }
+
+                if (role === "Kasi Analis" && pal <= 20000000) {
+                    var options = [
+                        { value: "Disetujui", text: "Disetujui" },
+                        { value: "Ditolak", text: "Ditolak" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Proses Analisa", text: "Proses Analisa" },
+                    ];
+                } else if (role == "Staff Analis" && pal > 20000000) {
+                    var options = [
+                        { value: "Ditolak", text: "Ditolak" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Proses Analisa", text: "Proses Analisa" },
+                    ];
+                }
+
+                if (role === "Kabag" && pal <= 30000000) {
+                    var options = [
+                        { value: "Disetujui", text: "Disetujui" },
+                        { value: "Ditolak", text: "Ditolak" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Proses Analisa", text: "Proses Analisa" },
+                    ];
+                } else if (role == "Staff Analis" && pal > 30000000) {
+                    var options = [
+                        { value: "Ditolak", text: "Ditolak" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Proses Analisa", text: "Proses Analisa" },
+                    ];
+                }
+
+                $.each(options, function (index, option) {
+                    komite.append(
+                        $("<option></option>")
+                            .attr("value", option.value)
+                            .text(option.text)
+                    );
+                });
+
+                // var options = [
+                //     { value: "Disetujui", text: "Disetujui" },
+                //     { value: "Ditolak", text: "Ditolak" },
+                //     { value: "Dibatalkan", text: "Dibatalkan" },
+                //     { value: "Dibatalkan", text: "Dibatalkan" },
+                //     { value: "Proses Analisa", text: "Proses Analisa" },
+                // ];
+
+                // $.each(options, function (index, option) {
+                //     komite.append(
+                //         $("<option></option>")
+                //             .attr("value", option.value)
+                //             .text(option.text)
+                //     );
+                // });
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
