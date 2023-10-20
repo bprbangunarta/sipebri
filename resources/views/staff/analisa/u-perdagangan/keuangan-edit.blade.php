@@ -21,18 +21,25 @@
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">OMSET HARIAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
-                                id="penhar" readonly>
+                                id="penhar" name="omset_harian"
+                                value="{{ old('belanja_harian') ?? ($perdagangan->omset_harian = 'Rp. ' . number_format($perdagangan->omset_harian, 0, ',', '.')) }}"
+                                readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">POKOK PENJUALAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
-                                id="popen" readonly>
+                                id="popen" name="pokok_penjualan"
+                                value="{{ old('belanja_harian') ?? ($perdagangan->pokok_penjualan = 'Rp. ' . number_format($perdagangan->pokok_penjualan, 0, ',', '.')) }}"
+                                readonly>
                         </div>
-                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                        <div style="margin-top:5px;width:
+                                49.5%;float:right;">
                             <span class="fw-bold">LABA BERSIH HARIAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
-                                id="lahar" readonly>
+                                id="lahar" name="laba_harian"
+                                value="{{ old('belanja_harian') ?? ($perdagangan->laba_harian = 'Rp. ' . number_format($perdagangan->laba_harian, 0, ',', '.')) }}"
+                                readonly>
                         </div>
 
                         <div style="margin-top:20px;width: 49.5%;float:left;">

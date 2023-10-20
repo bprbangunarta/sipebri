@@ -19,18 +19,18 @@
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">OMSET HARIAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
-                                id="penhar" readonly>
+                                id="penhar" name="omset_harian" readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">POKOK PENJUALAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
-                                id="popen" readonly>
+                                id="popen" name="pokok_penjualan" readonly>
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">LABA BERSIH HARIAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp. "
-                                id="lahar" readonly>
+                                id="lahar" name="laba_harian" readonly>
                         </div>
 
                         <div style="margin-top:20px;width: 49.5%;float:left;">

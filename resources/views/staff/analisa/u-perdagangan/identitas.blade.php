@@ -47,7 +47,8 @@
                         <div style="margin-top: 5px;">
                             <span class="fw-bold">ALAMAT USAHA</span>
                             <input class="form-control input-sm form-border" type="text" name="lokasi_usaha"
-                                value="{{ old('nama_usaha') ?? $perdagangan->lokasi_usaha }}" required>
+                                value="{{ old('nama_usaha') ?? ($perdagangan->lokasi_usaha ?? $perdagangan->alamat) }}"
+                                required>
                         </div>
                     </div>
 

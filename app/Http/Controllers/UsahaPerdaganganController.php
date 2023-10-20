@@ -72,14 +72,14 @@ class UsahaPerdaganganController extends Controller
 
             $cek = Midle::analisa_usaha($encpengajuan);
 
-            // $cek[0]->kd_nasabah = $request->query('nasabah');
-
             //Data perdagangan
             $enecpdg = Crypt::decrypt($request->query('kode_usaha'));
 
             $perdagangan = Perdagangan::where('kode_usaha', $enecpdg)->first();
             $perdagangan->kd_usaha = Crypt::encrypt($perdagangan->kode_usaha);
+            $perdagangan->alamat = $cek[0]->alamat_ktp;
             // dd($perdagangan);
+
             return view('staff.analisa.u-perdagangan.identitas', [
                 'data' => $cek[0],
                 'perdagangan' => $perdagangan,
@@ -296,6 +296,9 @@ class UsahaPerdaganganController extends Controller
 
             $data2 = [
                 'belanja_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('belanja_harian')) ?? 0,
+                'omset_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('omset_harian')) ?? 0,
+                'pokok_penjualan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pokok_penjualan')) ?? 0,
+                'laba_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_harian')) ?? 0,
                 'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')) ?? 0,
                 'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')) ?? 0,
                 'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')) ?? 0,
@@ -334,6 +337,9 @@ class UsahaPerdaganganController extends Controller
 
             $data2 = [
                 'belanja_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('belanja_harian')) ?? 0,
+                'omset_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('omset_harian')) ?? 0,
+                'pokok_penjualan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pokok_penjualan')) ?? 0,
+                'laba_harian' => (int)str_replace(["Rp.", " ", "."], "", $request->input('laba_harian')) ?? 0,
                 'pendapatan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pendapatan')) ?? 0,
                 'pengeluaran' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran')) ?? 0,
                 'penambahan' => (int)str_replace(["Rp.", " ", "."], "", $request->input('penambahan')) ?? 0,

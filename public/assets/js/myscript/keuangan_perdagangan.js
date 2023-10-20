@@ -120,14 +120,15 @@ $("#transport, #bongkar, #pegawai, #gatel, #retri, #sewa").keyup(function () {
     var rsewa = parseFloat(sewa.replace(/[^\d]/g, "")) || 0;
 
     var has = rtransport + rbongkar + rpegawai + rgatel + rretri + rsewa;
-    var bp = "Rp. " + has.toLocaleString("id-ID");
+    var tb = has * 30;
+    var bp = "Rp. " + tb.toLocaleString("id-ID");
     $("#bdagang").val(bp);
 
     var pn = $("#penambahan").val();
     var lbulan = $("#lbulan").val();
     var rpn = parseFloat(pn.replace(/[^\d]/g, "")) || 0;
     var rbulan = parseFloat(lbulan.replace(/[^\d]/g, "")) || 0;
-    var hsl = rbulan - parseFloat(has) + rpn;
+    var hsl = rbulan - parseFloat(tb) + rpn;
     var bs = "Rp. " + hsl.toLocaleString("id-ID");
     $("#hasilbersih").val(bs);
 });

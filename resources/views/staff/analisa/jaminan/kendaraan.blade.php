@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($jaminan as $item)
+                    @forelse ($jaminan as $item)
                         <tr>
                             <td style="vertical-align: middle;">
                                 <b>Jenis: </b><br>
@@ -52,7 +52,11 @@
                                 </button>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td class="text-center" colspan="7">Tidak ada analisa usaha pertania.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
