@@ -127,7 +127,7 @@
         $("#usulan_plafon").on("input", function() {
             var value1 = parseFloat($(this).val().replace(/[^\d]/g, ""));
             var value2 = parseFloat($("#max").val().replace(/[^\d]/g, ""));
-            console.log(value1, value2)
+
             // Memeriksa apakah nilai input1 lebih besar dari input2
             if (value1 > value2) {
                 // Jika lebih besar, atur nilai input1 menjadi nilai input2
