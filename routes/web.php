@@ -53,6 +53,7 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\NotifikasiController;
 
 /*
@@ -232,6 +233,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/analisa/tambahan', [CetakAnalisaController::class, 'tambahan'])->name('tambahan.tambahan');
         Route::get('/cetak/analisa/cetakmemorandum', [CetakAnalisaController::class, 'cetak_memorandum'])->name('memorandum.memorandum');
         //===Cetak Analisa===//
+
+        //Dashboard Analis
+        Route::get('/themes/dashboard', [DashboardAnalisController::class, 'index']);
     });
 
     //Komite
@@ -239,7 +243,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('themes')->group(function () {
-        Route::view('/dashboard', 'dashboard.index');
+        // Route::view('/dashboard', 'dashboard.index');
 
         Route::get('/permohonan/analisa', [AnalisaController::class, 'index'])->name('permohonan.analisa');
 
@@ -310,6 +314,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/jaminan/kendaraan', 'updatekendaraan')->name('taksasi.updatekendaraan');
             Route::post('/analisa/jaminan/fhoto/kendaraan', 'fhotokendaraan')->name('taksasi.fhotokendaraan');
             Route::get('/analisa/jaminan/fhoto/kendaraan/{id}/edit', 'previewkendaraan')->name('taksasi.previewkendaraan');
+            Route::get('/analisa/jaminan/fhoto/kendaraan/data/{id}/edit', 'datakendaraan')->name('taksasi.datakendaraan');
             Route::get('/analisa/jaminan/kendaraan/{id}/edit', 'editkendaraan')->name('taksasi.editkendaraan');
             Route::get('/analisa/jaminan/tanah', 'tanah')->name('taksasi.tanah');
             Route::get('/analisa/jaminan/tanah/{id}/edit', 'edittanah')->name('taksasi.edittanah');

@@ -47,7 +47,7 @@
                                 </button>
 
                                 <button id="{{ $item->id }}" data-toggle="modal" data-target="#modal-foto"
-                                    class="btn btn-sm btn-primary" data-id="{{ $item->id }}">
+                                    class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                     <i class="fa fa-image"></i>
                                 </button>
                             </td>
@@ -193,6 +193,7 @@
                                                 data-target="depan">PREVIEW</a>
                                         </span>
                                         <input type="text" id="nid" name="id" hidden>
+                                        <input type="text" id="ats_nama" name="nama" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto1" accept="image/*">
                                     </div>
@@ -211,7 +212,7 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">
                                             TAMPAK BELAKANG
-                                            <a href="#" class="pull-right" target="_blank" id="prevbelakang"
+                                            <a href="#" class="pull-right" id="prevbelakang"
                                                 data-target="belakang">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
@@ -221,7 +222,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">
                                             TAMPAK KANAN
-                                            <a href="#" class="pull-right" target="_blank" id="prevkanan"
+                                            <a href="#" class="pull-right" id="prevkanan"
                                                 data-target="kanan">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
@@ -247,10 +248,14 @@
     <script>
         $("button[data-target='#modal-foto']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
-            var nilaiid = $(this).attr('id');
+            var dataId = $(this).data('id').split(',');
+
+            var nilaiid = dataId[0];
+            var atasNama = dataId[1];
 
             // Menyalin nilai 'id' ke elemen di dalam modal
             $('#nid').val(nilaiid);
+            $('#ats_nama').val(atasNama);
         });
     </script>
 @endpush

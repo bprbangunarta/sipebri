@@ -25,7 +25,7 @@ class AnalisaJaminanController extends Controller
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Kendaraan')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-            // dd($au);
+
             return view('staff.analisa.jaminan.kendaraan', [
                 'data' => $cek[0],
                 'jaminan' => $au,
@@ -106,6 +106,7 @@ class AnalisaJaminanController extends Controller
         $foto2 = $jaminan->foto2 ? asset('storage/image/photo_agunan/' . $jaminan->foto2) : null;
         $foto3 = $jaminan->foto3 ? asset('storage/image/photo_agunan/' . $jaminan->foto3) : null;
         $foto4 = $jaminan->foto4 ? asset('storage/image/photo_agunan/' . $jaminan->foto4) : null;
+        $dir = 'storage/image/photo_agunan/';
         $img = [
             'gambar1' => $foto1,
             'gambar2' => $foto2,
@@ -131,36 +132,43 @@ class AnalisaJaminanController extends Controller
 
             if ($request->file('foto1')) {
                 $ekstensi = $cek['foto1']->getClientOriginalExtension();
-                $new1 = 'depan' . '_' . $tanggal . '.' . $ekstensi;
+                $new1 = $request->nama . '_' . 'depan' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto1'] = $request->file('foto1')->storeAs('image/photo_agunan', $new1, 'public');
                 $cek['foto1'] = $new1;
             }
 
             if ($request->file('foto2')) {
                 $ekstensi = $cek['foto2']->getClientOriginalExtension();
-                $new2 = 'belakang' . '_' . $tanggal . '.' . $ekstensi;
+                $new2 = $request->nama . '_' . 'belakang' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto2'] = $request->file('foto2')->storeAs('image/photo_agunan', $new2, 'public');
                 $cek['foto2'] = $new2;
             }
 
             if ($request->file('foto3')) {
                 $ekstensi = $cek['foto3']->getClientOriginalExtension();
-                $new3 = 'kiri' . '_' . $tanggal . '.' . $ekstensi;
+                $new3 = $request->nama . '_' . 'kiri' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto3'] = $request->file('foto3')->storeAs('image/photo_agunan', $new3, 'public');
                 $cek['foto3'] = $new3;
             }
 
             if ($request->file('foto4')) {
                 $ekstensi = $cek['foto4']->getClientOriginalExtension();
-                $new4 = 'kanan' . '_' . $tanggal . '.' . $ekstensi;
+                $new4 = $request->nama . '_' . 'kanan' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto4'] = $request->file('foto4')->storeAs('image/photo_agunan', $new4, 'public');
                 $cek['foto4'] = $new4;
             }
+
             DB::table('data_jaminan')->where('id', $request->id)->update($cek);
             return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan fhoto');
         }
+    }
+
+    public function datakendaraan($dataId)
+    {
+        $jaminan = DB::table('data_jaminan')->where('id', $dataId)->first();
+        return response()->json($jaminan);
     }
 
     public function tanah(Request $request)
@@ -236,14 +244,14 @@ class AnalisaJaminanController extends Controller
         }
     }
 
-    public function editlain($id)
+    public function editlain($dataId)
     {
         $lain = DB::table('data_jaminan')
             ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
             ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-            ->where('data_jaminan.id', $id)->first();
+            ->where('data_jaminan.id', $dataId)->first();
         //
-        $lain->jaminan_id = $id;
+        $lain->jaminan_id = $dataId;
         return response()->json($lain);
     }
 
