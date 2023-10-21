@@ -3143,11 +3143,11 @@ a:focus {
 .table>thead>tr>td,
 .table>tbody>tr>td,
 .table>tfoot>tr>td {
-  border-top: 1px solid #f4f4f4
+  border-top: 1px solid #3C8DBC
 }
 
 .table>thead>tr>th {
-  border-bottom: 2px solid #f4f4f4
+  border-bottom: 2px solid #3C8DBC
 }
 
 .table tr td .progress {
@@ -3155,7 +3155,7 @@ a:focus {
 }
 
 .table-bordered {
-  border: 1px solid #f4f4f4
+  border: 1px solid #3C8DBC
 }
 
 .table-bordered>thead>tr>th,
@@ -3164,7 +3164,7 @@ a:focus {
 .table-bordered>thead>tr>td,
 .table-bordered>tbody>tr>td,
 .table-bordered>tfoot>tr>td {
-  border: 1px solid #f4f4f4
+  border: 1px solid #3C8DBC
 }
 
 .table-bordered>thead>tr>th,

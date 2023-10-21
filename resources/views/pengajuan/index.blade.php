@@ -1,436 +1,216 @@
-@extends('templates.app')
+@extends('theme.app')
 @section('title', 'Pengajuan Kredit')
 @yield('jquery')
 @section('content')
-    <div class="page-body">
-        <div class="container-xl">
-            <div class="row row-deck row-cards">
+    <div class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-user"></i>
+                            <h3 class="box-title">DATA PENGAJUAN KREDIT</h3>
 
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="container-xl">
-                                <div class="row g-2 align-items-center">
-                                    <div class="col">
-                                        <!-- Page pre-title -->
-                                        <div class="page-pretitle">
-                                            Pendaftaran
+                            <div class="box-tools">
+                                <form {{ route('user.index') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
+                                        <input type="text" class="form-control pull-right"  name="name" id="name" value="{{ request('name') }}" placeholder="Search">
+                    
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                                         </div>
-                                        <h2 class="page-title">
-                                            Pengajuan Kredit
-                                        </h2>
                                     </div>
-                                    <!-- Page title actions -->
-
-                                    @can('pengajuan tambah')
-                                        <div class="col-auto ms-auto d-print-none">
-                                            <div class="btn-list">
-                                                <a href="#" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-tambah">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-tabler icon-tabler-plus" width="24" height="24"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                        <path d="M12 5l0 14"></path>
-                                                        <path d="M5 12l14 0"></path>
-                                                    </svg>
-                                                    Tambah
-                                                </a>
-                                            </div>
-                                        </div>
-                                    @endcan
-
-                                </div>
+                                </form>
                             </div>
                         </div>
 
-                        <div class="card-body border-bottom py-3" style="margin-top:-7px;">
-
-                            <form action="{{ route('pengajuan.index') }}" method="GET">
-                                <div class="input-group mb-2">
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Kode atau Nama Nasabah" value="{{ request('name') }}">
-                                    <button class="btn" type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter"
-                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                            stroke="currentColor" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z">
-                                            </path>
-                                        </svg>
-                                        Filter
-                                    </button>
-                                </div>
-                            </form>
-
-
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-vcenter fs-5">
-                                    <thead>
+                        <div class="box-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="bg-blue">
                                         <tr>
-                                            <th class="text-center" width="3%">No</th>
-                                            <th class="text-center" width="7%">Kode</th>
-                                            <th class="text-center">Nama Debitur</th>
-                                            <th class="text-center" width="40%">Alamat</th>
-                                            <th class="text-center" width="10%">Plafon</th>
-                                            <th class="text-center" width="3%">JK</th>
-                                            <th class="text-center" width="10%">Status</th>
+                                            <th class="text-center" width="3%">NO</th>
+                                            <th class="text-center" width="7%">KODE</th>
+                                            <th class="text-center">NAMA NASABAH</th>
+                                            <th class="text-center" width="40%">ALAMAT</th>
+                                            <th class="text-center" width="10%">PLADOND</th>
+                                            <th class="text-center" width="10%">STATUS</th>
+                                            <th class="text-center" width="9%">AKSI</th>
 
-                                            @can('pengajuan otorisasi')
-                                                <th class="text-center" width="4%">Aksi</th>
+                                            @can('edit pengajuan kredit')
+                                            <th class="text-center" width="3%">HAPUS</th>
                                             @endcan
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $no = 1;
+                                    @endphp
+                                    @forelse ($data as $item)
+                                        <tr>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->kode }}</td>
+                                            <td style="vertical-align: middle;">
+                                                {{ strtoupper($item->nama) }} <br>
+                                                <b>No. HP :</b> 082320099971
+                                            </td>
 
-                                            @can('pengajuan edit')
-                                                <th class="text-center" width="8%">Aksi</th>
-                                            @endcan
+                                            @if (is_null($item->alamat))
+                                                <td class="text-center">-</td>
+                                            @else
+                                                <td>{{ $item->alamat }} <br>
+                                                    <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
+                                                </td>
+                                            @endif
 
-                                            @can('pengajuan hapus')
-                                                <th class="text-center" width="4%">Batal</th>
+                                            @php
+                                                $item->plafon = number_format($item->plafon, 0, ',', '.');
+                                            @endphp
+                                            <td style="vertical-align: middle;">
+                                                {{ $item->plafon }} <br>
+                                                <b>JK :</b> {{ $item->jk }} BULAN
+                                            </td>
+
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->status == 'Lengkapi Data')
+                                                    <span class="badge bg-red">{{ $item->status }}</span>
+                                                @elseif ($item->status == 'Minta Otorisasi')
+                                                    <span class="badge bg-yellow">{{ $item->status }}</span>
+                                                @else
+                                                    <span class="badge bg-green">{{ $item->status }}</span>
+                                                @endif
+                                            </td>
+
+                                            <td class="text-center" style="vertical-align: middle;">
+
+                                                @can('edit pengajuan kredit')
+                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}" class="btn btn-sm btn-warning">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+
+                                                &nbsp;
+                                                <a href="#" class="btn btn-sm btn-primary">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                                @endcan
+
+                                                @can('otorisasi pengajuan kredit')
+                                                <a href="#" class="btn btn-sm btn-success">
+                                                    <i class="fa fa-check"></i>
+                                                </a>
+                                                @endcan
+                                            </td>
+
+                                            @can('edit pengajuan kredit')
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <form action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}" method="POST">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
                                             @endcan
                                         </tr>
-                                    </thead>
-                                    <tbody>
                                         @php
-                                            $no = 1;
+                                            $no++;
                                         @endphp
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td class="text-center">{{ $no }}</td>
-                                                <td>{{ $item->kode }}</td>
-                                                <td>{{ strtoupper($item->nama) }}</td>
-                                                @if (is_null($item->alamat))
-                                                    <td class="text-center">-</td>
-                                                @else
-                                                    <td>{{ $item->alamat }}
-                                                    </td>
-                                                @endif
-                                                @php
-                                                    $item->plafon = 'Rp. ' . number_format($item->plafon, 0, ',', '.');
-                                                @endphp
-                                                <td class="text-start">{{ $item->plafon }}</td>
-                                                <td class="text-center">{{ $item->jk }}</td>
-                                                <td class="text-center">
-                                                    @if ($item->status == 'Lengkapi Data')
-                                                        <span class="badge bg-danger-lt">{{ $item->status }}</span>
-                                                    @elseif ($item->status == 'Minta Otorisasi')
-                                                        <span class="badge bg-warning-lt">{{ $item->status }}</span>
-                                                    @else
-                                                        <span class="badge bg-success-lt">{{ $item->status }}</span>
-                                                    @endif
-                                                </td>
-                                                @can('pengajuan otorisasi')
-                                                    <td class="text-center">
-                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
-                                                            title="Validasi Data">
-                                                            <span class="badge bg-success">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="icon icon-tabler icon-tabler-clipboard-check"
-                                                                    width="24" height="24" viewBox="0 0 24 24"
-                                                                    stroke-width="2" stroke="currentColor" fill="none"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z">
-                                                                    </path>
-                                                                    <path d="M9 14l2 2l4 -4"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </a>
-                                                    </td>
-                                                @endcan
-
-                                                @can('pengajuan edit')
-                                                    <td class="text-center">
-                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
-                                                            title="Edit Data" style="text-decoration: none;">
-                                                            <span class="badge bg-warning">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="icon icon-tabler icon-tabler-edit" width="24"
-                                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                                    stroke="currentColor" fill="none"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
-                                                                    </path>
-                                                                    <path d="M16 5l3 3"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </a>
-
-                                                        @if ($item->status == 'Sudah Otorisasi')
-                                                            <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}"
-                                                                title="Print Data">
-                                                                <span class="badge bg-info">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon icon-tabler icon-tabler-printer"
-                                                                        width="24" height="24" viewBox="0 0 24 24"
-                                                                        stroke-width="2" stroke="currentColor" fill="none"
-                                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
-                                                                        </path>
-                                                                        <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z">
-                                                                        </path>
-                                                                    </svg>
-                                                                </span>
-                                                            </a>
-                                                        @else
-                                                            <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kode]) }}"
-                                                                title="Print Data"
-                                                                style="pointer-events: none; text-decoration: none; cursor: default;">
-                                                                <span class="badge bg-gray">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon icon-tabler icon-tabler-printer"
-                                                                        width="24" height="24" viewBox="0 0 24 24"
-                                                                        stroke-width="2" stroke="currentColor" fill="none"
-                                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2">
-                                                                        </path>
-                                                                        <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4">
-                                                                        </path>
-                                                                        <path
-                                                                            d="M7 13m0 2a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-6a2 2 0 0 1 -2 -2z">
-                                                                        </path>
-                                                                    </svg>
-                                                                </span>
-                                                            </a>
-                                                        @endif
-                                                    </td>
-                                                @endcan
-
-                                                @can('pengajuan hapus')
-                                                    <td class="text-center">
-                                                        <form
-                                                            action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
-                                                            method="POST">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button type="submit"
-                                                                style="border: none; background: transparent;"
-                                                                class="confirmbatal">
-                                                                <span class=" badge bg-danger">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="icon icon-tabler icon-tabler-trash"
-                                                                        width="24" height="24" viewBox="0 0 24 24"
-                                                                        stroke-width="2" stroke="currentColor" fill="none"
-                                                                        stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none">
-                                                                        </path>
-                                                                        <path d="M4 7l16 0"></path>
-                                                                        <path d="M10 11l0 6"></path>
-                                                                        <path d="M14 11l0 6"></path>
-                                                                        <path
-                                                                            d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12">
-                                                                        </path>
-                                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3">
-                                                                        </path>
-                                                                    </svg>
-                                                                </span>
-                                                            </button>
-                                                        </form>
-                                                    </td>
-                                                @endcan
-                                            </tr>
-                                            @php
-                                                $no++;
-                                            @endphp
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <br>
-                                {{ $data->links('vendor.pagination.bootstrap-5') }}
-                            </div>
+                                    @empty
+                                        <tr>
+                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            @can('tambah pengajuan kredit')
+                            <button data-toggle="modal" data-target="#modal-tambah" class="btn btn-primary btn-sm pull-left">TAMBAH</button>
+                            @endcan
+
+                            {{ $data->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
-
             </div>
-        </div>
+        </section>
     </div>
 
-    <div class="modal modal-blur fade" id="modal-tambah" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
+    <div class="modal fade" id="modal-tambah">
+        <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Pendaftaran</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">TAMBAH PENGAJUAN</h4>
                 </div>
-
                 <form action="{{ route('nasabah.store') }}" method="POST">
                     @csrf
+
+                    {{-- Input user $ Identitas --}}
+                    <input type="text" value="{{ $auth }}" name="input_user" hidden>
+                    <input type="text" name="identitas" value="1" hidden>
+
                     <div class="modal-body">
                         <div class="row">
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Jenis ID</label>
-                                    <input type="text" value="{{ $auth }}" name="input_user" hidden>
-                                    <select type="text" class="form-select" placeholder="Pilih Identitas"
-                                        name="identitas" id="select-identitas">
-                                        <option value="">Pilih Identitas</option>
-                                        <option value="1" {{ old('identitas') == '1' ? 'selected' : '' }}>KTP
-                                        </option>
-                                        <option value="2" {{ old('identitas') == '2' ? 'selected' : '' }}>SIM
-                                        </option>
-                                        <option value="3" {{ old('identitas') == '3' ? 'selected' : '' }}>Pasport
-                                        </option>
-                                        <option value="9" {{ old('identitas') == '9' ? 'selected' : '' }}>Lainnya
-                                        </option>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>KATEGORI</label>
+                                    <select class="form-control" name="kategori" required>
+                                        <option value="BARU" {{ old('kategori') == '1' ? 'selected' : '' }}>BARU</option>
+                                        <option value="RELOAN" {{ old('kategori') == '2' ? 'selected' : '' }}>RELOAN</option>
+                                        <option value="RSC" {{ old('kategori') == '3' ? 'selected' : '' }}>RSC</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">No. Indentias</label>
-                                    <input type="text" class="form-control" name="no_identitas" id="no_identitas"
-                                        placeholder="3213000000000000" value="{{ old('no_identitas') }}" required>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>NO IDENTITAS</label>
+                                    <input class="form-control" type="text" name="no_identitas" id="no_identitas" minlength="16" maxlength="16" value="{{ old('no_identitas') }}" placeholder="ENTRI" required>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>NAMA LENGKAP</label>
+                                    <input class="form-control text-uppercase" type="text" name="nama_nasabah" id="nama_nasabah"
+                                    placeholder="ENTRI" value="{{ old('nama_nasabah') }}" required>
                                 </div>
                             </div>
 
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah"
-                                        placeholder="Nama Lengkap" value="{{ old('nama_nasabah') }}" required>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>TANGGAL LAHIR</label>
+                                    <input type="text" class="form-control" name="tanggal_lahir" id="datemask" value="{{ old('tanggal_lahir') }}" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PENGAJUAN PLAFON</label>
+                                    <input class="form-control" type="text" name="plafon" id="plafond" placeholder="ENTRI" value="{{ old('plafon') }}" required>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>JANGKA WAKTU</label>
+                                    <input class="form-control" type="number" name="jangka_waktu" value="{{ old('jangka_waktu') }}" placeholder="ENTRI" required>
                                 </div>
                             </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Tanggal Lahir</label>
-                                    <input class="form-control mb-2" placeholder="Pilih Tanggal" name="tanggal_lahir"
-                                        id="datepicker-lahir" />
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Plafon</label>
-                                    <input type="text" class="form-control" name="plafon" id="plafond"
-                                        placeholder="10.000.000" value="{{ old('plafon') }}" required>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Jangka Waktu</label>
-                                    <input type="text" class="form-control" placeholder="60" name="jangka_waktu"
-                                        id="select-jk">
-                                    {{-- <select type="text" class="form-select" placeholder="Jengka Waktu"
-                                        name="jangka_waktu" id="select-jk">
-                                        <option value="">Pilih JK</option>
-                                        <option value="6" {{ old('jangka_waktu') === '6' ? 'selected' : '' }}>6 Bulan
-                                        </option>
-                                        <option value="12" {{ old('jangka_waktu') === '12' ? 'selected' : '' }}>12
-                                            Bulan</option>
-                                        <option value="24" {{ old('jangka_waktu') === '24' ? 'selected' : '' }}>24
-                                            Bulan</option>
-                                        <option value="36" {{ old('jangka_waktu') === '36' ? 'selected' : '' }}>36
-                                            Bulan</option>
-                                    </select> --}}
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Batal</a>
-                        <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">SIMPAN</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            window.Litepicker && (new Litepicker({
-                element: document.getElementById('datepicker-lahir'),
-                buttonText: {
-                    previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
-                    nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
-                },
-            }));
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-identitas'), {
-                copyClassesToDropdown: false,
-                dropdownClass: 'dropdown-menu ts-dropdown',
-                optionClass: 'dropdown-item',
-                controlInput: '<input>',
-                render: {
-                    item: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                    option: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                },
-            }));
-        });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-jk'), {
-                copyClassesToDropdown: false,
-                dropdownClass: 'dropdown-menu ts-dropdown',
-                optionClass: 'dropdown-item',
-                controlInput: '<input>',
-                render: {
-                    item: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                    option: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                },
-            }));
-        });
+        //Datemask yyyy/mm/dd
+        $('#datemask').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' })
 
         //Format rupiah
         var rupiah = document.getElementById('plafond');

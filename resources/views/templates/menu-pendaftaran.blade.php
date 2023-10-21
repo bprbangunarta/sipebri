@@ -15,7 +15,7 @@
         class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('survei/edit') ? 'active' : '' }}">Data
         Surveyor</a>
 
-    @can('pengajuan konfirmasi')
+    @can('edit pengajuan kredit')
         <a href="{{ route('pengajuan.konfirmasi', ['nasabah' => $nasabah]) }}"
             class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">Konfirmasi
             Data</a>

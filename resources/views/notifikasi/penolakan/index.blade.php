@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Penolakan Pengajuan')
+@section('title', 'Penolakan Penolakan')
 
 @section('content')
 <div class="content-wrapper">
@@ -10,7 +10,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <i class="fa fa-file-text-o"></i>
-                        <h3 class="box-title">PENOLAKAN PENGAJUAN</h3>
+                        <h3 class="box-title">DATA PENOLAKAN</h3>
                     </div>
                     <div class="box-body">
                         <table class="table table-bordered">
@@ -45,12 +45,12 @@
                                         KANTOR KAS SUBANG
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        <a href="{{ route('penolakan.edit') }}" class="btn-circle btn-sm btn-warning">
+                                        <a href="{{ route('penolakan.edit') }}" class="btn-circle btn-sm btn-warning" title="Surat Penolakan">
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
 
                                         &nbsp;
-                                        <a href="#" class="btn-circle btn-sm btn-primary">
+                                        <a href="#" class="btn-circle btn-sm btn-primary" title="Cetak Surat Penolakan">
                                             <i class="fa fa-print"></i>
                                         </a>
                                     </td>
@@ -62,8 +62,6 @@
                             @endforelse --}}
                             </tbody>
                         </table>
-
-                        <a href="{{ route('penolakan.tambah') }}" class="btn btn-sm btn-primary" style="margin-top:10px;">TAMBAH</a>
 
                     </div>
                 </div>

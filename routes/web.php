@@ -56,6 +56,7 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use Spatie\Permission\Models\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,9 +70,12 @@ use App\Http\Controllers\AnalisaKepemilikanController;
 */
 
 Route::get('/', function () {
-    // $role = Role::find(7);
-    // $role->givePermissionTo('analisa input');
-    // dd($role);
+    $role = Role::find(3);
+    $permission = Permission::find(36);
+
+    $role->givePermissionTo($permission);
+    $permission->assignRole($role);
+    dd($permission);
     return redirect('login');
 });
 

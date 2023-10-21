@@ -62,7 +62,7 @@
 
                             <div class="table-responsive">
 
-                                <table class="table table-bordered table-vcenter mb-2">
+                                {{-- <table class="table table-bordered table-vcenter mb-2">
                                     <thead>
                                         <tr>
                                             <th class="text-center" width="3%">No</th>
@@ -254,7 +254,7 @@
                                             <input type="checkbox" name="give-permission" id="give-permission">
                                         </td>
                                     </tr>
-                                </table>
+                                </table> --}}
 
                                 <table class="table table-bordered table-vcenter">
                                     <thead>
