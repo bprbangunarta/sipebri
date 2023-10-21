@@ -37,7 +37,7 @@
                                             <th class="text-center">KANTOR</th>
                                             <th class="text-center">HAK AKSES</th>
                                             <th class="text-center" width="5%">AKTIF</th>
-                                            <th class="text-center" width="10%">AKSI</th>
+                                            <th class="text-center" width="12%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,14 +67,18 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a href="#" class="btn-circle btn-sm btn-warning">
+                                                <a data-toggle="modal" data-target="#modal-edit" data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 &nbsp;
+                                                <a href="#" class="btn-circle btn-sm btn-danger">
+                                                    <i class="fa fa-key"></i>
+                                                </a>
 
+                                                &nbsp;
                                                 <a href="#" class="btn-circle btn-sm btn-primary">
-                                                    <i class="fa fa-unlock-alt"></i>
+                                                    <i class="fa fa-user"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -111,6 +115,80 @@
                     <h4 class="modal-title">TAMBAH USER</h4>
                 </div>
                 <form action="{{ route('user.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>NAMA LENGKAP</label>
+                                    <input class="form-control" type="text" name="name" id="name" placeholder="ENTRI" required>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>EMAIL ADDRESS</label>
+                                    <input class="form-control" type="email" name="email" id="email" placeholder="ENTRI" required>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>USERNAME</label>
+                                    <input class="form-control" type="text" name="username" id="username" placeholder="ENTRI" required>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="kode_kantor" id="kode_kantor" required>
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $data)
+                                            <option value="{{ $data->kode_kantor }}">{{ $data->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>KODE USER</label>
+                                    <input class="form-control" type="text" name="user_kode" id="user_kode" minlength="3" maxlength="3" placeholder="ENTRI">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KODE SURVEYOR</label>
+                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KODE KOLEKTOR</label>
+                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>IS ACTIVE?</label>
+                                    <select class="form-control" name="is_active" id="is_active" required>
+                                        <option value="1">AKTIF</option>
+                                        <option value="0">TIDAK AKTIF</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EDIT USER</h4>
+                </div>
+                <form action="{{ route('user.update', ['user' => $users[0]->code_user]) }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
