@@ -29,54 +29,52 @@ $(document).ready(function () {
                 var pl = formatRupiah(pal);
                 $("#plafon").val("Rp. " + " " + pl);
 
-                if (role === "Staff Analis" && pal <= 10000000) {
+                if (role === "Staff Analis" && pal >= 1000 && pal <= 10000000) {
                     var options = [
                         { value: "Disetujui", text: "Disetujui" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Proses Analisa", text: "Proses Analisa" },
+                        { value: "Dibatalkan", text: "Naik Kasi" },
                     ];
-                } else if (role == "Staff Analis" && pal > 1000000) {
-                    var options = [
-                        { value: "Ditolak", text: "Ditolak" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Proses Analisa", text: "Proses Analisa" },
-                    ];
+                } else if (role == "Staff Analis" && pal > 10000000) {
+                    var options = [{ value: "Dibatalkan", text: "Naik Kasi" }];
                 }
 
-                if (role === "Kasi Analis" && pal <= 20000000) {
+                if (
+                    role === "Kasi Analis" &&
+                    pal > 10000001 &&
+                    pal <= 35000000
+                ) {
                     var options = [
                         { value: "Disetujui", text: "Disetujui" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Proses Analisa", text: "Proses Analisa" },
+                        { value: "Dibatalkan", text: "Naik Kasi" },
                     ];
-                } else if (role == "Staff Analis" && pal > 20000000) {
-                    var options = [
-                        { value: "Ditolak", text: "Ditolak" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Proses Analisa", text: "Proses Analisa" },
-                    ];
+                } else if (role == "Staff Analis" && pal > 35000000) {
+                    var options = [{ value: "Dibatalkan", text: "Naik Kasi" }];
                 }
 
-                if (role === "Kabag" && pal <= 30000000) {
+                if (
+                    role === "Kabag Analis" &&
+                    pal >= 35000001 &&
+                    pal >= 75000000
+                ) {
                     var options = [
                         { value: "Disetujui", text: "Disetujui" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Proses Analisa", text: "Proses Analisa" },
+                        { value: "Dibatalkan", text: "Naik Kasi" },
                     ];
                 } else if (role == "Staff Analis" && pal > 30000000) {
+                    var options = [{ value: "Dibatalkan", text: "Naik Kasi" }];
+                }
+
+                if (role === "Direksi" && pal > 75000000) {
                     var options = [
+                        { value: "Disetujui", text: "Disetujui" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Proses Analisa", text: "Proses Analisa" },
                     ];
                 }
 
@@ -87,22 +85,6 @@ $(document).ready(function () {
                             .text(option.text)
                     );
                 });
-
-                // var options = [
-                //     { value: "Disetujui", text: "Disetujui" },
-                //     { value: "Ditolak", text: "Ditolak" },
-                //     { value: "Dibatalkan", text: "Dibatalkan" },
-                //     { value: "Dibatalkan", text: "Dibatalkan" },
-                //     { value: "Proses Analisa", text: "Proses Analisa" },
-                // ];
-
-                // $.each(options, function (index, option) {
-                //     komite.append(
-                //         $("<option></option>")
-                //             .attr("value", option.value)
-                //             .text(option.text)
-                //     );
-                // });
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
