@@ -1,0 +1,47 @@
+table {
+    width: 85%;
+}
+
+thead {
+    display: flexbox;
+    align-items: center;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
+tbody tr {
+    font-size: 13px;
+}
+
+tbody .nama {
+    background-color: rgb(219, 219, 210);
+}
+
+tbody .one {
+    width: 2%;
+}
+
+.img img {
+    position: relative;
+    width: 70%;
+    left: 0%;
+}
+table tr td {
+    padding-bottom: 5px;
+}
+tr td {
+    border: none;
+}
+
+th {
+    border: none;
+}
+
+.up {
+    text-align: center;
+}
+
+.down {
+    text-align: center;
+}

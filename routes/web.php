@@ -29,12 +29,15 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\KonfirmasiController;
 use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PendampingController;
 use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
+use App\Http\Controllers\PerhitunganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\CetakAnalisaController;
 use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\DataAnalisa5CController;
@@ -46,15 +49,13 @@ use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\AnalisaKeuanganController;
 use App\Http\Controllers\AnalisaTambahanController;
+use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
-use App\Http\Controllers\DashboardAnalisController;
-use App\Http\Controllers\NotifikasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -408,6 +409,14 @@ Route::middleware('auth')->group(function () {
         // Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
         // Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');
         // Route::view('/analisa/jaminan/lainnya', 'staff.analisa.jaminan.lainnya');
+    });
+
+    Route::controller(PerhitunganController::class)->group(function () {
+        Route::get('/perhitungan/flat', 'flat')->name('flat');
+        Route::get('/perhitungan/efektif_musiman', 'efektif_musiman')->name('efektif_musiman');
+        Route::get('/perhitungan/simulasi', 'simulasi')->name('simulasi_ajk');
+        Route::get('/perhitungan/premi', 'add')->name('premi');
+        Route::get('/perhitungan/simulasi_ajk', 'sheet')->name('sheet');
     });
 });
 
