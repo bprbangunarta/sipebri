@@ -26,14 +26,11 @@
             <li class="header">MAIN MENU</li>
 
             @hasanyrole($roles)
-                <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
-                    <a href="/dashboard" title="Dashboard">
-                        <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                </li>
+            <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
+                <a href="/dashboard" title="Dashboard">
+                    <i class="fa fa-laptop"></i> <span>Dashboard</span>
+                </a>
+            </li>
             @endhasanyrole
 
             @can('pengajuan kredit')
@@ -41,9 +38,6 @@
                 <a href="{{ route('pengajuan.index') }}" title="Pengajuan Kredit">
                     <i class="fa fa-user-plus"></i>
                     <span>Pengajuan</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
                 </a>
             </li>
             @endcan
@@ -55,24 +49,24 @@
                     <i class="fa fa-cube"></i>
                     <span>Data Master</span>
                     <span class="pull-right-container">
-                        <small class="label pull-right bg-blue">3</small>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
-                        <a href="{{ route('user.index') }}">
+                        <a href="{{ route('user.index') }}" title=" Data User">
                             <i class="fa fa-circle-o"></i>
                             Data User
                         </a>
                     </li>
                     <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
-                        <a href="{{ route('role.index') }}">
+                        <a href="{{ route('role.index') }}" title="Data Role">
                             <i class="fa fa-circle-o"></i>
                             Data Role
                         </a>
                     </li>
                     <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
-                        <a href="{{ route('permission.index') }}">
+                        <a href="{{ route('permission.index') }}" title="Permission">
                             <i class="fa fa-circle-o"></i>
                             Permission
                         </a>
@@ -82,24 +76,35 @@
             @endcan
 
             @can('menu permohonan')
-            <li class="treeview {{ request()->is('themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit', 'themes/penolakan/pengajuan')? 'active': '' }}">
+            <li class="treeview {{ request()->is('themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit', 'themes/penolakan/pengajuan', 'analisa/penjadwalan')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-file-text-o"></i>
                     <span>Permohonan</span>
                     <span class="pull-right-container">
-                        <small class="label pull-right bg-blue">4</small>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
+                    @can('penjadwalan survey')
+                    <li class="{{ request()->is('analisa/penjadwalan') ? 'active' : '' }}">
+                        <a href="{{ route('analisa.penjadwalan') }}" title="Penjadwalan">
+                            <i class="fa fa-circle-o"></i>
+                            Penjadwalan
+                        </a>
+                    </li>
+                    @endcan
+
+                    @can('input analisa')
                     <li class="{{ request()->is('themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa')? 'active': '' }}">
-                        <a href="{{ route('permohonan.analisa') }}">
+                        <a href="{{ route('permohonan.analisa') }}" title="Input Analisa">
                             <i class="fa fa-circle-o"></i>
                             Input Analisa
                         </a>
                     </li>
+                    @endcan
 
                     <li class="{{ request()->is('themes/komite/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('komite.kredit') }}">
+                        <a href="{{ route('komite.kredit') }}" title="Input Persetujuan">
                             <i class="fa fa-circle-o"></i>
                             Input Persetujuan
                         </a>
@@ -107,9 +112,9 @@
 
                     <li
                         class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah', 'themes/penolakan/edit') ? 'active' : '' }}">
-                        <a href="{{ route('penolakan.pengajuan') }}">
+                        <a href="{{ route('penolakan.pengajuan') }}" title="Input Penolakan">
                             <i class="fa fa-circle-o"></i>
-                            Data Penolakan
+                            Input Penolakan
                         </a>
                     </li>
                 </ul>
@@ -121,18 +126,18 @@
                     <i class="fa fa-cube"></i>
                     <span>Perhitungan</span>
                     <span class="pull-right-container">
-                        <small class="label pull-right bg-blue">2</small>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="{{ route('flat') }}" title="Wilayah Kalijati">
+                        <a href="{{ route('flat') }}" title="Perhitungan Kredit">
                             <i class="fa fa-circle-o"></i>
                             Perhitungan Kredit
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('simulasi_ajk') }}" title="Wilayah Subang">
+                        <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
                             <i class="fa fa-circle-o"></i>
                             Perhitungan Asuransi
                         </a>
@@ -143,180 +148,18 @@
 
             <li class="header">LAPORAN</li>
             <li>
-                <a href="#" title="Janji Bayar">
-                    <i class="fa fa-hourglass-end"></i> <span>Tracking</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
+                <a href="#" title="Tracking Pengajuan">
+                    <i class="fa fa-hourglass-end"></i>
+                    <span>Tracking</span>
                 </a>
             </li>
 
             <li>
-                <a href="#" title="Data Debitur">
-                    <i class="fa fa-file-archive-o"></i> <span>Data Global</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
+                <a href="#" title="Data Global">
+                    <i class="fa fa-file-archive-o"></i>
+                    <span>Data Global</span>
                 </a>
             </li>
-
-            {{-- <li class="header">KASI KREDIT</li>
-            <li class="{{ request()->is('dashboard') ? 'active' :'' }}">
-                <a href="/dashboard" title="Dashboard">
-                    <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Janji Bayar">
-                    <i class="fa fa-calendar"></i> <span>Janji Bayar</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-yellow">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Data Debitur">
-                    <i class="fa fa-user"></i> <span>Data Debitur</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-green">2301</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Surat Tugas">
-                    <i class="fa fa-file-text"></i> <span>Surat Tugas</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-red">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Catatan Kasi">
-                    <i class="fa fa-comments"></i> <span>Catatan Kasi</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-blue">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Data Prospek">
-                    <i class="fa fa-rocket"></i> <span>Data Prospek</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-purple">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Rekap Surat Tugas">
-                    <i class="fa fa-files-o"></i> <span>Rekap Surtug</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-            </li>
-
-            <li class="header">WRITE OFF</li>
-            <li>
-                <a href="#" title="Data Debitur">
-                    <i class="fa fa-user"></i> <span>Debitur WO</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-green">600</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Surat Tugas">
-                    <i class="fa fa-file-text"></i> <span>Surat Tugas</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-red">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li class="header">CUSTOMER CARE</li>
-            <li>
-                <a href="#" title="Dashboard">
-                    <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Tele Billing">
-                    <i class="fa fa-phone-square"></i> <span>Tele Billing</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-green">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#" title="Janji Bayar">
-                    <i class="fa fa-calendar"></i> <span>Janji Bayar</span>
-                    <span class="pull-right-container">
-                        <small class="label pull-right bg-yellow">3</small>
-                    </span>
-                </a>
-            </li>
-
-            <li class="treeview">
-                <a href="#" title="Data Debitur">
-                    <i class="fa fa-user"></i>
-                    <span>Data Debitur</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="#" title="Wilayah Kalijati">
-                            <i class="fa fa-circle-o"></i>
-                            Kalijati</a>
-                    </li>
-                    <li>
-                        <a href="#" title="Wilayah Subang">
-                            <i class="fa fa-circle-o"></i>
-                            Subang</a>
-                    </li>
-                    <li>
-                        <a href="#" title="Wilayah Pagaden">
-                            <i class="fa fa-circle-o"></i>
-                            Pagaden</a>
-                    </li>
-                    <li>
-                        <a href="#" title="Wilayah Sukamandi">
-                            <i class="fa fa-circle-o"></i>
-                            Sukamandi</a>
-                    </li>
-                    <li>
-                        <a href="#" title="Wilayah Jalancagak">
-                            <i class="fa fa-circle-o"></i>
-                            Jalancagak</a>
-                    </li>
-                    <li>
-                        <a href="#" title="Wilayah Pusakajaya">
-                            <i class="fa fa-circle-o"></i>
-                            Pusakajaya</a>
-                    </li>
-                    <li>
-                        <a href="#" title="Wilayah Pamanukan">
-                            <i class="fa fa-circle-o"></i>
-                            Pamanukan</a>
-                    </li>
-                </ul>
-            </li> --}}
         </ul>
     </section>
 </aside>
