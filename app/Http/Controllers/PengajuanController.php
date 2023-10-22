@@ -37,9 +37,9 @@ class PengajuanController extends Controller
 
         $query = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
+            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
             ->where('data_pengajuan.status', '!=', 'Batal')
-            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%');
+            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_pengajuan.created_at', 'desc');;
         //
 
         if ($role[0]->role_name == 'Administrator') {

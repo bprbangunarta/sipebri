@@ -13,42 +13,29 @@ $(document).ready(function () {
             cache: false,
             success: function (response) {
                 // Isi modal dengan data yang diterima
-                var da = JSON.stringify(response[0]);
+                var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];
                 var name = hasil.name;
                 var email = hasil.email;
                 var username = hasil.username;
                 var kode = hasil.code_user;
-                var kodekntr = hasil.kantor_kode;
-                var nmkantor = hasil.nama_kantor;
                 var status = hasil.is_active;
 
-                $("#nama").val(name);
+                $("#names").val(name);
                 $("#emails").val(email);
                 $("#usernames").val(username);
-                $("#code_users").val(kode);
-
-                const nmkntr = response[1];
-                var kantor = JSON.stringify(nmkntr);
-                $("#kantor_kodes").append(
-                    $("<option>", {
-                        value: kodekntr,
-                        text: nmkantor,
-                    }).prop("selected", true)
-                );
+                $("#kode_surveyors").val(hasil.kode_surveyor) ?? null;
+                $("#kode_kolektors").val(hasil.kode_kolektor) ?? null;
+                $("#user_kodes").val(kode);
 
                 //Kantor
-                $.each(nmkntr, function (index, item) {
-                    if (item.nama_kantor != kodekntr) {
-                        $("#kantor_kodes").append(
-                            $("<option>", {
-                                value: item.kode_kantor,
-                                text: item.nama_kantor,
-                            })
-                        );
-                    }
-                });
+                $("#kode_kantors").append(
+                    $("<option>", {
+                        value: hasil.kantor_kode,
+                        text: hasil.nama_kantor,
+                    }).prop("selected", true)
+                );
 
                 //Status
                 if (status == 0) {

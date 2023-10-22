@@ -17,20 +17,24 @@ class Pengajuan extends Model
         'jangka_waktu',
         'tabungan_cgc',
         'input_user',
+        'kategori',
         'otorisasi',
         'is_entry',
     ];
     protected $guarded = ['id'];
 
-    public function nasabah(){
+    public function nasabah()
+    {
         return $this->belongsTo(Nasabah::class);
     }
 
-    public function survei(){
+    public function survei()
+    {
         return $this->hasMany(Survei::class);
     }
 
-    public function pendamping(){
+    public function pendamping()
+    {
         return $this->belongsTo(Pendamping::class);
     }
 }

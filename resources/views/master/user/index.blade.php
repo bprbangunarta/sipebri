@@ -14,10 +14,12 @@
                             <div class="box-tools">
                                 <form {{ route('user.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name" value="{{ Request('name') }}" placeholder="Search">
-                    
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="{{ Request('name') }}" placeholder="Search">
+
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -28,16 +30,16 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <tr>
-                                            <th class="text-center" width="3%">NO</th>
-                                            <th class="text-center">NAMA LENGKAP</th>
-                                            <th class="text-center">EMAIL</th>
-                                            <th class="text-center">USERNAME</th>
-                                            <th class="text-center">KODE</th>
-                                            <th class="text-center">KANTOR</th>
-                                            <th class="text-center">HAK AKSES</th>
-                                            <th class="text-center" width="5%">AKTIF</th>
-                                            <th class="text-center" width="12%">AKSI</th>
+                                    <tr>
+                                        <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center">NAMA LENGKAP</th>
+                                        <th class="text-center">EMAIL</th>
+                                        <th class="text-center">USERNAME</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">KANTOR</th>
+                                        <th class="text-center">HAK AKSES</th>
+                                        <th class="text-center" width="5%">AKTIF</th>
+                                        <th class="text-center" width="12%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,7 +69,8 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a data-toggle="modal" data-target="#modal-edit" data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
+                                                <a data-toggle="modal" data-target="#modal-edit"
+                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
@@ -95,7 +98,8 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <button data-toggle="modal" data-target="#modal-tambah" class="btn btn-primary btn-sm pull-left">TAMBAH</button>
+                            <button data-toggle="modal" data-target="#modal-tambah"
+                                class="btn btn-primary btn-sm pull-left">TAMBAH</button>
 
                             {{ $users->links('vendor.pagination.adminlte') }}
                         </div>
@@ -121,22 +125,25 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>NAMA LENGKAP</label>
-                                    <input class="form-control" type="text" name="name" id="name" placeholder="ENTRI" required>
+                                    <input class="form-control" type="text" name="name" id="name"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>EMAIL ADDRESS</label>
-                                    <input class="form-control" type="email" name="email" id="email" placeholder="ENTRI" required>
+                                    <input class="form-control" type="email" name="email" id="email"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>USERNAME</label>
-                                    <input class="form-control" type="text" name="username" id="username" placeholder="ENTRI" required>
+                                    <input class="form-control" type="text" name="username" id="username"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KANTOR</label>
-                                    <select class="form-control" name="kode_kantor" id="kode_kantor" required>
+                                    <select class="form-control" name="kantor_kode" id="kantor_kode" required>
                                         <option value="">--PILIH--</option>
                                         @foreach ($kantor as $data)
                                             <option value="{{ $data->kode_kantor }}">{{ $data->nama_kantor }}</option>
@@ -148,17 +155,20 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>KODE USER</label>
-                                    <input class="form-control" type="text" name="user_kode" id="user_kode" minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <input class="form-control" type="text" name="code_user" id="code_user"
+                                        minlength="3" maxlength="3" placeholder="ENTRI">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KODE SURVEYOR</label>
-                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyor"
+                                        minlength="3" maxlength="3" placeholder="ENTRI">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KODE KOLEKTOR</label>
-                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektor"
+                                        minlength="3" maxlength="3" placeholder="ENTRI">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
@@ -189,28 +199,32 @@
                     <h4 class="modal-title">EDIT USER</h4>
                 </div>
                 <form action="{{ route('user.update', ['user' => $users[0]->code_user]) }}" method="post">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>NAMA LENGKAP</label>
-                                    <input class="form-control" type="text" name="name" id="name" placeholder="ENTRI" required>
+                                    <input class="form-control" type="text" name="name" id="names"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>EMAIL ADDRESS</label>
-                                    <input class="form-control" type="email" name="email" id="email" placeholder="ENTRI" required>
+                                    <input class="form-control" type="email" name="email" id="emails"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>USERNAME</label>
-                                    <input class="form-control" type="text" name="username" id="username" placeholder="ENTRI" required>
+                                    <input class="form-control" type="text" name="username" id="usernames"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KANTOR</label>
-                                    <select class="form-control" name="kode_kantor" id="kode_kantor" required>
+                                    <select class="form-control" name="kantor_kode" id="kode_kantors" required>
                                         <option value="">--PILIH--</option>
                                         @foreach ($kantor as $data)
                                             <option value="{{ $data->kode_kantor }}">{{ $data->nama_kantor }}</option>
@@ -222,24 +236,27 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>KODE USER</label>
-                                    <input class="form-control" type="text" name="user_kode" id="user_kode" minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <input class="form-control" type="text" name="code_user" id="user_kodes"
+                                        minlength="3" maxlength="3" placeholder="ENTRI">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KODE SURVEYOR</label>
-                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyors"
+                                        minlength="3" maxlength="3" placeholder="ENTRI">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KODE KOLEKTOR</label>
-                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektor" minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektors"
+                                        minlength="3" maxlength="3" placeholder="ENTRI">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>IS ACTIVE?</label>
-                                    <select class="form-control" name="is_active" id="is_active" required>
-                                        <option value="1">AKTIF</option>
-                                        <option value="0">TIDAK AKTIF</option>
+                                    <select class="form-control" name="is_active" id="is_actives" required>
+                                        {{-- <option value="1">AKTIF</option>
+                                        <option value="0">TIDAK AKTIF</option> --}}
                                     </select>
                                 </div>
                             </div>

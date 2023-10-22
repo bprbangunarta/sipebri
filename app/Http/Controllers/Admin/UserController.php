@@ -30,44 +30,50 @@ class UserController extends Controller
         return view('master/user.index', compact('users', 'roles', 'kantor'));
     }
 
-    public function store(Request $request){
-        
+    public function store(Request $request)
+    {
+
         $cek = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'username' => 'required|unique:users,username',
             'code_user' => 'required',
+            'kode_surveyor' => 'required',
+            'kode_kolektor' => 'required',
             'kantor_kode' => 'required',
             'is_active' => 'required',
         ]);
-        $cek['kantor_kode'] = strtoupper($cek['kantor_kode']);//Huruf kapital
-        $cek['code_user'] = strtoupper($cek['code_user']);//Huruf kapital
+        $cek['kantor_kode'] = strtoupper($cek['kantor_kode']); //Huruf kapital
+        $cek['code_user'] = strtoupper($cek['code_user']); //Huruf kapital
         $cek['password'] = bcrypt('12345');
-        
+
         if ($cek) {
             User::create($cek);
             return redirect()->back()->with('success', 'Data user berhasil ditambahkan');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Data user gagal ditambahkan');
         }
     }
 
-    public function edit($user){
+    public function edit($user)
+    {
         $data = User::where('code_user', $user)->get();
         $kntr = Kantor::where('kode_kantor', $data[0]->kantor_kode)->get();
         $data[0]['nama_kantor'] = $kntr[0]->nama_kantor;
-    
-        $kantor = Kantor::orderBy('nama_kantor', 'asc')->get();
-        return response()->json([$data, $kantor]);
+
+        return response()->json($data);
     }
 
-    public function update(Request $request){
-        
+    public function update(Request $request)
+    {
+
         $cek = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'username' => 'required',
             'code_user' => 'required',
+            'kode_surveyor' => 'required',
+            'kode_kolektor' => 'required',
             'kantor_kode' => 'required',
             'is_active' => 'required',
         ]);
@@ -85,12 +91,13 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($user){
+    public function destroy($user)
+    {
         $data = User::where('code_user', $user)->get();
         if ($data) {
             User::destroy($data[0]->id);
             return redirect()->back()->with('success', 'Data berhasil dihapus');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Data gagal dihapus');
         }
     }

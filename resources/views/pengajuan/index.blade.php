@@ -14,10 +14,12 @@
                             <div class="box-tools">
                                 <form {{ route('user.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right"  name="name" id="name" value="{{ request('name') }}" placeholder="Search">
-                    
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="{{ request('name') }}" placeholder="Search">
+
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -28,18 +30,18 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <tr>
-                                            <th class="text-center" width="3%">NO</th>
-                                            <th class="text-center" width="7%">KODE</th>
-                                            <th class="text-center">NAMA NASABAH</th>
-                                            <th class="text-center" width="40%">ALAMAT</th>
-                                            <th class="text-center" width="10%">PLADOND</th>
-                                            <th class="text-center" width="10%">STATUS</th>
-                                            <th class="text-center" width="9%">AKSI</th>
+                                    <tr>
+                                        <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center">NAMA NASABAH</th>
+                                        <th class="text-center" width="40%">ALAMAT</th>
+                                        <th class="text-center" width="10%">PLADOND</th>
+                                        <th class="text-center" width="10%">STATUS</th>
+                                        <th class="text-center" width="9%">AKSI</th>
 
-                                            @can('edit pengajuan kredit')
+                                        @can('edit pengajuan kredit')
                                             <th class="text-center" width="3%">HAPUS</th>
-                                            @endcan
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,11 +50,12 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td style="vertical-align: middle;">{{ $item->kode }}</td>
                                             <td style="vertical-align: middle;">
                                                 {{ strtoupper($item->nama) }} <br>
-                                                <b>No. HP :</b> 082320099971
+                                                <b>No. HP :</b> {{ $item->no_telp ?? null }}
                                             </td>
 
                                             @if (is_null($item->alamat))
@@ -84,33 +87,35 @@
                                             <td class="text-center" style="vertical-align: middle;">
 
                                                 @can('edit pengajuan kredit')
-                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}" class="btn btn-sm btn-warning">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
+                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
+                                                        class="btn btn-sm btn-warning">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
 
-                                                &nbsp;
-                                                <a href="#" class="btn btn-sm btn-primary">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                    &nbsp;
+                                                    <a href="#" class="btn btn-sm btn-primary">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
-                                                <a href="#" class="btn btn-sm btn-success">
-                                                    <i class="fa fa-check"></i>
-                                                </a>
+                                                    <a href="#" class="btn btn-sm btn-success">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
                                                 @endcan
                                             </td>
 
                                             @can('edit pengajuan kredit')
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <form action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}" method="POST">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <form action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
+                                                        method="POST">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-danger">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
                                             @endcan
                                         </tr>
                                         @php
@@ -127,7 +132,8 @@
 
                         <div class="box-footer clearfix">
                             @can('tambah pengajuan kredit')
-                            <button data-toggle="modal" data-target="#modal-tambah" class="btn btn-primary btn-sm pull-left">TAMBAH</button>
+                                <button data-toggle="modal" data-target="#modal-tambah"
+                                    class="btn btn-primary btn-sm pull-left">TAMBAH</button>
                             @endcan
 
                             {{ $data->links('vendor.pagination.adminlte') }}
@@ -160,38 +166,48 @@
                                 <div class="form-group">
                                     <label>KATEGORI</label>
                                     <select class="form-control" name="kategori" required>
-                                        <option value="BARU" {{ old('kategori') == '1' ? 'selected' : '' }}>BARU</option>
-                                        <option value="RELOAN" {{ old('kategori') == '2' ? 'selected' : '' }}>RELOAN</option>
-                                        <option value="RSC" {{ old('kategori') == '3' ? 'selected' : '' }}>RSC</option>
+                                        <option value="BARU" {{ old('kategori') == 'BARU' ? 'selected' : '' }}>BARU
+                                        </option>
+                                        <option value="RELOAN" {{ old('kategori') == 'RELOAN' ? 'selected' : '' }}>RELOAN
+                                        </option>
+                                        <option value="RSC" {{ old('kategori') == 'RSC' ? 'selected' : '' }}>RSC
+                                        </option>
                                     </select>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>NO IDENTITAS</label>
-                                    <input class="form-control" type="text" name="no_identitas" id="no_identitas" minlength="16" maxlength="16" value="{{ old('no_identitas') }}" placeholder="ENTRI" required>
+                                    <input class="form-control" type="text" name="no_identitas" id="no_identitas"
+                                        minlength="16" maxlength="16" value="{{ old('no_identitas') }}"
+                                        placeholder="ENTRI" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>NAMA LENGKAP</label>
-                                    <input class="form-control text-uppercase" type="text" name="nama_nasabah" id="nama_nasabah"
-                                    placeholder="ENTRI" value="{{ old('nama_nasabah') }}" required>
+                                    <input class="form-control text-uppercase" type="text" name="nama_nasabah"
+                                        id="nama_nasabah" placeholder="ENTRI" value="{{ old('nama_nasabah') }}"
+                                        required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>TANGGAL LAHIR</label>
-                                    <input type="text" class="form-control" name="tanggal_lahir" id="datemask" value="{{ old('tanggal_lahir') }}" data-inputmask="'alias': 'yyyy-mm-dd'" data-mask>
+                                    <input type="text" class="form-control" name="tanggal_lahir" id="datemask"
+                                        value="{{ old('tanggal_lahir') }}" data-inputmask="'alias': 'yyyy-mm-dd'"
+                                        data-mask>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>PENGAJUAN PLAFON</label>
-                                    <input class="form-control" type="text" name="plafon" id="plafond" placeholder="ENTRI" value="{{ old('plafon') }}" required>
+                                    <input class="form-control" type="text" name="plafon" id="plafond"
+                                        placeholder="ENTRI" value="{{ old('plafon') }}" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>JANGKA WAKTU</label>
-                                    <input class="form-control" type="number" name="jangka_waktu" value="{{ old('jangka_waktu') }}" placeholder="ENTRI" required>
+                                    <input class="form-control" type="number" name="jangka_waktu"
+                                        value="{{ old('jangka_waktu') }}" placeholder="ENTRI" required>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +226,9 @@
     <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
     <script>
         //Datemask yyyy/mm/dd
-        $('#datemask').inputmask('yyyy-mm-dd', { 'placeholder': 'yyyy-mm-dd' })
+        $('#datemask').inputmask('yyyy-mm-dd', {
+            'placeholder': 'yyyy-mm-dd'
+        })
 
         //Format rupiah
         var rupiah = document.getElementById('plafond');

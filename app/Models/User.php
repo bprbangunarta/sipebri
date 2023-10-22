@@ -24,6 +24,8 @@ class User extends Authenticatable
         'username',
         'code_user',
         'kantor_kode',
+        'kode_surveyor',
+        'kode_kolektor',
         'is_active',
         'password',
     ];

@@ -115,6 +115,7 @@ class NasabahController extends Controller
             'nama_nasabah' => 'required',
             'tanggal_lahir' => 'required',
             'input_user' => 'required',
+            'kategori' => 'required',
         ]);
 
         //Hapus format tanggal Y-M-D menjadi YMD
@@ -158,6 +159,7 @@ class NasabahController extends Controller
             //Hapus format rupiah
             $remove = array("Rp", ".", " ");
             $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+            $cekpengajuan['kategori'] = $request->kategori;
             $cekpengajuan['input_user'] = $usr;
 
             //masuk ke pendamping dan survei
@@ -202,6 +204,7 @@ class NasabahController extends Controller
             //Hapus format rupiah
             $remove = array("Rp", ".", " ");
             $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+            $cekpengajuan['kategori'] = $request->kategori;
             $cekpengajuan['input_user'] = $usr;
 
 
