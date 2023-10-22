@@ -155,7 +155,7 @@
             </li>
             @endcan
 
-            <li class="treeview">
+            <li class="treeview {{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman', 'perhitungan/simulasi')? 'active': '' }}">
                 <a href="#" title="Data Debitur">
                     <i class="fa fa-cube"></i>
                     <span>Perhitungan</span>
@@ -164,13 +164,13 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li>
+                    <li class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman')? 'active': '' }}">
                         <a href="{{ route('flat') }}" title="Perhitungan Kredit">
                             <i class="fa fa-circle-o"></i>
                             Perhitungan Kredit
                         </a>
                     </li>
-                    <li>
+                    <li class="{{ request()->is('perhitungan/simulasi')? 'active': '' }}">
                         <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
                             <i class="fa fa-circle-o"></i>
                             Perhitungan Asuransi
