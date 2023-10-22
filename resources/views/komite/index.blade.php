@@ -34,46 +34,67 @@
                                             <td class="text-center" style="vertical-align: middle;">1</td>
                                             <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->nama_nasabah }} <br>
-                                                <b>Kategori:</b> {{ $item->kategori }}
+                                                <b>Kategori:</b> {{ $item->kategori ?? 'KOSONG' }}
                                             </td>
                                             <td style="vertical-align: middle;">
                                                 <b>KODE: </b>{{ $item->kode_pengajuan }} <br>
-                                                <b>PLAFON</b> : 20.000.000
+                                                <b>PLAFON</b> : <br>
+                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-                                            
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
-
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <i class="fa fa-circle text-success"></i>
+                                                @if ($item->plafon >= 1000 && $item->plafon <= 10000000)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @else
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @endif
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->plafon >= 10000001 && $item->plafon <= 35000000)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @elseif ($item->plafon >= 35000000)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @else
+                                                    <i class="fa fa-circle text-danger"></i>
+                                                @endif
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->plafon >= 35000001 && $item->plafon <= 75000000)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @elseif ($item->plafon >= 75000000)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @else
+                                                    <i class="fa fa-circle text-danger"></i>
+                                                @endif
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <i class="fa fa-circle text-success"></i>
+                                                @if ($item->plafon > 75000001)
+                                                    <i class="fa fa-circle text-success"></i>
+                                                @else
+                                                    <i class="fa fa-circle text-danger"></i>
+                                                @endif
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <i class="fa fa-circle text-danger"></i>
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <i class="fa fa-circle text-danger"></i>
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#modal-catatan">
+                                                <a data-toggle="modal" data-target="#modal-catatan"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}">
                                                     <span class="label label-warning">BERIKAN CATATAN</span>
                                                 </a>
                                             </td>
-                                            
+
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#modal-edit" class="btn-circle btn-sm btn-success" data-pengajuan="{{ $item->kode_pengajuan }}" title="Lihat Analisa">
+                                                <a data-toggle="modal" data-target="#" class="btn-circle btn-sm btn-success"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}" title="Lihat Analisa">
                                                     <i class="fa fa-file-text-o"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#modal-edit" class="btn-circle btn-sm btn-primary" data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
+                                                <a data-toggle="modal" data-target="#modal-edit"
+                                                    class="btn-circle btn-sm btn-primary"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
                                                     <i class="fa fa-check"></i>
                                                 </a>
                                             </td>
@@ -111,21 +132,21 @@
 
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">STAFF ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="" readonly>Catatan dari staff analis</textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="staff_analis" readonly>Catatan dari staff analis</textarea>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KASI ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="" readonly>Catatan dari kasi analis</textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kasi_analis" readonly>Catatan dari kasi analis</textarea>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KABAG ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="" readonly>Catatan dari kabag analis</textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kabag_analis" readonly>Catatan dari kabag analis</textarea>
                                 </div>
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">DIREKSI</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="" readonly>Catatan dari direksi</textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
                                 </div>
                             </div>
                         </div>
@@ -152,6 +173,7 @@
 
                                 <div style="margin-top: -10px;">
                                     <span class="fw-bold">NAMA NASABAH</span>
+                                    <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
                                     <input class="form-control text-uppercase" type="text" value="ZULFADLI RIZAL"
                                         id="nama" readonly>
                                 </div>
@@ -171,7 +193,7 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id=""></textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="catatan" id="" required></textarea>
                                 </div>
 
                             </div>
@@ -190,4 +212,5 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/persetujuan_komite.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/catatan_komite.js') }}"></script>
 @endpush

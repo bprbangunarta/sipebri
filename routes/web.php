@@ -382,6 +382,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/komite/kredit', 'index')->name('komite.kredit');
             Route::post('/komite/kredit/data', 'getdata')->name('komite.getdata');
             Route::post('/komite/kredit', 'simpan')->name('komite.simpan');
+            Route::get('/komite/kredit/catatan/{pengajuan}', 'catatan')->name('komite.catatan');
         });
 
         Route::controller(NotifikasiController::class)->group(function () {
