@@ -75,7 +75,7 @@ Route::get('/', function () {
 
     $role->givePermissionTo($permission);
     $permission->assignRole($role);
-    dd($permission);
+    // dd($permission);
     return redirect('login');
 });
 

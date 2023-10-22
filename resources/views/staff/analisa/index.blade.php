@@ -33,12 +33,12 @@
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
                                             <td style="vertical-align: middle;">
-                                                <b>KODE: </b>{{ $item->kode_nasabah }} <br>
+                                                <b>KODE: </b>{{ $item->kode_pengajuan }} <br>
                                                 <b>TANGGAL</b> : {{ $item->tgl_survei }}
                                             </td>
                                             <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->nama_nasabah }} <br>
-                                                <b>Kaetegori:</b> RELOAN
+                                                <b>Kaetegori:</b> {{ $item->kategori }}
 
                                             </td>
                                             <td style="text-transform: uppercase;">
