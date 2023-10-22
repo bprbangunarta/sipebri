@@ -213,9 +213,13 @@ class DataAnalisa5CController extends Controller
             $cek = Midle::analisa_usaha($enc);
             $cap = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
 
-            $nilai = Data::analisa5c_number($cap->capital_evaluasi_capital);
-            $cap->capital_evaluasi_capital = $nilai;
+            if (is_null($cap)) {
+                return redirect()->back()->with('error', 'Lengkapi Analisa 5C Capacity terlebih dahulu');
+            }
 
+            $nilai = Data::analisa5c_number($cap->capital_evaluasi_capital);
+
+            $cap->capital_evaluasi_capital = $nilai;
             return view('staff.analisa.5c.capital', [
                 'data' => $cek[0],
                 'capital' => $cap,
@@ -248,7 +252,9 @@ class DataAnalisa5CController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $cap = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
-
+            if (is_null($cap)) {
+                return redirect()->back()->with('error', 'Lengkapi Analisa 5C Capital terlebih dahulu');
+            }
             //Taksasi
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             //total semua nilai taksasi

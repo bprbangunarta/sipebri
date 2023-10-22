@@ -5,7 +5,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('analisa5c.simpancondition', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
+            <form action="{{ route('analisa5c.simpan_condition', ['pengajuan' => $data->kd_pengajuan]) }}" method="POST">
                 @csrf
                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
 

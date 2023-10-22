@@ -344,8 +344,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/5c/collateral', 'simpancollateral')->name('analisa5c.simpancollateral');
             Route::put('/analisa/5c/collateral', 'updatecollateral')->name('analisa5c.updatecollateral');
             Route::get('/analisa/5c/condition', 'condition')->name('analisa5c.condition');
-            Route::post('/analisa/5c/condition', 'simpancondition')->name('analisa5c.simpancondition');
-            Route::post('/analisa/5c/condition', 'updatecondition')->name('analisa5c.updatecondition');
+            Route::post('/analisa/5c/condition', 'simpancondition')->name('analisa5c.simpan_condition');
+            Route::post('/analisa/5c/condition/update', 'updatecondition')->name('analisa5c.updatecondition');
         });
 
         Route::controller(AnalisaKualitatifController::class)->group(function () {

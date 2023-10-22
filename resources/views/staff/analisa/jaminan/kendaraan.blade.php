@@ -54,7 +54,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="text-center" colspan="7">Tidak ada analisa usaha pertania.</td>
+                            <td class="text-center" colspan="7">Tidak ada jaminan kendaraan.</td>
                         </tr>
                     @endforelse
                 </tbody>
