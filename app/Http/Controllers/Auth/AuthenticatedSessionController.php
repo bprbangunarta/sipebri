@@ -30,16 +30,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         //Cek Role User
-        $data = auth()->user()->code_user;
-        $user = DB::table('v_users')->where('code_user', $data)->first();
+        // $data = auth()->user()->code_user;
+        // $user = DB::table('v_users')->where('code_user', $data)->first();
 
-        if ($user->role_name == 'Staff Analis') {
-            // if ($user->role_name == 'Staff Analis' || $user->role_name == 'Kasi Analis') {
-            return redirect('/themes/dashboard')->with('toast_success', 'Welcome back!');
-        } else {
-            return redirect('/dashboard')->with('toast_success', 'Welcome back!');
-        }
-        // return redirect()->intended(RouteServiceProvider::HOME)->with('toast_success', 'Welcome back!');
+        // if ($user->role_name == 'Staff Analis') {
+        //     // if ($user->role_name == 'Staff Analis' || $user->role_name == 'Kasi Analis') {
+        //     return redirect('/themes/dashboard')->with('toast_success', 'Welcome back!');
+        // } else {
+        //     return redirect('/dashboard')->with('toast_success', 'Welcome back!');
+        // }
+        return redirect()->intended(RouteServiceProvider::HOME)->with('toast_success', 'Welcome back!');
     }
 
     /**
