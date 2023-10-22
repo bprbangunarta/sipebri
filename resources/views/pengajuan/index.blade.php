@@ -32,16 +32,15 @@
                                     <tr class="bg-blue">
                                     <tr>
                                         <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center" width="7%">KODE</th>
                                         <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="40%">ALAMAT</th>
-                                        <th class="text-center" width="10%">PLADOND</th>
-                                        <th class="text-center" width="10%">STATUS</th>
-                                        <th class="text-center" width="9%">AKSI</th>
+                                        <th class="text-center" width="45%">ALAMAT</th>
+                                        <th class="text-center" width="15%">PENGAJUAN</th>
+                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center" width="5%">CETAK</th>
 
-                                        @can('edit pengajuan kredit')
+                                        {{-- @can('hapus pengajuan kredit')
                                             <th class="text-center" width="3%">HAPUS</th>
-                                        @endcan
+                                        @endcan --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -51,48 +50,53 @@
                                     @forelse ($data as $item)
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->kode }}</td>
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}
+                                            </td>
+
                                             <td style="vertical-align: middle;">
-                                                {{ strtoupper($item->nama) }} <br>
-                                                <b>No. HP :</b> {{ $item->no_telp ?? null }}
+                                                <b>KODE :</b> {{ $item->kode }}<br>
+                                                <b>NAMA :</b> {{ strtoupper($item->nama) }}
                                             </td>
 
                                             @if (is_null($item->alamat))
-                                                <td class="text-center">-</td>
+                                            <td class="text-center">-</td>
                                             @else
-                                                <td>{{ $item->alamat }} <br>
-                                                    <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
-                                                </td>
+                                            <td class="text-uppercase">{{ $item->alamat }} <br>
+                                                <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
+                                            </td>
                                             @endif
 
                                             @php
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
                                             @endphp
                                             <td style="vertical-align: middle;">
-                                                {{ $item->plafon }} <br>
-                                                <b>JK :</b> {{ $item->jk }} BULAN
+                                                <b>JK :</b> {{ $item->jk }} BULAN <br>
+                                                <b>PLAFON :</b> {{ $item->plafon }} 
                                             </td>
 
+                                            @can('edit pengajuan kredit')
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->status == 'Lengkapi Data')
-                                                    <span class="badge bg-red">{{ $item->status }}</span>
+                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                        <span class="btn bg-red" style="width: 120px;float:left;">{{ $item->status }}</span>
+                                                    </a>
+
                                                 @elseif ($item->status == 'Minta Otorisasi')
-                                                    <span class="badge bg-yellow">{{ $item->status }}</span>
+                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                    <span class="btn bg-yellow" style="width: 120px;float:left;">{{ $item->status }}</span>
+                                                </a>
+
                                                 @else
-                                                    <span class="badge bg-green">{{ $item->status }}</span>
+                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                    <span class="btn bg-green" style="width: 120px;float:left;">{{ $item->status }}</span>
+                                                </a>
                                                 @endif
                                             </td>
+                                            @endcan
 
                                             <td class="text-center" style="vertical-align: middle;">
 
                                                 @can('edit pengajuan kredit')
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
-                                                        class="btn btn-sm btn-warning">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-
-                                                    &nbsp;
                                                     <a href="#" class="btn btn-sm btn-primary">
                                                         <i class="fa fa-print"></i>
                                                     </a>
@@ -105,7 +109,7 @@
                                                 @endcan
                                             </td>
 
-                                            @can('edit pengajuan kredit')
+                                            {{-- @can('hapus pengajuan kredit')
                                                 <td class="text-center" style="vertical-align: middle;">
                                                     <form action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
                                                         method="POST">
@@ -116,7 +120,7 @@
                                                         </button>
                                                     </form>
                                                 </td>
-                                            @endcan
+                                            @endcan --}}
                                         </tr>
                                         @php
                                             $no++;

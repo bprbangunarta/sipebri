@@ -8,7 +8,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <i class="fa fa-user"></i>
+                            <i class="fa fa-calendar"></i>
                             <h3 class="box-title">PENJADWALAN SURVEY</h3>
 
                             <div class="box-tools">

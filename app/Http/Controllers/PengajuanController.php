@@ -39,7 +39,7 @@ class PengajuanController extends Controller
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
             ->where('data_pengajuan.status', '!=', 'Batal')
-            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_pengajuan.created_at', 'desc');;
+            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_pengajuan.created_at', 'asc');;
         //
 
         if ($role[0]->role_name == 'Administrator') {
@@ -50,7 +50,7 @@ class PengajuanController extends Controller
             $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
         }
 
-        $pengajuan = $query->paginate(10);
+        $pengajuan = $query->paginate(7);
 
         $auth = Auth::user()->code_user;
         foreach ($pengajuan as $item) {
@@ -61,6 +61,29 @@ class PengajuanController extends Controller
         return view('pengajuan.index', [
             'data' => $pengajuan,
             'auth' => $auth,
+        ]);
+    }
+
+    public function all(Request $request)
+    {
+        $name = request('name');
+
+        $query = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.is_entry as entry')
+            ->where('data_pengajuan.status', '!=', 'Batal')
+            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_pengajuan.created_at', 'asc');;
+        //
+
+        $pengajuan = $query->paginate(7);
+
+        foreach ($pengajuan as $item) {
+            $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
+            $item->kd = Crypt::encrypt($item->kode);
+        }
+
+        return view('pengajuan.all', [
+            'data' => $pengajuan,
         ]);
     }
 

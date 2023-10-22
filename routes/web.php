@@ -70,8 +70,8 @@ use Spatie\Permission\Models\Permission;
 */
 
 Route::get('/', function () {
-    // $role = Role::find(7);
-    // $permission = Permission::find(38);
+    // $role = Role::find(5);
+    // $permission = Permission::find(39);
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);
@@ -137,6 +137,8 @@ Route::middleware('auth')->group(function () {
 
         //======Pendaftaran Nasabah======//
         Route::controller(PengajuanController::class)->group(function () {
+            Route::get('/data/pengajuan', 'all')->name('pengajuan.data');
+
             Route::get('/pengajuan', 'index')->name('pengajuan.index');
             Route::get('/pengajuan/edit', 'edit')->name('pengajuan.edit');
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');

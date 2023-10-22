@@ -33,14 +33,48 @@
             </li>
             @endhasanyrole
 
-            @can('pengajuan kredit')
-            <li class="{{ request()->is('pengajuan') ? 'active' : '' }}">
-                <a href="{{ route('pengajuan.index') }}" title="Pengajuan Kredit">
-                    <i class="fa fa-user-plus"></i>
+            <li class="treeview {{ request()->is('data/pengajuan' ,'pengajuan') ? 'active' : '' }}">
+                <a href=#">
+                    <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
+                            <i class="fa fa-circle-o"></i>
+                            Data Pengajuan
+                        </a>
+                    </li>
+                    
+                    @can('tambah pengajuan kredit')
+                    <li class="{{ request()->is('pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.index') }}" title="Permission" title="Input Pengajuan">
+                            <i class="fa fa-circle-o"></i>
+                            Input Pengajuan
+                        </a>
+                    </li> 
+                    @endcan
+
+                    @can('otorisasi pengajuan kredit')
+                    <li class="{{ request()->is('pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.index') }}" title="Otorisasi Pengajuan">
+                            <i class="fa fa-circle-o"></i>
+                            Otorisasi Pengajuan
+                        </a>
+                    </li>                                
+                    @endcan
+
+                    <li class="{{ request()->is('kosong') ? 'active' : '' }}">
+                        <a href="{{ route('user.index') }}" title=" Tracking Pengajuan">
+                            <i class="fa fa-circle-o"></i>
+                            Tracking Pengajuan
+                        </a>
+                    </li>
+                </ul>
             </li>
-            @endcan
 
             {{-- MENU ADMIN --}}
             @can('master data')
@@ -147,12 +181,6 @@
 
 
             <li class="header">LAPORAN</li>
-            <li>
-                <a href="#" title="Tracking Pengajuan">
-                    <i class="fa fa-hourglass-end"></i>
-                    <span>Tracking</span>
-                </a>
-            </li>
 
             <li>
                 <a href="#" title="Data Global">
