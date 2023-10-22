@@ -70,11 +70,11 @@ use Spatie\Permission\Models\Permission;
 */
 
 Route::get('/', function () {
-    $role = Role::find(3);
-    $permission = Permission::find(36);
+    // $role = Role::find(7);
+    // $permission = Permission::find(38);
 
-    $role->givePermissionTo($permission);
-    $permission->assignRole($role);
+    // $role->givePermissionTo($permission);
+    // $permission->assignRole($role);
     // dd($permission);
     return redirect('login');
 });
