@@ -9,7 +9,7 @@
                     @csrf
                     <div class="card-body">
 
-                        <table class="table table-vcenter fs-5">
+                        <table class="table table-vcenter">
                             <thead>
                                 <tr>
                                     <th class="text-center fs-4" colspan="5" style="border: none;">
@@ -18,23 +18,23 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <thead>
+                            <tbody>
                                 <tr>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
-                                        <input type="text" class="form-control border-none" name="nama" id="nama"
-                                            required>
+                                        <input type="text" class="form-control" name="nama" id="nama" required>
                                     </td>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Plafon</span>
                                         <input type="text" class="form-control" name="plafon" id="plafons" required>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Pilih Metode RPS</span>
                                         <select class="form-control input-sm form-border"
-                                            style="border: 1px solid rgb(196, 196, 196);" name="rps" id="">
+                                            style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
+                                            name="rps" id="">
                                             <option value="" selected>---Pilih---</option>
                                             <option value="FLAT">FLAT</option>
                                             <option value="ANUITAS">ANUITAS</option>
@@ -45,10 +45,11 @@
                                             </option>
                                         </select>
                                     </td>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Pilih Produk</span>
                                         <select class="form-control input-sm form-border"
-                                            style="border: 1px solid rgb(196, 196, 196);" name="produk" id="">
+                                            style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
+                                            name="produk" id="">
                                             <option value="" selected>---Pilih---</option>
                                             <option value="KRU">KRU</option>
                                             <option value="KUP">KUP</option>
@@ -66,12 +67,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Jangka Waktu</span>
                                         <input type="text" class="form-control" name="jw"
                                             placeholder="Masukan Jangka Waktu" id="jk" required>
                                     </td>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Lahir
                                             (12-27-1994)</span>
                                         <input type="text" class="form-control" name="tgl_lahir"
@@ -79,19 +80,19 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
                                         <input type="text" class="form-control" name="tgl_realisasi"
                                             placeholder="Tanggal Sekarang" id="hari" readonly>
                                     </td>
-                                    <td>
+                                    <td class="no-border">
                                         <button type="submit" class="btn btn-primary"
                                             style="margin-top: 20px; width:100%;">
                                             Hitung
                                         </button>
                                     </td>
                                 </tr>
-                            </thead>
+                            </tbody>
                         </table>
                     </div>
                 </form>
