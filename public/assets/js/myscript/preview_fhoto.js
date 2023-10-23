@@ -1,41 +1,46 @@
-$(document).ready(function () {
-    $("#modal-foto").on("show.bs.modal", function (event) {
-        var button = $(event.relatedTarget); // Tombol yang membuka modal
-        var id = button.data("id"); // Ambil data-id dari tombol
-        var dataId = id.split(",");
-        // console.log(dataId[0]);
-        // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-        $.ajax({
-            url:
-                "/themes/analisa/jaminan/fhoto/kendaraan/data/" +
-                dataId[0] +
-                "/edit",
-            type: "GET",
-            dataType: "json",
-            cache: false,
-            success: function (response) {
-                $("#name_img_1").val(response.foto1);
-                $("#name_img_2").val(response.foto2);
-                $("#name_img_3").val(response.foto3);
-                $("#name_img_4").val(response.foto4);
-            },
-            error: function (xhr, status, error) {
-                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                console.error("Error:", xhr.responseText);
-            },
-        });
+// $(document).ready(function () {
+//     $("#modal-foto").on("show.bs.modal", function (event) {
+//         var button = $(event.relatedTarget); // Tombol yang membuka modal
+//         var id = button.data("id"); // Ambil data-id dari tombol
+//         var dataId = id.split(",");
 
-        function notif() {
-            Swal.fire({
-                text: "Anda tidak memiliki gambar",
-                icon: "warning",
-                showCancelButton: no,
-                confirmButtonText: "Ok!",
-                cancelButtonText: "Tidak, batalkan",
-            });
-        }
-    });
-});
+//         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+//         $.ajax({
+//             url:
+//                 "/themes/analisa/jaminan/fhoto/kendaraan/data/" +
+//                 dataId[0] +
+//                 "/edit",
+//             type: "GET",
+//             dataType: "json",
+//             cache: false,
+//             success: function (response) {
+//                 $("#prevdepan").click(function (e) {
+//                     e.preventDefault();
+//                     $("#modal-foto").modal("show");
+//                 });
+//                 $("#name_img_1").val(response.foto1);
+//                 $("#image-1").attr("src", response.foto1);
+//                 $("#name_img_2").val(response.foto2);
+//                 $("#name_img_3").val(response.foto3);
+//                 $("#name_img_4").val(response.foto4);
+//             },
+//             error: function (xhr, status, error) {
+//                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+//                 console.error("Error:", xhr.responseText);
+//             },
+//         });
+
+//         function notif() {
+//             Swal.fire({
+//                 text: "Anda tidak memiliki gambar",
+//                 icon: "warning",
+//                 showCancelButton: no,
+//                 confirmButtonText: "Ok!",
+//                 cancelButtonText: "Tidak, batalkan",
+//             });
+//         }
+//     });
+// });
 
 $(document).ready(function () {
     $("#modal-foto").on("show.bs.modal", function (event) {
@@ -56,16 +61,9 @@ $(document).ready(function () {
             success: function (response) {
                 $("#prevdepan").click(function (e) {
                     e.preventDefault();
-                    if (
-                        response.gambar1 === null ||
-                        response.gambar1 === undefined
-                    ) {
-                        Swal.fire({
-                            icon: "error", // Jenis ikon notifikasi (info, success, error, warning)
-                            title: "",
-                            text: "Tidak ada Fhoto",
-                            confirmButtonText: "Tutup",
-                        });
+                    console.log(response.gambar1);
+                    if (response.gambar1 === null) {
+                        window.open("_blank");
                     } else {
                         window.open(response.gambar1, "_blank");
                     }

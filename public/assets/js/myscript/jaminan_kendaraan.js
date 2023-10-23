@@ -40,7 +40,6 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
-                console.log(response);
                 $("#id").val(response.id);
                 $("#jenis").val(response.jenis_agunan);
                 $("#dokumen").val(response.jenis_dokumen);

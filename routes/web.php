@@ -251,8 +251,11 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('themes')->group(function () {
         // Route::view('/dashboard', 'dashboard.index');
-
-        Route::get('/permohonan/analisa', [AnalisaController::class, 'index'])->name('permohonan.analisa');
+        ROute::controller(AnalisaController::class)->group(function () {
+            Route::get('/permohonan/analisa', 'index')->name('permohonan.analisa');
+            Route::get('/permohonan/data_jadul/{pengajuan}', 'data_jadul')->name('permohonan.data_jadul');
+            Route::post('/permohonan/data_jadul', 'simpanjadul')->name('permohonan.simpanjadul');
+        });
 
         //Analisa Usaha Perdagangan
         Route::controller(UsahaPerdaganganController::class)->group(function () {

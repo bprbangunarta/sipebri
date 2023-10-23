@@ -248,6 +248,16 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="view-foto">
+        <div class="modal-dialog bg-primary">
+            <div class="modal-content text-center">
+                <img id="image-depan" alt="Image 1">
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 @push('myscript')

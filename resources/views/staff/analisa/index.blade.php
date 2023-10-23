@@ -106,7 +106,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">PERMINTAAN JADUL</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ Route('permohonan.simpanjadul') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -116,18 +116,19 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">KODE PENGAJUAN</span>
                                     <input type="text" id="id" name="id" hidden>
-                                    <input class="form-control text-uppercase" type="text" value="123456789S" readonly>
+                                    <input class="form-control text-uppercase" type="text" value="123456789S"
+                                        name="kode_pengajuan" id="kd_pengajuan" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NAMA NASABAH</span>
-                                    <input class="form-control text-uppercase" type="text" value="ZULFADLI RIZAL"
-                                        readonly>
+                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                        type="text" value="ZULFADLI RIZAL" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
-                                    <textarea class="form-control text-uppercase" name="" id=""></textarea>
+                                    <textarea class="form-control text-uppercase" name="keterangan" id=""></textarea>
                                 </div>
                             </div>
                         </div>
@@ -140,4 +141,9 @@
             </div>
         </div>
     </div>
+
 @endsection
+
+@push('myscript')
+    <script src="{{ asset('assets/js/myscript/permintaan_jadul.js') }}"></script>
+@endpush

@@ -106,7 +106,7 @@ class AnalisaJaminanController extends Controller
         $foto2 = $jaminan->foto2 ? asset('storage/image/photo_agunan/' . $jaminan->foto2) : null;
         $foto3 = $jaminan->foto3 ? asset('storage/image/photo_agunan/' . $jaminan->foto3) : null;
         $foto4 = $jaminan->foto4 ? asset('storage/image/photo_agunan/' . $jaminan->foto4) : null;
-        $dir = 'storage/image/photo_agunan/';
+
         $img = [
             'gambar1' => $foto1,
             'gambar2' => $foto2,
@@ -134,7 +134,7 @@ class AnalisaJaminanController extends Controller
                 if ($request->name_img_1) {
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_1);
                 }
-                dd($request);
+
                 $ekstensi = $cek['foto1']->getClientOriginalExtension();
                 $new1 = $request->nama . '_' . 'depan' . '_' . $tanggal . '.' . $ekstensi;
                 $cek['foto1'] = $request->file('foto1')->storeAs('image/photo_agunan', $new1, 'public');
