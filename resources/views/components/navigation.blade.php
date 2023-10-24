@@ -25,6 +25,14 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN MENU</li>
 
+            @hasanyrole($roles)
+                <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
+                    <a href="/dashboard" title="Dashboard">
+                        <i class="fa fa-laptop"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+            @endhasanyrole
+
             {{-- MENU ADMIN --}}
             @can('master data')
                 <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
@@ -58,15 +66,7 @@
                 </li>
             @endcan
 
-            @hasanyrole($roles)
-                <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
-                    <a href="/dashboard" title="Dashboard">
-                        <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                    </a>
-                </li>
-            @endhasanyrole
-
-            <li class="treeview {{ request()->is('data/pengajuan', 'pengajuan') ? 'active' : '' }}">
+            <li class="treeview {{ request()->is('data/pengajuan', 'pengajuan' , 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'otorisasi/pengajuan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
@@ -92,7 +92,7 @@
                     @endcan
 
                     @can('otorisasi pengajuan kredit')
-                        <li class="{{ request()->is('pengajuan') ? 'active' : '' }}">
+                        <li class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'otorisasi/pengajuan') ? 'active' : '' }}">
                             <a href="{{ route('pengajuan.index') }}" title="Otorisasi Pengajuan">
                                 <i class="fa fa-circle-o"></i>
                                 Otorisasi Pengajuan
