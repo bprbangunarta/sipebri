@@ -89,6 +89,7 @@ class PendampingController extends Controller
             'no_identitas' => 'required',
             'masa_identitas' => 'required',
             'nama_pendamping' => 'required',
+            'no_hp' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
             'status' => 'required',
