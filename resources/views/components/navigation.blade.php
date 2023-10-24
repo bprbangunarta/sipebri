@@ -11,12 +11,12 @@
             </div>
         </div>
 
-        <form action="#" method="get" class="sidebar-form">
+        <form action="{{ route('pengajuan.data') }}" method="GET" class="sidebar-form">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Cari Debitur">
+                <input type="text" name="name" class="form-control" value="{{ Request('name') }}" placeholder="Cari Debitur">
                 <span class="input-group-btn">
-                    <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i
-                            class="fa fa-search"></i>
+                    <button type="submit" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
                     </button>
                 </span>
             </div>
@@ -67,8 +67,8 @@
                         </li>
                     @endcan
 
-                    <li class="{{ request()->is('kosong') ? 'active' : '' }}">
-                        <a href="{{ route('user.index') }}" title=" Tracking Pengajuan">
+                    <li class="{{ request()->is('tracking') ? 'active' : '' }}">
+                        <a href="/tracking" title=" Tracking Pengajuan">
                             <i class="fa fa-circle-o"></i>
                             Tracking Pengajuan
                         </a>
