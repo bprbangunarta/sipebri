@@ -97,7 +97,8 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#penjadwalan"
+                                                
+                                                <a href="#" data-toggle="modal" data-target="#modal-penjadwalan"
                                                     data-id="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
                                                     <i class="fa fa-calendar"></i>
@@ -126,7 +127,7 @@
         </section>
     </div>
 
-    <div class="modal fade" id="penjadwalan">
+    <div class="modal fade" id="modal-penjadwalan">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-yellow">
@@ -135,61 +136,61 @@
                     <h4 class="modal-title">PENJADWALAN SURVEY</h4>
                 </div>
                 <form action="{{ route('analisa.updatepenjadwalan') }}" method="POST">
+                    @method('put')
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>NAMA LENGKAP</label>
-                                    <input class="form-control" type="text" name="name" id="name"
-                                        placeholder="ENTRI" required>
-                                </div>
 
-                                <div class="form-group" style="margin-top:-10px;">
-                                    <label>EMAIL ADDRESS</label>
-                                    <input class="form-control" type="email" name="email" id="email"
-                                        placeholder="ENTRI" required>
-                                </div>
-
-                                <div class="form-group" style="margin-top:-10px;">
-                                    <label>USERNAME</label>
-                                    <input class="form-control" type="text" name="username" id="username"
-                                        placeholder="ENTRI" required>
-                                </div>
-                            </div>
+                            <input type="text" name="alamat" id="alamat" hidden>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>KODE USER</label>
-                                    <input class="form-control" type="text" name="code_user" id="code_user"
-                                        minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <label>KODE PENGAJUAN</label>
+                                    <input type="text" class="form-control" name="kode_pengajuan" id="kode_pengajuan" readonly>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
-                                    <label>KODE SURVEYOR</label>
-                                    <input class="form-control" type="text" name="kode_surveyor" id="kode_surveyor"
-                                        minlength="3" maxlength="3" placeholder="ENTRI">
+                                    <label>NAMA NASABAH</label>
+                                    <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah" readonly>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
-                                    <label>KODE KOLEKTOR</label>
-                                    <input class="form-control" type="text" name="kode_kolektor" id="kode_kolektor"
-                                        minlength="3" maxlength="3" placeholder="ENTRI">
-                                </div>
-
-                                <div class="form-group" style="margin-top:-10px;">
-                                    <label>IS ACTIVE?</label>
-                                    <select class="form-control" name="is_active" id="is_active" required>
-                                        <option value="1">AKTIF</option>
-                                        <option value="0">TIDAK AKTIF</option>
+                                    <label>PETUGAS</label>
+                                    <select class="form-control petugas" style="width: 100%;" name="kode_petugas" id="kode_petugas">
+                                        <option value="">--PILIH--</option>
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>TGL. SURVEY</label>
+                                    <input type="date" class="form-control" name="tgl_survei" id="datepicker-tanggal-survei">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>TGL. JADUL 1</label>
+                                    <input type="date" class="form-control" name="tgl_jadul_1" id="datepicker-tanggal-survei1">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>TGL. JADUL 2</label>
+                                    <input type="date" class="form-control" name="tgl_jadul_2" id="datepicker-tanggal-survei2">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>CATATAN</label>
+                                    <textarea class="form-control" rows="3" readonly></textarea>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-primary">SIMPAN</button>
+                        <button type="submit" class="btn btn-warning">SIMPAN</button>
                     </div>
                 </form>
             </div>
@@ -198,8 +199,9 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/user.js') }}"></script>
-    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
-    <script src="{{ asset('assets/js/myscript/update.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/penjadwalan.js') }}"></script>
+    <script>
+        //Initialize Select2 Elements
+        $('.petugas').select2()
+    </script>
 @endpush

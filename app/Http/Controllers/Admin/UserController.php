@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::query();
-        $query->select('users.id AS model_id', 'roles.id AS role_id', 'users.name', 'email', 'username', 'roles.name AS position', 'nama_kantor', 'code_user', 'is_active');
+        $query->select('users.id AS model_id', 'roles.id AS role_id', 'users.name', 'email', 'username', 'roles.name AS position', 'nama_kantor', 'code_user', 'kantor_kode', 'is_active');
         $query->leftJoin('model_has_roles', 'model_has_roles.model_id', '=', 'users.id');
         $query->leftJoin('roles', 'roles.id', '=', 'model_has_roles.role_id');
         $query->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'users.kantor_kode');

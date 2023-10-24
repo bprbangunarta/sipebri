@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Pengajuan Kredit')
+@section('title', 'Data Pengajuan')
 @yield('jquery')
 @section('content')
     <div class="content-wrapper">

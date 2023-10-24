@@ -202,7 +202,7 @@
                                     <label>TANGGAL LAHIR</label>
                                     <input type="text" class="form-control" name="tanggal_lahir" id="datemask"
                                         value="{{ old('tanggal_lahir') }}" data-inputmask="'alias': 'yyyy-mm-dd'"
-                                        data-mask>
+                                        data-mask placeholder="YYYY-MM-DD">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">

@@ -469,10 +469,10 @@
 @endsection
 
 @push('myscript')
-<script>
-    //Initialize Select2 Elements
-    $('.jenis_agunan').select2()
-    $('.jenis_dokumen').select2()
-    $('.dati2').select2()
-</script>
+    <script>
+        //Initialize Select2 Elements
+        $('.jenis_agunan').select2()
+        $('.jenis_dokumen').select2()
+        $('.dati2').select2()
+    </script>
 @endpush

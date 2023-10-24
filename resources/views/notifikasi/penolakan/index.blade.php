@@ -60,7 +60,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">Tidak ada data penolakan.</td>
+                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

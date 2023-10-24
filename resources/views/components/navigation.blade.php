@@ -25,6 +25,39 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN MENU</li>
 
+            {{-- MENU ADMIN --}}
+            @can('master data')
+                <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-cube"></i>
+                        <span>Data Master</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                            <a href="{{ route('user.index') }}" title=" Data User">
+                                <i class="fa fa-circle-o"></i>
+                                Data User
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
+                            <a href="{{ route('role.index') }}" title="Data Role">
+                                <i class="fa fa-circle-o"></i>
+                                Data Role
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
+                            <a href="{{ route('permission.index') }}" title="Permission">
+                                <i class="fa fa-circle-o"></i>
+                                Permission
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
+
             @hasanyrole($roles)
                 <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
                     <a href="/dashboard" title="Dashboard">
@@ -75,39 +108,6 @@
                     </li>
                 </ul>
             </li>
-
-            {{-- MENU ADMIN --}}
-            @can('master data')
-                <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-cube"></i>
-                        <span>Data Master</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
-                            <a href="{{ route('user.index') }}" title=" Data User">
-                                <i class="fa fa-circle-o"></i>
-                                Data User
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
-                            <a href="{{ route('role.index') }}" title="Data Role">
-                                <i class="fa fa-circle-o"></i>
-                                Data Role
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
-                            <a href="{{ route('permission.index') }}" title="Permission">
-                                <i class="fa fa-circle-o"></i>
-                                Permission
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            @endcan
 
             @can('menu permohonan')
                 <li

@@ -101,8 +101,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="10">Tidak ada permohonan Persetujuan Komite.
-                                            </td>
+                                            <td class="text-center" colspan="10">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

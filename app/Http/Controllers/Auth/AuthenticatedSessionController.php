@@ -39,7 +39,8 @@ class AuthenticatedSessionController extends Controller
         // } else {
         //     return redirect('/dashboard')->with('toast_success', 'Welcome back!');
         // }
-        return redirect()->intended(RouteServiceProvider::HOME)->with('toast_success', 'Welcome back!');
+        // return redirect()->intended(RouteServiceProvider::HOME)->with('toast_success', 'Welcome back!');
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

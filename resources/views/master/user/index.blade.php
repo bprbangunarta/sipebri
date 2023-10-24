@@ -18,8 +18,9 @@
                                             value="{{ Request('name') }}" placeholder="Search">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i
-                                                    class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -30,7 +31,6 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                    <tr>
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">NAMA LENGKAP</th>
                                         <th class="text-center">EMAIL</th>
@@ -53,7 +53,7 @@
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->username }}</td>
                                             <td class="text-center">{{ $data->code_user }}</td>
-                                            <td class="text-center">{{ $data->kode_kantor }}</td>
+                                            <td class="text-center">{{ $data->kantor_kode }}</td>
                                             <td>
                                                 @if (empty($data->position))
                                                     -
@@ -69,19 +69,18 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a data-toggle="modal" data-target="#modal-edit"
-                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
+                                                <a data-toggle="modal" data-target="#modal-edit" data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a href="#" class="btn-circle btn-sm btn-danger">
-                                                    <i class="fa fa-key"></i>
+                                                <a data-toggle="modal" data-target="#modal-akses" data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-success">
+                                                    <i class="fa fa-user"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a href="#" class="btn-circle btn-sm btn-primary">
-                                                    <i class="fa fa-user"></i>
+                                                <a data-toggle="modal" data-target="#modal-password" data-user="{{ $data->code_user }}" class="btn-circle btn-sm btn-danger">
+                                                    <i class="fa fa-key"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -270,10 +269,96 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-akses">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">HAK AKSES</h4>
+                </div>
+                <form action="" method="post" id="myForm">
+                    @method('put')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="hidden" class="form-control" name="code_user" id="code">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>ID USER</label>
+                                    <input type="text" class="form-control" name="model_id" id="model_id" readonly>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>NAMA LENGKAP</label>
+                                    <input type="text" class="form-control" name="name" id="names" readonly>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>HAK AKSES</label>
+                                    <select class="form-control role" style="width: 100%;" name="role_id" id="roles_id"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-password">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">RESET PASSWORD</h4>
+                </div>
+                <form action="{{ route('reset.update', ['reset' => $users[0]->code_user]) }}" method="post"
+                    id="reset-password">
+                    @method('put')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="hidden" class="form-control" name="code_user" id="code">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>NAMA LENGKAP</label>
+                                    <input type="text" class="form-control" name="name" id="name_user" readonly>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>EMAIL ADDRESS</label>
+                                    <input type="password" class="form-control" name="reset" id="reset" value="123456" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/user.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/update.js') }}"></script>
+
+    <script>
+        $('.role').select2()
+    </script>
 @endpush
