@@ -170,7 +170,7 @@
                                                             placeholder="Pilih Kelurahan" name="kelurahan"
                                                             id="select-kelurahan">
                                                             @if (is_null($nasabah->kelurahan))
-                                                                <option value="">Pilih Kecamatan</option>
+                                                                <option value="">Pilih Kelurahan</option>
                                                             @else
                                                                 <option value="{{ $nasabah->kelurahan }}">
                                                                     {{ $nasabah->kelurahan }}</option>
@@ -703,31 +703,31 @@
             }));
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
-            var el;
-            window.TomSelect && (new TomSelect(el = document.getElementById('select-kabupaten'), {
-                copyClassesToDropdown: false,
-                dropdownClass: 'dropdown-menu ts-dropdown',
-                optionClass: 'dropdown-item',
-                controlInput: '<input>',
-                render: {
-                    item: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                    option: function(data, escape) {
-                        if (data.customProperties) {
-                            return '<div><span class="dropdown-item-indicator">' + data
-                                .customProperties + '</span>' + escape(data.text) + '</div>';
-                        }
-                        return '<div>' + escape(data.text) + '</div>';
-                    },
-                },
-            }));
-        });
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     var el;
+        //     window.TomSelect && (new TomSelect(el = document.getElementById('select-kabupaten'), {
+        //         copyClassesToDropdown: false,
+        //         dropdownClass: 'dropdown-menu ts-dropdown',
+        //         optionClass: 'dropdown-item',
+        //         controlInput: '<input>',
+        //         render: {
+        //             item: function(data, escape) {
+        //                 if (data.customProperties) {
+        //                     return '<div><span class="dropdown-item-indicator">' + data
+        //                         .customProperties + '</span>' + escape(data.text) + '</div>';
+        //                 }
+        //                 return '<div>' + escape(data.text) + '</div>';
+        //             },
+        //             option: function(data, escape) {
+        //                 if (data.customProperties) {
+        //                     return '<div><span class="dropdown-item-indicator">' + data
+        //                         .customProperties + '</span>' + escape(data.text) + '</div>';
+        //                 }
+        //                 return '<div>' + escape(data.text) + '</div>';
+        //             },
+        //         },
+        //     }));
+        // });
 
         document.addEventListener("DOMContentLoaded", function() {
             var el;
@@ -1029,9 +1029,11 @@
         $(document).ready(function() {
             //Ambil data kabupaten
             $("#select-kabupaten").on('change', function() {
+
                 $('#select-kecamatan').empty()
                 // $('#select-kelurahan').empty()
                 var nama = $("#select-kabupaten").val();
+                console.log(nama)
                 $.ajax({
                     url: "/nasabah/kabupaten",
                     type: "POST",
@@ -1040,6 +1042,7 @@
                         name: nama
                     },
                     success: function(response) {
+
                         let st = JSON.stringify(response);
                         let obj = Object.values(response);
                         var ch = []

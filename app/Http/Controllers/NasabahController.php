@@ -53,7 +53,7 @@ class NasabahController extends Controller
                     $kosong['nasabah']->kd_pengajuan = Crypt::encrypt($kosong['nasabah']->kd_pengajuan);
                     $cek = Midle::analisa_usaha($enc);
 
-                    return view('nasabah.edit', [
+                    return view('pengajuan.data-nasabah', [
                         'data' => $cek[0],
                         'pend' => $kosong['pend'],
                         'job' => $kosong['job'],
@@ -76,7 +76,7 @@ class NasabahController extends Controller
 
                     $cek = Midle::analisa_usaha($enc);
 
-                    return view('nasabah.edit', [
+                    return view('pengajuan.data-nasabah', [
                         'data' => $cek[0],
                         'pend' => $cif['pend'],
                         'job' => $cif['job'],

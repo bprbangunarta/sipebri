@@ -61,6 +61,7 @@ class PenjadwalanController extends Controller
             'tgl_survei' => $request->tgl_survei,
             'tgl_jadul_1' => $request->tgl_jadul_1,
             'tgl_jadul_2' => $request->tgl_jadul_2,
+            'tracking' => 'Proses Survei',
             'auth_user' => Auth::user()->code_user,
         ];
 

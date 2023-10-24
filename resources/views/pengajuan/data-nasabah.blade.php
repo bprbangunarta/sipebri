@@ -153,77 +153,10 @@
                                             <div style="margin-top:5px;width: 100%;float:right;">
                                                 <span class="fw-bold">ALAMAT SEKARANG</span>
                                                 @if (is_null($nasabah->alamat_sekarang))
-                                                    <input type="text" class="form-control" name="alamat_sekarang" value="{{ old('alamat_sekarang') }}" placeholder="ENTRI" required>
+                                                    <input type="text" class="form-control" name="required>
                                                 @else
                                                     <input type="text" class="form-control" name="alamat_sekarang" id="alamat_sekarang" value="{{ old('alamat_sekarang', $nasabah->alamat_sekarang) }}" placeholder="ENTRI" required>
                                                 @endif
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">AGAMA</span>
-                                                <select class="form-control agama" style="width: 100%;" name="agama" required>
-                                                    @if (is_null($nasabah->religi))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->agama }}">
-                                                            {{ $nasabah->religi }}
-                                                        </option>
-                                                    @endif
-
-                                                    <option value="1">ISLAM</option>
-                                                    <option value="2">KATOLIK</option>
-                                                    <option value="3">KRISTEN</option>
-                                                    <option value="4">HINDU</option>
-                                                    <option value="5">BUDHA</option>
-                                                    <option value="6">KONG HU CU</option>
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">KELAMIN</span>
-                                                <select class="form-control kelamin" style="width: 100%;" name="jenis_kelamin" required>
-                                                    @if (is_null($nasabah->jk))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->jenis_kelamin }}">
-                                                            {{ $nasabah->jk }}</option>
-                                                    @endif
-
-                                                    <option value="1">PRIA</option>
-                                                    <option value="2">WANITA</option>
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KEWARGANEGARAAN</span>
-                                                <select type="text" class="form-control negara" style="width: 100%;" name="kewarganegaraan">
-                                                    @if (is_null($nasabah->kn))
-                                                        <option value="WNI">Warga Negara Indonesia</option>
-                                                        <option value="WNA">Warga Negara Asing</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->kewarganegaraan }}">
-                                                            {{ $nasabah->kn }}
-                                                        </option>
-                                                    @endif
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">GELAR</span>
-                                                <select type="text" class="form-control gelar" name="pendidikan_kode">
-                                                    @if (is_null($nasabah->pendidikan_kode))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->pendidikan_kode }}">
-                                                            {{ $nasabah->std }}
-                                                        </option>
-                                                    @endif
-
-                                                    @foreach ($pend as $item)
-                                                        <option value="{{ $item->kode_pendidikan }}">
-                                                            {{ $item->nama_pendidikan }}</option>
-                                                    @endforeach
-                                                </select>
                                             </div>
                                         </div>
 
