@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class AnalisaJaminanController extends Controller
 {
@@ -119,6 +120,7 @@ class AnalisaJaminanController extends Controller
 
     public function fhotokendaraan(Request $request)
     {
+
         try {
             $cek = $request->validate([
                 'foto1' => 'image|mimes:jpeg,png,jpg|max:5120',
@@ -136,7 +138,7 @@ class AnalisaJaminanController extends Controller
                 }
 
                 $ekstensi = $cek['foto1']->getClientOriginalExtension();
-                $new1 = $request->nama . '_' . 'depan' . '_' . $tanggal . '.' . $ekstensi;
+                $new1 =  'depan' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto1'] = $request->file('foto1')->storeAs('image/photo_agunan', $new1, 'public');
                 $cek['foto1'] = $new1;
             } else {
@@ -148,7 +150,7 @@ class AnalisaJaminanController extends Controller
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_2);
                 }
                 $ekstensi = $cek['foto2']->getClientOriginalExtension();
-                $new2 = $request->nama . '_' . 'belakang' . '_' . $tanggal . '.' . $ekstensi;
+                $new2 =  'belakang' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto2'] = $request->file('foto2')->storeAs('image/photo_agunan', $new2, 'public');
                 $cek['foto2'] = $new2;
             } else {
@@ -160,7 +162,7 @@ class AnalisaJaminanController extends Controller
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_3);
                 }
                 $ekstensi = $cek['foto3']->getClientOriginalExtension();
-                $new3 = $request->nama . '_' . 'kiri' . '_' . $tanggal . '.' . $ekstensi;
+                $new3 =  'kiri' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto3'] = $request->file('foto3')->storeAs('image/photo_agunan', $new3, 'public');
                 $cek['foto3'] = $new3;
             } else {
@@ -172,13 +174,13 @@ class AnalisaJaminanController extends Controller
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_4);
                 }
                 $ekstensi = $cek['foto4']->getClientOriginalExtension();
-                $new4 = $request->nama . '_' . 'kanan' . '_' . $tanggal . '.' . $ekstensi;
+                $new4 =  'kanan' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto4'] = $request->file('foto4')->storeAs('image/photo_agunan', $new4, 'public');
                 $cek['foto4'] = $new4;
             } else {
                 $cek['foto4'] = $request->name_img_4;
             }
-
+            // dd($cek);
             DB::table('data_jaminan')->where('id', $request->id)->update($cek);
             return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
         } catch (\Throwable $th) {
