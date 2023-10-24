@@ -6,7 +6,7 @@
         <section class="content">
             <div class="row">
                 <div class="col-md-3">
-                    @include('theme.menu-pengajuan', ['nasabah' => $data->kd_pengajuan,])
+                    @include('theme.menu-pengajuan', ['nasabah' => $data->kd_pengajuan])
                 </div>
 
                 <div class="col-xs-9">
@@ -22,7 +22,8 @@
                         <div class="tab-content">
                             <div class="tab-pane active">
 
-                                <form action="{{ route('nasabah.update', ['nasabah' => $nasabah->kode_nasabah]) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('nasabah.update', ['nasabah' => $nasabah->kode_nasabah]) }}"
+                                    method="POST" enctype="multipart/form-data">
                                     @method('PUT')
                                     @csrf
                                     <div class="box-body" style="margin-top: -10px;font-size:12px;">
@@ -31,14 +32,16 @@
                                             <div style="width: 49.5%;float:left;">
                                                 <span class="fw-bold">NO CIF</span>
                                                 <input type="hidden" value="{{ $nasabah->kode_user }}" name="input_user">
-                                                <input type="text" class="form-control" name="no_cif" id="no_cif" value="{{ $nasabah->nocif }}" readonly>
+                                                <input type="text" class="form-control" name="no_cif" id="no_cif"
+                                                    value="{{ $nasabah->nocif }}" readonly>
                                             </div>
 
                                             <div style="width: 49.5%;float:right;">
                                                 <span class="fw-bold">JENIS ID</span>
-                                                <select type="text" class="form-select ktp" style="width: 100%;" name="identitas" required>
+                                                <select type="text" class="form-select ktp" style="width: 100%;"
+                                                    name="identitas" required>
                                                     <option value="{{ $nasabah->identitas }}" selected>
-                                                    {{ $nasabah->iden }}</option>
+                                                        {{ $nasabah->iden }}</option>
                                                     <option value="1">KTP</option>
                                                     <option value="2">SIM</option>
                                                     <option value="3">PASPORT</option>
@@ -48,83 +51,103 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NO IDENTITAS</span>
-                                                <input type="text" class="form-control" name="no_identitas" id="no_identitas" placeholder="ENTRI" value="{{ old('no_identitas', $nasabah->no_identitas) }}" required>
+                                                <input type="text" class="form-control" name="no_identitas"
+                                                    id="no_identitas" placeholder="ENTRI"
+                                                    value="{{ old('no_identitas', $nasabah->no_identitas) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">MASA IDENTITAS</span>
                                                 @if (is_null($nasabah->masa_identitas))
-                                                <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="min" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask/>
+                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                        name="masa_identitas" id="min"
+                                                        data-inputmask="'alias': 'YYYY-DD-MM'" data-mask />
                                                 @else
-                                                <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="mio" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask value="{{ $nasabah->masa_identitas }}" />
+                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                        name="masa_identitas" id="mio"
+                                                        data-inputmask="'alias': 'YYYY-DD-MM'" data-mask
+                                                        value="{{ $nasabah->masa_identitas }}" />
                                                 @endif
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA PANGGILAN</span>
-                                                <input type="text" class="form-control" name="nama_panggilan" id="nama_panggilan" placeholder="ENTRI" value="{{ old('nama_panggilan', $nasabah->sname) }}" required>
+                                                <input type="text" class="form-control" name="nama_panggilan"
+                                                    id="nama_panggilan" placeholder="ENTRI"
+                                                    value="{{ old('nama_panggilan', $nasabah->sname) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NAMA LENGKAP</span>
-                                                <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah" placeholder="ENTRI" value="{{ old('nama_nasabah', $nasabah->nama_nasabah) }}">
+                                                <input type="text" class="form-control" name="nama_nasabah"
+                                                    id="nama_nasabah" placeholder="ENTRI"
+                                                    value="{{ old('nama_nasabah', $nasabah->nama_nasabah) }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">TEMPAT LAHIR</span>
-                                                <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="ENTRI" value="{{ old('tempat_lahir', $nasabah->tempat_lahir) }}" required>
+                                                <input type="text" class="form-control" name="tempat_lahir"
+                                                    id="tempat_lahir" placeholder="ENTRI"
+                                                    value="{{ old('tempat_lahir', $nasabah->tempat_lahir) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TANGGAL LAHIR</span>
                                                 @if (is_null($nasabah->tanggal_lahir))
-                                                <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="tlln" />
+                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                        name="tanggal_lahir" id="tlln" />
                                                 @else
-                                                <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="ttlo" value="{{ $nasabah->tanggal_lahir }}" />
+                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                        name="tanggal_lahir" id="ttlo"
+                                                        value="{{ $nasabah->tanggal_lahir }}" />
                                                 @endif
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">KABUPATEN</span>
-                                                <select class="form-select kab" style="width: 100%;" name="kode_dati" id="select-kabupaten" required>
+                                                <select class="form-select kab" style="width: 100%;" name="kode_dati"
+                                                    id="select-kabupaten" required>
                                                     @if (is_null($nasabah->kode_dati))
-                                                    <option value="">--PILIH--</option>
+                                                        <option value="">--PILIH--</option>
                                                     @else
-                                                    <option class="text-uppercase" value="{{ $nasabah->kode_dati }}">
-                                                        {{ $nasabah->nm_dati }}
-                                                    </option>
+                                                        <option class="text-uppercase" value="{{ $nasabah->kode_dati }}">
+                                                            {{ $nasabah->nm_dati }}
+                                                        </option>
                                                     @endif
 
                                                     @foreach ($kab as $item)
-                                                    <option class="text-uppercase" value="{{ $item->kode_dati }}">
-                                                        {{ $item->nama_dati }}
-                                                    </option>
+                                                        <option class="text-uppercase" value="{{ $item->kode_dati }}">
+                                                            {{ $item->nama_dati }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">KECAMATAN</span>
-                                                <select class="form-select kec kecamatan" style="width: 100%;" name="kecamatan" id="select-kecamatan" required>
+                                                <select class="form-select kec kecamatan" style="width: 100%;"
+                                                    name="kecamatan" id="select-kecamatan" required>
                                                     @if (is_null($nasabah->kecamatan))
-                                                    <option value="">--PILIH--</option>
+                                                        <option value="">--PILIH--</option>
                                                     @else
-                                                    <option value="{{ $nasabah->kecamatan }}">
-                                                        {{ $nasabah->kecamatan }}
-                                                    </option>
+                                                        <option value="{{ $nasabah->kecamatan }}">
+                                                            {{ $nasabah->kecamatan }}
+                                                        </option>
                                                     @endif
                                                 </select>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">KELURAHAN</span>
-                                                <select type="text" class="form-select kel kelurahan"  style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan" id="select-kelurahan">
+                                                <select type="text" class="form-select kel kelurahan"
+                                                    style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan"
+                                                    id="select-kelurahan">
                                                     @if (is_null($nasabah->kelurahan))
-                                                    <option value="">Pilih Kecamatan</option>
+                                                        <option value="">Pilih Kecamatan</option>
                                                     @else
-                                                    <option value="{{ $nasabah->kelurahan }}">
-                                                        {{ $nasabah->kelurahan }}
-                                                    </option>
+                                                        <option value="{{ $nasabah->kelurahan }}">
+                                                            {{ $nasabah->kelurahan }}
+                                                        </option>
                                                     @endif
                                                 </select>
                                             </div>
@@ -132,12 +155,12 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">WILAYAH</span>
                                                 @if (is_null($nasabah->kota))
-                                                <input class="form-control dati2" type="text" name="kota" id="kota" placeholder="Kota"
-                                                value="{{ old('kota') }}">
+                                                    <input class="form-control dati2" type="text" name="kota"
+                                                        id="kota" placeholder="Kota" value="{{ old('kota') }}">
                                                 @else
-                                                <input class="form-control" type="text" name="kota"
-                                                id="kota" placeholder="Kota"
-                                                value="{{ old('kota', $nasabah->kota) }}">
+                                                    <input class="form-control" type="text" name="kota"
+                                                        id="kota" placeholder="Kota"
+                                                        value="{{ old('kota', $nasabah->kota) }}">
                                                 @endif
                                             </div>
                                         </div>
@@ -147,13 +170,15 @@
                                             <div style="width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA ITEM</span>
                                                 <input value="KONSUMSI POKOK" name="nama1" hidden>
-                                                <input class="form-control input-sm form-border" type="text" name="" id="">
+                                                <input class="form-control input-sm form-border" type="text"
+                                                    name="" id="">
                                             </div>
 
                                             <div style="width: 49.5%;float:right;">
                                                 <span class="fw-bold">NAMA ITEM</span>
                                                 <input value="KESEHATAN" name="nama2" hidden>
-                                                <input class="form-control input-sm form-border" type="text" name="" id="">
+                                                <input class="form-control input-sm form-border" type="text"
+                                                    name="" id="">
                                             </div>
                                         </div>
 
@@ -202,7 +227,6 @@
         $('#ttlo').inputmask('yyyy-mm-dd', {
             'placeholder': 'YYYY-DD-MM'
         })
-
     </script>
 
     <script>
@@ -263,9 +287,8 @@
             }
         }
     </script>
-@endpush
 
-@section('scr')
+
     <script>
         $(document).ready(function() {
             //Ambil data kabupaten
@@ -349,4 +372,8 @@
             });
         });
     </script>
-@endsection
+@endpush
+
+{{-- @section('scr')
+
+@endsection --}}
