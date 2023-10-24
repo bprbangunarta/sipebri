@@ -210,11 +210,23 @@
                                     </div>
                                 </div>
                                 
+                                @can('edit pengajuan kredit')
                                 <div class="box-body" style="margin-top:-20px;">
                                     <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</button>
                                 </div>
+                                @endcan
                             </div>
                         </form>
+
+                        @can('otorisasi pengajuan kredit')
+                            <form action="{{ route('otorpendamping', ['otorisasi' => $nasabah->kd_pengajuan]) }}" method="POST">
+                                @csrf
+                                <div class="box-body" style="margin-top:-20px;">
+                                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">OTORISASI</button>
+                                </div>
+                            </form>
+                        @endcan
+
                     </div>
                 </div>
         </section>

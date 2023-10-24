@@ -52,8 +52,7 @@
                                     </div>
                                     <div class="col d-flex flex-column">
 
-                                        <form action="{{ route('konfirmasi', ['konfirmasi' => $data->kd_pengajuan]) }}"
-                                            method="post">
+                                        <form action="{{ route('konfirmasi', ['konfirmasi' => $data->kd_pengajuan]) }}" method="post">
                                             @csrf
                                             <div class="card-body">
                                                 <div class="card mb-3">

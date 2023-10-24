@@ -29,14 +29,21 @@
 
                             <div class="tab-pane active" id="kendaraan">
                                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
-                                    <table class="table table-striped table-hover table-bordered table-condensed">
+                                    <table class="table table-bordered">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center" style="width: 200px">Agunan</th>
-                                                <th class="text-center" style="width: 200px">Informasi</th>
-                                                <th class="text-center">Detail</th>
-                                                <th class="text-center" style="width: 100px">Taksasi</th>
-                                                <th class="text-center" style="width: 100px">Aksi</th>
+                                            <tr class="bg-blue">
+                                                <th class="text-center" style="width: 200px">AGUNAN</th>
+                                                <th class="text-center" style="width: 200px">INFORMASI</th>
+                                                <th class="text-center">DETAIL</th>
+                                                <th class="text-center" style="width: 100px">TAKSASI</th>
+                                                
+                                                @can('edit pengajuan kredit')
+                                                <th class="text-center" style="width: 100px">AKSI</th>
+                                                @endcan
+
+                                                @can('otorisasi pengajuan kredit')
+                                                <th class="text-center" style="width: 50px">AKSI</th>
+                                                @endcan
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -63,7 +70,10 @@
                                                         <b>No. Polisi: </b> Konten
                                                     </td>
                                                     <td style="vertical-align: middle;">
-                                                        Rp.  21.000.000</td>
+                                                        Rp.  21.000.000
+                                                    </td>
+
+                                                    @can('edit pengajuan kredit')
                                                     <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
                                                         <button data-toggle="modal" data-target="#modal-edit" data-id="15" class="btn btn-sm btn-warning">
                                                             <i class="fa fa-file-text-o"></i>
@@ -73,6 +83,16 @@
                                                             <i class="fa fa-image"></i>
                                                         </button>
                                                     </td>
+                                                    @endcan
+
+                                                    @can('otorisasi pengajuan kredit')
+                                                    <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
+                                                        <button data-toggle="modal" data-target="#otor-kendaraan" data-id="#"
+                                                            class="btn btn-sm btn-success">
+                                                            <i class="fa fa-check"></i>
+                                                        </button>
+                                                    </td>
+                                                    @endcan
                                                 </tr>
                                             </tbody>
                                     </table>
@@ -82,14 +102,21 @@
 
                             <div class="tab-pane" id="tanah">
                                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
-                                    <table class="table table-striped table-hover table-bordered table-condensed">
+                                    <table class="table table-bordered">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center" style="width: 200px">Agunan</th>
-                                                <th class="text-center" style="width: 150px">Informasi</th>
-                                                <th class="text-center">Detail</th>
-                                                <th class="text-center" style="width: 120px">Taksasi</th>
-                                                <th class="text-center" style="width: 100px">Aksi</th>
+                                            <tr class="bg-blue">
+                                                <th class="text-center" style="width: 200px">AGUNAN</th>
+                                                <th class="text-center" style="width: 150px">INFORMASI</th>
+                                                <th class="text-center">DETAIL</th>
+                                                <th class="text-center" style="width: 120px">TAKSASI</th>
+
+                                                @can('edit pengajuan kredit')
+                                                <th class="text-center" style="width: 100px">AKSI</th>
+                                                @endcan
+
+                                                @can('otorisasi pengajuan kredit')
+                                                <th class="text-center" style="width: 50px">AKSI</th>
+                                                @endcan
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -119,6 +146,8 @@
                                                 <td style="vertical-align: middle;">
                                                     {{-- {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }} --}}
                                                 </td>
+
+                                                @can('edit pengajuan kredit')
                                                 <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
                                                     <button data-toggle="modal" data-target="#modal-edit" data-id="#"
                                                         class="btn btn-sm btn-warning">
@@ -129,6 +158,16 @@
                                                         <i class="fa fa-image"></i>
                                                     </button>
                                                 </td>
+                                                @endcan
+
+                                                @can('otorisasi pengajuan kredit')
+                                                <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
+                                                    <button data-toggle="modal" data-target="#otor-tanah" data-id="#"
+                                                        class="btn btn-sm btn-success">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+                                                </td>
+                                                @endcan
                                             </tr>
                                         </tbody>
                                     </table>
@@ -138,14 +177,21 @@
 
                             <div class="tab-pane" id="lainnya">
                                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
-                                    <table class="table table-striped table-hover table-bordered table-condensed">
+                                    <table class="table table-bordered">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center" style="width: 200px">Agunan</th>
-                                                <th class="text-center" style="width: 150px">Informasi</th>
-                                                <th class="text-center">Detail</th>
-                                                <th class="text-center" style="width: 100px">Taksasi</th>
-                                                <th class="text-center" style="width: 100px">Aksi</th>
+                                            <tr class="bg-blue">
+                                                <th class="text-center" style="width: 200px">AGUNAN</th>
+                                                <th class="text-center" style="width: 150px">INFORMASI</th>
+                                                <th class="text-center">DETAIL</th>
+                                                <th class="text-center" style="width: 100px">TAKSASI</th>
+
+                                                @can('edit pengajuan kredit')
+                                                <th class="text-center" style="width: 100px">AKSI</th>
+                                                @endcan
+
+                                                @can('otorisasi pengajuan kredit')
+                                                <th class="text-center" style="width: 50px">AKSI</th>
+                                                @endcan
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -172,6 +218,8 @@
                                                     BPJS mudah dicairkan
                                                 </td>
                                                 <td style="vertical-align: middle;">Rp8.000.000</td>
+
+                                                @can('edit pengajuan kredit')
                                                 <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
                                                     <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
                                                         <i class="fa fa-file-text-o"></i>
@@ -181,6 +229,16 @@
                                                         <i class="fa fa-image"></i>
                                                     </button>
                                                 </td>
+                                                @endcan
+
+                                                @can('otorisasi pengajuan kredit')
+                                                <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
+                                                    <button data-toggle="modal" data-target="#otor-lainnya" data-id="#"
+                                                        class="btn btn-sm btn-success">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+                                                </td>
+                                                @endcan
                                             </tr>
                                         </tbody>
                                     </table>

@@ -77,7 +77,7 @@
             @can('otorisasi pengajuan kredit')
             <li class="{{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">
                 <a href="{{ route('pengajuan.otorisasi', ['nasabah' => $nasabah]) }}">
-                    <i class="fa fa-folder-o"></i> Konfirmasi Data
+                    <i class="fa fa-folder-o"></i> Otorisasi Data
                 </a>
             </li>
             @endcan
