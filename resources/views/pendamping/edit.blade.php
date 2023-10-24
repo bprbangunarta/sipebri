@@ -264,7 +264,7 @@
                                                 </div>
                                             </div>
 
-                                            @can('pendamping edit')
+                                            @can('edit pengajuan kredit')
                                                 <div class="card-footer bg-transparent mt-auto">
                                                     <div class="btn-list justify-content-end">
                                                         <button type="submit" class="btn btn-primary text-white ms-auto">
@@ -275,7 +275,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('pendamping otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form
                                                 action="{{ route('otorpendamping', ['otorisasi' => $nasabah->kd_pengajuan]) }}"
                                                 method="POST">

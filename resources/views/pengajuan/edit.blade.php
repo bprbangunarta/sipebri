@@ -239,7 +239,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('pengajuan otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form
                                                 action="{{ route('otorpengajuan', ['otorisasi' => $pengajuan->kode_pengajuan]) }}"
                                                 method="POST">

@@ -35,8 +35,11 @@
                                         <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center" width="45%">ALAMAT</th>
                                         <th class="text-center" width="15%">PENGAJUAN</th>
-                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center" width="8%">AKSI</th>
+                                        
+                                        @can('edit pengajuan kredit')
                                         <th class="text-center" width="5%">CETAK</th>
+                                        @endcan
 
                                         {{-- @can('hapus pengajuan kredit')
                                             <th class="text-center" width="3%">HAPUS</th>
@@ -103,7 +106,7 @@
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
-                                                    <a href="#" class="btn btn-sm btn-success">
+                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}" class="btn btn-sm btn-success" title="Otorisasi Pengajuan">
                                                         <i class="fa fa-check"></i>
                                                     </a>
                                                 @endcan

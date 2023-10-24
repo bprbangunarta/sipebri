@@ -125,7 +125,7 @@
                                                 </div>
                                             </div>
 
-                                            @can('survei edit')
+                                            @can('edit pengajuan kredit')
                                                 <div class="card-footer bg-transparent mt-auto">
                                                     <div class="btn-list justify-content-end">
                                                         <button type="submit" class="btn btn-primary text-white ms-auto">
@@ -136,7 +136,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('survei otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form action="{{ route('otorsurvei', ['otorisasi' => $data->kd_pengajuan]) }}"
                                                 method="POST">
                                                 @csrf

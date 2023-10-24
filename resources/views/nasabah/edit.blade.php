@@ -595,7 +595,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('nasabah otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form action="{{ route('otornasabah', ['otorisasi' => $nasabah->kd_nasabah]) }}"
                                                 method="POST">
                                                 @csrf

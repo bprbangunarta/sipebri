@@ -77,7 +77,7 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#modal-edit" data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
+                                                <a data-toggle="modal" data-target="#penjadwalan" data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
                                                     <i class="fa fa-calendar"></i>
                                                 </a>
                                             </td>
@@ -104,15 +104,15 @@
         </section>
     </div>
 
-    <div class="modal fade" id="modal-tambah">
+    <div class="modal fade" id="penjadwalan">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-blue">
+                <div class="modal-header bg-yellow">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">TAMBAH USER</h4>
+                    <h4 class="modal-title">PENJADWALAN SURVEY</h4>
                 </div>
-                <form action="{{ route('user.store') }}" method="POST">
+                <form action="{{ route('analisa.updatepenjadwalan') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
