@@ -148,7 +148,6 @@
                                                                     {{ $item->nama_dati }}
                                                                 </option>
                                                             @endforeach
-
                                                         </select>
                                                     </div>
                                                     <div class="col-md">
