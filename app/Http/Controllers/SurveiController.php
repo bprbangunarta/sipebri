@@ -92,7 +92,7 @@ class SurveiController extends Controller
             $cek->plafon = $dt[0]->plafon;
             $cek->jangka_waktu = $dt[0]->jangka_waktu;
 
-            return view('survei.edit', [
+            return view('pengajuan.data-surveyor', [
                 'data' => $cek,
                 'kasi' => $kasi,
                 'staff' => $staff,

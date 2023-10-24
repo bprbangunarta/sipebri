@@ -43,7 +43,7 @@ class KonfirmasiController extends Controller
             $cek[0]->plafon = $dt[0]->plafon;
             $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
 
-            return view('pengajuan.konfirmasi', [
+            return view('pengajuan.data-konfirmasi', [
                 'data' => $cek[0],
                 'konfirmasi' => $konfirmasi[0],
             ]);
@@ -133,7 +133,7 @@ class KonfirmasiController extends Controller
             $cek[0]->plafon = $dt[0]->plafon;
             $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
 
-            return view('pengajuan.otorisasi', [
+            return view('pengajuan.data-otorisasi', [
                 'data' => $cek[0],
                 'otorisasi' => $otorisasi[0],
             ]);

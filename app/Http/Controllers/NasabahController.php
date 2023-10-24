@@ -93,7 +93,7 @@ class NasabahController extends Controller
                 //tambah data  
                 $cek = Midle::analisa_usaha($enc);
 
-                return view('nasabah.edit', [
+                return view('pengajuan.data-nasabah', [
                     'data' => $cek[0],
                     'pend' => $data['pend'],
                     'job' => $data['job'],
