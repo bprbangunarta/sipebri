@@ -135,13 +135,13 @@ class PengajuanController extends Controller
             }
 
             // mencari nama
-            $query = DB::connection('sqlsrv')->table('resort')->select('kode', 'ket')
-                ->where('kode', $peng->resort_kode)->first();
 
-            if (is_null($query)) {
-                $peng->nama_resort = null;
-            } else {
+            if (!is_null($peng->resort_kode)) {
+                $query = DB::connection('sqlsrv')->table('resort')->select('kode', 'ket')
+                    ->where('kode', $peng->resort_kode ?? null)->first();
                 $peng->nama_resort = $query->ket;
+            } else {
+                $peng->nama_resort = null;
             }
 
             //Data auth
