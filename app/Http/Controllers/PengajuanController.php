@@ -247,8 +247,8 @@ class PengajuanController extends Controller
             'atas_nama' => 'required',
             'masa_agunan' => 'required',
             'kode_dati' => 'required',
-            'lokasi' => 'required',
-            'catatan' => 'required',
+            'lokasi' => '',
+            'catatan' => '',
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
@@ -321,8 +321,8 @@ class PengajuanController extends Controller
             'atas_nama' => 'required',
             'masa_agunan' => 'required',
             'kode_dati' => 'required',
-            'lokasi' => 'required',
-            'catatan' => 'required',
+            'lokasi' => '',
+            'catatan' => '',
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
