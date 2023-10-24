@@ -1,43 +1,147 @@
 $(document).ready(function () {
     $("#modal-foto").on("show.bs.modal", function (event) {
-        var button = $(event.relatedTarget); // Tombol yang membuka modal
-        var id = button.data("id"); // Ambil data-id dari tombol
-        var dataId = id.split(",");
-
-        // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-        $.ajax({
-            url:
-                "/themes/analisa/jaminan/fhoto/kendaraan/data/" +
-                dataId[0] +
-                "/edit",
-            type: "GET",
-            dataType: "json",
-            cache: false,
-            success: function (response) {
-                $("#prevdepan").click(function (e) {
-                    e.preventDefault();
-                    $("#modal-foto").modal("show");
+        $("#prevdepan")
+            .off("click")
+            .on("click", function (e) {
+                e.preventDefault();
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var token = $('meta[name="csrf-token"]').attr("content");
+                var id = button.data("id"); // Ambil data-id dari tombol
+                var dataId = id.split(",");
+                var data = {
+                    iddata: dataId[0],
+                    no: "foto1",
+                    _token: token,
+                };
+                $.ajax({
+                    url: "/themes/analisa/jaminan/fhoto/kendaraan/prev",
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        if ($.isEmptyObject(response)) {
+                            Swal.fire({
+                                title: "",
+                                text: "Tidak Ada Gambar",
+                                icon: "error",
+                                confirmButtonText: "Ok",
+                            });
+                        } else {
+                            window.open(response, "_blank");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", xhr.responseText);
+                    },
                 });
-                $("#name_img_1").val(response.foto1);
-                $("#image-1").attr("src", response.foto1);
-                $("#name_img_2").val(response.foto2);
-                $("#name_img_3").val(response.foto3);
-                $("#name_img_4").val(response.foto4);
-            },
-            error: function (xhr, status, error) {
-                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                console.error("Error:", xhr.responseText);
-            },
-        });
-
-        function notif() {
-            Swal.fire({
-                text: "Anda tidak memiliki gambar",
-                icon: "warning",
-                showCancelButton: no,
-                confirmButtonText: "Ok!",
-                cancelButtonText: "Tidak, batalkan",
             });
-        }
+
+        $("#prevbelakang")
+            .off("click")
+            .on("click", function (e) {
+                e.preventDefault();
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var token = $('meta[name="csrf-token"]').attr("content");
+                var id = button.data("id"); // Ambil data-id dari tombol
+                var dataId = id.split(",");
+                var data = {
+                    iddata: dataId[0],
+                    no: "foto2",
+                    _token: token,
+                };
+                $.ajax({
+                    url: "/themes/analisa/jaminan/fhoto/kendaraan/prev",
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        if ($.isEmptyObject(response)) {
+                            Swal.fire({
+                                title: "",
+                                text: "Tidak Ada Gambar",
+                                icon: "error",
+                                confirmButtonText: "Ok",
+                            });
+                        } else {
+                            window.open(response, "_blank");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
+            });
+
+        $("#prevkiri")
+            .off("click")
+            .on("click", function (e) {
+                e.preventDefault();
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var token = $('meta[name="csrf-token"]').attr("content");
+                var id = button.data("id"); // Ambil data-id dari tombol
+                var dataId = id.split(",");
+                var data = {
+                    iddata: dataId[0],
+                    no: "foto3",
+                    _token: token,
+                };
+                $.ajax({
+                    url: "/themes/analisa/jaminan/fhoto/kendaraan/prev",
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        if ($.isEmptyObject(response)) {
+                            Swal.fire({
+                                title: "",
+                                text: "Tidak Ada Gambar",
+                                icon: "error",
+                                confirmButtonText: "Ok",
+                            });
+                        } else {
+                            window.open(response, "_blank");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
+            });
+
+        $("#prevkanan")
+            .off("click")
+            .on("click", function (e) {
+                e.preventDefault();
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var token = $('meta[name="csrf-token"]').attr("content");
+                var id = button.data("id"); // Ambil data-id dari tombol
+                var dataId = id.split(",");
+                var data = {
+                    iddata: dataId[0],
+                    no: "foto4",
+                    _token: token,
+                };
+                $.ajax({
+                    url: "/themes/analisa/jaminan/fhoto/kendaraan/prev",
+                    type: "POST",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        if ($.isEmptyObject(response)) {
+                            Swal.fire({
+                                title: "",
+                                text: "Tidak Ada Gambar",
+                                icon: "error",
+                                confirmButtonText: "Ok",
+                            });
+                        } else {
+                            window.open(response, "_blank");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
+            });
     });
 });

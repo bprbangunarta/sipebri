@@ -323,7 +323,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/jaminan/kendaraan', 'kendaraan')->name('taksasi.kendaraan');
             Route::post('/analisa/jaminan/kendaraan', 'updatekendaraan')->name('taksasi.updatekendaraan');
             Route::post('/analisa/jaminan/fhoto/kendaraan', 'fhotokendaraan')->name('taksasi.fhotokendaraan');
-            Route::get('/analisa/jaminan/fhoto/kendaraan/{id}/edit', 'previewkendaraan')->name('taksasi.previewkendaraan');
+            Route::post('/analisa/jaminan/fhoto/kendaraan/prev', 'previewkendaraan')->name('taksasi.previewkendaraan');
             Route::get('/analisa/jaminan/fhoto/kendaraan/data/{id}/edit', 'datakendaraan')->name('taksasi.datakendaraan');
             Route::get('/analisa/jaminan/kendaraan/{id}/edit', 'editkendaraan')->name('taksasi.editkendaraan');
             Route::get('/analisa/jaminan/tanah', 'tanah')->name('taksasi.tanah');

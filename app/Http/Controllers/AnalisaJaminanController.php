@@ -22,10 +22,12 @@ class AnalisaJaminanController extends Controller
                 ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
                 ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
                 ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jaminan.nilai_taksasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.*', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Kendaraan')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
+
+            //
 
             return view('staff.analisa.jaminan.kendaraan', [
                 'data' => $cek[0],
@@ -67,9 +69,9 @@ class AnalisaJaminanController extends Controller
             'no_polisi' => $data[0]->no_polisi ?? null,
             'no_rangka' => $data[0]->no_rangka ?? null,
             'tipe_kendaraan' => $data[0]->tipe_kendaraan ?? null,
-            'merek_kendaraan' => $data[0]->merek_kendaraan ?? null,
-            'tahun_kendaraan' => $data[0]->tahun_kendaraan ?? null,
-            'warna_kendaraan' => $data[0]->warna_kendaraan ?? null,
+            'merek_kendaraan' => $data[0]->merek ?? null,
+            'tahun_kendaraan' => $data[0]->tahun ?? null,
+            'warna_kendaraan' => $data[0]->warna ?? null,
             'lokasi_kendaraan' => $data[0]->lokasi,
             'nilai_pasar' => $data[0]->nilai_pasar,
             'nilai_taksasi' => $data[0]->nilai_taksasi,
@@ -94,28 +96,29 @@ class AnalisaJaminanController extends Controller
         return redirect()->back()->with('succeserrors', 'Gagal menambahkan data');
     }
 
-    public function previewkendaraan($id)
+    public function previewkendaraan(Request $request)
     {
+
         // $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
-        // $foto1 = asset('storage/image/photo_agunan/' . $jaminan->foto1 ?? null);
-        // $foto2 = asset('storage/image/photo_agunan/' . $jaminan->foto2 ?? null);
-        // $foto3 = asset('storage/image/photo_agunan/' . $jaminan->foto3 ?? null);
-        // $foto4 = asset('storage/image/photo_agunan/' . $jaminan->foto4 ?? null);
 
+        // if (empty($jaminan->foto1)) {
+        //     $foto1 = '';
+        // } else {
+        //     $foto1 = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->foto1) : null;
+        // }
+
+        $id = $request->input('iddata');
+        $no = $request->input('no');
         $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
-        $foto1 = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->foto1) : null;
-        $foto2 = $jaminan->foto2 ? asset('storage/image/photo_agunan/' . $jaminan->foto2) : null;
-        $foto3 = $jaminan->foto3 ? asset('storage/image/photo_agunan/' . $jaminan->foto3) : null;
-        $foto4 = $jaminan->foto4 ? asset('storage/image/photo_agunan/' . $jaminan->foto4) : null;
+        if (is_null($jaminan->$no)) {
+            $foto = null;
+        } else {
+            $foto = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->$no) : null;
+        }
 
-        $img = [
-            'gambar1' => $foto1,
-            'gambar2' => $foto2,
-            'gambar3' => $foto3,
-            'gambar4' => $foto4,
-        ];
-        // return response()->json([$foto1, $foto2, $foto3, $foto4]);
-        return response()->json($img);
+        return response()->json($foto);
+
+        // return view('tampilkan_gambar', ['image' => $base64Image]);
     }
 
     public function fhotokendaraan(Request $request)

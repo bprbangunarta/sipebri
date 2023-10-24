@@ -32,11 +32,11 @@
                                 {{ $item->no_dokumen }}
                             </td>
                             <td style="vertical-align: middle;">
-                                <b>Merek: </b> Konten <br>
-                                <b>Tahun: </b> Konten <br>
-                                <b>No. Rangka: </b> Konten <br>
-                                <b>No. Mesin: </b> Konten <br>
-                                <b>No. Polisi: </b> Konten
+                                <b>Merek: </b> {{ $item->merek ?? null }} <br>
+                                <b>Tahun: </b> {{ $item->tahun ?? null }} <br>
+                                <b>No. Rangka: </b> {{ $item->no_rangka ?? null }} <br>
+                                <b>No. Mesin: </b> {{ $item->no_mesin ?? null }} <br>
+                                <b>No. Polisi: </b> {{ $item->no_polisi ?? null }}
                             </td>
                             <td style="vertical-align: middle;">
                                 {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>

@@ -55,11 +55,19 @@ $(document).ready(function () {
                 $("#lok").val(response.lokasi_kendaraan);
 
                 var np = response.nilai_pasar;
-                var ps = formatRupiah(np);
+                if (np !== null) {
+                    var ps = formatRupiah(np);
+                } else {
+                    var ps = 0;
+                }
                 $("#nilai_pasar").val("RP. " + " " + ps);
 
                 var nt = response.nilai_taksasi;
-                var ts = formatRupiah(nt);
+                if (nt !== null) {
+                    var ts = formatRupiah(nt);
+                } else {
+                    var ts = 0;
+                }
                 $("#nilai_taksasi").val("Rp. " + " " + ts);
             },
             error: function (xhr, status, error) {
