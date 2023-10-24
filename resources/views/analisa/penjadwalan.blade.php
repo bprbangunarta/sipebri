@@ -62,22 +62,44 @@
                                             </td>
 
                                             <td style="vertical-align: middle;">
-                                                <b>Tanggal : </b>@if (is_null($item->tgl_survei))- @else {{ $item->tgl_survei }} @endif <br>
-                                                <b>Jadul 1 : </b>@if (is_null($item->tgl_jadul_1)) - @else {{ $item->tgl_jadul_1 }} @endif <br>
-                                                <b>Jadul 2 : </b>@if (is_null($item->tgl_jadul_2)) - @else {{ $item->tgl_jadul_2 }} @endif
+                                                <b>Tanggal : </b>
+                                                @if (is_null($item->tgl_survei))
+                                                    -
+                                                @else
+                                                    {{ $item->tgl_survei }}
+                                                @endif
+                                                <br>
+                                                <b>Jadul 1 : </b>
+                                                @if (is_null($item->tgl_jadul_1))
+                                                    -
+                                                @else
+                                                    {{ $item->tgl_jadul_1 }}
+                                                @endif
+                                                <br>
+                                                <b>Jadul 2 : </b>
+                                                @if (is_null($item->tgl_jadul_2))
+                                                    -
+                                                @else
+                                                    {{ $item->tgl_jadul_2 }}
+                                                @endif
                                             </td>
 
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}
+                                            </td>
 
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->code_user }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->code_user }}
+                                            </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="#" class="btn-circle btn-sm btn-primary" title="Info Nasabah">
+                                                <a href="#" class="btn-circle btn-sm btn-primary"
+                                                    title="Info Nasabah">
                                                     <i class="fa fa-user"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#penjadwalan" data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
+                                                <a data-toggle="modal" data-target="#penjadwalan"
+                                                    data-id="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
                                                     <i class="fa fa-calendar"></i>
                                                 </a>
                                             </td>
@@ -179,4 +201,5 @@
     <script src="{{ asset('assets/js/myscript/user.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/update.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/penjadwalan.js') }}"></script>
 @endpush

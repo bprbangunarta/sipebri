@@ -169,6 +169,7 @@ class KonfirmasiController extends Controller
             $data = [
                 'auth_user' => Auth::user()->code_user,
                 'status' => 'Sudah Otorisasi',
+                'tracking' => 'Penjadwalan',
             ];
 
             //Cek data apakah sudah ceklis semua apa belum
