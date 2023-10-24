@@ -339,14 +339,13 @@
                                                         <div class="form-label">Nomor Rekening Bank Umum</div>
                                                         <input type="number" class="form-control" name="no_rekening"
                                                             id="no_rekening" placeholder="No Rekening"
-                                                            value="{{ old('no_rekening', $nasabah->no_rekening) }}"
-                                                            required>
+                                                            value="{{ old('no_rekening', $nasabah->no_rekening) }}">
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nomor NPWP</div>
                                                         <input type="number" class="form-control" name="no_npwp"
                                                             id="no_npwp" placeholder="No NPWP"
-                                                            value="{{ old('no_npwp', $nasabah->no_npwp) }}" required>
+                                                            value="{{ old('no_npwp', $nasabah->no_npwp) }}">
                                                     </div>
                                                 </div>
                                                 <p></p>
@@ -595,7 +594,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('nasabah otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form action="{{ route('otornasabah', ['otorisasi' => $nasabah->kd_nasabah]) }}"
                                                 method="POST">
                                                 @csrf

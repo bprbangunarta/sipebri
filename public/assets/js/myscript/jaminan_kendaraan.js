@@ -40,7 +40,6 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
-                console.log(response);
                 $("#id").val(response.id);
                 $("#jenis").val(response.jenis_agunan);
                 $("#dokumen").val(response.jenis_dokumen);
@@ -56,11 +55,19 @@ $(document).ready(function () {
                 $("#lok").val(response.lokasi_kendaraan);
 
                 var np = response.nilai_pasar;
-                var ps = formatRupiah(np);
+                if (np !== null) {
+                    var ps = formatRupiah(np);
+                } else {
+                    var ps = 0;
+                }
                 $("#nilai_pasar").val("RP. " + " " + ps);
 
                 var nt = response.nilai_taksasi;
-                var ts = formatRupiah(nt);
+                if (nt !== null) {
+                    var ts = formatRupiah(nt);
+                } else {
+                    var ts = 0;
+                }
                 $("#nilai_taksasi").val("Rp. " + " " + ts);
             },
             error: function (xhr, status, error) {

@@ -32,11 +32,11 @@
                                 {{ $item->no_dokumen }}
                             </td>
                             <td style="vertical-align: middle;">
-                                <b>Merek: </b> Konten <br>
-                                <b>Tahun: </b> Konten <br>
-                                <b>No. Rangka: </b> Konten <br>
-                                <b>No. Mesin: </b> Konten <br>
-                                <b>No. Polisi: </b> Konten
+                                <b>Merek: </b> {{ $item->merek ?? null }} <br>
+                                <b>Tahun: </b> {{ $item->tahun ?? null }} <br>
+                                <b>No. Rangka: </b> {{ $item->no_rangka ?? null }} <br>
+                                <b>No. Mesin: </b> {{ $item->no_mesin ?? null }} <br>
+                                <b>No. Polisi: </b> {{ $item->no_polisi ?? null }}
                             </td>
                             <td style="vertical-align: middle;">
                                 {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
@@ -54,7 +54,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="text-center" colspan="7">Tidak ada analisa usaha pertania.</td>
+                            <td class="text-center" colspan="7">Tidak ada jaminan kendaraan.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -248,6 +248,16 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="view-foto">
+        <div class="modal-dialog bg-primary">
+            <div class="modal-content text-center">
+                <img id="image-depan" alt="Image 1">
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 @push('myscript')

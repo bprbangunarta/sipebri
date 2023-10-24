@@ -21,7 +21,7 @@
             Data</a>
     @endcan
 
-    @can('pengajuan otorisasi')
+    @can('otorisasi pengajuan kredit')
         <a href="{{ route('pengajuan.otorisasi', ['nasabah' => $nasabah]) }}"
             class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">Otorisasi
             Data</a>

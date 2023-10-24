@@ -93,7 +93,7 @@ class NasabahController extends Controller
                 //tambah data  
                 $cek = Midle::analisa_usaha($enc);
 
-                return view('nasabah.edit', [
+                return view('pengajuan.data-nasabah', [
                     'data' => $cek[0],
                     'pend' => $data['pend'],
                     'job' => $data['job'],
@@ -251,8 +251,8 @@ class NasabahController extends Controller
             'status_pernikahan' => 'required',
             'pekerjaan_kode' => 'required',
             'nama_ibu_kandung' => 'required',
-            'no_rekening' => 'required',
-            'no_npwp' => 'required',
+            'no_rekening' => '',
+            'no_npwp' => '',
             'no_telp' => 'required',
             'no_telp_darurat' => 'required',
             'email' => '',

@@ -88,6 +88,12 @@
                                                             value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}">
                                                     </div>
                                                     <div class="col-md">
+                                                        <div class="form-label">No HP</div>
+                                                        <input type="text" class="form-control" name="no_hp"
+                                                            id="no_hp" placeholder="082320099971"
+                                                            value="{{ old('no_hp', $pendamping[0]->no_hp) }}">
+                                                    </div>
+                                                    <div class="col-md">
                                                         <div class="form-label">Masa Identitas</div>
                                                         @if (is_null($pendamping[0]->masa_identitas))
                                                             <input class="form-control mb-2" placeholder="Pilih Tanggal"
@@ -264,7 +270,7 @@
                                                 </div>
                                             </div>
 
-                                            @can('pendamping edit')
+                                            @can('edit pengajuan kredit')
                                                 <div class="card-footer bg-transparent mt-auto">
                                                     <div class="btn-list justify-content-end">
                                                         <button type="submit" class="btn btn-primary text-white ms-auto">
@@ -275,7 +281,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('pendamping otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form
                                                 action="{{ route('otorpendamping', ['otorisasi' => $nasabah->kd_pengajuan]) }}"
                                                 method="POST">

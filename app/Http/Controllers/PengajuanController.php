@@ -39,7 +39,8 @@ class PengajuanController extends Controller
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
             ->where('data_pengajuan.status', '!=', 'Batal')
-            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_pengajuan.created_at', 'asc');;
+            ->where('data_pengajuan.tracking', '!=', 'Selesai')
+            ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_nasabah.created_at', 'ASC');;
         //
 
         if ($role[0]->role_name == 'Administrator') {
@@ -72,6 +73,7 @@ class PengajuanController extends Controller
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.is_entry as entry')
             ->where('data_pengajuan.status', '!=', 'Batal')
+            ->where('data_pengajuan.tracking', '!=', 'Selesai')
             ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_pengajuan.created_at', 'asc');;
         //
 
@@ -133,13 +135,13 @@ class PengajuanController extends Controller
             }
 
             // mencari nama
-            $query = DB::connection('sqlsrv')->table('resort')->select('kode', 'ket')
-                ->where('kode', $peng->resort_kode)->first();
 
-            if (is_null($query)) {
-                $peng->nama_resort = null;
-            } else {
+            if (!is_null($peng->resort_kode)) {
+                $query = DB::connection('sqlsrv')->table('resort')->select('kode', 'ket')
+                    ->where('kode', $peng->resort_kode ?? null)->first();
                 $peng->nama_resort = $query->ket;
+            } else {
+                $peng->nama_resort = null;
             }
 
             //Data auth
@@ -169,7 +171,7 @@ class PengajuanController extends Controller
             $namacgc = CGC::where('noacc', $peng->tabungan_cgc)->first();
             $peng->namacgc = $namacgc->fnama ?? null;
             // dd($)
-            return view('pengajuan.edit', [
+            return view('pengajuan.data-pengajuan', [
                 'data' => $dt[0],
                 'cgc' => $cgc,
                 'pengajuan' => $peng,
@@ -221,7 +223,7 @@ class PengajuanController extends Controller
                 $jaminan[$i]->kd_pengajuan = Crypt::encrypt($jaminan[$i]->kode_pengajuan);
             }
 
-            return view('pengajuan.agunan', [
+            return view('pengajuan.data-agunan', [
                 'agunan' => $agunan,
                 'dok' => $dok,
                 'data' => $cek,
@@ -245,8 +247,8 @@ class PengajuanController extends Controller
             'atas_nama' => 'required',
             'masa_agunan' => 'required',
             'kode_dati' => 'required',
-            'lokasi' => 'required',
-            'catatan' => 'required',
+            'lokasi' => '',
+            'catatan' => '',
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;
@@ -319,8 +321,8 @@ class PengajuanController extends Controller
             'atas_nama' => 'required',
             'masa_agunan' => 'required',
             'kode_dati' => 'required',
-            'lokasi' => 'required',
-            'catatan' => 'required',
+            'lokasi' => '',
+            'catatan' => '',
             'input_user' => 'required',
         ]);
         $cek['is_entry'] = 1;

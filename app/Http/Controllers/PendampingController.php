@@ -70,7 +70,7 @@ class PendampingController extends Controller
             $cek->kd_pengajuan = $nasabah;
             $dt = Midle::analisa_usaha($enc);
 
-            return view('pendamping.edit', [
+            return view('pengajuan.data-pendamping', [
                 'data' => $dt[0],
                 'nasabah' => $cek,
                 'pengajuan' => $pengajuan,
@@ -89,6 +89,7 @@ class PendampingController extends Controller
             'no_identitas' => 'required',
             'masa_identitas' => 'required',
             'nama_pendamping' => 'required',
+            'no_hp' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
             'status' => 'required',

@@ -38,8 +38,8 @@ class UserController extends Controller
             'email' => 'required|email',
             'username' => 'required|unique:users,username',
             'code_user' => 'required',
-            'kode_surveyor' => 'required',
-            'kode_kolektor' => 'required',
+            'kode_surveyor' => '',
+            'kode_kolektor' => '',
             'kantor_kode' => 'required',
             'is_active' => 'required',
         ]);
@@ -72,8 +72,8 @@ class UserController extends Controller
             'email' => 'required|email',
             'username' => 'required',
             'code_user' => 'required',
-            'kode_surveyor' => 'required',
-            'kode_kolektor' => 'required',
+            'kode_surveyor' => '',
+            'kode_kolektor' => '',
             'kantor_kode' => 'required',
             'is_active' => 'required',
         ]);

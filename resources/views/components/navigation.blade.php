@@ -157,7 +157,43 @@
                 </li>
             @endcan
 
-            <li class="treeview {{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman', 'perhitungan/simulasi')? 'active': '' }}">
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-print"></i>
+                    <span>Cetak Berkas</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="#" title="Perhitungan Kredit">
+                            <i class="fa fa-circle-o"></i>
+                            Notifikasi Kredit
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="Perhitungan Kredit">
+                            <i class="fa fa-circle-o"></i>
+                            Perjanjian Kredit
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="Perhitungan Kredit">
+                            <i class="fa fa-circle-o"></i>
+                            Penolakan Kredit
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" title="Perhitungan Kredit">
+                            <i class="fa fa-circle-o"></i>
+                            pendaftaran Fiducia
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- <li class="treeview {{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman', 'perhitungan/simulasi')? 'active': '' }}">
                 <a href="#" title="Data Debitur">
                     <i class="fa fa-cube"></i>
                     <span>Perhitungan</span>
@@ -179,7 +215,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
 
             <li class="header">LAPORAN</li>

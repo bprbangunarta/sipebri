@@ -251,8 +251,11 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('themes')->group(function () {
         // Route::view('/dashboard', 'dashboard.index');
-
-        Route::get('/permohonan/analisa', [AnalisaController::class, 'index'])->name('permohonan.analisa');
+        ROute::controller(AnalisaController::class)->group(function () {
+            Route::get('/permohonan/analisa', 'index')->name('permohonan.analisa');
+            Route::get('/permohonan/data_jadul/{pengajuan}', 'data_jadul')->name('permohonan.data_jadul');
+            Route::post('/permohonan/data_jadul', 'simpanjadul')->name('permohonan.simpanjadul');
+        });
 
         //Analisa Usaha Perdagangan
         Route::controller(UsahaPerdaganganController::class)->group(function () {
@@ -320,7 +323,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/jaminan/kendaraan', 'kendaraan')->name('taksasi.kendaraan');
             Route::post('/analisa/jaminan/kendaraan', 'updatekendaraan')->name('taksasi.updatekendaraan');
             Route::post('/analisa/jaminan/fhoto/kendaraan', 'fhotokendaraan')->name('taksasi.fhotokendaraan');
-            Route::get('/analisa/jaminan/fhoto/kendaraan/{id}/edit', 'previewkendaraan')->name('taksasi.previewkendaraan');
+            Route::post('/analisa/jaminan/fhoto/kendaraan/prev', 'previewkendaraan')->name('taksasi.previewkendaraan');
             Route::get('/analisa/jaminan/fhoto/kendaraan/data/{id}/edit', 'datakendaraan')->name('taksasi.datakendaraan');
             Route::get('/analisa/jaminan/kendaraan/{id}/edit', 'editkendaraan')->name('taksasi.editkendaraan');
             Route::get('/analisa/jaminan/tanah', 'tanah')->name('taksasi.tanah');
@@ -344,8 +347,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/5c/collateral', 'simpancollateral')->name('analisa5c.simpancollateral');
             Route::put('/analisa/5c/collateral', 'updatecollateral')->name('analisa5c.updatecollateral');
             Route::get('/analisa/5c/condition', 'condition')->name('analisa5c.condition');
-            Route::post('/analisa/5c/condition', 'simpancondition')->name('analisa5c.simpancondition');
-            Route::post('/analisa/5c/condition', 'updatecondition')->name('analisa5c.updatecondition');
+            Route::post('/analisa/5c/condition', 'simpancondition')->name('analisa5c.simpan_condition');
+            Route::post('/analisa/5c/condition/update', 'updatecondition')->name('analisa5c.updatecondition');
         });
 
         Route::controller(AnalisaKualitatifController::class)->group(function () {
@@ -392,30 +395,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
             Route::get('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
         });
-
-        // Route::view('/analisa/usaha/perdagangan', 'staff.analisa.u-perdagangan.index');
-        // Route::view('/analisa/identitas/usaha/perdagangan', 'staff.analisa.u-perdagangan.identitas');
-        // Route::view('/analisa/barang/usaha/perdagangan', 'staff.analisa.u-perdagangan.barang');
-        // Route::view('/analisa/keuangan/usaha/perdagangan', 'staff.analisa.u-perdagangan.keuangan');
-
-        // Route::view('/analisa/usaha/pertanian', 'staff.analisa.u-pertanian.index');
-        // Route::view('/analisa/informasi/usaha/pertanian', 'staff.analisa.u-pertanian.informasi');
-        // Route::view('/analisa/biaya/usaha/pertanian', 'staff.analisa.u-pertanian.biaya');
-        // Route::view('/analisa/keuangan/usaha/pertanian', 'staff.analisa.u-pertanian.keuangan');
-
-        // Route::view('/analisa/usaha/jasa', 'staff.analisa.u-jasa.index');
-        // Route::view('/analisa/keuangan/usaha/jasa', 'staff.analisa.u-jasa.keuangan');
-
-        // Route::view('/analisa/usaha/lainnya', 'staff.analisa.u-lainnya.index');
-        // Route::view('/analisa/identitas/usaha/lainnya', 'staff.analisa.u-lainnya.identitas');
-        // Route::view('/analisa/keuangan/usaha/lainnya', 'staff.analisa.u-lainnya.keuangan');
-
-        // Route::view('/analisa/keuangan', 'staff.analisa.keuangan');
-        // Route::view('/analisa/kepemilikan', 'staff.analisa.kepemilikan');
-
-        // Route::view('/analisa/jaminan/kendaraan', 'staff.analisa.jaminan.kendaraan');
-        // Route::view('/analisa/jaminan/tanah', 'staff.analisa.jaminan.tanah');
-        // Route::view('/analisa/jaminan/lainnya', 'staff.analisa.jaminan.lainnya');
     });
 
     Route::controller(PerhitunganController::class)->group(function () {

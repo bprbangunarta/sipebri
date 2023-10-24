@@ -52,7 +52,7 @@
                                     </div>
 
                                     <div class="col d-flex flex-column">
-                                        @can('agunan tambah')
+                                        @can('edit pengajuan kredit')
                                             <div class="card-header bg-transparent mt-auto">
                                                 <div class="btn-list justify-content">
                                                     <a href="#" class="btn btn-primary" data-bs-toggle="modal"
@@ -71,15 +71,12 @@
                                                             <th class="text-center">Atas Nama</th>
                                                             <th class="text-center" width="10%">Status</th>
 
-                                                            @can('agunan otorisasi')
+                                                            @can('otorisasi pengajuan kredit')
                                                                 <th class="text-center" width="5%">Aksi</th>
                                                             @endcan
 
-                                                            @can('agunan edit')
+                                                            @can('edit pengajuan kredit')
                                                                 <th class="text-center" width="5%">Ubah</th>
-                                                            @endcan
-
-                                                            @can('agunan hapus')
                                                                 <th class="text-center" width="5%">Hapus</th>
                                                             @endcan
                                                         </tr>
@@ -103,7 +100,7 @@
                                                                     @endif
                                                                 </td>
 
-                                                                @can('agunan otorisasi')
+                                                                @can('otorisasi pengajuan kredit')
                                                                     <td class="text-center">
                                                                         <a href="#" data-bs-toggle="modal"
                                                                             data-bs-target="#modal-validasi"
@@ -132,7 +129,7 @@
                                                                     </td>
                                                                 @endcan
 
-                                                                @can('agunan edit')
+                                                                @can('edit pengajuan kredit')
                                                                     <td class="text-center">
                                                                         <a href="" data-bs-toggle="modal"
                                                                             data-bs-target="#modal-edit"
@@ -160,7 +157,7 @@
                                                                     </td>
                                                                 @endcan
 
-                                                                @can('agunan hapus')
+                                                                @can('edit pengajuan kredit')
                                                                     <td class="text-center">
                                                                         <form
                                                                             action="{{ route('pengajuan.deleteagunan', ['id' => $item->id]) }}"
@@ -278,7 +275,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Jatuh Tempo Agunan</label>
                                     <input class="form-control mb-2" placeholder="Pilih Tanggal" name="masa_agunan"
-                                        id="datepicker-masa-agunan">
+                                        id="datepicker-masa-agunan" value="{{ old('masa_agunan') }}">
                                 </div>
                             </div>
 

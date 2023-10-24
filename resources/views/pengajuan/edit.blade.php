@@ -81,12 +81,12 @@
                                                                 <option value="">Pilih Produk</option>
                                                             @else
                                                                 <option value="{{ $pengajuan->produk_kode }}">
-                                                                    {{ $pengajuan->produk_nama }}
+                                                                    {{ $pengajuan->produk_kode }} - {{ $pengajuan->produk_nama }}
                                                                 </option>
                                                             @endif
                                                             @foreach ($produk as $item)
                                                                 <option value="{{ $item->kode_produk }}">
-                                                                    {{ $item->nama_produk }}
+                                                                    {{ $item->kode_produk }} - {{ $item->nama_produk }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -239,7 +239,7 @@
                                             @endcan
                                         </form>
 
-                                        @can('pengajuan otorisasi')
+                                        @can('otorisasi pengajuan kredit')
                                             <form
                                                 action="{{ route('otorpengajuan', ['otorisasi' => $pengajuan->kode_pengajuan]) }}"
                                                 method="POST">

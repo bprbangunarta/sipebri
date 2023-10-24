@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Midle;
+use App\Models\Survei;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -37,5 +38,27 @@ class AnalisaController extends Controller
         return view('staff.analisa.index', [
             'data' => $data
         ]);
+    }
+
+    public function data_jadul($pengajuan)
+    {
+        $data = DB::table('data_survei')
+            ->leftJoin('data_pengajuan', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.nama_nasabah', 'data_survei.id')
+            ->where('data_survei.pengajuan_kode', '=', $pengajuan)->get();
+        return response()->json($data[0]);
+    }
+
+    public function simpanjadul(Request $request)
+    {
+
+        try {
+            $survei = Survei::where('id', $request->id)->first();
+
+            // dd($survei->tgl_survei);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 }
