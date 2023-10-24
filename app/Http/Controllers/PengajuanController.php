@@ -171,7 +171,7 @@ class PengajuanController extends Controller
             $namacgc = CGC::where('noacc', $peng->tabungan_cgc)->first();
             $peng->namacgc = $namacgc->fnama ?? null;
             // dd($)
-            return view('pengajuan.edit', [
+            return view('pengajuan.data-pengajuan', [
                 'data' => $dt[0],
                 'cgc' => $cgc,
                 'pengajuan' => $peng,
@@ -223,7 +223,7 @@ class PengajuanController extends Controller
                 $jaminan[$i]->kd_pengajuan = Crypt::encrypt($jaminan[$i]->kode_pengajuan);
             }
 
-            return view('pengajuan.agunan', [
+            return view('pengajuan.data-agunan', [
                 'agunan' => $agunan,
                 'dok' => $dok,
                 'data' => $cek,
