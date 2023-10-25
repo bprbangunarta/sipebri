@@ -190,6 +190,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/pendamping/edit/otorisasi', 'otorpendamping')->name('otorpendamping');
             Route::post('/pengajuan/edit/otorisasi', 'otorpengajuan')->name('otorpengajuan');
             Route::post('/survei/edit/otorisasi', 'otorsurvei')->name('otorsurvei');
+            Route::post('/pengajuan/otorisasi/kendaraan', 'otorkendaraan')->name('otorkendaraan');
+            Route::post('/pengajuan/otorisasi/tanah', 'otortanah')->name('otortanah');
+            Route::post('/pengajuan/otorisasi/lain', 'otorlain')->name('otorlain');
         });
 
         // Cetak Berkas Pengajuan

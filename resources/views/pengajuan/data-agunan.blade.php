@@ -96,7 +96,8 @@
                                                             <td class="text-center"
                                                                 style="vertical-align: middle;text-transform:uppercase;">
                                                                 <button data-toggle="modal" data-target="#otor-kendaraan"
-                                                                    data-id="#" class="btn btn-sm btn-success">
+                                                                    data-id="{{ $item->id }}"
+                                                                    class="btn btn-sm btn-success">
                                                                     <i class="fa fa-check"></i>
                                                                 </button>
                                                             </td>
@@ -191,7 +192,8 @@
                                                             <td class="text-center"
                                                                 style="vertical-align: middle;text-transform:uppercase;">
                                                                 <button data-toggle="modal" data-target="#otor-tanah"
-                                                                    data-id="#" class="btn btn-sm btn-success">
+                                                                    data-id="{{ $item->id }}"
+                                                                    class="btn btn-sm btn-success">
                                                                     <i class="fa fa-check"></i>
                                                                 </button>
                                                             </td>
@@ -282,8 +284,9 @@
                                                         @can('otorisasi pengajuan kredit')
                                                             <td class="text-center"
                                                                 style="vertical-align: middle;text-transform:uppercase;">
-                                                                <button data-toggle="modal" data-target="#otor-lainnya"
-                                                                    data-id="#" class="btn btn-sm btn-success">
+                                                                <button data-toggle="modal" data-target="#otor-lain"
+                                                                    data-id="{{ $item->id }}"
+                                                                    class="btn btn-sm btn-success">
                                                                     <i class="fa fa-check"></i>
                                                                 </button>
                                                             </td>
@@ -312,8 +315,11 @@
     </div>
 
     @include('pengajuan.include.edit-kendaraan')
+    @include('pengajuan.include.otor-kendaraan')
     @include('pengajuan.include.edit-tanah')
+    @include('pengajuan.include.otor-tanah')
     @include('pengajuan.include.edit-lain')
+    @include('pengajuan.include.otor-lain')
 
     <div class="modal fade" id="tambah-kendaraan">
         <div class="modal-dialog">

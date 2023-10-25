@@ -334,4 +334,52 @@ class KonfirmasiController extends Controller
         }
         return redirect()->back()->with('error', 'Konfirmasi gagal');
     }
+
+    public function otorkendaraan(Request $request)
+    {
+        try {
+            $data = [
+                'otorisasi' => 'A',
+                'auth_user' => Auth::user()->code_user,
+                'updated_at' => now(),
+            ];
+
+            DB::table('data_jaminan')->where('id', $request->id)->update($data);
+            return redirect()->back()->with('success', 'Data Kendaraan berhasil diotorisasi');
+        } catch (Throwable $e) {
+            return redirect()->back()->with('error', 'Data Kendaraan gagal diotorisasi');
+        }
+    }
+
+    public function otortanah(Request $request)
+    {
+        try {
+            $data = [
+                'otorisasi' => 'A',
+                'auth_user' => Auth::user()->code_user,
+                'updated_at' => now(),
+            ];
+
+            DB::table('data_jaminan')->where('id', $request->id)->update($data);
+            return redirect()->back()->with('success', 'Data Tanah berhasil diotorisasi');
+        } catch (Throwable $e) {
+            return redirect()->back()->with('error', 'Data Tanah gagal diotorisasi');
+        }
+    }
+
+    public function otorlain(Request $request)
+    {
+        try {
+            $data = [
+                'otorisasi' => 'A',
+                'auth_user' => Auth::user()->code_user,
+                'updated_at' => now(),
+            ];
+
+            DB::table('data_jaminan')->where('id', $request->id)->update($data);
+            return redirect()->back()->with('success', 'Data Lainnya berhasil diotorisasi');
+        } catch (Throwable $e) {
+            return redirect()->back()->with('error', 'Data Lainnya gagal diotorisasi');
+        }
+    }
 }

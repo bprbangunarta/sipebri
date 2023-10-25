@@ -41,6 +41,47 @@ $(document).ready(function () {
         });
     });
 
+    $("#otor-tanah").on("show.bs.modal", function (event) {
+        $("#jenis").empty();
+        $("#dokumen").empty();
+        var button = $(event.relatedTarget); // Tombol yang membuka modal
+        var id = button.data("id"); // Ambil data-id dari tombol
+
+        // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+        $.ajax({
+            url: "/pengajuan/agunan/" + id + "/edit",
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            success: function (response) {
+                $("#ja").append(
+                    $("<option>", {
+                        value: response.jenis_agunan_kode,
+                        text: response.jenis_agunan,
+                    }).prop("selected", true)
+                );
+
+                $("#jd").append(
+                    $("<option>", {
+                        value: response.jenis_dokumen_kode,
+                        text: response.jenis_dokumen,
+                    }).prop("selected", true)
+                );
+                $("#idd").val(response.id);
+                $("#no_d").val(response.no_dokumen);
+                $("#atas").val(response.atas_nama);
+                $("#lo").val(response.lokasi);
+
+                var lu = response.luas;
+                $("#lu").val(formatRupiah(lu));
+            },
+            error: function (xhr, status, error) {
+                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                console.error("Error:", xhr.responseText);
+            },
+        });
+    });
+
     function formatRupiah(angka, prefix) {
         var number_string = angka.replace(/[^,\d]/g, "").toString(),
             split = number_string.split(","),
