@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Midle;
 use App\Models\Kantor;
 use App\Models\Survei;
 use App\Models\Pengajuan;
@@ -71,6 +72,21 @@ class PenjadwalanController extends Controller
         $filteredArray = array_filter($field, function ($value) {
             return $value !== "-" && !is_null($value);
         });
+
+        //Data Tracking
+        $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+        if (!is_null($trc)) {
+            $name = 'TRK';
+            $length = 5;
+            $kode = Midle::kode_tracking($name, $length);
+            $tracking = [
+                'kode_tracking' => $kode,
+                'pengajuan_kode' => $request->kode_pengajuan,
+                'proses_survey' => now(),
+            ];
+
+            DB::table('data_tracking')->update($tracking);
+        }
 
         $pengajuan = ['tracking' => 'Proses Survei', 'updated_at' => now(),];
 

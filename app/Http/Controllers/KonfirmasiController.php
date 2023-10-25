@@ -80,6 +80,21 @@ class KonfirmasiController extends Controller
                 'status' => 'Minta Otorisasi',
             ];
 
+            //Data Tracking
+            $trc = DB::table('data_tracking')->where('pengajuan_kode', $enc)->first();
+            if (is_null($trc)) {
+                $name = 'TRK';
+                $length = 5;
+                $kode = Midle::kode_tracking($name, $length);
+                $tracking = [
+                    'kode_tracking' => $kode,
+                    'pengajuan_kode' => $enc,
+                    'pemeriksaan_dokumen' => now(),
+                ];
+
+                DB::table('data_tracking')->insert($tracking);
+            }
+
             try {
                 $nas = Pengajuan::where('kode_pengajuan', $enc)->get();
                 Pengajuan::where('id', $nas[0]->id)->update($data);

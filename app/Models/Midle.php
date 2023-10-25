@@ -535,4 +535,18 @@ class Midle extends Model
 
         return $cek;
     }
+
+    public static function kode_tracking($name, $length)
+    {
+        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+
+            // Cek apakah kode sudah ada dalam database
+            if (!DB::table('data_tracking')->where('kode_tracking', $acak)->exists()) {
+                return $acak;
+            }
+        }
+
+        return null; // Jika tidak ada kode yang unik ditemukan
+    }
 }

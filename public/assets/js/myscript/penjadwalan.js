@@ -64,23 +64,30 @@ $(document).ready(function () {
                     $("#datepicker-tanggal-survei2").val("");
                 }
 
-                $("#catatan").append(
-                    "<p>" +
-                        "Survei Peretama :" +
-                        " " +
-                        response[0][0].catatan_survei ||
-                        "" +
-                            "\n" +
+                if (response[0][0].catatan_survei != null) {
+                    $("#catatan").append(
+                        "<p>" +
+                            "Survei Pertama :" +
+                            " " +
+                            (response[0][0].catatan_survei
+                                ? response[0][0].catatan_survei
+                                : "Tidak ada catatan") +
+                            "</br>" +
                             "Survei Kedua :" +
                             " " +
-                            response[0][0].catatan_resurvei_1 ||
-                        "" +
-                            "\n" +
+                            (response[0][0].catatan_jadul_1
+                                ? response[0][0].catatan_jadul_1
+                                : "Tidak ada catatan") +
+                            "</br>" +
                             "Survei Ketiga :" +
                             " " +
-                            response[0][0].catatan_resurvei_2 ||
-                        "" + "\n" + "</p>"
-                );
+                            (response[0][0].catatan_jadul_2
+                                ? response[0][0].catatan_jadul_2
+                                : "Tidak ada catatan") +
+                            "</p>"
+                    );
+                }
+                console.log(response);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
