@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use App\Models\Midle;
 use App\Models\Agunan;
 use App\Models\Survei;
@@ -125,8 +126,8 @@ class KonfirmasiController extends Controller
                     }
                 }
             }
-            // dd($otor);
             $otorisasi[0]->otoragunan = $otor;
+            // dd($otorisasi[0]);
 
             $cek[0]->kd_pengajuan = $nasabah;
             $dt = Midle::analisa_usaha($enc);
@@ -199,7 +200,7 @@ class KonfirmasiController extends Controller
             $enc = Crypt::decrypt($req);
 
             $data = [
-                'otorisasi' => $request->otorisasi,
+                'otorisasi' => 'A',
                 'auth_user' => Auth::user()->code_user,
             ];
 
@@ -223,10 +224,10 @@ class KonfirmasiController extends Controller
             $enc = Crypt::decrypt($req);
 
             $data = [
-                'otorisasi' => $request->otorisasi,
+                'otorisasi' => 'A',
                 'auth_user' => Auth::user()->code_user,
             ];
-
+            // dd($enc);
             try {
                 $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
                 Pendamping::where('id', $pendamping[0]->id)->update($data);
@@ -247,7 +248,7 @@ class KonfirmasiController extends Controller
             $enc = Crypt::decrypt($req);
 
             $data = [
-                'otorisasi' => $request->otorisasi,
+                'otorisasi' => "A",
                 'auth_user' => Auth::user()->code_user,
             ];
 
@@ -255,7 +256,7 @@ class KonfirmasiController extends Controller
                 $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
                 Pengajuan::where('id', $pengajuan[0]->id)->update($data);
                 return redirect()->back()->with('success', 'Data Pengajuan berhasil diotorisasi');
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 return redirect()->back()->with('error', 'Data Pengajuan gagal diotorisasi');
             }
         } catch (DecryptException $e) {
@@ -271,7 +272,7 @@ class KonfirmasiController extends Controller
             $enc = Crypt::decrypt($req);
 
             $data = [
-                'otorisasi' => $request->otorisasi,
+                'otorisasi' => 'A',
                 'auth_user' => Auth::user()->code_user,
             ];
 

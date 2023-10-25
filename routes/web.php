@@ -52,6 +52,7 @@ use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
@@ -149,6 +150,12 @@ Route::middleware('auth')->group(function () {
             Route::put('/pengajuan/editagunan/validasi', 'validasiagunan')->name('pengajuan.validasiagunan');
             Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');
             Route::post('/pengajuan/store', 'store')->name('pengajuan.store');
+        });
+
+        Route::controller(AgunanController::class)->group(function () {
+            Route::post('/pengajuan/agunan/kendaraan', 'tambah_kendaraan')->name('kendaraan.simpan');
+            Route::post('/pengajuan/agunan/tanah', 'tambah_tanah')->name('tanah.simpan');
+            Route::post('/pengajuan/agunan/lainnya', 'tambah_lain')->name('lain.simpan');
         });
 
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');

@@ -197,7 +197,7 @@ class PengajuanController extends Controller
                 ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
                 ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
                 ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.id', 'data_jaminan.no_dokumen', 'data_jaminan.atas_nama', 'data_jaminan.otorisasi', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.*', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
                 ->where('data_pengajuan.kode_pengajuan', '=', $pengajuan[0]->kode_pengajuan)
                 ->get();
 
@@ -222,13 +222,13 @@ class PengajuanController extends Controller
             for ($i = 0; $i < count($jaminan); $i++) {
                 $jaminan[$i]->kd_pengajuan = Crypt::encrypt($jaminan[$i]->kode_pengajuan);
             }
-
+            // dd($pengajuan[0]);
             return view('pengajuan.data-agunan', [
                 'agunan' => $agunan,
                 'dok' => $dok,
                 'data' => $cek,
                 'jaminan' => $jaminan,
-                'pengajuan' => $pengajuan,
+                'pengajuan' => $pengajuan[0],
                 'dati' => $kab,
             ]);
         } catch (DecryptException $e) {
