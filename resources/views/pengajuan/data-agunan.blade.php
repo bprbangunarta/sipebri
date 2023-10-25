@@ -78,8 +78,9 @@
                                                         @can('edit pengajuan kredit')
                                                             <td class="text-center"
                                                                 style="vertical-align: middle;text-transform:uppercase;">
-                                                                <button data-toggle="modal" data-target="#modal-edit"
-                                                                    data-id="15" class="btn btn-sm btn-warning">
+                                                                <button data-toggle="modal" data-target="#modal-edit-kendaraan"
+                                                                    data-id="{{ $item->id }}"
+                                                                    class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
 
@@ -173,8 +174,9 @@
                                                         @can('edit pengajuan kredit')
                                                             <td class="text-center"
                                                                 style="vertical-align: middle;text-transform:uppercase;">
-                                                                <button data-toggle="modal" data-target="#modal-edit"
-                                                                    data-id="#" class="btn btn-sm btn-warning">
+                                                                <button data-toggle="modal" data-target="#modal-edit-tanah"
+                                                                    data-id="{{ $item->id }}"
+                                                                    class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
 
@@ -264,7 +266,8 @@
                                                         @can('edit pengajuan kredit')
                                                             <td class="text-center"
                                                                 style="vertical-align: middle;text-transform:uppercase;">
-                                                                <button data-toggle="modal" data-target="#modal-edit"
+                                                                <button data-toggle="modal" data-target="#modal-edit-lain"
+                                                                    data-id="{{ $item->id }}"
                                                                     class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
@@ -307,6 +310,10 @@
                 </div>
         </section>
     </div>
+
+    @include('pengajuan.include.edit-kendaraan')
+    @include('pengajuan.include.edit-tanah')
+    @include('pengajuan.include.edit-lain')
 
     <div class="modal fade" id="tambah-kendaraan">
         <div class="modal-dialog">

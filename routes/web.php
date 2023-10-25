@@ -154,8 +154,12 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(AgunanController::class)->group(function () {
             Route::post('/pengajuan/agunan/kendaraan', 'tambah_kendaraan')->name('kendaraan.simpan');
+            Route::get('/pengajuan/agunan/{id}/edit', 'edit_agunan');
+            Route::put('/pengajuan/agunan/kendaraan', 'update_kendaraan')->name('kendaraan.update');
             Route::post('/pengajuan/agunan/tanah', 'tambah_tanah')->name('tanah.simpan');
+            Route::put('/pengajuan/agunan/tanah', 'update_tanah')->name('tanah.update');
             Route::post('/pengajuan/agunan/lainnya', 'tambah_lain')->name('lain.simpan');
+            Route::put('/pengajuan/agunan/lainnya', 'update_lain')->name('lain.update');
         });
 
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
