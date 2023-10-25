@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class AnalisaJaminanController extends Controller
 {
@@ -93,19 +94,11 @@ class AnalisaJaminanController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        return redirect()->back()->with('succeserrors', 'Gagal menambahkan data');
+        return redirect()->back()->with('errors', 'Gagal menambahkan data');
     }
 
     public function previewkendaraan(Request $request)
     {
-
-        // $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
-
-        // if (empty($jaminan->foto1)) {
-        //     $foto1 = '';
-        // } else {
-        //     $foto1 = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->foto1) : null;
-        // }
 
         $id = $request->input('iddata');
         $no = $request->input('no');

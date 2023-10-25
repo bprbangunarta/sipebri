@@ -100,9 +100,7 @@ class AgunanController extends Controller
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
     }
-    public function edit_tanah(Request $request)
-    {
-    }
+
     public function update_tanah(Request $request)
     {
 
@@ -155,10 +153,7 @@ class AgunanController extends Controller
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
     }
-    public function edit_lain(Request $request)
-    {
-        //
-    }
+
     public function update_lain(Request $request)
     {
 

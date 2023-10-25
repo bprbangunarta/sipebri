@@ -85,8 +85,9 @@
                                                                 </button>
 
                                                                 <button id="15" data-toggle="modal"
-                                                                    data-target="#modal-foto" class="btn btn-sm btn-primary"
-                                                                    data-id="15">
+                                                                    data-target="#modal-foto-kendaraan"
+                                                                    class="btn btn-sm btn-primary"
+                                                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
                                                             </td>
@@ -181,8 +182,9 @@
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
 
-                                                                <button data-toggle="modal" data-target="#modal-foto"
-                                                                    class="btn btn-sm btn-primary">
+                                                                <button data-toggle="modal" data-target="#modal-foto-tanah"
+                                                                    class="btn btn-sm btn-primary"
+                                                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
                                                             </td>
@@ -274,8 +276,9 @@
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
 
-                                                                <button data-toggle="modal" data-target="#modal-foto"
-                                                                    class="btn btn-sm btn-primary">
+                                                                <button data-toggle="modal" data-target="#modal-foto-lain"
+                                                                    class="btn btn-sm btn-primary"
+                                                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
                                                             </td>
@@ -316,10 +319,13 @@
 
     @include('pengajuan.include.edit-kendaraan')
     @include('pengajuan.include.otor-kendaraan')
+    @include('pengajuan.include.foto-kendaraan')
     @include('pengajuan.include.edit-tanah')
     @include('pengajuan.include.otor-tanah')
+    @include('pengajuan.include.foto-tanah')
     @include('pengajuan.include.edit-lain')
     @include('pengajuan.include.otor-lain')
+    @include('pengajuan.include.foto-lain')
 
     <div class="modal fade" id="tambah-kendaraan">
         <div class="modal-dialog">
@@ -616,10 +622,48 @@
             </div>
         </div>
     </div>
+
+
 @endsection
 
 @push('myscript')
     <script>
+        $("button[data-target='#modal-foto-kendaraan'], button[data-target='#modal-foto-tanah']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var dataId = $(this).data('id').split(',');
+
+            var nilaiid = dataId[0];
+            var atasNama = dataId[1];
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#nid').val(nilaiid);
+            $('#ats_nama').val(atasNama);
+        });
+
+        $("button[data-target='#modal-foto-tanah']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var dataId = $(this).data('id').split(',');
+
+            var nilaiid = dataId[0];
+            var atasNama = dataId[1];
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#nidt').val(nilaiid);
+            $('#ats_namat').val(atasNama);
+        });
+
+        $("button[data-target='#modal-foto-lain']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var dataId = $(this).data('id').split(',');
+
+            var nilaiid = dataId[0];
+            var atasNama = dataId[1];
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#nidl').val(nilaiid);
+            $('#ats_namal').val(atasNama);
+        });
+
         //Initialize Select2 Elements
         $('.jenis_agunan').select2()
         $('.jenis_dokumen').select2()
