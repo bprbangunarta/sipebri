@@ -64,7 +64,23 @@ $(document).ready(function () {
                     $("#datepicker-tanggal-survei2").val("");
                 }
 
-                console.log(response);
+                $("#catatan").append(
+                    "<p>" +
+                        "Survei Peretama :" +
+                        " " +
+                        response[0][0].catatan_survei ||
+                        "" +
+                            "\n" +
+                            "Survei Kedua :" +
+                            " " +
+                            response[0][0].catatan_resurvei_1 ||
+                        "" +
+                            "\n" +
+                            "Survei Ketiga :" +
+                            " " +
+                            response[0][0].catatan_resurvei_2 ||
+                        "" + "\n" + "</p>"
+                );
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
