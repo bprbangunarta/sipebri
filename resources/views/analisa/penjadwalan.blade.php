@@ -97,7 +97,7 @@
                                                 </a>
 
                                                 &nbsp;
-                                                
+
                                                 <a href="#" data-toggle="modal" data-target="#modal-penjadwalan"
                                                     data-id="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
@@ -146,17 +146,20 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>KODE PENGAJUAN</label>
-                                    <input type="text" class="form-control" name="kode_pengajuan" id="kode_pengajuan" readonly>
+                                    <input type="text" class="form-control" name="kode_pengajuan" id="kode_pengajuan"
+                                        readonly>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>NAMA NASABAH</label>
-                                    <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah" readonly>
+                                    <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah"
+                                        readonly>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>PETUGAS</label>
-                                    <select class="form-control petugas" style="width: 100%;" name="kode_petugas" id="kode_petugas">
+                                    <select class="form-control petugas" style="width: 100%;" name="kode_petugas"
+                                        id="kode_petugas">
                                         <option value="">--PILIH--</option>
                                     </select>
                                 </div>
@@ -165,17 +168,20 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>TGL. SURVEY</label>
-                                    <input type="date" class="form-control" name="tgl_survei" id="datepicker-tanggal-survei">
+                                    <input type="date" class="form-control" name="tgl_survei"
+                                        id="datepicker-tanggal-survei">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>TGL. JADUL 1</label>
-                                    <input type="date" class="form-control" name="tgl_jadul_1" id="datepicker-tanggal-survei1">
+                                    <input type="date" class="form-control" name="tgl_jadul_1"
+                                        id="datepicker-tanggal-survei1">
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>TGL. JADUL 2</label>
-                                    <input type="date" class="form-control" name="tgl_jadul_2" id="datepicker-tanggal-survei2">
+                                    <input type="date" class="form-control" name="tgl_jadul_2"
+                                        id="datepicker-tanggal-survei2">
                                 </div>
                             </div>
 

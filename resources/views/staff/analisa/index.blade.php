@@ -118,6 +118,8 @@
                                     <input type="text" id="id" name="id" hidden>
                                     <input class="form-control text-uppercase" type="text" value="123456789S"
                                         name="kode_pengajuan" id="kd_pengajuan" readonly>
+                                    <input class="form-control text-uppercase" type="text" value=""
+                                        name="tgl_survei" id="tgl_survei" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">

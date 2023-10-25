@@ -47,22 +47,24 @@ $(document).ready(function () {
                     $("#datepicker-tanggal-survei").val(hasil.tgl_survei);
                     $("#datepicker-tanggal-survei").prop("disabled", true);
                 } else {
-                    $("#datepicker-tanggal-survei").val("-");
+                    $("#datepicker-tanggal-survei").val("");
                 }
 
                 if (hasil.tgl_jadul_1 !== null) {
                     $("#datepicker-tanggal-survei1").val(hasil.tgl_jadul_1);
                     $("#datepicker-tanggal-survei1").prop("disabled", true);
                 } else {
-                    $("#datepicker-tanggal-survei1").val("-");
+                    $("#datepicker-tanggal-survei1").val("");
                 }
 
                 if (hasil.tgl_jadul_2 !== null) {
                     $("#datepicker-tanggal-survei2").val(hasil.tgl_jadul_2);
                     $("#datepicker-tanggal-survei2").prop("disabled", true);
                 } else {
-                    $("#datepicker-tanggal-survei2").val("-");
+                    $("#datepicker-tanggal-survei2").val("");
                 }
+
+                console.log(response);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

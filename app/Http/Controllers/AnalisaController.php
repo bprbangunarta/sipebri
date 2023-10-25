@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Midle;
 use App\Models\Survei;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -45,8 +46,26 @@ class AnalisaController extends Controller
         $data = DB::table('data_survei')
             ->leftJoin('data_pengajuan', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.nama_nasabah', 'data_survei.id')
+            ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.nama_nasabah', 'data_survei.*')
             ->where('data_survei.pengajuan_kode', '=', $pengajuan)->get();
+        //
+        $arr = [
+            'tgl_survei' => $data[0]->tgl_survei,
+            'tgl_jadul_1' => $data[0]->tgl_jadul_1,
+            'tgl_jadul_2' => $data[0]->tgl_jadul_2,
+            'tgl_resurvei' => $data[0]->tgl_resurvei,
+            'tgl_resurvei_1' => $data[0]->tgl_resurvei_1,
+            'tgl_resurvei_2' => $data[0]->tgl_resurvei_2,
+        ];
+
+        //Filter data yang null
+        $filteredArray = array_filter($arr, function ($value) {
+            return $value !== "-" && !is_null($value);
+        });
+
+        //Amibl yang terbaru dengan cara mengambil dari indexnya
+        $latestIndex = min(array_filter($filteredArray));
+        $data[0]->tgl_survei = $latestIndex;
         return response()->json($data[0]);
     }
 
@@ -56,9 +75,88 @@ class AnalisaController extends Controller
         try {
             $survei = Survei::where('id', $request->id)->first();
 
-            // dd($survei->tgl_survei);
+            //Cek tanggal 
+            $data = [
+                'catatan' => $request->keterangan,
+                'updated_at' => now(),
+            ];
+            if ($request->tgl_survei === $survei->tgl_survei) {
+                $data = [
+                    'catatan_survei' => $request->keterangan,
+                    'updated_at' => now(),
+                ];
+
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            } elseif ($request->tgl_survei === $survei->tgl_jadul_1) {
+                $data = [
+                    'catatan_jadul_1' => $request->keterangan,
+                    'updated_at' => now(),
+                ];
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            } elseif ($request->tgl_survei === $survei->tgl_jadul_2) {
+                $data = [
+                    'catatan_jadul_2' => $request->keterangan,
+                    'updated_at' => now(),
+                ];
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            } elseif ($request->tgl_survei === $survei->tgl_resurvei) {
+                $data = [
+                    'catatan_resurvei' => $request->keterangan,
+                    'updated_at' => now(),
+                ];
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            } elseif ($request->tgl_survei === $survei->tgl_resurvei_1) {
+                $data = [
+                    'catatan_resurvei_1' => $request->keterangan,
+                    'updated_at' => now(),
+                ];
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            } elseif ($request->tgl_survei === $survei->tgl_resurvei_2) {
+                $data = [
+                    'catatan_resurvei_2' => $request->keterangan,
+                    'updated_at' => now(),
+                ];
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            }
+            return redirect()->back()->with('success', 'Anda berhasil melakukan pembatalan survei');
         } catch (\Throwable $th) {
-            //throw $th;
+            return redirect()->back()->with('error', 'Anda gagal melakukan pembatalan survei');
         }
     }
 }
