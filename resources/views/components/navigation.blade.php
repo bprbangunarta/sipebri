@@ -150,14 +150,14 @@
                     Notifikasi Kredit
                 </a>
             </li>
-            <li>
-                <a href="#" title="Perhitungan Kredit">
+            <li class="{{ request()->is('themes/notifikasi/perjanjian/kredit') ? 'active' : '' }}">
+                <a href="{{ route('perjanjian.kredit') }}" title="Perhitungan Kredit">
                     <i class="fa fa-print"></i>
                     Perjanjian Kredit
                 </a>
             </li>
-            <li>
-                <a href="#" title="Perhitungan Kredit">
+            <li class="{{ request()->is('themes/notifikasi/penolakan/kredit') ? 'active' : '' }}">
+                <a href="{{ route('penolakan.kredit') }}" title="Perhitungan Kredit">
                     <i class="fa fa-print"></i>
                     Penolakan Kredit
                 </a>

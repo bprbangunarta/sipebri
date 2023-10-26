@@ -413,8 +413,9 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(DataCetakController::class)->group(function () {
             Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
-            Route::get('/notifikasi/perjanjian/kredit', 'perjanjian_kredit')->name('perjanjian_kredit');
             Route::get('/notifikasi/kredit/generate/{kode}', 'generate_notifikasi')->name('kode.notifikasi');
+            Route::get('/notifikasi/perjanjian/kredit', 'perjanjian_kredit')->name('perjanjian.kredit');
+            Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
         });
     });
 

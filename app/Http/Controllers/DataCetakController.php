@@ -66,8 +66,6 @@ class DataCetakController extends Controller
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->where('data_pengajuan.status', '=', 'Disetujui');
             })
-            // ->where('data_pengajuan.tracking', '=', 'Selesai')
-            // ->orWhere('data_pengajuan.status', '=', 'Disetujui')
             ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
 
         //Enkripsi kode pengajuan
@@ -95,11 +93,10 @@ class DataCetakController extends Controller
 
         $lasts = Pengajuan::latest('kode_pengajuan')->first();
         if (is_null($lasts)) {
-            $count = 339931;
+            $count = 0000;
         } else {
             $count = (int) $lasts->kode_pengajuan + 1;
         }
-        $count = 530;
         $lengths = 4;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
         $data[0]->generate = $kodes;
@@ -107,33 +104,59 @@ class DataCetakController extends Controller
         return response()->json($data[0]);
     }
 
-    // public function perjanjian_kredit(Request $request)
-    // {
-    //     $cek = DB::table('data_pengajuan')
-    //         ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-    //         ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-    //         ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-    //         ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-    //         ->where(function ($query) {
-    //             $query->where('data_pengajuan.tracking', '=', 'Selesai')
-    //                 ->where('data_pengajuan.status', '=', 'Disetujui');
-    //         })
-    //         // ->where('data_pengajuan.tracking', '=', 'Selesai')
-    //         // ->orWhere('data_pengajuan.status', '=', 'Disetujui')
-    //         ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+    public function perjanjian_kredit(Request $request)
+    {
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->where(function ($query) {
+                $query->where('data_pengajuan.tracking', '=', 'Realisasi')
+                    ->where('data_pengajuan.status', '=', 'Disetujui');
+            })
+            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
 
-    //     //Enkripsi kode pengajuan
-    //     $c = $cek->get();
-    //     $count = count($c);
-    //     $data = $cek->paginate(10);
-    //     for ($i = 0; $i < $count; $i++) {
-    //         if ($data->isNotEmpty()) {
-    //             $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-    //         }
-    //     }
-    //     // dd($data);
-    //     return view('cetak.notifikasi-kredit.index', [
-    //         'data' => $data
-    //     ]);
-    // }
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        for ($i = 0; $i < $count; $i++) {
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            }
+        }
+        // dd($data);
+        return view('cetak.perjanjian-kredit.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function penolakan_kredit(Request $request)
+    {
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->where(function ($query) {
+                $query->where('data_pengajuan.tracking', '=', 'Selesai')
+                    ->where('data_pengajuan.status', '=', 'Ditolak');
+            })
+            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        for ($i = 0; $i < $count; $i++) {
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            }
+        }
+        // dd($data);
+        return view('cetak.penolakan-kredit.index', [
+            'data' => $data
+        ]);
+    }
 }

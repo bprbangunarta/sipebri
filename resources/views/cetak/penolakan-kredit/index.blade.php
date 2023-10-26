@@ -10,14 +10,14 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">NOTIFIKASI KREDIT</h3>
+                            <h3 class="box-title">PENOLAKAN KREDIT</h3>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" style="width: 10px">#</th>
-                                        <th class="text-center" style="width: 150px">NOTIFIKASI</th>
+                                        <th class="text-center" style="width: 150px">PENOLAKAN</th>
                                         <th class="text-center" style="width: 150px">PENGAJUAN</th>
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center" style="width: 120px">ADMINISTRASI</th>
