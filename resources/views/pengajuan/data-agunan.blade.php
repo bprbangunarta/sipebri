@@ -38,7 +38,7 @@
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" colspan="2" style="width: 100px">AKSI</th>
+                                                    <th class="text-center" style="width:130px;">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -49,7 +49,7 @@
                                         <tbody>
                                             @forelse ($jaminan as $item)
                                                 @if ($item->jenis_jaminan == 'Kendaraan')
-                                                    <tr>
+                                                    <tr class="text-uppercase">
                                                         <td style="vertical-align: middle;">
                                                             <b>Jenis: </b><br>
                                                             {{ $item->jenis_agunan }}
@@ -76,37 +76,27 @@
                                                         </td>
 
                                                         @can('edit pengajuan kredit')
-                                                            <td class="text-center"
-                                                                style="vertical-align: middle;text-transform:uppercase;">
-                                                                <button data-toggle="modal" data-target="#modal-edit-kendaraan"
-                                                                    data-id="{{ $item->id }}"
-                                                                    class="btn btn-sm btn-warning">
+                                                        <form action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}" method="POST">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <td class="text-center" style="vertical-align: middle;">
+                                                                <button data-toggle="modal" data-target="#modal-edit-kendaraan" data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
 
-                                                                <button id="15" data-toggle="modal"
-                                                                    data-target="#modal-foto-kendaraan"
-                                                                    class="btn btn-sm btn-primary"
-                                                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}">
+                                                                <button id="15" data-toggle="modal" data-target="#modal-foto-kendaraan" class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
+                                                        
+                                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
                                                             </td>
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <form
-                                                                    action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
-                                                                    method="POST">
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                                        <i class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </td>
+                                                        </form>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
-                                                            <td class="text-center"
-                                                                style="vertical-align: middle;text-transform:uppercase;">
+                                                            <td class="text-center" style="vertical-align: middle;">
                                                                 <button data-toggle="modal" data-target="#otor-kendaraan"
                                                                     data-id="{{ $item->id }}"
                                                                     class="btn btn-sm btn-success">
@@ -139,12 +129,12 @@
                                         <thead>
                                             <tr class="bg-blue">
                                                 <th class="text-center" style="width: 200px">AGUNAN</th>
-                                                <th class="text-center" style="width: 100px">INFORMASI</th>
+                                                <th class="text-center" style="width: 200px">INFORMASI</th>
                                                 <th class="text-center">DETAIL</th>
-                                                <th class="text-center" style="width: 120px">TAKSASI</th>
+                                                <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" colspan="2" style="width: 100px">AKSI</th>
+                                                    <th class="text-center" style="width: 130px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -156,7 +146,7 @@
 
                                             @forelse ($jaminan as $item)
                                                 @if ($item->jenis_jaminan == 'Tanah')
-                                                    <tr>
+                                                    <tr class="text-uppercase">
                                                         <td style="vertical-align: middle;">
                                                             <b>Jenis: </b><br>
                                                             {{ $item->jenis_agunan }}
@@ -184,31 +174,25 @@
                                                         </td>
 
                                                         @can('edit pengajuan kredit')
-                                                            <td class="text-center"
-                                                                style="vertical-align: middle;text-transform:uppercase;">
+                                                        <form action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}" method="POST">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <td class="text-center" style="vertical-align: middle;">
                                                                 <button data-toggle="modal" data-target="#modal-edit-tanah"
-                                                                    data-id="{{ $item->id }}"
-                                                                    class="btn btn-sm btn-warning">
+                                                                    data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
                                                                 </button>
 
                                                                 <button data-toggle="modal" data-target="#modal-foto-tanah"
-                                                                    class="btn btn-sm btn-primary"
-                                                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}">
+                                                                    class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
+                                                        
+                                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
                                                             </td>
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <form
-                                                                    action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
-                                                                    method="POST">
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                                        <i class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </td>
+                                                        </form>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
@@ -244,13 +228,13 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr class="bg-blue">
-                                                <th class="text-center" style="width: 200px">AGUNAN</th>
+                                                <th class="text-center" style="width: 150px">AGUNAN</th>
                                                 <th class="text-center" style="width: 150px">INFORMASI</th>
                                                 <th class="text-center">DETAIL</th>
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" colspan="2" style="width: 100px">AKSI</th>
+                                                    <th class="text-center" style="width: 130px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -261,7 +245,7 @@
                                         <tbody>
                                             @forelse ($jaminan as $item)
                                                 @if ($item->jenis_jaminan == 'Lainnya')
-                                                    <tr>
+                                                    <tr class="text-uppercase">
                                                         <td style="vertical-align: middle;">
                                                             <b>Jenis: </b><br>
                                                             {{ $item->jenis_agunan }}
@@ -289,8 +273,10 @@
                                                         </td>
 
                                                         @can('edit pengajuan kredit')
-                                                            <td class="text-center"
-                                                                style="vertical-align: middle;text-transform:uppercase;">
+                                                        <form action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}" method="POST">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <td class="text-center" style="vertical-align: middle;">
                                                                 <button data-toggle="modal" data-target="#modal-edit-lain"
                                                                     data-id="{{ $item->id }}"
                                                                     class="btn btn-sm btn-warning">
@@ -298,27 +284,21 @@
                                                                 </button>
 
                                                                 <button data-toggle="modal" data-target="#modal-foto-lain"
-                                                                    class="btn btn-sm btn-primary"
+                                                                    class="btn btn-sm btn-primary mt-1"
                                                                     data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
+                                                        
+                                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
                                                             </td>
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <form
-                                                                    action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
-                                                                    method="POST">
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                                        <i class="fa fa-trash"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </td>
+                                                        </form>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
                                                             <td class="text-center"
-                                                                style="vertical-align: middle;text-transform:uppercase;">
+                                                                style="vertical-align: middle;">
                                                                 <button data-toggle="modal" data-target="#otor-lain"
                                                                     data-id="{{ $item->id }}"
                                                                     class="btn btn-sm btn-success">
