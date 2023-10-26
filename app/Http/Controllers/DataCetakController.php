@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Data;
 use App\Models\Survei;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -62,11 +64,12 @@ class DataCetakController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->where(function ($query) {
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->where('data_pengajuan.status', '=', 'Disetujui');
             })
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+            ->select('data_notifikasi.*', 'data_pengajuan.*', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
@@ -77,13 +80,13 @@ class DataCetakController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-        // dd($data);
+
         return view('cetak.notifikasi-kredit.index', [
             'data' => $data
         ]);
     }
 
-    public function generate_notifikasi($kode)
+    public function get_notifikasi($kode)
     {
         $data = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -91,18 +94,52 @@ class DataCetakController extends Controller
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
         //
 
-        $lasts = Pengajuan::latest('kode_pengajuan')->first();
+        $lasts = DB::table('data_notifikasi')->latest('nomor')->first();
         if (is_null($lasts)) {
             $count = 0000;
         } else {
-            $count = (int) $lasts->kode_pengajuan + 1;
+            $count = (int) $lasts->nomor + 1;
         }
         $lengths = 4;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
-        $data[0]->generate = $kodes;
+
+
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $romawi = Data::romawi($bulan);
+
+        $notif = $kodes . '/' . 'NK' . '/' . 'PBA' . '/' . $romawi . '/' . $now->year;
+
+        $data[0]->kode_notif = $notif;
+        $data[0]->nomor = $kodes;
 
         return response()->json($data[0]);
     }
+
+    public function simpan_notifikasi(Request $request)
+    {
+        try {
+            $cek = DB::table('data_notifikasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+
+            if ($cek) {
+                return back()->with('error', "Anda Sudah Memiliki Nomor Notifikasi");
+            }
+
+            $data = [
+                'nomor' => $request->nomor,
+                'no_notifikasi' => $request->kode_notifikasi,
+                'pengajuan_kode' => $request->kode_pengajuan,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
+            ];
+
+            DB::table('data_notifikasi')->insert($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+
 
     public function perjanjian_kredit(Request $request)
     {

@@ -540,4 +540,33 @@ class Data extends Model
 
         return $data;
     }
+
+    public static function romawi($bulan)
+    {
+        if ($bulan == 1) {
+            return 'I';
+        } elseif ($bulan == 2) {
+            return 'II';
+        } elseif ($bulan == 3) {
+            return 'III';
+        } elseif ($bulan == 4) {
+            return 'IV';
+        } elseif ($bulan == 5) {
+            return 'V';
+        } elseif ($bulan == 6) {
+            return 'VI';
+        } elseif ($bulan == 7) {
+            return 'VII';
+        } elseif ($bulan == 8) {
+            return 'VIII';
+        } elseif ($bulan == 9) {
+            return 'IX';
+        } elseif ($bulan == 10) {
+            return 'X';
+        } elseif ($bulan == 11) {
+            return 'XI';
+        } elseif ($bulan == 12) {
+            return 'XII';
+        }
+    }
 }
