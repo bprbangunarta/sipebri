@@ -30,7 +30,6 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                    <tr>
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">PENGAJUAN</th>
                                         <th class="text-center" width="35%">ALAMAT</th>

@@ -30,7 +30,6 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                    <tr>
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">NASABAH</th>
                                         <th class="text-center" width="45%">ALAMAT</th>
