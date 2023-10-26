@@ -672,8 +672,7 @@
 
 @push('myscript')
     <script>
-        $("button[data-target='#modal-foto-kendaraan']").click(function() {
-            // Mendapatkan nilai 'id' dari tombol yang diklik
+        $('a[data-target="#modal-foto-kendaraan"]').click(function() {
             var dataId = $(this).data('id').split(',');
 
             var nilaiid = dataId[0];
@@ -684,10 +683,8 @@
             $('#ats_nama').val(atasNama);
         });
 
-        $("button[data-target='#modal-foto-tanah']").click(function() {
-            // Mendapatkan nilai 'id' dari tombol yang diklik
+        $('a[data-target="#modal-foto-tanah"]').click(function() {
             var dataId = $(this).data('id').split(',');
-
             var nilaiid = dataId[0];
             var atasNama = dataId[1];
 
@@ -696,8 +693,7 @@
             $('#ats_namat').val(atasNama);
         });
 
-        $("button[data-target='#modal-foto-lain']").click(function() {
-            // Mendapatkan nilai 'id' dari tombol yang diklik
+        $('a[data-target="#modal-foto-lain"]').click(function() {
             var dataId = $(this).data('id').split(',');
 
             var nilaiid = dataId[0];
@@ -707,6 +703,8 @@
             $('#nidl').val(nilaiid);
             $('#ats_namal').val(atasNama);
         });
+
+
 
         //Initialize Select2 Elements
         $('.jenis_agunan').select2()
