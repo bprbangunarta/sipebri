@@ -33,7 +33,7 @@
                                         <thead>
                                             <tr class="bg-blue">
                                                 <th class="text-center" style="width: 200px">AGUNAN</th>
-                                                <th class="text-center" style="width: 200px">INFORMASI</th>
+                                                <th class="text-center" style="width: 150px">INFORMASI</th>
                                                 <th class="text-center">DETAIL</th>
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
@@ -136,12 +136,12 @@
                                         <thead>
                                             <tr class="bg-blue">
                                                 <th class="text-center" style="width: 200px">AGUNAN</th>
-                                                <th class="text-center" style="width: 200px">INFORMASI</th>
+                                                <th class="text-center" style="width: 150px">INFORMASI</th>
                                                 <th class="text-center">DETAIL</th>
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" style="width: 130px">AKSI</th>
+                                                    <th class="text-center" style="width: 125px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -167,13 +167,12 @@
                                                             <br>
                                                             <p></p>
                                                             <b>No Dokumen: </b><br>
-                                                            {{ $item->no_dokumen }}
+                                                            {{ $item->no_dokumen }} <br>&nbsp;
                                                         </td>
                                                         <td style="vertical-align: middle;">
                                                             <b>Luas: </b>
-                                                            {{ $item->luas }} M2
-                                                            <br>
-                                                            <b>Lokasi: </b> <br>
+                                                            <br>{{ $item->luas }} M2
+                                                            <p></p>
                                                             {{ $item->lokasi }}
                                                         </td>
                                                         <td style="vertical-align: middle;">
@@ -245,7 +244,7 @@
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" style="width: 130px">AKSI</th>
+                                                    <th class="text-center" style="width: 125px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -273,11 +272,10 @@
                                                             {{ $item->no_dokumen }}
                                                         </td>
                                                         <td style="vertical-align: middle;">
-                                                            <b>Lokasi: </b> <br>
-                                                            {{ $item->lokasi }}
-                                                            <p></p>
                                                             <b>Catatan: </b><br>
-                                                            {{ $item->catatan }}
+                                                            {{ $item->catatan }} <br>
+                                                            <p></p>
+                                                            {{ $item->lokasi }}
                                                         </td>
                                                         <td style="vertical-align: middle;">
                                                             {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
