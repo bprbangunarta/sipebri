@@ -41,12 +41,12 @@
                             <td style="vertical-align: middle;">
                                 {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                             <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                                <button data-toggle="modal" data-target="#modal-edit" data-id="{{ $item->id }}"
-                                    class="btn btn-sm btn-warning">
+                                <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
                                     <i class="fa fa-file-text-o"></i>
                                 </button>
 
-                                <button data-toggle="modal" data-target="#modal-foto" class="btn btn-sm btn-primary">
+                                <button data-toggle="modal" data-target="#modal-foto-lain"
+                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}" class="btn btn-sm btn-primary">
                                     <i class="fa fa-image"></i>
                                 </button>
                             </td>
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-foto">
+    <div class="modal fade" id="modal-foto-lain">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue">
@@ -157,15 +157,19 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">
                                             TAMPAK DEPAN
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" id="prevdepan"
+                                                data-target="depan">PREVIEW</a>
                                         </span>
+                                        <input type="text" id="nil" name="id" hidden>
+                                        <input type="text" id="atas_namal" name="nama" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto1" accept="image/*">
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">
                                             TAMPAK KIRI
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" id="prevkiri"
+                                                data-target="kiri">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto3" accept="image/*">
@@ -176,7 +180,8 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">
                                             TAMPAK BELAKANG
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" id="prevbelakang"
+                                                data-target="belakang">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto2" accept="image/*">
@@ -185,7 +190,8 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">
                                             TAMPAK KANAN
-                                            <a href="#" class="pull-right" target="_blank">PREVIEW</a>
+                                            <a href="#" class="pull-right" id="prevkanan"
+                                                data-target="kanan">PREVIEW</a>
                                         </span>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto4" accept="image/*">
@@ -206,4 +212,17 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/jaminan_lainnya.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/preview_fhoto_lain.js') }}"></script>
+    <script>
+        $("button[data-target='#modal-foto']").click(function() {
+            var dataId = $(this).data('id').split(",");
+
+            var nilaiid = dataId[0];
+            var atasNama = dataId[1];
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#nil').val(nilaiid);
+            $('#atas_namal').val(atasNama);
+        });
+    </script>
 @endpush

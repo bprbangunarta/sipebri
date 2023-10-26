@@ -262,7 +262,7 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/jaminan_kendaraan.js') }}"></script>
-    <script src="{{ asset('assets/js/myscript/preview_fhoto.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/preview_fhoto_kendaraan.js') }}"></script>
     <script>
         $("button[data-target='#modal-foto']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik

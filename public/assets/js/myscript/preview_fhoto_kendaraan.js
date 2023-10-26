@@ -8,6 +8,7 @@ $(document).ready(function () {
                 var token = $('meta[name="csrf-token"]').attr("content");
                 var id = button.data("id"); // Ambil data-id dari tombol
                 var dataId = id.split(",");
+
                 var data = {
                     iddata: dataId[0],
                     no: "foto1",
