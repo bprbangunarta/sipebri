@@ -182,11 +182,6 @@
                                     <select class="form-control text-uppercase" style="width:100%;" name="putusan_komite"
                                         id="komite" required>
                                         <option value="">--Pilih--</option>
-                                        {{-- <option value="Disetujui">Disetujui</option>
-                                        <option value="Ditolak">Ditolak</option>
-                                        <option value="Dibatalkan">Dibatalkan</option>
-                                        <option value="Naik Kasi">Naik Kasi</option>
-                                        <option value="Proses Analisa">Proses Analisa</option> --}}
                                     </select>
                                 </div>
 

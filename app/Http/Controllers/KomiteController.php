@@ -112,11 +112,17 @@ class KomiteController extends Controller
                 $waktu => now(),
             ];
 
-            // dd($data2);
+            // dd($request);
 
             if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite 1' || $request->putusan_komite == 'Naik Komite 2') {
                 $data2 = [
                     'tracking' => ucwords($request->putusan_komite),
+                    'updated_at' => now(),
+                ];
+            } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
+                $data2 = [
+                    'status' => ucwords($request->putusan_komite),
+                    'tracking' => "Selesai",
                     'updated_at' => now(),
                 ];
             } else {
@@ -142,7 +148,6 @@ class KomiteController extends Controller
         try {
             $usr = Auth::user()->code_user;
             $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
-
 
             //Cek role user
             if ($user->role_name == 'Staff Analis') {

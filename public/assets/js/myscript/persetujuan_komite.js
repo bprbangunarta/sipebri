@@ -35,7 +35,6 @@ $(document).ready(function () {
                         { value: "Disetujui", text: "Disetujui" },
                         { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Naik Kasi", text: "Naik Kasi" },
                     ];
                 } else if (role == "Staff Analis" && pal > 10000000) {
                     var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
@@ -50,7 +49,6 @@ $(document).ready(function () {
                         { value: "Disetujui", text: "Disetujui" },
                         { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Naik Kasi", text: "Naik Kasi" },
                     ];
                 } else if (role == "Staff Analis" && pal > 35000000) {
                     var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
@@ -65,9 +63,8 @@ $(document).ready(function () {
                         { value: "Disetujui", text: "Disetujui" },
                         { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
-                        { value: "Naik Kasi", text: "Naik Kasi" },
                     ];
-                } else if (role == "Staff Analis" && pal > 30000000) {
+                } else if (role == "Staff Analis" && pal > 75000000) {
                     var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
                 }
 
