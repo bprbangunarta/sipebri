@@ -24,7 +24,7 @@ class UsahaPerdaganganController extends Controller
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
                 $item->kode_id = Crypt::encrypt($item->id);
             }
-            // dd($au);
+
             return view('staff.analisa.u-perdagangan.index', [
                 'data' => $cek[0],
                 'perdagangan' => $au,
@@ -42,6 +42,16 @@ class UsahaPerdaganganController extends Controller
             $name = 'AUPG';
             $length = 5;
             $kode = Perdagangan::kodeacak($name, $length);
+
+            //Data Tracking
+            $trc = DB::table('data_tracking')->where('pengajuan_kode', $enc)->first();
+            if (!is_null($trc)) {
+                $tracking = [
+                    'analisa_kredit' => now(),
+                ];
+
+                DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($tracking);
+            }
 
             if ($kode !== null) {
                 $data = $request->validate([

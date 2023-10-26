@@ -76,16 +76,11 @@ class PenjadwalanController extends Controller
         //Data Tracking
         $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
         if (!is_null($trc)) {
-            $name = 'TRK';
-            $length = 5;
-            $kode = Midle::kode_tracking($name, $length);
             $tracking = [
-                'kode_tracking' => $kode,
-                'pengajuan_kode' => $request->kode_pengajuan,
                 'proses_survey' => now(),
             ];
 
-            DB::table('data_tracking')->update($tracking);
+            DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
         }
 
         $pengajuan = ['tracking' => 'Proses Survei', 'updated_at' => now(),];
