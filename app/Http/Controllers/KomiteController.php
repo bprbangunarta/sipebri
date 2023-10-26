@@ -24,10 +24,10 @@ class KomiteController extends Controller
             $role = "Naik Kasi";
             $cek = Midle::persetujuan_komite_kasi($usr, $role);
         } elseif ($user->role_name == 'Kabag Analis') {
-            $role = "Komite 1";
+            $role = "Naik Komite 1";
             $cek = Midle::persetujuan_komite_kabag($role);
         } elseif ($user->role_name == 'Direksi') {
-            $role = "Komite 2";
+            $role = "Naik Komite 2";
             $cek = Midle::persetujuan_komite_direksi($role);
         }
 

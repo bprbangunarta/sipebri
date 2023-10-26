@@ -419,6 +419,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/notifikasi/kredit/simpan', 'simpan_notifikasi')->name('simpan.notifikasi');
             Route::get('/notifikasi/perjanjian/kredit', 'perjanjian_kredit')->name('perjanjian.kredit');
             Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
+            Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
+            Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');
         });
     });
 

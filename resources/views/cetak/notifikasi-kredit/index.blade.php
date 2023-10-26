@@ -53,7 +53,7 @@
                                             <td style="vertical-align: middle;">
                                                 <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
                                                 <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
-                                                <b>KREDIT: </b> 5.00%
+                                                <b>KREDIT: </b>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
@@ -139,7 +139,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-danger">GENERATE</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
                     </div>
                 </form>
             </div>
@@ -149,7 +149,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/generate_kode_penolakan.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
