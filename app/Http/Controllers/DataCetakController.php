@@ -95,7 +95,8 @@ class DataCetakController extends Controller
         $count = 530;
         $lengths = 4;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+        $data[0]->generate = $kodes;
 
-        return response()->json($kodes);
+        return response()->json($data[0]);
     }
 }

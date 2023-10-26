@@ -118,8 +118,8 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KETERANGAN</span>
-                                    <input class="form-control text-uppercase" name="kode_notifikasi" id="kd_notifikasi"
+                                    <span class="fw-bold">KODE NOTIFIKASI</span>
+                                    <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
                                         type="text" readonly>
                                 </div>
                             </div>
