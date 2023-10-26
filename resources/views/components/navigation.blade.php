@@ -66,48 +66,30 @@
                 </li>
             @endcan
 
-            <li class="treeview {{ request()->is('data/pengajuan', 'pengajuan' , 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'otorisasi/pengajuan') ? 'active' : '' }}">
-                <a href="#">
-                    <i class="fa fa-users"></i>
-                    <span>Pengajuan</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
+            <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
+                <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
+                    <i class="fa fa-user"></i>
+                    Data Pengajuan
                 </a>
-                <ul class="treeview-menu">
-                    <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
-                            <i class="fa fa-circle-o"></i>
-                            Data Pengajuan
-                        </a>
-                    </li>
-
-                    @can('tambah pengajuan kredit')
-                        <li class="{{ request()->is('pengajuan') ? 'active' : '' }}">
-                            <a href="{{ route('pengajuan.index') }}" title="Permission" title="Input Pengajuan">
-                                <i class="fa fa-circle-o"></i>
-                                Input Pengajuan
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('otorisasi pengajuan kredit')
-                        <li class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'otorisasi/pengajuan') ? 'active' : '' }}">
-                            <a href="{{ route('pengajuan.index') }}" title="Otorisasi Pengajuan">
-                                <i class="fa fa-circle-o"></i>
-                                Otorisasi Pengajuan
-                            </a>
-                        </li>
-                    @endcan
-
-                    <li class="{{ request()->is('tracking') ? 'active' : '' }}">
-                        <a href="/tracking" title=" Tracking Pengajuan">
-                            <i class="fa fa-circle-o"></i>
-                            Tracking Pengajuan
-                        </a>
-                    </li>
-                </ul>
             </li>
+
+            @can('tambah pengajuan kredit')
+                <li class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
+                    <a href="{{ route('pengajuan.index') }}" title="Permission" title="Input Pengajuan">
+                        <i class="fa fa-edit"></i>
+                        Input Pengajuan
+                    </a>
+                </li>
+            @endcan
+
+            @can('otorisasi pengajuan kredit')
+                <li class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'otorisasi/pengajuan') ? 'active' : '' }}">
+                    <a href="{{ route('pengajuan.index') }}" title="Otorisasi Pengajuan">
+                        <i class="fa fa-check-square-o"></i>
+                        Otorisasi Pengajuan
+                    </a>
+                </li>
+            @endcan
 
             @can('menu permohonan')
                 <li
@@ -157,40 +139,30 @@
                 </li>
             @endcan
 
-            <li class="treeview">
-                <a href="#">
+            <li class="header">CETAK BERKAS</li>
+            <li>
+                <a href="#" title="Perhitungan Kredit">
                     <i class="fa fa-print"></i>
-                    <span>Cetak Berkas</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
+                    Notifikasi Kredit
                 </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="#" title="Perhitungan Kredit">
-                            <i class="fa fa-circle-o"></i>
-                            Notifikasi Kredit
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Perhitungan Kredit">
-                            <i class="fa fa-circle-o"></i>
-                            Perjanjian Kredit
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Perhitungan Kredit">
-                            <i class="fa fa-circle-o"></i>
-                            Penolakan Kredit
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" title="Perhitungan Kredit">
-                            <i class="fa fa-circle-o"></i>
-                            pendaftaran Fiducia
-                        </a>
-                    </li>
-                </ul>
+            </li>
+            <li>
+                <a href="#" title="Perhitungan Kredit">
+                    <i class="fa fa-print"></i>
+                    Perjanjian Kredit
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Perhitungan Kredit">
+                    <i class="fa fa-print"></i>
+                    Penolakan Kredit
+                </a>
+            </li>
+            <li>
+                <a href="#" title="Perhitungan Kredit">
+                    <i class="fa fa-print"></i>
+                    Pendaftaran Fiducia
+                </a>
             </li>
 
             {{-- <li class="treeview {{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman', 'perhitungan/simulasi')? 'active': '' }}">
@@ -220,10 +192,31 @@
 
             <li class="header">LAPORAN</li>
 
+            <li class="{{ request()->is('tracking') ? 'active' : '' }}">
+                <a href="/tracking" title=" Tracking Pengajuan">
+                    <i class="fa fa-map-o"></i>
+                    Tracking
+                </a>
+            </li>
+
             <li>
                 <a href="#" title="Data Global">
                     <i class="fa fa-file-archive-o"></i>
                     <span>Data Global</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" title="Data Global">
+                    <i class="fa fa-file-archive-o"></i>
+                    <span>Pendaftaran</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" title="Data Global">
+                    <i class="fa fa-file-archive-o"></i>
+                    <span>Sesudah Survey</span>
                 </a>
             </li>
         </ul>
