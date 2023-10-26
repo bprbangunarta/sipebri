@@ -85,7 +85,7 @@
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">Tidak ada permohonan analisa.</td>
+                                            <td class="text-center text-uppercase" colspan="7">Tidak ada data</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
