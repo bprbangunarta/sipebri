@@ -42,8 +42,9 @@
                                             <div style="width: 49.5%;float:right;">
                                                 <span class="fw-bold">PROVISI</span>
                                                 <input type="text"
-                                                    class="form-control input-sm form-border text-uppercase" name="privisi"
-                                                    placeholder="Rp." id="provisi">
+                                                    class="form-control input-sm form-border text-uppercase" name="provisi"
+                                                    placeholder="Rp." id="provisi"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">

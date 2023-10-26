@@ -55,8 +55,8 @@
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA ADMIN (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="b_admin"
-                                id="" placeholder="ENTRI" value="{{ $usulan->b_admin }}">
+                            <input type="text" class="form-control text-uppercase" name="b_admin" id="b_admin"
+                                placeholder="ENTRI" value="{{ $data->b_admin }}">
                         </div>
 
                         <div style="width: 49.5%;float:right;">
@@ -67,8 +67,8 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA PROVISI (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="b_provisi" id=""
-                                placeholder="ENTRI" value="{{ $usulan->b_provisi }}">
+                            <input type="text" class="form-control text-uppercase" name="b_provisi" id="b_provisi"
+                                placeholder="ENTRI" value="{{ $data->b_provisi }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -79,7 +79,8 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA PENALTI (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="b_penalti" id="" value="{{ $usulan->b_penalti }}" readonly>
+                            <input type="text" class="form-control text-uppercase" name="b_penalti" id=""
+                                value="{{ $data->b_penalti }}" readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -89,7 +90,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</button>
+                    <button type="submit" class="btn btn-sm btn-primary"
+                        style="margin-top:10px;width:100%">SIMPAN</button>
                 </div>
             </form>
 
@@ -150,6 +152,30 @@
                 // Jika lebih besar, atur nilai input1 menjadi nilai input2
                 $(this).val(value2);
             }
+        });
+
+
+
+        $('#b_admin').on('input', function() {
+            // Mengambil nilai dari input field
+            var inputValue = $(this).val();
+
+            // Mengganti koma (,) menjadi titik (.)
+            var convertedValue = inputValue.replace(/,/g, '.');
+
+            // Memasukkan nilai yang sudah diubah ke dalam input field
+            $(this).val(convertedValue);
+        });
+
+        $('#b_provisi').on('input', function() {
+            // Mengambil nilai dari input field
+            var inputValue = $(this).val();
+
+            // Mengganti koma (,) menjadi titik (.)
+            var convertedValue = inputValue.replace(/,/g, '.');
+
+            // Memasukkan nilai yang sudah diubah ke dalam input field
+            $(this).val(convertedValue);
         });
     </script>
 @endpush

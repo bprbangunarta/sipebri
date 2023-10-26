@@ -191,7 +191,7 @@ class Midle extends Model
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->where('data_pengajuan.kode_pengajuan', '=', $data)
-            ->select('data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.kode_pengajuan', 'data_pengajuan.temp_plafon', 'data_pengajuan.produk_kode', 'data_pengajuan.plafon', 'data_pengajuan.jangka_waktu', 'data_pengajuan.metode_rps', 'data_pengajuan.suku_bunga')->get();
+            ->select('data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.*')->get();
         $cek[0]->kd_pengajuan = Crypt::encrypt($data);
         $produk = DB::table('data_produk')->where('kode_produk', $cek[0]->produk_kode)->first('admin');
         $cek[0]->admin = $produk->admin ?? null;

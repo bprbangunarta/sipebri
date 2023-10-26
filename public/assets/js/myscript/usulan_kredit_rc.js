@@ -21,6 +21,12 @@ $(document).ready(function () {
             var bg = (((parseFloat(usulan) * jangka_wkatu) / 100) * 30) / 365;
             var rc = (pp / bg) * 100;
             $("#rc").val(rc.toFixed(2));
+        } else {
+            var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+            var poko = parseFloat(usulan) / parseFloat(jangka_wkatu);
+            var angsuran = bunga + poko;
+            var rc = (angsuran / parseFloat(keuangan)) * 100;
+            $("#rc").val(rc.toFixed(2));
         }
     });
 });

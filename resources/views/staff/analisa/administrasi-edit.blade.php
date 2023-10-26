@@ -45,7 +45,7 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase" name="privisi"
                                                     placeholder="Rp." id="provisi"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->privisi, 0, ',', '.') }}">
+                                                    value="{{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">

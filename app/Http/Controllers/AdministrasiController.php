@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Midle;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Spatie\FlareClient\View;
 use Illuminate\Support\Facades\DB;
@@ -23,13 +24,17 @@ class AdministrasiController extends Controller
             //cek data ada atau tidak
             $administrasi = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
 
+            //Biaya Provisi
+            $provisi = ($cek[0]->plafon * $cek[0]->b_provisi) / 100;
+            $cek[0]->provisi = (int)$provisi;
+
             if (is_null($administrasi)) {
                 return view('staff.analisa.administrasi', [
                     'data' => $cek[0],
                 ]);
             }
 
-            // dd($administrasi);
+
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
                 'adm' => $administrasi,
@@ -50,7 +55,7 @@ class AdministrasiController extends Controller
                 'kode_analisa' => $kode,
                 'pengajuan_kode' => $enc,
                 'administrasi' => (int)str_replace(["Rp", " ", "."], "", $request->administrasi),
-                'privisi' =>  (int)str_replace(["Rp", " ", "."], "", $request->privisi),
+                'provisi' =>  (int)str_replace(["Rp", " ", "."], "", $request->privisi),
                 'materai' =>  (int)str_replace(["Rp", " ", "."], "", $request->materai),
                 'asuransi_jiwa_menurun1' =>  (int)str_replace(["Rp", " ", "."], "", $request->asuransi_jiwa_menurun1),
                 'asuransi_jiwa_menurun2' =>  (int)str_replace(["Rp", " ", "."], "", $request->asuransi_jiwa_menurun2),
@@ -68,6 +73,7 @@ class AdministrasiController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
+
             DB::table('a_administrasi')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
@@ -82,7 +88,7 @@ class AdministrasiController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = [
                 'administrasi' => (int)str_replace(["Rp", " ", "."], "", $request->administrasi),
-                'privisi' =>  (int)str_replace(["Rp", " ", "."], "", $request->privisi),
+                'provisi' =>  (int)str_replace(["Rp", " ", "."], "", $request->privisi),
                 'materai' =>  (int)str_replace(["Rp", " ", "."], "", $request->materai),
                 'asuransi_jiwa_menurun1' =>  (int)str_replace(["Rp", " ", "."], "", $request->asuransi_jiwa_menurun1),
                 'asuransi_jiwa_menurun2' =>  (int)str_replace(["Rp", " ", "."], "", $request->asuransi_jiwa_menurun2),
@@ -100,7 +106,9 @@ class AdministrasiController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
+
             DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($data);
+
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
