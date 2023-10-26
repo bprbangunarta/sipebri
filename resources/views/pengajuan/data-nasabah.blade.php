@@ -42,7 +42,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">JENIS ID</span>
-                                                <select type="text" class="form-select ktp" style="width: 100%;"
+                                                <select class="form-control text-uppercase ktp" style="width: 100%;"
                                                     name="identitas" required>
                                                     <option value="{{ $nasabah->identitas }}" selected>
                                                         {{ $nasabah->iden }}</option>
@@ -109,7 +109,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">KABUPATEN</span>
-                                                <select class="form-select kab" style="width: 100%;" name="kode_dati"
+                                                <select class="form-control text-uppercase kab" style="width: 100%;" name="kode_dati"
                                                     id="select-kabupaten" required>
                                                     @if (is_null($nasabah->kode_dati))
                                                         <option value="">--PILIH--</option>
@@ -129,7 +129,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">KECAMATAN</span>
-                                                <select class="form-select kec kecamatan" style="width: 100%;"
+                                                <select class="form-control text-uppercase kec kecamatan" style="width: 100%;"
                                                     name="kecamatan" id="select-kecamatan" required>
                                                     @if (is_null($nasabah->kecamatan))
                                                         <option value="">--PILIH--</option>
@@ -143,11 +143,11 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">KELURAHAN</span>
-                                                <select type="text" class="form-select kel kelurahan"
+                                                <select class="form-control text-uppercase kel kelurahan"
                                                     style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan"
-                                                    id="select-kelurahan">
+                                                    id="select-kelurahan" required>
                                                     @if (is_null($nasabah->kelurahan))
-                                                        <option value="">Pilih Kecamatan</option>
+                                                        <option value="">--PILIH--</option>
                                                     @else
                                                         <option value="{{ $nasabah->kelurahan }}">
                                                             {{ $nasabah->kelurahan }}
@@ -191,7 +191,7 @@
                                         <div class="div-right">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">AGAMA</span>
-                                                <select class="form-control agama" style="width: 100%;" name="agama" required>
+                                                <select class="form-control text-uppercase agama" style="width: 100%;" name="agama" required>
                                                     @if (is_null($nasabah->religi))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -211,7 +211,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">KELAMIN</span>
-                                                <select class="form-control kelamin" style="width: 100%;" name="jenis_kelamin" required>
+                                                <select class="form-control text-uppercase kelamin" style="width: 100%;" name="jenis_kelamin" required>
                                                     @if (is_null($nasabah->jk))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -240,7 +240,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">GELAR</span>
-                                                <select type="text" class="form-control gelar" name="pendidikan_kode">
+                                                <select type="text" class="form-control text-uppercase gelar" name="pendidikan_kode">
                                                     @if (is_null($nasabah->pendidikan_kode))
                                                         <option value=""></option>
                                                     @else
@@ -258,7 +258,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">STATUS</span>
-                                                <select class="form-control status" style="width: 100%;" name="status_pernikahan" required>
+                                                <select class="form-control text-uppercase status" style="width: 100%;" name="status_pernikahan" required>
                                                     @if (is_null($nasabah->st))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -275,7 +275,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PEKERJAAN</span>
-                                                <select type="text" class="form-control pekerjaan" style="width: 100%;" name="pekerjaan_kode">
+                                                <select type="text" class="form-control text-uppercase pekerjaan" style="width: 100%;" name="pekerjaan_kode">
                                                     @if (is_null($nasabah->jo))
                                                         <option value="" selected>--PILIH--</option>
                                                     @else
@@ -314,7 +314,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NOMOR NPWP</span>
-                                                <input type="number" class="form-control" name="no_npwp" id="no_npwp" placeholder="ENTRI" value="{{ old('no_npwp', $nasabah->no_npwp) }}">
+                                                <input type="text" class="form-control" name="no_npwp" id="no_npwp" placeholder="ENTRI" value="{{ old('no_npwp', $nasabah->no_npwp) }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -324,7 +324,7 @@
 
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">SUMBER DANA</span>
-                                                <select type="text" class="form-control sumber_dana" style="width: 100%;" name="sumber_dana" required>
+                                                <select type="text" class="form-control text-uppercase sumber_dana" style="width: 100%;" name="sumber_dana" required>
                                                     @if (is_null($nasabah->sumber_dana))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -341,7 +341,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">PENGHASILAN UTAMA</span>
-                                                <select type="text" class="form-control penghasilan_u" style="width: 100%;" name="penghasilan_utama" required>
+                                                <select type="text" class="form-control text-uppercase penghasilan_u" style="width: 100%;" name="penghasilan_utama" required>
                                                     @if (is_null($nasabah->penghasilan_utama))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -359,7 +359,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PENGHASILAN LAINNYA</span>
-                                                <select type="text" class="form-select penghasilan_l" style="width: 100%;" name="penghasilan_lainnya" required>
+                                                <select type="text" class="form-control text-uppercase penghasilan_l" style="width: 100%;" name="penghasilan_lainnya" required>
                                                     @if (is_null($nasabah->penghasilan_utama))
                                                         <option value="">--PILIH--</option>
                                                     @else

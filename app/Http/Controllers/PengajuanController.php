@@ -95,7 +95,7 @@ class PengajuanController extends Controller
         $cek = $request->validate([
             'kode_pengajuan' => 'required', 'plafon' => 'required', 'produk_kode' => 'required', 'suku_bunga' => 'required',
             'jangka_waktu' => 'required', 'metode_rps' => 'required', 'jangka_pokok' => 'required', 'jangka_bunga' => 'required',
-            'resort_kode' => '', 'penggunaan' => 'required', 'tabungan_cgc' => '', 'keterangan' => 'required', 'input_user' => 'required',
+            'resort_kode' => '', 'penggunaan' => 'required', 'tabungan_cgc' => '', 'keterangan' => '', 'input_user' => 'required',
         ]);
         // dd($request);
         $cek['is_entry'] = 1;

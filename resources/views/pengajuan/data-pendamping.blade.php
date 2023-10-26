@@ -33,12 +33,11 @@
                                                 <span class="fw-bold">JENIS ID</span>
                                                 <select type="text" class="form-control ktp" style="width: 100%;" name="identitas" required>
                                                     @if (is_null($pendamping[0]->identitas))
-                                                        <option value="">--PILIH--</option>
+                                                        <option value="1">KTP</option>
                                                     @else
                                                         <option value="{{ $pendamping[0]->identitas }}" selected>
                                                             {{ $pendamping[0]->iden }}</option>
                                                     @endif
-                                                    <option value="1">KTP</option>
                                                     <option value="2">SIM</option>
                                                     <option value="3">PASPORT</option>
                                                     <option value="9">LAINNYA</option>
@@ -47,14 +46,14 @@
     
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO IDENTITAS</span>
-                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user">
+                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user" required>
                                                 <input type="text" class="form-control" name="no_identitas" id="no_identitas" placeholder="ENTRI" value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}" required>
                                             </div>
     
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA LENGKAP</span>
                                                 @if (is_null($pendamping[0]->nama_pendamping))
-                                                    <input type="text" class="form-control" name="nama_pendamping" id="nama_pendamping" placeholder="ENTRI" value="{{ old('nama_pendamping') }}">
+                                                    <input type="text" class="form-control" name="nama_pendamping" id="nama_pendamping" placeholder="ENTRI" value="{{ old('nama_pendamping') }}" required>
                                                 @else
                                                     <input type="text" class="form-control" name="nama_pendamping" id="nama_pendamping" placeholder="ENTRI" value="{{ old('nama_pendamping', $pendamping[0]->nama_pendamping) }}" required>
                                                 @endif
@@ -63,7 +62,7 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TEMPAT LAHIR</span>
                                                 @if (is_null($pendamping[0]->tempat_lahir))
-                                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="ENTRI" value="{{ old('tempat_lahir') }}">
+                                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="ENTRI" value="{{ old('tempat_lahir') }}" required>
                                                 @else
                                                     <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="ENTRI" value="{{ old('tempat_lahir', $pendamping[0]->tempat_lahir) }}" required>
                                                 @endif 
@@ -72,7 +71,7 @@
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">TANGGAL LAHIR</span>
                                                 @if (is_null($pendamping[0]->tanggal_lahir))
-                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="ttln" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask />
+                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="ttln" required data-inputmask="'alias': 'YYYY-DD-MM'" data-mask>
                                                 @else
                                                     <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="ttlo" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask value="{{ $pendamping[0]->tanggal_lahir }}" required>
                                                 @endif
@@ -81,7 +80,7 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">MASA IDENTITAS</span>
                                                 @if (is_null($pendamping[0]->masa_identitas))
-                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="min" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask />
+                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="min" required data-inputmask="'alias': 'YYYY-DD-MM'" data-mask>
                                                 @else
                                                     <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="mio" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask value="{{ $pendamping[0]->masa_identitas }}" required>
                                                 @endif
@@ -110,7 +109,7 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO TELP</span>
                                                 @if (is_null($pendamping[0]->no_hp))
-                                                    <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="ENTRI" value="{{ old('no_hp') }}">
+                                                    <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="ENTRI" value="{{ old('no_hp') }}" required>
                                                 @else
                                                     <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="ENTRI" value="{{ old('no_hp', $pendamping[0]->no_hp) }}" required>
                                                 @endif
@@ -118,7 +117,7 @@
     
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">TANGGUNGAN</span>
-                                                <select class="form-control" name="tanggungan" required>
+                                                <select class="form-control text-uppercase" name="tanggungan" required>
                                                 @if (is_null($pendamping[0]->tanggungan))
                                                     <option value="">--PILIH--</option>
                                                 @else
@@ -142,16 +141,16 @@
     
                                             <div style="margin-top:5px;width: 100%;float:right;">
                                                 <span class="fw-bold">PISAH HARTA</span>
-                                                <select class="form-control" placeholder="--PILIH--" name="pisah_harta" required>
+                                                <select class="form-control text-uppercase" placeholder="--PILIH--" name="pisah_harta" required>
                                                     @if (is_null($pendamping[0]->pisah_harta))
-                                                        <option value="">Pisah Harta</option>
+                                                        <option value="">--PILIH--</option>
                                                     @else
                                                         <option value="{{ $pendamping[0]->pisah_harta }}">
                                                             {{ $pendamping[0]['pisah'] }}</option>
                                                     @endif
     
-                                                    <option value="Y">Ya</option>
-                                                    <option value="T">Tidak</option>
+                                                    <option value="Y">YA</option>
+                                                    <option value="T">TIDAK</option>
                                                 </select>
                                             </div>
                                         </div>

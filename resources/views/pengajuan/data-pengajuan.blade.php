@@ -36,7 +36,7 @@
     
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PRODUK</span>
-                                                <select class="form-control produk" style="width:100%;" name="produk_kode" id="select-produk" required>
+                                                <select class="form-control text-uppercase produk" style="width:100%;" name="produk_kode" id="select-produk" required>
                                                     @if (is_null($pengajuan->produk_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -53,40 +53,8 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">JK KREDIT (BULAN)</span>
-                                                <input type="number" class="form-control" name="jangka_waktu" id="jangka_waktu" placeholder="ENTRI" value="{{ $pengajuan->jangka_waktu }}">
-                                            </div>
-    
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">JK POKOK (BULAN)</span>
-                                                <input type="number" class="form-control" name="jangka_pokok" id="jangka_pokok" placeholder="ENTRI" value="{{ old('jangka_pokok', $pengajuan->jangka_pokok) }}">
-                                            </div>
-    
-                                            <div style="margin-top:5px;width: 100%;float:right;">
-                                                <span class="fw-bold">NAMA CGC</span>
-                                                <select class="form-control cgc" name="tabungan_cgc">
-                                                    @if (is_null($pengajuan->tabungan_cgc))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $pengajuan->tabungan_cgc }}">
-                                                            {{ $pengajuan->tabungan_cgc . ' ' . '-' . ' ' . $pengajuan->namacgc }}
-                                                        </option>
-                                                    @endif
-
-                                                    @foreach ($cgc as $item)
-                                                        <option value="{{ $item->noacc }}">{{ $item->noacc }} -
-                                                            {{ $item->fnama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div class="div-right">
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">METODE RPS</span>
-                                                <select class="form-control" name="metode_rps" id="select-metode" required>
+                                                <select class="form-control text-uppercase" name="metode_rps" id="select-metode" required>
                                                     @if (is_null($pengajuan->metode_rps))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -114,17 +82,49 @@
     
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">SUKU BUNGA</span>
-                                                <input type="number" class="form-control" name="suku_bunga" id="suku_bunga" placeholder="ENTRI" value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}">
+                                                <input type="number" class="form-control" name="suku_bunga" id="suku_bunga" placeholder="ENTRI" value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}" required>
+                                            </div>
+    
+                                            <div style="margin-top:5px;width: 100%;float:right;">
+                                                <span class="fw-bold">NAMA CGC</span>
+                                                <select class="form-control cgc" name="tabungan_cgc">
+                                                    @if (is_null($pengajuan->tabungan_cgc))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $pengajuan->tabungan_cgc }}">
+                                                            {{ $pengajuan->tabungan_cgc . ' ' . '-' . ' ' . $pengajuan->namacgc }}
+                                                        </option>
+                                                    @endif
+
+                                                    @foreach ($cgc as $item)
+                                                        <option value="{{ $item->noacc }}">{{ $item->noacc }} -
+                                                            {{ $item->fnama }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+    
+    
+                                        <div class="div-right">
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">JK KREDIT (BULAN)</span>
+                                                <input type="number" class="form-control" name="jangka_waktu" id="jangka_waktu" placeholder="ENTRI" value="{{ $pengajuan->jangka_waktu }}" required>
+                                            </div>
+    
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">JK POKOK (BULAN)</span>
+                                                <input type="number" class="form-control" name="jangka_pokok" id="jangka_pokok" placeholder="ENTRI" value="{{ old('jangka_pokok', $pengajuan->jangka_pokok) }}" required>
                                             </div>
     
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">JW BUNGA (BULAN)</span>
-                                                <input type="number" class="form-control" name="jangka_bunga" id="jangka_bunga" placeholder="ENTRI" value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}">
+                                                <input type="number" class="form-control" name="jangka_bunga" id="jangka_bunga" placeholder="ENTRI" value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}" required>
                                             </div>
     
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PENGGUNAAN</span>
-                                                <select class="form-control" name="penggunaan" id="select-penggunaan">
+                                                <select class="form-control" name="penggunaan" id="select-penggunaan" required>
                                                     @if (is_null($pengajuan->penggunaan))
                                                         <option value="">--PILIH--</option>
                                                     @else

@@ -107,8 +107,7 @@
                                                 @endif
                                             @empty
                                                 <tr>
-                                                    <td class="text-center" colspan="7">Tidak Ada Agunan Kendaraan.
-                                                    </td>
+                                                    <td class="text-center" colspan="7">TIDAK ADA DATA</td>
                                                 </tr>
                                             @endforelse
 
@@ -204,7 +203,7 @@
                                                 @endif
                                             @empty
                                                 <tr>
-                                                    <td class="text-center" colspan="7">Tidak Ada Agunan Tanah.
+                                                    <td class="text-center" colspan="7">TIDAK ADA DATA
                                                     </td>
                                                 </tr>
                                             @endforelse
@@ -298,7 +297,7 @@
                                                 @endif
                                             @empty
                                                 <tr>
-                                                    <td class="text-center" colspan="7">Tidak Ada Agunan Lainnya.
+                                                    <td class="text-center" colspan="7">TIDAK ADA DATA
                                                     </td>
                                                 </tr>
                                             @endforelse
@@ -506,7 +505,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('no_dok') }}" name="no_dokumen" id="no_dok">
+                                            value="{{ old('no_dok') }}" name="no_dokumen" id="no_dok" placeholder="ENTRI">
                                     </div>
 
                                 </div>
@@ -516,18 +515,18 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('atas_nama') }}" name="atas_nama" id="atas_nama">
+                                            value="{{ old('atas_nama') }}" name="atas_nama" id="atas_nama" placeholder="ENTRI">
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('luas') }}" name="luas" id="luas">
+                                            value="{{ old('luas') }}" name="luas" id="luas" placeholder="ENTRI">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI TANAH</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
-                                            id="lokasi" value="{{ old('lokasi') }}">
+                                            id="lokasi" value="{{ old('lokasi') }}" placeholder="ENTRI">
                                     </div>
                                 </div>
                             </div>
@@ -588,7 +587,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR DOKUMEN</span>
                                         <input class="form-control text-uppercase" type="text" name="no_dokumen"
-                                            id="no_dok" value="{{ old('no_dokumen') }}">
+                                            id="no_dok" value="{{ old('no_dokumen') }}" placeholder="ENTRI" required>
                                     </div>
 
                                 </div>
@@ -597,18 +596,18 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">NAMA PEMILIK</span>
                                         <input class="form-control text-uppercase" type="text" name="atas_nama"
-                                            id="atas_nama" value="{{ old('atas_nama') }}">
+                                            id="atas_nama" value="{{ old('atas_nama') }}" placeholder="ENTRI" required>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
-                                            id="lokasi" value="{{ old('lokasi') }}">
+                                            id="lokasi" value="{{ old('lokasi') }}" placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                            id="catatan" placeholder="Catatan" value="{{ old('catatan') }}">
+                                            id="catatan" value="{{ old('catatan') }}" placeholder="ENTRI">
                                     </div>
                                 </div>
                             </div>
