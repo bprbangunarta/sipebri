@@ -10,7 +10,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">PUTUSAN KOMITE</h3>
+                            <h3 class="box-title">PERSETUJUAN KOMITE</h3>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -20,10 +20,10 @@
                                         <th class="text-center" style="width: 200px">NASABAH</th>
                                         <th class="text-center" style="width: 150px">PENGAJUAN</th>
                                         <th class="text-center">STATUS</th>
-                                        <th class="text-center">K1</th>
-                                        <th class="text-center">K2</th>
-                                        <th class="text-center">K3</th>
-                                        <th class="text-center">K4</th>
+                                        <th class="text-center" style="width: 50px;">K1</th>
+                                        <th class="text-center" style="width: 50px;">K2</th>
+                                        <th class="text-center" style="width: 50px;">K3</th>
+                                        <th class="text-center" style="width: 50px;">K4</th>
                                         <th class="text-center">CATATAN</th>
                                         <th class="text-center" style="width: 100px">AKSI</th>
                                     </tr>
@@ -36,14 +36,17 @@
                                                 {{ $item->nama_nasabah }} <br>
                                                 <b>Kategori:</b> {{ $item->kategori ?? 'KOSONG' }}
                                             </td>
+
                                             <td style="vertical-align: middle;">
                                                 <b>KODE: </b>{{ $item->kode_pengajuan }} <br>
                                                 <b>PLAFON</b> : <br>
                                                 {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}
                                             </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->plafon >= 1000 && $item->plafon <= 10000000)
                                                     <i class="fa fa-circle text-success"></i>
@@ -51,6 +54,7 @@
                                                     <i class="fa fa-circle text-success"></i>
                                                 @endif
                                             </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->plafon >= 10000001 && $item->plafon <= 35000000)
                                                     <i class="fa fa-circle text-success"></i>
@@ -60,6 +64,7 @@
                                                     <i class="fa fa-circle text-danger"></i>
                                                 @endif
                                             </td>
+                                            
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->plafon >= 35000001 && $item->plafon <= 75000000)
                                                     <i class="fa fa-circle text-success"></i>
