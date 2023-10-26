@@ -80,13 +80,13 @@
                                                             @method('delete')
                                                             @csrf
                                                             <td class="text-center" style="vertical-align: middle;">
-                                                                <button data-toggle="modal" data-target="#modal-edit-kendaraan" data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
+                                                                <a data-toggle="modal" data-target="#modal-edit-kendaraan" data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
-                                                                </button>
+                                                                </a>
 
-                                                                <button id="15" data-toggle="modal" data-target="#modal-foto-kendaraan" class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
+                                                                <a id="15" data-toggle="modal" data-target="#modal-foto-kendaraan" class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
-                                                                </button>
+                                                                </a>
                                                         
                                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                                     <i class="fa fa-trash"></i>
@@ -178,15 +178,15 @@
                                                             @method('delete')
                                                             @csrf
                                                             <td class="text-center" style="vertical-align: middle;">
-                                                                <button data-toggle="modal" data-target="#modal-edit-tanah"
+                                                                <a data-toggle="modal" data-target="#modal-edit-tanah"
                                                                     data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
-                                                                </button>
+                                                                </a>
 
-                                                                <button data-toggle="modal" data-target="#modal-foto-tanah"
+                                                                <a data-toggle="modal" data-target="#modal-foto-tanah"
                                                                     class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
-                                                                </button>
+                                                                </a>
                                                         
                                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                                     <i class="fa fa-trash"></i>
@@ -277,17 +277,17 @@
                                                             @method('delete')
                                                             @csrf
                                                             <td class="text-center" style="vertical-align: middle;">
-                                                                <button data-toggle="modal" data-target="#modal-edit-lain"
+                                                                <a data-toggle="modal" data-target="#modal-edit-lain"
                                                                     data-id="{{ $item->id }}"
                                                                     class="btn btn-sm btn-warning">
                                                                     <i class="fa fa-file-text-o"></i>
-                                                                </button>
+                                                                </a>
 
-                                                                <button data-toggle="modal" data-target="#modal-foto-lain"
+                                                                <a data-toggle="modal" data-target="#modal-foto-lain"
                                                                     class="btn btn-sm btn-primary mt-1"
                                                                     data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
-                                                                </button>
+                                                                </a>
                                                         
                                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                                     <i class="fa fa-trash"></i>
