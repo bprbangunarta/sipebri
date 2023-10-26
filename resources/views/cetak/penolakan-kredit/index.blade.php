@@ -35,7 +35,7 @@
                                             <td style="vertical-align: middle;">
                                                 [ {{ $item->kategori }} ]<br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                {{ $item->no_notifikasi }}
+                                                {{ $item->no_penolakan }}
                                             </td>
 
                                             <td style="vertical-align: middle;">
@@ -69,10 +69,16 @@
                                                 </button>
 
                                                 &nbsp;
-                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    class="btn btn-sm btn-primary" title="Cetak Analisa">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                @if (is_null($item->no_penolakan))
+                                                    <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        class="btn btn-sm btn-primary" title="Cetak Analisa">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php
@@ -122,8 +128,8 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE NOTIFIKASI</span>
-                                    <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
+                                    <span class="fw-bold">KODE PENOLAKAN</span>
+                                    <input class="form-control text-uppercase" name="kode_penolakan" id="generate"
                                         type="text" readonly>
                                 </div>
                             </div>

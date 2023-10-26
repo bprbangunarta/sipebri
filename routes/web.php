@@ -410,6 +410,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
             Route::get('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
             Route::get('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
+            Route::post('/penolakan/simpan', 'simpan_penolakan')->name('penolakan.simpan');
         });
 
 
@@ -418,6 +419,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/notifikasi/kredit/get/{kode}', 'get_notifikasi')->name('kode.notifikasi');
             Route::post('/notifikasi/kredit/simpan', 'simpan_notifikasi')->name('simpan.notifikasi');
             Route::get('/notifikasi/perjanjian/kredit', 'perjanjian_kredit')->name('perjanjian.kredit');
+            Route::get('/notifikasi/perjanjian/kredit/spk/{kode}', 'get_spk')->name('get.spk');
+            Route::post('/notifikasi/perjanjian/simpan', 'simpan_spk')->name('simpan.spk');
             Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
             Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');

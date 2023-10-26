@@ -46,7 +46,7 @@
                                                 {{ $item->nama_kantor }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('penolakan.edit') }}"
+                                                <a href="{{ route('penolakan.edit', ['pengajuan' => $item->kd_pengajuan]) }}"
                                                     class="btn-circle btn-sm btn-warning" title="Surat Penolakan">
                                                     <i class="fa fa-file-text-o"></i>
                                                 </a>

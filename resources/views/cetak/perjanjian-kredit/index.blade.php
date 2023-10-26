@@ -35,13 +35,14 @@
                                             <td style="vertical-align: middle;">
                                                 [ {{ $item->kategori }} ]<br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                0000/03/KABAG.ANALIS/PBA/X/2023
+                                                {{ $item->no_spk }}
                                             </td>
 
                                             <td style="vertical-align: middle;">
-                                                <b>RP. 10.000.000</b> <br>
-                                                EFEKTIF MUSIMAN <br>
-                                                <b>KUP</b> - <b>36 BULAN</b> - <b>32%</b>
+                                                <b>{{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}</b> <br>
+                                                {{ $item->metode_rps }} <br>
+                                                <b>{{ $item->produk_kode }}</b> - <b>{{ $item->jangka_waktu }} BULAN</b> -
+                                                <b>{{ $item->suku_bunga }}%</b>
                                             </td>
 
                                             <td style="text-transform: uppercase;">
@@ -50,8 +51,8 @@
                                                 </b>{{ $item->kecamatan }}
                                             </td>
                                             <td style="vertical-align: middle;">
-                                                <b>ADM: </b> 4.00%<br>
-                                                <b>PROVISI: </b> 1.00%<br>
+                                                <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
+                                                <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
                                                 <b>KREDIT: </b> 5.00%
                                             </td>
 
@@ -68,10 +69,16 @@
                                                 </button>
 
                                                 &nbsp;
-                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    class="btn btn-sm btn-primary" title="Cetak Analisa">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                @if (is_null($item->no_spk))
+                                                    <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        class="btn btn-sm btn-primary" title="Cetak Analisa">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php
@@ -100,7 +107,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">GENERATE CODE</h4>
                 </div>
-                <form action="{{ Route('permohonan.simpanjadul') }}" method="POST">
+                <form action="{{ Route('simpan.spk') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -110,6 +117,7 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">KODE PENGAJUAN</span>
                                     <input type="text" id="kode" hidden>
+                                    <input type="text" id="nomor" name="nomor" hidden>
                                     <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
                                         id="kd_pengajuan" readonly>
                                 </div>
@@ -121,16 +129,16 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE NOTIFIKASI</span>
-                                    <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
-                                        type="text" readonly>
+                                    <span class="fw-bold">KODE PERJANJIAN KREDIT</span>
+                                    <input class="form-control text-uppercase" name="kode_spk" id="generate" type="text"
+                                        readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-danger">GENERATE</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
                     </div>
                 </form>
             </div>
@@ -140,7 +148,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/generate_kode_spk.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
