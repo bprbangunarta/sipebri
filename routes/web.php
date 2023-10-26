@@ -155,6 +155,8 @@ Route::middleware('auth')->group(function () {
         Route::controller(AgunanController::class)->group(function () {
             Route::post('/pengajuan/agunan/kendaraan', 'tambah_kendaraan')->name('kendaraan.simpan');
             Route::get('/pengajuan/agunan/{id}/edit', 'edit_agunan');
+            Route::get('/pengajuan/agunan/tanah/{id}/edit', 'edit_agunan_tanah');
+            Route::get('/pengajuan/agunan/lain/{id}/edit', 'edit_agunan_lain');
             Route::put('/pengajuan/agunan/kendaraan', 'update_kendaraan')->name('kendaraan.update');
             Route::post('/pengajuan/agunan/tanah', 'tambah_tanah')->name('tanah.simpan');
             Route::put('/pengajuan/agunan/tanah', 'update_tanah')->name('tanah.update');

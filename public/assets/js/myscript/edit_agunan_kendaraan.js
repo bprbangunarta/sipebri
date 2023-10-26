@@ -2,6 +2,7 @@ $(document).ready(function () {
     $("#modal-edit-kendaraan").on("show.bs.modal", function (event) {
         $("#jenis").empty();
         $("#dokumen").empty();
+
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
 
@@ -25,10 +26,25 @@ $(document).ready(function () {
                         text: response.jenis_dokumen,
                     }).prop("selected", true)
                 );
+                $("#dati").append(
+                    $("<option>", {
+                        value: response.kode_dati,
+                        text: response.nama_dati,
+                    }).prop("selected", true)
+                );
+
                 $("#no_dok").val(response.no_dokumen);
                 $("#id").val(response.id);
                 $("#atas_nama").val(response.atas_nama);
                 $("#lokasi").val(response.lokasi);
+                $("#no_mesin").val(response.no_mesin);
+                $("#no_rangka").val(response.no_rangka);
+                $("#no_polisi").val(response.merek);
+                $("#merek").val(response.no_polisi);
+                $("#tahun").val(response.tahun);
+                $("#warna").val(response.warna);
+                $("#tipe_kendaraan").val(response.tipe_kendaraan);
+                $("#lokasi_kendaraan").val(response.lokasi);
                 $("#catatan").val(response.catatan);
             },
             error: function (xhr, status, error) {

@@ -7,7 +7,7 @@ $(document).ready(function () {
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/pengajuan/agunan/" + id + "/edit",
+            url: "/pengajuan/agunan/tanah/" + id + "/edit",
             type: "GET",
             dataType: "json",
             cache: false,
@@ -25,11 +25,18 @@ $(document).ready(function () {
                         text: response.jenis_dokumen,
                     }).prop("selected", true)
                 );
-                $("#ids").val(response.id);
+                $("#datit").append(
+                    $("<option>", {
+                        value: response.kode_dati,
+                        text: response.nama_dati,
+                    }).prop("selected", true)
+                );
+                $("#idt").val(response.id);
                 $("#no_doks").val(response.no_dokumen);
                 $("#ids").val(response.id);
                 $("#atas_namas").val(response.atas_nama);
                 $("#lokasis").val(response.lokasi);
+                $("#catat").val(response.catatan);
 
                 var lu = response.luas;
                 $("#luass").val(formatRupiah(lu));
@@ -46,7 +53,7 @@ $(document).ready(function () {
         $("#dokumen").empty();
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
-
+        console.log(id);
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
             url: "/pengajuan/agunan/" + id + "/edit",
