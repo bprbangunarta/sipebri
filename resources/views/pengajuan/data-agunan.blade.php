@@ -76,23 +76,30 @@
                                                         </td>
 
                                                         @can('edit pengajuan kredit')
-                                                        <form action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}" method="POST">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <a data-toggle="modal" data-target="#modal-edit-kendaraan" data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
-                                                                    <i class="fa fa-file-text-o"></i>
-                                                                </a>
+                                                            <form
+                                                                action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}"
+                                                                method="POST">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <a data-toggle="modal" data-target="#modal-edit-kendaraan"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-warning">
+                                                                        <i class="fa fa-file-text-o"></i>
+                                                                    </a>
 
-                                                                <a id="15" data-toggle="modal" data-target="#modal-foto-kendaraan" class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
-                                                                    <i class="fa fa-image"></i>
-                                                                </a>
-                                                        
-                                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </td>
-                                                        </form>
+                                                                    <a id="15" data-toggle="modal"
+                                                                        data-target="#modal-foto-kendaraan"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        data-id="{{ $item->id }}, {{ $item->atas_nama }}">
+                                                                        <i class="fa fa-image"></i>
+                                                                    </a>
+
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </form>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
@@ -174,25 +181,29 @@
                                                         </td>
 
                                                         @can('edit pengajuan kredit')
-                                                        <form action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}" method="POST">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <a data-toggle="modal" data-target="#modal-edit-tanah"
-                                                                    data-id="{{ $item->id }}" class="btn btn-sm btn-warning">
-                                                                    <i class="fa fa-file-text-o"></i>
-                                                                </a>
+                                                            <form
+                                                                action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}"
+                                                                method="POST">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <a data-toggle="modal" data-target="#modal-edit-tanah"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-warning">
+                                                                        <i class="fa fa-file-text-o"></i>
+                                                                    </a>
 
-                                                                <a data-toggle="modal" data-target="#modal-foto-tanah"
-                                                                    class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
-                                                                    <i class="fa fa-image"></i>
-                                                                </a>
-                                                        
-                                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </td>
-                                                        </form>
+                                                                    <a data-toggle="modal" data-target="#modal-foto-tanah"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        data-id="{{ $item->id }}, {{ $item->atas_nama }}">
+                                                                        <i class="fa fa-image"></i>
+                                                                    </a>
+
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </form>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
@@ -273,32 +284,33 @@
                                                         </td>
 
                                                         @can('edit pengajuan kredit')
-                                                        <form action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}" method="POST">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <a data-toggle="modal" data-target="#modal-edit-lain"
-                                                                    data-id="{{ $item->id }}"
-                                                                    class="btn btn-sm btn-warning">
-                                                                    <i class="fa fa-file-text-o"></i>
-                                                                </a>
+                                                            <form
+                                                                action="{{ route('pengajuan.deleteagunan', ['pengajuan' => $item->id]) }}"
+                                                                method="POST">
+                                                                @method('delete')
+                                                                @csrf
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <a data-toggle="modal" data-target="#modal-edit-lain"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-warning">
+                                                                        <i class="fa fa-file-text-o"></i>
+                                                                    </a>
 
-                                                                <a data-toggle="modal" data-target="#modal-foto-lain"
-                                                                    class="btn btn-sm btn-primary mt-1"
-                                                                    data-id="{{ $item->id }}, {{ $item->atas_nama }}">
-                                                                    <i class="fa fa-image"></i>
-                                                                </a>
-                                                        
-                                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </td>
-                                                        </form>
+                                                                    <a data-toggle="modal" data-target="#modal-foto-lain"
+                                                                        class="btn btn-sm btn-primary mt-1"
+                                                                        data-id="{{ $item->id }}, {{ $item->atas_nama }}">
+                                                                        <i class="fa fa-image"></i>
+                                                                    </a>
+
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </form>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
-                                                            <td class="text-center"
-                                                                style="vertical-align: middle;">
+                                                            <td class="text-center" style="vertical-align: middle;">
                                                                 <button data-toggle="modal" data-target="#otor-lain"
                                                                     data-id="{{ $item->id }}"
                                                                     class="btn btn-sm btn-success">
@@ -662,7 +674,7 @@
 
 @push('myscript')
     <script>
-        $("button[data-target='#modal-foto-kendaraan'], button[data-target='#modal-foto-tanah']").click(function() {
+        $("button[data-target='#modal-foto-kendaraan']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
             var dataId = $(this).data('id').split(',');
 

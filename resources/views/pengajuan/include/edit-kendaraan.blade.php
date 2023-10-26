@@ -19,8 +19,9 @@
                             <div class="div-left">
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">JENIS AGUNAN</span>
+                                    <input type="text" id="id" name="id" hidden>
                                     <select type="text" class="form-control jenis_agunan" style="width: 100%;"
-                                        name="jenis_agunan_kode" required>
+                                        name="jenis_agunan_kode" id="jenis_agunan" required>
                                         <option value="" selected>--PILIH--</option>
                                         {{ $agunan }}
                                         @foreach ($agunan as $item)
@@ -32,7 +33,7 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">JENIS DOKUMEN</span>
                                     <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
-                                        name="jenis_dokumen_kode" required>
+                                        name="jenis_dokumen_kode" id='jenis_dokumen' required>
                                         <option value="" selected>--PILIH--</option>
                                         @foreach ($dok as $item)
                                             <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
@@ -43,30 +44,30 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR BPKB</span>
                                     <input class="form-control text-uppercase" type="text" name="no_dokumen"
-                                        placeholder="ENTRI" value="{{ old('no_dokumen') }}" required>
+                                        placeholder="ENTRI" value="{{ old('no_dokumen') }}" id="no_dok" required>
                                 </div>
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">PEMILIK KENDARAAN</span>
                                     <input class="form-control text-uppercase" type="text" name="atas_nama"
-                                        placeholder="ENTRI" value="{{ old('atas_nama') }}" required>
+                                        placeholder="ENTRI" value="{{ old('atas_nama') }}" id="atas_nama" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR MESIN</span>
                                     <input class="form-control text-uppercase" type="text" name="no_mesin"
-                                        value="{{ old('no_mesin') }}" placeholder="ENTRI" required>
+                                        value="{{ old('no_mesin') }}" placeholder="ENTRI" id="no_mesin" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR POLISI</span>
                                     <input class="form-control text-uppercase" type="text" name="no_polisi"
-                                        value="{{ old('no_polisi') }}" placeholder="ENTRI" required>
+                                        value="{{ old('no_polisi') }}" placeholder="ENTRI" id="no_polisi" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR RANGKA</span>
                                     <input class="form-control text-uppercase" type="text" name="no_rangka"
-                                        value="{{ old('no_rangka') }}" placeholder="ENTRI" required>
+                                        value="{{ old('no_rangka') }}" placeholder="ENTRI" id="no_rangka" required>
                                 </div>
                             </div>
 
@@ -74,37 +75,39 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">TIPE KENDARAAN</span>
                                     <input class="form-control text-uppercase" type="text" name="tipe_kendaraan"
-                                        value="{{ old('tipe_kendaraan') }}" placeholder="ENTRI" required>
+                                        value="{{ old('tipe_kendaraan') }}" placeholder="ENTRI" id="tipe_kendaraan"
+                                        required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">MEREK KENDARAAN</span>
                                     <input class="form-control text-uppercase" type="text" name="merek"
-                                        value="{{ old('merek') }}" placeholder="ENTRI" required>
+                                        value="{{ old('merek') }}" placeholder="ENTRI" id="merek" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">TAHUN KENDARAAN</span>
                                     <input class="form-control text-uppercase" type="text" name="tahun"
-                                        value="{{ old('tahun') }}" placeholder="ENTRI" required>
+                                        value="{{ old('tahun') }}" id="tahun" placeholder="ENTRI"
+                                        ondblclick="tahun" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">WARNA KENDARAAN</span>
                                     <input class="form-control text-uppercase" type="text" name="warna"
-                                        value="{{ old('warna') }}" placeholder="ENTRI" required>
+                                        value="{{ old('warna') }}" placeholder="ENTRI" id="warna" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">LOKASI KENDARAAN</span>
                                     <input class="form-control text-uppercase" type="text" name="lokasi"
-                                        {{ old('lokasi') }} placeholder="ENTRI" required>
+                                        {{ old('lokasi') }} placeholder="ENTRI" id="lokasi_kendaraan" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">LOKASI DATI2</span>
                                     <select type="text" class="form-control dati2" style="width:100%;"
-                                        name="kode_dati" required>
+                                        name="kode_dati" id="dati" required>
                                         <option value="" selected>--PILIH--</option>
                                         @foreach ($dati as $item)
                                             <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}</option>
@@ -115,7 +118,7 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN AGUNAN</span>
                                     <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="ENTRI">
+                                        {{ old('catatan') }} id="catatan" placeholder="ENTRI">
                                 </div>
                             </div>
                         </div>

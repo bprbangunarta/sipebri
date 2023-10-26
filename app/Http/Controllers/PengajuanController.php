@@ -213,6 +213,7 @@ class PengajuanController extends Controller
                 ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('users.code_user')
                 ->where('users.id', '=', $us)->get();
+
             $cek->auth = $user[0]->code_user;
             $cek->kd_pengajuan = $req;
             $dt = Midle::analisa_usaha($enc);
@@ -222,7 +223,7 @@ class PengajuanController extends Controller
             for ($i = 0; $i < count($jaminan); $i++) {
                 $jaminan[$i]->kd_pengajuan = Crypt::encrypt($jaminan[$i]->kode_pengajuan);
             }
-            // dd($pengajuan[0]);
+
             return view('pengajuan.data-agunan', [
                 'agunan' => $agunan,
                 'dok' => $dok,

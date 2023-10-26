@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agunan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AgunanController extends Controller
 {
@@ -46,11 +47,19 @@ class AgunanController extends Controller
             ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
             ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
             ->where('data_jaminan.id', $id)->get();
+        //
+        //Data dati
+        $dati = DB::table('v_dati')
+            ->select('nama_dati')
+            ->distinct()
+            ->where('kode_dati', $data[0]->kode_dati)->get();
+        $data[0]->nama_dati = $dati[0]->nama_dati;
 
         return response()->json($data[0]);
     }
     public function update_kendaraan(Request $request)
     {
+
         try {
             $data = [
                 'jenis_jaminan' => $request->jenis_jaminan,
@@ -58,9 +67,18 @@ class AgunanController extends Controller
                 'jenis_dokumen_kode' => $request->jenis_dokumen_kode,
                 'no_dokumen' => $request->no_dokumen,
                 'atas_nama' => $request->atas_nama,
+                'no_mesin' => $request->no_mesin,
+                'no_polisi' => $request->no_polisi,
+                'no_rangka' => $request->no_rangka,
+                'no_polisi' => $request->no_polisi,
+                'tipe_kendaraan' => $request->tipe_kendaraan,
+                'merek' => $request->merek,
+                'tahun' => $request->tahun,
+                'warna' => $request->warna,
                 'lokasi' => $request->lokasi,
+                'kode_dati' => $request->kode_dati,
                 'catatan' => $request->catatan,
-                'input_user' => $request->input_user,
+                'input_user' => Auth::user()->code_user,
             ];
 
             $data['is_entry'] = 1;
@@ -112,8 +130,9 @@ class AgunanController extends Controller
                 'no_dokumen' => $request->no_dokumen,
                 'atas_nama' => $request->atas_nama,
                 'lokasi' => $request->lokasi,
-                'luas' => $request->luas,
+                'kode_dati' => $request->kode_dati,
                 'input_user' => $request->input_user,
+                'catatan' => $request->catatan,
             ];
 
             $data['is_entry'] = 1;
@@ -126,6 +145,24 @@ class AgunanController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
+    }
+
+    public function edit_agunan_tanah($id)
+    {
+        $data = DB::table('data_jaminan')
+            ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
+            ->where('data_jaminan.id', $id)->get();
+        //
+        //Data dati
+        $dati = DB::table('v_dati')
+            ->select('nama_dati')
+            ->distinct()
+            ->where('kode_dati', $data[0]->kode_dati)->get();
+        $data[0]->nama_dati = $dati[0]->nama_dati ?? null;
+
+        return response()->json($data[0]);
     }
 
     public function tambah_lain(Request $request)
@@ -152,6 +189,17 @@ class AgunanController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
+    }
+
+    public function edit_agunan_lain($id)
+    {
+        $data = DB::table('data_jaminan')
+            ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+            ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
+            ->where('data_jaminan.id', $id)->get();
+        //
+        return response()->json($data[0]);
     }
 
     public function update_lain(Request $request)

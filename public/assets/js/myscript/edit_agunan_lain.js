@@ -7,7 +7,7 @@ $(document).ready(function () {
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/pengajuan/agunan/" + id + "/edit",
+            url: "/pengajuan/agunan/lain/" + id + "/edit",
             type: "GET",
             dataType: "json",
             cache: false,

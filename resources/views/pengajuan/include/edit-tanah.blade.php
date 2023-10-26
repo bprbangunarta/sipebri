@@ -20,7 +20,7 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">JENIS AGUNAN</span>
                                     <input type="text" value="{{ $data->auth }}" name="input_user" hidden>
-                                    <input type="text" name="id" id="ids" hidden>
+                                    <input type="text" name="id" id="idt" hidden>
                                     <input type="text" value="{{ $pengajuan->kode_pengajuan }}" name="pengajuan_kode"
                                         hidden>
                                     <select type="text" class="form-control jenis_agunan" style="width: 100%;"
@@ -47,13 +47,15 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                     <input class="form-control text-uppercase" type="text"
-                                        value="{{ old('no_dok') }}" name="no_dokumen" id="no_doks" placeholder="ENTRI" required>
+                                        value="{{ old('no_dok') }}" name="no_dokumen" id="no_doks" placeholder="ENTRI"
+                                        required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                     <input class="form-control text-uppercase" type="text"
-                                        value="{{ old('atas_nama') }}" name="atas_nama" id="atas_namas" placeholder="ENTRI" required>
+                                        value="{{ old('atas_nama') }}" name="atas_nama" id="atas_namas"
+                                        placeholder="ENTRI" required>
                                 </div>
                             </div>
 
@@ -62,7 +64,8 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">LUAS TANAH (M2)</span>
                                     <input class="form-control text-uppercase" type="text"
-                                        value="{{ old('luas') }}" name="luas" id="luass" placeholder="ENTRI" required>
+                                        value="{{ old('luas') }}" name="luas" id="luass" placeholder="ENTRI"
+                                        required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
@@ -74,7 +77,7 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">LOKASI DATI2</span>
                                     <select type="text" class="form-control dati2" style="width:100%;"
-                                        name="kode_dati" required>
+                                        name="kode_dati" id="datit" required>
                                         <option value="" selected>--PILIH--</option>
                                         @foreach ($dati as $item)
                                             <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}</option>
@@ -85,7 +88,7 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN AGUNAN</span>
                                     <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="ENTRI">
+                                        value="{{ old('catatan') }}" id="catat" placeholder="ENTRI">
                                 </div>
                             </div>
                         </div>
