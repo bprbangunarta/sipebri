@@ -53,19 +53,36 @@
 
 
                     <div class="div-right">
-                        <div style="width: 100%;float:left;">
+                        <div style="width: 49.5%;float:left;">
+                            <span class="fw-bold">BIAYA ADMIN (%)</span>
+                            <input type="text" class="form-control text-uppercase" name="b_admin"
+                                id="" placeholder="ENTRI" value="{{ $usulan->b_admin }}">
+                        </div>
+
+                        <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">SEBELUM REALISASI</span>
                             <input type="text" class="form-control text-uppercase" name="sebelum_realisasi"
                                 id="" placeholder="ENTRI" value="{{ $usulan->sebelum_realisasi }}">
                         </div>
 
-                        <div style="margin-top:5px;width: 100%;float:right;">
+                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                            <span class="fw-bold">BIAYA PROVISI (%)</span>
+                            <input type="text" class="form-control text-uppercase" name="b_provisi" id=""
+                                placeholder="ENTRI" value="{{ $usulan->b_provisi }}">
+                        </div>
+
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">SYARAT TAMBAHAN</span>
                             <input type="text" class="form-control text-uppercase" name="syarat_tambahan" id=""
                                 placeholder="ENTRI" value="{{ $usulan->syarat_tambahan }}">
                         </div>
 
-                        <div style="margin-top:5px;width: 100%;float:left;">
+                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                            <span class="fw-bold">BIAYA PENALTI (%)</span>
+                            <input type="text" class="form-control text-uppercase" name="b_penalti" id="" value="{{ $usulan->b_penalti }}" readonly>
+                        </div>
+
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">SYARAT LAINNYA</span>
                             <input type="text" class="form-control text-uppercase" name="syarat_lainnya" id=""
                                 placeholder="ENTRI" value="{{ $usulan->syarat_lainnya }}">
