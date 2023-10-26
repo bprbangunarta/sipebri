@@ -13,7 +13,8 @@
 
         <form action="{{ route('pengajuan.data') }}" method="GET" class="sidebar-form">
             <div class="input-group">
-                <input type="text" name="name" class="form-control" value="{{ Request('name') }}" placeholder="Cari Debitur">
+                <input type="text" name="name" class="form-control" value="{{ Request('name') }}"
+                    placeholder="Cari Debitur">
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-flat">
                         <i class="fa fa-search"></i>
@@ -74,7 +75,8 @@
             </li>
 
             @can('tambah pengajuan kredit')
-                <li class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
+                <li
+                    class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
                     <a href="{{ route('pengajuan.index') }}" title="Permission" title="Input Pengajuan">
                         <i class="fa fa-edit"></i>
                         Input Pengajuan
@@ -83,7 +85,8 @@
             @endcan
 
             @can('otorisasi pengajuan kredit')
-                <li class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'otorisasi/pengajuan') ? 'active' : '' }}">
+                <li
+                    class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'otorisasi/pengajuan') ? 'active' : '' }}">
                     <a href="{{ route('pengajuan.index') }}" title="Otorisasi Pengajuan">
                         <i class="fa fa-check-square-o"></i>
                         Otorisasi Pengajuan
@@ -141,7 +144,7 @@
 
             <li class="header">CETAK BERKAS</li>
             <li>
-                <a href="#" title="Perhitungan Kredit">
+                <a href="{{ route('notifikasi_kredit') }}" title="Perhitungan Kredit">
                     <i class="fa fa-print"></i>
                     Notifikasi Kredit
                 </a>

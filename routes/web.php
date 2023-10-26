@@ -409,6 +409,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
             Route::get('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
         });
+
+
+        Route::controller(DataCetakController::class)->group(function () {
+            Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
+            Route::get('/notifikasi/kredit/generate/{kode}', 'generate_notifikasi')->name('kode.notifikasi');
+        });
     });
 
     Route::controller(PerhitunganController::class)->group(function () {

@@ -29,14 +29,19 @@
                                         <div class="div-left">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">PLAFON</span>
-                                                <input type="hidden" name="kode_pengajuan" value="{{ $pengajuan->kode_pengajuan }}">
+                                                <input type="hidden" name="kode_pengajuan"
+                                                    value="{{ $pengajuan->kode_pengajuan }}">
                                                 <input type="hidden" value="{{ $pengajuan->auth }}" name="input_user">
-                                                <input type="text" class="form-control" name="plafon" id="plafon" placeholder="10.000.000" value="{{ $pengajuan->plafon = 'Rp. ' . number_format($pengajuan->plafon, 0, ',', '.') }}" readonly>
+                                                <input type="text" class="form-control" name="plafon" id="plafon"
+                                                    placeholder="10.000.000"
+                                                    value="{{ $pengajuan->plafon = 'Rp. ' . number_format($pengajuan->plafon, 0, ',', '.') }}"
+                                                    readonly>
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PRODUK</span>
-                                                <select class="form-control produk" style="width:100%;" name="produk_kode" id="select-produk" required>
+                                                <select class="form-control produk" style="width:100%;" name="produk_kode"
+                                                    id="select-produk" required>
                                                     @if (is_null($pengajuan->produk_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -54,14 +59,18 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">JK KREDIT (BULAN)</span>
-                                                <input type="number" class="form-control" name="jangka_waktu" id="jangka_waktu" placeholder="ENTRI" value="{{ $pengajuan->jangka_waktu }}">
+                                                <input type="number" class="form-control" name="jangka_waktu"
+                                                    id="jangka_waktu" placeholder="ENTRI"
+                                                    value="{{ $pengajuan->jangka_waktu }}">
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">JK POKOK (BULAN)</span>
-                                                <input type="number" class="form-control" name="jangka_pokok" id="jangka_pokok" placeholder="ENTRI" value="{{ old('jangka_pokok', $pengajuan->jangka_pokok) }}">
+                                                <input type="number" class="form-control" name="jangka_pokok"
+                                                    id="jangka_pokok" placeholder="ENTRI"
+                                                    value="{{ old('jangka_pokok', $pengajuan->jangka_pokok) }}">
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 100%;float:right;">
                                                 <span class="fw-bold">NAMA CGC</span>
                                                 <select class="form-control cgc" name="tabungan_cgc">
@@ -81,12 +90,12 @@
                                                 </select>
                                             </div>
                                         </div>
-    
-    
+
+
                                         <div class="div-right">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">METODE RPS</span>
-                                                <select class="form-control" name="metode_rps" id="select-metode" required>
+                                                <select class="form-control" name="metode_rps" id="select-metodes" required>
                                                     @if (is_null($pengajuan->metode_rps))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -94,34 +103,43 @@
                                                             {{ $pengajuan->metode_rps }}
                                                         </option>
                                                     @endif
-                                                    <option value="FLAT" {{ old('metode_rps') == 'FLAT' ? 'selected' : '' }}>
+                                                    <option value="FLAT"
+                                                        {{ old('metode_rps') == 'FLAT' ? 'selected' : '' }}>
                                                         Flat
                                                     </option>
-                                                    <option value="PRK" {{ old('metode_rps') == 'PRK' ? 'selected' : '' }}>
+                                                    <option value="PRK"
+                                                        {{ old('metode_rps') == 'PRK' ? 'selected' : '' }}>
                                                         PRK
                                                     </option>
-                                                    <option value="EFEKTIF" {{ old('metode_rps') == 'EFEKTIF' ? 'selected' : '' }}>
+                                                    <option value="EFEKTIF"
+                                                        {{ old('metode_rps') == 'EFEKTIF' ? 'selected' : '' }}>
                                                         EFEKTIF
                                                     </option>
-                                                    <option value="EFEKTIF ANUITAS" {{ old('metode_rps') == 'EFEKTIF ANUITAS' ? 'selected' : '' }}>
+                                                    <option value="EFEKTIF ANUITAS"
+                                                        {{ old('metode_rps') == 'EFEKTIF ANUITAS' ? 'selected' : '' }}>
                                                         EFEKTIF ANUITAS
                                                     </option>
-                                                    <option value="EFEKTIF MUSIMAN" {{ old('metode_rps') == 'EFEKTIF MUSIMAN' ? 'selected' : '' }}>
+                                                    <option value="EFEKTIF MUSIMAN"
+                                                        {{ old('metode_rps') == 'EFEKTIF MUSIMAN' ? 'selected' : '' }}>
                                                         EFEKTIF MUSIMAN
                                                     </option>
                                                 </select>
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">SUKU BUNGA</span>
-                                                <input type="number" class="form-control" name="suku_bunga" id="suku_bunga" placeholder="ENTRI" value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}">
+                                                <input type="number" class="form-control" name="suku_bunga" id="suku_bunga"
+                                                    placeholder="ENTRI"
+                                                    value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}">
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">JW BUNGA (BULAN)</span>
-                                                <input type="number" class="form-control" name="jangka_bunga" id="jangka_bunga" placeholder="ENTRI" value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}">
+                                                <input type="number" class="form-control" name="jangka_bunga"
+                                                    id="jangka_bunga" placeholder="ENTRI"
+                                                    value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}">
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PENGGUNAAN</span>
                                                 <select class="form-control" name="penggunaan" id="select-penggunaan">
@@ -132,16 +150,20 @@
                                                             {{ $pengajuan->penggunaan }}
                                                         </option>
                                                     @endif
-                                                    <option value="MODAL USAHA" {{ old('penggunaan') == 'MODAL USAHA' ? 'selected' : '' }}>
+                                                    <option value="MODAL USAHA"
+                                                        {{ old('penggunaan') == 'MODAL USAHA' ? 'selected' : '' }}>
                                                         MODAL USAHA
                                                     </option>
-                                                    <option value="INVESTASI" {{ old('penggunaan') == 'INVESTASI' ? 'selected' : '' }}>
+                                                    <option value="INVESTASI"
+                                                        {{ old('penggunaan') == 'INVESTASI' ? 'selected' : '' }}>
                                                         INVESTASI
                                                     </option>
-                                                    <option value="KONSUMTIF" {{ old('penggunaan') == 'KONSUMTIF' ? 'selected' : '' }}>
+                                                    <option value="KONSUMTIF"
+                                                        {{ old('penggunaan') == 'KONSUMTIF' ? 'selected' : '' }}>
                                                         KONSUMTIF
                                                     </option>
-                                                    <option value="LAINNYA" {{ old('penggunaan') == 'LAINNYA' ? 'selected' : '' }}>
+                                                    <option value="LAINNYA"
+                                                        {{ old('penggunaan') == 'LAINNYA' ? 'selected' : '' }}>
                                                         LAINNYA
                                                     </option>
                                                 </select>
@@ -149,7 +171,8 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">RESORT</span>
-                                                <select class="form-control resort" style="width:100%;" name="resort_kode">
+                                                <select class="form-control resort" style="width:100%;"
+                                                    name="resort_kode">
                                                     @if (is_null($pengajuan->resort_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -166,25 +189,30 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">KETERANGAN</span>
-                                                <input type="text" class="form-control" name="keterangan" name="keterangan" placeholder="ENTRI" value="{{ old('keterangan', $pengajuan->keterangan) }}">
+                                                <input type="text" class="form-control" name="keterangan"
+                                                    name="keterangan" placeholder="ENTRI"
+                                                    value="{{ old('keterangan', $pengajuan->keterangan) }}">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 @can('edit pengajuan kredit')
-                                <div class="box-body" style="margin-top:-20px;">
-                                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</button>
-                                </div>
+                                    <div class="box-body" style="margin-top:-20px;">
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            style="margin-top:10px;width:100%">SIMPAN</button>
+                                    </div>
                                 @endcan
                             </div>
                         </form>
 
                         @can('otorisasi pengajuan kredit')
-                            <form action="{{ route('otorpengajuan', ['otorisasi' => $pengajuan->kode_pengajuan]) }}" method="POST">
+                            <form action="{{ route('otorpengajuan', ['otorisasi' => $pengajuan->kode_pengajuan]) }}"
+                                method="POST">
                                 @csrf
                                 <div class="box-body" style="margin-top:-20px;">
-                                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">OTORISASI</button>
+                                    <button type="submit" class="btn btn-sm btn-primary"
+                                        style="margin-top:10px;width:100%">OTORISASI</button>
                                 </div>
                             </form>
                         @endcan
@@ -203,10 +231,11 @@
     </script>
     <script>
         // Ketika pilihan sistem berubah
-        $("#select-metode").change(function() {
+        $("#select-metodes").change(function() {
             var selectedValue = $(this).val();
 
-            if (selectedValue === "Flat") {
+            if (selectedValue === "FLAT") {
+
                 // Jika dipilih "Sistem Flat Terelect"
                 $("#jangka_pokok").val("1").prop("readonly", true);
                 $("#jangka_bunga").val("1").prop("readonly", true);
