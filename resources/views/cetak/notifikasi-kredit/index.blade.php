@@ -17,12 +17,11 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" style="width: 10px">#</th>
+                                        <th class="text-center" style="width: 150px">NOTIFIKASI</th>
                                         <th class="text-center" style="width: 150px">PENGAJUAN</th>
-                                        <th class="text-center" style="width: 200px">NASABAH</th>
                                         <th class="text-center">ALAMAT</th>
-                                        <th class="text-center" style="width: 100px">WILAYAH</th>
-                                        <th class="text-center">STATUS</th>
-                                        <th class="text-center" style="width: 130px">AKSI</th>
+                                        <th class="text-center" style="width: 120px">ADMINISTRASI</th>
+                                        <th class="text-center" style="width: 100px">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -32,26 +31,30 @@
                                     @forelse ($data as $item)
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
-                                            <td style="vertical-align: middle;">
-                                                <b>KODE: </b>{{ $item->kode_pengajuan }} <br>
-                                                <b>TANGGAL</b> : {{ $item->tgl_survei }}
-                                            </td>
-                                            <td style="text-transform: uppercase;vertical-align: middle;">
-                                                {{ $item->nama_nasabah }} <br>
-                                                <b>Kaetegori:</b> {{ $item->kategori }}
 
+                                            <td style="vertical-align: middle;">
+                                                [ {{ $item->kategori }} ]<br>
+                                                <b>AN. </b>{{ $item->nama_nasabah }} <br>
+                                                0000/03/KABAG.ANALIS/PBA/X/2023
                                             </td>
+
+                                            <td style="vertical-align: middle;">
+                                                <b>RP. 10.000.000</b> <br>
+                                                EFEKTIF MUSIMAN <br>
+                                                <b>KUP</b> - <b>36 BULAN</b> - <b>32%</b>
+                                            </td>
+
                                             <td style="text-transform: uppercase;">
                                                 {{ $item->alamat_ktp }} <br>
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ $item->nama_kantor }}
+                                            <td style="vertical-align: middle;">
+                                                <b>ADM: </b> 4.00%<br>
+                                                <b>PROVISI: </b> 1.00%<br>
+                                                <b>KREDIT: </b> 5.00%
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <span class="label label-warning">{{ $item->tracking }}</span>
-                                            </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
 
                                                 {{-- <a data-toggle="modal" data-target="#generate-code"
@@ -66,7 +69,7 @@
 
                                                 &nbsp;
                                                 <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    class="btn-circle btn-sm btn-primary" title="Cetak Analisa">
+                                                    class="btn btn-sm btn-primary" title="Cetak Analisa">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                             </td>

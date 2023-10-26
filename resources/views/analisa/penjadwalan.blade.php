@@ -37,7 +37,7 @@
                                         <th class="text-center" width="15%">JADWAL SURVEY</th>
                                         <th class="text-center" width="8%">KANTOR</th>
                                         <th class="text-center" width="8%">PETUGAS</th>
-                                        <th class="text-center" width="8%">AKSI</th>
+                                        <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>

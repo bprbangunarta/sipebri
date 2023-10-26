@@ -143,7 +143,8 @@
             @endcan
 
             <li class="header">CETAK BERKAS</li>
-            <li>
+
+            <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
                 <a href="{{ route('notifikasi_kredit') }}" title="Perhitungan Kredit">
                     <i class="fa fa-print"></i>
                     Notifikasi Kredit
