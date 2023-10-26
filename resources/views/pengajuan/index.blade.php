@@ -115,7 +115,7 @@
                                                 @endcan
                                             </td>
 
-                                            {{-- @can('hapus pengajuan kredit')
+                                            @can('hapus pengajuan kredit')
                                                 <td class="text-center" style="vertical-align: middle;">
                                                     <form action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
                                                         method="POST">
@@ -126,7 +126,7 @@
                                                         </button>
                                                     </form>
                                                 </td>
-                                            @endcan --}}
+                                            @endcan
                                         </tr>
                                         @php
                                             $no++;

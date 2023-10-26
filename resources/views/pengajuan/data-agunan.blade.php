@@ -38,7 +38,7 @@
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" style="width: 100px">AKSI</th>
+                                                    <th class="text-center" colspan="2" style="width: 100px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -91,6 +91,17 @@
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
                                                             </td>
+                                                            <td class="text-center" style="vertical-align: middle;">
+                                                                <form
+                                                                    action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
+                                                                    method="POST">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
@@ -128,12 +139,12 @@
                                         <thead>
                                             <tr class="bg-blue">
                                                 <th class="text-center" style="width: 200px">AGUNAN</th>
-                                                <th class="text-center" style="width: 150px">INFORMASI</th>
+                                                <th class="text-center" style="width: 100px">INFORMASI</th>
                                                 <th class="text-center">DETAIL</th>
                                                 <th class="text-center" style="width: 120px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" style="width: 100px">AKSI</th>
+                                                    <th class="text-center" colspan="2" style="width: 100px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -187,6 +198,17 @@
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
                                                             </td>
+                                                            <td class="text-center" style="vertical-align: middle;">
+                                                                <form
+                                                                    action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
+                                                                    method="POST">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
@@ -228,7 +250,7 @@
                                                 <th class="text-center" style="width: 100px">TAKSASI</th>
 
                                                 @can('edit pengajuan kredit')
-                                                    <th class="text-center" style="width: 100px">AKSI</th>
+                                                    <th class="text-center" colspan="2" style="width: 100px">AKSI</th>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -280,6 +302,17 @@
                                                                     data-id="{{ $item->id }}, {{ $item->atas_nama }}">
                                                                     <i class="fa fa-image"></i>
                                                                 </button>
+                                                            </td>
+                                                            <td class="text-center" style="vertical-align: middle;">
+                                                                <form
+                                                                    action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
+                                                                    method="POST">
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </form>
                                                             </td>
                                                         @endcan
 
@@ -507,13 +540,15 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('no_dok') }}" name="no_dokumen" id="no_dok" placeholder="ENTRI" required>
+                                            value="{{ old('no_dok') }}" name="no_dokumen" id="no_dok"
+                                            placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('atas_nama') }}" name="atas_nama" id="atas_nama" placeholder="ENTRI" required>
+                                            value="{{ old('atas_nama') }}" name="atas_nama" id="atas_nama"
+                                            placeholder="ENTRI" required>
                                     </div>
                                 </div>
 
@@ -522,7 +557,8 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('luas') }}" name="luas" id="luas" placeholder="ENTRI" required>
+                                            value="{{ old('luas') }}" name="luas" id="luas"
+                                            placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -530,7 +566,7 @@
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
                                             id="lokasi" value="{{ old('lokasi') }}" placeholder="ENTRI" required>
                                     </div>
-                                    
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI DATI2</span>
                                         <select type="text" class="form-control dati2" style="width:100%;"
