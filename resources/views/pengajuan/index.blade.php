@@ -36,9 +36,9 @@
                                         <th class="text-center" width="45%">ALAMAT</th>
                                         <th class="text-center" width="15%">PENGAJUAN</th>
                                         <th class="text-center" width="8%">AKSI</th>
-                                        
+
                                         @can('edit pengajuan kredit')
-                                        <th class="text-center" width="5%">CETAK</th>
+                                            <th class="text-center" width="5%">CETAK</th>
                                         @endcan
 
                                         {{-- @can('hapus pengajuan kredit')
@@ -62,11 +62,11 @@
                                             </td>
 
                                             @if (is_null($item->alamat))
-                                            <td class="text-center">-</td>
+                                                <td class="text-center">-</td>
                                             @else
-                                            <td class="text-uppercase">{{ $item->alamat }} <br>
-                                                <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
-                                            </td>
+                                                <td class="text-uppercase">{{ $item->alamat }} <br>
+                                                    <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
+                                                </td>
                                             @endif
 
                                             @php
@@ -74,39 +74,42 @@
                                             @endphp
                                             <td style="vertical-align: middle;">
                                                 <b>JK :</b> {{ $item->jk }} BULAN <br>
-                                                <b>PLAFON :</b> {{ $item->plafon }} 
+                                                <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
 
                                             @can('edit pengajuan kredit')
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->status == 'Lengkapi Data')
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                        <span class="btn bg-red" style="width: 120px;float:left;">{{ $item->status }}</span>
-                                                    </a>
-
-                                                @elseif ($item->status == 'Minta Otorisasi')
-                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                    <span class="btn bg-yellow" style="width: 120px;float:left;">{{ $item->status }}</span>
-                                                </a>
-
-                                                @else
-                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                    <span class="btn bg-green" style="width: 120px;float:left;">{{ $item->status }}</span>
-                                                </a>
-                                                @endif
-                                            </td>
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    @if ($item->status == 'Lengkapi Data')
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                            <span class="btn bg-red"
+                                                                style="width: 120px;float:left;">{{ $item->status }}</span>
+                                                        </a>
+                                                    @elseif ($item->status == 'Minta Otorisasi')
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                            <span class="btn bg-yellow"
+                                                                style="width: 120px;float:left;">{{ $item->status }}</span>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                            <span class="btn bg-green"
+                                                                style="width: 120px;float:left;">{{ $item->status }}</span>
+                                                        </a>
+                                                    @endif
+                                                </td>
                                             @endcan
 
                                             <td class="text-center" style="vertical-align: middle;">
 
                                                 @can('edit pengajuan kredit')
-                                                    <a href="#" class="btn btn-sm btn-primary">
+                                                    <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}"
+                                                        class="btn btn-sm btn-primary">
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}" class="btn btn-sm btn-success" title="Otorisasi Pengajuan">
+                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
+                                                        class="btn btn-sm btn-success" title="Otorisasi Pengajuan">
                                                         <i class="fa fa-check"></i>
                                                     </a>
                                                 @endcan
