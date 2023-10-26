@@ -28,9 +28,9 @@
                                             <div class="form-group">
                                                 <label>WILAYAH</label>
                                                 <input type="hidden" value="{{ $data->auth }}" name="input_user">
-                                                <input type="hidden" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode" >
+                                                <input type="hidden" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode">
                                                 
-                                                <select type="text" class="form-control wilayah" name="kantor_kode">
+                                                <select type="text" class="form-control wilayah" name="kantor_kode" required>
                                                     @if (is_null($survey->kantor_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -49,7 +49,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>KASI ANALIS</label>
-                                                <select type="text" class="form-control kasi" name="kasi_kode">
+                                                <select type="text" class="form-control kasi" name="kasi_kode" required>
                                                     @if (is_null($survey->kasi_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -68,7 +68,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>SURVEYOR</label>
-                                                <select type="text" class="form-control surveyor" name="surveyor_kode">
+                                                <select type="text" class="form-control surveyor" name="surveyor_kode" required>
                                                     @if (is_null($survey->surveyor_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else

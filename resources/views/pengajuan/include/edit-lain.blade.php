@@ -46,7 +46,7 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR DOKUMEN</span>
                                     <input class="form-control text-uppercase" type="text" name="no_dokumen"
-                                        id="no_dokx" value="{{ old('no_dokumen') }}">
+                                        id="no_dokx" value="{{ old('no_dokumen') }}" placeholder="ENTRI" required>
                                 </div>
 
                             </div>
@@ -55,18 +55,18 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">NAMA PEMILIK</span>
                                     <input class="form-control text-uppercase" type="text" name="atas_nama"
-                                        id="atas_namax" value="{{ old('atas_nama') }}">
+                                        id="atas_namax" value="{{ old('atas_nama') }}" placeholder="ENTRI" required>
                                 </div>
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">LOKASI AGUNAN</span>
                                     <input class="form-control text-uppercase" type="text" name="lokasi"
-                                        id="lokasix" value="{{ old('lokasi') }}">
+                                        id="lokasix" value="{{ old('lokasi') }}" placeholder="ENTRI">
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN</span>
                                     <input class="form-control text-uppercase" type="text" name="catatan"
-                                        id="catatanx" placeholder="Catatan" value="{{ old('catatan') }}">
+                                        id="catatanx" value="{{ old('catatan') }}" placeholder="ENTRI">
                                 </div>
                             </div>
                         </div>

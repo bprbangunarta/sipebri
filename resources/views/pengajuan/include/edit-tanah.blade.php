@@ -32,6 +32,7 @@
                                         @endforeach
                                     </select>
                                 </div>
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">JENIS DOKUMEN</span>
                                     <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
@@ -42,31 +43,49 @@
                                         @endforeach
                                     </select>
                                 </div>
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                     <input class="form-control text-uppercase" type="text"
-                                        value="{{ old('no_dok') }}" name="no_dokumen" id="no_doks">
+                                        value="{{ old('no_dok') }}" name="no_dokumen" id="no_doks" placeholder="ENTRI" required>
                                 </div>
 
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">PEMILIK SERTIFIKAT</span>
+                                    <input class="form-control text-uppercase" type="text"
+                                        value="{{ old('atas_nama') }}" name="atas_nama" id="atas_namas" placeholder="ENTRI" required>
+                                </div>
                             </div>
 
                             <div class="div-right">
 
                                 <div style="margin-top: -15px;">
-                                    <span class="fw-bold">PEMILIK SERTIFIKAT</span>
-                                    <input class="form-control text-uppercase" type="text"
-                                        value="{{ old('atas_nama') }}" name="atas_nama" id="atas_namas">
-                                </div>
-                                <div style="margin-top: 5px;">
                                     <span class="fw-bold">LUAS TANAH (M2)</span>
                                     <input class="form-control text-uppercase" type="text"
-                                        value="{{ old('luas') }}" name="luas" id="luass">
+                                        value="{{ old('luas') }}" name="luas" id="luass" placeholder="ENTRI" required>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">LOKASI TANAH</span>
                                     <input class="form-control text-uppercase" type="text" name="lokasi"
-                                        id="lokasis" value="{{ old('lokasi') }}">
+                                        id="lokasis" value="{{ old('lokasi') }}" placeholder="ENTRI" required>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">LOKASI DATI2</span>
+                                    <select type="text" class="form-control dati2" style="width:100%;"
+                                        name="kode_dati" required>
+                                        <option value="" selected>--PILIH--</option>
+                                        @foreach ($dati as $item)
+                                            <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">CATATAN AGUNAN</span>
+                                    <input class="form-control text-uppercase" type="text" name="catatan"
+                                        {{ old('catatan') }} placeholder="ENTRI">
                                 </div>
                             </div>
                         </div>
