@@ -153,6 +153,8 @@ class Data extends Model
             return "2";
         } elseif ($data == "Kurang Baik") {
             return "1";
+        } else {
+            return '0';
         }
     }
 

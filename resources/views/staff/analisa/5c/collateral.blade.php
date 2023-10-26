@@ -24,8 +24,8 @@
 
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">LEGALITAS AGUNAN UTAMA</span>
-                            <select class="form-control input-sm form-border text-uppercase legalitas_agunan" name="legalitas_agunan"
-                                id="collateral3" required>
+                            <select class="form-control input-sm form-border text-uppercase legalitas_agunan"
+                                name="legalitas_agunan" id="collateral3" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('legalitas_agunan') == 3 ? 'selected' : '' }}>Milik Sendiri
                                 </option>
@@ -36,8 +36,8 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">MUDAH DIUANGKAN</span>
-                            <select class="form-control input-sm form-border text-uppercase mudah_diuangkan" name="mudah_diuangkan"
-                                id="collateral5" required>
+                            <select class="form-control input-sm form-border text-uppercase mudah_diuangkan"
+                                name="mudah_diuangkan" id="collateral5" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('mudah_diuangkan') == 3 ? 'selected' : '' }}>
                                     Deposito,Tabungan, Emas</option>
@@ -49,8 +49,8 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KONDISI KENDARAAN</span>
-                            <select class="form-control input-sm form-border text-uppercase kondisi_kendaraan" name="kondisi_kendaraan"
-                                id="collateral7" required>
+                            <select class="form-control input-sm form-border text-uppercase kondisi_kendaraan"
+                                name="kondisi_kendaraan" id="collateral7" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('kondisi_kendaraan') == 3 ? 'selected' : '' }}>Original,
                                     Lengkap, Tidak Cacat</option>
@@ -91,8 +91,8 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KEPEMILIKAN AGUNAN TAMBAHAN</span>
-                            <select class="form-control input-sm form-border text-uppercase agunan_tambahan" name="agunan_tambahan"
-                                id="collateral2" required>
+                            <select class="form-control input-sm form-border text-uppercase agunan_tambahan"
+                                name="agunan_tambahan" id="collateral2" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('agunan_tambahan') == 3 ? 'selected' : '' }}>Milik Sendiri
                                 </option>
@@ -106,7 +106,8 @@
                     <div class="div-right">
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">LEGALITAS AGUNAN TAMBAHAN</span>
-                            <select class="form-control input-sm form-border text-uppercase legalitas_agunan_tambahan" name="legalitas_agunan_tambahan" id="collateral4" required>
+                            <select class="form-control input-sm form-border text-uppercase legalitas_agunan_tambahan"
+                                name="legalitas_agunan_tambahan" id="collateral4" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('legalitas_agunan_tambahan') == 3 ? 'selected' : '' }}>Milik
                                     Sendiri</option>
@@ -117,8 +118,8 @@
 
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">STABILITAS HARGA</span>
-                            <select class="form-control input-sm form-border text-uppercase stabilitas_harga" name="stabilitas_harga"
-                                id="collateral6" required>
+                            <select class="form-control input-sm form-border text-uppercase stabilitas_harga"
+                                name="stabilitas_harga" id="collateral6" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('stabilitas_harga') == 3 ? 'selected' : '' }}>SHM</option>
                                 <option value="2" {{ old('stabilitas_harga') == 2 ? 'selected' : '' }}>
@@ -144,14 +145,14 @@
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">PERMOHONAN TAKSASI AGUNAN</span>
                             <input class="form-control text-uppercase" name="taksasi_agunan"
-                                value="{{ $collateral->taksasi ?? 0 }} %" required readonly>
+                                value="{{ $collateral->taksasi_agunan ?? 0 }} %" required readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:right;">
                             <span class="fw-bold">EVALUASI</span>
-                            <input class="form-control bg-blue text-uppercase" type="text"
-                                name="evaluasi_collateral" id="evaluasi_collateral"
-                                value="{{ old('evaluasi_collateral') ?? 'KOSONG' }}" readonly required>
+                            <input class="form-control bg-blue text-uppercase" type="text" name="evaluasi_collateral"
+                                id="evaluasi_collaterals" value="{{ old('evaluasi_collateral') ?? 'KOSONG' }}" readonly
+                                required>
                         </div>
                     </div>
 
@@ -167,6 +168,7 @@
 @push('myscript')
     <script>
         //====ANALISA COLLATERAL====//
+
         var collateral1 = document.getElementById("collateral1");
         var collateral2 = document.getElementById("collateral2");
         var collateral3 = document.getElementById("collateral3");
@@ -176,7 +178,7 @@
         var collateral7 = document.getElementById("collateral7");
         var collateral8 = document.getElementById("collateral8");
         var collateral9 = document.getElementById("collateral9");
-        var analisa4 = document.getElementById("evaluasi_collateral");
+        var analisa4 = document.getElementById("evaluasi_collaterals");
 
         collateral1.addEventListener("change", collateral);
         collateral2.addEventListener("change", collateral);
@@ -188,6 +190,7 @@
         collateral8.addEventListener("change", collateral);
         collateral9.addEventListener("change", collateral);
 
+
         function collateral() {
             var selectedcollateral1 = parseInt(collateral1.value) || 0;
             var selectedcollateral2 = parseInt(collateral2.value) || 0;
@@ -198,7 +201,7 @@
             var selectedcollateral7 = parseInt(collateral7.value) || 0;
             var selectedcollateral8 = parseInt(collateral8.value) || 0;
             var selectedcollateral9 = parseInt(collateral9.value) || 0;
-
+            console.log(selectedcollateral1)
             var jml =
                 selectedcollateral1 +
                 selectedcollateral2 +
@@ -210,11 +213,13 @@
                 selectedcollateral8 +
                 selectedcollateral9;
 
+
+
             if (jml === 0 || jml <= 9) {
                 var nilai = "Kurang Baik";
             } else if (jml === 10 || jml <= 18) {
                 var nilai = "Cukup Baik";
-            } else if (jml === 19 || jml <= 27) {
+            } else if (jml === 19 || jml <= 50) {
                 var nilai = "Baik";
             }
 
@@ -222,19 +227,19 @@
         }
         //====ANALISA COLLATERAL====//
     </script>
-    
+
     <script>
-        $(function () {
-            //Initialize Select2 Elements
-        $('.agunan_utama').select2()
-        $('.agunan_tambahan').select2()
-        $('.legalitas_agunan').select2()
-        $('.legalitas_agunan_tambahan').select2()
-        $('.mudah_diuangkan').select2()
-        $('.stabilitas_harga').select2()
-        $('.lokasi_shm').select2()
-        $('.kondisi_kendaraan').select2()
-        $('.aspek_hukum').select2()
-        })
+        // $(function() {
+        //     //Initialize Select2 Elements
+        //     $('#collateral1').select2()
+        //     $('.agunan_tambahan').select2()
+        //     $('.legalitas_agunan').select2()
+        //     $('.legalitas_agunan_tambahan').select2()
+        //     $('.mudah_diuangkan').select2()
+        //     $('.stabilitas_harga').select2()
+        //     $('.lokasi_shm').select2()
+        //     $('.kondisi_kendaraan').select2()
+        //     $('.aspek_hukum').select2()
+        // })
     </script>
 @endpush

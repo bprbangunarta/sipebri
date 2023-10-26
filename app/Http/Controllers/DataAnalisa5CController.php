@@ -238,7 +238,7 @@ class DataAnalisa5CController extends Controller
                 'capital_sumber_modal' => $request->capital_sumber_modal,
                 'capital_evaluasi_capital' => $nilai,
             ];
-            DB::table('a5c_capacity')->where('kode_analisa', $request->kode_analisa)->update($data);
+            DB::table('a5c_capital')->where('kode_analisa', $request->kode_analisa)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -252,9 +252,7 @@ class DataAnalisa5CController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
             $cap = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
-            if (is_null($cap)) {
-                return redirect()->back()->with('error', 'Lengkapi Analisa 5C Capital terlebih dahulu');
-            }
+
             //Taksasi
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             //total semua nilai taksasi
@@ -273,7 +271,7 @@ class DataAnalisa5CController extends Controller
                     'collateral' => $data,
                 ]);
             }
-            $nilai = Data::analisa5c_number($cap->evaluasi_collateral);
+            $nilai = Data::analisa5c_number($cap->evaluasi_collateral) ?? 0;
             $cap->evaluasi_collateral = $nilai;
             // dd($cap);
             return view('staff.analisa.5c.collateral-edit', [
@@ -307,6 +305,7 @@ class DataAnalisa5CController extends Controller
                 'taksasi_agunan' => str_replace(array(' ', '%'), '', $request->taksasi_agunan),
                 'evaluasi_collateral' => $nilai,
             ];
+
             DB::table('a5c_collateral')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {

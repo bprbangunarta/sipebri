@@ -92,6 +92,13 @@ class DataCetakController extends Controller
             ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.nama_nasabah')
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
         //
+
+        $lasts = Pengajuan::latest('kode_pengajuan')->first();
+        if (is_null($lasts)) {
+            $count = 339931;
+        } else {
+            $count = (int) $lasts->kode_pengajuan + 1;
+        }
         $count = 530;
         $lengths = 4;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
