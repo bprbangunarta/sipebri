@@ -107,6 +107,7 @@ class AnalisaJaminanController extends Controller
             $foto = null;
         } else {
             $foto = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->$no) : null;
+            // $foto = $jaminan->foto1 ? asset('storage/image/photo_agunan/' . $jaminan->$no) : null;
         }
 
         return response()->json($foto);
@@ -116,7 +117,7 @@ class AnalisaJaminanController extends Controller
 
     public function fhotokendaraan(Request $request)
     {
-
+        dd($request);
         try {
             $cek = $request->validate([
                 'foto1' => 'image|mimes:jpeg,png,jpg|max:5120',
