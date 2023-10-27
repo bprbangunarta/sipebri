@@ -168,7 +168,7 @@
                                 <div class="form-group">
                                     <label>TGL. SURVEY</label>
                                     <input type="date" class="form-control" name="tgl_survei"
-                                        id="datepicker-tanggal-survei">
+                                        id="datepicker-tanggal-survei" required>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
