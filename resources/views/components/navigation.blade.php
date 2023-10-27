@@ -126,6 +126,13 @@
                     Input Persetujuan
                 </a>
             </li>
+
+            <li class="#">
+                <a href="#">
+                    <i class="fa fa-file-text-o"></i>
+                    Survey dan Analisa
+                </a>
+            </li>
             @endcan
 
             @can('menu cetak')
