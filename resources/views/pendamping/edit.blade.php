@@ -129,8 +129,9 @@
                                                                 id="tempat_lahir" placeholder="Tempat Lahir"
                                                                 value="{{ old('tempat_lahir') }}">
                                                         @else
-                                                            <input type="text" class="form-control" name="tempat_lahir"
-                                                                id="tempat_lahir" placeholder="Tempat Lahir"
+                                                            <input type="text" class="form-control"
+                                                                name="tempat_lahir" id="tempat_lahir"
+                                                                placeholder="Tempat Lahir"
                                                                 value="{{ old('tempat_lahir', $pendamping[0]->tempat_lahir) }}">
                                                         @endif
 
@@ -163,6 +164,7 @@
                                                             <option value="Suami">Suami</option>
                                                             <option value="Orang Tua">Orang Tua</option>
                                                             <option value="Saudara">Saudara</option>
+                                                            <option value="Saudara">Lainnya</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md">

@@ -21,7 +21,8 @@
                             </li>
                         </ul>
 
-                        <form action="{{ route('pendamping.update', ['pendamping' => $pendamping[0]->pengajuan_kode]) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('pendamping.update', ['pendamping' => $pendamping[0]->pengajuan_kode]) }}"
+                            method="POST" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
                             <div class="tab-content">
@@ -31,7 +32,8 @@
                                         <div class="div-left">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">JENIS ID</span>
-                                                <select type="text" class="form-control ktp" style="width: 100%;" name="identitas" required>
+                                                <select type="text" class="form-control ktp" style="width: 100%;"
+                                                    name="identitas" required>
                                                     @if (is_null($pendamping[0]->identitas))
                                                         <option value="1">KTP</option>
                                                     @else
@@ -43,88 +45,117 @@
                                                     <option value="9">LAINNYA</option>
                                                 </select>
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO IDENTITAS</span>
-                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user" required>
-                                                <input type="text" class="form-control" name="no_identitas" id="no_identitas" placeholder="ENTRI" value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}" required>
+                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user"
+                                                    required>
+                                                <input type="text" class="form-control" name="no_identitas"
+                                                    id="no_identitas" placeholder="ENTRI"
+                                                    value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}"
+                                                    required>
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA LENGKAP</span>
                                                 @if (is_null($pendamping[0]->nama_pendamping))
-                                                    <input type="text" class="form-control" name="nama_pendamping" id="nama_pendamping" placeholder="ENTRI" value="{{ old('nama_pendamping') }}" required>
+                                                    <input type="text" class="form-control" name="nama_pendamping"
+                                                        id="nama_pendamping" placeholder="ENTRI"
+                                                        value="{{ old('nama_pendamping') }}" required>
                                                 @else
-                                                    <input type="text" class="form-control" name="nama_pendamping" id="nama_pendamping" placeholder="ENTRI" value="{{ old('nama_pendamping', $pendamping[0]->nama_pendamping) }}" required>
+                                                    <input type="text" class="form-control" name="nama_pendamping"
+                                                        id="nama_pendamping" placeholder="ENTRI"
+                                                        value="{{ old('nama_pendamping', $pendamping[0]->nama_pendamping) }}"
+                                                        required>
                                                 @endif
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TEMPAT LAHIR</span>
                                                 @if (is_null($pendamping[0]->tempat_lahir))
-                                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="ENTRI" value="{{ old('tempat_lahir') }}" required>
+                                                    <input type="text" class="form-control" name="tempat_lahir"
+                                                        id="tempat_lahir" placeholder="ENTRI"
+                                                        value="{{ old('tempat_lahir') }}" required>
                                                 @else
-                                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="ENTRI" value="{{ old('tempat_lahir', $pendamping[0]->tempat_lahir) }}" required>
-                                                @endif 
+                                                    <input type="text" class="form-control" name="tempat_lahir"
+                                                        id="tempat_lahir" placeholder="ENTRI"
+                                                        value="{{ old('tempat_lahir', $pendamping[0]->tempat_lahir) }}"
+                                                        required>
+                                                @endif
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">TANGGAL LAHIR</span>
                                                 @if (is_null($pendamping[0]->tanggal_lahir))
-                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="ttln" required data-inputmask="'alias': 'YYYY-DD-MM'" data-mask>
+                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                        name="tanggal_lahir" id="ttln" required
+                                                        data-inputmask="'alias': 'YYYY-DD-MM'" data-mask>
                                                 @else
-                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="tanggal_lahir" id="ttlo" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask value="{{ $pendamping[0]->tanggal_lahir }}" required>
+                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                        name="tanggal_lahir" id="ttlo"
+                                                        data-inputmask="'alias': 'YYYY-DD-MM'" data-mask
+                                                        value="{{ $pendamping[0]->tanggal_lahir }}" required>
                                                 @endif
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">MASA IDENTITAS</span>
                                                 @if (is_null($pendamping[0]->masa_identitas))
-                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="min" required data-inputmask="'alias': 'YYYY-DD-MM'" data-mask>
+                                                    <input class="form-control" placeholder="YYYY-MM-DD"
+                                                        name="masa_identitas" id="min" required
+                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask>
                                                 @else
-                                                    <input class="form-control" placeholder="YYYY-DD-MM" name="masa_identitas" id="mio" data-inputmask="'alias': 'YYYY-DD-MM'" data-mask value="{{ $pendamping[0]->masa_identitas }}" required>
+                                                    <input class="form-control" placeholder="YYYY-MM-DD"
+                                                        name="masa_identitas" id="mio"
+                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask
+                                                        value="{{ $pendamping[0]->masa_identitas }}" required>
                                                 @endif
                                             </div>
                                         </div>
-    
-    
+
+
                                         <div class="div-right">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">STATUS</span>
                                                 <select type="text" class="form-control" name="status" required>
-                                                @if (is_null($pendamping[0]->status))
-                                                    <option value="">--PILIH--</option>
-                                                @else
-                                                    <option value="{{ $pendamping[0]->status }}">
-                                                        {{ $pendamping[0]->status }}
-                                                    </option>
-                                                @endif
+                                                    @if (is_null($pendamping[0]->status))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $pendamping[0]->status }}">
+                                                            {{ $pendamping[0]->status }}
+                                                        </option>
+                                                    @endif
                                                     <option value="ISTRI">ISTRI</option>
                                                     <option value="SUAMI">SUAMI</option>
                                                     <option value="ORANG TUA">ORANG TUA</option>
                                                     <option value="SAUDARA">SAUDARA</option>
+                                                    <option value="SAUDARA">LAINNYA</option>
                                                 </select>
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO TELP</span>
                                                 @if (is_null($pendamping[0]->no_hp))
-                                                    <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="ENTRI" value="{{ old('no_hp') }}" required>
+                                                    <input type="text" class="form-control" name="no_hp"
+                                                        id="no_hp" placeholder="ENTRI" value="{{ old('no_hp') }}"
+                                                        required>
                                                 @else
-                                                    <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="ENTRI" value="{{ old('no_hp', $pendamping[0]->no_hp) }}" required>
+                                                    <input type="text" class="form-control" name="no_hp"
+                                                        id="no_hp" placeholder="ENTRI"
+                                                        value="{{ old('no_hp', $pendamping[0]->no_hp) }}" required>
                                                 @endif
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">TANGGUNGAN</span>
                                                 <select class="form-control text-uppercase" name="tanggungan" required>
-                                                @if (is_null($pendamping[0]->tanggungan))
-                                                    <option value="">--PILIH--</option>
-                                                @else
-                                                    <option value="{{ $pendamping[0]->tanggungan }}">
-                                                        {{ $pendamping[0]['tgn'] }}</option>
-                                                @endif
-    
+                                                    @if (is_null($pendamping[0]->tanggungan))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $pendamping[0]->tanggungan }}">
+                                                            {{ $pendamping[0]['tgn'] }}</option>
+                                                    @endif
+
                                                     <option value="0">Tidak Ada</option>
                                                     <option value="1">1 Orang</option>
                                                     <option value="2">2 Orang</option>
@@ -138,19 +169,20 @@
                                                     <option value="10">10 Orang</option>
                                                 </select>
                                             </div>
-    
+
                                             <div style="margin-top:5px;width: 100%;float:right;">
                                                 <span class="fw-bold">PISAH HARTA</span>
-                                                <select class="form-control text-uppercase" placeholder="--PILIH--" name="pisah_harta" required>
+                                                <select class="form-control text-uppercase" placeholder="--PILIH--"
+                                                    name="pisah_harta" required>
                                                     @if (is_null($pendamping[0]->pisah_harta))
                                                         <option value="">--PILIH--</option>
                                                     @else
                                                         <option value="{{ $pendamping[0]->pisah_harta }}">
                                                             {{ $pendamping[0]['pisah'] }}</option>
                                                     @endif
-    
+
                                                     <option value="Y">YA</option>
-                                                    <option value="T">TIDAK</option>
+                                                    <option value="T" selected>TIDAK</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -163,65 +195,79 @@
                                         <div class="div-left">
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">FOTO FORMAL</span>
-                                                <input type="hidden" name="oldphoto" value="{{ $pendamping[0]->photo }}">
-    
-                                                <input type="file" class="form-control" class="photo" name="photo" id="photo" onchange="previewPhoto()">
-    
-                                                <div class="box box-primary" id="accordion-photo" style="margin-top:5px;">
+                                                <input type="hidden" name="oldphoto"
+                                                    value="{{ $pendamping[0]->photo }}">
+
+                                                <input type="file" class="form-control" class="photo" name="photo"
+                                                    id="photo" onchange="previewPhoto()">
+
+                                                <div class="box box-primary" id="accordion-photo"
+                                                    style="margin-top:5px;">
                                                     <div class="box-header">
                                                         <span class="fw-bold">PREVIEW</span>
                                                         <div class="pull-right">
-                                                        <button type="button" class="btn btn-primary btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                                                            <i class="fa fa-minus"></i>
-                                                        </button>
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                data-widget="collapse" data-toggle="tooltip"
+                                                                title="" data-original-title="Collapse">
+                                                                <i class="fa fa-minus"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     <div class="box-body pad" style="">
-                                                        <img class="img-responsive img-preview" src="{{ asset('storage/image/photo/' . $pendamping[0]->photo) }}">
+                                                        <img class="img-responsive img-preview"
+                                                            src="{{ asset('storage/image/photo/' . $pendamping[0]->photo) }}">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-    
-    
+
+
                                         <div class="div-right">
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">FOTO KTP</span>
-                                                <input type="hidden" name="oldphotoktp" value="{{ $pendamping[0]->photo_ktp }}">
-    
-                                            <input type="file" class="form-control" class="photo_ktp" name="photo_ktp" id="photo_ktp" onchange="previewPhotoKtp()">
-    
+                                                <input type="hidden" name="oldphotoktp"
+                                                    value="{{ $pendamping[0]->photo_ktp }}">
+
+                                                <input type="file" class="form-control" class="photo_ktp"
+                                                    name="photo_ktp" id="photo_ktp" onchange="previewPhotoKtp()">
+
                                                 <div class="box box-primary" id="accordion-kk" style="margin-top:5px;">
                                                     <div class="box-header">
                                                         <span class="fw-bold">PREVIEW</span>
                                                         <div class="pull-right">
-                                                        <button type="button" class="btn btn-primary btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                                                            <i class="fa fa-minus"></i>
-                                                        </button>
+                                                            <button type="button" class="btn btn-primary btn-sm"
+                                                                data-widget="collapse" data-toggle="tooltip"
+                                                                title="" data-original-title="Collapse">
+                                                                <i class="fa fa-minus"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     <div class="box-body pad" style="">
-                                                        <img class="img-responsive img-preview-ktp" src="{{ asset('storage/image/photo_ktp/' . $pendamping[0]->photo_ktp) }}">
+                                                        <img class="img-responsive img-preview-ktp"
+                                                            src="{{ asset('storage/image/photo_ktp/' . $pendamping[0]->photo_ktp) }}">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 @can('edit pengajuan kredit')
-                                <div class="box-body" style="margin-top:-20px;">
-                                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</button>
-                                </div>
+                                    <div class="box-body" style="margin-top:-20px;">
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            style="margin-top:10px;width:100%">SIMPAN</button>
+                                    </div>
                                 @endcan
                             </div>
                         </form>
 
                         @can('otorisasi pengajuan kredit')
-                            <form action="{{ route('otorpendamping', ['otorisasi' => $nasabah->kd_pengajuan]) }}" method="POST">
+                            <form action="{{ route('otorpendamping', ['otorisasi' => $nasabah->kd_pengajuan]) }}"
+                                method="POST">
                                 @csrf
                                 <div class="box-body" style="margin-top:-20px;">
-                                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">OTORISASI</button>
+                                    <button type="submit" class="btn btn-sm btn-primary"
+                                        style="margin-top:10px;width:100%">OTORISASI</button>
                                 </div>
                             </form>
                         @endcan
