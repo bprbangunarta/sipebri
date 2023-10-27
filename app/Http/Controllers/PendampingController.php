@@ -34,13 +34,13 @@ class PendampingController extends Controller
             //Ubah format masa identitas Ymd menjadi m-d-Y
             if (!is_null($pendamping[0]->masa_identitas)) {
                 $carbonid = Carbon::createFromFormat('Ymd', $pendamping[0]->masa_identitas);
-                $pendamping[0]->masa_identitas = $carbonid->format('m-d-Y');
+                $pendamping[0]->masa_identitas = $carbonid->format('Y-d-m');
             }
 
             //Ubah format tanggal lahir Ymd menjadi m-d-Y
             if (!is_null($pendamping[0]->masa_identitas)) {
                 $carbonDate = Carbon::createFromFormat('Ymd', $pendamping[0]->tanggal_lahir);
-                $pendamping[0]->tanggal_lahir = $carbonDate->format('m-d-Y');
+                $pendamping[0]->tanggal_lahir = $carbonDate->format('Y-d-m');
             }
 
             //Ubah identitas dari nomor id menjadi data string
@@ -69,7 +69,7 @@ class PendampingController extends Controller
             $cek->kd_nasabah = Crypt::encrypt($cek->kode_nasabah);
             $cek->kd_pengajuan = $nasabah;
             $dt = Midle::analisa_usaha($enc);
-
+            // dd($pendamping);
             return view('pengajuan.data-pendamping', [
                 'data' => $dt[0],
                 'nasabah' => $cek,
