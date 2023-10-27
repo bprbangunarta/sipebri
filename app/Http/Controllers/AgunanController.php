@@ -155,12 +155,7 @@ class AgunanController extends Controller
             ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
             ->where('data_jaminan.id', $id)->get();
         //
-        //Data dati
-        $dati = DB::table('v_dati')
-            ->select('nama_dati')
-            ->distinct()
-            ->where('kode_dati', $data[0]->kode_dati)->get();
-        $data[0]->nama_dati = $dati[0]->nama_dati ?? null;
+
 
         return response()->json($data[0]);
     }

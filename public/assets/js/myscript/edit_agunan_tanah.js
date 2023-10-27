@@ -7,11 +7,12 @@ $(document).ready(function () {
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/pengajuan/agunan/tanah/" + id + "/edit",
+            url: "pengajuan/agunan/tanah/" + id + "/edit",
             type: "GET",
             dataType: "json",
             cache: false,
             success: function (response) {
+                console.log(response);
                 $("#jenis_agunans").append(
                     $("<option>", {
                         value: response.jenis_agunan_kode,
@@ -53,10 +54,10 @@ $(document).ready(function () {
         $("#dokumen").empty();
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
-        console.log(id);
+
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/pengajuan/agunan/" + id + "/edit",
+            url: "/pengajuan/agunan/tanah/" + id + "/edit",
             type: "GET",
             dataType: "json",
             cache: false,
