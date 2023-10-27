@@ -187,7 +187,6 @@
                             <div class="col-md-12">
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>CATATAN</label>
-                                    {{-- <textarea class="form-control" rows="3" readonly></textarea> --}}
                                     <div id="catatan"></div>
                                 </div>
                             </div>
