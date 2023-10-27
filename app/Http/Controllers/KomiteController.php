@@ -124,7 +124,6 @@ class KomiteController extends Controller
                 DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
             }
 
-
             // dd($cek, $request->all(), $user->role_name);
             if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
                 $data2 = [

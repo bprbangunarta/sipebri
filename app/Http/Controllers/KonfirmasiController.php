@@ -43,7 +43,7 @@ class KonfirmasiController extends Controller
             $dt = Midle::analisa_usaha($enc);
             $cek[0]->plafon = $dt[0]->plafon;
             $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
-
+            dd($konfirmasi[0]);
             return view('pengajuan.data-konfirmasi', [
                 'data' => $cek[0],
                 'konfirmasi' => $konfirmasi[0],
@@ -82,6 +82,7 @@ class KonfirmasiController extends Controller
 
             //Data Tracking
             $trc = DB::table('data_tracking')->where('pengajuan_kode', $enc)->first();
+
             if (is_null($trc)) {
                 $name = 'TRK';
                 $length = 5;
