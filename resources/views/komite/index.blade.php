@@ -44,10 +44,6 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <span class="label label-warning">{{ $item->tracking }}</span>
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->plafon >= 1000 && $item->plafon <= 10000000)
                                                     <i class="fa fa-circle text-success"></i>
                                                 @else
@@ -81,6 +77,10 @@
                                                 @else
                                                     <i class="fa fa-circle text-danger"></i>
                                                 @endif
+                                            </td>
+
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <span class="label label-warning">{{ $item->tracking }}</span>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
