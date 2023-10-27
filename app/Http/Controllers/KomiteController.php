@@ -72,7 +72,7 @@ class KomiteController extends Controller
             $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
             $cek = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
 
-            //Data Tracking
+            // //Data Tracking
             $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             if (!is_null($trc)) {
                 $tracking = [
@@ -81,7 +81,7 @@ class KomiteController extends Controller
 
                 DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
             }
-
+            // dd($trc);
             if (!is_null($cek)) {
                 return self::update($request);
             }
@@ -124,21 +124,23 @@ class KomiteController extends Controller
                 ];
             } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
                 $data2 = [
-                    'status' => ucwords($request->putusan_komite),
-                    'tracking' => "Selesai",
+                    'tracking' => ucwords($request->putusan_komite),
+                    'selesai' => "Selesai",
                     'updated_at' => now(),
                 ];
             } else {
                 $data2 = [
-                    'status' => ucwords($request->putusan_komite),
+                    'tracking' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             }
+            // dd($request->putusan_komite);
 
+            // DB::transaction(function () use ($data) {
             DB::transaction(function () use ($data, $request, $data2) {
-                $a = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->get();
-                Pengajuan::where('id', $a[0]->id)->update($data2);
-                DB::table('a_komite')->insert($data);
+                // $a = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->get();
+                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+                DB::table('a_komite')->update($data);
             });
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (Throwable $th) {

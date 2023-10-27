@@ -10,6 +10,7 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
+                console.log(response);
                 $("#staff_analis").val(response.catatan1 ?? null);
                 $("#kasi_analis").val(response.catatan2 ?? null);
                 $("#kabag_analis").val(response.catatan3 ?? null);
