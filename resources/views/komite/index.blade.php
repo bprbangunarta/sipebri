@@ -18,7 +18,7 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" style="width: 10px">#</th>
                                         <th class="text-center" style="width: 200px">NASABAH</th>
-                                        <th class="text-center" style="width: 150px">PENGAJUAN</th>
+                                        <th class="text-center" style="width: 200px">PENGAJUAN</th>
                                         <th class="text-center">STATUS</th>
                                         <th class="text-center" style="width: 50px;">K1</th>
                                         <th class="text-center" style="width: 50px;">K2</th>
