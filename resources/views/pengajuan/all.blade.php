@@ -55,7 +55,8 @@
                                                 <td class="text-center">-</td>
                                             @else
                                                 <td class="text-uppercase">{{ $item->alamat }} <br>
-                                                    <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
+                                                    <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
+                                                    </b>{{ $item->kecamatan }}
                                                 </td>
                                             @endif
 
@@ -64,21 +65,22 @@
                                             @endphp
                                             <td style="vertical-align: middle;">
                                                 <b>JK :</b> {{ $item->jk }} BULAN <br>
-                                                <b>PLAFON :</b> {{ $item->plafon }} 
+                                                <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->status == 'Lengkapi Data' || $item->status == 'Minta Otorisasi')
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Verifikasi Data</span>
-
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Verifikasi
+                                                        Data</span>
                                                 @elseif ($item->status == 'Batal' || $item->status == 'Dibatalkan' || $item->status == 'Ditolak')
-                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">{{ $item->status }}</span>
-
+                                                    <span class="btn bg-red"
+                                                        style="width: 120px;hight:100%;">{{ $item->status }}</span>
                                                 @elseif ($item->status == 'Sudah Otorisasi')
-                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Survey & Analisa</span>
-
+                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Survey &
+                                                        Analisa</span>
                                                 @else
-                                                    <span class="btn bg-green" style="width: 120px;hight:100%;">{{ $item->status }}</span>
+                                                    <span class="btn bg-green"
+                                                        style="width: 120px;hight:100%;">{{ $item->status }}</span>
                                                 @endif
                                             </td>
                                         </tr>
