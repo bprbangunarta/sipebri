@@ -40,9 +40,12 @@ class KomiteController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
+
+        $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first('role_name');
         // dd($data);
         return view('komite.index', [
             'data' => $data,
+            'user' => $user,
         ]);
     }
 
@@ -112,7 +115,7 @@ class KomiteController extends Controller
                 $waktu => now(),
             ];
 
-            // dd($request);
+
 
             if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite 1' || $request->putusan_komite == 'Naik Komite 2') {
                 $data2 = [

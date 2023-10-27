@@ -37,7 +37,7 @@ class PengajuanController extends Controller
 
         $query = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
+            ->select('data_pengajuan.kode_pengajuan as kode', 'data_pengajuan.nasabah_kode as kd_nasabah', 'data_pengajuan.id as id', 'data_pengajuan.plafon as plafon', 'data_pengajuan.jangka_waktu as jk', 'data_nasabah.nama_nasabah as nama', 'data_nasabah.no_telp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_nasabah.alamat_ktp as alamat', 'data_pengajuan.status',  'data_nasabah.is_entry as entry')
             ->where('data_pengajuan.status', '!=', 'Batal')
             ->where('data_pengajuan.tracking', '!=', 'Selesai')
             ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')->orderBy('data_nasabah.created_at', 'ASC');;
@@ -58,7 +58,7 @@ class PengajuanController extends Controller
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
         }
-
+        // dd($pengajuan);
         return view('pengajuan.index', [
             'data' => $pengajuan,
             'auth' => $auth,

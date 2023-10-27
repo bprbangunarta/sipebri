@@ -64,7 +64,7 @@
                                                     <i class="fa fa-circle text-danger"></i>
                                                 @endif
                                             </td>
-                                            
+
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->plafon >= 35000001 && $item->plafon <= 75000000)
                                                     <i class="fa fa-circle text-success"></i>
@@ -97,11 +97,31 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#modal-edit"
-                                                    class="btn-circle btn-sm btn-primary"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
-                                                    <i class="fa fa-check"></i>
-                                                </a>
+                                                @if ($user->role_name == 'Staff Analis' && $item->tracking == 'Persetujuan Komite')
+                                                    <a data-toggle="modal" data-target="#modal-edit"
+                                                        class="btn-circle btn-sm btn-primary"
+                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                @elseif ($user->role_name == 'Kasi Analis' && $item->tracking == 'Naik Kasi')
+                                                    <a data-toggle="modal" data-target="#modal-edit"
+                                                        class="btn-circle btn-sm btn-primary"
+                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                @elseif ($user->role_name == 'Kabag Analis' && $item->tracking == 'Naik Komite 1')
+                                                    <a data-toggle="modal" data-target="#modal-edit"
+                                                        class="btn-circle btn-sm btn-primary"
+                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                @elseif ($user->role_name == 'Direksi' && $item->tracking == 'Naik Komite 2')
+                                                    <a data-toggle="modal" data-target="#modal-edit"
+                                                        class="btn-circle btn-sm btn-primary"
+                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
+                                                        <i class="fa fa-check"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty

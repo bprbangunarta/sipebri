@@ -64,7 +64,8 @@
                                                 <td class="text-center">-</td>
                                             @else
                                                 <td class="text-uppercase">{{ $item->alamat }} <br>
-                                                    <b>Desa: </b>Sukamulya | <b>Kecamatan: </b>Kamarung
+                                                    <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
+                                                    </b>{{ $item->kecamatan }}
                                                 </td>
                                             @endif
 
