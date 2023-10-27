@@ -437,7 +437,7 @@
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">TAHUN KENDARAAN</span>
+                                        <span class="fw-bold">TAHUN PEMBUATAN KENDARAAN</span>
                                         <input class="form-control text-uppercase" type="text" name="tahun"
                                             value="{{ old('tahun') }}" placeholder="ENTRI" required>
                                     </div>
