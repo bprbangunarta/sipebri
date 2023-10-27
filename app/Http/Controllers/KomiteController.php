@@ -24,10 +24,10 @@ class KomiteController extends Controller
             $role = "Naik Kasi";
             $cek = Midle::persetujuan_komite_kasi($usr, $role);
         } elseif ($user->role_name == 'Kabag Analis') {
-            $role = "Naik Komite 1";
+            $role = "Naik Komite I";
             $cek = Midle::persetujuan_komite_kabag($role);
         } elseif ($user->role_name == 'Direksi') {
-            $role = "Naik Komite 2";
+            $role = "Naik Komite II";
             $cek = Midle::persetujuan_komite_direksi($role);
         }
 
@@ -81,10 +81,8 @@ class KomiteController extends Controller
 
                 DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
             }
-            // dd($trc);
-            if (!is_null($cek)) {
-                return self::update($request);
-            }
+
+
 
             if ($user->role_name == 'Staff Analis') {
                 $komite = 'komite1';
@@ -104,28 +102,39 @@ class KomiteController extends Controller
                 $waktu = 'waktu4';
             }
 
-            $name = 'KMT';
-            $length = 5;
-            $kode = Midle::kode_komite($name, $length);
-            $data = [
-                'kode_analisa' => $kode,
-                'pengajuan_kode' => $request->kode_pengajuan,
-                $komite => $usr,
-                $catatan => $request->catatan,
-                $waktu => now(),
-            ];
+
+            if (is_null($cek)) {
+                $name = 'KMT';
+                $length = 5;
+                $kode = Midle::kode_komite($name, $length);
+                $data = [
+                    'kode_analisa' => $kode,
+                    'pengajuan_kode' => $request->kode_pengajuan,
+                    $komite => $usr,
+                    $catatan => $request->catatan,
+                    $waktu => now(),
+                ];
+                DB::table('a_komite')->insert($data);
+            } else {
+                $data = [
+                    $komite => $usr,
+                    $catatan => $request->catatan,
+                    $waktu => now(),
+                ];
+                DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
+            }
 
 
-
-            if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite 1' || $request->putusan_komite == 'Naik Komite 2') {
+            // dd($cek, $request->all(), $user->role_name);
+            if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
                 $data2 = [
                     'tracking' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
                 $data2 = [
-                    'tracking' => ucwords($request->putusan_komite),
-                    'selesai' => "Selesai",
+                    'tracking' => "Selesai",
+                    'status' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             } else {
@@ -134,14 +143,9 @@ class KomiteController extends Controller
                     'updated_at' => now(),
                 ];
             }
-            // dd($request->putusan_komite);
 
-            // DB::transaction(function () use ($data) {
-            DB::transaction(function () use ($data, $request, $data2) {
-                // $a = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->get();
-                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-                DB::table('a_komite')->update($data);
-            });
+            DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
@@ -215,10 +219,11 @@ class KomiteController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->where('data_pengajuan.tracking', '==', "Naik Komite I")
-            // ->orWhere('data_pengajuan.tracking', '==', "Naik Kasi")
-            // ->orWhere('data_pengajuan.tracking', '==', "Naik Komite I")
-            // ->orWhere('data_pengajuan.tracking', '==', "Naik Komite II")
+            ->where('data_pengajuan.tracking', '=', "Persetujuan Komite")
+            ->orWhere('data_pengajuan.status', '=', "Disetujui")
+            ->orWhere('data_pengajuan.tracking', '=', "Naik Kasi")
+            ->orWhere('data_pengajuan.tracking', '=', "Naik Komite I")
+            ->orWhere('data_pengajuan.tracking', '=', "Naik Komite II")
             ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_pengajuan.plafon', 'data_pengajuan.created_at', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
         //
         $c = $cek->get();

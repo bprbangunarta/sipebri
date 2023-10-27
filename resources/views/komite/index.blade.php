@@ -109,13 +109,13 @@
                                                         data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
                                                         <i class="fa fa-check"></i>
                                                     </a>
-                                                @elseif ($user->role_name == 'Kabag Analis' && $item->tracking == 'Naik Komite 1')
+                                                @elseif ($user->role_name == 'Kabag Analis' && $item->tracking == 'Naik Komite I')
                                                     <a data-toggle="modal" data-target="#modal-edit"
                                                         class="btn-circle btn-sm btn-primary"
                                                         data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
                                                         <i class="fa fa-check"></i>
                                                     </a>
-                                                @elseif ($user->role_name == 'Direksi' && $item->tracking == 'Naik Komite 2')
+                                                @elseif ($user->role_name == 'Direksi' && $item->tracking == 'Naik Komite II')
                                                     <a data-toggle="modal" data-target="#modal-edit"
                                                         class="btn-circle btn-sm btn-primary"
                                                         data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
