@@ -64,7 +64,7 @@
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
                                             @endphp
                                             <td style="vertical-align: middle;">
-                                                <b>JK :</b> {{ $item->jk }} BULAN <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
 
