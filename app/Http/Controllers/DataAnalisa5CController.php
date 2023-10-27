@@ -238,7 +238,7 @@ class DataAnalisa5CController extends Controller
                 'capital_sumber_modal' => $request->capital_sumber_modal,
                 'capital_evaluasi_capital' => $nilai,
             ];
-            DB::table('a5c_capital')->where('kode_analisa', $request->kode_analisa)->update($data);
+            DB::table('a5c_capacity')->where('kode_analisa', $request->kode_analisa)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
