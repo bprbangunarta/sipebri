@@ -18,13 +18,13 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" style="width: 10px">#</th>
                                         <th class="text-center" style="width: 200px">NASABAH</th>
-                                        <th class="text-center" style="width: 200px">PENGAJUAN</th>
-                                        <th class="text-center">STATUS</th>
+                                        <th class="text-center">PENGAJUAN</th>
                                         <th class="text-center" style="width: 50px;">K1</th>
                                         <th class="text-center" style="width: 50px;">K2</th>
                                         <th class="text-center" style="width: 50px;">K3</th>
                                         <th class="text-center" style="width: 50px;">K4</th>
-                                        <th class="text-center">CATATAN</th>
+                                        <th class="text-center" style="width: 150px">STATUS</th>
+                                        <th class="text-center" style="width: 150px">CATATAN</th>
                                         <th class="text-center" style="width: 100px">AKSI</th>
                                     </tr>
                                 </thead>
