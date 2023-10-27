@@ -50,22 +50,26 @@ $(document).ready(function () {
                         { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
                     ];
-                } else if (role == "Staff Analis" && pal > 35000000) {
-                    var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
+                } else if (role == "Kasi Analis" && pal > 35000000) {
+                    var options = [
+                        { value: "Naik Komite I", text: "Naik Komite I" },
+                    ];
                 }
 
                 if (
                     role === "Kabag Analis" &&
                     pal >= 35000001 &&
-                    pal >= 75000000
+                    pal <= 75000000
                 ) {
                     var options = [
                         { value: "Disetujui", text: "Disetujui" },
                         { value: "Dibatalkan", text: "Dibatalkan" },
                         { value: "Ditolak", text: "Ditolak" },
                     ];
-                } else if (role == "Staff Analis" && pal > 75000000) {
-                    var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
+                } else if (role == "Kabag Analis" && pal > 75000001) {
+                    var options = [
+                        { value: "Naik Komite II", text: "Naik Komite II" },
+                    ];
                 }
 
                 if (role === "Direksi" && pal > 75000000) {
