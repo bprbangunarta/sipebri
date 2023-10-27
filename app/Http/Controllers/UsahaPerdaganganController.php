@@ -79,7 +79,6 @@ class UsahaPerdaganganController extends Controller
     {
         try {
             $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
-
             $cek = Midle::analisa_usaha($encpengajuan);
 
             //Data perdagangan
@@ -118,7 +117,6 @@ class UsahaPerdaganganController extends Controller
     {
         try {
             $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
-
             $cek = Midle::analisa_usaha($encpengajuan);
 
             //Data barang
