@@ -360,7 +360,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/5c/capital', 'capital')->name('analisa5c.capital');
             Route::post('/analisa/5c/capital', 'simpancapital')->name('analisa5c.simpancapital');
             Route::get('/analisa/5c/collateral', 'collateral')->name('analisa5c.collateral');
-            Route::post('/analisa/5c/collateral', 'simpancollateral')->name('analisa5c.simpancollateral');
+            Route::post('/analisa/5c/collateral/simpan', 'simpancollateral')->name('analisa5c.simpancollateral');
             Route::put('/analisa/5c/collateral', 'updatecollateral')->name('analisa5c.updatecollateral');
             Route::get('/analisa/5c/condition', 'condition')->name('analisa5c.condition');
             Route::post('/analisa/5c/condition', 'simpancondition')->name('analisa5c.simpan_condition');

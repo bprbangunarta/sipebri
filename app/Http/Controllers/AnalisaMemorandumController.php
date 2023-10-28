@@ -234,7 +234,7 @@ class AnalisaMemorandumController extends Controller
 
 
             //Menghitung Taksasi Agunan
-            $taksasiagunan = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+            $taksasiagunan = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
             $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
 
             //kebutuhan dana

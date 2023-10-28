@@ -54,8 +54,9 @@
 
                     <div style="margin-top:5px;width: 100%;float:left;">
                         <span class="fw-bold">TRADE CHECKING</span>
-                        <input class="form-control input-sm form-border text-uppercase" name="trade_checking" id=""
-                            placeholder="ENTRI" value="{{ $usaha->trade_checking }}">
+                        <textarea name="trade_checking" id="" cols="30" rows="10">{{ $usaha->trade_checking }}</textarea>
+                        {{-- <input class="form-control input-sm form-border text-uppercase" name="trade_checking" id=""
+                            placeholder="ENTRI" value="{{ $usaha->trade_checking }}"> --}}
                     </div>
 
                     <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</button>
