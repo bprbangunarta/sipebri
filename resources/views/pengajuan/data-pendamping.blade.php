@@ -266,6 +266,7 @@
                                 method="POST">
                                 @csrf
                                 <div class="box-body" style="margin-top:-20px;">
+                                    <input type="text" name='kode_pengajuan' value="{{ $data->kd_pengajuan }}" hidden>
                                     <button type="submit" class="btn btn-sm btn-primary"
                                         style="margin-top:10px;width:100%">OTORISASI</button>
                                 </div>

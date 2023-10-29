@@ -72,11 +72,13 @@ class PengajuanController extends Controller
 
         $pengajuan = $query->paginate(7);
         $auth = Auth::user()->code_user;
+        $dtu = DB::table('v_users')->where('code_user', $auth)->first();
         foreach ($pengajuan as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
+            $item->user = $dtu->role_name;
         }
-
+        // dd($pengajuan);
         return view('pengajuan.index', [
             'data' => $pengajuan,
             'auth' => $auth,

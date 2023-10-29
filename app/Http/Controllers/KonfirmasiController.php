@@ -223,7 +223,7 @@ class KonfirmasiController extends Controller
             try {
                 $nasabah = Nasabah::where('kode_nasabah', $enc)->get();
                 Nasabah::where('id', $nasabah[0]->id)->update($data);
-                return redirect()->back()->with('success', 'Data Nasabah berhasil diotorisasi');
+                return redirect()->route('pendamping.edit', ['nasabah' => $request->kode_pengajuan])->with('success', 'Data Nasabah berhasil diotorisasi');
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', 'Data Nasabah gagal diotorisasi');
             }
@@ -247,7 +247,7 @@ class KonfirmasiController extends Controller
             try {
                 $pendamping = Pendamping::where('pengajuan_kode', $enc)->get();
                 Pendamping::where('id', $pendamping[0]->id)->update($data);
-                return redirect()->back()->with('success', 'Data Pendamping berhasil diotorisasi');
+                return redirect()->route('pengajuan.edit', ['nasabah' => $request->kode_pengajuan])->with('success', 'Data Pendamping berhasil diotorisasi');
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', 'Data Pendamping gagal diotorisasi');
             }
@@ -271,7 +271,7 @@ class KonfirmasiController extends Controller
             try {
                 $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->get();
                 Pengajuan::where('id', $pengajuan[0]->id)->update($data);
-                return redirect()->back()->with('success', 'Data Pengajuan berhasil diotorisasi');
+                return redirect()->route('pengajuan.agunan', ['nasabah' => $request->kode_pengajuan])->with('success', 'Data Pengajuan berhasil diotorisasi');
             } catch (Throwable $th) {
                 return redirect()->back()->with('error', 'Data Pengajuan gagal diotorisasi');
             }
@@ -295,7 +295,7 @@ class KonfirmasiController extends Controller
             try {
                 $survei = Survei::where('pengajuan_kode', $enc)->get();
                 Survei::where('id', $survei[0]->id)->update($data);
-                return redirect()->back()->with('success', 'Data Survei berhasil diotorisasi');
+                return redirect()->route('pengajuan.otorisasi', ['nasabah' => $request->kode_pengajuan])->with('success', 'Data Survei berhasil diotorisasi');
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', 'Data Survei gagal diotorisasi');
             }

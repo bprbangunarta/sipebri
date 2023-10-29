@@ -59,7 +59,8 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">METODE RPS</span>
-                                                <select class="form-control text-uppercase" name="metode_rps" id="select-metodes" required>
+                                                <select class="form-control text-uppercase" name="metode_rps"
+                                                    id="select-metodes" required>
                                                     @if (is_null($pengajuan->metode_rps))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -93,7 +94,8 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">SUKU BUNGA</span>
                                                 <input type="number" class="form-control" name="suku_bunga" id="suku_bunga"
-                                                    placeholder="ENTRI" value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}" required>
+                                                    placeholder="ENTRI"
+                                                    value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 100%;float:right;">
@@ -135,12 +137,14 @@
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">JW BUNGA (BULAN)</span>
                                                 <input type="number" class="form-control" name="jangka_bunga"
-                                                    id="jangka_bunga" placeholder="ENTRI" value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}" required>
+                                                    id="jangka_bunga" placeholder="ENTRI"
+                                                    value="{{ old('jangka_bunga', $pengajuan->jangka_bunga) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PENGGUNAAN</span>
-                                                <select class="form-control" name="penggunaan" id="select-penggunaan" required>
+                                                <select class="form-control" name="penggunaan" id="select-penggunaan"
+                                                    required>
                                                     @if (is_null($pengajuan->penggunaan))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -169,7 +173,8 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">RESORT</span>
-                                                <select class="form-control resort" style="width:100%;" name="resort_kode">
+                                                <select class="form-control resort" style="width:100%;"
+                                                    name="resort_kode">
                                                     @if (is_null($pengajuan->resort_kode))
                                                         <option value="">--PILIH--</option>
                                                     @else
@@ -186,7 +191,9 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">KETERANGAN</span>
-                                                <input type="text" class="form-control" name="keterangan" name="keterangan" placeholder="ENTRI" value="{{ old('keterangan', $pengajuan->keterangan) }}">
+                                                <input type="text" class="form-control" name="keterangan"
+                                                    name="keterangan" placeholder="ENTRI"
+                                                    value="{{ old('keterangan', $pengajuan->keterangan) }}">
                                             </div>
                                         </div>
                                     </div>
@@ -206,6 +213,7 @@
                                 method="POST">
                                 @csrf
                                 <div class="box-body" style="margin-top:-20px;">
+                                    <input type="text" name='kode_pengajuan' value="{{ $data->kd_pengajuan }}" hidden>
                                     <button type="submit" class="btn btn-sm btn-primary"
                                         style="margin-top:10px;width:100%">OTORISASI</button>
                                 </div>
