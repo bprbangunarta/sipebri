@@ -103,13 +103,23 @@
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <button data-toggle="modal" data-target="#otor-kendaraan"
-                                                                    data-id="{{ $item->id }}"
-                                                                    class="btn btn-sm btn-success">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                            </td>
+                                                            @if ($item->otorisasi == 'A')
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <button data-toggle="modal" data-target="#otor-kendaraan"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-success">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </button>
+                                                                </td>
+                                                            @else
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <button data-toggle="modal" data-target="#otor-kendaraan"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </button>
+                                                                </td>
+                                                            @endif
                                                         @endcan
                                                     </tr>
                                                 @endif
@@ -206,14 +216,25 @@
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
-                                                            <td class="text-center"
-                                                                style="vertical-align: middle;text-transform:uppercase;">
-                                                                <button data-toggle="modal" data-target="#otor-tanah"
-                                                                    data-id="{{ $item->id }}"
-                                                                    class="btn btn-sm btn-success">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                            </td>
+                                                            @if ($item->otorisasi == 'A')
+                                                                <td class="text-center"
+                                                                    style="vertical-align: middle;text-transform:uppercase;">
+                                                                    <button data-toggle="modal" data-target="#otor-tanah"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-success">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </button>
+                                                                </td>
+                                                            @else
+                                                                <td class="text-center"
+                                                                    style="vertical-align: middle;text-transform:uppercase;">
+                                                                    <button data-toggle="modal" data-target="#otor-tanah"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </button>
+                                                                </td>
+                                                            @endif
                                                         @endcan
                                                     </tr>
                                                 @endif
@@ -308,13 +329,23 @@
                                                         @endcan
 
                                                         @can('otorisasi pengajuan kredit')
-                                                            <td class="text-center" style="vertical-align: middle;">
-                                                                <button data-toggle="modal" data-target="#otor-lain"
-                                                                    data-id="{{ $item->id }}"
-                                                                    class="btn btn-sm btn-success">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                            </td>
+                                                            @if ($item->otorisasi == 'A')
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <button data-toggle="modal" data-target="#otor-lain"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-success">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </button>
+                                                                </td>
+                                                            @else
+                                                                <td class="text-center" style="vertical-align: middle;">
+                                                                    <button data-toggle="modal" data-target="#otor-lain"
+                                                                        data-id="{{ $item->id }}"
+                                                                        class="btn btn-sm btn-danger">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </button>
+                                                                </td>
+                                                            @endif
                                                         @endcan
                                                     </tr>
                                                 @endif
@@ -451,7 +482,8 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI KENDARAAN</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
-                                            {{ old('lokasi') }} placeholder="ENTRI" required>
+                                            value="{{ old('lokasi') ?? $data->alamat_ktp }}" placeholder="ENTRI"
+                                            required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -554,7 +586,8 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI TANAH</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
-                                            id="lokasi" value="{{ old('lokasi') }}" placeholder="ENTRI" required>
+                                            id="lokasi" value="{{ old('lokasi') ?? $data->alamat_ktp }}"
+                                            placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -646,7 +679,8 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
-                                            id="lokasi" value="{{ old('lokasi') }}" placeholder="ENTRI">
+                                            id="lokasi" value="{{ old('lokasi') ?? $data->alamat_ktp }}"
+                                            placeholder="ENTRI">
                                     </div>
 
                                     <div style="margin-top: 5px;">

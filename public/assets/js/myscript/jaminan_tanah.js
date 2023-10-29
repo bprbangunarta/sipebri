@@ -26,6 +26,22 @@ function formatRupiah(angka, prefix) {
     return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
 }
 
+function format(angka, prefix) {
+    var number_string = angka.replace(/[^,\d]/g, "").toString(),
+        split = number_string.split(","),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        separator = sisa ? "." : "";
+        rupiah += separator + ribuan.join(".");
+    }
+
+    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+    return prefix == undefined ? rupiah : rupiah ? rupiah : "";
+}
+
 $(document).ready(function () {
     $("#modal-edit").on("show.bs.modal", function (event) {
         var button = $(event.relatedTarget); // Tombol yang membuka modal
@@ -43,9 +59,10 @@ $(document).ready(function () {
                 $("#jenis_dokumen").val(response.jenis_dokumen);
                 $("#no_dok").val(response.no_dokumen);
                 $("#atas_nama").val(response.atas_nama);
-                $("#luas").val(response.luas);
+                var ls = format(response.luas);
+                $("#luas").val(ls);
                 $("#lokasi").val(response.lokasi);
-                console.log(response);
+
                 if (response.nilai_pasar == null) {
                     return 0;
                 } else {
@@ -53,7 +70,6 @@ $(document).ready(function () {
                     var ps = formatRupiah(np);
                     $("#nilai_pasar").val("RP. " + " " + ps);
                 }
-
                 if (response.nilai_taksasi == null) {
                     return 0;
                 } else {

@@ -134,7 +134,7 @@ class AnalisaJaminanController extends Controller
                 }
 
                 $ekstensi = $cek['foto1']->getClientOriginalExtension();
-                $new1 =  'depan' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
+                $new1 =  $request->jenis . '_' . 'depan' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto1'] = $request->file('foto1')->storeAs('image/photo_agunan', $new1, 'public');
                 $cek['foto1'] = $new1;
             } else {
@@ -146,7 +146,7 @@ class AnalisaJaminanController extends Controller
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_2);
                 }
                 $ekstensi = $cek['foto2']->getClientOriginalExtension();
-                $new2 =  'belakang' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
+                $new2 =  $request->jenis . '_' . 'belakang' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto2'] = $request->file('foto2')->storeAs('image/photo_agunan', $new2, 'public');
                 $cek['foto2'] = $new2;
             } else {
@@ -158,7 +158,7 @@ class AnalisaJaminanController extends Controller
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_3);
                 }
                 $ekstensi = $cek['foto3']->getClientOriginalExtension();
-                $new3 =  'kiri' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
+                $new3 =  $request->jenis . '_' . 'kiri' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto3'] = $request->file('foto3')->storeAs('image/photo_agunan', $new3, 'public');
                 $cek['foto3'] = $new3;
             } else {
@@ -170,13 +170,13 @@ class AnalisaJaminanController extends Controller
                     Storage::delete('public/image/photo_agunan/' . $request->name_img_4);
                 }
                 $ekstensi = $cek['foto4']->getClientOriginalExtension();
-                $new4 =  'kanan' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
+                $new4 =  $request->jenis . '_' . 'kanan' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
                 $cek['foto4'] = $request->file('foto4')->storeAs('image/photo_agunan', $new4, 'public');
                 $cek['foto4'] = $new4;
             } else {
                 $cek['foto4'] = $request->name_img_4;
             }
-            // dd($cek);
+            // dd($cek, $request->all());
             DB::table('data_jaminan')->where('id', $request->id)->update($cek);
             return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
         } catch (\Throwable $th) {
@@ -219,6 +219,8 @@ class AnalisaJaminanController extends Controller
             ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
             ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
             ->where('data_jaminan.id', $id)->first();
+        //
+
         $tanah->jaminan_id = $id;
         return response()->json($tanah);
     }

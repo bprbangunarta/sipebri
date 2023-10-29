@@ -292,7 +292,7 @@
         })
 
         $('#ttln').inputmask('yyyy-mm-dd', {
-            'placeholder': 'YYYY-DD-MM'
+            'placeholder': 'YYYY-MM-DD'
         })
         $('#ttlo').inputmask('yyyy-mm-dd', {
             'placeholder': 'YYYY-DD-MM'

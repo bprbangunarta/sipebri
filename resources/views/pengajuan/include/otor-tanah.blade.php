@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="submit" class="btn btn-primary">SIMPAN</button>
+                    <button type="submit" class="btn btn-primary">OTORISASI</button>
                 </div>
             </form>
         </div>

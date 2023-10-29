@@ -21,6 +21,7 @@
                                     </span>
                                     <input type="text" id="nid" name="id" hidden>
                                     <input type="text" id="ats_nama" name="nama" hidden>
+                                    <input type="text" name="jenis" value="kendaraan" hidden>
                                     <input type="text" name="name_img_1" id="name_img_1" hidden>
                                     <input class="form-control input-sm form-border text-uppercase" type="file"
                                         name="foto1" accept="image/*">

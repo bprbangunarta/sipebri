@@ -138,9 +138,8 @@ Route::middleware('auth')->group(function () {
 
         //======Pendaftaran Nasabah======//
         Route::controller(PengajuanController::class)->group(function () {
-            Route::get('/data/pengajuan', 'all')->name('pengajuan.data');
-
             Route::get('/pengajuan', 'index')->name('pengajuan.index');
+            Route::get('/data/pengajuan', 'all')->name('pengajuan.data');
             Route::get('/pengajuan/edit', 'edit')->name('pengajuan.edit');
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
             Route::get('/pengajuan/agunan', 'agunan')->name('pengajuan.agunan');
@@ -216,27 +215,6 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['role:Staff Analis']], function () {
         //Analisa Proses
         Route::get('/analisa/proses', [AnalisaController::class, 'index'])->name('analisa.proses');
-        //Analisa Usaha Perdagangan
-        // Route::resource('/analisa/usaha/perdagangan/tambah', PerdaganganController::class);
-        // Route::post('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_store'])->name('tambah.detail_store');
-        // Route::put('/analisa/usaha/perdagangan', [PerdaganganController::class, 'detail_update'])->name('tambah.detail_update');
-        //Analisa Usaha Pertanian
-        // Route::resource('/analisa/usaha/pertanian', PertanianController::class);
-        // Route::put('/analisa/usaha/pertanian', [PertanianController::class, 'update_detail'])->name('pertanian.update_detail');
-        //Analisa Usaha Jasa
-        // Route::resource('/analisa/usaha/jasa', JasaController::class);
-        //Analisa Usaha Lainnya
-        // Route::resource('/analisa/usaha/lain', LainController::class);
-        // Route::put('/analisa/usaha/lain', [LainController::class, 'update_edit'])->name('lain.update_edit');
-        //Analisa Keuangan
-        // Route::resource('/analisa/keuangan', KeuanganController::class);
-        // Route::put('/analisa/keuangan', [KeuanganController::class, 'update_detail'])->name('keuangan.update_detail');
-        //Analisa kepemilikan
-        // Route::resource('/analisa/harta/kepemilikan', KepemilikanController::class);
-        //Analisa Taksasi Kepemilikan
-        // Route::resource('/analisa/taksasi/jaminan', TaksasiJaminanController::class);
-        //Analisa 5C
-        // Route::resource('/analisa/a5c', Analisa5cController::class);
         //Memorandum
         Route::resource('/analisa/memorandum', MemorandumController::class);
         //Analisa Kualitatif
@@ -265,6 +243,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/komite', [KomiteController::class, 'index'])->name('komite.komite');
 
 
+
+
+
+    //====Route Analisa====//
     Route::prefix('themes')->group(function () {
         // Route::view('/dashboard', 'dashboard.index');
         ROute::controller(AnalisaController::class)->group(function () {
@@ -427,6 +409,10 @@ Route::middleware('auth')->group(function () {
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');
         });
     });
+    //====Route Analisa====//
+
+
+
 
     Route::controller(PerhitunganController::class)->group(function () {
         Route::get('/perhitungan/flat', 'flat')->name('flat');

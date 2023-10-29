@@ -46,12 +46,21 @@ $(document).ready(function () {
                 $("#lokasi").val(response.lokasi);
                 $("#catatan").val(response.catatan);
 
-                var np = response.nilai_pasar;
-                var ps = formatRupiah(np);
+                var np = response.nilai_pasar ?? 0;
+                if (np == 0) {
+                    var ps = 0;
+                } else {
+                    var ps = formatRupiah(np);
+                }
                 $("#nilai_pasar").val("RP. " + " " + ps);
 
-                var nt = response.nilai_taksasi;
-                var ts = formatRupiah(nt);
+                var nt = response.nilai_taksasi ?? 0;
+                if (nt == 0) {
+                    var ts = 0;
+                } else {
+                    var ts = formatRupiah(nt);
+                }
+
                 $("#nilai_taksasi").val("Rp. " + " " + ts);
             },
             error: function (xhr, status, error) {

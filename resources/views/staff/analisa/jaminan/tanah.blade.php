@@ -40,7 +40,8 @@
                                 {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}
                             </td>
                             <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                                <button data-toggle="modal" data-target="#modal-edit" class="btn btn-sm btn-warning">
+                                <button data-toggle="modal" data-target="#modal-edit" data-id="{{ $item->id }}"
+                                    class="btn btn-sm btn-warning">
                                     <i class="fa fa-file-text-o"></i>
                                 </button>
 
@@ -144,7 +145,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">FOTO AGUNAN</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('taksasi.fhotokendaraan') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
@@ -159,6 +160,7 @@
                                         </span>
                                         <input type="text" id="nit" name="id" hidden>
                                         <input type="text" id="atas_namat" name="nama" hidden>
+                                        <input type="text" name="jenis" value="tanah" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto1" accept="image/*">
                                     </div>
@@ -211,7 +213,7 @@
     <script src="{{ asset('assets/js/myscript/jaminan_tanah.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/preview_fhoto_tanah.js') }}"></script>
     <script>
-        $("button[data-target='#modal-foto']").click(function() {
+        $("button[data-target='#modal-foto-tanah']").click(function() {
             var dataId = $(this).data('id').split(",");
 
             var nilaiid = dataId[0];
@@ -220,6 +222,13 @@
             // Menyalin nilai 'id' ke elemen di dalam modal
             $('#nit').val(nilaiid);
             $('#atas_namat').val(atasNama);
+        });
+
+        $("button[data-target='#modal-edit']").click(function() {
+            var dataId = $(this).data('id');
+
+            // Menyalin nilai 'id' ke elemen di dalam modal
+            $('#id').val(dataId);
         });
     </script>
 @endpush
