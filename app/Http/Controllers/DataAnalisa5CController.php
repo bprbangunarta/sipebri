@@ -261,6 +261,11 @@ class DataAnalisa5CController extends Controller
                 $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
             }
             $totaltaksasi = array_sum($tak);
+
+            if ($totaltaksasi == 0) {
+                return redirect()->back()->with('error', 'Nilai Taksasi harus diisi terlebih dahulu');
+            }
+
             //Menghitung Taksasi Agunan
             $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
 

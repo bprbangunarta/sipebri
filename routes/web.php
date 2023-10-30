@@ -424,5 +424,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::view('/analisa/index', 'analisa.index');
+Route::view('/anuitas', 'perhitungan.anuitas');
 
 require __DIR__ . '/auth.php';
