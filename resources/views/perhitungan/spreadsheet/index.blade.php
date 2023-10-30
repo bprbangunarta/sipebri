@@ -83,7 +83,7 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
                                         <input type="text" class="form-control" name="tgl_realisasi"
-                                            placeholder="Tanggal Sekarang" id="hari" readonly>
+                                            placeholder="Tanggal Sekarang" id="hari">
                                     </td>
                                     <td class="no-border">
                                         <button type="submit" class="btn btn-primary"

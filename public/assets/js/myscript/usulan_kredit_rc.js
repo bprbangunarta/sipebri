@@ -50,22 +50,19 @@ $(document).ready(function () {
                         (Math.pow(1 + sb / 12, parseInt(jangka_waktu)) - 1)));
 
             $("#max").val("Rp." + " " + plafonPinjaman.toLocaleString("id-ID"));
+        } else {
+            //
+            var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+            var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
+            var angsuran = bunga + poko;
+            var rc = (angsuran / parseFloat(keuangan)) * 100;
+            $("#rc").val(rc.toFixed(2) + " " + "%");
+
+            //MAX Plafon FLAT
+            var max_plafon =
+                (angsuran * jangka_waktu) / (1 + (jangka_waktu * sb) / 12);
+            $("#max").val(max_plafon.toFixed(2));
+            //
         }
     });
 });
-
-function formatRupiah(angka, prefix) {
-    var number_string = angka.replace(/[^,\d]/g, "").toString(),
-        split = number_string.split(","),
-        sisa = split[0].length % 3,
-        rupiah = split[0].substr(0, sisa),
-        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    if (ribuan) {
-        separator = sisa ? "." : "";
-        rupiah += separator + ribuan.join(".");
-    }
-
-    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-    return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
-}

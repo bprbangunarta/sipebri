@@ -705,6 +705,7 @@
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script>
         $('a[data-target="#modal-foto-kendaraan"]').click(function() {
             var dataId = $(this).data('id').split(',');
