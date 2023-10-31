@@ -76,43 +76,45 @@ $(document).ready(function () {
             });
         });
 
-    $("#otor-kendaraan").on("show.bs.modal", function (event) {
-        $("#jenis").empty();
-        $("#dokumen").empty();
-        var button = $(event.relatedTarget); // Tombol yang membuka modal
-        var ids = button.data("id"); // Ambil data-id dari tombol
+    $("#otor-kendaraan")
+        .off("show.bs.modal")
+        .on("show.bs.modal", function (event) {
+            $("#agunan").empty();
+            $("#dokumen").empty();
+            var button = $(event.relatedTarget); // Tombol yang membuka modal
+            var ids = button.data("id"); // Ambil data-id dari tombol
 
-        // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-        $.ajax({
-            url: "/pengajuan/agunan/" + ids + "/edit",
-            type: "GET",
-            dataType: "json",
-            cache: false,
-            success: function (response) {
-                $("#agunan").append(
-                    $("<option>", {
-                        value: response.jenis_agunan_kode,
-                        text: response.jenis_agunan,
-                    }).prop("selected", true)
-                );
+            // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+            $.ajax({
+                url: "/pengajuan/agunan/" + ids + "/edit",
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                success: function (response) {
+                    $("#agunan").append(
+                        $("<option>", {
+                            value: response[0].jenis_agunan_kode,
+                            text: response[0].jenis_agunan,
+                        }).prop("selected", true)
+                    );
 
-                $("#dokumen").append(
-                    $("<option>", {
-                        value: response.jenis_dokumen_kode,
-                        text: response.jenis_dokumen,
-                    }).prop("selected", true)
-                );
-                $("#ids").val(response.id);
-                $("#dok").val(response.no_dokumen);
-                $("#id").val(response.id);
-                $("#nama").val(response.atas_nama);
-                $("#lok").val(response.lokasi);
-                $("#catatans").val(response.catatan);
-            },
-            error: function (xhr, status, error) {
-                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                console.error("Error:", xhr.responseText);
-            },
+                    $("#dokumen").append(
+                        $("<option>", {
+                            value: response[0].jenis_dokumen_kode,
+                            text: response[0].jenis_dokumen,
+                        }).prop("selected", true)
+                    );
+                    $("#ids").val(response[0].id);
+                    $("#dok").val(response[0].no_dokumen);
+                    $("#id").val(response[0].id);
+                    $("#nama").val(response[0].atas_nama);
+                    $("#lok").val(response[0].lokasi);
+                    $("#catatans").val(response[0].catatan);
+                },
+                error: function (xhr, status, error) {
+                    // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                    console.error("Error:", xhr.responseText);
+                },
+            });
         });
-    });
 });
