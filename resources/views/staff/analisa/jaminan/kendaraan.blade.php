@@ -213,6 +213,17 @@
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto3" accept="image/*">
                                     </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">
+                                            LAINNYA
+                                            <a href="#" class="pull-right" id="lain1"
+                                                data-target="lain1">PREVIEW</a>
+                                        </span>
+                                        <input type="text" name="name_img_5" id="name_img_5" hidden>
+                                        <input class="form-control input-sm form-border text-uppercase" type="file"
+                                            name="foto5" accept="image/*">
+                                    </div>
                                 </div>
 
                                 <div class="div-right">
@@ -237,6 +248,17 @@
                                         <input class="form-control input-sm form-border text-uppercase" type="file"
                                             name="foto4" accept="image/*">
                                     </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">
+                                            LAINNYA
+                                            <a href="#" class="pull-right" id="lain2"
+                                                data-target="lain2">PREVIEW</a>
+                                        </span>
+                                        <input type="text" name="name_img_6" id="name_img_6" hidden>
+                                        <input class="form-control input-sm form-border text-uppercase" type="file"
+                                            name="foto6" accept="image/*">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -249,15 +271,6 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="view-foto">
-        <div class="modal-dialog bg-primary">
-            <div class="modal-content text-center">
-                <img id="image-depan" alt="Image 1">
-            </div>
-        </div>
-    </div>
-
 
 @endsection
 

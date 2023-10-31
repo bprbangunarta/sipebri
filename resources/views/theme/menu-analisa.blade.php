@@ -19,6 +19,12 @@
                     {{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') . ' ' . '(' . $data->jangka_waktu . ' ' . 'BULAN)' }}
                 </a>
             </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-gear"></i>
+                    {{ $data->metode_rps }}
+                </a>
+            </li>
         </ul>
     </div>
 </div>

@@ -29,7 +29,7 @@ class AnalisaJaminanController extends Controller
                 ->get();
 
             //
-
+            // dd($cek[0]);
             return view('staff.analisa.jaminan.kendaraan', [
                 'data' => $cek[0],
                 'jaminan' => $au,
@@ -123,6 +123,8 @@ class AnalisaJaminanController extends Controller
                 'foto2' => 'image|mimes:jpeg,png,jpg|max:5120',
                 'foto3' => 'image|mimes:jpeg,png,jpg|max:5120',
                 'foto4' => 'image|mimes:jpeg,png,jpg|max:5120',
+                'foto5' => 'image|mimes:jpeg,png,jpg|max:5120',
+                'foto6' => 'image|mimes:jpeg,png,jpg|max:5120',
             ]);
 
             $tanggalSekarang = Carbon::now();
@@ -175,6 +177,30 @@ class AnalisaJaminanController extends Controller
                 $cek['foto4'] = $new4;
             } else {
                 $cek['foto4'] = $request->name_img_4;
+            }
+
+            if ($request->file('foto5')) {
+                if ($request->name_img_5) {
+                    Storage::delete('public/image/photo_agunan/' . $request->name_img_5);
+                }
+                $ekstensi = $cek['foto5']->getClientOriginalExtension();
+                $new4 =  $request->jenis . '_' . 'lain1' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
+                $cek['foto5'] = $request->file('foto5')->storeAs('image/photo_agunan', $new4, 'public');
+                $cek['foto5'] = $new4;
+            } else {
+                $cek['foto5'] = $request->name_img_5;
+            }
+
+            if ($request->file('foto6')) {
+                if ($request->name_img_6) {
+                    Storage::delete('public/image/photo_agunan/' . $request->name_img_6);
+                }
+                $ekstensi = $cek['foto6']->getClientOriginalExtension();
+                $new4 =  $request->jenis . '_' . 'lain2' . '_' . $tanggal .  '_' . $request->nama . '.' . $ekstensi;
+                $cek['foto6'] = $request->file('foto6')->storeAs('image/photo_agunan', $new4, 'public');
+                $cek['foto6'] = $new4;
+            } else {
+                $cek['foto6'] = $request->name_img_6;
             }
             // dd($cek, $request->all());
             DB::table('data_jaminan')->where('id', $request->id)->update($cek);
