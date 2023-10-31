@@ -258,14 +258,12 @@ class PengajuanController extends Controller
 
             // dd($jenis_kendaraan);
             return view('pengajuan.data-agunan', [
-                // 'agunan' => $agunan,
                 'jenis_kendaraan' => $jenis_kendaraan,
                 'data_kendaraan' => $data_kendaraan,
                 'jenis_tanah' => $jenis_tanah,
                 'data_tanah' => $data_tanah,
                 'jenis_lain' => $jenis_lain,
                 'data_lain' => $data_lain,
-                // 'dok' => $dok,
                 'data' => $cek,
                 'jaminan' => $jaminan,
                 'pengajuan' => $pengajuan[0],

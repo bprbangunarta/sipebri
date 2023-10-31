@@ -304,6 +304,7 @@ class AnalisaMemorandumController extends Controller
             $data2 = [
                 'plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
                 'jangka_waktu' => $request->jangka_waktu,
+                'temp_plafon' => $cek[0]->plafon,
                 'b_admin' => number_format($request->b_admin, 2),
                 'b_provisi' => number_format($request->b_provisi, 2),
                 'b_penalti' => number_format($request->b_penalti, 2),
