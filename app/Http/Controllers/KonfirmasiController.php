@@ -44,6 +44,11 @@ class KonfirmasiController extends Controller
             $cek[0]->plafon = $dt[0]->plafon;
             $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
 
+            //validasi Produk KTA
+            if ($dt[0]->produk_kode == "KTA") {
+                $konfirmasi[0]->agunan = "1";
+            }
+
             return view('pengajuan.data-konfirmasi', [
                 'data' => $cek[0],
                 'konfirmasi' => $konfirmasi[0],
@@ -130,7 +135,7 @@ class KonfirmasiController extends Controller
 
             //Cek data agunan apakah sudah otorisasi
             $agunan = DB::table('data_jaminan')->select('otorisasi')->where('pengajuan_kode', '=', $enc)->get();
-            if (is_null($agunan)) {
+            if (count($agunan) == 0) {
                 $otor = 'N';
             } else {
                 foreach ($agunan as $value) {
@@ -142,13 +147,18 @@ class KonfirmasiController extends Controller
                     }
                 }
             }
+
             $otorisasi[0]->otoragunan = $otor;
-            // dd($otorisasi[0]);
 
             $cek[0]->kd_pengajuan = $nasabah;
             $dt = Midle::analisa_usaha($enc);
             $cek[0]->plafon = $dt[0]->plafon;
             $cek[0]->jangka_waktu = $dt[0]->jangka_waktu;
+
+            //Validasi Produk KTA
+            if ($dt[0]->produk_kode == "KTA") {
+                $otorisasi[0]->otoragunan = "A";
+            }
 
             return view('pengajuan.data-otorisasi', [
                 'data' => $cek[0],

@@ -189,23 +189,27 @@
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">HARTA LAIN</span>
                                                 <input class="form-control input-sm form-border" type="text"
-                                                    name="nama_lain1" placeholder="ENTRI">
+                                                    name="nama_lain1" value="{{ $milik->nama_lain1 ?? null }}"
+                                                    placeholder="ENTRI">
                                             </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">HARTA LAIN</span>
                                                 <input class="form-control input-sm form-border" type="text"
-                                                    name="nama_lain2" placeholder="ENTRI">
+                                                    name="nama_lain2" value="{{ $milik->nama_lain2 ?? null }}"
+                                                    placeholder="ENTRI">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">HARTA LAIN</span>
                                                 <input class="form-control input-sm form-border" type="text"
-                                                    name="nama_lain3" placeholder="ENTRI">
+                                                    name="nama_lain3" value="{{ $milik->nama_lain3 ?? null }}"
+                                                    placeholder="ENTRI">
                                             </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">HARTA LAIN</span>
                                                 <input class="form-control input-sm form-border" type="text"
-                                                    name="nama_lain4" placeholder="ENTRI">
+                                                    name="nama_lain4" value="{{ $milik->nama_lain4 ?? null }}"
+                                                    placeholder="ENTRI">
                                             </div>
 
 

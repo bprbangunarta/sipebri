@@ -67,12 +67,15 @@
                             <select class="form-control input-sm form-border text-uppercase" name="regulasi_pemerintah"
                                 id="condition3">
                                 <option value="">--PILIH--</option>
-                                <option value="3" {{ $condition->regulasi_pemerintah == '3' ? 'selected' : '' }}>BAIK
+                                <option value="4" {{ $condition->regulasi_pemerintah == '4' ? 'selected' : '' }}>
+                                    SANGAT MENDUKUNG
                                 </option>
-                                <option value="2" {{ $condition->regulasi_pemerintah == '2' ? 'selected' : '' }}>CUKUP
-                                    BAIK</option>
+                                <option value="3" {{ $condition->regulasi_pemerintah == '3' ? 'selected' : '' }}>
+                                    MENDUKUNG</option>
+                                <option value="2" {{ $condition->regulasi_pemerintah == '2' ? 'selected' : '' }}>
+                                    KURANG MENDUKUNG</option>
                                 <option value="1" {{ $condition->regulasi_pemerintah == '1' ? 'selected' : '' }}>
-                                    KURANG BAIK</option>
+                                    TIDAK MENDUKUNG</option>
                             </select>
                         </div>
 

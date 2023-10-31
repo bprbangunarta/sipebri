@@ -259,8 +259,20 @@ class AnalisaMemorandumController extends Controller
 
             //Cek data usulan
             $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-            $usulan->kebutuhan_dana = $dana->kebutuhan_dana ?? null;
 
+            if (is_null($usulan)) {
+                $usulan = (object) [
+                    'kebutuhan_dana' => 0,
+                    'sebelum_realisasi' => null,
+                    'syarat_tambahan' => null,
+                    'syarat_lainnya' => null,
+                ];
+            } else {
+                $usulan->kebutuhan_dana = $dana->kebutuhan_dana;
+            }
+
+            // $usulan->kebutuhan_dana = $dana->kebutuhan_dana ?? null;
+            // dd($usulan);
             //Menghitung RC
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
                 $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
@@ -285,7 +297,7 @@ class AnalisaMemorandumController extends Controller
             }
             $cek[0]->rc = number_format($rc, 2);
             $cek[0]->keuangan = $keuangan;
-            // dd($cek[0]);
+
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,

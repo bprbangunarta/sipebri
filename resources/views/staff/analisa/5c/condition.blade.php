@@ -50,9 +50,10 @@
                             <select class="form-control input-sm form-border text-uppercase" name="regulasi_pemerintah"
                                 id="condition3">
                                 <option value="">--PILIH--</option>
-                                <option value="3">BAIK</option>
-                                <option value="2">CUKUP BAIK</option>
-                                <option value="1">KURANG BAIK</option>
+                                <option value="4">SANGAT MENDUKUNG</option>
+                                <option value="3">MENDUKUNG</option>
+                                <option value="2">KURANG MENDUKUNG</option>
+                                <option value="1">TIDAK MENDUKUNG</option>
                             </select>
                         </div>
 

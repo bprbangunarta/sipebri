@@ -21,13 +21,13 @@ class AnalisaKeuanganController extends Controller
             $data = Keuangan::data_keuangan($enc);
 
             $filter = array_filter($kemampuan, function ($value) {
-                return $value !== null ? $value : 0;
+                return $value !== null;
             });
 
             //Hasil penjumlahan analisa usaha
             $total = array_sum($filter);
             $kemampuan['total'] = $total;
-            // dd($kemampuan);
+            // dd($total);
             if ($data === 0) {
                 return view('staff.analisa.keuangan', [
                     'data' => $cek[0],
@@ -75,7 +75,7 @@ class AnalisaKeuanganController extends Controller
                 ];
                 Keuangan::where('pengajuan_kode', $enc)->update($au);
             }
-            // dd($kemampuan, $data);
+
             return view('staff.analisa.keuangan-edit', [
                 'data' => $cek[0],
                 'kemampuan' => $kemampuan,
