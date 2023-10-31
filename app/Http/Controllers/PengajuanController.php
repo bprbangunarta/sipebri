@@ -243,10 +243,29 @@ class PengajuanController extends Controller
             for ($i = 0; $i < count($jaminan); $i++) {
                 $jaminan[$i]->kd_pengajuan = Crypt::encrypt($jaminan[$i]->kode_pengajuan);
             }
-            // dd($jaminan);
+
+            //Agunan Kendaraan
+            $jenis_kendaraan = DB::table('ja_kendaraan')->get();
+            $data_kendaraan = DB::table('da_kendaraan')->get();
+
+            //Agunan Tanah
+            $jenis_tanah = DB::table('ja_tanah')->get();
+            $data_tanah = DB::table('da_tanah')->get();
+
+            //Agunan Lain
+            $jenis_lain = DB::table('ja_lainnya')->get();
+            $data_lain = DB::table('da_lainnya')->get();
+
+            // dd($jenis_kendaraan);
             return view('pengajuan.data-agunan', [
-                'agunan' => $agunan,
-                'dok' => $dok,
+                // 'agunan' => $agunan,
+                'jenis_kendaraan' => $jenis_kendaraan,
+                'data_kendaraan' => $data_kendaraan,
+                'jenis_tanah' => $jenis_tanah,
+                'data_tanah' => $data_tanah,
+                'jenis_lain' => $jenis_lain,
+                'data_lain' => $data_lain,
+                // 'dok' => $dok,
                 'data' => $cek,
                 'jaminan' => $jaminan,
                 'pengajuan' => $pengajuan[0],

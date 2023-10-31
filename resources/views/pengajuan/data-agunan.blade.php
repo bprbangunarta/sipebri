@@ -406,8 +406,8 @@
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            {{ $agunan }}
-                                            @foreach ($agunan as $item)
+                                            {{ $jenis_kendaraan }}
+                                            @foreach ($jenis_kendaraan as $item)
                                                 <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
                                             @endforeach
                                         </select>
@@ -418,7 +418,7 @@
                                         <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
                                             name="jenis_dokumen_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            @foreach ($dok as $item)
+                                            @foreach ($data_kendaraan as $item)
                                                 <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
                                             @endforeach
                                         </select>
@@ -541,8 +541,8 @@
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            {{ $agunan }}
-                                            @foreach ($agunan as $item)
+                                            {{ $jenis_tanah }}
+                                            @foreach ($jenis_tanah as $item)
                                                 <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
                                             @endforeach
                                         </select>
@@ -553,7 +553,7 @@
                                         <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
                                             name="jenis_dokumen_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            @foreach ($dok as $item)
+                                            @foreach ($data_tanah as $item)
                                                 <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
                                             @endforeach
                                         </select>
@@ -645,8 +645,8 @@
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            {{ $agunan }}
-                                            @foreach ($agunan as $item)
+                                            {{ $jenis_lain }}
+                                            @foreach ($jenis_lain as $item)
                                                 <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
                                             @endforeach
                                         </select>
@@ -656,7 +656,7 @@
                                         <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
                                             name="jenis_dokumen_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            @foreach ($dok as $item)
+                                            @foreach ($data_lain as $item)
                                                 <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
                                             @endforeach
                                         </select>

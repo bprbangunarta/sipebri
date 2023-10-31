@@ -25,8 +25,8 @@
                                     <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                         name="jenis_agunan_kode" id="agunan" required readonly>
                                         <option value="" selected>--PILIH--</option>
-                                        {{ $agunan }}
-                                        @foreach ($agunan as $item)
+                                        {{ $jenis_kendaraan }}
+                                        @foreach ($jenis_kendaraan as $item)
                                             <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
                                         @endforeach
                                     </select>
@@ -36,7 +36,7 @@
                                     <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
                                         name="jenis_dokumen_kode" id="dokumen" required readonly>
                                         <option value="" selected>--PILIH--</option>
-                                        @foreach ($dok as $item)
+                                        @foreach ($data_kendaraan as $item)
                                             <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
                                         @endforeach
                                     </select>

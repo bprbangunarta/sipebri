@@ -48,6 +48,10 @@ class AgunanController extends Controller
             ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
             ->where('data_jaminan.id', $id)->get();
         //
+        //Agunan Kendaraan
+        $jenis_kendaraan = DB::table('ja_kendaraan')->get();
+        $data_kendaraan = DB::table('da_kendaraan')->get();
+
         //Data dati
         $dati = DB::table('v_dati')
             ->select('nama_dati')
@@ -55,7 +59,7 @@ class AgunanController extends Controller
             ->where('kode_dati', $data[0]->kode_dati)->get();
         $data[0]->nama_dati = $dati[0]->nama_dati;
 
-        return response()->json($data[0]);
+        return response()->json([$data[0], $jenis_kendaraan, $data_kendaraan]);
     }
     public function update_kendaraan(Request $request)
     {
@@ -155,9 +159,11 @@ class AgunanController extends Controller
             ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
             ->where('data_jaminan.id', $id)->get();
         //
+        //Agunan Tanah
+        $jenis_tanah = DB::table('ja_tanah')->get();
+        $data_tanah = DB::table('da_tanah')->get();
 
-
-        return response()->json($data[0]);
+        return response()->json([$data[0], $jenis_tanah, $data_tanah]);
     }
 
     public function tambah_lain(Request $request)
@@ -194,7 +200,11 @@ class AgunanController extends Controller
             ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
             ->where('data_jaminan.id', $id)->get();
         //
-        return response()->json($data[0]);
+        //Agunan Lain
+        $jenis_lain = DB::table('ja_lainnya')->get();
+        $data_lain = DB::table('da_lainnya')->get();
+
+        return response()->json([$data[0], $jenis_lain, $data_lain]);
     }
 
     public function update_lain(Request $request)

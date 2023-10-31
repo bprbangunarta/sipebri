@@ -1,58 +1,80 @@
 $(document).ready(function () {
-    $("#modal-edit-kendaraan").on("show.bs.modal", function (event) {
-        $("#jenis").empty();
-        $("#dokumen").empty();
+    $("#modal-edit-kendaraan")
+        .off("show.bs.modal")
+        .on("show.bs.modal", function (event) {
+            $("#jenis_agunan").empty();
+            $("#jenis_dokumen").empty();
 
-        var button = $(event.relatedTarget); // Tombol yang membuka modal
-        var id = button.data("id"); // Ambil data-id dari tombol
+            var button = $(event.relatedTarget); // Tombol yang membuka modal
+            var id = button.data("id"); // Ambil data-id dari tombol
 
-        // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-        $.ajax({
-            url: "/pengajuan/agunan/" + id + "/edit",
-            type: "GET",
-            dataType: "json",
-            cache: false,
-            success: function (response) {
-                $("#jenis_agunan").append(
-                    $("<option>", {
-                        value: response.jenis_agunan_kode,
-                        text: response.jenis_agunan,
-                    }).prop("selected", true)
-                );
+            // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+            $.ajax({
+                url: "/pengajuan/agunan/" + id + "/edit",
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                success: function (response) {
+                    $("#jenis_agunan").append(
+                        $("<option>", {
+                            value: response[0].jenis_agunan_kode,
+                            text: response[0].jenis_agunan,
+                        }).prop("selected", true)
+                    );
 
-                $("#jenis_dokumen").append(
-                    $("<option>", {
-                        value: response.jenis_dokumen_kode,
-                        text: response.jenis_dokumen,
-                    }).prop("selected", true)
-                );
-                $("#dati").append(
-                    $("<option>", {
-                        value: response.kode_dati,
-                        text: response.nama_dati,
-                    }).prop("selected", true)
-                );
+                    $("#jenis_dokumen").append(
+                        $("<option>", {
+                            value: response[0].jenis_dokumen_kode,
+                            text: response[0].jenis_dokumen,
+                        }).prop("selected", true)
+                    );
 
-                $("#no_dok").val(response.no_dokumen);
-                $("#id").val(response.id);
-                $("#atas_nama").val(response.atas_nama);
-                $("#lokasi").val(response.lokasi);
-                $("#no_mesin").val(response.no_mesin);
-                $("#no_rangka").val(response.no_rangka);
-                $("#no_polisi").val(response.merek);
-                $("#merek").val(response.no_polisi);
-                $("#tahun").val(response.tahun);
-                $("#warna").val(response.warna);
-                $("#tipe_kendaraan").val(response.tipe_kendaraan);
-                $("#lokasi_kendaraan").val(response.lokasi);
-                $("#catatan").val(response.catatan);
-            },
-            error: function (xhr, status, error) {
-                // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                console.error("Error:", xhr.responseText);
-            },
+                    //All
+                    $.each(response[1], function (index, data) {
+                        $("#jenis_agunan").append(
+                            $("<option>", {
+                                value: data.kode,
+                                text: data.jenis_agunan,
+                            })
+                        );
+                    });
+
+                    $.each(response[2], function (index, data) {
+                        $("#jenis_dokumen").append(
+                            $("<option>", {
+                                value: data.kode,
+                                text: data.jenis_dokumen,
+                            })
+                        );
+                    });
+
+                    $("#dati").append(
+                        $("<option>", {
+                            value: response[0].kode_dati,
+                            text: response[0].nama_dati,
+                        }).prop("selected", true)
+                    );
+
+                    $("#no_dok").val(response[0].no_dokumen);
+                    $("#id").val(response[0].id);
+                    $("#atas_nama").val(response[0].atas_nama);
+                    $("#lokasi").val(response[0].lokasi);
+                    $("#no_mesin").val(response[0].no_mesin);
+                    $("#no_rangka").val(response[0].no_rangka);
+                    $("#no_polisi").val(response[0].merek);
+                    $("#merek").val(response[0].no_polisi);
+                    $("#tahun").val(response[0].tahun);
+                    $("#warna").val(response[0].warna);
+                    $("#tipe_kendaraan").val(response[0].tipe_kendaraan);
+                    $("#lokasi_kendaraan").val(response[0].lokasi);
+                    $("#catatan").val(response[0].catatan);
+                },
+                error: function (xhr, status, error) {
+                    // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                    console.error("Error:", xhr.responseText);
+                },
+            });
         });
-    });
 
     $("#otor-kendaraan").on("show.bs.modal", function (event) {
         $("#jenis").empty();
