@@ -48,12 +48,8 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO IDENTITAS</span>
-                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user"
-                                                    required>
-                                                <input type="text" class="form-control" name="no_identitas"
-                                                    id="no_identitas" placeholder="ENTRI"
-                                                    value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}"
-                                                    required>
+                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user" required>
+                                                <input type="text" class="form-control" name="no_identitas" id="no_identitas" minlength="16" maxlength="16" placeholder="ENTRI" value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
