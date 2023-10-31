@@ -27,7 +27,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">ALAMAT USAHA</span>
                             <input class="form-control input-sm form-border" type="text" name="lokasi_usaha"
-                                value="{{ old('lokasi_usaha') }}">
+                                value="{{ old('lokasi_usaha') ?? $data->alamat_ktp }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -49,6 +49,17 @@
                                     KETAN</option>
                                 <option value="PADI INPARI" {{ old('jenis_tanaman') == 'PADI INPARI' ? 'selected' : '' }}>
                                     PADI INPARI</option>
+                                <option value="PADI 42" {{ old('jenis_tanaman') == 'PADI 42' ? 'selected' : '' }}>
+                                    PADI 42</option>
+                                <option value="PADI IR64" {{ old('jenis_tanaman') == 'PADI IR64' ? 'selected' : '' }}>
+                                    PADI IR64</option>
+                                <option value="PADI MUNCUL" {{ old('jenis_tanaman') == 'PADI MUNCUL' ? 'selected' : '' }}>
+                                    PADI MUNCUL</option>
+                                <option value="PADI PANDAN WANGI"
+                                    {{ old('jenis_tanaman') == 'PADI PANDAN WANGI' ? 'selected' : '' }}>
+                                    PADI PANDAN WANGI</option>
+                                <option value="LAINNYA" {{ old('jenis_tanaman') == 'LAINNYA' ? 'selected' : '' }}>
+                                    LAINNYA</option>
                             </select>
                         </div>
                     </div>

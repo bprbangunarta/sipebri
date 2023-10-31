@@ -79,7 +79,7 @@ class UsahaLainnyaController extends Controller
 
             $lain = Lain::where('kode_usaha', $enc)->first();
             $lain->kd_usaha = Crypt::encrypt($lain->kode_usaha);
-            // dd($lain);
+            // dd($cek[0]);
             return view('staff.analisa.u-lainnya.identitas', [
                 'data' => $cek[0],
                 'lain' => $lain,

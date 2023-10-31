@@ -235,9 +235,19 @@ class AnalisaMemorandumController extends Controller
             $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
 
             //Menghitung Max Plafon
+            // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
+            //     $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
+            //     $cek[0]->maxplafon = $keuangan / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
+            // } elseif ($cek[0]->metode_rps == "FLAT") {
+            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
+            // } else {
+            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
+            // }
             if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
                 $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
-                $cek[0]->maxplafon = $keuangan / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
+                $sb = $cek[0]->suku_bunga / 12;
+                $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
+                $cek[0]->maxplafon = $anuitas / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
             } elseif ($cek[0]->metode_rps == "FLAT") {
                 $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
             } else {
@@ -275,7 +285,7 @@ class AnalisaMemorandumController extends Controller
             }
             $cek[0]->rc = number_format($rc, 2);
             $cek[0]->keuangan = $keuangan;
-
+            // dd($cek[0]);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,

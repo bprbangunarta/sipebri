@@ -74,7 +74,7 @@
                         <div style="margin-top:5px;width: 100%;float:right;">
                             <span class="fw-bold">ALAMAT USAHA</span>
                             <input class="form-control input-sm form-border" type="text" name="lokasi_usaha"
-                                value="{{ $lain->lokasi_usaha ?? null }}">
+                                value="{{ $lain->lokasi_usaha ?? $data->alamat_ktp }}">
                         </div>
                     </div>
 

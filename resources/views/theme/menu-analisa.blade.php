@@ -22,7 +22,7 @@
             <li>
                 <a href="#">
                     <i class="fa fa-gear"></i>
-                    {{ $data->metode_rps }}
+                    {{ $data->produk_kode . ' ' . '-' . ' ' . $data->metode_rps }}
                 </a>
             </li>
         </ul>
