@@ -56,7 +56,8 @@ class PengajuanController extends Controller
                 'data_pengajuan.kategori', 
                 'data_nasabah.is_entry as entry',
                 'data_kantor.nama_kantor',
-                'data_survei.kantor_kode as kantor'
+                'data_survei.kantor_kode as kantor',
+                'data_pengajuan.created_at as tanggal'
             )
             // ->where('data_pengajuan.status', 'Sudah Otorisasi')
             // ->orWhere('data_pengajuan.status', 'Lengkapi Data')
@@ -121,7 +122,8 @@ class PengajuanController extends Controller
                 'data_pengajuan.kategori', 
                 'data_nasabah.is_entry as entry',
                 'data_kantor.nama_kantor',
-                'data_survei.kantor_kode as kantor'
+                'data_survei.kantor_kode as kantor',
+                'data_pengajuan.created_at as tanggal'
                 )
             ->where('data_pengajuan.status', '!=', 'Batal')
             ->where('data_pengajuan.tracking', '!=', 'Selesai')

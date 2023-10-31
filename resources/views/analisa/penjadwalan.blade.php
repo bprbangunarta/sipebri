@@ -31,11 +31,9 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">PENGAJUAN</th>
-                                        <th class="text-center" width="35%">ALAMAT</th>
-                                        <th class="text-center" width="15%">JADWAL SURVEY</th>
-                                        <th class="text-center" width="8%">KANTOR</th>
-                                        <th class="text-center" width="8%">PETUGAS</th>
+                                        <th class="text-center">INFORMASI NASABAH</th>
+                                        <th class="text-center"width="25%">PENGAJUAN</th>
+                                        <th class="text-center" width="15%">JADWAL</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -50,32 +48,33 @@
                                             </td>
 
                                             <td style="vertical-align: middle;">
-                                                <b>KODE : </b>{{ $item->kode_pengajuan }} <br>
-                                                <b>NAMA: </b>{{ $item->nama_nasabah }} <br>
-                                                <b>TANGGAL : </b> 2023-12-12
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
+                                                <b>{{ $item->nama_nasabah }}</b> [ {{ $item->kategori }} ] <br>
                                                 {{ $item->alamat_ktp }}<br>
-                                                <b>DESA</b>: CIGUGUR | <b>KECAMATAN</b>: PUSAKAJAYA
+                                                <b>DESA</b>: {{ $item->kelurahan }} | <b>KECAMATAN</b>: {{ $item->kecamatan }}
                                             </td>
 
                                             <td style="vertical-align: middle;">
-                                                <b>Tanggal : </b>
+                                                <b>KODE : </b>{{ $item->kode_pengajuan }} [ {{ $item->kode_kantor }} ] <br>
+                                                <b>TANGGAL : </b> {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}<br>
+                                                <b>PETUGAS : </b> {{ $item->name }} 
+                                            </td>
+
+                                            <td style="vertical-align: middle;">
+                                                <b>SURVEY : </b>
                                                 @if (is_null($item->tgl_survei))
                                                     -
                                                 @else
                                                     {{ $item->tgl_survei }}
                                                 @endif
                                                 <br>
-                                                <b>Jadul 1 : </b>
+                                                <b>JADUL 1 : </b>
                                                 @if (is_null($item->tgl_jadul_1))
                                                     -
                                                 @else
                                                     {{ $item->tgl_jadul_1 }}
                                                 @endif
                                                 <br>
-                                                <b>Jadul 2 : </b>
+                                                <b>JADUL 2 : </b>
                                                 @if (is_null($item->tgl_jadul_2))
                                                     -
                                                 @else
@@ -83,25 +82,10 @@
                                                 @endif
                                             </td>
 
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->code_user }}
-                                            </td>
-
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="#" class="btn-circle btn-sm btn-primary"
-                                                    title="Info Nasabah">
-                                                    <i class="fa fa-user"></i>
-                                                </a>
-
-                                                &nbsp;
-
-                                                <a href="#" data-toggle="modal" data-target="#modal-penjadwalan"
-                                                    data-id="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm btn-warning" title="Jadwal Survey">
-                                                    <i class="fa fa-calendar"></i>
-                                                </a>
+                                                <span data-toggle="modal" data-target="#modal-penjadwalan" data-id="{{ $item->kode_pengajuan }}" class="btn bg-yellow" style="width: 120px;hight:100%;">Jadwalkan</span>
+                                                <p style="margin-top:-5px;"></p>
+                                                <span class="btn bg-blue" style="width: 120px;hight:100%;">Info Nasabah</span>
                                             </td>
                                         </tr>
                                         @php

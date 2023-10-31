@@ -32,7 +32,7 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">INFORMASI NASABAH</th>
-                                        <th class="text-center" width="45%">ALAMAT</th>
+                                        <th class="text-center" width="40%">INFORMASI NASABAH</th>
                                         <th class="text-center" width="17%">PENGAJUAN</th>
                                         <th class="text-center" width="10%">STATUS</th>
                                     </tr>
@@ -47,15 +47,15 @@
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
                                             <td style="vertical-align: middle;">
-                                                [ {{ $item->kategori }} ] <br>
-                                                <b>KODE :</b> {{ $item->kode }}<br>
-                                                <b>NAMA :</b> {{ strtoupper($item->nama) }}
+                                                <b>KODE :</b> {{ $item->kode }} [ {{ $item->kategori }} ] <br>
+                                                <b>NAMA :</b> {{ strtoupper($item->nama) }} <br>
+                                                <b>TANGGAL :</b> {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
                                             </td>
 
                                             @if (is_null($item->alamat))
-                                                <td class="text-center">-</td>
+                                                <td class="text-center" style="vertical-align: middle;">-</td>
                                             @else
-                                                <td class="text-uppercase">{{ $item->alamat }} <br>
+                                                <td class="text-uppercase" style="vertical-align: middle;">{{ $item->alamat }} <br>
                                                     <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                     </b>{{ $item->kecamatan }}
                                                 </td>
@@ -84,6 +84,9 @@
                                                     <span class="btn bg-green"
                                                         style="width: 120px;hight:100%;">{{ $item->status }}</span>
                                                 @endif
+
+                                                <p style="margin-top:-5px;"></p>
+                                                <span class="btn bg-purple" style="width: 120px;hight:100%;">Lihat Tracking</span>
                                             </td>
                                         </tr>
                                         @php
