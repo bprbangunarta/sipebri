@@ -31,9 +31,9 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="45%">ALAMAT</th>
-                                        <th class="text-center" width="15%">PENGAJUAN</th>
+                                        <th class="text-center">INFORMASI NASABAH</th>
+                                        <th class="text-center" width="35%">ALAMAT</th>
+                                        <th class="text-center" width="17%">PENGAJUAN</th>
                                         <th class="text-center" width="8%">AKSI</th>
 
                                         @can('edit pengajuan kredit')
@@ -56,6 +56,7 @@
                                             </td>
 
                                             <td style="vertical-align: middle;">
+                                                [ {{ $item->kategori }} ] <br>
                                                 <b>KODE :</b> {{ $item->kode }}<br>
                                                 <b>NAMA :</b> {{ strtoupper($item->nama) }}
                                             </td>
@@ -73,6 +74,7 @@
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
                                             @endphp
                                             <td style="vertical-align: middle;">
+                                                <b>KANTOR :</b> {{ $item->kantor }} <br>
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>

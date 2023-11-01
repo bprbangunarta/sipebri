@@ -15,16 +15,22 @@ class PenjadwalanController extends Controller
 {
     public function index()
     {
+        $name = request('name');
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_kantor.kode_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name', 'users.code_user', 'data_nasabah.kecamatan', 'data_nasabah.kelurahan', 'data_pengajuan.created_at as tanggal', 'data_pengajuan.kategori')
             ->where('data_survei.kasi_kode', '=', $user)
             ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
             ->where('data_pengajuan.tracking', '=', 'Penjadwalan')
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_kantor.kode_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name', 'users.code_user');
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                      ->orWhere('data_kantor.kode_kantor', 'like', '%' . $name . '%')
+                      ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            });
 
         $datas = $cek->paginate(10);
 

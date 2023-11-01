@@ -294,7 +294,7 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>NAMA LENGKAP</label>
-                                    <input type="text" class="form-control" name="name" id="names" readonly>
+                                    <input type="text" class="form-control" name="name" id="name" readonly>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
