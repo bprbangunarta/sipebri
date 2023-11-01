@@ -233,7 +233,7 @@ class AnalisaMemorandumController extends Controller
             //Menghitung Taksasi Agunan
             $taksasiagunan = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
             $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
-
+            // dd($cek[0], $totaltaksasi);
             //Menghitung Max Plafon
             // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
             //     $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
