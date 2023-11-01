@@ -71,8 +71,8 @@ use Spatie\Permission\Models\Permission;
 */
 
 Route::get('/', function () {
-    // $role = Role::find(2);
-    // $permission = Permission::find(40);
+    // $role = Role::find(10);
+    // $permission = Permission::find(45);
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);

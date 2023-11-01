@@ -50,40 +50,55 @@
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
+                                                    @if ($data->produk == 'KTA')
+                                                    <label>KEPALA KANTOR KAS</label>
+                                                    @else
                                                     <label>KASI ANALIS</label>
-                                                    <select type="text" class="form-control kasi" name="kasi_kode"
-                                                        required>
-                                                        @if (is_null($survey->kasi_kode))
-                                                            <option value="">--PILIH--</option>
+                                                    @endif
+                                                    <select type="text" class="form-control kasi" name="kasi_kode" required>
+                                                        @if ($data->produk == 'KTA')
+                                                        <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}</option>
                                                         @else
-                                                            <option value="{{ $survey->kasi_kode }}">
-                                                                {{ $survey->nama_kasi }}</option>
-                                                        @endif
+                                                            @if (is_null($survey->kasi_kode))
+                                                                <option value="">--PILIH--</option>
+                                                            @else
+                                                                <option value="{{ $survey->kasi_kode }}">
+                                                                    {{ $survey->nama_kasi }}</option>
+                                                            @endif
 
-                                                        @foreach ($kasi as $item)
-                                                            <option value="{{ $item->code_user }}">{{ $item->nama }}
-                                                            </option>
-                                                        @endforeach
+                                                            @foreach ($kasi as $item)
+                                                                <option value="{{ $item->code_user }}">{{ $item->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
+                                                    @if ($data->produk == 'KTA')
+                                                    <label>ANALIS</label>
+                                                    @else
                                                     <label>SURVEYOR</label>
-                                                    <select type="text" class="form-control surveyor"
-                                                        name="surveyor_kode" required>
-                                                        @if (is_null($survey->surveyor_kode))
-                                                            <option value="">--PILIH--</option>
+                                                    @endif
+                                                    <select type="text" class="form-control surveyor" name="surveyor_kode" required>
+                                                        @if ($data->produk == 'KTA')
+                                                        <option value="{{ $cs->code_user }}">{{ $cs->nama }}</option>
+                                                        <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}</option>
                                                         @else
-                                                            <option value="{{ $survey->surveyor_kode }}">
-                                                                {{ $survey->nama_surveyor }}</option>
-                                                        @endif
+                                                            @if (is_null($survey->surveyor_kode))
+                                                                <option value="">--PILIH--</option>
+                                                            @else
+                                                                <option value="{{ $survey->surveyor_kode }}">
+                                                                    {{ $survey->nama_surveyor }}</option>
+                                                            @endif
 
-                                                        @foreach ($staff as $item)
-                                                            <option value="{{ $item->code_user }}">{{ $item->nama }}
-                                                            </option>
-                                                        @endforeach
+                                                            @foreach ($staff as $item)
+                                                                <option value="{{ $item->code_user }}">{{ $item->nama }}
+                                                                </option>
+                                                            @endforeach
+                                                        @endif
                                                     </select>
                                                 </div>
                                             </div>

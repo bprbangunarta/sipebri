@@ -84,6 +84,15 @@
                 </li>
             @endcan
 
+            @can('input analisa kta')
+            <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
+                <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
+                    <i class="fa fa-edit"></i>
+                    Input Analisa KTA
+                </a>
+            </li>
+            @endcan
+
             @can('otorisasi pengajuan kredit')
                 <li
                     class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'otorisasi/pengajuan') ? 'active' : '' }}">

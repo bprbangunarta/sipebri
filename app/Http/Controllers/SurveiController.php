@@ -74,6 +74,20 @@ class SurveiController extends Controller
                 ->select('code_user', 'nama_user as nama')
                 ->where('role_name', '=', 'Staff Analis')->get();
 
+            //Data KKPK
+            $kantor_user = Auth::user()->kantor_kode;
+            $kkpk = DB::table('v_users')
+                ->select('code_user', 'nama_user as nama')
+                ->where('role_name', '=', 'Kepala Kantor Kas')
+                ->where('kantor_kode', '=', $kantor_user)
+                ->get();
+            //Data CS
+            $cs = DB::table('v_users')
+                ->select('code_user', 'nama_user as nama')
+                ->where('role_name', '=', 'Customer Service')
+                ->where('kantor_kode', '=', $kantor_user)
+                ->get();
+
             //Data Kantor
             $kantor = Kantor::all();
 
@@ -91,12 +105,15 @@ class SurveiController extends Controller
             $dt = Midle::analisa_usaha($enc);
             $cek->plafon = $dt[0]->plafon;
             $cek->jangka_waktu = $dt[0]->jangka_waktu;
+            $cek->produk = $pengajuan->produk_kode;
 
             return view('pengajuan.data-surveyor', [
                 'data' => $cek,
                 'kasi' => $kasi,
                 'staff' => $staff,
                 'survey' => $survey,
+                'kkpk' => $kkpk[0],
+                'cs' => $cs[0],
                 'kantor' => $kantor,
             ]);
         } catch (DecryptException $e) {

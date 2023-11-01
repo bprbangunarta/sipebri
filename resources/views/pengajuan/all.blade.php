@@ -32,7 +32,7 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">INFORMASI NASABAH</th>
-                                        <th class="text-center" width="40%">INFORMASI NASABAH</th>
+                                        <th class="text-center" width="40%">ALAMAT</th>
                                         <th class="text-center" width="17%">PENGAJUAN</th>
                                         <th class="text-center" width="10%">STATUS</th>
                                     </tr>
@@ -46,6 +46,7 @@
                                             <td class="text-center" style="vertical-align: middle;">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
+                                            
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode }} [ {{ $item->kategori }} ] <br>
                                                 <b>NAMA :</b> {{ strtoupper($item->nama) }} <br>
