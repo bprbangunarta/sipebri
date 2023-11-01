@@ -243,16 +243,19 @@ class AnalisaMemorandumController extends Controller
             // } else {
             //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
             // }
-            if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
-                $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
-                $sb = $cek[0]->suku_bunga / 12;
-                $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
-                $cek[0]->maxplafon = $anuitas / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
-            } elseif ($cek[0]->metode_rps == "FLAT") {
-                $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
-            } else {
-                $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
-            }
+
+            // $cek[0]->metode_rps = "EFEKTIF ANUITAS";
+
+            // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
+            //     $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
+            //     $sb = $cek[0]->suku_bunga / 12;
+            //     $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
+            //     $cek[0]->maxplafon = $anuitas / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
+            // } elseif ($cek[0]->metode_rps == "FLAT") {
+            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
+            // } else {
+            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
+            // }
 
             //kebutuhan dana
             $dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
@@ -271,23 +274,34 @@ class AnalisaMemorandumController extends Controller
                 $usulan->kebutuhan_dana = $dana->kebutuhan_dana;
             }
 
-            // $usulan->kebutuhan_dana = $dana->kebutuhan_dana ?? null;
-            // dd($usulan);
             //Menghitung RC
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
+                $sb = (int)$cek[0]->suku_bunga / 100;
                 $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
-                $pp = $plafon_permusim / 6;
-                $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
+                $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
+                $bg = ((((int)$cek[0]->plafon * $sb) / 100) * 30) / 365;
                 $rc = ($bg / $pp) * 100;
+
+                //Max Plafond Musiman
+                $cek[0]->maxplafon = $pp / ((int)$cek[0]->jangka_waktu / 6);
+                //
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
-                $sb = $cek[0]->suku_bunga / 12;
+                $ssb = $cek[0]->suku_bunga / 100;
+                $sb = $ssb / 12;
                 $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
                 $rc = ($anuitas / $keuangan) * 100;
+
+                //Max Plafon
+                $cek[0]->maxplafon = $anuitas / (($ssb / 12) * (pow(1 + $ssb / 12, $cek[0]->jangka_waktu) / (pow(1 + $ssb / 12, $cek[0]->jangka_waktu) - 1)));
             } else {
-                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
+                $sb = (int)$cek[0]->suku_bunga / 100;
+                $bunga = (((int)$cek[0]->plafon * $sb) / 100) / 12;
                 $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
                 $angsuran = $bunga + $pokok;
                 $rc = ($angsuran / $keuangan) * 100;
+
+                //Max Plafon
+                $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $sb) / 12);
             }
 
             //cek RC jika ada perubahan analisa usaha
