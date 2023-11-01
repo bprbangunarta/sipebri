@@ -81,12 +81,26 @@ class SurveiController extends Controller
                 ->where('role_name', '=', 'Kepala Kantor Kas')
                 ->where('kantor_kode', '=', $kantor_user)
                 ->get();
+
+            //validasi
+            if (count($kkpk) == 0) {
+                $kkpk = collect([
+                    (object) ['code_user' => null, 'nama' => null]
+                ]);
+            }
             //Data CS
             $cs = DB::table('v_users')
                 ->select('code_user', 'nama_user as nama')
                 ->where('role_name', '=', 'Customer Service')
                 ->where('kantor_kode', '=', $kantor_user)
                 ->get();
+
+            //validasi
+            if (count($cs) == 0) {
+                $kkpk = collect([
+                    (object) ['code_user' => null, 'nama' => null]
+                ]);
+            }
 
             //Data Kantor
             $kantor = Kantor::all();

@@ -34,7 +34,7 @@ class AdministrasiController extends Controller
                 ]);
             }
 
-
+            // dd($provisi);
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
                 'adm' => $administrasi,
@@ -55,7 +55,7 @@ class AdministrasiController extends Controller
                 'kode_analisa' => $kode,
                 'pengajuan_kode' => $enc,
                 'administrasi' => (int)str_replace(["Rp", " ", "."], "", $request->administrasi),
-                'provisi' =>  (int)str_replace(["Rp", " ", "."], "", $request->privisi),
+                'provisi' =>  (int)str_replace(["Rp", " ", "."], "", $request->provisi),
                 'materai' =>  (int)str_replace(["Rp", " ", "."], "", $request->materai),
                 'asuransi_jiwa_menurun1' =>  (int)str_replace(["Rp", " ", "."], "", $request->asuransi_jiwa_menurun1),
                 'asuransi_jiwa_menurun2' =>  (int)str_replace(["Rp", " ", "."], "", $request->asuransi_jiwa_menurun2),

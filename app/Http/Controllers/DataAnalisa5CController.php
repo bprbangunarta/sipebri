@@ -114,8 +114,8 @@ class DataAnalisa5CController extends Controller
                 //
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
                 $ssb = $cek[0]->suku_bunga / 100;
-                // $sb = $cek[0]->suku_bunga / 12;
-                $anuitas = ((int)$cek[0]->plafon * $cek[0]->suku_bunga) / (1 - 1 / pow(1 + $cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu));
+                $sb = $ssb / 12;
+                $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
                 $rc = ($anuitas / $keuangan) * 100;
             } else {
                 $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
@@ -123,7 +123,6 @@ class DataAnalisa5CController extends Controller
                 $angsuran = $bunga + $pokok;
                 $rc = ($angsuran / $keuangan) * 100;
             }
-            // dd((int)$cek[0]->jangka_waktu);
 
             // //Menghitung RC
             // if ($cek[0]->metode_rps == 'Efektif Musiman') {
@@ -158,7 +157,7 @@ class DataAnalisa5CController extends Controller
             $cap = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
             $nilai = Data::analisa5c_number($cap->evaluasi_capacity);
             $cap->evaluasi_capacity = $nilai;
-            // dd($cap);
+
             return view('staff.analisa.5c.capacity-edit', [
                 'data' => $cek[0],
                 'capacity' => $cap,

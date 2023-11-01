@@ -293,15 +293,21 @@ class AnalisaMemorandumController extends Controller
 
                 //Max Plafon
                 $cek[0]->maxplafon = $anuitas / (($ssb / 12) * (pow(1 + $ssb / 12, $cek[0]->jangka_waktu) / (pow(1 + $ssb / 12, $cek[0]->jangka_waktu) - 1)));
-            } else {
-                $sb = (int)$cek[0]->suku_bunga / 100;
-                $bunga = (((int)$cek[0]->plafon * $sb) / 100) / 12;
+                //
+            } else if ($cek[0]->metode_rps == 'FLAT') {
+                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
                 $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-                $angsuran = $bunga + $pokok;
+                $angsuran = ceil($bunga) + $pokok;
                 $rc = ($angsuran / $keuangan) * 100;
 
                 //Max Plafon
-                $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $sb) / 12);
+                $mp_sb = (int)$cek[0]->suku_bunga / 100;
+                $cek[0]->maxplafon = ((int)$angsuran * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
+            }
+
+            //validasi RC jika kosong
+            if (is_null($RC)) {
+                return redirect()->back()->with('error', 'Lengkapi A5C CAPACITY terlebih dahulu');
             }
 
             //cek RC jika ada perubahan analisa usaha

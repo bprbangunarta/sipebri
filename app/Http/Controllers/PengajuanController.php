@@ -44,16 +44,16 @@ class PengajuanController extends Controller
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.nasabah_kode as kd_nasabah',
                 'data_pengajuan.id as id',
-                'data_pengajuan.plafon as plafon', 
-                'data_pengajuan.jangka_waktu as jk', 
-                'data_nasabah.nama_nasabah as nama', 
-                'data_nasabah.kelurahan', 
-                'data_nasabah.kecamatan', 
-                'data_nasabah.no_telp', 
-                'data_nasabah.alamat_ktp as alamat', 
-                'data_pengajuan.status', 
-                'data_pengajuan.tracking', 
-                'data_pengajuan.kategori', 
+                'data_pengajuan.plafon as plafon',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_nasabah.nama_nasabah as nama',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_nasabah.no_telp',
+                'data_nasabah.alamat_ktp as alamat',
+                'data_pengajuan.status',
+                'data_pengajuan.tracking',
+                'data_pengajuan.kategori',
                 'data_nasabah.is_entry as entry',
                 'data_kantor.nama_kantor',
                 'data_survei.kantor_kode as kantor',
@@ -70,8 +70,8 @@ class PengajuanController extends Controller
             })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                      ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                      ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
             ->orderBy('data_nasabah.created_at', 'ASC');
         //
@@ -110,28 +110,28 @@ class PengajuanController extends Controller
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.nasabah_kode as kd_nasabah',
                 'data_pengajuan.id as id',
-                'data_pengajuan.plafon as plafon', 
-                'data_pengajuan.jangka_waktu as jk', 
-                'data_nasabah.nama_nasabah as nama', 
-                'data_nasabah.kelurahan', 
-                'data_nasabah.kecamatan', 
-                'data_nasabah.no_telp', 
-                'data_nasabah.alamat_ktp as alamat', 
-                'data_pengajuan.status', 
-                'data_pengajuan.tracking', 
-                'data_pengajuan.kategori', 
+                'data_pengajuan.plafon as plafon',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_nasabah.nama_nasabah as nama',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_nasabah.no_telp',
+                'data_nasabah.alamat_ktp as alamat',
+                'data_pengajuan.status',
+                'data_pengajuan.tracking',
+                'data_pengajuan.kategori',
                 'data_nasabah.is_entry as entry',
                 'data_kantor.nama_kantor',
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal'
-                )
+            )
             ->where('data_pengajuan.status', '!=', 'Batal')
             ->where('data_pengajuan.tracking', '!=', 'Selesai')
             // ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                      ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                      ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
             ->orderBy('data_pengajuan.created_at', 'asc');
         //

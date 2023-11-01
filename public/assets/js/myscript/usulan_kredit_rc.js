@@ -6,20 +6,22 @@ $(document).ready(function () {
         var keuangan = $("#keuangan").val();
         var sb = $("#suku_bunga").val();
         var jangka_waktu = $("#jw").val();
-        var mx = $("#max").val();
 
         if (metode == "FLAT") {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
             var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
-            var angsuran = bunga + poko;
+            var angsuran = Math.ceil(bunga) + poko;
             var rc = (angsuran / parseFloat(keuangan)) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
 
             //MAX Plafon FLAT
+            var mx_sb = sb / 100;
             var max_plafon =
-                (angsuran * jangka_waktu) / (1 + (jangka_waktu * sb) / 12);
-            $("#max").val(max_plafon.toFixed(2));
+                (angsuran * jangka_waktu) / (1 + (jangka_waktu * mx_sb) / 12);
+            var mx = formatRupiah(max_plafon.toFixed(0));
+            $("#max").val("Rp. " + " " + mx);
+
             //
         } else if (metode == "EFEKTIF MUSIMAN") {
             //
@@ -35,8 +37,8 @@ $(document).ready(function () {
             $("#max").val(max_plafon.toFixed(2));
             //
         } else if (metode == "EFEKTIF ANUITAS") {
-            //
-            var bunga = sb / 12;
+            var ssb = sb / 100;
+            var bunga = ssb / 12;
             var anuitas =
                 (usulan * bunga) / (1 - 1 / Math.pow(1 + bunga, jangka_waktu));
             var rc = (anuitas / keuangan) * 100;
@@ -45,9 +47,9 @@ $(document).ready(function () {
             //MAX Plafon EFKTIF ANUITAS
             var plafonPinjaman =
                 anuitas /
-                ((sb / 12) *
-                    (Math.pow(1 + sb / 12, parseInt(jangka_waktu)) /
-                        (Math.pow(1 + sb / 12, parseInt(jangka_waktu)) - 1)));
+                ((ssb / 12) *
+                    (Math.pow(1 + ssb / 12, parseInt(jangka_waktu)) /
+                        (Math.pow(1 + ssb / 12, parseInt(jangka_waktu)) - 1)));
 
             $("#max").val("Rp." + " " + plafonPinjaman.toLocaleString("id-ID"));
         } else {
@@ -61,8 +63,24 @@ $(document).ready(function () {
             //MAX Plafon FLAT
             var max_plafon =
                 (angsuran * jangka_waktu) / (1 + (jangka_waktu * sb) / 12);
-            $("#max").val(max_plafon.toFixed(2));
+            $("#max").val("Rp." + " " + max_plafon.toFixed(2));
             //
         }
     });
+
+    function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, "").toString(),
+            split = number_string.split(","),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+        if (ribuan) {
+            separator = sisa ? "." : "";
+            rupiah += separator + ribuan.join(".");
+        }
+
+        rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+        return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+    }
 });

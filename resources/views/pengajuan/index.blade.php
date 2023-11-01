@@ -54,13 +54,15 @@
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode }} [ {{ $item->kategori }} ] <br>
                                                 <b>NAMA :</b> {{ strtoupper($item->nama) }} <br>
-                                                <b>TANGGAL :</b> {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
+                                                <b>TANGGAL :</b>
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
                                             </td>
 
                                             @if (is_null($item->alamat))
                                                 <td class="text-center" style="vertical-align: middle;">-</td>
                                             @else
-                                                <td class="text-uppercase" style="vertical-align: middle;">{{ $item->alamat }} <br>
+                                                <td class="text-uppercase" style="vertical-align: middle;">
+                                                    {{ $item->alamat }} <br>
                                                     <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                     </b>{{ $item->kecamatan }}
                                                 </td>
@@ -77,40 +79,46 @@
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @can('edit pengajuan kredit')
-                                                @if ($item->status == 'Lengkapi Data')
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                        <span class="btn bg-red" style="width: 120px;hight:100%;">{{ $item->status }}</span>
-                                                    </a>
-                                                @elseif ($item->status == 'Minta Otorisasi')
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                        <span class="btn bg-yellow" style="width: 120px;hight:100%;">{{ $item->status }}</span>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                        <span class="btn bg-green" style="width: 120px;hight:100%;">{{ $item->status }}</span>
-                                                    </a>
-                                                    {{-- <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                    @if ($item->status == 'Lengkapi Data')
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                            <span class="btn bg-red"
+                                                                style="width: 120px;hight:100%;">{{ $item->status }}</span>
+                                                        </a>
+                                                    @elseif ($item->status == 'Minta Otorisasi')
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                            <span class="btn bg-yellow"
+                                                                style="width: 120px;hight:100%;">{{ $item->status }}</span>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                            <span class="btn bg-green"
+                                                                style="width: 120px;hight:100%;">{{ $item->status }}</span>
+                                                        </a>
+                                                        {{-- <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
                                                         <span class="btn bg-green"
                                                             style="width: 120px;float:left;">{{ $item->status }}</span>
                                                     </a> --}}
-                                                @endif
-                                                
-                                                <p style="margin-top:-5px;"></p>
-                                                @if ($item->status == "Sudah Otorisasi")
-                                                <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}">
-                                                @else
-                                                <a data-toggle="modal" data-target="#modal-cetak">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Berkas</span>
-                                                </a>
-                                                @endif
+                                                    @endif
 
+                                                    <p style="margin-top:-5px;"></p>
+                                                    @if ($item->status == 'Sudah Otorisasi')
+                                                        <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}"><span
+                                                                class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
+                                                                Berkas</span></a>
+                                                    @else
+                                                        <a data-toggle="modal" data-target="#modal-cetak">
+                                                            <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
+                                                                Berkas</span>
+                                                        </a>
+                                                    @endif
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
-                                                <p style="margin-top:-5px;"></p>
-                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">Otorisasi Data</span>
-                                                </a>
+                                                    <p style="margin-top:-5px;"></p>
+                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
+                                                        <span class="btn bg-red" style="width: 120px;hight:100%;">Otorisasi
+                                                            Data</span>
+                                                    </a>
                                                 @endcan
                                             </td>
 
@@ -253,7 +261,8 @@
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
-                        <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                        <button type="button" class="btn btn-danger" style="width: 100%;"
+                            data-dismiss="modal">TUTUP</button>
                     </div>
                 </form>
             </div>
