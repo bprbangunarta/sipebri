@@ -45,13 +45,10 @@ $(document).ready(function () {
             $("#rc").val(rc.toFixed(2) + "%");
 
             //MAX Plafon EFKTIF ANUITAS
-            var plafonPinjaman =
-                anuitas /
-                ((ssb / 12) *
-                    (Math.pow(1 + ssb / 12, parseInt(jangka_waktu)) /
-                        (Math.pow(1 + ssb / 12, parseInt(jangka_waktu)) - 1)));
-
-            $("#max").val("Rp." + " " + plafonPinjaman.toLocaleString("id-ID"));
+            var plafonPinjaman = keuangan / (bunga * (Math.pow(1 + bunga, parseInt(jangka_waktu)) / (Math.pow(1 + bunga, parseInt(jangka_waktu)) - 1)));
+            var mx = formatRupiah(plafonPinjaman.toFixed(0));
+            $("#max").val("Rp." + " " + mx.toLocaleString("id-ID"));
+            console.log(keuangan, bunga);
         } else {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
