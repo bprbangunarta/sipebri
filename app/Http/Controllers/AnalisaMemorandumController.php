@@ -233,7 +233,7 @@ class AnalisaMemorandumController extends Controller
             //Menghitung Taksasi Agunan
             $taksasiagunan = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
             $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
-            // dd($cek[0], $totaltaksasi);
+
             //Menghitung Max Plafon
             // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
             //     $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
@@ -302,7 +302,16 @@ class AnalisaMemorandumController extends Controller
 
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
-                $cek[0]->maxplafon = ((int)$angsuran * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
+                $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
+            } else {
+                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
+                $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
+                $angsuran = ceil($bunga) + $pokok;
+                $rc = ($angsuran / $keuangan) * 100;
+
+                //Max Plafon
+                $mp_sb = (int)$cek[0]->suku_bunga / 100;
+                $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             }
 
             //validasi RC jika kosong

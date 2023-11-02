@@ -18,7 +18,7 @@ $(document).ready(function () {
             //MAX Plafon FLAT
             var mx_sb = sb / 100;
             var max_plafon =
-                (angsuran * jangka_waktu) / (1 + (jangka_waktu * mx_sb) / 12);
+                (keuangan * jangka_waktu) / (1 + (jangka_waktu * mx_sb) / 12);
             var mx = formatRupiah(max_plafon.toFixed(0));
             $("#max").val("Rp. " + " " + mx);
 
@@ -53,15 +53,16 @@ $(document).ready(function () {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
             var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
-            var angsuran = bunga + poko;
+            var angsuran = Math.ceil(bunga) + poko;
             var rc = (angsuran / parseFloat(keuangan)) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
 
             //MAX Plafon FLAT
+            var mx_sb = sb / 100;
             var max_plafon =
-                (angsuran * jangka_waktu) / (1 + (jangka_waktu * sb) / 12);
-            $("#max").val("Rp." + " " + max_plafon.toFixed(2));
-            //
+                (keuangan * jangka_waktu) / (1 + (jangka_waktu * mx_sb) / 12);
+            var mx = formatRupiah(max_plafon.toFixed(0));
+            $("#max").val("Rp. " + " " + mx);
         }
     });
 
