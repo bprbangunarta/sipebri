@@ -108,6 +108,7 @@ class AgunanController extends Controller
                 'no_dokumen' => 'required',
                 'atas_nama' => 'required',
                 'luas' => 'required',
+                'kode_dati' => 'required',
                 'lokasi' => 'required',
                 'input_user' => 'required',
             ]);
@@ -162,6 +163,7 @@ class AgunanController extends Controller
         //Agunan Tanah
         $jenis_tanah = DB::table('ja_tanah')->get();
         $data_tanah = DB::table('da_tanah')->get();
+        // $dati =
 
         return response()->json([$data[0], $jenis_tanah, $data_tanah]);
     }

@@ -6,7 +6,7 @@ $(document).ready(function () {
             $("#jenis_dokumens").empty();
             var button = $(event.relatedTarget); // Tombol yang membuka modal
             var id = button.data("id"); // Ambil data-id dari tombol
-
+            
             // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
             $.ajax({
                 url: "/pengajuan/agunan/tanah/" + id + "/edit",
@@ -14,6 +14,7 @@ $(document).ready(function () {
                 dataType: "json",
                 cache: false,
                 success: function (response) {
+                    console.log(response[0])
                     $("#jenis_agunans").append(
                         $("<option>", {
                             value: response[0].jenis_agunan_kode,

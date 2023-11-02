@@ -57,7 +57,11 @@ class Midle extends Model
 
         //Pendidikan dari CIF
         $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
-        $query->std = $p->nama_pendidikan;
+        if (is_null($p)) {
+            $query->std = null;
+        } else {
+            $query->std = $p->nama_pendidikan;
+        }
         $query->pendidikan_kode = $query->pendidikan;
 
         //perubahan field tabel untuk view
