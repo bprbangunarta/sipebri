@@ -149,7 +149,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_penolakan.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
