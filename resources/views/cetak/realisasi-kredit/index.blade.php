@@ -10,14 +10,14 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">NOTIFIKASI KREDIT</h3>
+                            <h3 class="box-title">REALISASI KREDIT</h3>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" style="width: 10px">#</th>
-                                        <th class="text-center" style="width: 150px">NOTIFIKASI</th>
+                                        <th class="text-center" style="width: 150px">PERJANJIAN</th>
                                         <th class="text-center" style="width: 150px">PENGAJUAN</th>
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center" style="width: 120px">ADMINISTRASI</th>
@@ -35,7 +35,7 @@
                                             <td style="vertical-align: middle;">
                                                 [ {{ $item->kategori }} ]<br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                {{ $item->no_notifikasi }}
+                                                {{ $item->no_spk }}
                                             </td>
 
                                             <td style="vertical-align: middle;">
@@ -53,23 +53,18 @@
                                             <td style="vertical-align: middle;">
                                                 <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
                                                 <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
-                                                <b>KREDIT: </b>
+                                                <b>KREDIT: </b> 5.00%
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
 
-                                                {{-- <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm btn-warning" title="Input Analisa">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </a> --}}
-                                                <a data-toggle="modal" data-target="#generate-code"
+                                                <button data-toggle="modal" data-target="#generate-code"
                                                     class="btn btn-sm btn-warning" data-id="{{ $item->kode_pengajuan }}">
                                                     <i class="fa fa-file-text-o"></i>
-                                                </a>
+                                                </button>
 
                                                 &nbsp;
-                                                @if (is_null($item->no_notifikasi))
+                                                @if (is_null($item->no_spk))
                                                     <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
                                                         <i class="fa fa-print"></i>
                                                     </a>
@@ -79,7 +74,6 @@
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @endif
-
                                             </td>
                                         </tr>
                                         @php
@@ -108,7 +102,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">GENERATE CODE</h4>
                 </div>
-                <form action="{{ route('simpan.notifikasi') }}" method="POST">
+                <form action="{{ route('simpan.realisasi') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -118,7 +112,7 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">KODE PENGAJUAN</span>
                                     <input type="text" id="kode" hidden>
-                                    <input type="text" name="nomor" id="nomor" hidden>
+                                    <input type="text" id="nomor" name="nomor" hidden>
                                     <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
                                         id="kd_pengajuan" readonly>
                                 </div>
@@ -130,9 +124,9 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE NOTIFIKASI</span>
-                                    <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
-                                        type="text" readonly>
+                                    <span class="fw-bold">KODE REALISASI KREDIT</span>
+                                    <input class="form-control text-uppercase" name="kode_spk" id="generate" type="text"
+                                        readonly>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +143,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/generate_kode_realisasi.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik

@@ -118,8 +118,15 @@
                                     <span class="fw-bold">KODE PENGAJUAN</span>
                                     <input type="text" id="kode" hidden>
                                     <input type="text" id="nomor" name="nomor" hidden>
+                                    <input type="text" id="kode_produk" name="kode_produk" hidden>
                                     <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
                                         id="kd_pengajuan" readonly>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">NO CIF</span>
+                                    <input class="form-control text-uppercase" name="no_cif" id="no_cif" type="text"
+                                        readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
@@ -138,7 +145,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                        <button type="submit" id="smb" class="btn btn-danger">SIMPAN</button>
                     </div>
                 </form>
             </div>
