@@ -163,7 +163,8 @@ class AgunanController extends Controller
         //Agunan Tanah
         $jenis_tanah = DB::table('ja_tanah')->get();
         $data_tanah = DB::table('da_tanah')->get();
-        // $dati =
+        $dati = DB::table('v_dati')->where('kode_dati', $data[0]->kode_dati)->first();
+        $data[0]->nama_dati = $dati->nama_dati;
 
         return response()->json([$data[0], $jenis_tanah, $data_tanah]);
     }

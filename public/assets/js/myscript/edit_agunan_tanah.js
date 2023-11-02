@@ -14,7 +14,7 @@ $(document).ready(function () {
                 dataType: "json",
                 cache: false,
                 success: function (response) {
-                    console.log(response[0])
+                    
                     $("#jenis_agunans").append(
                         $("<option>", {
                             value: response[0].jenis_agunan_kode,
