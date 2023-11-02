@@ -252,6 +252,7 @@ class DataCetakController extends Controller
 
         $data[0]->kode_notif = $notif;
         $data[0]->nomor = $kodes;
+        $data[0]->kode_produk = $data[0]->produk_kode;
 
 
         return response()->json($data[0]);
@@ -265,7 +266,7 @@ class DataCetakController extends Controller
                 ->orWhere('nomor', $request->nomor)->first();
 
             if ($cek) {
-                return back()->with('error', "Anda Sudah Memiliki Nomor Penolakan");
+                return back()->with('error', "Anda Sudah Memiliki Nomor PK");
             }
 
             $data = [
@@ -281,7 +282,16 @@ class DataCetakController extends Controller
                 return redirect()->back()->with('error', 'No CIF tidak boleh kosong');
             }
 
-            DB::table('data_spk')->insert($data);
+            $data2 = [
+                'no_spk' => $request->nomor,
+            ];
+
+            DB::transaction(function () use ($data, $request, $data2) {
+                DB::table('data_spk')->insert($data);
+                Produk::where('kode_produk', $request->kode_produk)->update($data2);
+            });
+
+
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');

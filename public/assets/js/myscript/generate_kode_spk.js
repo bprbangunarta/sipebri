@@ -9,11 +9,13 @@ $("#generate-code").on("show.bs.modal", function (event) {
         dataType: "json",
         cache: false,
         success: function (response) {
+            
             $("#no_cif").val(response.no_cif);
             $("#kd_pengajuan").val(response.kode_pengajuan);
             $("#nm_nasabah").val(response.nama_nasabah);
             $("#generate").val(response.kode_notif);
             $("#nomor").val(response.nomor);
+            $("#kode_produk").val(response.produk_kode);
 
         },
         error: function (xhr, status, error) {
