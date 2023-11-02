@@ -15,14 +15,14 @@
             </li>
             <li>
                 <a href="#">
-                    <i class="fa fa-bitcoin"></i>
-                    {{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') . ' ' . '(' . $data->jangka_waktu . ' ' . 'BULAN)' }}
+                    <i class="fa fa-gear"></i>
+                    {{ $data->produk_kode . ' ' . '-' . ' ' . $data->metode_rps }}
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <i class="fa fa-gear"></i>
-                    {{ $data->produk_kode . ' ' . '-' . ' ' . $data->metode_rps }}
+                    <i class="fa fa-bitcoin"></i>
+                    {{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') . ' ' . '(' . $data->jangka_waktu . ' ' . 'BULAN)' }}
                 </a>
             </li>
         </ul>
