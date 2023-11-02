@@ -10,7 +10,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">PERJANJIAN KREDIT</h3>
+                            <h3 class="box-title">REALISASI KREDIT</h3>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -58,11 +58,6 @@
 
                                             <td class="text-center" style="vertical-align: middle;">
 
-                                                {{-- <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm btn-warning" title="Input Analisa">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </a> --}}
                                                 <button data-toggle="modal" data-target="#generate-code"
                                                     class="btn btn-sm btn-warning" data-id="{{ $item->kode_pengajuan }}">
                                                     <i class="fa fa-file-text-o"></i>
@@ -107,7 +102,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">GENERATE CODE</h4>
                 </div>
-                <form action="{{ Route('simpan.spk') }}" method="POST">
+                <form action="{{ route('simpan.realisasi') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -123,19 +118,13 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">NO CIF</span>
-                                    <input class="form-control text-uppercase" name="no_cif" id="no_cif" type="text"
-                                        readonly>
-                                </div>
-
-                                <div style="margin-top: 5px;">
                                     <span class="fw-bold">NAMA NASABAH</span>
                                     <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
                                         type="text" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE PERJANJIAN KREDIT</span>
+                                    <span class="fw-bold">KODE REALISASI KREDIT</span>
                                     <input class="form-control text-uppercase" name="kode_spk" id="generate" type="text"
                                         readonly>
                                 </div>
@@ -144,7 +133,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" id="smb" class="btn btn-danger">SIMPAN</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
                     </div>
                 </form>
             </div>
@@ -154,7 +143,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_spk.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/generate_kode_realisasi.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik

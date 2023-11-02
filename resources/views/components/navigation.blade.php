@@ -85,12 +85,12 @@
             @endcan
 
             @can('input analisa kta')
-            <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
-                <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
-                    <i class="fa fa-edit"></i>
-                    Input Analisa KTA
-                </a>
-            </li>
+                <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
+                    <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
+                        <i class="fa fa-edit"></i>
+                        Input Analisa KTA
+                    </a>
+                </li>
             @endcan
 
             @can('otorisasi pengajuan kredit')
@@ -164,6 +164,13 @@
                     <a href="{{ route('perjanjian.kredit') }}" title="Cetak Perjanjian Kredit">
                         <i class="fa fa-print"></i>
                         Perjanjian Kredit
+                    </a>
+                </li>
+
+                <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
+                    <a href="{{ route('realisasi.kredit') }}" title="Cetak Realisasi Kredit">
+                        <i class="fa fa-print"></i>
+                        Realisasi Kredit
                     </a>
                 </li>
             @endcan

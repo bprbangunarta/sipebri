@@ -144,19 +144,17 @@ class DataCetakController extends Controller
 
     public function perjanjian_kredit(Request $request)
     {
-        $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
+        // $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
-            ->where(function ($query) use ($user) {
-                $query->where('data_pengajuan.tracking', '=', 'Realisasi')
-                    ->where('data_pengajuan.status', '=', 'Disetujui')
-                    ->orWhere('data_survei.kantor_kode', '==', $user->kantor_kode);
-            })
-            ->select('data_spk.*', 'data_pengajuan.*', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->select('data_spk.*', 'data_pengajuan.*', 'data_notifikasi.*', 'data_pengajuan.*', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
@@ -167,13 +165,42 @@ class DataCetakController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-        // dd($user);
+
         return view('cetak.perjanjian-kredit.index', [
             'data' => $data
         ]);
     }
 
-    public function get_spk($kode)
+    public function realisasi_kredit()
+    {
+
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->whereColumn('data_pengajuan.kode_pengajuan', 'data_spk.pengajuan_kode')
+            ->select('data_spk.*', 'data_pengajuan.*', 'data_notifikasi.*', 'data_pengajuan.*', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        for ($i = 0; $i < $count; $i++) {
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            }
+        }
+
+        return view('cetak.realisasi-kredit.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function get_realisasi($kode)
     {
         $data = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -201,6 +228,35 @@ class DataCetakController extends Controller
         return response()->json($data[0]);
     }
 
+    public function get_spk($kode)
+    {
+        $data = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            // ->leftJoin('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
+            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.produk_kode', 'data_nasabah.nama_nasabah', 'data_nasabah.no_cif')
+            ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
+        //
+
+        $produk = Produk::where('kode_produk', $data[0]->produk_kode)->first();
+
+        $count = (int) $produk->no_spk + 1;
+        $lengths = 4;
+        $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $romawi = Data::romawi($bulan);
+
+        $notif = $kodes . '/' . $data[0]->produk_kode . '/' . $romawi . '/' . $now->year;
+
+        $data[0]->kode_notif = $notif;
+        $data[0]->nomor = $kodes;
+
+
+        return response()->json($data[0]);
+    }
+
     public function simpan_spk(Request $request)
     {
         try {
@@ -219,6 +275,11 @@ class DataCetakController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
+
+            //validasi CIF harus ada
+            if (is_null($request->no_cif)) {
+                return redirect()->back()->with('error', 'No CIF tidak boleh kosong');
+            }
 
             DB::table('data_spk')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
