@@ -111,7 +111,6 @@ class DataAnalisa5CController extends Controller
                 $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
                 $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
                 $rc = ($bg / $pp) * 100;
-                //
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
                 $ssb = $cek[0]->suku_bunga / 100;
                 $sb = $ssb / 12;

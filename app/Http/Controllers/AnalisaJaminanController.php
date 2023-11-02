@@ -261,11 +261,11 @@ class AnalisaJaminanController extends Controller
             ];
 
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
-            return redirect()->back()->with('success', 'Berhasil menambahkan fhoto');
+            return redirect()->back()->with('success', 'Berhasil melakukan perubahan');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
-        return redirect()->back()->with('error', 'Gagal menambahkan fhoto');
+        return redirect()->back()->with('error', 'Gagal melakukan perubahan');
     }
 
     public function lain(Request $request)
