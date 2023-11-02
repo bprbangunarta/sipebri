@@ -19,7 +19,7 @@ class AdministrasiController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
 
-            $adm = ($cek[0]->plafon * $cek[0]->admin) / 100;
+            $adm = ($cek[0]->plafon * $cek[0]->b_admin) / 100;
             $cek[0]->administrasi = (int)$adm;
             //cek data ada atau tidak
             $administrasi = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
@@ -34,7 +34,6 @@ class AdministrasiController extends Controller
                 ]);
             }
 
-            // dd($provisi);
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
                 'adm' => $administrasi,

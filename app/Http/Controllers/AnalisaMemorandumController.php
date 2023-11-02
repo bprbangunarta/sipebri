@@ -217,6 +217,7 @@ class AnalisaMemorandumController extends Controller
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
             $RC = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first('rc');
+            $tk_agunan = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
 
             //Cek kemampuan keuangan sudah terisi apa belum
             if (is_null($keuangan) || $keuangan == 0) {
@@ -224,15 +225,15 @@ class AnalisaMemorandumController extends Controller
             }
 
             //total semua nilai taksasi
-            $tak = [];
-            for ($i = 0; $i < count($taksasi); $i++) {
-                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
-            }
-            $totaltaksasi = array_sum($tak);
+            // $tak = [];
+            // for ($i = 0; $i < count($taksasi); $i++) {
+            //     $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
+            // }
+            // $totaltaksasi = array_sum($tak);
 
-            //Menghitung Taksasi Agunan
-            $taksasiagunan = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
-            $cek[0]->taksasiagunan = number_format($taksasiagunan, 2);
+            // //Menghitung Taksasi Agunan
+            // $taksasiagunan = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+
 
             //Menghitung Max Plafon
             // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
@@ -256,6 +257,13 @@ class AnalisaMemorandumController extends Controller
             // } else {
             //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
             // }
+
+            //Taksasi Agunan
+            if (!is_null($tk_agunan)) {
+                $cek[0]->taksasiagunan = $tk_agunan->taksasi_agunan;
+            } else {
+                $cek[0]->taksasiagunan = 0;
+            }
 
             //kebutuhan dana
             $dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
@@ -326,7 +334,7 @@ class AnalisaMemorandumController extends Controller
             }
             $cek[0]->rc = number_format($rc, 2);
             $cek[0]->keuangan = $keuangan;
-
+            // dd($cek);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
@@ -361,7 +369,7 @@ class AnalisaMemorandumController extends Controller
                 'b_penalti' => number_format($request->b_penalti, 2),
                 'updated_at' => now(),
             ];
-
+            dd($request);
             DB::transaction(function () use ($data, $data2, $enc) {
                 Pengajuan::where('kode_pengajuan', $enc)->update($data2);
                 DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data);
