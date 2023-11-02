@@ -56,7 +56,7 @@
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA ADMIN (%)</span>
                             <input type="text" class="form-control text-uppercase" name="b_admin" id="b_admin"
-                                placeholder="ENTRI" value="{{ $data->b_admin }}">
+                                placeholder="ENTRI" value="{{ $data->b_admin }}" required>
                         </div>
 
                         <div style="width: 49.5%;float:right;">
@@ -68,7 +68,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA PROVISI (%)</span>
                             <input type="text" class="form-control text-uppercase" name="b_provisi" id="b_provisi"
-                                placeholder="ENTRI" value="{{ $data->b_provisi }}">
+                                placeholder="ENTRI" value="{{ $data->b_provisi }}" required>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
