@@ -292,7 +292,7 @@ class AnalisaMemorandumController extends Controller
                 $rc = ($anuitas / $keuangan) * 100;
 
                 //Max Plafon
-                $cek[0]->maxplafon = $anuitas / (($ssb / 12) * (pow(1 + $ssb / 12, $cek[0]->jangka_waktu) / (pow(1 + $ssb / 12, $cek[0]->jangka_waktu) - 1)));
+                $cek[0]->maxplafon = $keuangan / ($sb * (pow(1 + $sb, $cek[0]->jangka_waktu) / (pow(1 + $sb, $cek[0]->jangka_waktu) - 1)));
                 //
             } else if ($cek[0]->metode_rps == 'FLAT') {
                 $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
