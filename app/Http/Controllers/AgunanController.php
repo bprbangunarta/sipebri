@@ -33,7 +33,7 @@ class AgunanController extends Controller
             ]);
             $cek['is_entry'] = 1;
             $cek['created_at'] = now();
-
+            // $cek = array_map('strtoupper', $cek);
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
