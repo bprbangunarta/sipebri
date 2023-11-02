@@ -10,7 +10,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">NOTIFIKASI KREDIT</h3>
+                            <h3 class="box-title">PENDAFTARAN FIDUCIA</h3>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -58,18 +58,14 @@
 
                                             <td class="text-center" style="vertical-align: middle;">
 
-                                                {{-- <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm btn-warning" title="Input Analisa">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </a> --}}
+
                                                 <a data-toggle="modal" data-target="#generate-code"
                                                     class="btn btn-sm btn-warning" data-id="{{ $item->kode_pengajuan }}">
                                                     <i class="fa fa-file-text-o"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                @if (is_null($item->no_notifikasi))
+                                                {{-- @if (is_null($item->no_notifikasi))
                                                     <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
                                                         <i class="fa fa-print"></i>
                                                     </a>
@@ -78,7 +74,7 @@
                                                         class="btn btn-sm btn-primary" title="Cetak Analisa">
                                                         <i class="fa fa-print"></i>
                                                     </a>
-                                                @endif
+                                                @endif --}}
 
                                             </td>
                                         </tr>
@@ -106,7 +102,7 @@
                 <div class="modal-header bg-red">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">GENERATE CODE</h4>
+                    <h4 class="modal-title">PENDAFTARAN FIDUCIA</h4>
                 </div>
                 <form action="{{ route('simpan.notifikasi') }}" method="POST">
                     @csrf
@@ -149,7 +145,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script> --}}
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
