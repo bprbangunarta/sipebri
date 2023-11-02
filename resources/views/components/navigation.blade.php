@@ -68,7 +68,7 @@
             @endcan
 
             <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
-                <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
+                <a href="{{ route('pengajuan.data') }}" title="Data Pengajuan">
                     <i class="fa fa-user"></i>
                     Data Pengajuan
                 </a>
@@ -85,8 +85,8 @@
             @endcan
 
             @can('input analisa kta')
-                <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
-                    <a href="{{ route('pengajuan.data') }}" title=" Data Pengajuan">
+                <li class="#">
+                    <a href="#" title="Input Analisa KTA">
                         <i class="fa fa-edit"></i>
                         Input Analisa KTA
                     </a>
