@@ -185,8 +185,8 @@
             @endcan
 
             @can('cetak fiducia')
-                <li>
-                    <a href="#" title="Perhitungan Kredit">
+                <li class="{{ request()->is('themes/fiducia') ? 'active' : '' }}">
+                    <a href="{{ route('fiducia') }}" title="Perhitungan Kredit">
                         <i class="fa fa-print"></i>
                         Pendaftaran Fiducia
                     </a>

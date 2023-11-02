@@ -53,7 +53,7 @@
                                             <td style="vertical-align: middle;">
                                                 <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
                                                 <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
-                                                <b>KREDIT: </b>
+                                                <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }}%
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">

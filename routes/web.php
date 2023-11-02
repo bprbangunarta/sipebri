@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
 use App\Http\Controllers\LainController;
+use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
+use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\KomiteController;
 use App\Http\Controllers\SurveiController;
 use App\Http\Controllers\AnalisaController;
+use App\Http\Controllers\FiduciaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AsuransiController;
@@ -52,12 +55,10 @@ use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
-use Spatie\Permission\Models\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -410,6 +411,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
             Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');
+        });
+
+
+        Route::controller(FiduciaController::class)->group(function () {
+            Route::get('/fiducia', 'index')->name('fiducia');
         });
     });
     //====Route Analisa====//
