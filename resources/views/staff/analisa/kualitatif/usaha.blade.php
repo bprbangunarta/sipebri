@@ -54,7 +54,7 @@
 
                     <div style="margin-top:5px;width: 100%;float:left;">
                         <span class="fw-bold">TRADE CHECKING</span>
-                        <textarea class="form-control" name="trade_checking" id="" cols="30" rows="10">{{ $usaha->trade_checking }}</textarea>
+                        <textarea class="form-control form-border" name="trade_checking" id="" rows="3">{{ $usaha->trade_checking }}</textarea>
                         {{-- <input class="form-control input-sm form-border text-uppercase" name="trade_checking" id=""
                             placeholder="ENTRI" value="{{ $usaha->trade_checking }}"> --}}
                     </div>
