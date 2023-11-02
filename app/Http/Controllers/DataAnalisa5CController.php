@@ -282,13 +282,13 @@ class DataAnalisa5CController extends Controller
             }
             $totaltaksasi = array_sum($tak);
 
-            if ($totaltaksasi == 0) {
+            if ($totaltaksasi === 0) {
                 return redirect()->back()->with('error', 'Nilai Taksasi harus diisi terlebih dahulu');
             }
 
             //Menghitung Taksasi Agunan
-            $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
-
+            $hasiltaksasi = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
+            // dd($hasiltaksasi);
             if (is_null($cap)) {
                 $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
                 return view('staff.analisa.5c.collateral', [
@@ -298,7 +298,15 @@ class DataAnalisa5CController extends Controller
             }
             $nilai = Data::analisa5c_number($cap->evaluasi_collateral) ?? 0;
             $cap->evaluasi_collateral = $nilai;
-            // dd($cap);
+
+            // if ($hasiltaksasi !== $cap->taksasi_agunan) {
+            //     dd($cap);
+            // }else{
+
+            // }
+
+
+
             return view('staff.analisa.5c.collateral-edit', [
                 'data' => $cek[0],
                 'collateral' => $cap,
