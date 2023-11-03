@@ -73,12 +73,12 @@
                                                 @if (is_null($item->no_notifikasi))
                                                     <p style="margin-top:-5px;"></p>
                                                     <a href="#">
-                                                        <span class="btn bg-primary" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
                                                     </a>
                                                 @else
                                                     <p style="margin-top:-5px;"></p>
                                                     <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                        <span class="btn bg-primary" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
                                                     </a>
                                                 @endif
 

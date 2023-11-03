@@ -16,11 +16,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" style="width: 10px">#</th>
-                                        <th class="text-center" style="width: 150px">NOTIFIKASI</th>
-                                        <th class="text-center" style="width: 150px">PENGAJUAN</th>
-                                        <th class="text-center">ALAMAT</th>
-                                        <th class="text-center" style="width: 120px">ADMINISTRASI</th>
+                                        <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center">NASABAH</th>
+                                        <th class="text-center" width="30%">KENDARAAN</th>
+                                        <th class="text-center" width="15%">NOMOR</th>
                                         <th class="text-center" style="width: 100px">AKSI</th>
                                     </tr>
                                 </thead>
@@ -29,62 +28,48 @@
                                         $no = 1;
                                     @endphp
                                     @forelse ($data as $item)
-                                        <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
+                                    <tr>
+                                        <td class="text-center" style="vertical-align: middle;">1</td>
+                                        
+                                        <td style="text-transform: uppercase;vertical-align: middle;">
+                                            <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
+                                            <b>AN. </b>{{ $item->nama_nasabah }} <br>
+                                            @if (is_null($item->no_spk))
+                                            <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK ADA</span>
+                                            @else    
+                                            <span class="label label-success" style="font-size: 12px;">{{ $item->no_spk }}</span>
+                                            @endif
 
-                                            <td style="vertical-align: middle;">
-                                                [ {{ $item->kategori }} ]<br>
-                                                <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                {{ $item->no_notifikasi }}
-                                            </td>
+                                            <p></p>
+                                            {{ $item->alamat_ktp }} <br>
+                                            <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan: </b>{{ $item->kecamatan }}
+                                        </td>
 
-                                            <td style="vertical-align: middle;">
-                                                <b>{{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}</b> <br>
-                                                {{ $item->metode_rps }} <br>
-                                                <b>{{ $item->produk_kode }}</b> - <b>{{ $item->jangka_waktu }} BULAN</b> -
-                                                <b>{{ $item->suku_bunga }}%</b>
-                                            </td>
+                                        <td class="text-uppercase" style="vertical-align: middle;">
+                                            <b>Atas Nama: </b><br> {{ $item->atas_nama }} <br>
+                                            <b>Merek/ Tipe:</b><br>{{ $item->merek }}/ {{ $item->tipe_kendaraan }} / {{ $item->agunan_jenis }} <br>
+                                            <b>Tahun / Warna:</b><br> {{ $item->tahun }} / {{ $item->warna }}
+                                        </td>
 
-                                            <td style="text-transform: uppercase;">
-                                                {{ $item->alamat_ktp }} <br>
-                                                <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
-                                                </b>{{ $item->kecamatan }}
-                                            </td>
-                                            <td style="vertical-align: middle;">
-                                                <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
-                                                <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
-                                                <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }}%
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-
-
-                                                <a data-toggle="modal" data-target="#generate-code"
-                                                    class="btn btn-sm btn-warning" data-id="{{ $item->kode_pengajuan }}">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </a>
-
-                                                &nbsp;
-                                                {{-- @if (is_null($item->no_notifikasi))
-                                                    <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        class="btn btn-sm btn-primary" title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                @endif --}}
-
-                                            </td>
-                                        </tr>
-                                        @php
-                                            $no++;
-                                        @endphp
+                                        <td class="text-uppercase" style="vertical-align: middle;">
+                                            <b>No. Polisi: </b><br> {{ $item->no_polisi }} <br>
+                                            <b>No. Mesin:</b><br> {{ $item->no_mesin }} <br>
+                                            <b>No. Rangka: </b><br> {{ $item->no_rangka }}
+                                        </td>
+                                        
+                                        <td class="text-center" style="vertical-align: middle;">
+                                            <a href="#">
+                                                <span class="btn bg-blue" style="width: 120px;">Cetak</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $no++;
+                                    @endphp
                                     @empty
-                                        <tr>
-                                            <td class="text-center text-uppercase" colspan="7">Tidak Ada Data.</td>
-                                        </tr>
+                                    <tr>
+                                        <td class="text-center text-uppercase" colspan="7">Tidak Ada Data</td>
+                                    </tr>
                                     @endforelse
                                 </tbody>
                             </table>
