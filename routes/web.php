@@ -81,8 +81,14 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/login', function () {
-    return redirect('login');
+// Route::get('/login', function () {
+//     return redirect('login');
+// });
+
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/login', function () {
+        return redirect('login');
+    });
 });
 
 Route::get('/tabungan', [TabunganController::class, 'index'])->name('tabungan.index');
