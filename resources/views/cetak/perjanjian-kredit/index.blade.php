@@ -32,12 +32,6 @@
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
 
-                                            {{-- <td style="vertical-align: middle;">
-                                                [ {{ $item->kategori }} ]<br>
-                                                <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                {{ $item->no_spk }}
-                                            </td> --}}
-
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>

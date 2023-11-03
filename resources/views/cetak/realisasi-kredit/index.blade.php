@@ -16,11 +16,11 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" style="width: 10px">#</th>
-                                        <th class="text-center" style="width: 150px">PERJANJIAN</th>
-                                        <th class="text-center" style="width: 150px">PENGAJUAN</th>
-                                        <th class="text-center">ALAMAT</th>
-                                        <th class="text-center" style="width: 120px">ADMINISTRASI</th>
+                                        <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center">PERJANJIAN</th>
+                                        <th class="text-center" width="33%">ALAMAT</th>
+                                        <th class="text-center" width="18%">PENGAJUAN</th>
+                                        <th class="text-center" width="13%">BIAYA</th>
                                         <th class="text-center" style="width: 100px">AKSI</th>
                                     </tr>
                                 </thead>
@@ -33,27 +33,31 @@
                                             <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
 
                                             <td style="vertical-align: middle;">
-                                                [ {{ $item->kategori }} ]<br>
+                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                {{ $item->no_spk }}
+                                                <span class="label label-success" style="font-size: 12px;">{{ $item->no_spk }}</span>
                                             </td>
 
-                                            <td style="vertical-align: middle;">
-                                                <b>{{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}</b> <br>
-                                                {{ $item->metode_rps }} <br>
-                                                <b>{{ $item->produk_kode }}</b> - <b>{{ $item->jangka_waktu }} BULAN</b> -
-                                                <b>{{ $item->suku_bunga }}%</b>
-                                            </td>
-
-                                            <td style="text-transform: uppercase;">
+                                            <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->alamat_ktp }} <br>
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}
                                             </td>
+
                                             <td style="vertical-align: middle;">
-                                                <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
-                                                <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
-                                                <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }}%
+                                                <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
+                                                <b>PLAFON :</b> {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
+                                                <b>METODE :</b> {{ $item->metode_rps }}
+                                            </td>
+
+                                            <td style="vertical-align: middle;">
+                                                {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
+
+                                                <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
+                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
+                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }} <br>
+                                                <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
