@@ -254,7 +254,7 @@ class KomiteController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-        // dd($data);
+
         return view('komite.survei_analisa', [
             'data' => $data,
         ]);
