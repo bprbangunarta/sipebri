@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Permohonan Analisa')
+@section('title', 'Perjanjian Kredit')
 
 @section('content')
     <div class="content-wrapper">
@@ -76,15 +76,15 @@
                                                     <span class="btn bg-green" style="width: 120px;hight:100%;">Generate Nomor</span>
                                                 </a>
 
-                                                @if (is_null($item->no_notifikasi))
+                                                @if (is_null($item->no_spk))
                                                     <p style="margin-top:-5px;"></p>
                                                     <a href="#">
-                                                        <span class="btn bg-primary" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
                                                     </a>
                                                 @else
                                                     <p style="margin-top:-5px;"></p>
                                                     <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                        <span class="btn bg-primary" style="width: 120px;hight:100%;">Cetak Perjanjian</span>
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Perjanjian</span>
                                                     </a>
                                                 @endif
 

@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Permohonan Analisa')
+@section('title', 'Realisasi Kredit')
 
 @section('content')
     <div class="content-wrapper">
@@ -57,23 +57,14 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
+                                                <a data-toggle="modal" data-target="#bukti-realisasi" data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Bukti Realisasi</span>
+                                                </a>
 
-                                                <button data-toggle="modal" data-target="#generate-code"
-                                                    class="btn btn-sm btn-warning" data-id="{{ $item->kode_pengajuan }}">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </button>
-
-                                                &nbsp;
-                                                @if (is_null($item->no_spk))
-                                                    <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        class="btn btn-sm btn-primary" title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                @endif
+                                                <p style="margin-top:-5px;"></p>
+                                                <a data-toggle="modal" data-target="#konfirmasi" data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-green" style="width: 120px;hight:100%;">Konfirmasi</span>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php
@@ -94,13 +85,13 @@
 
     </div>
 
-    <div class="modal fade" id="generate-code">
+    <div class="modal fade" id="bukti-realisasi">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-red">
+                <div class="modal-header bg-blue">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">GENERATE CODE</h4>
+                    <h4 class="modal-title">BUKTI REALISASI</h4>
                 </div>
                 <form action="{{ route('simpan.realisasi') }}" method="POST">
                     @csrf
@@ -110,30 +101,53 @@
                             <div class="row">
 
                                 <div style="margin-top: -15px;">
-                                    <span class="fw-bold">KODE PENGAJUAN</span>
-                                    <input type="text" id="kode" hidden>
-                                    <input type="text" id="nomor" name="nomor" hidden>
-                                    <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
-                                        id="kd_pengajuan" readonly>
+                                    <span class="fw-bold">FOTO PEMOHON</span>
+                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon">
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">NAMA NASABAH</span>
-                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
-                                        type="text" readonly>
+                                    <span class="fw-bold">FOTO PENDAMPING</span>
+                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon">
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE REALISASI KREDIT</span>
-                                    <input class="form-control text-uppercase" name="kode_spk" id="generate" type="text"
-                                        readonly>
+                                    <span class="fw-bold">CATATAN</span>
+                                    <textarea class="form-control text-uppercase" name="catatan" id="" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                        <button type="submit" class="btn btn-primary">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="konfirmasi">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">KONFIRMASI</h4>
+                </div>
+                <form action="{{ route('simpan.realisasi') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row text-center">
+                                <p>APAKAH REALISASI SUDAH SELESAI DILAKUKAN? JIKA YA LAKUKAN KONFIRMASI</p>
+                                <p>UNTUK MENYELESAIKAN PROSES PEMBERIAN KREDIT</p>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">KONFIRMASI</button>
                     </div>
                 </form>
             </div>
