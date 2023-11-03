@@ -22,7 +22,7 @@
                                     <th class="text-center" width="17%">PENGAJUAN</th>
                                     <th class="text-center" width="10%">KOMITE</th>
                                     <th class="text-center">STATUS</th>
-                                    <th class="text-center" width="10%">CATATAN</th>
+                                    <th class="text-center" width="10%">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
