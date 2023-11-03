@@ -17,6 +17,7 @@ class UserController extends Controller
         $query->leftJoin('model_has_roles', 'model_has_roles.model_id', '=', 'users.id');
         $query->leftJoin('roles', 'roles.id', '=', 'model_has_roles.role_id');
         $query->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'users.kantor_kode');
+        $query->orderBy('name', 'asc');
 
         if (!empty($request->name)) {
             $query->where('users.name', 'like', '%' . $request->name . '%');
