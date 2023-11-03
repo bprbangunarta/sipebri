@@ -57,7 +57,11 @@ class Midle extends Model
 
         //Pendidikan dari CIF
         $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
-        $query->std = $p->nama_pendidikan;
+        if (is_null($p)) {
+            $query->std = null;
+        } else {
+            $query->std = $p->nama_pendidikan;
+        }
         $query->pendidikan_kode = $query->pendidikan;
 
         //perubahan field tabel untuk view
@@ -100,12 +104,12 @@ class Midle extends Model
         //Format masa identitas
         if (!is_null($cek->masa_identitas)) {
             $carbonid = Carbon::createFromFormat('Ymd', $cek->masa_identitas);
-            $cek->masa_identitas = $carbonid->format('m-d-Y');
+            $cek->masa_identitas = $carbonid->format('Y-m-d');
         }
 
         //Format tanggal lahir
         $carbonDate = Carbon::createFromFormat('Ymd', $cek->tanggal_lahir);
-        $cek->tanggal_lahir = $carbonDate->format('m-d-Y');
+        $cek->tanggal_lahir = $carbonDate->format('Y-m-d');
 
         //Ubah identitas dari nomor id menjadi data string
         $iden = Data::identitas($cek->identitas);

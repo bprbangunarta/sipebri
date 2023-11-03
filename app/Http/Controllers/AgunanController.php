@@ -33,7 +33,7 @@ class AgunanController extends Controller
             ]);
             $cek['is_entry'] = 1;
             $cek['created_at'] = now();
-
+            // $cek = array_map('strtoupper', $cek);
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
@@ -108,6 +108,7 @@ class AgunanController extends Controller
                 'no_dokumen' => 'required',
                 'atas_nama' => 'required',
                 'luas' => 'required',
+                'kode_dati' => 'required',
                 'lokasi' => 'required',
                 'input_user' => 'required',
             ]);
@@ -162,6 +163,8 @@ class AgunanController extends Controller
         //Agunan Tanah
         $jenis_tanah = DB::table('ja_tanah')->get();
         $data_tanah = DB::table('da_tanah')->get();
+        $dati = DB::table('v_dati')->where('kode_dati', $data[0]->kode_dati)->first();
+        $data[0]->nama_dati = $dati->nama_dati;
 
         return response()->json([$data[0], $jenis_tanah, $data_tanah]);
     }

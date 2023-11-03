@@ -16,6 +16,8 @@
                             <input type="text" id="metode" value="{{ $data->metode_rps }}" hidden>
                             <input type="text" id="suku_bunga" value="{{ $data->suku_bunga }}" hidden>
                             <input type="text" id="keuangan" value="{{ $data->keuangan }}" hidden>
+                            <input type="text" id="laba_usaha_pertanian" value="{{ $data->laba_usaha_pertanian }}"
+                                hidden>
                             <input type="text" class="form-control text-uppercase"
                                 value="{{ 'Rp.' . ' ' . number_format($usulan->kebutuhan_dana, 0, ',', '.') }}" readonly>
                         </div>
@@ -85,8 +87,8 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">SYARAT LAINNYA</span>
-                            <input type="text" class="form-control text-uppercase" name="syarat_lainnya" id=""
-                                placeholder="ENTRI" value="{{ $usulan->syarat_lainnya }}">
+                            <input type="text" class="form-control text-uppercase" name="syarat_lainnya"
+                                id="" placeholder="ENTRI" value="{{ $usulan->syarat_lainnya }}">
                         </div>
                     </div>
 

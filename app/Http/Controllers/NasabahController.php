@@ -90,8 +90,8 @@ class NasabahController extends Controller
                 $data['nasabah']->kd_nasabah = Crypt::encrypt($data['nasabah']->kode_nasabah);
                 $data['nasabah']->nocif = $data['nasabah']->no_cif;
                 $data['nasabah']->kd_pengajuan = Crypt::encrypt($data['nasabah']->kd_pengajuan);
-                $data['nasabah']->masa_identitas = Carbon::createFromFormat('m-d-Y', $data['nasabah']->masa_identitas)->format('Y-m-d');
-                $data['nasabah']->tanggal_lahir = Carbon::createFromFormat('m-d-Y', $data['nasabah']->tanggal_lahir)->format('Y-m-d');
+                // $data['nasabah']->masa_identitas = Carbon::createFromFormat('m-d-Y', $data['nasabah']->masa_identitas)->format('Y-m-d');
+                // $data['nasabah']->tanggal_lahir = Carbon::createFromFormat('m-d-Y', $data['nasabah']->tanggal_lahir)->format('Y-m-d');
                 //tambah data  
                 $cek = Midle::analisa_usaha($enc);
                 // dd($data['nasabah']);

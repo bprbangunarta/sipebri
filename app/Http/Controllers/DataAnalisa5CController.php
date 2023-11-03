@@ -108,10 +108,9 @@ class DataAnalisa5CController extends Controller
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
                 $sb = (int)$cek[0]->suku_bunga / 100;
                 $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
-                $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
+                // $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
                 $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
-                $rc = ($bg / $pp) * 100;
-                //
+                $rc = ($bg / $keuangan) * 100;
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
                 $ssb = $cek[0]->suku_bunga / 100;
                 $sb = $ssb / 12;
@@ -288,7 +287,7 @@ class DataAnalisa5CController extends Controller
 
             //Menghitung Taksasi Agunan
             $hasiltaksasi = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
-            // dd($hasiltaksasi);
+
             if (is_null($cap)) {
                 $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
                 return view('staff.analisa.5c.collateral', [

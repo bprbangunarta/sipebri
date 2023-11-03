@@ -6,6 +6,7 @@ $(document).ready(function () {
         var keuangan = $("#keuangan").val();
         var sb = $("#suku_bunga").val();
         var jangka_waktu = $("#jw").val();
+        var lb = $("#laba_usaha_pertanian").val();
 
         if (metode == "FLAT") {
             //
@@ -24,18 +25,16 @@ $(document).ready(function () {
 
             //
         } else if (metode == "EFEKTIF MUSIMAN") {
-            //
-            var pl = (parseFloat(usulan) * 70) / 100;
-            var pp = pl / 6;
-            var bg = (((parseFloat(usulan) * jangka_waktu) / 100) * 30) / 365;
-            var rc = (pp / bg) * 100;
+        
+            var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
+            var rc = (bg / keuangan) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
 
             //MAX Plafon FLAT
-            var max_plafon =
-                (keuangan * jangka_waktu) / (1 + (jangka_waktu * sb) / 12);
-            $("#max").val(max_plafon.toFixed(2));
-            //
+            var max_plafon = lb * (parseInt(jangka_waktu) / 6)
+            var mx = formatRupiah(max_plafon.toFixed(0));
+            $("#max").val("Rp." + " " + mx.toLocaleString("id-ID"));
+            
         } else if (metode == "EFEKTIF ANUITAS") {
             var ssb = sb / 100;
             var bunga = ssb / 12;

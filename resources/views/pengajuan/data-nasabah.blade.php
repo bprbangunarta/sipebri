@@ -64,13 +64,13 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">MASA IDENTITAS</span>
                                                 @if (is_null($nasabah->masa_identitas))
-                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                    <input class="form-control" placeholder="YYYY-MM-DD"
                                                         name="masa_identitas" id="min"
-                                                        data-inputmask="'alias': 'YYYY-DD-MM'" data-mask />
+                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask />
                                                 @else
-                                                    <input class="form-control" placeholder="YYYY-DD-MM"
+                                                    <input class="form-control" placeholder="YYYY-MM-DD"
                                                         name="masa_identitas" id="mio"
-                                                        data-inputmask="'alias': 'YYYY-DD-MM'" data-mask
+                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask
                                                         value="{{ $nasabah->masa_identitas }}" />
                                                 @endif
                                             </div>
@@ -602,17 +602,17 @@
 
         // Datemask
         $('#min').inputmask('yyyy-mm-dd', {
-            'placeholder': 'YYYY-DD-MM'
+            'placeholder': 'YYYY-MM-DD'
         })
         $('#mio').inputmask('yyyy-mm-dd', {
-            'placeholder': 'YYYY-DD-MM'
+            'placeholder': 'YYYY-MM-DD'
         })
 
         $('#ttln').inputmask('yyyy-mm-dd', {
-            'placeholder': 'YYYY-DD-MM'
+            'placeholder': 'YYYY-MM-DD'
         })
         $('#ttlo').inputmask('yyyy-mm-dd', {
-            'placeholder': 'YYYY-DD-MM'
+            'placeholder': 'YYYY-MM-DD'
         })
     </script>
 

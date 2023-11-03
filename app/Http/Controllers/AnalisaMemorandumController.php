@@ -284,15 +284,23 @@ class AnalisaMemorandumController extends Controller
 
             //Menghitung RC
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
-                $sb = (int)$cek[0]->suku_bunga / 100;
-                $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
-                $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
-                $bg = ((((int)$cek[0]->plafon * $sb) / 100) * 30) / 365;
-                $rc = ($bg / $pp) * 100;
+                //ambil semua laba bersih pertanian
+                $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
+                $tn = [];
+                for ($i = 0; $i < count($tani); $i++) {
+                    $tn[] = $tani[$i]->laba_bersih ?? 0;
+                }
+                $totaltn = array_sum($tn);
+
+                // $sb = (int)$cek[0]->suku_bunga / 100;
+                $saving = ($totaltn * 70) / 100;
+                // $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
+                $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
+                $rc = ($bg / $keuangan) * 100;
 
                 //Max Plafond Musiman
-                $cek[0]->maxplafon = $pp / ((int)$cek[0]->jangka_waktu / 6);
-                //
+                $cek[0]->maxplafon = $saving * ((int)$cek[0]->jangka_waktu / 6);
+                $cek[0]->laba_usaha_pertanian = $saving;
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
                 $ssb = $cek[0]->suku_bunga / 100;
                 $sb = $ssb / 12;
@@ -334,7 +342,8 @@ class AnalisaMemorandumController extends Controller
             }
             $cek[0]->rc = number_format($rc, 2);
             $cek[0]->keuangan = $keuangan;
-            // dd($cek);
+            $cek[0]->laba_usaha_pertanian = $saving ?? null;
+            // dd($cek[0]);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
@@ -369,7 +378,7 @@ class AnalisaMemorandumController extends Controller
                 'b_penalti' => number_format($request->b_penalti, 2),
                 'updated_at' => now(),
             ];
-            dd($request);
+
             DB::transaction(function () use ($data, $data2, $enc) {
                 Pengajuan::where('kode_pengajuan', $enc)->update($data2);
                 DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data);
