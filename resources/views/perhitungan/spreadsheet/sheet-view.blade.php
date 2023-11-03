@@ -16,11 +16,12 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th colspan="14" class="up">PT BPR BANGUNARTA</th>
+                                <th colspan="10" class="up">PT BPR BANGUNARTA</th>
                             </tr>
                             <tr>
-                                <th colspan="14" class="down">SIMULASI PERHITUNGAN PREMI ASURANSI JIWA
-                                    KEMATIAN</th>
+                                <th colspan="10" class="down">SIMULASI PERHITUNGAN PREMI ASURANSI JIWA
+                                    KREDIT</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody class="tbup">
@@ -40,7 +41,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td colspan="8" class="img"><img src="{{ asset('assets/img/pba.png') }}"
+                                <td colspan="8" class="img border"><img src="{{ asset('assets/img/pba.png') }}"
                                         alt="">
                                 </td>
                             </tr>

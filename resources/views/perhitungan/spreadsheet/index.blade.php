@@ -14,7 +14,7 @@
                                 <tr>
                                     <th class="text-center fs-4" colspan="5" style="border: none;">
                                         <b>SIMULASI PERHITUNGAN PREMI ASURANSI JIWA
-                                            KEMATIAN</b>
+                                            KREDIT</b>
                                     </th>
                                 </tr>
                             </thead>

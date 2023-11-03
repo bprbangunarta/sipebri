@@ -25,11 +25,11 @@ $(document).ready(function () {
 
             //
         } else if (metode == "EFEKTIF MUSIMAN") {
-        
+            
             var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
             var rc = (bg / keuangan) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
-
+            
             //MAX Plafon FLAT
             var max_plafon = lb * (parseInt(jangka_waktu) / 6)
             var mx = formatRupiah(max_plafon.toFixed(0));

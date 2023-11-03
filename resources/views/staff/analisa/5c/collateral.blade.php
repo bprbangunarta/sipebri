@@ -50,7 +50,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KONDISI KENDARAAN</span>
                             <select class="form-control input-sm form-border text-uppercase kondisi_kendaraan"
-                                name="kondisi_kendaraan" id="collateral7" required>
+                                name="kondisi_kendaraan" id="collateral7">
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('kondisi_kendaraan') == 3 ? 'selected' : '' }}>Original,
                                     Lengkap, Tidak Cacat</option>
@@ -65,7 +65,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">PENGIKATAN / ASPEK HUKUM</span>
                             <select class="form-control input-sm form-border text-uppercase aspek_hukum" name="aspek_hukum"
-                                id="collateral9" required>
+                                id="collateral9">
                                 <option value="">--Pilih--</option>
                                 <option value="4" {{ old('aspek_hukum') == 5 ? 'selected' : '' }}>
                                     Emas dan deposito/tabungan yang saldonya di blokir dan dilengkapi dengan surat kuasa
@@ -92,7 +92,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">KEPEMILIKAN AGUNAN TAMBAHAN</span>
                             <select class="form-control input-sm form-border text-uppercase agunan_tambahan"
-                                name="agunan_tambahan" id="collateral2" required>
+                                name="agunan_tambahan" id="collateral2">
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('agunan_tambahan') == 3 ? 'selected' : '' }}>Milik Sendiri
                                 </option>
@@ -107,7 +107,7 @@
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">LEGALITAS AGUNAN TAMBAHAN</span>
                             <select class="form-control input-sm form-border text-uppercase legalitas_agunan_tambahan"
-                                name="legalitas_agunan_tambahan" id="collateral4" required>
+                                name="legalitas_agunan_tambahan" id="collateral4">
                                 <option value="">--Pilih--</option>
                                 <option value="3" {{ old('legalitas_agunan_tambahan') == 3 ? 'selected' : '' }}>Milik
                                     Sendiri</option>

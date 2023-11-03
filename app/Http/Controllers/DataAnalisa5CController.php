@@ -298,14 +298,6 @@ class DataAnalisa5CController extends Controller
             $nilai = Data::analisa5c_number($cap->evaluasi_collateral) ?? 0;
             $cap->evaluasi_collateral = $nilai;
 
-            // if ($hasiltaksasi !== $cap->taksasi_agunan) {
-            //     dd($cap);
-            // }else{
-
-            // }
-
-
-
             return view('staff.analisa.5c.collateral-edit', [
                 'data' => $cek[0],
                 'collateral' => $cap,

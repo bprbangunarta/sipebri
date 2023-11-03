@@ -108,14 +108,14 @@
                                                 <p></p>
                                                 <div class="row g-3">
                                                     <div class="col-md">
-                                                        <div class="form-label">Nama Lengkap</div>
+                                                        <div class="form-label text-uppercase">Nama Lengkap</div>
                                                         @if (is_null($pendamping[0]->nama_pendamping))
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control text-uppercase"
                                                                 name="nama_pendamping" id="nama_pendamping"
                                                                 placeholder="Nama Lengkap"
                                                                 value="{{ old('nama_pendamping') }}">
                                                         @else
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control text-uppercase"
                                                                 name="nama_pendamping" id="nama_pendamping"
                                                                 placeholder="Nama Lengkap"
                                                                 value="{{ old('nama_pendamping', $pendamping[0]->nama_pendamping) }}">

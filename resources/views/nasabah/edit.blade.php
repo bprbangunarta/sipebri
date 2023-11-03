@@ -100,14 +100,15 @@
                                                 <div class="row g-3">
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Panggilan</div>
-                                                        <input type="text" class="form-control" name="nama_panggilan"
-                                                            id="nama_panggilan" placeholder="Nama Panggilan"
+                                                        <input type="text" class="form-control text-uppercase"
+                                                            name="nama_panggilan" id="nama_panggilan"
+                                                            placeholder="Nama Panggilan"
                                                             value="{{ old('nama_panggilan', $nasabah->sname) }}" required>
                                                     </div>
                                                     <div class="col-md">
                                                         <div class="form-label">Nama Lengkap</div>
-                                                        <input type="text" class="form-control" name="nama_nasabah"
-                                                            id="nama_nasabah" placeholder="Nama Lengkap"
+                                                        <input type="text" class="form-control text-uppercase"
+                                                            name="nama_nasabah" id="nama_nasabah" placeholder="Nama Lengkap"
                                                             value="{{ old('nama_nasabah', $nasabah->nama_nasabah) }}">
                                                     </div>
                                                     <div class="col-md">
