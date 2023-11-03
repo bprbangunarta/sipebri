@@ -41,7 +41,7 @@
                                         
                                         <td style="vertical-align: middle;">
                                             <b>KANTOR :</b> PMK <br>
-                                            <b>KRU - JK :</b> 18 BULAN <br>
+                                            <b>KRU - JK :</b> 18 BULAN - 32%<br>
                                             <b>METODE :</b> EFEKTIF ANUITAS <br>
                                             <b>PLAFON :</b> Rp. 10.000.000
                                         </td>
@@ -229,37 +229,65 @@
                     <div class="modal-body">
 
                         <div class="box-body">
+
                             <div class="row">
+                                <div class="div-left">
+                                    <div style="margin-top:-20px;">
+                                        <span class="fw-bold">MAX PLAFON</span>
+                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input class="form-control text-uppercase" type="text" value="RP. 150.000.000"
+                                            id="nama" readonly>
+                                    </div>
 
-                                <div style="margin-top: -20px;">
-                                    <span class="fw-bold">MAX PLAFON</span>
-                                    <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                    <input class="form-control text-uppercase" type="text" value="RP. 150.000.000"
-                                        id="nama" readonly>
+                                    <div style="margin-top:5px;">
+                                        <span class="fw-bold">SUKU BUNGA</span>
+                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input class="form-control" type="number" value="32" id="nama" >
+                                    </div>
+
+                                    <div style="margin-top:5px;">
+                                        <span class="fw-bold">BIAYA PROVISI</span>
+                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input class="form-control" type="number" value="1.00" id="nama" >
+                                    </div>
                                 </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">METODE RPS</span>
-                                    <input class="form-control text-uppercase" type="text" value="EFEKTIF ANUITAS"
-                                        id="nama" readonly>
-                                </div>
+                                <div class="div-right" style="margin-bottom:10px;">
+                                    <div style="margin-top:-20px;">
+                                        <span class="fw-bold">METODE RPS</span>
+                                        <select class="form-control" name="" id="">
+                                            <option value="EFEKTIF ANUITAS">EFEKTIF ANUITAS</option>
+                                        </select>
+                                    </div>
 
-                                <div style="margin-top: 5px;">
+                                    <div style="margin-top:5px;">
+                                        <span class="fw-bold">JANGKA WAKTU</span>
+                                        <input class="form-control" type="number" value="32" id="nama" >
+                                    </div>
+
+                                    <div style="margin-top:5px;">
+                                        <span class="fw-bold">BIAYA ADMIN</span>
+                                        <input class="form-control" type="number" value="4.00" id="nama" >
+                                    </div>
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div style="margin-top:-5px;">
                                     <span class="fw-bold">USULAN PLAFON</span>
                                     <input class="form-control text-uppercase" type="text" placeholder="RP." id="nama" required>
                                 </div>
 
-                                <div style="margin-top: 5px;">
+                                <div style="margin-top:5px;">
                                     <span class="fw-bold">CATATAN KOMITE</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="catatan" id="" required></textarea>
                                 </div>
-
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-yellow">SIMPAN</button>
+                        <button type="submit" class="btn btn-warning">SIMPAN</button>
                     </div>
                 </form>
             </div>
