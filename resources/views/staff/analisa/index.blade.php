@@ -38,7 +38,7 @@
                                                 {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('Y-m-d') }}
                                             </td>
 
-                                            <td style="text-transform: uppercase;">
+                                            <td style="text-transform: uppercase;vertical-align:middle;">
                                                 {{ $item->alamat_ktp }} <br>
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}

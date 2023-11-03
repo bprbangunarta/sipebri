@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Permohonan Analisa')
+@section('title', 'Notifikasi Kredit')
 
 @section('content')
     <div class="content-wrapper">
@@ -16,11 +16,11 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" style="width: 10px">#</th>
-                                        <th class="text-center" style="width: 150px">NOTIFIKASI</th>
-                                        <th class="text-center" style="width: 150px">PENGAJUAN</th>
-                                        <th class="text-center">ALAMAT</th>
-                                        <th class="text-center" style="width: 120px">ADMINISTRASI</th>
+                                        <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center">NOTIFIKASI</th>
+                                        <th class="text-center" width="33%">ALAMAT</th>
+                                        <th class="text-center" width="18%">PENGAJUAN</th>
+                                        <th class="text-center" width="13%">BIAYA</th>
                                         <th class="text-center" style="width: 100px">AKSI</th>
                                     </tr>
                                 </thead>
@@ -33,50 +33,52 @@
                                             <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
 
                                             <td style="vertical-align: middle;">
-                                                [ {{ $item->kategori }} ]<br>
+                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                {{ $item->no_notifikasi }}
+                                                @if (is_null($item->no_notifikasi))
+                                                <span class="label label-red" style="font-size: 12px;">NOMOR TIDAK ADA</span>
+                                                @else    
+                                                <span class="label label-warning" style="font-size: 12px;">{{ $item->no_notifikasi }}</span>
+                                                @endif
                                             </td>
 
-                                            <td style="vertical-align: middle;">
-                                                <b>{{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}</b> <br>
-                                                {{ $item->metode_rps }} <br>
-                                                <b>{{ $item->produk_kode }}</b> - <b>{{ $item->jangka_waktu }} BULAN</b> -
-                                                <b>{{ $item->suku_bunga }}%</b>
-                                            </td>
-
-                                            <td style="text-transform: uppercase;">
+                                            <td style="text-transform: uppercase;vertical-align: middle;">
                                                 {{ $item->alamat_ktp }} <br>
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}
                                             </td>
+
                                             <td style="vertical-align: middle;">
-                                                <b>ADM: </b> {{ number_format($item->b_admin, 2) }}%<br>
-                                                <b>PROVISI: </b> {{ number_format($item->b_provisi, 2) }}%<br>
-                                                <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }}%
+                                                <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
+                                                <b>PLAFON :</b> {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
+                                                <b>METODE :</b> {{ $item->metode_rps }}
+                                            </td>
+
+                                            <td style="vertical-align: middle;">
+                                                {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
+
+                                                <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
+                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
+                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }} <br>
+                                                <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
 
-                                                {{-- <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm btn-warning" title="Input Analisa">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </a> --}}
-                                                <a data-toggle="modal" data-target="#generate-code"
-                                                    class="btn btn-sm btn-warning" data-id="{{ $item->kode_pengajuan }}">
-                                                    <i class="fa fa-file-text-o"></i>
+                                                <a data-toggle="modal" data-target="#generate-code" data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Generate Nomor</span>
                                                 </a>
 
-                                                &nbsp;
                                                 @if (is_null($item->no_notifikasi))
-                                                    <a href="#" class="btn btn-sm btn-white" title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
+                                                    <p style="margin-top:-5px;"></p>
+                                                    <a href="#">
+                                                        <span class="btn bg-primary" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        class="btn btn-sm btn-primary" title="Cetak Analisa">
-                                                        <i class="fa fa-print"></i>
+                                                    <p style="margin-top:-5px;"></p>
+                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                        <span class="btn bg-primary" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
                                                     </a>
                                                 @endif
 
@@ -103,10 +105,10 @@
     <div class="modal fade" id="generate-code">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-red">
+                <div class="modal-header bg-yellow">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">GENERATE CODE</h4>
+                    <h4 class="modal-title">GENERATE NOMOR</h4>
                 </div>
                 <form action="{{ route('simpan.notifikasi') }}" method="POST">
                     @csrf
@@ -139,7 +141,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                        <button type="submit" class="btn btn-warning">SIMPAN</button>
                     </div>
                 </form>
             </div>
