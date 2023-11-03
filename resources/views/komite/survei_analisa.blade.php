@@ -26,12 +26,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">1</td>
 
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
@@ -112,9 +109,6 @@
 
 
                                         </tr>
-                                        @php
-                                            $no++;
-                                        @endphp
                                     @empty
                                         <tr>
                                             <td class="text-center" colspan="10">TIDAK ADA DATA</td>
