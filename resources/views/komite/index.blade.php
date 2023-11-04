@@ -25,47 +25,63 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-center" style="vertical-align: middle;">1</td>
+                                    @forelse ($data as $item)
+                                        <tr>
+                                            <td class="text-center" style="vertical-align: middle;">1</td>
 
-                                        <td style="vertical-align: middle;">
-                                            <b>KODE :</b> 00339940 [ BARU ] <br>
-                                            <b>NAMA :</b> DEDI IRAWAN <br>
-                                            <b>TANGGAL :</b> 2023-11-01
-                                        </td>
+                                            <td style="vertical-align: middle;">
+                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
+                                                <b>NAMA :</b> {{ $item->nama_nasabah }} <br>
+                                                <b>TANGGAL :</b> {{ date('Y-m-d', strtotime($item->created_at)) }}
+                                            </td>
 
-                                                                            <td class="text-uppercase" style="vertical-align: middle;">KAMPUNG KIARAKONENG RT/RW 07/02 TALAGASARI SERANGPANJANG SUBANG <br>
-                                            <b>Desa: </b>TALAGASARI | <b>Kecamatan:
-                                            </b>SERANGPANJANG
-                                        </td>
-                                        
-                                        <td style="vertical-align: middle;">
-                                            <b>KANTOR :</b> PMK <br>
-                                            <b>KRU - JK :</b> 18 BULAN <br>
-                                            <b>METODE :</b> EFEKTIF ANUITAS <br>
-                                            <b>PLAFON :</b> Rp. 10.000.000
-                                        </td>
+                                            <td class="text-uppercase" style="vertical-align: middle;">
+                                                {{ $item->alamat_ktp }} <br>
+                                                <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
+                                                </b>{{ $item->kecamatan }}
+                                            </td>
 
-                                        <td style="vertical-align: middle;">
-                                            <b>USULAN K1 :</b> RP. 10.000.000 <br>
-                                            <b>USULAN K2 :</b> RP. 15.000.000 <br>
-                                            <b>USULAN K3 :</b> RP. 20.000.000 <br>
-                                            <b>USULAN K4 :</b> RP. 20.000.000
-                                        </td>
+                                            <td style="vertical-align: middle;">
+                                                <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
+                                                <b>KRU - JK :</b> {{ $item->produk_kode }} <br>
+                                                <b>METODE :</b> {{ $item->metode_rps }} <br>
+                                                <b>PLAFON :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->plafon, 0, ',', '.') }}
+                                            </td>
 
-                                        <td class="text-center" style="vertical-align: middle;">
-                                            <a data-toggle="modal" data-target="#modal-persetujuan">
-                                                <span class="btn bg-yellow" style="width: 120px;hight:100%;">Persetujuan</span>
-                                            </a>
-                                            
-                                            <p style="margin-top:-5px;"></p>
-                                            <a data-toggle="modal" data-target="#modal-catatan" data-pengajuan="00339940">
-                                                <span class="btn bg-blue" style="width: 120px;">Lihat Catatan</span>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                            <td style="vertical-align: middle;">
+                                                <b>USULAN K1 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan1, 0, ',', '.') }} <br>
+                                                <b>USULAN K2 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan2, 0, ',', '.') }} <br>
+                                                <b>USULAN K3 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan3, 0, ',', '.') }} <br>
+                                                <b>USULAN K4 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan4, 0, ',', '.') }}
+                                            </td>
 
-                                    <!-- @forelse ($data as $item)
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a data-toggle="modal" data-target="#modal-persetujuan"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-yellow"
+                                                        style="width: 120px;hight:100%;">Persetujuan</span>
+                                                </a>
+
+                                                <p style="margin-top:-5px;"></p>
+                                                <a data-toggle="modal" data-target="#modal-catatan"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }} ">
+                                                    <span class="btn bg-blue" style="width: 120px;">Lihat Catatan</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td class="text-center" colspan="10">TIDAK ADA DATA</td>
+                                        </tr>
+                                    @endforelse
+
+
+                                    {{-- <!-- @forelse ($data as $item)
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">1</td>
                                             <td style="text-transform: uppercase;vertical-align: middle;">
@@ -164,7 +180,7 @@
                                         <tr>
                                             <td class="text-center" colspan="10">TIDAK ADA DATA</td>
                                         </tr>
-                                    @endforelse -->
+                                    @endforelse --> --}}
                                 </tbody>
                             </table>
                         </div>
@@ -234,24 +250,33 @@
                                 <div style="margin-top: -20px;">
                                     <span class="fw-bold">MAX PLAFON</span>
                                     <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                    <input class="form-control text-uppercase" type="text" value="RP. 150.000.000"
-                                        id="nama" readonly>
+                                    <input class="form-control text-uppercase" type="text" name="max_plafon"
+                                        value="" id="max" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">METODE RPS</span>
-                                    <input class="form-control text-uppercase" type="text" value="EFEKTIF ANUITAS"
-                                        id="nama" readonly>
+                                    <input class="form-control text-uppercase" type="text" name="metode_rps"
+                                        value="" id="metode_rps" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">USULAN PLAFON</span>
-                                    <input class="form-control text-uppercase" type="text" placeholder="RP." id="nama" required>
+                                    <input class="form-control text-uppercase" type="text" name="usulan_plafon"
+                                        placeholder="RP." id="usulan_plafon" required>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">KEPUTUSAN KOMITE</span>
+                                    <select type="text" class="form-control dati2" style="width:100%;"
+                                        name="putusan_komite" id="komite" required>
+
+                                    </select>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN KOMITE</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="catatan" id="" required></textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatan" required></textarea>
                                 </div>
 
                             </div>
@@ -259,7 +284,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-yellow">SIMPAN</button>
+                        <button type="submit" class="btn bg-yellow">SIMPAN</button>
                     </div>
                 </form>
             </div>

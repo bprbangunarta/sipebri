@@ -35,9 +35,17 @@ class KomiteController extends Controller
         $c = $cek->get();
         $count = count($c);
         $data = $cek->paginate(10);
+        $usul1 = "Staff Analis";
+        $usul2 = "Kasi Analis";
+        $usul3 = "Kabag Analis";
+        $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
             if ($data->isNotEmpty()) {
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
             }
         }
 
@@ -54,8 +62,15 @@ class KomiteController extends Controller
         $kode = $request->input('field');
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_nasabah.nama_nasabah')->get();
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.plafon',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.nama_nasabah',
+                'a_memorandum.max_plafond',
+            )->get();
 
         //User
         $usr = Auth::user()->code_user;
@@ -81,8 +96,6 @@ class KomiteController extends Controller
 
                 DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
             }
-
-
 
             if ($user->role_name == 'Staff Analis') {
                 $komite = 'komite1';
@@ -127,23 +140,42 @@ class KomiteController extends Controller
             // dd($cek, $request->all(), $user->role_name);
             if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
                 $data2 = [
+                    'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                     'tracking' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
                 $data2 = [
+                    'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                     'tracking' => "Selesai",
                     'status' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             } else {
                 $data2 = [
+                    'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                     'tracking' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             }
 
-            DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            $ajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
+            $usulan = [
+                'pengajuan_kode' => $request->kode_pengajuan,
+                'role_name' => $user->role_name,
+                'input_user' => Auth::user()->code_user,
+                'metode_rps' => $request->metode_rps,
+                'suku_bunga' => $ajuan->suku_bunga,
+                'b_provisi' => $ajuan->b_provisi,
+                'b_admin' => $ajuan->b_admin,
+                'usulan_plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
+                'catatan' => $request->catatan,
+            ];
+
+            DB::transaction(function () use ($request, $data2, $usulan) {
+                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+                DB::table('data_usulan')->insert($usulan);
+            });
 
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (Throwable $th) {

@@ -1,10 +1,33 @@
+var usulan_plafon = document.getElementById("usulan_plafon");
+if (usulan_plafon) {
+    usulan_plafon.addEventListener("keyup", function (e) {
+        usulan_plafon.value = formatRupiah(this.value, "Rp. ");
+    });
+}
+
+function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+        }
+
 $(document).ready(function () {
-    $("#modal-edit").on("show.bs.modal", function (event) {
+    $("#modal-persetujuan").on("show.bs.modal", function (event) {
         $("#komite").empty();
         var button = $(event.relatedTarget);
         var pengajuan = button.data("pengajuan");
         var token = $('meta[name="csrf-token"]').attr("content");
-
+        
         var token = $('meta[name="csrf-token"]').attr("content");
         var data = {
             field: pengajuan,
@@ -17,12 +40,15 @@ $(document).ready(function () {
             cache: false,
             data: data,
             success: function (response) {
+                
                 var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];
                 $("#kode").val(hasil.kode_pengajuan);
-                $("#nama").val(hasil.nama_nasabah);
+                var rp = hasil.max_plafond
+                $("#max").val('Rp. '+' '+formatRupiah(rp.toString()));
                 $("#kd_pengajuan").val(hasil.kode_pengajuan);
+                $("#metode_rps").val(hasil.metode_rps);
                 var komite = $("#komite");
                 var role = hasil.role_user;
 
@@ -110,4 +136,15 @@ $(document).ready(function () {
             return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
         }
     });
+
+$("#usulan_plafon").on("input", function() {
+            var value1 = parseFloat($(this).val().replace(/[^\d]/g, ""));
+            var value2 = parseFloat($("#max").val().replace(/[^\d]/g, ""));
+
+            // Memeriksa apakah nilai input1 lebih besar dari input2
+            if (value1 > value2) {
+                // Jika lebih besar, atur nilai input1 menjadi nilai input2
+                $(this).val(value2);
+            }
+        });
 });

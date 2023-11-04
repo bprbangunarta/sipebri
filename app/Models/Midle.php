@@ -478,6 +478,20 @@ class Midle extends Model
         return null; // Jika tidak ada kode yang unik ditemukan
     }
 
+    public static function data_usulan($data, $role)
+    {
+        $cek = DB::table('data_usulan')
+            ->where('pengajuan_kode', $data)
+            ->where('role_name', $role)
+            ->first();
+        //
+        if (is_null($cek)) {
+            $cek = (object) ['usulan_plafon' => null];
+        }
+
+        return $cek->usulan_plafon;
+    }
+
     public static function persetujuan_komite_staff($user, $role)
     {
         $cek = DB::table('data_pengajuan')
@@ -485,14 +499,36 @@ class Midle extends Model
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->orWhere('data_survei.surveyor_kode', '=', $user)
-            ->where('data_pengajuan.tracking', '=', $role)
-            // ->orWhere('data_pengajuan.tracking', '=', "Naik Kasi")
-            // ->orWhere('data_pengajuan.tracking', '=', "Naik Komite 1")
-            // ->orWhere('data_pengajuan.tracking', '=', "Naik Komite 2")
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_pengajuan.plafon', 'data_pengajuan.created_at', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
-        //
-
+            ->where(function ($query) use ($user, $role) {
+                $query->where('data_survei.surveyor_kode', '=', $user)
+                    ->where('data_pengajuan.tracking', '=', $role);
+            })
+            // ->orWhere('data_survei.surveyor_kode', '=', $user)
+            // ->where('data_pengajuan.tracking', '=', $role)
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_pengajuan.plafon',
+                'data_pengajuan.created_at',
+                'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name'
+            );
+        //  
         return $cek;
     }
 
@@ -503,11 +539,35 @@ class Midle extends Model
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->orWhere('data_survei.kasi_kode', '=', $user)
-            ->where('data_pengajuan.tracking', '=', $role)
-            // ->orWhere('data_pengajuan.tracking', '=', "Naik Komite 1")
-            // ->orWhere('data_pengajuan.tracking', '=', "Naik Komite 2")
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_pengajuan.plafon', 'data_pengajuan.created_at', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+            ->where(function ($query) use ($user, $role) {
+                $query->where('data_survei.kasi_kode', '=', $user)
+                    ->where('data_pengajuan.tracking', '=', $role);
+            })
+            // ->orWhere('data_survei.kasi_kode', '=', $user)
+            // ->where('data_pengajuan.tracking', '=', $role)
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_pengajuan.plafon',
+                'data_pengajuan.created_at',
+                'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name'
+            );
         //
 
         return $cek;
@@ -521,7 +581,29 @@ class Midle extends Model
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->where('data_pengajuan.tracking', '=', $role)
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_pengajuan.plafon', 'data_pengajuan.created_at', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_pengajuan.plafon',
+                'data_pengajuan.created_at',
+                'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name'
+            );
         //
 
         return $cek;
@@ -535,7 +617,29 @@ class Midle extends Model
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->where('data_pengajuan.tracking', '=', $role)
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.status', 'data_pengajuan.plafon', 'data_pengajuan.created_at', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2', 'users.name');
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_pengajuan.plafon',
+                'data_pengajuan.created_at',
+                'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name'
+            );
         //
 
         return $cek;
