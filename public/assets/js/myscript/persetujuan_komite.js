@@ -46,7 +46,7 @@ $(document).ready(function () {
                 var hasil = data[0];
 
                 $("#kode").val(hasil.kode_pengajuan);
-                var rp = hasil.max_plafond
+                var rp = parseInt(hasil.max_plafond)
                 $("#max").val('Rp. '+' '+formatRupiah(rp.toString()));
                 $("#pengajuan").val(pengajuan);
                 var komite = $("#komite");
