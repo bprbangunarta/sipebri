@@ -40,7 +40,6 @@
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}
                                             </td>
-
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
                                                 <b>KRU - JK :</b> {{ $item->produk_kode }} - {{ $item->jangka_waktu }} Bulan
@@ -49,7 +48,6 @@
                                                 <b>PLAFON :</b>
                                                 {{ 'Rp. ' . ' ' . number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-
                                             <td style="vertical-align: middle;">
                                                 <b>USULAN K1 :</b>
                                                 {{ 'Rp. ' . ' ' . number_format($item->usulan1, 0, ',', '.') }} <br>
