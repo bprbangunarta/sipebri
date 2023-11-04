@@ -63,10 +63,15 @@ class KomiteController extends Controller
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            // ->leftJoin('data_usulan', 'data_pengajuan.kode_pengajuan', '=', 'data_usulan.pengajuan_kode')
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.plafon',
+                'data_pengajuan.suku_bunga',
+                'data_pengajuan.metode_rps',
+                'data_pengajuan.b_provisi',
+                'data_pengajuan.b_admin',
                 'data_pengajuan.metode_rps',
                 'data_nasabah.nama_nasabah',
                 'a_memorandum.max_plafond',
@@ -137,37 +142,52 @@ class KomiteController extends Controller
                 DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
             }
 
-            // dd($cek, $request->all(), $user->role_name);
+
             if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
                 $data2 = [
                     'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                     'tracking' => ucwords($request->putusan_komite),
+                    'b_provisi' => number_format($request->b_provisi, 2),
+                    'suku_bunga' => $request->suku_bunga,
+                    'metode_rps' => $request->metode_rps,
+                    'b_admin' => number_format($request->b_admin, 2),
+                    'b_provisi' => number_format($request->b_provisi, 2),
                     'updated_at' => now(),
                 ];
             } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
                 $data2 = [
                     'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                     'tracking' => "Selesai",
+                    'b_provisi' => number_format($request->b_provisi, 2),
+                    'suku_bunga' => $request->suku_bunga,
+                    'metode_rps' => $request->metode_rps,
+                    'b_admin' => number_format($request->b_admin, 2),
+                    'b_provisi' => number_format($request->b_provisi, 2),
                     'status' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             } else {
                 $data2 = [
+                    'b_provisi' => number_format($request->b_provisi, 2),
+                    'suku_bunga' => $request->suku_bunga,
+                    'metode_rps' => $request->metode_rps,
+                    'b_admin' => number_format($request->b_admin, 2),
+                    'b_provisi' => number_format($request->b_provisi, 2),
                     'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                     'tracking' => ucwords($request->putusan_komite),
                     'updated_at' => now(),
                 ];
             }
 
-            $ajuan = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
+
             $usulan = [
                 'pengajuan_kode' => $request->kode_pengajuan,
                 'role_name' => $user->role_name,
                 'input_user' => Auth::user()->code_user,
                 'metode_rps' => $request->metode_rps,
-                'suku_bunga' => $ajuan->suku_bunga,
-                'b_provisi' => $ajuan->b_provisi,
-                'b_admin' => $ajuan->b_admin,
+                'suku_bunga' => $request->suku_bunga,
+                'b_provisi' => number_format($request->b_provisi, 2),
+                'b_admin' => number_format($request->b_admin, 2),
                 'usulan_plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                 'catatan' => $request->catatan,
                 'created_at' => now(),
@@ -240,7 +260,7 @@ class KomiteController extends Controller
 
     public function catatan($pengajuan)
     {
-        $data = DB::table('a_komite')->where('pengajuan_kode', $pengajuan)->first();
+        $data = DB::table('data_usulan')->where('pengajuan_kode', $pengajuan)->get();
         return response()->json($data);
     }
 
@@ -284,9 +304,17 @@ class KomiteController extends Controller
         $c = $cek->get();
         $count = count($c);
         $data = $cek->paginate(10);
+        $usul1 = "Staff Analis";
+        $usul2 = "Kasi Analis";
+        $usul3 = "Kabag Analis";
+        $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
             if ($data->isNotEmpty()) {
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
             }
         }
 

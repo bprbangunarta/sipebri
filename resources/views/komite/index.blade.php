@@ -112,7 +112,7 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KASI ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kasi_analis" readonly>Catatan dari kasi analis</textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kasi_analiss" readonly>Catatan dari kasi analis</textarea>
                                 </div>
 
                                 <div style="margin-top: 5px;">
@@ -123,15 +123,6 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">DIREKSI</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
-                                </div>
-
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">SAMPLE</span>
-                                    <div class="form-control bg-gray" style="height: 100px;">
-                                        <b>USULAN :</b> RP. 10.000.000 -  <b>METODE :</b> EFEKTIF ANUITAS <br>
-                                        <b>B. PROVISI :</b> 1.00 - <b>B. ADMIN :</b> 4.00 <br>
-                                        <b>CATATAN :</b> HAHAHAHA
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,16 +150,15 @@
                                 <div class="div-left">
                                     <div style="margin-top: -20px;">
                                         <span class="fw-bold">MAX PLAFON</span>
-                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input type="text" name="kode_pengajuan" id="pengajuan" hidden>
                                         <input class="form-control text-uppercase" type="text" name="max_plafon"
                                             value="" id="max" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">BIAYA PROVISI</span>
-                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                        <input class="form-control text-uppercase" type="text" name="max_plafon"
-                                            value="" id="max">
+                                        <span class="fw-bold">BIAYA PROVISI (%)</span>
+                                        <input class="form-control text-uppercase" type="text" name="b_provisi"
+                                            value="" id="provisi">
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -176,21 +166,26 @@
                                         <input class="form-control text-uppercase" type="text" name="usulan_plafon"
                                             placeholder="RP." id="usulan_plafon" required>
                                     </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">SUKU BUNGA (%)</span>
+                                        <input class="form-control text-uppercase" type="text" name="suku_bunga"
+                                            id="bunga" required>
+                                    </div>
                                 </div>
 
                                 <div class="div-right">
                                     <div style="margin-top: -20px;">
                                         <span class="fw-bold">METODE RPS</span>
-                                        <select class="form-control" name="metode_rps" id="metode_rps">
+                                        <select class="form-control" name="metode_rps" id="metode">
                                             <option value=""></option>
                                         </select>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">BIAYA ADMIN</span>
-                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                        <input class="form-control text-uppercase" type="text" name="max_plafon"
-                                            value="" id="max">
+                                        <span class="fw-bold">BIAYA ADMIN (%)</span>
+                                        <input class="form-control text-uppercase" type="text" name="b_admin"
+                                            value="" id="admin">
                                     </div>
 
                                     <div style="margin-top: 5px;">

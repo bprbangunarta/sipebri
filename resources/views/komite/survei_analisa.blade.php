@@ -51,17 +51,22 @@
 
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN - {{ $item->suku_bunga }}% <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN -
+                                                {{ $item->suku_bunga }}% <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }}<br>
                                                 <b>PLAFON :</b>
                                                 {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}
                                             </td>
 
                                             <td style="vertical-align: middle;">
-                                                <b>USULAN K1 :</b> RP. 10.000.000 <br>
-                                                <b>USULAN K2 :</b> RP. 15.000.000 <br>
-                                                <b>USULAN K3 :</b> RP. 20.000.000 <br>
-                                                <b>USULAN K4 :</b> RP. 20.000.000
+                                                <b>USULAN K1 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan1, 0, ',', '.') }} <br>
+                                                <b>USULAN K2 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan2, 0, ',', '.') }} <br>
+                                                <b>USULAN K3 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan3, 0, ',', '.') }} <br>
+                                                <b>USULAN K4 :</b>
+                                                {{ 'Rp. ' . ' ' . number_format($item->usulan4, 0, ',', '.') }}
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
@@ -110,7 +115,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">CATATAN KOMITE</h4>
                 </div>
-                <form action="{{ route('komite.simpan') }}" method="POST">
+                <form action="#" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -124,7 +129,7 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KASI ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kasi_analis" readonly>Catatan dari kasi analis</textarea>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kasi_analiss" readonly>Catatan dari kasi analis</textarea>
                                 </div>
 
                                 <div style="margin-top: 5px;">
@@ -148,7 +153,8 @@
 @push('myscript')
     {{-- <script src="{{ asset('assets/js/myscript/persetujuan_komite.js') }}"></script>
 <script src="{{ asset('assets/js/myscript/catatan_komite.js') }}"></script> --}}
-    <script>
+    <script src="{{ asset('assets/js/myscript/catatan_komite.js') }}"></script>
+    {{-- <script>
         $(document).ready(function() {
             $("#modal-catatan").on("show.bs.modal", function(event) {
                 $("#komite").empty();
@@ -174,5 +180,5 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 @endpush

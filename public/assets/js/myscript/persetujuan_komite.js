@@ -44,17 +44,20 @@ $(document).ready(function () {
                 var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];
+
                 $("#kode").val(hasil.kode_pengajuan);
                 var rp = hasil.max_plafond
                 $("#max").val('Rp. '+' '+formatRupiah(rp.toString()));
-                $("#kd_pengajuan").val(hasil.kode_pengajuan);
-                $("#metode_rps").val(hasil.metode_rps);
+                $("#pengajuan").val(pengajuan);
                 var komite = $("#komite");
                 var role = hasil.role_user;
 
                 var pal = hasil.plafon;
                 var pl = formatRupiah(pal);
                 $("#plafon").val("Rp. " + " " + pl);
+                $("#provisi").val(hasil.b_provisi);
+                $("#bunga").val(hasil.suku_bunga);
+                $("#admin").val(hasil.b_admin);
 
                 if (role === "Staff Analis" && pal >= 1000 && pal <= 10000000) {
                     var options = [
@@ -106,6 +109,34 @@ $(document).ready(function () {
                     ];
                 }
 
+               $("#metode").append(
+                        $("<option>", {
+                            value: hasil.metode_rps,
+                            text: hasil.metode_rps,
+                        }).prop("selected", true),
+                        
+                        $("<option>", {
+                            value: "FLAT",
+                            text: "FLAT",
+                        }),
+                        $("<option>", {
+                            value: "PRK",
+                            text: "PRK",
+                        }),
+                        $("<option>", {
+                            value: "EFEKTIF",
+                            text: "EFEKTIF",
+                        }),
+                        $("<option>", {
+                            value: "EFEKTIF ANUITAS",
+                            text: "EFEKTIF ANUITAS",
+                        }),
+                        $("<option>", {
+                            value: "EFEKTIF MUSIMAN",
+                            text: "EFEKTIF MUSIMAN",
+                        }),
+                    );
+
                 $.each(options, function (index, option) {
                     komite.append(
                         $("<option></option>")
@@ -137,7 +168,7 @@ $(document).ready(function () {
         }
     });
 
-$("#usulan_plafon").on("input", function() {
+        $("#usulan_plafon").on("input", function() {
             var value1 = parseFloat($(this).val().replace(/[^\d]/g, ""));
             var value2 = parseFloat($("#max").val().replace(/[^\d]/g, ""));
 
@@ -146,5 +177,27 @@ $("#usulan_plafon").on("input", function() {
                 // Jika lebih besar, atur nilai input1 menjadi nilai input2
                 $(this).val(value2);
             }
+        });
+
+        $('#provisi').on('input', function() {
+            // Mengambil nilai dari input field
+            var inputValue = $(this).val();
+
+            // Mengganti koma (,) menjadi titik (.)
+            var convertedValue = inputValue.replace(/,/g, '.');
+
+            // Memasukkan nilai yang sudah diubah ke dalam input field
+            $(this).val(convertedValue);
+        });
+
+        $('#admin').on('input', function() {
+            // Mengambil nilai dari input field
+            var inputValue = $(this).val();
+
+            // Mengganti koma (,) menjadi titik (.)
+            var convertedValue = inputValue.replace(/,/g, '.');
+
+            // Memasukkan nilai yang sudah diubah ke dalam input field
+            $(this).val(convertedValue);
         });
 });
