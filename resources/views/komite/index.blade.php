@@ -40,14 +40,15 @@
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}
                                             </td>
+
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>KRU - JK :</b> {{ $item->produk_kode }} - {{ $item->jangka_waktu }} Bulan
-                                                <br>
+                                                <b>KRU - JK :</b> {{ $item->produk_kode }} <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }} <br>
                                                 <b>PLAFON :</b>
                                                 {{ 'Rp. ' . ' ' . number_format($item->plafon, 0, ',', '.') }}
                                             </td>
+
                                             <td style="vertical-align: middle;">
                                                 <b>USULAN K1 :</b>
                                                 {{ 'Rp. ' . ' ' . number_format($item->usulan1, 0, ',', '.') }} <br>
@@ -68,7 +69,7 @@
 
                                                 <p style="margin-top:-5px;"></p>
                                                 <a data-toggle="modal" data-target="#modal-catatan"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }} ">
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}">
                                                     <span class="btn bg-blue" style="width: 120px;">Lihat Catatan</span>
                                                 </a>
                                             </td>
@@ -244,21 +245,13 @@
                     <div class="modal-body">
 
                         <div class="box-body">
-
                             <div class="row">
-                                <div class="div-left">
-                                    <div style="margin-top:-20px;">
-                                        <span class="fw-bold">MAX PLAFON</span>
-                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                        <input class="form-control text-uppercase" type="text" value="RP. 150.000.000"
-                                            id="nama" readonly>
-                                    </div>
 
-                                    <<<<<<< HEAD <div style="margin-top: -20px;">
-                                        <span class="fw-bold">MAX PLAFON</span>
-                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                        <input class="form-control text-uppercase" type="text" name="max_plafon"
-                                            value="" id="max" readonly>
+                                <div style="margin-top: -20px;">
+                                    <span class="fw-bold">MAX PLAFON</span>
+                                    <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                    <input class="form-control text-uppercase" type="text" name="max_plafon"
+                                        value="" id="max" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
@@ -266,73 +259,36 @@
                                     <input class="form-control text-uppercase" type="text" name="metode_rps"
                                         value="" id="metode_rps" readonly>
                                 </div>
-                                =======
-                                <div style="margin-top:5px;">
-                                    <span class="fw-bold">SUKU BUNGA</span>
-                                    <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                    <input class="form-control" type="number" value="32" id="nama">
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">USULAN PLAFON</span>
+                                    <input class="form-control text-uppercase" type="text" name="usulan_plafon"
+                                        placeholder="RP." id="usulan_plafon" required>
                                 </div>
 
-                                <div style="margin-top:5px;">
-                                    <span class="fw-bold">BIAYA PROVISI</span>
-                                    <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                    <input class="form-control" type="number" value="1.00" id="nama">
-                                </div>
-                            </div>
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">KEPUTUSAN KOMITE</span>
+                                    <select type="text" class="form-control dati2" style="width:100%;"
+                                        name="putusan_komite" id="komite" required>
 
-                            <div class="div-right" style="margin-bottom:10px;">
-                                <div style="margin-top:-20px;">
-                                    <span class="fw-bold">METODE RPS</span>
-                                    <select class="form-control" name="" id="">
-                                        <option value="EFEKTIF ANUITAS">EFEKTIF ANUITAS</option>
                                     </select>
                                 </div>
-                                >>>>>>> d180b8a18abb0ad2b7534ab89da6b57855759f7d
 
-                                <div style="margin-top:5px;">
-                                    <span class="fw-bold">JANGKA WAKTU</span>
-                                    <input class="form-control" type="number" value="32" id="nama">
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">CATATAN KOMITE</span>
+                                    <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatan" required></textarea>
                                 </div>
 
-                                <div style="margin-top:5px;">
-                                    <span class="fw-bold">BIAYA ADMIN</span>
-                                    <input class="form-control" type="number" value="4.00" id="nama">
-                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div style="margin-top:-5px;">
-                                <span class="fw-bold">USULAN PLAFON</span>
-                                <input class="form-control text-uppercase" type="text" name="usulan_plafon"
-                                    placeholder="RP." id="usulan_plafon" required>
-                            </div>
-
-                            <div style="margin-top: 5px;">
-                                <span class="fw-bold">KEPUTUSAN KOMITE</span>
-                                <select type="text" class="form-control dati2" style="width:100%;"
-                                    name="putusan_komite" id="komite" required>
-
-                                </select>
-                            </div>
-
-                            <div style="margin-top:5px;">
-                                <span class="fw-bold">CATATAN KOMITE</span>
-                                <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatan" required></textarea>
-                            </div>
-                        </div>
-
                     </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn bg-yellow">SIMPAN</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer" style="margin-top: -10px;">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                <<<<<<< HEAD <button type="submit" class="btn bg-yellow">SIMPAN</button>
-                    =======
-                    <button type="submit" class="btn btn-warning">SIMPAN</button>
-                    >>>>>>> d180b8a18abb0ad2b7534ab89da6b57855759f7d
-            </div>
-            </form>
         </div>
-    </div>
     </div>
 
 @endsection
