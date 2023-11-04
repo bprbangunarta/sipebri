@@ -187,10 +187,10 @@
                                         <span class="fw-bold">KEPUTUSAN KOMITE</span>
                                         <select type="text" class="form-control dati2" style="width:100%;"
                                             name="putusan_komite" id="komite" required>
-    
+
                                         </select>
                                     </div>
-                                </div>                                
+                                </div>
 
                             </div>
 

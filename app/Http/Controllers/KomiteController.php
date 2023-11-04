@@ -170,6 +170,7 @@ class KomiteController extends Controller
                 'b_admin' => $ajuan->b_admin,
                 'usulan_plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                 'catatan' => $request->catatan,
+                'created_at' => now(),
             ];
 
             DB::transaction(function () use ($request, $data2, $usulan) {
