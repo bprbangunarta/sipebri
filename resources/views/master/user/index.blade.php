@@ -35,8 +35,7 @@
                                         <th class="text-center">NAMA LENGKAP</th>
                                         <th class="text-center">EMAIL</th>
                                         <th class="text-center">USERNAME</th>
-                                        <th class="text-center">KODE</th>
-                                        <th class="text-center">KANTOR</th>
+                                        <th class="text-center" colspan="3">KODE</th>
                                         <th class="text-center">HAK AKSES</th>
                                         <th class="text-center" width="5%">AKTIF</th>
                                         <th class="text-center" width="12%">AKSI</th>
@@ -49,11 +48,14 @@
                                     @forelse ($users as $data)
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration + $users->firstItem() - 1 }}</td>
-                                            <td>{{ $data->name }}</td>
+                                            <td class="text-uppercase">{{ $data->name }}</td>
                                             <td>{{ $data->email }}</td>
                                             <td>{{ $data->username }}</td>
+
                                             <td class="text-center">{{ $data->code_user }}</td>
+                                            <td class="text-center">{{ $data->kode_surveyor }}</td>
                                             <td class="text-center">{{ $data->kantor_kode }}</td>
+
                                             <td>
                                                 @if (empty($data->position))
                                                     -
@@ -263,7 +265,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-primary">SIMPAN</button>
+                        <button type="submit" class="btn btn-warning">SIMPAN</button>
                     </div>
                 </form>
             </div>
