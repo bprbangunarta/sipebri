@@ -43,7 +43,7 @@
 
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>KRU - JK :</b> {{ $item->produk_kode }} - {{ $item->jangka_waktu }} Bulan
+                                                <b>KRU - JK :</b> {{ $item->produk_kode }} -Bulan
                                                 <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }} <br>
                                                 <b>PLAFON :</b>
@@ -80,108 +80,6 @@
                                             <td class="text-center" colspan="10">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
-
-
-                                    {{-- <!-- @forelse ($data as $item)
-                                        <tr>
-                                            <td class="text-center" style="vertical-align: middle;">1</td>
-                                            <td style="text-transform: uppercase;vertical-align: middle;">
-                                                {{ $item->nama_nasabah }} <br>
-                                                <b>Kategori:</b> {{ $item->kategori ?? 'KOSONG' }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KODE: </b>{{ $item->kode_pengajuan }} <br>
-                                                <b>PLAFON</b> : <br>
-                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->plafon >= 1000 && $item->plafon <= 10000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @endif
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->plafon >= 10000001 && $item->plafon <= 35000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @elseif ($item->plafon >= 35000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-danger"></i>
-                                                @endif
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->plafon >= 35000001 && $item->plafon <= 75000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @elseif ($item->plafon >= 75000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-danger"></i>
-                                                @endif
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->plafon > 75000001)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-danger"></i>
-                                                @endif
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <span class="label label-warning">{{ $item->tracking }}</span>
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#modal-catatan"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }}">
-                                                    <span class="label label-warning">BERIKAN CATATAN</span>
-                                                </a>
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#" class="btn-circle btn-sm btn-success"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }}" title="Lihat Analisa">
-                                                    <i class="fa fa-file-text-o"></i>
-                                                </a>
-
-                                                &nbsp;
-                                                @if ($user->role_name == 'Staff Analis' && $item->tracking == 'Persetujuan Komite')
-                                                    <a data-toggle="modal" data-target="#modal-edit"
-                                                        class="btn-circle btn-sm btn-primary"
-                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                @elseif ($user->role_name == 'Kasi Analis' && $item->tracking == 'Naik Kasi')
-                                                    <a data-toggle="modal" data-target="#modal-edit"
-                                                        class="btn-circle btn-sm btn-primary"
-                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                @elseif ($user->role_name == 'Kabag Analis' && $item->tracking == 'Naik Komite I')
-                                                    <a data-toggle="modal" data-target="#modal-edit"
-                                                        class="btn-circle btn-sm btn-primary"
-                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                @elseif ($user->role_name == 'Direksi' && $item->tracking == 'Naik Komite II')
-                                                    <a data-toggle="modal" data-target="#modal-edit"
-                                                        class="btn-circle btn-sm btn-primary"
-                                                        data-pengajuan="{{ $item->kode_pengajuan }}" title="Persetujuan">
-                                                        <i class="fa fa-check"></i>
-                                                    </a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td class="text-center" colspan="10">TIDAK ADA DATA</td>
-                                        </tr>
-                                    @endforelse --> --}}
                                 </tbody>
                             </table>
                         </div>
@@ -248,38 +146,59 @@
                         <div class="box-body">
                             <div class="row">
 
-                                <div style="margin-top: -20px;">
-                                    <span class="fw-bold">MAX PLAFON</span>
-                                    <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
-                                    <input class="form-control text-uppercase" type="text" name="max_plafon"
-                                        value="" id="max" readonly>
+                                <div class="div-left">
+                                    <div style="margin-top: -20px;">
+                                        <span class="fw-bold">MAX PLAFON</span>
+                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="max_plafon"
+                                            value="" id="max" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">BIAYA PROVISI</span>
+                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="max_plafon"
+                                            value="" id="max">
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">USULAN PLAFON</span>
+                                        <input class="form-control text-uppercase" type="text" name="usulan_plafon"
+                                            placeholder="RP." id="usulan_plafon" required>
+                                    </div>
                                 </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">METODE RPS</span>
-                                    <input class="form-control text-uppercase" type="text" name="metode_rps"
-                                        value="" id="metode_rps" readonly>
-                                </div>
+                                <div class="div-right">
+                                    <div style="margin-top: -20px;">
+                                        <span class="fw-bold">METODE RPS</span>
+                                        <select class="form-control" name="metode_rps" id="metode_rps">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">USULAN PLAFON</span>
-                                    <input class="form-control text-uppercase" type="text" name="usulan_plafon"
-                                        placeholder="RP." id="usulan_plafon" required>
-                                </div>
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">BIAYA ADMIN</span>
+                                        <input type="text" name="kode_pengajuan" id="kd_pengajuan" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="max_plafon"
+                                            value="" id="max">
+                                    </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KEPUTUSAN KOMITE</span>
-                                    <select type="text" class="form-control dati2" style="width:100%;"
-                                        name="putusan_komite" id="komite" required>
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">KEPUTUSAN KOMITE</span>
+                                        <select type="text" class="form-control dati2" style="width:100%;"
+                                            name="putusan_komite" id="komite" required>
+    
+                                        </select>
+                                    </div>
+                                </div>                                
 
-                                    </select>
-                                </div>
+                            </div>
 
+                            <div class="row">
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN KOMITE</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatan" required></textarea>
                                 </div>
-
                             </div>
                         </div>
                     </div>
