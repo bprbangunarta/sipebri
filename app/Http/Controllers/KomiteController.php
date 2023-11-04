@@ -259,6 +259,8 @@ class KomiteController extends Controller
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
                 'data_pengajuan.status',
+                'data_pengajuan.suku_bunga',
+                'data_pengajuan.metode_rps',
                 'data_pengajuan.plafon',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.jangka_waktu as jk',

@@ -19,10 +19,9 @@
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">NASABAH</th>
                                         <th class="text-center" width="30%">ALAMAT</th>
-                                        <th class="text-center" width="17%">PENGAJUAN</th>
-                                        <th class="text-center" width="10%">KOMITE</th>
-                                        <th class="text-center">STATUS</th>
-                                        <th class="text-center" width="10%">CATATAN</th>
+                                        <th class="text-center" width="18%">PENGAJUAN</th>
+                                        <th class="text-center" width="18%">KOMITE</th>
+                                        <th class="text-center" width="10%">STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -52,43 +51,17 @@
 
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN - {{ $item->suku_bunga }}% <br>
+                                                <b>METODE :</b> {{ $item->metode_rps }}<br>
                                                 <b>PLAFON :</b>
                                                 {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}
                                             </td>
 
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->plafon >= 1000 && $item->plafon <= 10000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @endif
-
-                                                @if ($item->plafon >= 10000001 && $item->plafon <= 35000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @elseif ($item->plafon >= 35000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-danger"></i>
-                                                @endif
-
-                                                @if ($item->plafon >= 35000001 && $item->plafon <= 75000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @elseif ($item->plafon >= 75000000)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-danger"></i>
-                                                @endif
-
-                                                @if ($item->plafon > 75000001)
-                                                    <i class="fa fa-circle text-success"></i>
-                                                @else
-                                                    <i class="fa fa-circle text-danger"></i>
-                                                @endif
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <span class="label label-warning">{{ $item->tracking }}</span>
+                                            <td style="vertical-align: middle;">
+                                                <b>USULAN K1 :</b> RP. 10.000.000 <br>
+                                                <b>USULAN K2 :</b> RP. 15.000.000 <br>
+                                                <b>USULAN K3 :</b> RP. 20.000.000 <br>
+                                                <b>USULAN K4 :</b> RP. 20.000.000
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">

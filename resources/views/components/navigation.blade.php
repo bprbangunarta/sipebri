@@ -176,17 +176,24 @@
             @endcan
 
             @can('menu permohonan')
-                <li class="{{ request()->is('cetak/analisa/kredit') ? 'active' : '' }}">
-                    <a href="{{ route('penolakan.kredit') }}" title="Cetak Analisa Kredit">
+                <li class="">
+                    <a href="#" title="Cetak Analisa Kredit">
                         <i class="fa fa-print"></i>
                         Analisa Kredit
                     </a>
                 </li>
 
-                <li class="{{ request()->is('themes/notifikasi/penolakan/kredit') ? 'active' : '' }}">
-                    <a href="{{ route('penolakan.kredit') }}" title="Cetak Penolakan">
+                <li class="#">
+                    <a href="#" title="Cetak Penolakan">
                         <i class="fa fa-print"></i>
                         Penolakan Kredit
+                    </a>
+                </li>
+
+                <li class="">
+                    <a href="#" title="Cetak Persetujuan Komite">
+                        <i class="fa fa-print"></i>
+                        Persetujuan Komite
                     </a>
                 </li>
             @endcan
