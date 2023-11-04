@@ -119,9 +119,19 @@
                                     <span class="fw-bold">KABAG ANALIS</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="kabag_analis" readonly>Catatan dari kabag analis</textarea>
                                 </div>
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">DIREKSI</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">SAMPLE</span>
+                                    <div class="form-control bg-gray" style="height: 100px;">
+                                        <b>USULAN :</b> RP. 10.000.000 -  <b>METODE :</b> EFEKTIF ANUITAS <br>
+                                        <b>B. PROVISI :</b> 1.00 - <b>B. ADMIN :</b> 4.00 <br>
+                                        <b>CATATAN :</b> HAHAHAHA
+                                    </div>
                                 </div>
                             </div>
                         </div>
