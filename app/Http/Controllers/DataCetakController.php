@@ -278,6 +278,11 @@ class DataCetakController extends Controller
         return response()->json($data[0]);
     }
 
+    public function simpan_realisasi(Request $request)
+    {
+        dd($request);
+    }
+
     public function get_spk($kode)
     {
         $data = DB::table('data_pengajuan')

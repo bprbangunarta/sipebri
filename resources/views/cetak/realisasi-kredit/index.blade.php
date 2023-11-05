@@ -35,7 +35,8 @@
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                <span class="label label-success" style="font-size: 12px;">{{ $item->no_spk }}</span>
+                                                <span class="label label-success"
+                                                    style="font-size: 12px;">{{ $item->no_spk }}</span>
                                             </td>
 
                                             <td style="text-transform: uppercase;vertical-align: middle;">
@@ -47,7 +48,8 @@
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
-                                                <b>PLAFON :</b> {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
+                                                <b>PLAFON :</b>
+                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }}
                                             </td>
 
@@ -55,19 +57,24 @@
                                                 {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
 
                                                 <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
-                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
+                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b>
+                                                {{ number_format($item->b_provisi, 2) }} <br>
                                                 <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }} <br>
                                                 <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#bukti-realisasi" data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Bukti Realisasi</span>
+                                                <a data-toggle="modal" data-target="#bukti-realisasi"
+                                                    data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Bukti
+                                                        Realisasi</span>
                                                 </a>
 
                                                 <p style="margin-top:-5px;"></p>
-                                                <a data-toggle="modal" data-target="#konfirmasi" data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-green" style="width: 120px;hight:100%;">Konfirmasi</span>
+                                                <a data-toggle="modal" data-target="#konfirmasi"
+                                                    data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-green"
+                                                        style="width: 120px;hight:100%;">Konfirmasi</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -106,6 +113,7 @@
 
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">FOTO PEMOHON</span>
+                                    <input type="text" name="kode_pengajuan" id="kd" hidden>
                                     <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon">
                                 </div>
 
@@ -145,7 +153,8 @@
                         <div class="box-body">
                             <div class="row text-center">
                                 <p>APAKAH REALISASI SUDAH SELESAI DILAKUKAN? JIKA YA LAKUKAN KONFIRMASI</p>
-                                <p>UNTUK MENYELESAIKAN PROSES PEMBERIAN KREDIT</p>                                
+                                <p>UNTUK MENYELESAIKAN PROSES PEMBERIAN KREDIT</p>
+                                <input type="text" name="kode_pengajuan" id="kodes" hidden>
                             </div>
                         </div>
                     </div>
@@ -167,6 +176,18 @@
             // Mendapatkan nilai 'id' dari tombol yang diklik
             var kode = $(this).data('id');
             $('#kode').val(kode);
+        });
+
+        $("a[data-target='#bukti-realisasi']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var kode = $(this).data('id');
+            $('#kd').val(kode);
+        });
+
+        $("a[data-target='#konfirmasi']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var kode = $(this).data('id');
+            $('#kodes').val(kode);
         });
     </script>
 @endpush
