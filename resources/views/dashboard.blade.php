@@ -58,7 +58,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">REALISASI</span>
-                        <span class="info-box-number">28 USER</span>
+                        <span class="info-box-number">{{ $disetujui }}  USER</span>
 
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
@@ -76,7 +76,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">PENOLAKAN</span>
-                        <span class="info-box-number">13 USER</span>
+                        <span class="info-box-number">{{ $penolakan }} USER</span>
 
                         <div class="progress">
                             <div class="progress-bar" style="width: 100%"></div>
@@ -104,6 +104,7 @@
                             <thead>
                                 <tr class="bg-blue">
                                     <th class="text-center" style="width: 15px;">#</th>
+                                    <th class="text-center">KODE</th>
                                     <th class="text-center">NAMA DEBITUR</th>
                                     <th class="text-center">ALAMAT</th>
                                     <th class="text-center">SURVEYOR</th>
@@ -111,15 +112,36 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                $no = 1;
+                                @endphp
+                                @forelse ($data as $item)
                                 <tr class="bg-info">
-                                    <td class="text-center" style="vertical-align: middle;">1</td>
-                                    <td style="vertical-align: middle;">ZULFADLI RIZAL</td>
-                                    <td>Jl. H. Iksan No.89, Pamanukan, Kec. Pamanukan, Kabupaten Subang, Jawa Barat</td>
-                                    <td class="text-center" style="vertical-align: middle;">MUHIDIN</td>
-                                    <td class="text-right" style="vertical-align: middle;">Rp. 20.000.000</td>
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        {{ $loop->iteration + $data->firstItem() - 1 }}
+                                    </td>
+                                    <td class="text-center">{{ $item->kode }}</td>
+                                    <td style="vertical-align: middle;">{{ $item->nama }}</td>
+                                    <td>{{ $item->alamat }}</td>
+                                    <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}</td>
+
+                                    @php
+                                    $item->plafon = number_format($item->plafon, 0, ',', '.');
+                                    @endphp
+                                    <td class="text-right" style="vertical-align: middle;">{{ $item->plafon }}</td>
                                 </tr>
+                                @php
+                                $no++;
+                                @endphp
+
+                                @empty
+                                <tr>
+                                    <td class="text-center" colspan="6">TIDAK ADA DATA</td>
+                                </tr>
+                                @endforelse
+
                                 <tr class="bg-blue">
-                                    <td class="text-center" colspan="4"><b>TOTAL</b></td>
+                                    <td class="text-center" colspan="5"><b>TOTAL</b></td>
                                     <td class="text-right"><b>Rp. 20.000.000</b></td>
                                 </tr>
                             </tbody>
