@@ -56,7 +56,7 @@ class Analisa5cController extends Controller
             }
 
             //Menghitung Taksasi Agunan
-            $c = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+            $c = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
 
             $an = [
                 'rc' => number_format($rc, 2),
