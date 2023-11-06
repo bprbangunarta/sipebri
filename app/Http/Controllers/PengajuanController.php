@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class PengajuanController extends Controller
@@ -439,6 +440,22 @@ class PengajuanController extends Controller
     {
 
         try {
+
+            $data = DB::table('data_jaminan')->where('id', $pengajuan)->get();
+
+            //Hapus foto didirektori
+            if ($data[0]->foto1) {
+                Storage::delete('public/image/photo_agunan/' . $data[0]->foto1);
+            }
+            if ($data[0]->foto2) {
+                Storage::delete('public/image/photo_agunan/' . $data[0]->foto2);
+            }
+            if ($data[0]->foto3) {
+                Storage::delete('public/image/photo_agunan/' . $data[0]->foto3);
+            }
+            if ($data[0]->foto4) {
+                Storage::delete('public/image/photo_agunan/' . $data[0]->foto4);
+            }
 
             DB::table('data_jaminan')->where('id', $pengajuan)->delete();
 

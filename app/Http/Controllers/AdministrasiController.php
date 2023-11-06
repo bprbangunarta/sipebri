@@ -21,6 +21,7 @@ class AdministrasiController extends Controller
 
             $adm = ($cek[0]->plafon * $cek[0]->b_admin) / 100;
             $cek[0]->administrasi = (int)$adm;
+
             //cek data ada atau tidak
             $administrasi = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
 
