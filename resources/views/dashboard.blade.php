@@ -2,156 +2,158 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
-        <h1>
-            Dashboard
-            <small>Monitoring</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-laptop"></i> Dashboard</a></li>
-            <li class="active">Index</li>
-        </ol>
-    </section>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Dashboard
+                <small>Monitoring</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-laptop"></i> Dashboard</a></li>
+                <li class="active">Index</li>
+            </ol>
+        </section>
 
-    <section class="content">
-        <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box bg-green">
-                    <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-green">
+                        <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">PERMOHONAN</span>
-                        <span class="info-box-number">{{ $pengajuan }} USER</span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">PERMOHONAN</span>
+                            <span class="info-box-number">{{ $pengajuan }} USER</span>
 
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%"></div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">
+                                OKTOBER 2023
+                            </span>
                         </div>
-                        <span class="progress-description">
-                            OKTOBER 2023
-                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-aqua">
+                        <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">ANALISA</span>
+                            <span class="info-box-number">{{ $survei }} USER</span>
+
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">
+                                OKTOBER 2023
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-yellow">
+                        <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">REALISASI</span>
+                            <span class="info-box-number">{{ $disetujui }} USER</span>
+
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">
+                                OKTOBER 2023
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-red">
+                        <span class="info-box-icon"><i class="fa fa-warning"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">PENOLAKAN</span>
+                            <span class="info-box-number">{{ $penolakan }} USER</span>
+
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">
+                                OKTOBER 2023
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box bg-aqua">
-                    <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">ANALISA</span>
-                        <span class="info-box-number">{{ $survei }} USER</span>
-
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-calendar"></i>
+                            <h3 class="box-title">REALISASI HARI INI</h3>
+                            <span class="pull-right-container">
+                                <small class="label pull-right bg-blue">2</small>
+                            </span>
                         </div>
-                        <span class="progress-description">
-                            OKTOBER 2023
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box bg-yellow">
-                    <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">REALISASI</span>
-                        <span class="info-box-number">{{ $disetujui }}  USER</span>
-
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%"></div>
-                        </div>
-                        <span class="progress-description">
-                            OKTOBER 2023
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box bg-red">
-                    <span class="info-box-icon"><i class="fa fa-warning"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">PENOLAKAN</span>
-                        <span class="info-box-number">{{ $penolakan }} USER</span>
-
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 100%"></div>
-                        </div>
-                        <span class="progress-description">
-                            OKTOBER 2023
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <i class="fa fa-calendar"></i>
-                        <h3 class="box-title">REALISASI HARI INI</h3>
-                        <span class="pull-right-container">
-                            <small class="label pull-right bg-blue">2</small>
-                        </span>
-                    </div>
-                    <div class="box-body">
-                        <table class="table table-bordered text-uppercase">
-                            <thead>
-                                <tr class="bg-blue">
-                                    <th class="text-center" style="width: 15px;">#</th>
-                                    <th class="text-center">KODE</th>
-                                    <th class="text-center">NAMA DEBITUR</th>
-                                    <th class="text-center">ALAMAT</th>
-                                    <th class="text-center">SURVEYOR</th>
-                                    <th class="text-center">PLAFOND</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                $no = 1;
-                                @endphp
-                                @forelse ($data as $item)
-                                <tr class="bg-info">
-                                    <td class="text-center" style="vertical-align: middle;">
-                                        {{ $loop->iteration + $data->firstItem() - 1 }}
-                                    </td>
-                                    <td class="text-center">{{ $item->kode }}</td>
-                                    <td style="vertical-align: middle;">{{ $item->nama }}</td>
-                                    <td>{{ $item->alamat }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}</td>
-
+                        <div class="box-body">
+                            <table class="table table-bordered text-uppercase">
+                                <thead>
+                                    <tr class="bg-blue">
+                                        <th class="text-center" style="width: 15px;">#</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">NAMA DEBITUR</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">SURVEYOR</th>
+                                        <th class="text-center">PLAFOND</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     @php
-                                    $item->plafon = number_format($item->plafon, 0, ',', '.');
+                                        $no = 1;
                                     @endphp
-                                    <td class="text-right" style="vertical-align: middle;">{{ $item->plafon }}</td>
-                                </tr>
-                                @php
-                                $no++;
-                                @endphp
+                                    @forelse ($data as $item)
+                                        <tr class="bg-info">
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}
+                                            </td>
+                                            <td class="text-center">{{ $item->kode }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->nama }}</td>
+                                            <td>{{ $item->alamat }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}
+                                            </td>
 
-                                @empty
-                                <tr>
-                                    <td class="text-center" colspan="6">TIDAK ADA DATA</td>
-                                </tr>
-                                @endforelse
+                                            @php
+                                                $item->plafon = number_format($item->plafon, 0, ',', '.');
+                                            @endphp
+                                            <td class="text-right" style="vertical-align: middle;">{{ $item->plafon }}</td>
+                                        </tr>
+                                        @php
+                                            $no++;
+                                        @endphp
 
-                                <tr class="bg-blue">
-                                    <td class="text-center" colspan="5"><b>TOTAL</b></td>
-                                    <td class="text-right"><b>Rp. 20.000.000</b></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    @empty
+                                        <tr>
+                                            <td class="text-center" colspan="6">TIDAK ADA DATA</td>
+                                        </tr>
+                                    @endforelse
+
+                                    <tr class="bg-blue">
+                                        <td class="text-center" colspan="5"><b>TOTAL</b></td>
+                                        <td class="text-right"><b>{{ 'Rp. ' . ' ' . number_format($total, 0, ',', '.') }}</b>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- <div class="row">
+            {{-- <div class="row">
             <div class="col-md-6">
                 <div class="box box-danger">
                     <div class="box-header with-border">
@@ -232,7 +234,7 @@
                 </div>
             </div>
         </div> --}}
-    </section>
+        </section>
 
-</div>
+    </div>
 @endsection

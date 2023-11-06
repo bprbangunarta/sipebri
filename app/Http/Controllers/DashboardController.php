@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
 use App\Models\Survei;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,6 +21,7 @@ class DashboardController extends Controller
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->leftJoin('data_tracking', 'data_pengajuan.kode_pengajuan', '=', 'data_tracking.pengajuan_kode')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
@@ -43,18 +45,25 @@ class DashboardController extends Controller
                 'users.username as surveyor'
             )
             ->where('data_pengajuan.status', 'Disetujui')
+            ->whereDate('data_tracking.selesai', now()->format('Y-m-d'))
             ->where('data_pengajuan.on_current', '1')
             ->orderBy('data_pengajuan.created_at', 'asc');
         //
-
+        $dt = $query->get();
+        $tak = [];
+        for ($i = 0; $i < count($dt); $i++) {
+            $tak[] = $dt[$i]->plafon ?? 0;
+        }
+        $total = array_sum($tak);
         $realisasi = $query->paginate(10);
-        
+
         return view('dashboard', [
             'pengajuan' => $pengajuan,
             'survei' => $survei,
             'disetujui' => $disetujui,
             'penolakan' => $penolakan,
             'data' => $realisasi,
+            'total' => $total,
         ]);
     }
 }

@@ -413,7 +413,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/notifikasi/perjanjian/simpan', 'simpan_spk')->name('simpan.spk');
             Route::get('/notifikasi/realisasi/kredit', 'realisasi_kredit')->name('realisasi.kredit');
             Route::get('/notifikasi/realisasi/kredit/{kode}', 'get_realisasi')->name('get.realisasi');
+            Route::get('/notifikasi/realisasi/kredit/foto/{kode}', 'get_foto_realisasi')->name('getfoto.realisasi');
             Route::post('/notifikasi/realisasi/kredit/simpan', 'simpan_realisasi')->name('simpan.realisasi');
+            Route::post('/notifikasi/realisasi/kredit/konfirmasi', 'konfirmasi_realisasi')->name('konfirmasi.realisasi');
             Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
             Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');

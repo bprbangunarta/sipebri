@@ -104,7 +104,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">BUKTI REALISASI</h4>
                 </div>
-                <form action="{{ route('simpan.realisasi') }}" method="POST">
+                <form action="{{ route('simpan.realisasi') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
 
@@ -114,17 +114,22 @@
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">FOTO PEMOHON</span>
                                     <input type="text" name="kode_pengajuan" id="kd" hidden>
-                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon">
+                                    <a href="#" class="pull-right fw-bold" id="pemohon">PREVIEW</a>
+                                    <input type="text" name="foto1" hidden>
+                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon" hidden>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">FOTO PENDAMPING</span>
-                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon">
+                                    <a href="#" class="pull-right fw-bold" id="pendamping">PREVIEW</a>
+                                    <input type="text" name="foto2" hidden>
+                                    <input type="file" class="form-control" name="foto_pendamping" id="foto_pendamping"
+                                        hidden>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN</span>
-                                    <textarea class="form-control text-uppercase" name="catatan" id="" rows="3"></textarea>
+                                    <textarea class="form-control text-uppercase" name="catatan" id="catatan" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +151,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">KONFIRMASI</h4>
                 </div>
-                <form action="{{ route('simpan.realisasi') }}" method="POST">
+                <form action="{{ route('konfirmasi.realisasi') }}" method="post">
                     @csrf
                     <div class="modal-body">
 
@@ -171,6 +176,7 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/generate_kode_realisasi.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/bukti_realisasi.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik

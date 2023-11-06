@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Data;
+use App\Models\Produk;
 use App\Models\Survei;
 use App\Models\Pengajuan;
-use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class DataCetakController extends Controller
@@ -65,10 +66,12 @@ class DataCetakController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->where(function ($query) {
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_pengajuan.status', '=', 'Disetujui');
+                    ->where('data_pengajuan.status', '=', 'Disetujui')
+                    ->where('data_spk.no_spk', '=', null);
             })
             ->select(
                 'data_notifikasi.*',
@@ -169,6 +172,7 @@ class DataCetakController extends Controller
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
+            ->where('data_pengajuan.on_current', '0')
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->select(
                 'data_spk.*',
@@ -215,6 +219,7 @@ class DataCetakController extends Controller
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
+            ->where('data_pengajuan.on_current', '1')
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_spk.pengajuan_kode')
             ->select(
                 'data_spk.*',
@@ -252,35 +257,118 @@ class DataCetakController extends Controller
 
     public function get_realisasi($kode)
     {
-        $data = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            // ->leftJoin('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.produk_kode', 'data_nasabah.nama_nasabah')
-            ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
-        //
+        $data = DB::table('data_realisasi')->where('pengajuan_kode', $kode)->first();
 
-        $produk = Produk::where('kode_produk', $data[0]->produk_kode)->first();
+        if (is_null($data)) {
+            $data = [
+                'pengajuan_kode' => null,
+                'foto_pemohon' => null,
+                'foto_pendamping' => null,
+                'catatan' => null,
+            ];
+        }
+        return response()->json($data);
+    }
 
-        $count = (int) $produk->no_spk + 1;
-        $lengths = 4;
-        $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+    public function get_foto_realisasi($kode)
+    {
+        $data = $kode;
+        $array_data = explode(",", $data);
+        $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $array_data[0])->first();
+
+        if (is_null($realisasi)) {
+            $foto = null;
+        } else {
+            if ($array_data[1] == 'pemohon') {
+                $foto = $realisasi->foto_pemohon ? asset('storage/image/photo_realisasi/' . $realisasi->foto_pemohon) : null;
+            } else if ($array_data[1] == 'pendamping') {
+                $foto = $realisasi->foto_pendamping ? asset('storage/image/photo_realisasi/' . $realisasi->foto_pendamping) : null;
+            }
+        }
 
 
-        $now = Carbon::now();
-        $bulan = $now->month;
-        $romawi = Data::romawi($bulan);
 
-        $notif = $kodes . '/' . $data[0]->produk_kode . '/' . $romawi . '/' . $now->year;
+        return response()->json($foto);
+    }
 
-        $data[0]->kode_notif = $notif;
-        $data[0]->nomor = $kodes;
+    public function konfirmasi_realisasi(Request $request)
+    {
+        try {
+            $data = ['selesai' => now()];
+            $data2 = ['tracking' => 'Selesai'];
+            $data3 = ['status' => 'A'];
 
-        return response()->json($data[0]);
+            DB::transaction(function () use ($request, $data, $data2, $data3) {
+                DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->update($data3);
+                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
+            });
+            return redirect()->back()->with('success', 'Berhasil melakukan konfirmasi');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal melakukan konfirmasi');
+        }
     }
 
     public function simpan_realisasi(Request $request)
     {
-        dd($request);
+
+        try {
+            $cek = $request->validate([
+                'foto_pemohon' => 'image|mimes:jpeg,png,jpg|max:5120',
+                'foto_pendamping' => 'image|mimes:jpeg,png,jpg|max:5120',
+            ]);
+
+            $tanggalSekarang = Carbon::now();
+            $tanggal = $tanggalSekarang->format('dmY');
+
+            if ($request->file('foto_pemohon')) {
+                if ($request->foto1) {
+                    Storage::delete('public/image/photo_realisasi/' . $request->foto1);
+                }
+
+                $ekstensi = $cek['foto_pemohon']->getClientOriginalExtension();
+                $new1 =  'realisasi' . '_' . $tanggal .  '_' . 'pemohon' . '.' . $ekstensi;
+                $cek['foto_pemohon'] = $request->file('foto_pemohon')->storeAs('image/photo_realisasi', $new1, 'public');
+                $cek['foto_pemohon'] = $new1;
+            } else {
+                $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+                $cek['foto_pemohon'] = $realisasi->foto_pemohon;
+            }
+
+            if ($request->file('foto_pendamping')) {
+                if ($request->foto2) {
+                    Storage::delete('public/image/photo_realisasi/' . $request->foto2);
+                }
+
+                $ekstensi = $cek['foto_pendamping']->getClientOriginalExtension();
+                $new1 =  'realisasi' . '_' . $tanggal .  '_' . 'pendamping' . '.' . $ekstensi;
+                $cek['foto_pendamping'] = $request->file('foto_pendamping')->storeAs('image/photo_realisasi', $new1, 'public');
+                $cek['foto_pendamping'] = $new1;
+            } else {
+                $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+                $cek['foto_pendamping'] = $realisasi->foto_pendamping;
+            }
+
+            $cek['pengajuan_kode'] = $request->kode_pengajuan;
+            $cek['input_user'] = Auth::user()->code_user;
+            $cek['catatan'] = strtoupper($request->catatan);
+            $cek['created_at'] = now();
+            // dd($cek);
+            $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+            if (is_null($realisasi)) {
+                $ds = ['pencairan_dana' => now()];
+                DB::table('data_realisasi')->insert($cek);
+                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($ds);
+            } else {
+                $ds = ['pencairan_dana' => now()];
+                DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->update($cek);
+                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($ds);
+            }
+
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
     }
 
     public function get_spk($kode)
@@ -341,12 +429,18 @@ class DataCetakController extends Controller
                 'no_spk' => $request->nomor,
             ];
 
-            DB::transaction(function () use ($data, $request, $data2) {
+            $data3 = [
+                'akad_kredit' => now(),
+            ];
+            $data4 = [
+                'tracking' => 'Realisasi',
+            ];
+            DB::transaction(function () use ($data, $request, $data2, $data3, $data4) {
                 DB::table('data_spk')->insert($data);
+                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($data3);
                 Produk::where('kode_produk', $request->kode_produk)->update($data2);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data4);
             });
-
-
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
