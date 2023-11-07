@@ -13,38 +13,6 @@
                         </div>
 
                         <div class="box-body">
-                            {{-- <div class="col-md-6">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr class="bg-blue">
-                                        <th class="text-center">INFORMASI NASABAH</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td> <b>KODE : </b> 00339939 [ BARU ]</td>
-                                    </tr>
-                                    <tr>
-                                        <td> <b>NAMA : </b> NELI YOBAN NIASIH</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <b>KANTOR</b> : PGD <br>
-                                            <b>KTA - JK</b> : 3 BULAN <br>
-                                            <b>PLAFON</b> : 3.000.000
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <b>ALAMAT</b> <br>
-                                            DUSUN CIHANJA RT/RW 09/03 SAWANGAN CIPEUNDEUY SUBANG <br>
-                                            DESA: SAWANGAN | KECAMATAN: CIPEUNDEUY
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> --}}
-
                             <div class="col-md-12">
                                 <table class="table table-bordered">
                                     <thead>

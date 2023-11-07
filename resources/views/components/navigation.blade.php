@@ -67,7 +67,7 @@
                 </li>
             @endcan
 
-            <li class="{{ request()->is('data/pengajuan') ? 'active' : '' }}">
+            <li class="{{ request()->is('data/pengajuan', 'tracking/pengajuan') ? 'active' : '' }}">
                 <a href="{{ route('pengajuan.data') }}" title="Data Pengajuan">
                     <i class="fa fa-user"></i>
                     Data Pengajuan
