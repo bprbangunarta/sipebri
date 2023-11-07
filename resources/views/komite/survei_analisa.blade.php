@@ -19,9 +19,9 @@
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">NASABAH</th>
                                         <th class="text-center" width="30%">ALAMAT</th>
-                                        <th class="text-center" width="18%">PENGAJUAN</th>
-                                        <th class="text-center" width="18%">KOMITE</th>
-                                        <th class="text-center" width="10%">STATUS</th>
+                                        <th class="text-center" width="17%">PENGAJUAN</th>
+                                        <th class="text-center">KOMITE</th>
+                                        <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
