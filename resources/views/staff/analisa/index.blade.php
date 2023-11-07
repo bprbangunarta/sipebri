@@ -52,19 +52,19 @@
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
-                                            
-                                            {{-- <td class="text-center" style="vertical-align: middle;">
-                                                {{ $item->nama_kantor }}
-                                            </td> --}}
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->tracking == 'Proses Survei')
                                                 <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" style="pointer-events: none; text-decoration: none; cursor: default;" title="Input Analisa" disabled="disabled">
                                                     <span class="btn bg-gray" style="width: 120px;hight:100%;">Input Analisa</span>
                                                 </a>
-                                                @else
+                                                @elseif ($item->tracking == 'Proses Analisa')
                                                 <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" title="Input Analisa">
                                                     <span class="btn bg-yellow" style="width: 120px;hight:100%;">Input Analisa</span>
+                                                </a>
+                                                @else
+                                                <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" title="Input Analisa">
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Input Analisa</span>
                                                 </a>
                                                 @endif
 
@@ -72,12 +72,6 @@
                                                 <a data-toggle="modal" data-target="#jadwal-ulang" data-pengajuan="{{ $item->kode_pengajuan }}" title="Jadwal Ulang">
                                                     <span class="btn bg-red" style="width: 120px;hight:100%;">Jadwal Ulang</span>
                                                 </a>
-
-                                                {{-- &nbsp;
-                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    class="btn-circle btn-sm btn-primary" title="Cetak Analisa">
-                                                    <i class="fa fa-print"></i>
-                                                </a> --}}
                                             </td>
                                         </tr>
                                         @php
