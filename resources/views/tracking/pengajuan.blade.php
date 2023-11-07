@@ -66,9 +66,15 @@
                                             <td>
                                                 @if (!is_null($data->keputusan_komite))
                                                     Berdasarkan hasil pertimbangkan komite permohonan kredit Anda
-                                                    <span class="label label-success">Disetujui</span>
-                                                    <span class="label label-danger">Ditolak</span>
-                                                    <span class="label label-danger">Dibatalkan</span>
+                                                    @if ($data->status == 'Disetujui')
+                                                        <span class="label label-success">Disetujui</span>
+                                                    @endif
+                                                    @if ($data->status == 'Ditolak')
+                                                        <span class="label label-danger">Ditolak</span>
+                                                    @endif
+                                                    @if ($data->status == 'Dibatalkan')
+                                                        <span class="label label-danger">Dibatalkan</span>
+                                                    @endif
                                                 @endif
                                             </td>
                                         </tr>

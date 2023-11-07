@@ -13,7 +13,13 @@ class TrackingController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-            $tracking = DB::table('data_tracking')->where('pengajuan_kode', $enc)->first();
+            $tracking = DB::table('data_tracking')
+                ->leftJoin('data_pengajuan', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->where('pengajuan_kode', $enc)
+                ->select(
+                    'data_pengajuan.*',
+                    'data_tracking.*',
+                )->first();
 
             return view('tracking.pengajuan', [
                 'data' => $tracking,
