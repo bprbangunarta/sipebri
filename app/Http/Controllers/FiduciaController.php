@@ -18,7 +18,8 @@ class FiduciaController extends Controller
             ->leftJoin('data_jenis_agunan', 'data_jenis_agunan.kode', '=', 'data_jaminan.jenis_agunan_kode')
             ->where(function ($query) {
                 $query->where('data_jaminan.jenis_jaminan', 'Kendaraan')
-                    ->where('data_pengajuan.status', 'Disetujui');
+                    ->where('data_pengajuan.status', 'Disetujui')
+                    ->where('data_jaminan.on_current', '0');
             })
             ->select(
                 'data_pengajuan.*',

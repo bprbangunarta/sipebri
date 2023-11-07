@@ -36,7 +36,7 @@
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
                                                 @if (is_null($item->no_notifikasi))
-                                                <span class="label label-red" style="font-size: 12px;">NOMOR TIDAK ADA</span>
+                                                <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK ADA</span>
                                                 @else    
                                                 <span class="label label-warning" style="font-size: 12px;">{{ $item->no_notifikasi }}</span>
                                                 @endif
@@ -58,9 +58,9 @@
                                             <td style="vertical-align: middle;">
                                                 {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
 
+                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }}% <br>
                                                 <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
                                                 <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
-                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }} <br>
                                                 <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
                                             </td>
 
