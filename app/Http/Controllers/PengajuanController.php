@@ -127,8 +127,8 @@ class PengajuanController extends Controller
                 'data_pengajuan.created_at as tanggal'
             )
             ->where('data_pengajuan.status', '!=', 'Batal')
-            ->where('data_pengajuan.tracking', '!=', 'Selesai')
-            // ->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+            // ->where('data_pengajuan.tracking', '!=', 'Selesai')
+            ->where('data_pengajuan.on_current', '!=', '1')
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
