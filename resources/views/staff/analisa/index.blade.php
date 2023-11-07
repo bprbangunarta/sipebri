@@ -52,13 +52,13 @@
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
-
+                                            
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->tracking == 'Proses Survei')
                                                 <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" style="pointer-events: none; text-decoration: none; cursor: default;" title="Input Analisa" disabled="disabled">
                                                     <span class="btn bg-gray" style="width: 120px;hight:100%;">Input Analisa</span>
                                                 </a>
-                                                @elseif ($item->tracking == 'Proses Analisa')
+                                                @elseif($item->tracking == 'Proses Analisa')
                                                 <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" title="Input Analisa">
                                                     <span class="btn bg-yellow" style="width: 120px;hight:100%;">Input Analisa</span>
                                                 </a>

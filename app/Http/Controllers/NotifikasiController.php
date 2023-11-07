@@ -16,7 +16,28 @@ class NotifikasiController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where('data_pengajuan.status', '=', 'Ditolak')
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.tracking', 'data_pengajuan.plafon', 'data_pengajuan.updated_at', 'data_pengajuan.kategori', 'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 'data_nasabah.alamat_ktp', 'data_nasabah.kelurahan', 'data_nasabah.kecamatan', 'data_pengajuan.plafon', 'data_kantor.nama_kantor', 'data_survei.surveyor_kode', 'data_survei.tgl_survei', 'data_survei.tgl_jadul_1', 'data_survei.tgl_jadul_2');
+            ->select(
+                'data_pengajuan.kode_pengajuan', 
+                'data_pengajuan.tracking', 
+                'data_pengajuan.plafon', 
+                'data_pengajuan.updated_at', 
+                'data_pengajuan.kategori', 
+                'data_nasabah.kode_nasabah', 
+                'data_nasabah.nama_nasabah', 
+                'data_nasabah.alamat_ktp', 
+                'data_nasabah.kelurahan', 
+                'data_nasabah.kecamatan', 
+                'data_pengajuan.plafon', 
+                'data_kantor.nama_kantor', 
+                'data_survei.surveyor_kode', 
+                'data_survei.tgl_survei', 
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'data_pengajuan.created_at as tgl_daftar',
+                'data_survei.kantor_kode',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.jangka_waktu as jk'
+            );
         //
 
         $c = $cek->get();

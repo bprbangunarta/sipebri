@@ -162,12 +162,6 @@
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">USULAN PLAFON</span>
-                                        <input class="form-control text-uppercase" type="text" name="usulan_plafon"
-                                            placeholder="RP." id="usulan_plafon" required>
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
                                         <span class="fw-bold">SUKU BUNGA (%)</span>
                                         <input class="form-control text-uppercase" type="text" name="suku_bunga"
                                             id="bunga" required>
@@ -189,17 +183,23 @@
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">KEPUTUSAN KOMITE</span>
-                                        <select type="text" class="form-control dati2" style="width:100%;"
-                                            name="putusan_komite" id="komite" required>
-
-                                        </select>
+                                        <span class="fw-bold">USULAN PLAFON</span>
+                                        <input class="form-control text-uppercase" type="text" name="usulan_plafon"
+                                            placeholder="RP." id="usulan_plafon" required>
                                     </div>
                                 </div>
 
                             </div>
 
                             <div class="row">
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">KEPUTUSAN KOMITE</span>
+                                    <select type="text" class="form-control dati2" style="width:100%;"
+                                        name="putusan_komite" id="komite" required>
+
+                                    </select>
+                                </div>
+                                
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN KOMITE</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatan" required></textarea>

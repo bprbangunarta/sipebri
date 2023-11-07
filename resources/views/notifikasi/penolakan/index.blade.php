@@ -16,25 +16,23 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" style="width: 10px">#</th>
-                                        <th class="text-center" style="width: 150px">PENGAJUAN</th>
-                                        <th class="text-center" style="width: 200px">NASABAH</th>
-                                        <th class="text-center">ALAMAT</th>
-                                        <th class="text-center" style="width: 100px">WILAYAH</th>
-                                        <th class="text-center" style="width: 90px">AKSI</th>
+                                        <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center">INFORMASI NASABAH</th>
+                                        <th class="text-center" width="40%">ALAMAT</th>
+                                        <th class="text-center" width="17%">PENGAJUAN</th>
+                                        <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($data as $item)
                                         <tr>
                                             <td class="text-center" style="vertical-align: middle;">1</td>
+
                                             <td style="vertical-align: middle;">
-                                                <b>KODE: </b>{{ $item->kode_pengajuan }} <br>
-                                                <b>TANGGAL</b> : {{ date('Y-m-d', strtotime($item->updated_at)) }}
-                                            </td>
-                                            <td style="text-transform: uppercase;vertical-align: middle;">
-                                                {{ $item->nama_nasabah }} <br>
-                                                <b>Kaetegori:</b> {{ $item->kategori }}
+                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
+                                                <b>NAMA :</b> {{ strtoupper($item->nama_nasabah) }} <br>
+                                                <b>TANGGAL :</b>
+                                                {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('Y-m-d') }}
                                             </td>
 
                                             <td style="text-transform: uppercase;">
@@ -42,19 +40,24 @@
                                                 <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
                                                 </b>{{ $item->kecamatan }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ $item->nama_kantor }}
+
+                                            @php
+                                            $item->plafon = number_format($item->plafon, 0, ',', '.');
+                                            @endphp
+                                            <td style="vertical-align: middle;">
+                                                <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
+                                                <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('penolakan.edit', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    class="btn-circle btn-sm btn-warning" title="Surat Penolakan">
-                                                    <i class="fa fa-file-text-o"></i>
+                                                <a href="{{ route('penolakan.edit', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">Input Penolakan</span>
                                                 </a>
 
-                                                &nbsp;
-                                                <a href="#" class="btn-circle btn-sm btn-primary"
-                                                    title="Cetak Surat Penolakan">
-                                                    <i class="fa fa-print"></i>
+                                                <p style="margin-top:-5px;"></p>
+                                                <a data-toggle="modal" data-target="#jadwal-ulang" data-pengajuan="{{ $item->kode_pengajuan }}" title="Jadwal Ulang">
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Lihat Analisa</span>
                                                 </a>
                                             </td>
                                         </tr>
