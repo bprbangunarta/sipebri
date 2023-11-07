@@ -92,7 +92,9 @@ class KomiteController extends Controller
             $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
             $cek = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             $cek = Midle::analisa_usaha($request->kode_pengajuan);
-            dd($cek, $request->all());
+
+            // dd($cek, $request->all());
+
             // //Data Tracking
             $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             if (!is_null($trc)) {

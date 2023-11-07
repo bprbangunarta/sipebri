@@ -194,12 +194,12 @@
                             <div class="row">
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KEPUTUSAN KOMITE</span>
-                                    <select type="text" class="form-control dati2" style="width:100%;"
+                                    <select class="form-control text-uppercase" style="width:100%;"
                                         name="putusan_komite" id="komite" required>
 
                                     </select>
                                 </div>
-                                
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN KOMITE</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatan" required></textarea>
