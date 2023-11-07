@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Data;
+use App\Models\Midle;
 use App\Models\Produk;
 use App\Models\Survei;
 use App\Models\Pengajuan;
@@ -530,5 +531,72 @@ class DataCetakController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
+    }
+    public function analisa_kredit(Request $request)
+    {
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->where('data_pengajuan.on_current', '=', '1')
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+                'data_kantor.kode_kantor',
+            );
+
+        $c = $query->get();
+        $count = count($c);
+        $data = $query->paginate(10);
+        $usul1 = "Staff Analis";
+        $usul2 = "Kasi Analis";
+        $usul3 = "Kabag Analis";
+        $usul4 = "Direksi";
+        for ($i = 0; $i < $count; $i++) {
+            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+            $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+            $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+            $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+        }
+        // dd($data);
+        return view('cetak.analisa-kredit.index', [
+            'data' => $data,
+        ]);
+    }
+
+    public function data_penolakan_kredit(Request $request)
+    {
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_penolakan', 'data_pengajuan.kode_pengajuan', '=', 'data_penolakan.pengajuan_kode')
+            ->where('data_pengajuan.status', '=', 'Ditolak')
+            ->where('data_pengajuan.kode_pengajuan', '=', 'data_penolakan.pengajuan_kode')
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+                'data_kantor.kode_kantor',
+            );
+
+        $c = $query->get();
+        $count = count($c);
+        $data = $query->paginate(10);
+        $usul1 = "Staff Analis";
+        $usul2 = "Kasi Analis";
+        $usul3 = "Kabag Analis";
+        $usul4 = "Direksi";
+        for ($i = 0; $i < $count; $i++) {
+            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+            $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+            $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+            $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+        }
+        // dd($data);
+        return view('cetak.penolakan-kredit.penolakan_kredit', [
+            'data' => $data,
+        ]);
     }
 }

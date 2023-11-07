@@ -177,14 +177,14 @@
 
             @can('menu permohonan')
                 <li class="">
-                    <a href="#" title="Cetak Analisa Kredit">
+                    <a href="{{ route('analisa.kredit') }}" title="Cetak Analisa Kredit">
                         <i class="fa fa-print"></i>
                         Analisa Kredit
                     </a>
                 </li>
 
                 <li class="#">
-                    <a href="#" title="Cetak Penolakan">
+                    <a href="{{ route('data_penolakan.kredit') }}" title="Cetak Penolakan">
                         <i class="fa fa-print"></i>
                         Penolakan Kredit
                     </a>
