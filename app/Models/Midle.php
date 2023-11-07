@@ -526,7 +526,8 @@ class Midle extends Model
                 'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
-                'users.name'
+                'users.name',
+                'data_pengajuan.jangka_waktu as jk'
             );
         //  
         return $cek;
@@ -567,7 +568,8 @@ class Midle extends Model
                 'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
-                'users.name'
+                'users.name',
+                'data_pengajuan.jangka_waktu as jk'
             );
         //
 
@@ -604,7 +606,8 @@ class Midle extends Model
                 'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
-                'users.name'
+                'users.name',
+                'data_pengajuan.jangka_waktu as jk'
             );
         //
 
@@ -641,7 +644,8 @@ class Midle extends Model
                 'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
-                'users.name'
+                'users.name',
+                'data_pengajuan.jangka_waktu as jk'
             );
         //
 
