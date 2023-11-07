@@ -223,12 +223,6 @@
 
 
             <li class="header">LAPORAN</li>
-            <li class="{{ request()->is('tracking/pengajuan') ? 'active' : '' }}">
-                <a href="/tracking/pengajuan" title=" Tracking Pengajuan">
-                    <i class="fa fa-file-text-o"></i>
-                    Tracking
-                </a>
-            </li>
 
             <li>
                 <a href="#" title="Data Global">
