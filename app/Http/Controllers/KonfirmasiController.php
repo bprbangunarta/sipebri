@@ -351,8 +351,12 @@ class KonfirmasiController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
 
             $data = ['tracking' => 'Persetujuan Komite'];
+            $data2 = ['analisa_kredit' => now()];
 
-            Pengajuan::where('kode_pengajuan', $enc)->update($data);
+            DB::transaction(function () use ($enc, $data, $data2) {
+                DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
+                Pengajuan::where('kode_pengajuan', $enc)->update($data);
+            });
 
             return redirect()->back()->with('success', 'Konfirmasi berhasil');
         } catch (DecryptException $e) {
