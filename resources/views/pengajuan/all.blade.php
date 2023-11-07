@@ -83,7 +83,9 @@
                                         @endif
 
                                         <p style="margin-top:-5px;"></p>
-                                        <span class="btn bg-purple" style="width: 120px;hight:100%;">Lihat Tracking</span>
+                                        <a href="/tracking/pengajuan">
+                                            <span class="btn bg-purple" style="width: 120px;hight:100%;">Lihat Tracking</span>
+                                        </a>
                                     </td>
                                 </tr>
                                 @php
