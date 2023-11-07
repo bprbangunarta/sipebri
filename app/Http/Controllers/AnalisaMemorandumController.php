@@ -130,7 +130,7 @@ class AnalisaMemorandumController extends Controller
             }
 
             $sandidata = Midle::sandibi($sandibi);
-            // dd($sandidata);
+
             return view('staff.analisa.memorandum.sandi-bi-edit', [
                 'data' => $cek[0],
                 'debitur' => $debitur,

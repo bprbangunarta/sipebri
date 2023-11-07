@@ -14,16 +14,16 @@ class UserController extends Controller
     {
         $query = User::query();
         $query->select(
-            'users.id AS model_id', 
-            'roles.id AS role_id', 
-            'users.name', 
-            'email', 
-            'username', 
-            'roles.name AS position', 
-            'nama_kantor', 
-            'code_user', 
-            'kantor_kode', 
-            'kode_surveyor', 
+            'users.id AS model_id',
+            'roles.id AS role_id',
+            'users.name',
+            'email',
+            'username',
+            'roles.name AS position',
+            'nama_kantor',
+            'code_user',
+            'kantor_kode',
+            'kode_surveyor',
             'is_active'
         );
         $query->leftJoin('model_has_roles', 'model_has_roles.model_id', '=', 'users.id');
@@ -33,8 +33,8 @@ class UserController extends Controller
 
         if (!empty($request->name)) {
             $query->where('users.name', 'like', '%' . $request->name . '%')
-                    ->orWhere('roles.name', 'like', '%' . $request->name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $request->name . '%');
+                ->orWhere('roles.name', 'like', '%' . $request->name . '%')
+                ->orWhere('data_kantor.nama_kantor', 'like', '%' . $request->name . '%');
         }
 
         $users = $query->paginate(10);
@@ -59,9 +59,10 @@ class UserController extends Controller
             'is_active' => 'required',
         ]);
         $cek['kantor_kode'] = strtoupper($cek['kantor_kode']); //Huruf kapital
+        $cek['name'] = strtoupper($cek['name']); //Huruf kapital
         $cek['code_user'] = strtoupper($cek['code_user']); //Huruf kapital
         $cek['password'] = bcrypt('12345');
-
+        dd($cek);
         if ($cek) {
             User::create($cek);
             return redirect()->back()->with('success', 'Data user berhasil ditambahkan');
@@ -95,6 +96,7 @@ class UserController extends Controller
 
         $cek['code_user'] = strtoupper($cek['code_user']); //kapital
         $cek['kantor_kode'] = strtoupper($cek['kantor_kode']); //kapital
+        $cek['name'] = strtoupper($cek['name']); //kapital
 
         if ($cek) {
             $data = User::where('code_user', $request->code_user)->get();
