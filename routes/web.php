@@ -21,6 +21,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\TabunganController;
+use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\Analisa5cController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCetakController;
@@ -201,6 +202,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/pengajuan/otorisasi/kendaraan', 'otorkendaraan')->name('otorkendaraan');
             Route::post('/pengajuan/otorisasi/tanah', 'otortanah')->name('otortanah');
             Route::post('/pengajuan/otorisasi/lain', 'otorlain')->name('otorlain');
+        });
+
+        //Tracking
+        Route::controller(TrackingController::class)->group(function () {
+            Route::get('/tracking/pengajuan', 'index')->name('tracking');
         });
 
         // Cetak Berkas Pengajuan

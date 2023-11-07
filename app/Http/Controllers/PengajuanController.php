@@ -143,7 +143,7 @@ class PengajuanController extends Controller
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
         }
-        // dd($pengajuan);
+
         return view('pengajuan.all', [
             'data' => $pengajuan,
         ]);
