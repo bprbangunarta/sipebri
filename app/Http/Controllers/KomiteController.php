@@ -274,6 +274,7 @@ class KomiteController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->where('data_pengajuan.tracking', '=', "Persetujuan Komite")
             ->orWhere('data_pengajuan.status', '=', "Disetujui")
+            ->orWhere('data_pengajuan.tracking', '=', "Proses Survei")
             ->orWhere('data_pengajuan.tracking', '=', "Naik Kasi")
             ->orWhere('data_pengajuan.tracking', '=', "Naik Komite I")
             ->orWhere('data_pengajuan.tracking', '=', "Naik Komite II")
