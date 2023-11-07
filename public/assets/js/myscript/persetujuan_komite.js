@@ -40,7 +40,7 @@ $(document).ready(function () {
             cache: false,
             data: data,
             success: function (response) {
-                
+                console.log(response)
                 var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];

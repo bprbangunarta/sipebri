@@ -114,7 +114,7 @@ class AnalisaMemorandumController extends Controller
             //Cek Data Sandi BI
             $sandibi = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
 
-            if (is_null($sandibi)) {
+            if (is_null($sandibi->bi_penggunaan_kode)) {
                 return view('staff.analisa.memorandum.sandi-bi', [
                     'data' => $cek[0],
                     'debitur' => $debitur,
@@ -130,7 +130,7 @@ class AnalisaMemorandumController extends Controller
             }
 
             $sandidata = Midle::sandibi($sandibi);
-
+            // dd($sandidata);
             return view('staff.analisa.memorandum.sandi-bi-edit', [
                 'data' => $cek[0],
                 'debitur' => $debitur,
@@ -153,12 +153,8 @@ class AnalisaMemorandumController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-            $name = 'AMO';
-            $length = 5;
-            $kode = Midle::kodeacak_memorandum($name, $length);
+
             $data = [
-                'kode_analisa' => $kode,
-                'pengajuan_kode' => $enc,
                 'bi_sifat_kode' => $request->bi_sifat_kode,
                 'bi_penggunaan_kode' => $request->bi_penggunaan_kode,
                 'bi_gol_penjamin_kode' => $request->bi_gol_penjamin_kode,
@@ -174,7 +170,7 @@ class AnalisaMemorandumController extends Controller
                 'created_at' => now(),
             ];
 
-            DB::table('a_memorandum')->insert($data);
+            DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -267,19 +263,24 @@ class AnalisaMemorandumController extends Controller
 
             //kebutuhan dana
             $dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
+            if (is_null($dana)) {
+                $kdana = 0;
+            } else {
+                $kdana = $dana->kebutuhan_dana;
+            }
 
             //Cek data usulan
             $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-
+            // dd($usulan);
             if (is_null($usulan)) {
                 $usulan = (object) [
-                    'kebutuhan_dana' => 0,
+                    'kebutuhan_dana' => $kdana,
                     'sebelum_realisasi' => null,
                     'syarat_tambahan' => null,
                     'syarat_lainnya' => null,
                 ];
             } else {
-                $usulan->kebutuhan_dana = $dana->kebutuhan_dana;
+                $usulan->kebutuhan_dana = $kdana;
             }
 
             //Menghitung RC
@@ -292,9 +293,7 @@ class AnalisaMemorandumController extends Controller
                 }
                 $totaltn = array_sum($tn);
 
-                // $sb = (int)$cek[0]->suku_bunga / 100;
                 $saving = ($totaltn * 70) / 100;
-                // $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
                 $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
                 $rc = ($bg / $keuangan) * 100;
 
@@ -361,7 +360,7 @@ class AnalisaMemorandumController extends Controller
 
             $data = [
                 'max_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->max_plafond),
-                'usulan_plafond' => $cek[0]->plafon,
+                'usulan_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
                 'jangka_waktu' => $request->jangka_waktu,
                 'sebelum_realisasi' => $request->sebelum_realisasi,
                 'syarat_tambahan' => $request->syarat_tambahan,
@@ -372,17 +371,42 @@ class AnalisaMemorandumController extends Controller
             $data2 = [
                 'plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
                 'jangka_waktu' => $request->jangka_waktu,
-                'temp_plafon' => $cek[0]->plafon,
+                'temp_plafon' => (int)$cek[0]->plafon,
                 'b_admin' => number_format($request->b_admin, 2),
                 'b_provisi' => number_format($request->b_provisi, 2),
                 'b_penalti' => number_format($request->b_penalti, 2),
                 'updated_at' => now(),
             ];
 
+            //cek data memorandum sudah ada apa belum
+            $memorandum = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
+
+            if (is_null($memorandum)) {
+                $name = 'AMO';
+                $length = 5;
+                $kode = Midle::kodeacak_memorandum($name, $length);
+                $data = [
+                    'kode_analisa' => $kode,
+                    'pengajuan_kode' => $enc,
+                    'max_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->max_plafond),
+                    'usulan_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
+                    'jangka_waktu' => $request->jangka_waktu,
+                    'sebelum_realisasi' => $request->sebelum_realisasi,
+                    'syarat_tambahan' => $request->syarat_tambahan,
+                    'syarat_lainnya' => $request->syarat_lainnya,
+                    'updated_at' => now(),
+                ];
+                DB::transaction(function () use ($data, $data2, $enc) {
+                    Pengajuan::where('kode_pengajuan', $enc)->update($data2);
+                    DB::table('a_memorandum')->where('pengajuan_kode', $enc)->insert($data);
+                });
+            }
+
             DB::transaction(function () use ($data, $data2, $enc) {
                 Pengajuan::where('kode_pengajuan', $enc)->update($data2);
                 DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data);
             });
+
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
