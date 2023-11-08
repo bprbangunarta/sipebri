@@ -101,13 +101,7 @@ class SurveiController extends Controller
                     (object) ['code_user' => null, 'nama' => null]
                 ]);
             }
-            // if (count($cs) === 0) {
-            //     $cs = collect([
-            //         (object) ['code_user' => null, 'nama' => null]
-            //     ]);
-            // }
-            // dd($kkpk);
-            //Data Kantor
+
             $kantor = Kantor::all();
 
             //Data Auth
