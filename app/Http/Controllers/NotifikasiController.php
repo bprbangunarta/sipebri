@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -76,19 +79,47 @@ class NotifikasiController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->kd_pengajuan);
+            $cek = DB::table('data_penolakan')->where('pengajuan_kode', $enc)->first();
+
+            if ($cek) {
+                return back()->with('error', "Anda Sudah Memiliki Nomor Penolakan");
+            }
+
+            $lasts = DB::table('data_penolakan')->latest('nomor')->first();
+            if (is_null($lasts)) {
+                $count = 0000;
+            } else {
+                $count = (int) $lasts->nomor + 1;
+            }
+            $lengths = 4;
+            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+            $now = Carbon::now();
+            $bulan = $now->month;
+            $romawi = Data::romawi($bulan);
+            // 0000 / 03 / KABAG . ANALIS / PBA / XI / 2023
+            $tolak = $kodes . '/' . '03' . '/' . 'KABAG.ANALIS' . '/' . $romawi . '/' . $now->year;
+
             $data = [
+                'nomor' => $kodes,
+                'no_penolakan' => $tolak,
+                'pengajuan_kode' => $enc,
                 'alasan' => $request->alasan,
                 'keterangan' => $request->keterangan,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
             ];
+
             $data['keterangan'] = strip_tags($data['keterangan']);
-            DB::table('data_penolakan')->where('pengajuan_kode', $enc)->insert($data);
             // dd($data);
-            // $data2['selesai'] = now();
-            // $data3['tracking'] = 'Selesai';
-            // DB::transaction(function () use ($data, $data2, $enc, $data3) {
-            //     DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
-            //     DB::table('data_pengajuan')->where('pengajuan_kode', $enc)->update($data3);
-            // });
+
+            $data2['selesai'] = now();
+            $data3['tracking'] = 'Selesai';
+            DB::transaction(function () use ($data, $data2, $enc, $data3) {
+                DB::table('data_penolakan')->insert($data);
+                DB::table('data_pengajuan')->where('kode_pengajuan', $enc)->update($data3);
+                DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
+            });
 
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
