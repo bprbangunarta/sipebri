@@ -287,7 +287,7 @@ class DataAnalisa5CController extends Controller
 
             // Menghitung Taksasi Agunan
             $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
-            // dd($hasiltaksasi);
+
             if (is_null($cap)) {
                 $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
                 return view('staff.analisa.5c.collateral', [
@@ -297,6 +297,7 @@ class DataAnalisa5CController extends Controller
             }
             $nilai = Data::analisa5c_number($cap->evaluasi_collateral) ?? 0;
             $cap->evaluasi_collateral = $nilai;
+            $cap->taksasi_agunan = number_format($hasiltaksasi, 2);
 
             return view('staff.analisa.5c.collateral-edit', [
                 'data' => $cek[0],
