@@ -96,12 +96,17 @@ class SurveiController extends Controller
                 ->get();
 
             //validasi
-            if (count($cs) == 0) {
-                $kkpk = collect([
+            if (count($cs) === 0) {
+                $cs = collect([
                     (object) ['code_user' => null, 'nama' => null]
                 ]);
             }
-
+            // if (count($cs) === 0) {
+            //     $cs = collect([
+            //         (object) ['code_user' => null, 'nama' => null]
+            //     ]);
+            // }
+            // dd($kkpk);
             //Data Kantor
             $kantor = Kantor::all();
 
