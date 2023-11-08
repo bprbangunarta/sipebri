@@ -438,7 +438,7 @@ class Midle extends Model
         $sek_ekonomi_slik = DB::table('bi_sektor_ekonomi_slik')->where('sandi', $data->bi_sek_ekonomi_slik)->get();
         $bi_gol_debitur = DB::table('bi_golongan_debitur')->where('sandi', $data->bi_gol_debitur_kode)->get();
         $bi_gol_debitur_slik = DB::table('bi_golongan_debitur_slik')->where('sandi', $data->bi_gol_debitur_slik)->get();
-        dd($data->bi_sifat_kode);
+
         if (count($sifat) == 0) {
             $sandi = null;
             $keterangan = null;
