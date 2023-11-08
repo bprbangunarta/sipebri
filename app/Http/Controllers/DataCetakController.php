@@ -538,7 +538,11 @@ class DataCetakController extends Controller
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->where('data_pengajuan.on_current', '=', '1')
+            ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
+            ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
+            ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
+            ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
+            ->where('data_pengajuan.on_current', '=', '0')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
