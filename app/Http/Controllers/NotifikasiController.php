@@ -17,20 +17,20 @@ class NotifikasiController extends Controller
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where('data_pengajuan.status', '=', 'Ditolak')
             ->select(
-                'data_pengajuan.kode_pengajuan', 
-                'data_pengajuan.tracking', 
-                'data_pengajuan.plafon', 
-                'data_pengajuan.updated_at', 
-                'data_pengajuan.kategori', 
-                'data_nasabah.kode_nasabah', 
-                'data_nasabah.nama_nasabah', 
-                'data_nasabah.alamat_ktp', 
-                'data_nasabah.kelurahan', 
-                'data_nasabah.kecamatan', 
-                'data_pengajuan.plafon', 
-                'data_kantor.nama_kantor', 
-                'data_survei.surveyor_kode', 
-                'data_survei.tgl_survei', 
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.plafon',
+                'data_pengajuan.updated_at',
+                'data_pengajuan.kategori',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
                 'data_pengajuan.created_at as tgl_daftar',
@@ -81,9 +81,15 @@ class NotifikasiController extends Controller
                 'keterangan' => $request->keterangan,
             ];
             $data['keterangan'] = strip_tags($data['keterangan']);
+            DB::table('data_penolakan')->where('pengajuan_kode', $enc)->insert($data);
+            // dd($data);
+            // $data2['selesai'] = now();
+            // $data3['tracking'] = 'Selesai';
+            // DB::transaction(function () use ($data, $data2, $enc, $data3) {
+            //     DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
+            //     DB::table('data_pengajuan')->where('pengajuan_kode', $enc)->update($data3);
+            // });
 
-            DB::table('data_penolakan')->where('pengajuan_kode', $enc)->update($data);
-            // dd($request, $enc);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
