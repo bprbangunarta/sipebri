@@ -66,6 +66,7 @@ class PengajuanController extends Controller
             // ->orWhere('data_pengajuan.status', 'Batal')
             ->where(function ($query) {
                 $query->where('data_pengajuan.status', 'Lengkapi Data')
+                    ->where('data_pengajuan.status', 'Lengkapi Data')
                     ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
                     ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
             })
@@ -81,11 +82,14 @@ class PengajuanController extends Controller
             $query->where('data_pengajuan.input_user', '=', $usr);
         } elseif ($role[0]->role_name == 'Head Teller') {
             $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
+        } elseif ($role[0]->role_name == 'Kepala Kantor Kas') {
+            $query->where('data_pengajuan.input_user', '=', $usr);
         }
 
         $pengajuan = $query->paginate(7);
         $auth = Auth::user()->code_user;
         $dtu = DB::table('v_users')->where('code_user', $auth)->first();
+
         foreach ($pengajuan as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
