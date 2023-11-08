@@ -438,10 +438,17 @@ class Midle extends Model
         $sek_ekonomi_slik = DB::table('bi_sektor_ekonomi_slik')->where('sandi', $data->bi_sek_ekonomi_slik)->get();
         $bi_gol_debitur = DB::table('bi_golongan_debitur')->where('sandi', $data->bi_gol_debitur_kode)->get();
         $bi_gol_debitur_slik = DB::table('bi_golongan_debitur_slik')->where('sandi', $data->bi_gol_debitur_slik)->get();
-
+        dd($data->bi_sifat_kode);
+        if (count($sifat) == 0) {
+            $sandi = null;
+            $keterangan = null;
+        } else {
+            $sandi = $sifat[0]->sandi;
+            $keterangan = $sifat[0]->keterangan;
+        }
         $hasil = (object) [
-            'sifat_kode' => $sifat[0]->sandi,
-            'sifat_nama' => $sifat[0]->keterangan,
+            'sifat_kode' => $sandi,
+            'sifat_nama' => $keterangan,
             'bi_penggunaan_debitur_kode' => $bi_penggunaan[0]->sandi,
             'bi_penggunaan_debitur_nama' => $bi_penggunaan[0]->keterangan,
             'bi_gol_penjamin_kode' => $bi_gol_penjamin[0]->sandi,
@@ -461,6 +468,7 @@ class Midle extends Model
             'bi_gol_debitur_slik_kode' => $bi_gol_debitur_slik[0]->sandi,
             'bi_gol_debitur_slik_slik_nama' => $bi_gol_debitur_slik[0]->keterangan,
         ];
+
         return $hasil;
     }
 

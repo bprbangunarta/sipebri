@@ -285,9 +285,9 @@ class DataAnalisa5CController extends Controller
                 return redirect()->back()->with('error', 'Nilai Taksasi harus diisi terlebih dahulu');
             }
 
-            //Menghitung Taksasi Agunan
-            $hasiltaksasi = ($totaltaksasi / intval($cek[0]->plafon)) * 100;
-
+            // Menghitung Taksasi Agunan
+            $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+            // dd($hasiltaksasi);
             if (is_null($cap)) {
                 $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
                 return view('staff.analisa.5c.collateral', [

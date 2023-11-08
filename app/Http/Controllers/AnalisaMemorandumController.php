@@ -113,8 +113,8 @@ class AnalisaMemorandumController extends Controller
 
             //Cek Data Sandi BI
             $sandibi = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-
-            if (is_null($sandibi)) {
+            // dd($sandibi);
+            if (!is_null($sandibi->pengajuan_kode)) {
                 return view('staff.analisa.memorandum.sandi-bi', [
                     'data' => $cek[0],
                     'debitur' => $debitur,
@@ -130,7 +130,7 @@ class AnalisaMemorandumController extends Controller
             }
 
             $sandidata = Midle::sandibi($sandibi);
-
+            // dd($sandidata);
             return view('staff.analisa.memorandum.sandi-bi-edit', [
                 'data' => $cek[0],
                 'debitur' => $debitur,
