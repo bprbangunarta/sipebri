@@ -281,6 +281,7 @@ class UsahaPertanianController extends Controller
                 return redirect()->back()->with('error', 'Isi biaya pertanian terlebih dahulu');
             }
             $bu2 = DB::table('bu_pertanian')->where('usaha_kode', $eneckode)->first();
+
             $pertanian->luas_sewa = $du->luas_sewa;
             $hasil_panen = $du->hasil_panen * $du->harga;
             $hasil_bersih = $hasil_panen - $bu;
@@ -300,7 +301,7 @@ class UsahaPertanianController extends Controller
                 'saving' => $saving,
                 'laba_perbulan' => number_format($pendapatan_perbulan, 0, '', ''),
             ];
-            // dd($kalkulasi, $ambil, $hasil_bersih);
+
             //cek pendapatan ada atau tidak
             if (is_null($pertanian->pendapatan)) {
                 return view('staff.analisa.u-pertanian.keuangan', [
