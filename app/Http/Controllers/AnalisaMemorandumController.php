@@ -114,7 +114,7 @@ class AnalisaMemorandumController extends Controller
             //Cek Data Sandi BI
             $sandibi = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
 
-            if (is_null($sandibi->bi_penggunaan_kode)) {
+            if (is_null($sandibi)) {
                 return view('staff.analisa.memorandum.sandi-bi', [
                     'data' => $cek[0],
                     'debitur' => $debitur,
