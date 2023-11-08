@@ -39,7 +39,7 @@
                                 <li class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'active' : '' }}">
                                     <a href="{{ route('memorandum.sandi', ['pengajuan' => $pengajuan]) }}"
                                         class="{{ request()->is('themes/analisa/memorandum/sandi') ? 'text-bold' : '' }}">
-                                        SANDI BI
+                                        SANDI LAPBUL
                                     </a>
                                 </li>
                             </ul>
