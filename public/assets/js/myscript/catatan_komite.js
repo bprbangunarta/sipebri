@@ -4,8 +4,10 @@ $(document).ready(function () {
         $("#kasi_analiss").empty();
         $("#kabag_analis").empty();
         $("#direksi").empty();
+
         var button = $(event.relatedTarget);
         var pengajuan = button.data("pengajuan");
+        
         $('#kd_pengajuan').val(pengajuan)
         $.ajax({
             url: "/themes/komite/kredit/catatan/" + pengajuan,
