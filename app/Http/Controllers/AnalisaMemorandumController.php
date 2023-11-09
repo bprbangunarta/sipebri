@@ -113,8 +113,12 @@ class AnalisaMemorandumController extends Controller
 
             //Cek Data Sandi BI
             $sandibi = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-            // dd($sandibi);
+
             if (is_null($sandibi)) {
+                return redirect()->back()->with('error', 'Lengkapi usulan kredit terlebih dahulu');
+            }
+
+            if (is_null($sandibi->bi_sifat_kode)) {
                 return view('staff.analisa.memorandum.sandi-bi', [
                     'data' => $cek[0],
                     'debitur' => $debitur,
@@ -129,8 +133,8 @@ class AnalisaMemorandumController extends Controller
                 ]);
             }
 
-            $sandidata = Midle::sandibi($sandibi);
-            // dd($sandidata);
+            $sandidata = Midle::sandibi($enc);
+            // dd($sandidata[0]);
             return view('staff.analisa.memorandum.sandi-bi-edit', [
                 'data' => $cek[0],
                 'debitur' => $debitur,
@@ -142,7 +146,7 @@ class AnalisaMemorandumController extends Controller
                 'slik' => $slik,
                 'golongandebitur' => $golongandebitur,
                 'golongandebiturslik' => $golongandebiturslik,
-                'sandibi' => $sandidata,
+                'sandibi' => $sandidata[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

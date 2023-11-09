@@ -368,26 +368,26 @@ class Midle extends Model
         return $data;
     }
 
-    public static function taksasi($data)
-    {
-        $cek = DB::table('data_jaminan')
-            ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
-            ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_dokumen.kode')
-            ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
-            ->where('pengajuan_kode', $data)->get();
-        //
-        $merge = [];
-        for ($i = 0; $i < count($cek); $i++) {
-            $merge[] = $cek[$i]->nilai_taksasi;
-        }
-        $total = array_sum($merge);
+    // public static function taksasi($data)
+    // {
+    //     $cek = DB::table('data_jaminan')
+    //         ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
+    //         ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_dokumen.kode')
+    //         ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
+    //         ->where('pengajuan_kode', $data)->get();
+    //     //
+    //     $merge = [];
+    //     for ($i = 0; $i < count($cek); $i++) {
+    //         $merge[] = $cek[$i]->nilai_taksasi;
+    //     }
+    //     $total = array_sum($merge);
 
-        for ($j = 0; $j < count($cek); $j++) {
-            $cek[$j]->total = $total;
-        }
+    //     for ($j = 0; $j < count($cek); $j++) {
+    //         $cek[$j]->total = $total;
+    //     }
 
-        return $cek;
-    }
+    //     return $cek;
+    // }
 
     public static function memorandum($data)
     {
@@ -427,49 +427,77 @@ class Midle extends Model
         return null; // Jika tidak ada kode yang unik ditemukan
     }
 
-    public static function sandibi($data)
+    public static function sandibi($enc)
     {
-        $sifat = DB::table('bi_sifat')->where('sandi', $data->bi_sifat_kode)->get();
-        $bi_penggunaan = DB::table('bi_penggunaan_debitur')->where('sandi', $data->bi_penggunaan_kode)->get();
-        $bi_gol_penjamin = DB::table('bi_golongan_penjamin')->where('sandi', $data->bi_gol_penjamin_kode)->get();
-        $sumber_pelunasan = DB::table('bi_sumber_dana_pelunasan')->where('sandi', $data->bi_sumber_pelunasan_kode)->get();
-        $jenis_usaha = DB::table('bi_jenis_usaha')->where('sandi', $data->bi_jenis_usaha_kode)->get();
-        $sek_ekonomi = DB::table('bi_sektor_ekonomi')->where('sandi', $data->bi_sek_ekonomi_kode)->get();
-        $sek_ekonomi_slik = DB::table('bi_sektor_ekonomi_slik')->where('sandi', $data->bi_sek_ekonomi_slik)->get();
-        $bi_gol_debitur = DB::table('bi_golongan_debitur')->where('sandi', $data->bi_gol_debitur_kode)->get();
-        $bi_gol_debitur_slik = DB::table('bi_golongan_debitur_slik')->where('sandi', $data->bi_gol_debitur_slik)->get();
+        // $sifat = DB::table('bi_sifat')->where('sandi', $data->bi_sifat_kode)->get();
+        // $bi_penggunaan = DB::table('bi_penggunaan_debitur')->where('sandi', $data->bi_penggunaan_kode)->get();
+        // $bi_gol_penjamin = DB::table('bi_golongan_penjamin')->where('sandi', $data->bi_gol_penjamin_kode)->get();
+        // $sumber_pelunasan = DB::table('bi_sumber_dana_pelunasan')->where('sandi', $data->bi_sumber_pelunasan_kode)->get();
+        // $jenis_usaha = DB::table('bi_jenis_usaha')->where('sandi', $data->bi_jenis_usaha_kode)->get();
+        // $sek_ekonomi = DB::table('bi_sektor_ekonomi')->where('sandi', $data->bi_sek_ekonomi_kode)->get();
+        // $sek_ekonomi_slik = DB::table('bi_sektor_ekonomi_slik')->where('sandi', $data->bi_sek_ekonomi_slik)->get();
+        // $bi_gol_debitur = DB::table('bi_golongan_debitur')->where('sandi', $data->bi_gol_debitur_kode)->get();
+        // $bi_gol_debitur_slik = DB::table('bi_golongan_debitur_slik')->where('sandi', $data->bi_gol_debitur_slik)->get();
 
-        if (count($sifat) == 0) {
-            $sandi = null;
-            $keterangan = null;
-        } else {
-            $sandi = $sifat[0]->sandi;
-            $keterangan = $sifat[0]->keterangan;
-        }
-        $hasil = (object) [
-            'sifat_kode' => $sandi,
-            'sifat_nama' => $keterangan,
-            'bi_penggunaan_debitur_kode' => $bi_penggunaan[0]->sandi,
-            'bi_penggunaan_debitur_nama' => $bi_penggunaan[0]->keterangan,
-            'bi_gol_penjamin_kode' => $bi_gol_penjamin[0]->sandi,
-            'bi_gol_penjamin_nama' => $bi_gol_penjamin[0]->keterangan,
-            'fiducia' => $data->by_fiducia,
-            'bagian_dijaminkan' => $data->bagian_dijaminkan,
-            'sumber_pelunasan_kode' => $sumber_pelunasan[0]->sandi,
-            'sumber_pelunasan_nama' => $sumber_pelunasan[0]->keterangan,
-            'jenis_usaha_kode' => $jenis_usaha[0]->sandi,
-            'jenis_usaha_nama' => $jenis_usaha[0]->keterangan,
-            'sek_ekonomi_kode' => $sek_ekonomi[0]->sandi,
-            'sek_ekonomi_nama' => $sek_ekonomi[0]->keterangan,
-            'sek_ekonomi_slik_kode' => $sek_ekonomi_slik[0]->sandi,
-            'sek_ekonomi_slik_nama' => $sek_ekonomi_slik[0]->keterangan,
-            'bi_gol_debitur_kode' => $bi_gol_debitur[0]->sandi,
-            'bi_gol_debitur_nama' => $bi_gol_debitur[0]->keterangan,
-            'bi_gol_debitur_slik_kode' => $bi_gol_debitur_slik[0]->sandi,
-            'bi_gol_debitur_slik_slik_nama' => $bi_gol_debitur_slik[0]->keterangan,
-        ];
+        // if (count($sifat) == 0) {
+        //     $sandi = null;
+        //     $keterangan = null;
+        // } else {
+        //     $sandi = $sifat[0]->sandi;
+        //     $keterangan = $sifat[0]->keterangan;
+        // }
+        // $hasil = (object) [
+        //     'sifat_kode' => $sandi,
+        //     'sifat_nama' => $keterangan,
+        //     'bi_penggunaan_debitur_kode' => $bi_penggunaan[0]->sandi,
+        //     'bi_penggunaan_debitur_nama' => $bi_penggunaan[0]->keterangan,
+        //     'bi_gol_penjamin_kode' => $bi_gol_penjamin[0]->sandi,
+        //     'bi_gol_penjamin_nama' => $bi_gol_penjamin[0]->keterangan,
+        //     'fiducia' => $data->by_fiducia,
+        //     'bagian_dijaminkan' => $data->bagian_dijaminkan,
+        //     'sumber_pelunasan_kode' => $sumber_pelunasan[0]->sandi,
+        //     'sumber_pelunasan_nama' => $sumber_pelunasan[0]->keterangan,
+        //     'jenis_usaha_kode' => $jenis_usaha[0]->sandi,
+        //     'jenis_usaha_nama' => $jenis_usaha[0]->keterangan,
+        //     'sek_ekonomi_kode' => $sek_ekonomi[0]->sandi,
+        //     'sek_ekonomi_nama' => $sek_ekonomi[0]->keterangan,
+        //     'sek_ekonomi_slik_kode' => $sek_ekonomi_slik[0]->sandi,
+        //     'sek_ekonomi_slik_nama' => $sek_ekonomi_slik[0]->keterangan,
+        //     'bi_gol_debitur_kode' => $bi_gol_debitur[0]->sandi,
+        //     'bi_gol_debitur_nama' => $bi_gol_debitur[0]->keterangan,
+        //     'bi_gol_debitur_slik_kode' => $bi_gol_debitur_slik[0]->sandi,
+        //     'bi_gol_debitur_slik_slik_nama' => $bi_gol_debitur_slik[0]->keterangan,
+        // ];
 
-        return $hasil;
+        // return $hasil;
+
+        $data = DB::table('data_pengajuan')
+            ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
+            ->leftJoin('bi_sifat', 'a_memorandum.bi_sifat_kode', '=', 'bi_sifat.sandi')
+            ->leftJoin('bi_penggunaan_debitur', 'a_memorandum.bi_penggunaan_kode', '=', 'bi_penggunaan_debitur.sandi')
+            ->leftJoin('bi_golongan_penjamin', 'a_memorandum.bi_gol_penjamin_kode', '=', 'bi_golongan_penjamin.sandi')
+            ->leftJoin('bi_sumber_dana_pelunasan', 'a_memorandum.bi_sumber_pelunasan_kode', '=', 'bi_sumber_dana_pelunasan.sandi')
+            ->leftJoin('bi_jenis_usaha', 'a_memorandum.bi_jenis_usaha_kode', '=', 'bi_jenis_usaha.sandi')
+            ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
+            ->leftJoin('bi_sektor_ekonomi_slik', 'a_memorandum.bi_sek_ekonomi_slik', '=', 'bi_sektor_ekonomi_slik.sandi')
+            ->leftJoin('bi_golongan_debitur', 'a_memorandum.bi_gol_debitur_kode', '=', 'bi_golongan_debitur.sandi')
+            ->leftJoin('bi_golongan_debitur_slik', 'a_memorandum.bi_gol_debitur_slik', '=', 'bi_golongan_debitur_slik.sandi')
+            ->where('data_pengajuan.kode_pengajuan', $enc)
+            ->select(
+                'a_memorandum.*',
+                'bi_sifat.keterangan as bi_sifat',
+                'bi_penggunaan_debitur.keterangan as bi_penggunaan_debitur',
+                'bi_golongan_penjamin.keterangan as bi_golongan_penjamin',
+                'bi_sumber_dana_pelunasan.keterangan as bi_sumber_dana_pelunasan',
+                'bi_jenis_usaha.keterangan as bi_jenis_usaha',
+                'bi_sektor_ekonomi.keterangan as bi_sek_ekonomi',
+                'bi_sektor_ekonomi_slik.keterangan as bi_sektor_ekonomi_slik',
+                'bi_golongan_debitur.keterangan as bi_golongan_debitur',
+                'bi_golongan_debitur_slik.keterangan as bi_golongan_debitur_slik',
+            )->get();
+        //
+
+        return $data;
     }
 
     public static function kode_komite($name, $length)
@@ -672,5 +700,17 @@ class Midle extends Model
         }
 
         return null; // Jika tidak ada kode yang unik ditemukan
+    }
+
+    public static function taksasi_agunan($data)
+    {
+        //Taksasi
+        $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $data)->get();
+        //total semua nilai taksasi
+        $tak = [];
+        for ($i = 0; $i < count($taksasi); $i++) {
+            $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
+        }
+        return $totaltaksasi = array_sum($tak);
     }
 }

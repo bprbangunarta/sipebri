@@ -273,13 +273,7 @@ class DataAnalisa5CController extends Controller
             $cap = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
 
             //Taksasi
-            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
-            //total semua nilai taksasi
-            $tak = [];
-            for ($i = 0; $i < count($taksasi); $i++) {
-                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
-            }
-            $totaltaksasi = array_sum($tak);
+            $totaltaksasi = Midle::taksasi_agunan($enc);
 
             if ($totaltaksasi === 0) {
                 return redirect()->back()->with('error', 'Nilai Taksasi harus diisi terlebih dahulu');
@@ -298,7 +292,7 @@ class DataAnalisa5CController extends Controller
             $nilai = Data::analisa5c_number($cap->evaluasi_collateral) ?? 0;
             $cap->evaluasi_collateral = $nilai;
             $cap->taksasi_agunan = number_format($hasiltaksasi, 2);
-
+            // dd($cap);
             return view('staff.analisa.5c.collateral-edit', [
                 'data' => $cek[0],
                 'collateral' => $cap,

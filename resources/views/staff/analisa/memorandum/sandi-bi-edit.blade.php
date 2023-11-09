@@ -15,8 +15,8 @@
                             <span class="fw-bold">SIFAT</span>
                             <select class="form-control input-sm form-border text-uppercase bi_sifat_kode"
                                 name="bi_sifat_kode" id="" required>
-                                <option value="{{ $sandibi->sifat_kode }}" selected>
-                                    {{ $sandibi->sifat_kode . ' ' . '-' . ' ' . $sandibi->sifat_nama }}</option>
+                                <option value="{{ $sandibi->bi_sifat_kode }}" selected>
+                                    {{ $sandibi->bi_sifat_kode . ' ' . '-' . ' ' . $sandibi->bi_sifat }}</option>
                                 {{-- Ambil data pada tabel bi_sifat --}}
                                 @foreach ($sifat as $item)
                                     <option value="{{ $item->sandi }}">
@@ -30,8 +30,8 @@
                             <span class="fw-bold">PENGGUNAAN DEBITUR</span>
                             <select class="form-control input-sm form-border text-uppercase bi_penggunaan_kode"
                                 name="bi_penggunaan_kode" id="" required>
-                                <option value="{{ $sandibi->bi_penggunaan_debitur_kode }}" selected>
-                                    {{ $sandibi->bi_penggunaan_debitur_kode . ' ' . '-' . ' ' . $sandibi->bi_penggunaan_debitur_nama }}
+                                <option value="{{ $sandibi->bi_penggunaan_kode }}" selected>
+                                    {{ $sandibi->bi_penggunaan_kode . ' ' . '-' . ' ' . $sandibi->bi_penggunaan_debitur }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_penggunaan_debitur --}}
                                 @foreach ($debitur as $item)
@@ -47,7 +47,7 @@
                             <select class="form-control input-sm text-uppercase bi_gol_penjamin_kode"
                                 name="bi_gol_penjamin_kode" id="" required>
                                 <option value="{{ $sandibi->bi_gol_penjamin_kode }}" selected>
-                                    {{ $sandibi->bi_gol_penjamin_kode . ' ' . '-' . ' ' . $sandibi->bi_gol_penjamin_nama }}
+                                    {{ $sandibi->bi_gol_penjamin_kode . ' ' . '-' . ' ' . $sandibi->bi_golongan_penjamin }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_golongan_penjamin --}}
                                 @foreach ($golongan as $item)
@@ -61,7 +61,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">BY FIDUCIA (%)</span>
                             <input type="text" class="form-control text-uppercase" name="ket_kewajiban1" id=""
-                                placeholder="00.00%" value="{{ $sandibi->fiducia }}">
+                                placeholder="00.00%" value="{{ $sandibi->by_fiducia }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -77,8 +77,8 @@
                             <span class="fw-bold">SUMBER DANA PELUNASAN</span>
                             <select class="form-control input-sm form-border text-uppercase bi_sumber_pelunasan_kode"
                                 name="bi_sumber_pelunasan_kode" id="" required>
-                                <option value="{{ $sandibi->sumber_pelunasan_kode }}" selected>
-                                    {{ $sandibi->sumber_pelunasan_kode . ' ' . '-' . ' ' . $sandibi->sumber_pelunasan_nama }}
+                                <option value="{{ $sandibi->bi_sumber_pelunasan_kode }}" selected>
+                                    {{ $sandibi->bi_sumber_pelunasan_kode . ' ' . '-' . ' ' . $sandibi->bi_sumber_dana_pelunasan }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_sumber_dana_pelunasan --}}
                                 @foreach ($sumber as $item)
@@ -93,8 +93,8 @@
                             <span class="fw-bold">JENIS USAHA</span>
                             <select class="form-control input-sm form-border text-uppercase bi_jenis_usaha_kode"
                                 name="bi_jenis_usaha_kode" id="" required>
-                                <option value="{{ $sandibi->jenis_usaha_kode }}" selected>
-                                    {{ $sandibi->jenis_usaha_kode . ' ' . '-' . ' ' . $sandibi->jenis_usaha_nama }}
+                                <option value="{{ $sandibi->bi_jenis_usaha_kode }}" selected>
+                                    {{ $sandibi->bi_jenis_usaha_kode . ' ' . '-' . ' ' . $sandibi->bi_jenis_usaha }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_jenis_usaha --}}
                                 @foreach ($jenis as $item)
@@ -109,8 +109,8 @@
                             <span class="fw-bold">SEKTOR EKONOMI</span>
                             <select class="form-control input-sm form-border text-uppercase bi_sek_ekonomi_kode"
                                 name="bi_sek_ekonomi_kode" id="" required>
-                                <option value="{{ $sandibi->sek_ekonomi_kode }}" selected>
-                                    {{ $sandibi->sek_ekonomi_kode . ' ' . '-' . ' ' . $sandibi->sek_ekonomi_nama }}
+                                <option value="{{ $sandibi->bi_sek_ekonomi_kode }}" selected>
+                                    {{ $sandibi->bi_sek_ekonomi_kode . ' ' . '-' . ' ' . $sandibi->bi_sek_ekonomi }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_sektor_ekonomi --}}
                                 @foreach ($sektor as $item)
@@ -125,8 +125,8 @@
                             <span class="fw-bold">SEKTOR EKONOMI (SLIK)</span>
                             <select class="form-control input-sm form-border text-uppercase bi_sek_ekonomi_slik"
                                 name="bi_sek_ekonomi_slik" id="" required>
-                                <option value="{{ $sandibi->sek_ekonomi_slik_kode }}" selected>
-                                    {{ $sandibi->sek_ekonomi_slik_kode . ' ' . '-' . ' ' . $sandibi->sek_ekonomi_slik_nama }}
+                                <option value="{{ $sandibi->bi_sek_ekonomi_slik }}" selected>
+                                    {{ $sandibi->bi_sek_ekonomi_slik . ' ' . '-' . ' ' . $sandibi->bi_sektor_ekonomi_slik }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_sektor_ekonimi_slik --}}
                                 @foreach ($slik as $item)
@@ -142,7 +142,7 @@
                             <select class="form-control input-sm form-border text-uppercase bi_gol_debitur_kode"
                                 name="bi_gol_debitur_kode" id="" required>
                                 <option value="{{ $sandibi->bi_gol_debitur_kode }}" selected>
-                                    {{ $sandibi->bi_gol_debitur_kode . ' ' . '-' . ' ' . $sandibi->bi_gol_debitur_nama }}
+                                    {{ $sandibi->bi_gol_debitur_kode . ' ' . '-' . ' ' . $sandibi->bi_golongan_debitur }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_golongan_debitur --}}
                                 @foreach ($golongandebitur as $item)
@@ -157,8 +157,8 @@
                             <span class="fw-bold">GOLONGAN DEBITUR (SLIK)</span>
                             <select class="form-control input-sm form-border text-uppercase bi_gol_debitur_slik"
                                 name="bi_gol_debitur_slik" id="" required>
-                                <option value="{{ $sandibi->bi_gol_debitur_slik_kode }}" selected>
-                                    {{ $sandibi->bi_gol_debitur_slik_kode . ' ' . '-' . ' ' . $sandibi->bi_gol_debitur_slik_slik_nama }}
+                                <option value="{{ $sandibi->bi_gol_debitur_slik }}" selected>
+                                    {{ $sandibi->bi_gol_debitur_slik . ' ' . '-' . ' ' . $sandibi->bi_golongan_debitur_slik }}
                                 </option>
                                 {{-- Ambil data pada tabel bi_golongan_debitur_slik --}}
                                 @foreach ($golongandebiturslik as $item)

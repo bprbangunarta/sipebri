@@ -68,15 +68,15 @@
                                 name="kondisi_kendaraan" id="collateral7">
                                 <option value="">--Pilih--</option>
                                 <option value="3"
-                                    {{ old('kondisi_kendaraan') == 3 || $collateral->kondisi_kendaraan == '3' ? 'selected' : '' }}>
+                                    {{ old('kondisi_kendaraan') == '3' || $collateral->kondisi_kendaraan == '3' ? 'selected' : '' }}>
                                     Original,
                                     Lengkap, Tidak Cacat</option>
                                 <option value="2"
-                                    {{ old('kondisi_kendaraan') == 2 || $collateral->kondisi_kendaraan == '2' ? 'selected' : '' }}>
+                                    {{ old('kondisi_kendaraan') == '2' || $collateral->kondisi_kendaraan == '2' ? 'selected' : '' }}>
                                     Original, Tidak
                                     Lengkap</option>
                                 <option value="1"
-                                    {{ old('kondisi_kendaraan') == 1 || $collateral->kondisi_kendaraan == '1' ? 'selected' : '' }}>
+                                    {{ old('kondisi_kendaraan') == '1' || $collateral->kondisi_kendaraan == '1' ? 'selected' : '' }}>
                                     Tidak
                                     Original,
                                     Tidak Lengkap, Cacat</option>
@@ -89,27 +89,27 @@
                                 id="collateral9">
                                 <option value="">--Pilih--</option>
                                 <option value="4"
-                                    {{ old('aspek_hukum') == 5 || $collateral->aspek_hukum == '5' ? 'selected' : '' }}>
+                                    {{ old('aspek_hukum') == '5' || $collateral->aspek_hukum == '5' ? 'selected' : '' }}>
                                     Emas dan deposito/tabungan yang saldonya di blokir dan dilengkapi dengan surat kuasa
                                     pencairan
                                 </option>
                                 <option value="4"
-                                    {{ old('aspek_hukum') == 4 || $collateral->aspek_hukum == '4' ? 'selected' : '' }}>
+                                    {{ old('aspek_hukum') == '4' || $collateral->aspek_hukum == '4' ? 'selected' : '' }}>
                                     SHM (dilengkapi dengan SPPT tahun berjalan atau 1 tahun yang lalu) diikat dengan hak
                                     tanggungan / BPKB (Kendaraan) diikat dengan fidusia
                                 </option>
                                 <option value="3"
-                                    {{ old('aspek_hukum') == 3 || $collateral->aspek_hukum == '3' ? 'selected' : '' }}>
+                                    {{ old('aspek_hukum') == '3' || $collateral->aspek_hukum == '3' ? 'selected' : '' }}>
                                     SHM (dilengkapi dengan SPPT tahun berjalan atau 1 tahun yang lalu) / BPKB tanpa
                                     pengikatan
                                 </option>
                                 <option value="2"
-                                    {{ old('aspek_hukum') == 2 || $collateral->aspek_hukum == '2' ? 'selected' : '' }}>
+                                    {{ old('aspek_hukum') == '2' || $collateral->aspek_hukum == '2' ? 'selected' : '' }}>
                                     AJB / SPOP (dilengkapi dengan SPPT tahun berjalan atau 1 tahun yang lalu) tanpa
                                     pengikatan hak
                                 </option>
                                 <option value="1"
-                                    {{ old('aspek_hukum') == 1 || $collateral->aspek_hukum == '1' ? 'selected' : '' }}>
+                                    {{ old('aspek_hukum') == '1' || $collateral->aspek_hukum == '1' ? 'selected' : '' }}>
                                     Agunan lain yang tidak memenuhi syarat
                                 </option>
                             </select>
@@ -121,11 +121,11 @@
                                 name="agunan_tambahan" id="collateral2">
                                 <option value="">--Pilih--</option>
                                 <option value="3"
-                                    {{ old('agunan_tambahan') == 3 || $collateral->agunan_tambahan == '3' ? 'selected' : '' }}>
+                                    {{ old('agunan_tambahan') == '3' || $collateral->agunan_tambahan == '3' ? 'selected' : '' }}>
                                     Milik Sendiri
                                 </option>
                                 <option value="1"
-                                    {{ old('agunan_tambahan') == 1 || $collateral->agunan_tambahan == '1' ? 'selected' : '' }}>
+                                    {{ old('agunan_tambahan') == '1' || $collateral->agunan_tambahan == '1' ? 'selected' : '' }}>
                                     Orang Lain/Milik
                                     Sendiri dan Orang Lain (Wariasan)</option>
                             </select>
@@ -140,11 +140,11 @@
                                 name="legalitas_agunan_tambahan" id="collateral4">
                                 <option value="">--Pilih--</option>
                                 <option value="3"
-                                    {{ old('legalitas_agunan_tambahan') == 3 || $collateral->legalitas_agunan_tambahan == '3' ? 'selected' : '' }}>
+                                    {{ old('legalitas_agunan_tambahan') == '3' || $collateral->legalitas_agunan_tambahan == '3' ? 'selected' : '' }}>
                                     Milik
                                     Sendiri</option>
                                 <option value="1"
-                                    {{ old('legalitas_agunan_tambahan') == 1 || $collateral->legalitas_agunan_tambahan == '1' ? 'selected' : '' }}>
+                                    {{ old('legalitas_agunan_tambahan') == '1' || $collateral->legalitas_agunan_tambahan == '1' ? 'selected' : '' }}>
                                     Orang
                                     Lain/Milik Sendiri dan Orang Lain (Wariasan)</option>
                             </select>
@@ -156,13 +156,13 @@
                                 name="stabilitas_harga" id="collateral6" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
-                                    {{ old('stabilitas_harga') == 3 || $collateral->stabilitas_harga == '3' ? 'selected' : '' }}>
+                                    {{ old('stabilitas_harga') == '3' || $collateral->stabilitas_harga == '3' ? 'selected' : '' }}>
                                     SHM</option>
                                 <option value="2"
-                                    {{ old('stabilitas_harga') == 2 || $collateral->stabilitas_harga == '2' ? 'selected' : '' }}>
+                                    {{ old('stabilitas_harga') == '2' || $collateral->stabilitas_harga == '2' ? 'selected' : '' }}>
                                     Deposito,Tabungan, Emas</option>
                                 <option value="1"
-                                    {{ old('stabilitas_harga') == 1 || $collateral->stabilitas_harga == '1' ? 'selected' : '' }}>
+                                    {{ old('stabilitas_harga') == '1' || $collateral->stabilitas_harga == '1' ? 'selected' : '' }}>
                                     BPKB</option>
                             </select>
                         </div>
@@ -173,15 +173,16 @@
                                 id="collateral8" required>
                                 <option value="">--Pilih--</option>
                                 <option value="3"
-                                    {{ old('lokasi_shm') == 3 || $collateral->lokasi_shm == '3' ? 'selected' : '' }}>
+                                    {{ old('lokasi_shm') == '3' || $collateral->lokasi_shm == '3' ? 'selected' : '' }}>
                                     Strategis dan atau
                                     Produktif</option>
                                 <option value="2"
-                                    {{ old('lokasi_shm') == 2 || $collateral->lokasi_shm == '2' ? 'selected' : '' }}>
+                                    {{ old('lokasi_shm') == '2' || $collateral->lokasi_shm == '2' ? 'selected' : '' }}>
                                     Strategis dan
                                     Produktif (Atau Sebaliknya)</option>
                                 <option value="1"
-                                    {{ old('lokasi_shm') == 1 || $collateral->lokasi_shm == '1' ? 'selected' : '' }}>Kurang
+                                    {{ old('lokasi_shm') == '1' || $collateral->lokasi_shm == '1' ? 'selected' : '' }}>
+                                    Kurang
                                     Strategis dan
                                     Kurang Produktif</option>
                             </select>
