@@ -7,6 +7,16 @@ $(document).ready(function () {
         var sb = $("#suku_bunga").val();
         var jangka_waktu = $("#jw").val();
         var lb = $("#laba_usaha_pertanian").val();
+        var totaltaksasi = $('#total_taksasi').val()
+
+        //Taksasi Agunan
+        if (totaltaksasi != 0) {
+            var taksasi = (usulan / totaltaksasi) * 100
+            $('#taksasi_agunan').val(taksasi.toFixed(2) + " " + "%")
+        }else{
+            $('#taksasi_agunan').val(0 + " " + "%")
+        }
+        
 
         if (metode == "FLAT") {
             //
@@ -47,7 +57,7 @@ $(document).ready(function () {
             var plafonPinjaman = keuangan / (bunga * (Math.pow(1 + bunga, parseInt(jangka_waktu)) / (Math.pow(1 + bunga, parseInt(jangka_waktu)) - 1)));
             var mx = formatRupiah(plafonPinjaman.toFixed(0));
             $("#max").val("Rp." + " " + mx.toLocaleString("id-ID"));
-            console.log(keuangan, bunga);
+            
         } else {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;

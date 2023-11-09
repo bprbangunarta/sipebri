@@ -105,36 +105,7 @@ class DataAnalisa5CController extends Controller
             }
 
             //Menghitung RC
-            if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
-                $sb = (int)$cek[0]->suku_bunga / 100;
-                $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
-                // $pp = $plafon_permusim / ((int)$cek[0]->jangka_waktu / 6);
-                $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
-                $rc = ($bg / $keuangan) * 100;
-            } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
-                $ssb = $cek[0]->suku_bunga / 100;
-                $sb = $ssb / 12;
-                $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
-                $rc = ($anuitas / $keuangan) * 100;
-            } else {
-                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
-                $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-                $angsuran = $bunga + $pokok;
-                $rc = ($angsuran / $keuangan) * 100;
-            }
-
-            // //Menghitung RC
-            // if ($cek[0]->metode_rps == 'Efektif Musiman') {
-            //     $plafon_permusim = ((int)$cek[0]->plafon * 70) / 100;
-            //     $pp = $plafon_permusim / 6;
-            //     $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
-            //     $rc = ($bg / $pp) * 100;
-            // } else {
-            //     $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
-            //     $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-            //     $angsuran = $bunga + $pokok;
-            //     $rc = ($angsuran / $keuangan) * 100;
-            // }
+            $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
 
             //cek data capacity sudah ada apa belum
             $cap = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
@@ -272,15 +243,8 @@ class DataAnalisa5CController extends Controller
             $cek = Midle::analisa_usaha($enc);
             $cap = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
 
-            //Taksasi
-            $totaltaksasi = Midle::taksasi_agunan($enc);
-
-            if ($totaltaksasi === 0) {
-                return redirect()->back()->with('error', 'Nilai Taksasi harus diisi terlebih dahulu');
-            }
-
-            // Menghitung Taksasi Agunan
-            $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
+            //Taksasi Agunan
+            $hasiltaksasi = Midle::taksasi_agunan($enc, $cek[0]->plafon);
 
             if (is_null($cap)) {
                 $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
@@ -292,7 +256,7 @@ class DataAnalisa5CController extends Controller
             $nilai = Data::analisa5c_number($cap->evaluasi_collateral) ?? 0;
             $cap->evaluasi_collateral = $nilai;
             $cap->taksasi_agunan = number_format($hasiltaksasi, 2);
-            // dd($cap);
+
             return view('staff.analisa.5c.collateral-edit', [
                 'data' => $cek[0],
                 'collateral' => $cap,

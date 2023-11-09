@@ -224,12 +224,14 @@ class AnalisaMemorandumController extends Controller
                 return redirect()->back()->with('error', 'Keuangan perbulan tidak boleh kosong');
             }
 
-            //Taksasi Agunan
-            if (!is_null($tk_agunan)) {
-                $cek[0]->taksasiagunan = $tk_agunan->taksasi_agunan;
-            } else {
-                $cek[0]->taksasiagunan = 0;
+            //Taksasi
+            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
+            //total semua nilai taksasi
+            $tak = [];
+            for ($i = 0; $i < count($taksasi); $i++) {
+                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
             }
+            $totaltaksasi = array_sum($tak);
 
             //kebutuhan dana
             $dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
@@ -241,7 +243,6 @@ class AnalisaMemorandumController extends Controller
 
             //Cek data usulan
             $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-            // dd($usulan);
             if (is_null($usulan)) {
                 $usulan = (object) [
                     'kebutuhan_dana' => $kdana,
@@ -256,6 +257,10 @@ class AnalisaMemorandumController extends Controller
             //Menghitung RC
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
                 //ambil semua laba bersih pertanian
+                // $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
+                // $rc = ($bg / $keuangan) * 100;
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
+
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
                 $tn = [];
                 for ($i = 0; $i < count($tani); $i++) {
@@ -264,8 +269,6 @@ class AnalisaMemorandumController extends Controller
                 $totaltn = array_sum($tn);
 
                 $saving = ($totaltn * 70) / 100;
-                $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
-                $rc = ($bg / $keuangan) * 100;
 
                 //Max Plafond Musiman
                 $cek[0]->maxplafon = $saving * ((int)$cek[0]->jangka_waktu / 6);
@@ -273,27 +276,28 @@ class AnalisaMemorandumController extends Controller
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
                 $ssb = $cek[0]->suku_bunga / 100;
                 $sb = $ssb / 12;
-                $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
-                $rc = ($anuitas / $keuangan) * 100;
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
+                // $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
+                // $rc = ($anuitas / $keuangan) * 100;
 
                 //Max Plafon
                 $cek[0]->maxplafon = $keuangan / ($sb * (pow(1 + $sb, $cek[0]->jangka_waktu) / (pow(1 + $sb, $cek[0]->jangka_waktu) - 1)));
                 //
             } else if ($cek[0]->metode_rps == 'FLAT') {
-                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
-                $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-                $angsuran = ceil($bunga) + $pokok;
-                $rc = ($angsuran / $keuangan) * 100;
-
+                // $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
+                // $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
+                // $angsuran = ceil($bunga) + $pokok;
+                // $rc = ($angsuran / $keuangan) * 100;
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             } else {
-                $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
-                $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-                $angsuran = ceil($bunga) + $pokok;
-                $rc = ($angsuran / $keuangan) * 100;
-
+                // $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
+                // $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
+                // $angsuran = ceil($bunga) + $pokok;
+                // $rc = ($angsuran / $keuangan) * 100;
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
@@ -313,25 +317,14 @@ class AnalisaMemorandumController extends Controller
             $cek[0]->keuangan = $keuangan;
             $cek[0]->laba_usaha_pertanian = $saving ?? null;
 
-            //Taksasi
-            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
-            //total semua nilai taksasi
-            $tak = [];
-            for ($i = 0; $i < count($taksasi); $i++) {
-                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
-            }
-            $totaltaksasi = array_sum($tak);
+            $hasiltaksasi = Midle::taksasi_agunan($enc, (int)$cek[0]->plafon);
 
-            if ($totaltaksasi === 0) {
-                return redirect()->back()->with('error', 'Nilai Taksasi harus diisi terlebih dahulu');
-            }
-
-            $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
-            $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? null;
+            $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? 0;
 
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
+                'total_taksasi' => $totaltaksasi,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

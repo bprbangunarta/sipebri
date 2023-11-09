@@ -368,27 +368,6 @@ class Midle extends Model
         return $data;
     }
 
-    // public static function taksasi($data)
-    // {
-    //     $cek = DB::table('data_jaminan')
-    //         ->leftJoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
-    //         ->leftJoin('data_jenis_dokumen', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_dokumen.kode')
-    //         ->select('data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen', 'data_jaminan.*')
-    //         ->where('pengajuan_kode', $data)->get();
-    //     //
-    //     $merge = [];
-    //     for ($i = 0; $i < count($cek); $i++) {
-    //         $merge[] = $cek[$i]->nilai_taksasi;
-    //     }
-    //     $total = array_sum($merge);
-
-    //     for ($j = 0; $j < count($cek); $j++) {
-    //         $cek[$j]->total = $total;
-    //     }
-
-    //     return $cek;
-    // }
-
     public static function memorandum($data)
     {
         $cek = DB::table('data_pengajuan')
@@ -702,7 +681,7 @@ class Midle extends Model
         return null; // Jika tidak ada kode yang unik ditemukan
     }
 
-    public static function taksasi_agunan($data)
+    public static function taksasi_agunan($data, $plafon)
     {
         //Taksasi
         $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $data)->get();
@@ -711,6 +690,37 @@ class Midle extends Model
         for ($i = 0; $i < count($taksasi); $i++) {
             $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
         }
-        return $totaltaksasi = array_sum($tak);
+        if (count($taksasi) != 0) {
+            $totaltaksasi = array_sum($tak);
+            $hasiltaksasi = (intval($plafon) / $totaltaksasi) * 100;
+        } else {
+            $hasiltaksasi = 0;
+        }
+        return $hasiltaksasi;
+    }
+
+    public static function perhitungan_rc($kode, $metode, $plafon, $suku_bunga, $jangka_waktu)
+    {
+        $keuangan = Keuangan::where('pengajuan_kode', $kode)->pluck('keuangan_perbulan')->first();
+
+        if ($metode == 'EFEKTIF MUSIMAN') {
+            $sb = $suku_bunga / 100;
+            $plafon_permusim = ($plafon * 70) / 100;
+
+            $bg = ((($plafon * $suku_bunga) / 100) * 30) / 365;
+            $rc = ($bg / $keuangan) * 100;
+        } else if ($metode == 'EFEKTIF ANUITAS') {
+            $ssb = $suku_bunga / 100;
+            $sb = $ssb / 12;
+            $anuitas = ($plafon * $sb) / (1 - 1 / pow(1 + $sb, $jangka_waktu));
+            $rc = ($anuitas / $keuangan) * 100;
+        } else {
+            $bunga = (($plafon * $suku_bunga) / 100) / 12;
+            $pokok = $plafon / $jangka_waktu;
+            $angsuran = $bunga + $pokok;
+            $rc = ($angsuran / $keuangan) * 100;
+        }
+
+        return number_format($rc, 2);
     }
 }

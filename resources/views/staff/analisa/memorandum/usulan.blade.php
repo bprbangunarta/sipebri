@@ -30,8 +30,10 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">USULAN PLAFOND</span>
+                            <input type="text" id="total_taksasi" value="{{ $total_taksasi }}" hidden>
                             <input type="text" class="form-control text-uppercase" name="usulan_plafond"
-                                id="usulan_plafon" placeholder="RP." value="" required>
+                                id="usulan_plafon" placeholder="RP."
+                                value="{{ 'Rp.' . ' ' . number_format($usulan->usulan_plafond, 0, ',', '.') }}" required>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -48,7 +50,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">TAKSASI AGUNAN</span>
-                            <input type="text" class="form-control text-uppercase"
+                            <input type="text" id="taksasi_agunan" class="form-control text-uppercase"
                                 value="{{ $data->taksasiagunan . ' ' . '%' }}" readonly>
                         </div>
                     </div>
