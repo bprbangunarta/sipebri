@@ -220,40 +220,6 @@ class AnalisaMemorandumController extends Controller
                 return redirect()->back()->with('error', 'Keuangan perbulan tidak boleh kosong');
             }
 
-            //total semua nilai taksasi
-            // $tak = [];
-            // for ($i = 0; $i < count($taksasi); $i++) {
-            //     $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
-            // }
-            // $totaltaksasi = array_sum($tak);
-
-            // //Menghitung Taksasi Agunan
-            // $taksasiagunan = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
-
-
-            //Menghitung Max Plafon
-            // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
-            //     $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
-            //     $cek[0]->maxplafon = $keuangan / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
-            // } elseif ($cek[0]->metode_rps == "FLAT") {
-            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
-            // } else {
-            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
-            // }
-
-            // $cek[0]->metode_rps = "EFEKTIF ANUITAS";
-
-            // if ($cek[0]->metode_rps == "EFEKTIF ANUITAS") {
-            //     $cek[0]->suku_bunga = $cek[0]->suku_bunga / 100;
-            //     $sb = $cek[0]->suku_bunga / 12;
-            //     $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
-            //     $cek[0]->maxplafon = $anuitas / (($cek[0]->suku_bunga / 12) * (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) / (pow(1 + $cek[0]->suku_bunga / 12, $cek[0]->jangka_waktu) - 1)));
-            // } elseif ($cek[0]->metode_rps == "FLAT") {
-            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
-            // } else {
-            //     $cek[0]->maxplafon = ($keuangan * $cek[0]->jangka_waktu) / (1 + ($cek[0]->jangka_waktu * $cek[0]->suku_bunga) / 12);
-            // }
-
             //Taksasi Agunan
             if (!is_null($tk_agunan)) {
                 $cek[0]->taksasiagunan = $tk_agunan->taksasi_agunan;
@@ -358,7 +324,7 @@ class AnalisaMemorandumController extends Controller
 
             $hasiltaksasi = (intval($cek[0]->plafon) / $totaltaksasi) * 100;
             $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? null;
-            // dd($cek[0]);
+
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
