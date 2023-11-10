@@ -132,7 +132,7 @@ class CetakController extends Controller
                 )
                 ->where(function ($query) use ($enc) {
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
-                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 2');
+                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
                 })->get();
 
             if (count($data) == 0) {
@@ -160,9 +160,9 @@ class CetakController extends Controller
 
             // $data[0]->nama_user = $surveyor[0]->nama_user;
             // $data[0]->role_name = $surveyor[0]->role_name;
-
+            // dd($data);
             return view('cetak.layouts.motor', [
-                'data' => $data[0]
+                'data' => $data
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -182,6 +182,7 @@ class CetakController extends Controller
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
                 ->leftJoin('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->leftJoin('ja_tanah', 'data_jaminan.jenis_agunan_kode', '=', 'ja_tanah.kode')
                 ->select(
                     'data_nasabah.no_identitas',
                     'data_nasabah.nama_nasabah',
@@ -191,6 +192,7 @@ class CetakController extends Controller
                     'data_nasabah.alamat_ktp',
                     'data_survei.surveyor_kode',
                     'data_jaminan.*',
+                    'ja_tanah.*',
                 )
                 ->where(function ($query) use ($enc) {
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
@@ -220,9 +222,9 @@ class CetakController extends Controller
             // //Tahun
             // $thn = Carbon::now()->year;
             // $data[0]->thn = $thn;
-
+            // dd($data);
             return view('cetak.layouts.tanah', [
-                'data' => $data[0]
+                'data' => $data
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -253,7 +255,7 @@ class CetakController extends Controller
                     'data_jaminan.*',
                 )
                 ->where(function ($query) use ($enc) {
-                    $query->where('data_pengajuan.kode_pengajuan', '=', '00339933')
+                    $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
                         ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
                 })->get();
 
@@ -272,7 +274,7 @@ class CetakController extends Controller
                 $data[$i]->role_name = $surveyor[$i]->role_name;
             }
 
-            // dd($data);
+
             return view('cetak.layouts.mobil', [
                 'data' => $data
             ]);
@@ -345,7 +347,6 @@ class CetakController extends Controller
             $item->kd = Crypt::encrypt($item->kode);
             $item->user = $dtu->role_name;
         }
-        // dd($pengajuan);
         return view('cetak.pengajuan.index', [
             'data' => $pengajuan,
             'auth' => $auth,

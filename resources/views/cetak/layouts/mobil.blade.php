@@ -130,11 +130,14 @@
                     <td class="text-center br-1" colspan="2" style="width: 25%"><b>No. BPKB</b></td>
                 </tr>
                 <tr>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;{{ }}
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;{{ $item->merek }}
                     </td>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">
+                        &nbsp;{{ $item->no_rangka }}</td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;{{ $item->warna }}
+                    </td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">
+                        &nbsp;{{ $item->no_dokumen }}</td>
                 </tr>
                 <tr>
                     <td class="text-center br-1" colspan="2" style="width: 25%"><b>No. Polisi</b></td>
@@ -143,10 +146,14 @@
                     <td class="text-center br-1" colspan="2" style="width: 25%"><b>Atas Nama</b></td>
                 </tr>
                 <tr>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
-                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;</td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">
+                        &nbsp;{{ $item->no_polisi }}</td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">
+                        &nbsp;{{ $item->no_mesin }}</td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">&nbsp;{{ $item->tahun }}
+                    </td>
+                    <td class="br-1" colspan="2" style="width: 25%; text-align:center;">
+                        &nbsp;{{ $item->atas_nama }}</td>
                 </tr>
             </table>
             <table style="border: 1px solid #000000;border-top:none;">

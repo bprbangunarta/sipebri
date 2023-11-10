@@ -40,7 +40,8 @@
                                                 Surat Persetujuan Pendamping
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="{{ route('cetak.pendamping', ['cetak' => $data->kd_pengajuan]) }}" target="_blank">
+                                                <a href="{{ route('cetak.pendamping', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
@@ -53,7 +54,8 @@
                                                 Surat pernyataan pengecekan NIK
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="{{ route('cetak.nik', ['cetak' => $data->kd_pengajuan]) }}" target="_blank">
+                                                <a href="{{ route('cetak.nik', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
@@ -66,7 +68,8 @@
                                                 Surat pernyataan pengecekan IDEB
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="{{ route('data.slik', ['cetak' => $data->kd_pengajuan]) }}" target="_blank">
+                                                <a href="{{ route('data.slik', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
@@ -79,7 +82,8 @@
                                                 BA Pemerikasaan Sertifikat Tanah
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="{{ route('cetak.tanah', ['cetak' => $data->kd_pengajuan]) }}" target="_blank">
+                                                <a href="{{ route('cetak.tanah', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
@@ -92,7 +96,8 @@
                                                 BA Pemerikasaan Agunan Kendaraan Motor
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="{{ route('cetak.motor', ['cetak' => $data->kd_pengajuan]) }}" target="_blank">
+                                                <a href="{{ route('cetak.motor', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
@@ -105,7 +110,8 @@
                                                 BA Pemerikasaan Agunan Kendaraan Mobil
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="#" target="_blank">
+                                                <a href="{{ route('cetak.mobil', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
