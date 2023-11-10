@@ -82,8 +82,20 @@ class CetakController extends Controller
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
-                ->select('data_pendamping.no_identitas', 'data_pendamping.nama_pendamping', 'data_pendamping.tempat_lahir', 'data_pendamping.tanggal_lahir', 'data_nasabah.no_identitas as iden', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir as tempat', 'data_nasabah.tanggal_lahir as ttl', 'data_nasabah.pendidikan_kode', 'data_nasabah.alamat_ktp')->get();
+                ->select(
+                    'data_pendamping.no_identitas',
+                    'data_pendamping.nama_pendamping',
+                    'data_pendamping.tempat_lahir',
+                    'data_pendamping.tanggal_lahir',
+                    'data_pendamping.status',
+                    'data_nasabah.no_identitas as iden',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir as tempat',
+                    'data_nasabah.tanggal_lahir as ttl',
+                    'data_nasabah.pendidikan_kode',
+                    'data_nasabah.alamat_ktp'
+                )
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
 
             //Rubah tanggal

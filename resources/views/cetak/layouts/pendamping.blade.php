@@ -118,7 +118,7 @@
         </table>
 
         <p>
-            Adalah merupakan (Suami/ Istri/ Orang Tua/ Kakak/ Adik/ Anak) yang selanjutnya disebut sebagai Pendamping
+            Adalah merupakan ({{ $data->status }}) yang selanjutnya disebut sebagai Pendamping
             dari Debitur :
         </p>
 
@@ -127,20 +127,20 @@
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->iden }}</td>
+                <td>&nbsp;{{ $data->iden }}</td>
 
             </tr>
             <tr>
                 <td></td>
-                <td>Nama Pendamping</td>
+                <td>Nama</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->nama_nasabah }}</td>
+                <td>&nbsp;{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tempat, Tanggal Lahir</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->tempat . ',' . ' ' . $data->ttl }}</td>
+                <td>&nbsp;{{ $data->tempat . ',' . ' ' . $data->ttl }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -152,25 +152,25 @@
                 <td></td>
                 <td style="position: absolute;">Alamat</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->alamat_ktp }}</td>
+                <td>&nbsp;{{ $data->alamat_ktp }}</td>
             </tr>
         </table>
 
         <p>
-            Dengan ini mengetahui dan memberi persetujuan penuh kepada (Suami/ Istri/ Orang Tua/ Kakak/ Adik/ Anak) Saya
+            Dengan ini mengetahui dan memberi persetujuan penuh kepada ({{ $data->status }}) Saya
             tersebut untuk membuat dan menandatangani perjanjian kredit dengan PT. BPR Bangunarta dan menandatangani
             surat-surat yang diperlukan berkenaan dengan hal tersebut.
         </p>
 
         <p>
-            Saya telah mengetahui terkait syarat dan ketentuan premi asuransi jiwa yang didaftarkan oleh (Suami/ Istri/
-            Orang Tua/ Kakak/ Adik/ Anak) Saya dan apabila dikemudian hari (Suami/ Istri/ Orang Tua/ Kakak/ Adik/ Anak)
+            Saya telah mengetahui terkait syarat dan ketentuan premi asuransi jiwa yang didaftarkan oleh
+            ({{ $data->status }}) Saya dan apabila dikemudian hari ({{ $data->status }})
             Saya meninggal dunia sebelum 45 (Empat Puluh Lima) Hari setelah kredit direalisasikan atau setelah lewat
             jatuh tempo pinjaman maka seluruh kewajiban menjadi tanggung jawab ahli waris.
         </p>
 
         <p>
-            Apabila dikemudian hari (Suami/ Istri/ Orang Tua/ Kakak/ Adik/ Anak) Saya melakukan tindakan yang merugikan
+            Apabila dikemudian hari ({{ $data->status }}) Saya melakukan tindakan yang merugikan
             PT. BPR Bangunarta dalam hal pembayaran angsuran, Saya bertanggung jawab untuk membayar angsuran tersebut
             sampai dinyatakan lunas oleh PT. BPR Bangunarta.
         </p>
