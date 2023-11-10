@@ -25,7 +25,15 @@ class CetakController extends Controller
             $enc = Crypt::decrypt($kode);
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.plafon', 'data_nasabah.nama_nasabah', 'data_pengajuan.produk_kode', 'data_pengajuan.metode_rps', 'data_pengajuan.jangka_bunga', 'data_pengajuan.jangka_waktu')
+                ->select(
+                    'data_nasabah.nama_nasabah',
+                    'data_pengajuan.kode_pengajuan',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.produk_kode',
+                    'data_pengajuan.metode_rps',
+                    'data_pengajuan.jangka_bunga',
+                    'data_pengajuan.jangka_waktu'
+                    )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             $data[0]->kd_pengajuan = $kode;
@@ -56,7 +64,43 @@ class CetakController extends Controller
             $enc = Crypt::decrypt($kode);
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah')
+                ->leftJoin('data_pekerjaan', 'data_pekerjaan.kode_pekerjaan', '=', 'data_nasabah.pekerjaan_kode')
+                ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('data_tabungan', 'data_pengajuan.tabungan_cgc', '=', 'data_tabungan.noacc')
+                ->leftJoin('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+                ->select(
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.nama_panggilan',
+                    'data_nasabah.no_identitas as no_identitas_n',
+                    'data_nasabah.masa_identitas as masa_identitas_n',
+                    'data_nasabah.kota as kota_n',
+                    'data_nasabah.tanggal_lahir as ttl_n',
+                    'data_nasabah.alamat_ktp as alamat_ktp_n',
+                    'data_nasabah.kode_pos',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.jenis_kelamin',
+                    'data_nasabah.agama',
+                    'data_nasabah.status_pernikahan',
+                    'data_pekerjaan.nama_pekerjaan',
+                    'data_nasabah.nama_ibu_kandung',
+                    'data_pendamping.nama_pendamping',
+                    'data_pendamping.no_hp',
+                    'data_pendamping.no_identitas as no_identitas_p',
+                    'data_pendamping.tempat_lahir as tempat_lahir_p',
+                    'data_pendamping.tanggal_lahir as ttl_p',
+                    'data_pendamping.masa_identitas as masa_identitas_p',
+                    'users.name as surveyor',
+                    'data_tabungan.noacc',
+                    'data_tabungan.fnama',
+                    'data_pengajuan.produk_kode',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.jangka_waktu',
+                    'data_pengajuan.metode_rps',
+                    'data_pengajuan.penggunaan',
+                    'data_pengajuan.keterangan as penggunaan_ket',
+                    )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             //Hari ini
