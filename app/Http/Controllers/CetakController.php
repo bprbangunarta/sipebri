@@ -144,7 +144,7 @@ class CetakController extends Controller
                 )
                 ->where(function ($query) use ($enc) {
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
-                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
+                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 2');
                 })->get();
 
             if (count($data) == 0) {
