@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Pengajuan Kredit')
+@section('title', 'Cetak Berkas Pengajuan')
 @yield('jquery')
 @section('content')
     <div class="content-wrapper">
@@ -101,19 +101,11 @@
                                                     @endif
 
                                                     <p style="margin-top:-5px;"></p>
-                                                    @if (IS_NULL($item->no_cif))
-                                                        <a href="#">
-                                                            <span class="btn bg-red" style="width: 120px;hight:100%;">
-                                                                Sinkronisasi
-                                                            </span>
-                                                        </a>
-                                                    @else
-                                                    <a href="#">
+                                                    <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}">
                                                         <span class="btn bg-blue" style="width: 120px;hight:100%;">
-                                                            Sinkronisasi
+                                                        Cetak Berkas
                                                         </span>
                                                     </a>
-                                                    @endif
                                                 @endcan
 
                                                 @can('otorisasi pengajuan kredit')
@@ -235,37 +227,6 @@
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
                         <button type="submit" class="btn btn-primary">SIMPAN</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modal-cetak">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-red">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">CETAK BERKAS</h4>
-                </div>
-                <form action="{{ route('nasabah.store') }}" method="POST">
-                    @csrf
-
-                    {{-- Input user $ Identitas --}}
-                    <input type="text" value="{{ $auth }}" name="input_user" hidden>
-                    <input type="text" name="identitas" value="1" hidden>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p>DATA PENGAJUAN BELUM DIOTORISASI</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="margin-top: -10px;">
-                        <button type="button" class="btn btn-danger" style="width: 100%;"
-                            data-dismiss="modal">TUTUP</button>
                     </div>
                 </form>
             </div>

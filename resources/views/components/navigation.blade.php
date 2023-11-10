@@ -150,6 +150,15 @@
                 <li class="header">CETAK BERKAS</li>
             @endcan
 
+            @can('cetak pengajuan')
+                <li class="{{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail') ? 'active' : '' }}">
+                    <a href="{{ route('cetak.pengajuan.index') }}" title="Berkas Pengajuan">
+                        <i class="fa fa-print"></i>
+                        Berkas Pengajuan
+                    </a>
+                </li>
+            @endcan
+
             @can('cetak notifikasi')
                 <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
                     <a href="{{ route('notifikasi_kredit') }}" title="Cetak Notifikasi">
@@ -166,7 +175,9 @@
                         Perjanjian Kredit
                     </a>
                 </li>
+            @endcan
 
+            @can('realisasi kredit')
                 <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                     <a href="{{ route('realisasi.kredit') }}" title="Cetak Realisasi Kredit">
                         <i class="fa fa-print"></i>

@@ -280,4 +280,75 @@ class CetakController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+    public function index_pengajuan(Request $request)
+    {
+        $name = request('name');
+        $usr = Auth::user()->code_user;
+
+        //Cek Role User
+        $role = DB::table('v_users')->select('v_users.role_name')->where('code_user', $usr)->get();
+
+        $query = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->select(
+                'data_pengajuan.kode_pengajuan as kode',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.nasabah_kode as kd_nasabah',
+                'data_pengajuan.id as id',
+                'data_pengajuan.plafon as plafon',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_nasabah.nama_nasabah as nama',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_nasabah.no_telp',
+                'data_nasabah.alamat_ktp as alamat',
+                'data_pengajuan.status',
+                'data_pengajuan.tracking',
+                'data_pengajuan.kategori',
+                'data_nasabah.is_entry as entry',
+                'data_kantor.nama_kantor',
+                'data_survei.kantor_kode as kantor',
+                'data_pengajuan.created_at as tanggal'
+            )
+            ->where('data_pengajuan.status', 'Sudah Otorisasi')
+            ->where(function ($query) {
+                $query->where('data_pengajuan.status', 'Lengkapi Data')
+                    ->where('data_pengajuan.status', 'Lengkapi Data')
+                    ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
+                    ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
+            })
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+            ->orderBy('data_nasabah.created_at', 'ASC');
+        //
+
+        if ($role[0]->role_name == 'Customer Service') {
+            $query->where('data_pengajuan.input_user', '=', $usr);
+        } elseif ($role[0]->role_name == 'Head Teller') {
+            $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
+        } elseif ($role[0]->role_name == 'Kepala Kantor Kas') {
+            $query->where('data_pengajuan.input_user', '=', $usr);
+        }
+
+        $pengajuan = $query->paginate(7);
+        $auth = Auth::user()->code_user;
+        $dtu = DB::table('v_users')->where('code_user', $auth)->first();
+
+        foreach ($pengajuan as $item) {
+            $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
+            $item->kd = Crypt::encrypt($item->kode);
+            $item->user = $dtu->role_name;
+        }
+        // dd($pengajuan);
+        return view('cetak.pengajuan.index', [
+            'data' => $pengajuan,
+            'auth' => $auth,
+        ]);
+    }
 }
