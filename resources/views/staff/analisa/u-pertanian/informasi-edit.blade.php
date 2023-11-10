@@ -59,6 +59,8 @@
                                     KETAN</option>
                                 <option value="PADI INPARI" {{ old('jenis_tanaman') == 'PADI INPARI' ? 'selected' : '' }}>
                                     PADI INPARI</option>
+                                <option value="CIHERANG" {{ old('jenis_tanaman') == 'CIHERANG' ? 'selected' : '' }}>
+                                    PADI CIHERANG</option>
                                 <option value="PADI 42" {{ old('jenis_tanaman') == 'PADI 42' ? 'selected' : '' }}>
                                     PADI 42</option>
                                 <option value="PADI IR64" {{ old('jenis_tanaman') == 'PADI IR64' ? 'selected' : '' }}>

@@ -243,9 +243,11 @@ class AnalisaMemorandumController extends Controller
 
             //Cek data usulan
             $usulan = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
+
             if (is_null($usulan)) {
                 $usulan = (object) [
                     'kebutuhan_dana' => $kdana,
+                    'usulan_plafond' => null,
                     'sebelum_realisasi' => null,
                     'syarat_tambahan' => null,
                     'syarat_lainnya' => null,
@@ -320,7 +322,7 @@ class AnalisaMemorandumController extends Controller
             $hasiltaksasi = Midle::taksasi_agunan($enc, (int)$cek[0]->plafon);
 
             $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? 0;
-
+            // dd($cek[0]);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
