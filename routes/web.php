@@ -437,8 +437,6 @@ Route::middleware('auth')->group(function () {
     //====Route Analisa====//
 
 
-
-
     Route::controller(PerhitunganController::class)->group(function () {
         Route::get('/perhitungan/flat', 'flat')->name('flat');
         Route::get('/perhitungan/efektif_musiman', 'efektif_musiman')->name('efektif_musiman');
@@ -450,5 +448,6 @@ Route::middleware('auth')->group(function () {
 
 Route::view('/analisa/index', 'analisa.index');
 Route::view('/anuitas', 'perhitungan.anuitas');
+Route::view('/cetak/notifikasi-kredit', 'cetak.notifikasi-kredit.cetak-notifikasi');
 
 require __DIR__ . '/auth.php';
