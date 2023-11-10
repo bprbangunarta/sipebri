@@ -75,7 +75,7 @@ class NasabahController extends Controller
                     $cif['nasabah']->kd_pengajuan = Crypt::encrypt($peng->kode_pengajuan);
 
                     $cek = Midle::analisa_usaha($enc);
-
+                    // dd($cif['nasabah']);
                     return view('pengajuan.data-nasabah', [
                         'data' => $cek[0],
                         'pend' => $cif['pend'],

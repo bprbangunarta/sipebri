@@ -34,7 +34,8 @@ class Midle extends Model
         //Ubah masa identitas
         $carbonMasa = Carbon::createFromFormat('Ymd', $query->tgllahir);
         $query->tgllahir = $carbonMasa->format('Y-m-d');
-        $query->masa_identitas = $query->tgllahir;
+        // $query->masa_identitas = $query->tgllahir;
+        $query->masa_identitas = '2099-12-29';
 
         //Ubah agama dari nomor id menjadi data string
         $agama = Data::agama($query->agama);
