@@ -15,11 +15,12 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
-              
+                
                 if (response[0]) {
                     var usulan1 = response[0].usulan_plafon ?? null
                     var text = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan1)+" "+"-"+" "+"METODE : "+" "+ response[0].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[0].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[0].b_admin+"\n"+
+                                "B. PROVISI : "+" "+ response[0].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[0].b_admin+" "+"-"+" "+
+                                "RC : "+" "+response[0].rc+"%"+"\n"+
                                 "CATATAN : "+" "+ response[0].catatan
                     $("#staff_analis").val(text);
                 }else{
@@ -29,7 +30,8 @@ $(document).ready(function () {
                 if(response[1]) {
                     var usulan2 = response[1].usulan_plafon ?? null
                     var text2 = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan2)+" "+"-"+" "+"METODE : "+" "+ response[1].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[1].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[1].b_admin+"\n"+
+                                "B. PROVISI : "+" "+ response[1].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[1].b_admin+" "+"-"+" "+
+                                "RC : "+" "+response[1].rc+"%"+"\n"+
                                 "CATATAN : "+" "+ response[1].catatan
                     $("#kasi_analiss").val(text2);
                 }else{
@@ -39,7 +41,8 @@ $(document).ready(function () {
                 if(response[2]) {
                     var usulan3 = response[2].usulan_plafon ?? null
                     var text3 = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan3)+" "+"-"+" "+"METODE : "+" "+ response[2].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[2].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[2].b_admin+"\n"+
+                                "B. PROVISI : "+" "+ response[2].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[2].b_admin+" "+"-"+" "+
+                                "RC : "+" "+response[2].rc+"%"+"\n"+
                                 "CATATAN : "+" "+ response[2].catatan
                     $("#kabag_analis").val(text3);
                 }else{
@@ -49,7 +52,8 @@ $(document).ready(function () {
                 if(response[3]) {
                     var usulan4 = response[3].usulan_plafon ?? null
                     var text4 = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan4)+" "+"-"+" "+"METODE : "+" "+ response[3].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[3].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[3].b_admin+"\n"+
+                                "B. PROVISI : "+" "+ response[3].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[3].b_admin+" "+"-"+" "+
+                                "RC : "+" "+response[3].rc+"%"+"\n"+
                                 "CATATAN : "+" "+ response[3].catatan
                     $("#direksi").val(text4);
                 }else{

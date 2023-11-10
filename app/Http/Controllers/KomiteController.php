@@ -62,18 +62,20 @@ class KomiteController extends Controller
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            // ->leftJoin('data_usulan', 'data_pengajuan.kode_pengajuan', '=', 'data_usulan.pengajuan_kode')
+            ->leftJoin('au_keuangan', 'data_pengajuan.kode_pengajuan', '=', 'au_keuangan.pengajuan_kode')
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.plafon',
                 'data_pengajuan.suku_bunga',
+                'data_pengajuan.jangka_waktu',
                 'data_pengajuan.metode_rps',
                 'data_pengajuan.b_provisi',
                 'data_pengajuan.b_admin',
                 'data_pengajuan.metode_rps',
                 'data_nasabah.nama_nasabah',
                 'a_memorandum.max_plafond',
+                'au_keuangan.keuangan_perbulan',
             )->get();
 
         //User
@@ -91,8 +93,6 @@ class KomiteController extends Controller
             $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
             $cek = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             $cek = Midle::analisa_usaha($request->kode_pengajuan);
-
-            // dd($cek, $request->all());
 
             // //Data Tracking
             $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
@@ -190,14 +190,17 @@ class KomiteController extends Controller
                 'suku_bunga' => $request->suku_bunga,
                 'b_provisi' => number_format($request->b_provisi, 2),
                 'b_admin' => number_format($request->b_admin, 2),
+                'rc' => (float) str_replace('%', '', $request->rc),
                 'usulan_plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                 'catatan' => $request->catatan,
                 'created_at' => now(),
             ];
-
-            DB::transaction(function () use ($request, $data2, $usulan) {
+            $capacity = ['rc' => (float) str_replace('%', '', $request->rc)];
+            // dd($request->all(), $usulan);
+            DB::transaction(function () use ($request, $data2, $usulan, $capacity) {
                 DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
                 DB::table('data_usulan')->insert($usulan);
+                DB::table('a5c_capacity')->where('pengajuan_kode', $request->kode_pengajuan)->update($capacity);
             });
 
             return redirect()->back()->with('success', 'Berhasil menambahkan data');

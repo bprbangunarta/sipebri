@@ -40,7 +40,7 @@ $(document).ready(function () {
             cache: false,
             data: data,
             success: function (response) {
-                console.log(response)
+                
                 var da = JSON.stringify(response);
                 var data = JSON.parse(da);
                 var hasil = data[0];
@@ -61,6 +61,7 @@ $(document).ready(function () {
                 $("#bunga").val(hasil.suku_bunga);
                 $("#admin").val(hasil.b_admin);
 
+                //Persetujuan
                 if (role === "Staff Analis" && pal >= 1000 && pal <= 10000000) {
                     var options = [
                         { value: "Disetujui", text: "Disetujui" },
@@ -146,6 +147,56 @@ $(document).ready(function () {
                             .text(option.text)
                     );
                 });
+
+
+                $("#metode").on("change", function() {
+                    var selectedValue = $(this).val();
+                    
+                });
+                
+
+                    //Menghitung RC Persetujuan Komite
+                    $("#usulan_plafon, #bunga").keyup(function () {
+                    var usulan = parseFloat($("#usulan_plafon").val().replace(/[^\d]/g, "")) || 0;
+                    var keuangan = hasil.keuangan_perbulan
+                    var sb = $('#bunga').val();
+                    var jangka_waktu = hasil.jangka_waktu;
+                    var mtd = $("#metode").val()
+                    
+                    if (hasil.metode_rps == "FLAT" || mtd== "FLAT") {
+                        //
+                        var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                        var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
+                        var angsuran = Math.ceil(bunga) + poko;
+                        var rc = (angsuran / parseFloat(keuangan)) * 100;
+                        
+                        $("#rc").val(rc.toFixed(2) + " " + "%");
+
+                    } else if (hasil.metode_rps == "EFEKTIF MUSIMAN" || mtd== "FLAT") {
+                        
+                        var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
+                        var rc = (bg / keuangan) * 100;
+                        $("#rc").val(rc.toFixed(2) + " " + "%");
+                        
+                    } else if (hasil.metode_rps == "EFEKTIF ANUITAS" || mtd== "FLAT") {
+                        var ssb = sb / 100;
+                        var bunga = ssb / 12;
+                        var anuitas =
+                            (usulan * bunga) / (1 - 1 / Math.pow(1 + bunga, jangka_waktu));
+                        var rc = (anuitas / keuangan) * 100;
+                        $("#rc").val(rc.toFixed(2) + "%");
+
+                    } else {
+                        //
+                        var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                        var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
+                        var angsuran = Math.ceil(bunga) + poko;
+                        var rc = (angsuran / parseFloat(keuangan)) * 100;
+                        $("#rc").val(rc.toFixed(2) + " " + "%");
+
+                    }
+                });
+
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
