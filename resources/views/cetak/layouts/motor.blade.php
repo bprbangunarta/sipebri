@@ -417,14 +417,14 @@
         </font><br>
 
         <table>
-            <font style="float: right;">Subang, ......................... {{ $data->thn }}</font>
+            <font style="float: right;">Pamanukan, ......................... {{ $data->thn }}</font>
             <tr>
                 <td class="text-center">
                     Calon Debitur
                     ,<br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
-                        $data->nama_nasabah }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        {{ $data->nama_nasabah }}</font>
                 </td>
                 <td class="text-center" style="width: 48%">
                     <div style="border: 1px solid black;padding:5px;">
@@ -435,8 +435,8 @@
                 <td class="text-center">
                     Petugas Survei,<br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
-                        $data->nama_user }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        {{ $data->nama_user }}</font>
                 </td>
             </tr>
         </table>

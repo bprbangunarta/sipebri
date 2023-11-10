@@ -9,6 +9,7 @@ use App\Models\Pendidikan;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Return_;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -117,20 +118,48 @@ class CetakController extends Controller
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir', 'data_nasabah.tanggal_lahir', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp', 'data_survei.surveyor_kode')
-                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
+                ->leftJoin('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->leftJoin('ja_kendaraan', 'data_jaminan.jenis_agunan_kode', '=', 'ja_kendaraan.kode')
+                ->select(
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir',
+                    'data_nasabah.tanggal_lahir',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.alamat_ktp',
+                    'data_survei.surveyor_kode',
+                    'data_jaminan.*',
+                )
+                ->where(function ($query) use ($enc) {
+                    $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 2');
+                })->get();
 
-            //Surveyor
-            $surveyor = DB::table('v_users')
-                ->where('code_user', $data[0]->surveyor_kode)
-                ->select('nama_user', 'role_name')->get();
+            if (count($data) == 0) {
+                return redirect()->back()->with('error', 'Jaminan kendaraan tidak ada');
+            }
 
-            //Tahun
-            $thn = Carbon::now()->year;
-            $data[0]->thn = $thn;
+            for ($i = 0; $i < count($data); $i++) {
+                $surveyor = DB::table('v_users')
+                    ->where('code_user', $data[$i]->surveyor_kode)
+                    ->select('nama_user', 'role_name')->get();
 
-            $data[0]->nama_user = $surveyor[0]->nama_user;
-            $data[0]->role_name = $surveyor[0]->role_name;
+                $thn = Carbon::now()->year;
+                $data[$i]->thn = $thn;
+                $data[$i]->nama_user = $surveyor[$i]->nama_user;
+                $data[$i]->role_name = $surveyor[$i]->role_name;
+            }
+
+            // $surveyor = DB::table('v_users')
+            //     ->where('code_user', $data[0]->surveyor_kode)
+            //     ->select('nama_user', 'role_name')->get();
+
+            // //Tahun
+            // $thn = Carbon::now()->year;
+            // $data[0]->thn = $thn;
+
+            // $data[0]->nama_user = $surveyor[0]->nama_user;
+            // $data[0]->role_name = $surveyor[0]->role_name;
 
             return view('cetak.layouts.motor', [
                 'data' => $data[0]
@@ -152,23 +181,100 @@ class CetakController extends Controller
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir', 'data_nasabah.tanggal_lahir', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp', 'data_survei.surveyor_kode')
-                ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
+                ->leftJoin('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->select(
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir',
+                    'data_nasabah.tanggal_lahir',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.alamat_ktp',
+                    'data_survei.surveyor_kode',
+                    'data_jaminan.*',
+                )
+                ->where(function ($query) use ($enc) {
+                    $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                        ->where('data_jaminan.jenis_jaminan', '=', 'Tanah');
+                })->get();
+            // ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
-            //Surveyor
-            $surveyor = DB::table('v_users')
-                ->where('code_user', $data[0]->surveyor_kode)
-                ->select('nama_user', 'role_name')->get();
+            for ($i = 0; $i < count($data); $i++) {
+                $surveyor = DB::table('v_users')
+                    ->where('code_user', $data[$i]->surveyor_kode)
+                    ->select('nama_user', 'role_name')->get();
 
-            $data[0]->nama_user = $surveyor[0]->nama_user;
-            $data[0]->role_name = $surveyor[0]->role_name;
+                $thn = Carbon::now()->year;
+                $data[$i]->thn = $thn;
+                $data[$i]->nama_user = $surveyor[$i]->nama_user;
+                $data[$i]->role_name = $surveyor[$i]->role_name;
+            }
 
-            //Tahun
-            $thn = Carbon::now()->year;
-            $data[0]->thn = $thn;
+            // //Surveyor
+            // $surveyor = DB::table('v_users')
+            //     ->where('code_user', $data[0]->surveyor_kode)
+            //     ->select('nama_user', 'role_name')->get();
+
+            // $data[0]->nama_user = $surveyor[0]->nama_user;
+            // $data[0]->role_name = $surveyor[0]->role_name;
+
+            // //Tahun
+            // $thn = Carbon::now()->year;
+            // $data[0]->thn = $thn;
 
             return view('cetak.layouts.tanah', [
                 'data' => $data[0]
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function mobil(Request $request)
+    {
+        $kode = $request->query('cetak');
+
+        //====Try Enkripsi Request====//
+        try {
+
+            $enc = Crypt::decrypt($kode);
+            $data = DB::table('data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->leftJoin('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->leftJoin('ja_kendaraan', 'data_jaminan.jenis_agunan_kode', '=', 'ja_kendaraan.kode')
+                ->select(
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir',
+                    'data_nasabah.tanggal_lahir',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.alamat_ktp',
+                    'data_survei.surveyor_kode',
+                    'data_jaminan.*',
+                )
+                ->where(function ($query) use ($enc) {
+                    $query->where('data_pengajuan.kode_pengajuan', '=', '00339933')
+                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
+                })->get();
+
+            if (count($data) == 0) {
+                return redirect()->back()->with('error', 'Jaminan kendaraan tidak ada');
+            }
+
+            for ($i = 0; $i < count($data); $i++) {
+                $surveyor = DB::table('v_users')
+                    ->where('code_user', $data[$i]->surveyor_kode)
+                    ->select('nama_user', 'role_name')->get();
+
+                $thn = Carbon::now()->year;
+                $data[$i]->thn = $thn;
+                $data[$i]->nama_user = $surveyor[$i]->nama_user;
+                $data[$i]->role_name = $surveyor[$i]->role_name;
+            }
+
+            // dd($data);
+            return view('cetak.layouts.mobil', [
+                'data' => $data
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

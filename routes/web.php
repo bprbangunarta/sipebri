@@ -215,6 +215,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/nik', [CetakController::class, 'nik'])->name('cetak.nik');
         Route::get('/cetak/pendamping', [CetakController::class, 'pendamping'])->name('cetak.pendamping');
         Route::get('/cetak/motor', [CetakController::class, 'motor'])->name('cetak.motor');
+        Route::get('/cetak/mobil', [CetakController::class, 'mobil'])->name('cetak.mobil');
         Route::get('/cetak/tanah', [CetakController::class, 'tanah'])->name('cetak.tanah');
 
         //Penjadawlan
