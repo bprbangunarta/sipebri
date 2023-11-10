@@ -212,6 +212,7 @@ Route::middleware('auth')->group(function () {
         // Cetak Berkas Pengajuan
         Route::get('/cetak/pengajuan', [CetakController::class, 'index_pengajuan'])->name('cetak.pengajuan.index');
         Route::get('/cetak/pengajuan/detail', [CetakController::class, 'pengajuan'])->name('cetak.pengajuan');
+        Route::get('/cetak/permohonan/kredit', [CetakController::class, 'permohonan_kredit'])->name('permohonan.kredit');
         Route::get('/cetak/slik', [DataCetakController::class, 'slik'])->name('data.slik');
         Route::get('/cetak/nik', [CetakController::class, 'nik'])->name('cetak.nik');
         Route::get('/cetak/pendamping', [CetakController::class, 'pendamping'])->name('cetak.pendamping');

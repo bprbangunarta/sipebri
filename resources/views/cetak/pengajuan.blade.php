@@ -27,7 +27,8 @@
                                                 Formulir Pengajuan Kredit
                                             </td>
                                             <td class="text-center" width="10%">
-                                                <a href="#" target="_blank">
+                                                <a href="{{ route('permohonan.kredit', ['cetak' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;hight:100%;">
                                                         Cetak Berkas
                                                     </span>
