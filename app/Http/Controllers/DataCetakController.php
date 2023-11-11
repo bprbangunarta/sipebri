@@ -252,7 +252,7 @@ class DataCetakController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-
+        // dd($data);
         return view('cetak.realisasi-kredit.index', [
             'data' => $data
         ]);
@@ -437,6 +437,7 @@ class DataCetakController extends Controller
             ];
             $data4 = [
                 'tracking' => 'Realisasi',
+                'on_current' => '1',
             ];
             DB::transaction(function () use ($data, $request, $data2, $data3, $data4) {
                 DB::table('data_spk')->insert($data);
