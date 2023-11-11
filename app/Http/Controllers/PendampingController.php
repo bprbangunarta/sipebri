@@ -103,7 +103,6 @@ class PendampingController extends Controller
         $cek['input_user'] = $request->input_user;
         $cek['is_entry'] = 1;
 
-
         // Pengecekan format "m-d-Y"
         $tg = explode('-', $request->masa_identitas);
         if (strlen($tg[0]) == 2) {

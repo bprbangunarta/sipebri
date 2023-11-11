@@ -174,6 +174,7 @@ class DataCetakController extends Controller
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
             ->where('data_pengajuan.on_current', '0')
+            ->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode)
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->select(
                 'data_spk.*',
