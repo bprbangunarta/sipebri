@@ -28,8 +28,8 @@ class PenjadwalanController extends Controller
             ->where('data_pengajuan.tracking', '=', 'Penjadwalan')
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                      ->orWhere('data_kantor.kode_kantor', 'like', '%' . $name . '%')
-                      ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+                    ->orWhere('data_kantor.kode_kantor', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             });
 
         $datas = $cek->paginate(10);
@@ -89,7 +89,10 @@ class PenjadwalanController extends Controller
             DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
         }
 
-        $pengajuan = ['tracking' => 'Proses Survei', 'updated_at' => now(),];
+        $pengajuan = [
+            'tracking' => 'Proses Survei',
+            'updated_at' => now(),
+        ];
 
         try {
             DB::transaction(function () use ($filteredArray, $request, $pengajuan) {
