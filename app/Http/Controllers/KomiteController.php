@@ -17,7 +17,7 @@ class KomiteController extends Controller
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
 
-        if ($user->role_name == 'Staff Analis') {
+        if ($user->role_name == 'Staff Analis' || $user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
             $role = "Persetujuan Komite";
             $cek = Midle::persetujuan_komite_staff($usr, $role);
         } elseif ($user->role_name == 'Kasi Analis') {
@@ -104,7 +104,7 @@ class KomiteController extends Controller
                 DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
             }
 
-            if ($user->role_name == 'Staff Analis') {
+            if ($user->role_name == 'Staff Analis' || $user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
                 $komite = 'komite1';
                 $catatan = 'catatan1';
                 $waktu = 'waktu1';

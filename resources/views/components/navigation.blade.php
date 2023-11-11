@@ -84,14 +84,14 @@
                 </li>
             @endcan
 
-            @can('input analisa kta')
+            {{-- @can('input analisa kta')
                 <li class="#">
                     <a href="#" title="Input Analisa KTA">
                         <i class="fa fa-edit"></i>
                         Input Analisa KTA
                     </a>
                 </li>
-            @endcan
+            @endcan --}}
 
             @can('otorisasi pengajuan kredit')
                 <li
