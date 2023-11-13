@@ -61,10 +61,6 @@ class PengajuanController extends Controller
                 'data_pengajuan.created_at as tanggal',
                 'data_nasabah.no_cif'
             )
-            // ->where('data_pengajuan.status', 'Sudah Otorisasi')
-            // ->orWhere('data_pengajuan.status', 'Lengkapi Data')
-            // ->where('data_pengajuan.status', 'Disetujui')
-            // ->orWhere('data_pengajuan.status', 'Batal')
             ->where(function ($query) {
                 $query->where('data_pengajuan.status', 'Lengkapi Data')
                     ->where('data_pengajuan.status', 'Lengkapi Data')

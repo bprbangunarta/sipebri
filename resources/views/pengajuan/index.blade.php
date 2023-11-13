@@ -73,7 +73,8 @@
                                             @endphp
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kantor }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
+                                                <b>PRODUK : </b>{{ $item->produk_kode }} <br>
+                                                <b>JK : </b>{{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
 
@@ -108,11 +109,11 @@
                                                             </span>
                                                         </a>
                                                     @else
-                                                    <a href="#">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">
-                                                            Sinkronisasi
-                                                        </span>
-                                                    </a>
+                                                        <a href="#">
+                                                            <span class="btn bg-blue" style="width: 120px;hight:100%;">
+                                                                Sinkronisasi
+                                                            </span>
+                                                        </a>
                                                     @endif
                                                 @endcan
 
