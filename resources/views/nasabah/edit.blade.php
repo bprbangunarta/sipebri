@@ -438,7 +438,8 @@
 
                                                         <input type="file" class="form-control" class="photo_ktp"
                                                             name="photo_ktp" id="photo_ktp" onchange="previewPhotoKtp()">
-
+                                                        <video id="ktp" width="640" height="480"
+                                                            autoplay></video>
                                                         <div class="accordion mt-2" id="accordion-ktp">
                                                             <div class="accordion-item">
                                                                 <h2 class="accordion-header" id="heading-1"
@@ -968,19 +969,56 @@
 
 <script>
     // JS Image Preview
-    function previewPhotoKtp() {
+    // function previewPhotoKtp() {
+    //     const image = document.getElementById('photo_ktp');
+    //     const imgPreview = document.querySelector('.img-preview-ktp');
+
+    //     imgPreview.style.display = 'block';
+
+    //     const oFReader = new FileReader();
+    //     oFReader.readAsDataURL(image.files[0]);
+
+    //     oFReader.onload = function(oFREvent) {
+    //         imgPreview.src = oFREvent.target.result;
+    //     }
+    // }
+
+    async function previewPhotoKtp() {
+        // Cek ketersediaan kamera
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const hasCamera = devices.some(device => device.kind === 'videoinput');
+
         const image = document.getElementById('photo_ktp');
+        const videoElement = document.getElementById('ktp');
         const imgPreview = document.querySelector('.img-preview-ktp');
 
-        imgPreview.style.display = 'block';
+        if (hasCamera) {
+            // Jika kamera tersedia, tampilkan pratinjau kamera
+            imgPreview.style.display = 'none';
+            videoElement.style.display = 'block';
 
-        const oFReader = new FileReader();
-        oFReader.readAsDataURL(image.files[0]);
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: true
+                });
+                videoElement.srcObject = stream;
+            } catch (error) {
+                console.error('Gagal membuka kamera:', error);
+            }
+        } else {
+            // Jika kamera tidak tersedia, tampilkan pratinjau gambar
+            imgPreview.style.display = 'block';
+            videoElement.style.display = 'none';
 
-        oFReader.onload = function(oFREvent) {
-            imgPreview.src = oFREvent.target.result;
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
         }
     }
+
 
     function previewPhotoKk() {
         const image = document.getElementById('photo_kk');

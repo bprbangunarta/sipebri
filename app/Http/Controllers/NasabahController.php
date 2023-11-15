@@ -354,6 +354,38 @@ class NasabahController extends Controller
         $cek['is_entry'] = 1;
         $cek['otorisasi'] = 'N';
 
+        if (!is_null($request->fhotoktp)) {
+            if ($request->oldphotoktp) {
+                Storage::delete('public/image/photo_ktp/' . $request->oldphotoktp);
+            }
+            $cek['photo_ktp'] = $request->no_identitas . '_' . $request->nama_nasabah . '.jpg';
+            Storage::put('public/image/photo_ktp/' . $cek['photo_ktp'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotoktp)));
+        }
+
+        if (!is_null($request->fhotokk)) {
+            if ($request->oldphotokk) {
+                Storage::delete('public/image/photo_kk/' . $request->oldphotokk);
+            }
+            $cek['photo_kk'] = $request->no_identitas . '_' . $request->nama_nasabah . '.jpg';
+            Storage::put('public/image/photo_kk/' . $cek['photo_kk'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotokk)));
+        }
+
+        if (!is_null($request->fhotoselfi)) {
+            if ($request->oldphotoselfie) {
+                Storage::delete('public/image/photo_kk/' . $request->oldphotoselfie);
+            }
+            $cek['photo_selfie'] = $request->no_identitas . '_' . $request->nama_nasabah . '.jpg';
+            Storage::put('public/image/photo_selfie/' . $cek['photo_selfie'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotoselfi)));
+        }
+
+        if (!is_null($request->fhotoformal)) {
+            if ($request->oldphoto) {
+                Storage::delete('public/image/photo_kk/' . $request->oldphoto);
+            }
+            $cek['photo'] = $request->no_identitas . '_' . $request->nama_nasabah . '.jpg';
+            Storage::put('public/image/photo/' . $cek['photo'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotoformal)));
+        }
+
         if ($cek) {
             $nas = Nasabah::where('kode_nasabah', $request->query('nasabah'))->get();
             Nasabah::where('id', $nas[0]->id)->update($cek);

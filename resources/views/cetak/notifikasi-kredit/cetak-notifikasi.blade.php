@@ -84,7 +84,7 @@
 <body>
     <div class="content">
 
-        <img src="{{ asset('assets/img/pba.png') }}" style="width:400px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <br>
         <br>
         <br>

@@ -452,5 +452,6 @@ Route::middleware('auth')->group(function () {
 Route::view('/analisa/index', 'analisa.index');
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/cetak/notifikasi-kredit', 'cetak.notifikasi-kredit.cetak-notifikasi');
+Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetujuan-kredit');
 
 require __DIR__ . '/auth.php';

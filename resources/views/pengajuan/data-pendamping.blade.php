@@ -48,8 +48,12 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO IDENTITAS</span>
-                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user" required>
-                                                <input type="text" class="form-control" name="no_identitas" id="no_identitas" minlength="16" maxlength="16" placeholder="ENTRI" value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}" required>
+                                                <input type="hidden" value="{{ $nasabah->auth }}" name="input_user"
+                                                    required>
+                                                <input type="text" class="form-control" name="no_identitas"
+                                                    id="no_identitas" minlength="16" maxlength="16" placeholder="ENTRI"
+                                                    value="{{ old('no_identitas', $pendamping[0]->no_identitas) }}"
+                                                    required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -196,7 +200,11 @@
 
                                                 <input type="file" class="form-control" class="photo" name="photo"
                                                     id="photo" onchange="previewPhoto()">
-
+                                                <input type="hidden" id="fhotoformal" name="fhotoformal">
+                                                <a class="form-control fw-bold" style="margin-top: 5px; cursor: pointer;"
+                                                    data-toggle="modal" data-target="#kamera-formal">
+                                                    <i class="fa fa-camera"
+                                                        aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Kamera</a>
                                                 <div class="box box-primary" id="accordion-photo"
                                                     style="margin-top:5px;">
                                                     <div class="box-header">
@@ -209,7 +217,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="box-body pad" style="">
+                                                    <div class="box-body pad img-preview-container-formal" style="">
                                                         <img class="img-responsive img-preview"
                                                             src="{{ asset('storage/image/photo/' . $pendamping[0]->photo) }}">
                                                     </div>
@@ -226,7 +234,10 @@
 
                                                 <input type="file" class="form-control" class="photo_ktp"
                                                     name="photo_ktp" id="photo_ktp" onchange="previewPhotoKtp()">
-
+                                                <input type="hidden" id="fhotoktp" name="fhotoktp">
+                                                <a class="form-control fw-bold" style="margin-top: 5px; cursor: pointer;"
+                                                    data-toggle="modal" data-target="#kamera-ktp"><i class="fa fa-camera"
+                                                        aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Kamera</a>
                                                 <div class="box box-primary" id="accordion-kk" style="margin-top:5px;">
                                                     <div class="box-header">
                                                         <span class="fw-bold">PREVIEW</span>
@@ -238,7 +249,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div class="box-body pad" style="">
+                                                    <div class="box-body pad img-preview-container-ktp" style="">
                                                         <img class="img-responsive img-preview-ktp"
                                                             src="{{ asset('storage/image/photo_ktp/' . $pendamping[0]->photo_ktp) }}">
                                                     </div>
@@ -273,9 +284,53 @@
                 </div>
         </section>
     </div>
+    <div class="modal fade" id="kamera-formal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align:center;">KAMERA FORMAL</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="video-container" style="max-width: 100%; overflow: hidden;">
+                        <video id="video-formal" style="display: none; width: 100%; height: auto;" autoplay></video>
+                        <button class="form-control bg-blue" id="ambilGambarBtn-formal"
+                            style="margin-top: 5px; margin-bottom: 5px;">Ambil Gambar</button>
+                        <canvas id="canvas-formal" style="overflow: hidden;" hidden></canvas>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="kamera-ktp">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align:center;">KAMERA KTP</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="video-container" style="max-width: 100%; overflow: hidden;">
+                        <video id="video" style="display: none; width: 100%; height: auto;" autoplay></video>
+                        <button class="form-control bg-blue" id="ambilGambarBtn"
+                            style="margin-top: 5px; margin-bottom: 5px;">Ambil Gambar</button>
+                        <canvas id="canvas" style="overflow: hidden;" hidden></canvas>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/kamera-formal.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/kamera-ktp.js') }}"></script>
     <script>
         // Select2
         $('.ktp').select2()

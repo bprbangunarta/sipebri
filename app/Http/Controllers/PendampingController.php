@@ -148,6 +148,23 @@ class PendampingController extends Controller
         $cek['nama_pendamping'] = strtoupper($cek['nama_pendamping']);
         $cek['tempat_lahir'] = strtoupper($cek['tempat_lahir']);
 
+
+        if (!is_null($request->fhotoformal)) {
+            if ($request->oldphoto) {
+                Storage::delete('public/image/photo/' . $request->oldphoto);
+            }
+            $cek['photo'] = $request->no_identitas . '_' . $request->nama_pendamping . '.jpg';
+            Storage::put('public/image/photo/' . $cek['photo'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotoformal)));
+        }
+
+        if (!is_null($request->fhotoktp)) {
+            if ($request->oldphotoktp) {
+                Storage::delete('public/image/photo_ktp/' . $request->oldphotoktp);
+            }
+            $cek['photo_ktp'] = $request->no_identitas . '_' . $request->nama_pendamping . '.jpg';
+            Storage::put('public/image/photo_ktp/' . $cek['photo_ktp'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotoktp)));
+        }
+
         try {
             $pend = Pendamping::where('pengajuan_kode', $request->query('pendamping'))->get();
             Pendamping::where('id', $pend[0]->id)->update($cek);
