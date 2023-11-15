@@ -73,8 +73,7 @@
                                             @endphp
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kantor }} <br>
-                                                <b>PRODUK : </b>{{ $item->produk_kode }} <br>
-                                                <b>JK : </b>{{ $item->jk }} BULAN <br>
+                                                <b>{{ $item->produk_kode }} - JK : </b>{{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
                                             </td>
 

@@ -43,7 +43,7 @@
 
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>KRU - JK :</b> {{ $item->produk_kode }} - {{ $item->jk }} Bulan
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} Bulan
                                                 <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }} <br>
                                                 <b>PLAFON :</b>
