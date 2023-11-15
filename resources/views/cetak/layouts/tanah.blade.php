@@ -137,7 +137,7 @@
                 </tr>
                 <tr>
                     <td class="br-1">&nbsp; Atas Nama</td>
-                    <td class="br-1">&nbsp;{{ $item->atas_nama }}</td>
+                    <td class="br-1">&nbsp;{{ Str::upper($item->atas_nama) }}</td>
                 </tr>
                 <tr>
                     <td class="br-1">&nbsp; Letak Objek</td>

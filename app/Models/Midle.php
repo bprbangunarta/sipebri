@@ -691,8 +691,9 @@ class Midle extends Model
         for ($i = 0; $i < count($taksasi); $i++) {
             $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
         }
-        if (count($taksasi) != 0) {
-            $totaltaksasi = array_sum($tak);
+
+        $totaltaksasi = array_sum($tak);
+        if (count($taksasi) != 0 && $totaltaksasi != 0) {
             $hasiltaksasi = (intval($plafon) / $totaltaksasi) * 100;
         } else {
             $hasiltaksasi = 0;

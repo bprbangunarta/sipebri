@@ -33,7 +33,7 @@ class CetakController extends Controller
                     'data_pengajuan.metode_rps',
                     'data_pengajuan.jangka_bunga',
                     'data_pengajuan.jangka_waktu'
-                    )
+                )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             $data[0]->kd_pengajuan = $kode;
@@ -100,12 +100,24 @@ class CetakController extends Controller
                     'data_pengajuan.metode_rps',
                     'data_pengajuan.penggunaan',
                     'data_pengajuan.keterangan as penggunaan_ket',
-                    )
+                )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             //Hari ini
             $hari = Carbon::today();
             $data[0]->hari = $hari->isoformat('D MMMM Y');
+
+            $masa_identitas = Carbon::createFromFormat('Ymd', $data[0]->masa_identitas_n);
+            $data[0]->masa_identitas_n = $masa_identitas->format('d/m/Y', $masa_identitas);
+
+            $tgl_nasabah = Carbon::createFromFormat('Ymd', $data[0]->ttl_n);
+            $data[0]->ttl_n = $tgl_nasabah->format('d/m/Y', $tgl_nasabah);
+
+            $tgl_pendamping = Carbon::createFromFormat('Ymd', $data[0]->ttl_p);
+            $data[0]->ttl_p = $tgl_pendamping->format('d/m/Y', $tgl_pendamping);
+
+            $masa_identitasp = Carbon::createFromFormat('Ymd', $data[0]->masa_identitas_p);
+            $data[0]->masa_identitas_p = $masa_identitasp->format('d/m/Y', $masa_identitasp);
 
             return view('cetak.layouts.permohonan_kredit', [
                 'data' => $data[0]
