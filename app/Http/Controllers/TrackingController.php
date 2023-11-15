@@ -21,6 +21,11 @@ class TrackingController extends Controller
                     'data_tracking.*',
                 )->first();
 
+            // Validasi data
+            if (is_null($tracking)) {
+                return redirect()->back()->with('error', 'Data Pengajuan Belum Lengakap');
+            }
+
             return view('tracking.pengajuan', [
                 'data' => $tracking,
             ]);

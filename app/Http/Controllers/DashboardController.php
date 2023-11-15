@@ -12,10 +12,16 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $pengajuan = Pengajuan::count();
+        $pengajuan = Pengajuan::where('status', 'Lengkapi Data')->orWhere('status', 'Minta Otorisasi')->count();
         $disetujui = Pengajuan::where('status', 'Disetujui')->count();
         $penolakan = Pengajuan::where('status', 'Ditolak')->orWhere('status', 'Dibatalkan')->count();
-        $survei = Survei::where('surveyor_kode', '!=', null)->count();
+        // $survei = Survei::where('surveyor_kode', '!=', null)->count();
+        $survei = Pengajuan::where('status', 'Sudah Otorisasi')
+            ->where(function ($query) {
+                $query->orWhere('tracking', 'Proses Survei')
+                    ->orWhere('tracking', 'Proses Analisa');
+            })
+            ->count();
 
         $query = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')

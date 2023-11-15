@@ -12,7 +12,7 @@
                             <h3 class="box-title">DATA PENGAJUAN KREDIT</h3>
 
                             <div class="box-tools">
-                                <form {{ route('user.index') }}" method="GET">
+                                <form href="{{ route('user.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
                                         <input type="text" class="form-control pull-right" name="name" id="name"
                                             value="{{ request('name') }}" placeholder="Search">
