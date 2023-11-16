@@ -70,7 +70,7 @@
                                             <td colspan="4">
                                                 <font class="text-uppercase">
                                                     <b>NAMA USAHA : </b> KARYAWAN - 
-                                                    <b>SEKTOR: </b> PERTANIAN - 
+                                                    <b>SEKTOR : </b> PERTANIAN - 
                                                     <b>JENIS TANAMAN : </b> PADI KETAN -
                                                     <b>ALAMAT : </b> KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG <br>
 
@@ -92,23 +92,100 @@
 
                                         <tr>
                                             <td class="text-center">1</td>
-                                            <td class="text-uppercase">Pendapatan Usaha</td>
+                                            <td class="text-uppercase">Pendapatan Hasil Panen</td>
                                             <td class="text-uppercase">Rp.  5.000.000</td>
                                             <td class="text-uppercase"></td>
                                         </tr>
 
                                         <tr>
                                             <td class="text-center">2</td>
-                                            <td class="text-uppercase">Pajak Kendaraan</td>
+                                            <td class="text-uppercase">Pengolahan Tanah</td>
                                             <td class="text-uppercase"></td>
-                                            <td class="text-uppercase">Rp.  120.000</td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
                                         </tr>
 
                                         <tr>
                                             <td class="text-center">3</td>
-                                            <td class="text-uppercase">Pengeluaran Lainnya</td>
+                                            <td class="text-uppercase">Biaya Bibit</td>
                                             <td class="text-uppercase"></td>
                                             <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">4</td>
+                                            <td class="text-uppercase">Biaya Pupuk</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">5</td>
+                                            <td class="text-uppercase">Biaya Pestisida</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">6</td>
+                                            <td class="text-uppercase">Biaya Pengairan</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">7</td>
+                                            <td class="text-uppercase">Biaya Panen</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">8</td>
+                                            <td class="text-uppercase">Biaya Penggarap</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">9</td>
+                                            <td class="text-uppercase">Biaya Tenaga Kerja</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">10</td>
+                                            <td class="text-uppercase">Biaya Pajak</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">11</td>
+                                            <td class="text-uppercase">Iuran Desa</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">12</td>
+                                            <td class="text-uppercase">Biaya Amortisasi</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">13</td>
+                                            <td class="text-uppercase">Pinjaman Bank Lain</td>
+                                            <td class="text-uppercase"></td>
+                                            <td class="text-uppercase">Rp.  150.000</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center">14</td>
+                                            <td class="text-uppercase">Penambahan Hasil Usaha</td>
+                                            <td class="text-uppercase">Rp.  15.000.000</td>
+                                            <td class="text-uppercase"></td>
                                         </tr>
 
                                         <tr>
@@ -121,6 +198,17 @@
                                         <tr>
                                             <th class="text-center text-uppercase" colspan="2">HASIL USAHA BERSIH</th>
                                             <th class="text-center text-uppercase" colspan="2">Rp. 4.730.000</th>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-center text-uppercase" style="vertical-align: middle;">#</td>
+                                            <td class="text-uppercase" colspan="3">
+                                                <font>
+                                                    <b>Ambil 70% : </b> Rp. <br>
+                                                    <b>Saving Pokok : </b> Rp. <br>
+                                                    <b>Pendapatan Perbulan : </b> Rp. <br> 
+                                                </font>
+                                            </td>
                                         </tr>
                                         {{-- END LOOPING USAHA --}} 
                                     </tbody>
