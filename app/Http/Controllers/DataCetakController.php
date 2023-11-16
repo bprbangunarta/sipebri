@@ -565,7 +565,7 @@ class DataCetakController extends Controller
             $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
             $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
         }
-        // dd($data);
+
         return view('cetak.analisa-kredit.index', [
             'data' => $data,
         ]);

@@ -258,11 +258,7 @@ class AnalisaMemorandumController extends Controller
 
             //Menghitung RC
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
-                //ambil semua laba bersih pertanian
-                // $bg = ((((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) * 30) / 365;
-                // $rc = ($bg / $keuangan) * 100;
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
-
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
                 $tn = [];
                 for ($i = 0; $i < count($tani); $i++) {
@@ -279,26 +275,16 @@ class AnalisaMemorandumController extends Controller
                 $ssb = $cek[0]->suku_bunga / 100;
                 $sb = $ssb / 12;
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
-                // $anuitas = ((int)$cek[0]->plafon * $sb) / (1 - 1 / pow(1 + $sb, (int)$cek[0]->jangka_waktu));
-                // $rc = ($anuitas / $keuangan) * 100;
 
                 //Max Plafon
                 $cek[0]->maxplafon = $keuangan / ($sb * (pow(1 + $sb, $cek[0]->jangka_waktu) / (pow(1 + $sb, $cek[0]->jangka_waktu) - 1)));
                 //
             } else if ($cek[0]->metode_rps == 'FLAT') {
-                // $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
-                // $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-                // $angsuran = ceil($bunga) + $pokok;
-                // $rc = ($angsuran / $keuangan) * 100;
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             } else {
-                // $bunga = (((int)$cek[0]->plafon * (int)$cek[0]->suku_bunga) / 100) / 12;
-                // $pokok = (int)$cek[0]->plafon / (int)$cek[0]->jangka_waktu;
-                // $angsuran = ceil($bunga) + $pokok;
-                // $rc = ($angsuran / $keuangan) * 100;
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
