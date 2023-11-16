@@ -725,4 +725,57 @@ class Midle extends Model
 
         return number_format($rc, 2);
     }
+
+    public static function perhitungan_apht_fiducia($data)
+    {
+        $memo = DB::table('data_pengajuan')
+            ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
+            ->where('pengajuan_kode', $data)
+            ->select(
+                'data_pengajuan.*',
+                'a_memorandum.*',
+            )->first();
+
+        if (!is_null($memo)) {
+            if ($memo->pengikatan == '1') {
+                $adm = ($memo->plafon * $memo->b_admin) / 100;
+                $has = (int)$adm;
+                $hasil = (object) [
+                    'apht' => 0,
+                    'fiducia' => 0,
+                    'adm' => $has,
+                ];
+            } elseif ($memo->pengikatan == '2') {
+                $jml = ($memo->plafon * 1.5) / 100;
+                $adm = ($memo->plafon * $memo->b_admin) / 100;
+                $has = (int)$adm - (int)$jml;
+                $hasil = (object) [
+                    'apht' => (int)$jml,
+                    'fiducia' => 0,
+                    'adm' => $has,
+                ];
+            } else  if ($memo->pengikatan == '3') {
+                $jml = ($memo->plafon * 1.5) / 100;
+                $adm = ($memo->plafon * $memo->b_admin) / 100;
+                $has = (int)$adm - (int)$jml;
+                $hasil = (object) [
+                    'apht' => 0,
+                    'fiducia' => (int)$jml,
+                    'adm' => $has,
+                ];
+            } else  if ($memo->pengikatan == '4') {
+                $jml = ($memo->plafon * 0.75) / 100;
+                $adm = ($memo->plafon * $memo->b_admin) / 100;
+                $has = (int)$adm - ((int)$jml * 2);
+                $hasil = (object) [
+                    'apht' => (int)$jml,
+                    'fiducia' => (int)$jml,
+                    'adm' => $has,
+                ];
+            }
+        } else {
+            return null;
+        }
+        return $hasil;
+    }
 }

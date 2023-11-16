@@ -162,7 +162,7 @@ class AnalisaMemorandumController extends Controller
                 'bi_sifat_kode' => $request->bi_sifat_kode,
                 'bi_penggunaan_kode' => $request->bi_penggunaan_kode,
                 'bi_gol_penjamin_kode' => $request->bi_gol_penjamin_kode,
-                'by_fiducia' => $request->ket_kewajiban1,
+                // 'by_fiducia' => $request->ket_kewajiban1,
                 'bagian_dijaminkan' => $request->ket_kewajiban2,
                 'bi_sumber_pelunasan_kode' => $request->bi_sumber_pelunasan_kode,
                 'bi_jenis_usaha_kode' => $request->bi_jenis_usaha_kode,
@@ -190,7 +190,7 @@ class AnalisaMemorandumController extends Controller
                 'bi_sifat_kode' => $request->bi_sifat_kode,
                 'bi_penggunaan_kode' => $request->bi_penggunaan_kode,
                 'bi_gol_penjamin_kode' => $request->bi_gol_penjamin_kode,
-                'by_fiducia' => $request->ket_kewajiban1,
+                // 'by_fiducia' => $request->ket_kewajiban1,
                 'bagian_dijaminkan' => $request->ket_kewajiban2,
                 'bi_sumber_pelunasan_kode' => $request->bi_sumber_pelunasan_kode,
                 'bi_jenis_usaha_kode' => $request->bi_jenis_usaha_kode,
@@ -217,7 +217,7 @@ class AnalisaMemorandumController extends Controller
             $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
             $RC = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first('rc');
-            $tk_agunan = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
+            // $tk_agunan = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
 
             //Cek kemampuan keuangan sudah terisi apa belum
             if (is_null($keuangan) || $keuangan == 0) {
@@ -308,7 +308,7 @@ class AnalisaMemorandumController extends Controller
             $hasiltaksasi = Midle::taksasi_agunan($enc, (int)$cek[0]->plafon);
 
             $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? 0;
-            // dd($cek[0]);
+            // dd($usulan);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
@@ -329,6 +329,7 @@ class AnalisaMemorandumController extends Controller
                 'max_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->max_plafond),
                 'usulan_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
                 'jangka_waktu' => $request->jangka_waktu,
+                'pengikatan' => $request->pengikatan,
                 'sebelum_realisasi' => $request->sebelum_realisasi,
                 'syarat_tambahan' => $request->syarat_tambahan,
                 'syarat_lainnya' => $request->syarat_lainnya,
@@ -358,6 +359,7 @@ class AnalisaMemorandumController extends Controller
                     'max_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->max_plafond),
                     'usulan_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
                     'jangka_waktu' => $request->jangka_waktu,
+                    'pengikatan' => $request->pengikatan,
                     'sebelum_realisasi' => $request->sebelum_realisasi,
                     'syarat_tambahan' => $request->syarat_tambahan,
                     'syarat_lainnya' => $request->syarat_lainnya,

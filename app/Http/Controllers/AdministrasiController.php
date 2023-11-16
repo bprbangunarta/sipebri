@@ -18,9 +18,7 @@ class AdministrasiController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
-
-            $adm = ($cek[0]->plafon * $cek[0]->b_admin) / 100;
-            $cek[0]->administrasi = (int)$adm;
+            $apht_fiducia = Midle::perhitungan_apht_fiducia($cek[0]->kode_pengajuan);
 
             //cek data ada atau tidak
             $administrasi = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
@@ -28,6 +26,17 @@ class AdministrasiController extends Controller
             //Biaya Provisi
             $provisi = ($cek[0]->plafon * $cek[0]->b_provisi) / 100;
             $cek[0]->provisi = (int)$provisi;
+
+            if (is_null($apht_fiducia)) {
+                $adm = ($cek[0]->plafon * $cek[0]->b_admin) / 100;
+                $cek[0]->administrasi = (int)$adm;
+                $cek[0]->apht = 0;
+                $cek[0]->fiducia = 0;
+            } else {
+                $cek[0]->administrasi = $apht_fiducia->adm;
+                $cek[0]->apht = $apht_fiducia->apht;
+                $cek[0]->fiducia = $apht_fiducia->fiducia;
+            }
 
             if (is_null($administrasi)) {
                 return view('staff.analisa.administrasi', [
