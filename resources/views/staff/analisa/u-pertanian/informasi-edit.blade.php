@@ -33,7 +33,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">SEKTOR EKONOMI</span>
-                            <select class="form-control input-sm form-border" name="jenis_usaha" id="">
+                            <select class="form-control input-sm form-border" name="jenis_usaha" id="" required>
                                 @if (is_null($pertanian->jenis_usaha))
                                     <option value="">--PILIH--</option>
                                 @else
@@ -48,7 +48,7 @@
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">JENIS TANAMAN</span>
-                            <select class="form-control input-sm form-border" name="jenis_tanaman" id="">
+                            <select class="form-control input-sm form-border" name="jenis_tanaman" id="" required>
                                 @if (is_null($detail->jenis_tanaman))
                                     <option value="">--PILIH--</option>
                                 @else

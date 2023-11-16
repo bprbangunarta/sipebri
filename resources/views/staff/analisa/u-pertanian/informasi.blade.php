@@ -32,7 +32,7 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">SEKTOR EKONOMI</span>
-                            <select class="form-control input-sm form-border" name="jenis_usaha" id="">
+                            <select class="form-control input-sm form-border" name="jenis_usaha" id="" required>
                                 <option value="">--PILIH--</option>
                                 <option value="PERTANIAN" {{ old('jenis_usaha') == 'PERTANIAN' ? 'selected' : '' }}>
                                     PERTANIAN
@@ -43,7 +43,7 @@
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">JENIS TANAMAN</span>
-                            <select class="form-control input-sm form-border" name="jenis_tanaman" id="">
+                            <select class="form-control input-sm form-border" name="jenis_tanaman" id="" required>
                                 <option value="">--PILIH--</option>
                                 <option value="PADI KETAN" {{ old('jenis_tanaman') == 'PADI KETAN' ? 'selected' : '' }}>PADI
                                     KETAN</option>
