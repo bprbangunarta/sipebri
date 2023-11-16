@@ -82,8 +82,15 @@ class AdministrasiController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
+            $data2 = [
+                'by_fiducia' =>  (int)str_replace(["Rp", " ", "."], "", $request->by_fiducia),
+            ];
 
-            DB::table('a_administrasi')->insert($data);
+            DB::transaction(function () use ($data, $data2) {
+                DB::table('a_administrasi')->insert($data);
+                DB::table('a_memorandum')->insert($data2);
+            });
+
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -115,8 +122,14 @@ class AdministrasiController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
+            $data2 = [
+                'by_fiducia' =>  (int)str_replace(["Rp", " ", "."], "", $request->by_fiducia),
+            ];
 
-            DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($data);
+            DB::transaction(function () use ($enc, $data, $data2) {
+                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($data);
+                DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data2);
+            });
 
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {

@@ -155,14 +155,21 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="proses_apht" placeholder="Rp." id="proses_apht"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->proses_apht, 0, ',', '.') }}">
+                                                    value="{{ 'Rp. ' . ' ' . number_format($data->apht, 0, ',', '.') }}"
+                                                    @if ($data->apht == 0) @readonly(true) @endif>
                                             </div>
 
-                                            <input type="hidden" class="form-control input-sm form-border text-uppercase" name="lainnya" placeholder="Rp." id="lainnya" value="{{ 'Rp. ' . ' ' . number_format($adm->lainnya, 0, ',', '.') }}">
+                                            {{-- <input type="hidden" class="form-control input-sm form-border text-uppercase"
+                                                name="lainnya" placeholder="Rp." id="lainnya"
+                                                value="{{ 'Rp. ' . ' ' . number_format($adm->lainnya, 0, ',', '.') }}"> --}}
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">BIAYA FIDUCIA</span>
-                                                <input type="text" class="form-control input-sm form-border text-uppercase" name="by_fiducia" placeholder="Rp." id="by_fiducia">
+                                                <input type="text"
+                                                    class="form-control input-sm form-border text-uppercase"
+                                                    name="by_fiducia" placeholder="Rp." id="by_fiducia"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($data->fiducia, 0, ',', '.') }}"
+                                                    @if ($data->fiducia == 0) @readonly(true) @endif>
                                             </div>
                                         </div>
 
