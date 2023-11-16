@@ -87,7 +87,9 @@
                                 value="{{ $data->b_penalti }}">
 
                             <select class="form-control" name="pengikatan" id="pengikatan" required>
-                                <option value="">--PILIH--</option>
+                                <option value="1"
+                                    {{ old('pengikatan') == 1 || $usulan->pengikatan == '1' ? 'selected' : '' }}>Tanpa
+                                    Pengikatan</option>
                                 <option value="2"
                                     {{ old('pengikatan') == 2 || $usulan->pengikatan == '2' ? 'selected' : '' }}>APHT
                                 </option>
@@ -97,9 +99,6 @@
                                 <option value="4"
                                     {{ old('pengikatan') == 4 || $usulan->pengikatan == '4' ? 'selected' : '' }}>APHT dan
                                     FIDUCIA</option>
-                                <option value="1"
-                                    {{ old('pengikatan') == 1 || $usulan->pengikatan == '1' ? 'selected' : '' }}>Tanpa
-                                    Pengikatan</option>
                             </select>
                         </div>
 

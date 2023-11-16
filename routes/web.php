@@ -454,4 +454,6 @@ Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/cetak/notifikasi-kredit', 'cetak.notifikasi-kredit.cetak-notifikasi');
 Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetujuan-kredit');
 
+Route::view('/rekap/analisa', 'rekap.analisa');
+
 require __DIR__ . '/auth.php';
