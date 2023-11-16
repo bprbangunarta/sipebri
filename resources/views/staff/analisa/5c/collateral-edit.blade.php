@@ -164,6 +164,9 @@
                                 <option value="1"
                                     {{ old('stabilitas_harga') == '1' || $collateral->stabilitas_harga == '1' ? 'selected' : '' }}>
                                     BPKB</option>
+                                <option value="0"
+                                {{ old('stabilitas_harga') == '0' || $collateral->stabilitas_harga == '0' ? 'selected' : '' }}>
+                                Lainnya</option>
                             </select>
                         </div>
 

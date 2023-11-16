@@ -82,9 +82,17 @@
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">BIAYA PENALTI (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="b_penalti" id=""
-                                value="{{ $data->b_penalti }}" readonly>
+                            <span class="fw-bold">PENGIKATAN ASURANSI</span>
+                            <input type="hidden" class="form-control text-uppercase" name="b_penalti" id=""
+                                value="{{ $data->b_penalti }}">
+
+                            <select class="form-control" name="pengikatan" id="pengikatan" required>
+                                <option value="">--PILIH--</option>
+                                <option value="2">APHT</option>
+                                <option value="3">Fiducia</option>
+                                <option value="4">APHT dan FIDUCIA</option>
+                                <option value="1">Tanpa Pengikatan</option>
+                            </select>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">

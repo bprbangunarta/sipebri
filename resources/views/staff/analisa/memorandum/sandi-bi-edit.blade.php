@@ -26,7 +26,46 @@
                             </select>
                         </div>
 
-                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">SEKTOR EKONOMI</span>
+                            <select class="form-control input-sm form-border text-uppercase bi_sek_ekonomi_kode"
+                                name="bi_sek_ekonomi_kode" id="" required>
+                                <option value="{{ $sandibi->bi_sek_ekonomi_kode }}" selected>
+                                    {{ $sandibi->bi_sek_ekonomi_kode . ' ' . '-' . ' ' . $sandibi->bi_sek_ekonomi }}
+                                </option>
+                                {{-- Ambil data pada tabel bi_sektor_ekonomi --}}
+                                @foreach ($sektor as $item)
+                                    <option value="{{ $item->sandi }}">
+                                        {{ $item->sandi . ' ' . '-' . ' ' . $item->keterangan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:right;">
+                            <span class="fw-bold">SEKTOR EKONOMI (SLIK)</span>
+                            <select class="form-control input-sm form-border text-uppercase bi_sek_ekonomi_slik"
+                                name="bi_sek_ekonomi_slik" id="" required>
+                                <option value="{{ $sandibi->bi_sek_ekonomi_slik }}" selected>
+                                    {{ $sandibi->bi_sek_ekonomi_slik . ' ' . '-' . ' ' . $sandibi->bi_sektor_ekonomi_slik }}
+                                </option>
+                                {{-- Ambil data pada tabel bi_sektor_ekonimi_slik --}}
+                                @foreach ($slik as $item)
+                                    <option value="{{ $item->sandi }}">
+                                        {{ $item->sandi . ' ' . '-' . ' ' . $item->keterangan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <input type="hidden" class="form-control text-uppercase" name="ket_kewajiban1" id="" placeholder="RP." value="{{ $sandibi->by_fiducia }}">
+                        
+                        <input type="hidden" class="form-control text-uppercase" name="ket_kewajiban2" id="" placeholder="00.00%" value="{{ $sandibi->bagian_dijaminkan }}">
+                    </div>
+
+
+                    <div class="div-right">
+                        <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">PENGGUNAAN DEBITUR</span>
                             <select class="form-control input-sm form-border text-uppercase bi_penggunaan_kode"
                                 name="bi_penggunaan_kode" id="" required>
@@ -42,7 +81,7 @@
                             </select>
                         </div>
 
-                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                        <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">GOLONGAN PENJAMIN</span>
                             <select class="form-control input-sm text-uppercase bi_gol_penjamin_kode"
                                 name="bi_gol_penjamin_kode" id="" required>
@@ -59,21 +98,6 @@
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">BY FIDUCIA (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="ket_kewajiban1" id=""
-                                placeholder="00.00%" value="{{ $sandibi->by_fiducia }}">
-                        </div>
-
-                        <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">BAGIAN YANG DIJAMIN (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="ket_kewajiban2" id=""
-                                placeholder="00.00%" value="{{ $sandibi->bagian_dijaminkan }}">
-                        </div>
-                    </div>
-
-
-                    <div class="div-right">
-                        <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">SUMBER DANA PELUNASAN</span>
                             <select class="form-control input-sm form-border text-uppercase bi_sumber_pelunasan_kode"
                                 name="bi_sumber_pelunasan_kode" id="" required>
@@ -89,7 +113,7 @@
                             </select>
                         </div>
 
-                        <div style="width: 49.5%;float:right;">
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">JENIS USAHA</span>
                             <select class="form-control input-sm form-border text-uppercase bi_jenis_usaha_kode"
                                 name="bi_jenis_usaha_kode" id="" required>
@@ -98,38 +122,6 @@
                                 </option>
                                 {{-- Ambil data pada tabel bi_jenis_usaha --}}
                                 @foreach ($jenis as $item)
-                                    <option value="{{ $item->sandi }}">
-                                        {{ $item->sandi . ' ' . '-' . ' ' . $item->keterangan }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">SEKTOR EKONOMI</span>
-                            <select class="form-control input-sm form-border text-uppercase bi_sek_ekonomi_kode"
-                                name="bi_sek_ekonomi_kode" id="" required>
-                                <option value="{{ $sandibi->bi_sek_ekonomi_kode }}" selected>
-                                    {{ $sandibi->bi_sek_ekonomi_kode . ' ' . '-' . ' ' . $sandibi->bi_sek_ekonomi }}
-                                </option>
-                                {{-- Ambil data pada tabel bi_sektor_ekonomi --}}
-                                @foreach ($sektor as $item)
-                                    <option value="{{ $item->sandi }}">
-                                        {{ $item->sandi . ' ' . '-' . ' ' . $item->keterangan }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">SEKTOR EKONOMI (SLIK)</span>
-                            <select class="form-control input-sm form-border text-uppercase bi_sek_ekonomi_slik"
-                                name="bi_sek_ekonomi_slik" id="" required>
-                                <option value="{{ $sandibi->bi_sek_ekonomi_slik }}" selected>
-                                    {{ $sandibi->bi_sek_ekonomi_slik . ' ' . '-' . ' ' . $sandibi->bi_sektor_ekonomi_slik }}
-                                </option>
-                                {{-- Ambil data pada tabel bi_sektor_ekonimi_slik --}}
-                                @foreach ($slik as $item)
                                     <option value="{{ $item->sandi }}">
                                         {{ $item->sandi . ' ' . '-' . ' ' . $item->keterangan }}
                                     </option>

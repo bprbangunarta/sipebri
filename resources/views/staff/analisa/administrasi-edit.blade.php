@@ -158,12 +158,11 @@
                                                     value="{{ 'Rp. ' . ' ' . number_format($adm->proses_apht, 0, ',', '.') }}">
                                             </div>
 
+                                            <input type="hidden" class="form-control input-sm form-border text-uppercase" name="lainnya" placeholder="Rp." id="lainnya" value="{{ 'Rp. ' . ' ' . number_format($adm->lainnya, 0, ',', '.') }}">
+
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">LAINNYA</span>
-                                                <input type="text"
-                                                    class="form-control input-sm form-border text-uppercase"
-                                                    name="lainnya" placeholder="Rp." id="lainnya"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->lainnya, 0, ',', '.') }}">
+                                                <span class="fw-bold">BIAYA FIDUCIA</span>
+                                                <input type="text" class="form-control input-sm form-border text-uppercase" name="by_fiducia" placeholder="Rp." id="by_fiducia">
                                             </div>
                                         </div>
 
