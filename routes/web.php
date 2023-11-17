@@ -451,7 +451,9 @@ Route::middleware('auth')->group(function () {
 
 Route::view('/analisa/index', 'analisa.index');
 Route::view('/anuitas', 'perhitungan.anuitas');
-Route::view('/cetak/notifikasi-kredit', 'cetak.notifikasi-kredit.cetak-notifikasi');
+Route::view('/cetak/notifikasi-kredit-tanah', 'cetak.notifikasi-kredit.cetak-notifikasi-tanah');
+Route::view('/cetak/notifikasi-kredit-bpkb', 'cetak.notifikasi-kredit.cetak-notifikasi-bpkb');
+Route::view('/cetak/notifikasi-kredit-bpkb-nonbpkb', 'cetak.notifikasi-kredit.cetak-notifikasi-bpkb-nonbpkb');
 Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetujuan-kredit');
 
 Route::view('/rekap/analisa', 'rekap.analisa');

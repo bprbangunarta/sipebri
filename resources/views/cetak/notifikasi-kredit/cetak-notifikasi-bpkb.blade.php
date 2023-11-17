@@ -92,17 +92,17 @@
             <tr>
                 <td style="width: 14%;">Nomor</td>
                 <td style="width: 2%;">:</td>
-                <td> </td>
+                <td>233/NK/PBA/VIII/2023</td>
             </tr>
             <tr>
                 <td style="width: 14%;">Tanggal</td>
                 <td style="width: 2%;">:</td>
-                <td> </td>
+                <td>16 Agustus 2023</td>
             </tr>
             <tr>
                 <td style="width: 14%;">Kode Nasabah</td>
                 <td style="width: 2%;">:</td>
-                <td> </td>
+                <td>00028728-004</td>
             </tr>
         </table>
 
@@ -261,8 +261,14 @@
                 <td style="width: 2%;">:</td>
                 <td>Rp 0 (dengan nilai pertanggungan Rp. 0 )</td>
             </tr>
+            <tr style="height: 20px; background-color:blueviolet;">
+                <td style="width: 2%;"></td>
+                <td style="width: 30%;"></td>
+                <td style="width: 2%;"></td>
+                <td></td>
+            </tr>
             <tr>
-                <td style="width: 2%;">11.</td>
+                <td style="width: 2%;">12.</td>
                 <td style="width: 30%;">Untuk jaminan Kendaraan</td>
                 <td style="width: 2%;">:</td>
                 <td></td>
@@ -299,7 +305,7 @@
             </tr>
             <tr>
                 <td style="width: 2%;"></td>
-                <td style="width: 30%; text-align:justify;" colspan="3">b. Apabla debitur lalai dari kewajiban atau
+                <td style="width: 30%; text-align:justify;" colspan="3">b. Apabila debitur lalai dari kewajiban atau
                     tidak dapat
                     mengangsur bunga dan atau pokok pinjaman selama 3 (tiga )
                     bulan , maka Bank berhak melelang atau menjual dibawah tangan , barang jaminan kendaraan tersebut
@@ -308,7 +314,8 @@
             </tr>
             <tr>
                 <td style="width: 2%;"></td>
-                <td style="width: 30%; text-align:justify;" colspan="3">c. Jika batas maksimal pinjaman berikut bunga
+                <td style="width: 30%; text-align:justify;" colspan="3">c. Jika batas maksimal pinjaman berikut
+                    bunga
                     telah melebihi
                     jaminan yang dimiliki debitur, maka dengan ini
                     Debitur menyatakan pula bahwa kepemilikan barang-barang jaminan kendaraan tersebut telah dialihkan
@@ -328,47 +335,26 @@
                     dalam pasal 372 KUHP.
                 </td>
             </tr>
-            <tr>
-                <td style="width: 2%;">13.</td>
-                <td style="width: 30%;">Untuk jaminan Non Kendaraan</td>
-                <td style="width: 2%;">:</td>
+            <tr style="height: 15px;">
+                <td style="width: 2%;"></td>
+                <td style="width: 30%;"></td>
+                <td style="width: 2%;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="width: 2%;"></td>
-                <td style="width: 30%; text-align:justify;" colspan="3">a. Debitur tidak akan menjaminkan atau
-                    menggunakannnya sebagai
-                    jaminan pinjaman, menjual atau memindahtangankan dengan cara apapun kepada pihak manapun sampai
-                    seluruh Hutang dinyatakan lunas
-                    oleh pihak Bank.</td>
-            </tr>
-            <tr>
-                <td style="width: 2%;"></td>
-                <td style="width: 30%; text-align:justify;" colspan="3">b. Apabila debitur lalai dari kewajiban
-                    atau tidak dapat
-                    mengangsur bunga dan atau pokok pinjaman selama 3 (tiga
-                    ) bulan atau lebih, maka Bank berhak melakukan tindakan-tindakan yang mendorong untuk penyelesaian
-                    tunggakan termasuk dalam hal ini BANK melakukan tindakan pemasangan plakat “TANAH INI SEDANG DI
-                    JAMINKAN KE BPR BANGUNARTA" sampai tunggakan tersebut dapat terselesaikan atau Bank melakukan
-                    upaya-upaya yang mengarah pada penguasaan agunan untuk penyelesaian kredit tersebut dan dalam hal
-                    ini Debitur tidak berhak untuk menolak, mempersulit, menghalang-halangi maaupun menghambat,</td>
-            </tr>
-            <tr>
-                <td style="width: 2%;">14.</td>
-                <td style="width: 30%; text-align:justify;" colspan="3">Debitur tidak diperbolehkan memberikan
+                <td style="width: 30%; text-align:justify;" colspan="4">13. Debitur tidak diperbolehkan memberikan
                     suatu imbalan dalam
-                    bentuk apapun kepada pejabat dan atau karyawan PT BPR PAMANUKAN BANGUNARTA berkenaan dengan
-                    persetujuan
-                    pemberian kredit, kecuali jasa survey sebesar Rp, 20.000,- yang dibayar oleh debitur pada saat
-                    survey yang disertakan bukti penerimaan uang jasa
-                    survey. Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada
-                    Debitur dan Pejabat atau petugas BANK dapat dikenakan sanksi sesuai ketentuan BANK.</td>
+                    bentuk apapun kepada pejabat dan atau karyawan PT
+                    BPR PAMANUKAN BANGUNARTA berkenaan dengan persetujuan pemberian kredit, kecuali jasa survey sebesar
+                    Rp, 20.000,- yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa
+                    survey. Apabila
+                    dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan Pejabat
+                    atau petugas BANK dapat dikenakan sanksi sesuai ketentuan BANK.</td>
+                <td></td>
             </tr>
             <tr>
-                <td style="width: 2%;">15.</td>
-                <td style="width: 30%; text-align:justify;" colspan="3">Notifikasi Kredit ini merupakan bagian yang
-                    tidak dapat
-                    terpisahkan dari Perjanjian Kredit berikut syarat umum
+                <td style="width: 30%; text-align:justify;" colspan="4">14. Notifikasi Kredit ini merupakan bagian
+                    yang tidak dapat terpisahkan dari Perjanjian Kredit berikut syarat umum
                     Perjanjian Kredit Konsumsi Lainnya PT. BPR PAMANUKAN BANGUNARTA. Sebagai tanda persetujuan
                     Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas.
                     Demikian agar Bapak / Ibu maklum.</td>
@@ -379,9 +365,8 @@
 
         <table style="font-size: 13px;">
             <tr>
-                <td style="text-align:justify;">Surat ini tidak memerlukan tanda tangan
-                    dari pejabat Bank karena dicetak secara
-                    Komputerisasi</td>
+                <td style="text-align:justify;">Surat ini tidak memerlukan tanda tangan dari pejabat Bank karena
+                    dicetak secara Komputerisasi</td>
                 <td style="width: 30%;"></td>
                 <td style="text-align: justify;">Pamanukan, 16 Agustus 2023 <br>
                     Dengan ini saya menyatakan telah membaca,
@@ -392,7 +377,9 @@
         <table style="font-size: 13px; margin-top: 70px;">
             <tr>
                 <td style="width: 50%"></td>
-                <td style="width: 50%; text-align:center; margin-top: 10px; position:relative;">Debitur</td>
+                <td style="width: 50%; text-align:center; margin-top: 10px; position:relative;">
+                    <div style="border-bottom: 1px solid black; display:inline-block; width: 60%;"></div><br>Debitur
+                </td>
             </tr>
         </table>
         <p>Catatan : <br> Adapun kelengkapan dokumen yang harus diserahkan saat realisasi kredit adalah :</p>
