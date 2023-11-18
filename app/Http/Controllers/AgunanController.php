@@ -31,9 +31,22 @@ class AgunanController extends Controller
                 'catatan' => '',
                 'input_user' => 'required',
             ]);
+            $cek['atas_nama'] = strtoupper($request->atas_nama);
+            $cek['merek'] = strtoupper($request->merek);
             $cek['is_entry'] = 1;
             $cek['created_at'] = now();
-            // $cek = array_map('strtoupper', $cek);
+
+            //Cek data kendaraan
+            if ($request->jenis_agunan_kode == '02') {
+                $jenis_agunan = 'Kendaraan Bermotor Roda 2';
+            } elseif ($request->jenis_agunan_kode == '02') {
+                $jenis_agunan = 'Kendaraan Bermotor Roda 4';
+            } elseif (is_null($request->jenis_agunan_kode)) {
+                $jenis_agunan = null;
+            }
+
+            $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
+
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
