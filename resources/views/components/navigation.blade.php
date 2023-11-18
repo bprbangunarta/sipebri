@@ -264,96 +264,95 @@
                             Persetujuan Kredit
                         </a>
                     </li>
-                @endcan
 
-                <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
-                    <a href="{{ route('notifikasi_kredit') }}" title="Cetak Notifikasi">
-                        <i class="fa fa-bell-o"></i>
-                        Notifikasi Kredit
-                    </a>
-                </li>
+                    <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('notifikasi_kredit') }}" title="Cetak Notifikasi">
+                            <i class="fa fa-bell-o"></i>
+                            Notifikasi Kredit
+                        </a>
+                    </li>
 
-                <li class="{{ request()->is('themes/fiducia') ? 'active' : '' }}">
-                    <a href="{{ route('fiducia') }}" title="Perhitungan Kredit">
-                        <i class="fa fa-truck"></i>
-                        Penjaminan Fiducia
-                    </a>
-                </li>
+                    <li class="{{ request()->is('themes/fiducia') ? 'active' : '' }}">
+                        <a href="{{ route('fiducia') }}" title="Perhitungan Kredit">
+                            <i class="fa fa-truck"></i>
+                            Penjaminan Fiducia
+                        </a>
+                    </li>
 
-                <li class="{{ request()->is('themes/notifikasi/perjanjian/kredit') ? 'active' : '' }}">
-                    <a href="{{ route('perjanjian.kredit') }}" title="Cetak Perjanjian Kredit">
-                        <i class="fa fa-exclamation-circle"></i>
-                        Perjanjian Kredit
-                    </a>
-                </li>
+                    <li class="{{ request()->is('themes/notifikasi/perjanjian/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('perjanjian.kredit') }}" title="Cetak Perjanjian Kredit">
+                            <i class="fa fa-exclamation-circle"></i>
+                            Perjanjian Kredit
+                        </a>
+                    </li>
 
-                <li class="{{ request()->is('themes/cetak/penolakan/kredit') ? 'active' : '' }}">
-                    <a href="{{ route('data_penolakan.kredit') }}" title="Cetak Penolakan">
-                        <i class="fa fa-close"></i>
-                        Penolakan Kredit
-                    </a>
-                </li>
+                    <li class="{{ request()->is('themes/cetak/penolakan/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('data_penolakan.kredit') }}" title="Cetak Penolakan">
+                            <i class="fa fa-close"></i>
+                            Penolakan Kredit
+                        </a>
+                    </li>
 
-            </ul>
-        </li>
+                </ul>
+            </li>
 
-        <li class="treeview">
-            <a href="#">
-                <i class="fa fa-folder-open"></i>
-                <span>Laporan</span>
-                <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li class="">
-                    <a href="#">
-                        <i class="fa fa-bank"></i>
-                        Fasilitas Kredit
-                    </a>
-                </li>
-                <li class="">
-                    <a href="#">
-                        <i class="fa fa-flag"></i>
-                        Realisasi Kredit
-                    </a>
-                </li>
-                <li class="">
-                    <a href="#">
-                        <i class="fa fa-close"></i>
-                        Penolakan Kredit
-                    </a>
-                </li>
-                <li class="">
-                    <a href="#">
-                        <i class="fa fa-users"></i>
-                        Pendaftaran Kredit
-                    </a>
-                </li>
-                <li class="">
-                    <a href="#">
-                        <i class="fa fa-hourglass-start"></i>
-                        Survey dan Analisa
-                    </a>
-                </li>
-            </ul>
-        </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-open"></i>
+                    <span>Laporan</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-bank"></i>
+                            Fasilitas Kredit
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-flag"></i>
+                            Realisasi Kredit
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-close"></i>
+                            Penolakan Kredit
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-users"></i>
+                            Pendaftaran Kredit
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-hourglass-start"></i>
+                            Survey dan Analisa
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-        <li class="header">ALAT BANTU</li>
-        <li class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
-            <a href="{{ route('flat') }}" title="Perhitungan Kredit">
-                <i class="fa fa-calculator"></i>
-                Simulasi Kredit
-            </a>
-        </li>
-        <li class="{{ request()->is('perhitungan/simulasi') ? 'active' : '' }}">
-            <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
-                <i class="fa fa-calculator"></i>
-                Simulasi Asuransi
-            </a>
-        </li>
+            <li class="header">ALAT BANTU</li>
+            <li class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
+                <a href="{{ route('flat') }}" title="Perhitungan Kredit">
+                    <i class="fa fa-calculator"></i>
+                    Simulasi Kredit
+                </a>
+            </li>
+            <li class="{{ request()->is('perhitungan/simulasi') ? 'active' : '' }}">
+                <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
+                    <i class="fa fa-calculator"></i>
+                    Simulasi Asuransi
+                </a>
+            </li>
 
-        {{-- @can('cetak pengajuan')
+            {{-- @can('cetak pengajuan')
                 <li class="{{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail') ? 'active' : '' }}">
                     <a href="{{ route('cetak.pengajuan.index') }}" title="Berkas Pengajuan">
                         <i class="fa fa-print"></i>
@@ -421,7 +420,7 @@
                 </li>
             @endcan --}}
 
-        {{-- <li class="header">SIMULASI</li>
+            {{-- <li class="header">SIMULASI</li>
             <li class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
                 <a href="{{ route('flat') }}" title="Perhitungan Kredit">
                     <i class="fa fa-calculator"></i>
@@ -436,21 +435,21 @@
             </li> --}}
 
 
-        <li class="header">LAPORAN</li>
+            <li class="header">LAPORAN</li>
 
-        <li>
-            <a href="#" title="Data Global">
-                <i class="fa fa-file-text-o"></i>
-                <span>Data Global</span>
-            </a>
-        </li>
+            <li>
+                <a href="#" title="Data Global">
+                    <i class="fa fa-file-text-o"></i>
+                    <span>Data Global</span>
+                </a>
+            </li>
 
-        <li>
-            <a href="#" title="Sudah Survey">
-                <i class="fa fa-file-text-o"></i>
-                <span>Sudah Survey</span>
-            </a>
-        </li>
-    </ul>
-</section>
+            <li>
+                <a href="#" title="Sudah Survey">
+                    <i class="fa fa-file-text-o"></i>
+                    <span>Sudah Survey</span>
+                </a>
+            </li>
+        </ul>
+    </section>
 </aside>
