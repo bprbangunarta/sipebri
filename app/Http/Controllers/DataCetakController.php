@@ -571,6 +571,19 @@ class DataCetakController extends Controller
         ]);
     }
 
+    public function cetak_analisa_kredit_detail(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+
+            return view('cetak.analisa-kredit.cetak-analisa-kredit', [
+                'data' => $request->query('pengajuan'),
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
     public function data_penolakan_kredit(Request $request)
     {
         $query = DB::table('data_pengajuan')

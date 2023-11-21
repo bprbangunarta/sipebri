@@ -429,6 +429,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');
             Route::get('/cetak/analisa/kredit', 'analisa_kredit')->name('analisa.kredit');
+            Route::get('/cetak/analisa/kredit/detail', 'cetak_analisa_kredit_detail')->name('cetak.analisa_kredit');
             Route::get('/cetak/penolakan/kredit', 'data_penolakan_kredit')->name('data_penolakan.kredit');
         });
 

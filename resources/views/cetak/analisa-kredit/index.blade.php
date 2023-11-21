@@ -76,8 +76,8 @@
                                                 </a>
 
                                                 <p style="margin-top:-5px;"></p>
-                                                <a href="#" data-toggle="modal" data-target="#modal-catatan"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }}">
+                                                <a
+                                                    href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}">
                                                     <span class="btn bg-blue" style="width: 120px;">Cetak Surat</span>
                                                 </a>
 
