@@ -465,4 +465,5 @@ Route::prefix('cetak-berkas')->group(function () {
     Route::view('notifikasi-kredit/bpkp-nonbpkp', 'cetak-berkas.notifikasi-kredit.bpkp-nonbpkp');
 });
 
+Route::view('/usaha_perdagangan', 'cetak.analisa.usaha_perdagangan');
 require __DIR__ . '/auth.php';
