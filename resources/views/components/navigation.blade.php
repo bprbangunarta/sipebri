@@ -306,31 +306,31 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="">
-                        <a href="#">
+                        <a href="/laporan/fasilitas">
                             <i class="fa fa-bank"></i>
                             Fasilitas Kredit
                         </a>
                     </li>
                     <li class="">
-                        <a href="#">
+                        <a href="/laporan/realisasi">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
                         </a>
                     </li>
                     <li class="">
-                        <a href="#">
+                        <a href="/laporan/penolakan">
                             <i class="fa fa-close"></i>
                             Penolakan Kredit
                         </a>
                     </li>
                     <li class="">
-                        <a href="#">
+                        <a href="/laporan/pendaftaran">
                             <i class="fa fa-users"></i>
                             Pendaftaran Kredit
                         </a>
                     </li>
                     <li class="">
-                        <a href="#">
+                        <a href="/laporan/survey">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
                         </a>
