@@ -22,10 +22,12 @@
                             <div class="box-tools">
                                 <form action="#" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name" value="" placeholder="Search">
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="" placeholder="Search">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -45,15 +47,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="text-uppercase">
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">17/11/2023</td>
-                                        <td class="text-center">00339950</td>
-                                        <td>Zulfadli Rizal Zulfadli Rizal</td>
-                                        <td>KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG PROVINSI JAWA BARAT</td>
-                                        <td class="text-right">10.000.000.000</td>
-                                        <td class="text-center">Disetujui</td>
-                                    </tr>
+                                    @php
+                                        $no = 1;
+                                    @endphp
+                                    @forelse ($data as $item)
+                                        <tr class="text-uppercase">
+                                            <td class="text-center">{{ $no }}</td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
+                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                            <td>{{ $item->nama_nasabah }}</td>
+                                            <td>{{ $item->alamat_ktp }}</td>
+                                            <td class="text-right">{{ 'Rp. ' . ' ' . $item->plafon }}</td>
+                                            <td class="text-center">{{ $item->status }}</td>
+                                        </tr>
+                                        @php
+                                            $no++;
+                                        @endphp
+                                    @empty
+                                        <tr>
+                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

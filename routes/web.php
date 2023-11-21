@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\CetakAnalisaController;
+use App\Http\Controllers\CetakLaporanController;
 use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\Admin\HakAksesController;
@@ -448,6 +449,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/perhitungan/premi', 'add')->name('premi');
         Route::get('/perhitungan/simulasi_ajk', 'sheet')->name('sheet');
     });
+
+    //====Route Cetak Laporan====//
+    Route::controller(CetakLaporanController::class)->group(function () {
+        Route::get('/laporan/fasilitas', 'laporan_fasilitas')->name('laporan.fasilitas');
+        Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
+        Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
+    });
+    //====Route Cetak Laporan====//
+
 });
 
 Route::view('/analisa/index', 'analisa.index');
@@ -459,9 +469,9 @@ Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetu
 
 Route::view('/rekap/analisa', 'rekap.analisa');
 
-Route::view('/laporan/fasilitas', 'laporan.fasilitas');
-Route::view('/laporan/realisasi', 'laporan.realisasi');
-Route::view('/laporan/penolakan', 'laporan.penolakan');
+// Route::view('/laporan/fasilitas', 'laporan.fasilitas');
+// Route::view('/laporan/realisasi', 'laporan.realisasi');
+// Route::view('/laporan/penolakan', 'laporan.penolakan');
 Route::view('/laporan/pendaftaran', 'laporan.pendaftaran');
 Route::view('/laporan/survey', 'laporan.survey-analisa');
 
