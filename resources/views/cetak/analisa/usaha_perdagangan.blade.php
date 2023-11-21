@@ -244,14 +244,16 @@
         </div>
         <br><br><br><br>
         <div class="border-1">
-            <div class="penghasilan">
-                <table style="border: 1px black; width: 70%;">
+            <div style="margin: 0;">
+                <table style="width: 100%; margin-top: -55px; border-collapse: collapse;">
                     <tr>
-                        <td>Jumlah Barang Dagangan (Modal)</td>
-                        <td>Jumlah Barang Dagangan (Modal)</td>
+                        <td>Jumlah Barang Dagang (Modal)</td>
+                        <td>Jumlah Barang Dagang (Modal)</td>
+                        <td>Jumlah Barang Dagang (Modal)</td>
                     </tr>
                 </table>
             </div>
+
         </div>
         <br><br><br><br>
 
