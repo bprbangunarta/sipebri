@@ -475,6 +475,8 @@ Route::prefix('cetak-berkas')->group(function () {
     Route::view('notifikasi-kredit/tanah', 'cetak-berkas.notifikasi-kredit.tanah');
     Route::view('notifikasi-kredit/bpkp', 'cetak-berkas.notifikasi-kredit.bpkb');
     Route::view('notifikasi-kredit/bpkp-nonbpkp', 'cetak-berkas.notifikasi-kredit.bpkp-nonbpkp');
+
+    Route::view('analisa-kredit', 'cetak-berkas.analisa-kredit.index');
 });
 
 Route::view('/usaha_perdagangan', 'cetak.analisa.usaha_perdagangan');
