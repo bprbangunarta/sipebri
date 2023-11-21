@@ -20,7 +20,8 @@ class CetakLaporanController extends Controller
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*'
-            );
+            )->orderBy('data_pengajuan.created_at', 'asc');
+
         $data = $query->paginate(7);
 
         return view('laporan.fasilitas', [
@@ -40,7 +41,7 @@ class CetakLaporanController extends Controller
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-            );
+            )->orderBy('data_pengajuan.created_at', 'asc');
         $data = $query->paginate(7);
 
         return view('laporan.realisasi', [
@@ -59,7 +60,7 @@ class CetakLaporanController extends Controller
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-            );
+            )->orderBy('data_pengajuan.created_at', 'asc');
         $data = $query->paginate(7);
 
         return view('laporan.penolakan', [
@@ -75,7 +76,7 @@ class CetakLaporanController extends Controller
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-            );
+            )->orderBy('data_pengajuan.created_at', 'asc');
         $data = $query->paginate(7);
         // dd($data);
         return view('laporan.pendaftaran', [
@@ -98,7 +99,7 @@ class CetakLaporanController extends Controller
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-            );
+            )->orderBy('data_pengajuan.created_at', 'asc');
         $data = $query->paginate(7);
         // dd($data);
         return view('laporan.survey-analisa', [
