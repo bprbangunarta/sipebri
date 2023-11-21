@@ -20,10 +20,10 @@
                             <h3 class="box-title">SURVEY DAN ANALISA</h3>
 
                             <div class="box-tools">
-                                <form action="#" method="GET">
+                                <form action="{{ route('laporan.survey-analisa') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs pull-right" style="width: 335px;">
                                         <input type="date" class="form-control pull-left" style="width: 150px;"
-                                            name="tgl1" id="tgl1" value="">
+                                            name="tgl1" id="tgls1" value="" required>
 
                                         <input type="date" class="form-control pull-right" style="width: 150px;"
                                             name="tgl2" id="tgl2" value="">
