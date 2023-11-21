@@ -21,7 +21,7 @@
 
                             <div class="box-tools">
                                 <form action="{{ route('laporan.survey-analisa') }}" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs pull-right" style="width: 335px;">
+                                    <div class="input-group input-group-sm hidden-xs pull-right" style="width: 370px;">
                                         <input type="date" class="form-control pull-left" style="width: 150px;"
                                             name="tgl1" id="tgls1" value="" required>
 
@@ -29,8 +29,10 @@
                                             name="tgl2" id="tgl2" value="">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-primary"><i
+                                            <button type="submit" class="btn btn-primary" style="margin-right: 3px;"><i
                                                     class="fa fa-filter"></i></button>
+                                            <a href="{{ route('laporan.survey-analisa') }}" class="btn btn-primary"
+                                                title="Refresh"><i class="fa fa-refresh" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                 </form>
