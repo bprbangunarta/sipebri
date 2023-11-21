@@ -459,6 +459,12 @@ Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetu
 
 Route::view('/rekap/analisa', 'rekap.analisa');
 
+Route::view('/laporan/fasilitas', 'laporan.fasilitas');
+Route::view('/laporan/realisasi', 'laporan.realisasi');
+Route::view('/laporan/penolakan', 'laporan.penolakan');
+Route::view('/laporan/pendaftaran', 'laporan.pendaftaran');
+Route::view('/laporan/survey', 'laporan.survey-analisa');
+
 Route::prefix('cetak-berkas')->group(function () {
     Route::view('notifikasi-kredit/tanah', 'cetak-berkas.notifikasi-kredit.tanah');
     Route::view('notifikasi-kredit/bpkp', 'cetak-berkas.notifikasi-kredit.bpkb');
