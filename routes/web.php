@@ -455,6 +455,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/fasilitas', 'laporan_fasilitas')->name('laporan.fasilitas');
         Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
         Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
+        Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
+        Route::get('/laporan/survey', 'laporan_survey_analisa')->name('laporan.survey-analisa');
     });
     //====Route Cetak Laporan====//
 
@@ -468,12 +470,6 @@ Route::view('/cetak/notifikasi-kredit-bpkb-nonbpkb', 'cetak.notifikasi-kredit.ce
 Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetujuan-kredit');
 
 Route::view('/rekap/analisa', 'rekap.analisa');
-
-// Route::view('/laporan/fasilitas', 'laporan.fasilitas');
-// Route::view('/laporan/realisasi', 'laporan.realisasi');
-// Route::view('/laporan/penolakan', 'laporan.penolakan');
-Route::view('/laporan/pendaftaran', 'laporan.pendaftaran');
-Route::view('/laporan/survey', 'laporan.survey-analisa');
 
 Route::prefix('cetak-berkas')->group(function () {
     Route::view('notifikasi-kredit/tanah', 'cetak-berkas.notifikasi-kredit.tanah');

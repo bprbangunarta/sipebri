@@ -9,18 +9,20 @@ class CetakLaporanController extends Controller
 {
     public function laporan_fasilitas()
     {
+        $name = request('name');
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->where(function ($query) {
-                $query->where('data_pengajuan.status', '=', 'Disetujui')
-                    ->where('data_pengajuan.on_current', '=', 0);
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->where(function ($query) use ($name) {
+                $query->orWhere('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%');
             })
             ->select(
                 'data_pengajuan.*',
-                'data_nasabah.*',
+                'data_nasabah.*'
             );
         $data = $query->paginate(7);
-        // dd($data);
+
         return view('laporan.fasilitas', [
             'data' => $data,
         ]);
@@ -60,7 +62,46 @@ class CetakLaporanController extends Controller
             );
         $data = $query->paginate(7);
 
-        return view('laporan.realisasi', [
+        return view('laporan.penolakan', [
+            'data' => $data,
+        ]);
+    }
+
+    public function laporan_pendaftaran()
+    {
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+            );
+        $data = $query->paginate(7);
+        // dd($data);
+        return view('laporan.pendaftaran', [
+            'data' => $data,
+        ]);
+    }
+
+    public function laporan_survey_analisa()
+    {
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->whereIn('data_pengajuan.tracking', [
+                'Penjadwalan',
+                'Proses Survei',
+                'Proses Analisa',
+                'Naik Kasi',
+                'Naik Komite I',
+                'Naik Komite II'
+            ])
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+            );
+        $data = $query->paginate(7);
+        // dd($data);
+        return view('laporan.survey-analisa', [
             'data' => $data,
         ]);
     }

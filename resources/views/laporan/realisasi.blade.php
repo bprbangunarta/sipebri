@@ -62,7 +62,7 @@
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-right">{{ 'Rp. ' . ' ' . $item->plafon }}</td>
+                                            <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center">{{ $item->status }}</td>
                                         </tr>
                                         @php
