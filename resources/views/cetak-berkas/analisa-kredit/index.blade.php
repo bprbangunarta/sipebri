@@ -659,13 +659,6 @@
                     {{ 'Rp.' . ' ' . number_format($pertanian->pinjaman_bank, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">14.</td>
-                <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
-                <td style="border:1px solid black;text-align:right;">
-                    {{ 'Rp.' . ' ' . number_format($pertanian->penambahan, 0, ',', '.') }} &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">#</td>
                 <th style="border:1px solid black;">&nbsp; Total</th>
                 <th style="border:1px solid black;text-align:right;">
@@ -692,6 +685,11 @@
                 <td>Saving Pokok</td>
                 <td class="text-center" width="3%">:</td>
                 <td>{{ 'Rp.' . ' ' . number_format($pertanian->saving, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td>Proyeksi Penambahan</td>
+                <td class="text-center" width="3%">:</td>
+                <td>{{ 'Rp.' . ' ' . number_format($pertanian->penambahan, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>Pendapatan Perbulan</td>
