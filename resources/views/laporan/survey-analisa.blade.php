@@ -20,10 +20,10 @@
                             <h3 class="box-title">SURVEY DAN ANALISA</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('laporan.survey-analisa') }}" method="GET">
+                                <form method="get" action="{{ route('laporan.survey') }}">
                                     <div class="input-group input-group-sm hidden-xs pull-right" style="width: 370px;">
                                         <input type="date" class="form-control pull-left" style="width: 150px;"
-                                            name="tgl1" id="tgls1" value="" required>
+                                            name="tgl1" id="tgl1" value="" required>
 
                                         <input type="date" class="form-control pull-right" style="width: 150px;"
                                             name="tgl2" id="tgl2" value="">
@@ -31,7 +31,7 @@
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn btn-primary" style="margin-right: 3px;"><i
                                                     class="fa fa-filter"></i></button>
-                                            <a href="{{ route('laporan.survey-analisa') }}" class="btn btn-primary"
+                                            <a href="{{ route('laporan.survey') }}" class="btn btn-primary"
                                                 title="Refresh"><i class="fa fa-refresh" aria-hidden="true"></i></a>
                                         </div>
                                     </div>
