@@ -147,7 +147,15 @@ Route::middleware('auth')->group(function () {
 
         //======Pendaftaran Nasabah======//
         Route::controller(PengajuanController::class)->group(function () {
-            Route::get('/pengajuan', 'index')->name('pengajuan.index');
+
+            Route::group(['middleware' => ['role:Customer Service']], function () {
+                Route::get('/pengajuan', 'index')->name('pengajuan.index');
+            });
+
+            Route::group(['middleware' => ['role:Head Teller|Kabag Operasional']], function () {
+                Route::get('/otorisasi/pengajuan', 'otorisasi')->name('pengajuan.otorisasi');
+            });
+
             Route::get('/data/pengajuan', 'all')->name('pengajuan.data');
             Route::get('/pengajuan/edit', 'edit')->name('pengajuan.edit');
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
@@ -211,7 +219,10 @@ Route::middleware('auth')->group(function () {
         });
 
         // Cetak Berkas Pengajuan
-        Route::get('/cetak/pengajuan', [CetakController::class, 'index_pengajuan'])->name('cetak.pengajuan.index');
+        Route::group(['middleware' => ['role:Customer Service']], function () {
+            Route::get('/cetak/pengajuan', [CetakController::class, 'index_pengajuan'])->name('cetak.pengajuan.index');
+        });
+
         Route::get('/cetak/pengajuan/detail', [CetakController::class, 'pengajuan'])->name('cetak.pengajuan');
         Route::get('/cetak/permohonan/kredit', [CetakController::class, 'permohonan_kredit'])->name('permohonan.kredit');
         Route::get('/cetak/slik', [DataCetakController::class, 'slik'])->name('data.slik');
@@ -223,7 +234,11 @@ Route::middleware('auth')->group(function () {
 
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
-            Route::get('/penjadwalan', 'index')->name('analisa.penjadwalan');
+
+            Route::group(['middleware' => ['role:Kasi Analis|Kepala Kantor Kas']], function () {
+                Route::get('/penjadwalan', 'index')->name('analisa.penjadwalan');
+            });
+
             Route::get('/penjadwalan/{id}', 'edit')->name('analisa.editpenjadwalan');
             Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
         });
@@ -267,7 +282,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('themes')->group(function () {
         // Route::view('/dashboard', 'dashboard.index');
         ROute::controller(AnalisaController::class)->group(function () {
-            Route::get('/permohonan/analisa', 'index')->name('permohonan.analisa');
+
+            Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/permohonan/analisa', 'index')->name('permohonan.analisa');
+            });
+
+
             Route::get('/permohonan/data_jadul/{pengajuan}', 'data_jadul')->name('permohonan.data_jadul');
             Route::post('/permohonan/data_jadul', 'simpanjadul')->name('permohonan.simpanjadul');
         });
@@ -401,15 +421,26 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(KomiteController::class)->group(function () {
-            Route::get('/komite/kredit', 'index')->name('komite.kredit');
+
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/komite/kredit', 'index')->name('komite.kredit');
+            });
+
             Route::post('/komite/kredit/data', 'getdata')->name('komite.getdata');
             Route::post('/komite/kredit', 'simpan')->name('komite.simpan');
             Route::get('/komite/kredit/catatan/{pengajuan}', 'catatan')->name('komite.catatan');
-            Route::get('/komite/kredit/survei/analisa', 'survei_analisa')->name('survei.analisa');
+
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi']], function () {
+                Route::get('/komite/kredit/survei/analisa', 'survei_analisa')->name('survei.analisa');
+            });
         });
 
         Route::controller(NotifikasiController::class)->group(function () {
-            Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
+
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
+            });
+
             Route::get('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
             Route::get('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
             Route::post('/penolakan/simpan', 'simpan_penolakan')->name('penolakan.simpan');
@@ -417,10 +448,18 @@ Route::middleware('auth')->group(function () {
 
 
         Route::controller(DataCetakController::class)->group(function () {
-            Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
+
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
+            });
+
             Route::get('/notifikasi/kredit/get/{kode}', 'get_notifikasi')->name('kode.notifikasi');
             Route::post('/notifikasi/kredit/simpan', 'simpan_notifikasi')->name('simpan.notifikasi');
-            Route::get('/notifikasi/perjanjian/kredit', 'perjanjian_kredit')->name('perjanjian.kredit');
+
+            Route::group(['middleware' => ['role:Realisasi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/notifikasi/perjanjian/kredit', 'perjanjian_kredit')->name('perjanjian.kredit');
+            });
+
             Route::get('/notifikasi/perjanjian/kredit/spk/{kode}', 'get_spk')->name('get.spk');
             Route::post('/notifikasi/perjanjian/simpan', 'simpan_spk')->name('simpan.spk');
             Route::get('/notifikasi/realisasi/kredit', 'realisasi_kredit')->name('realisasi.kredit');
@@ -431,18 +470,26 @@ Route::middleware('auth')->group(function () {
             Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
             Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');
-            Route::get('/cetak/analisa/kredit', 'analisa_kredit')->name('analisa.kredit');
+
+            Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/cetak/analisa/kredit', 'analisa_kredit')->name('analisa.kredit');
+            });
+
             Route::get('/cetak/analisa/kredit/detail', 'cetak_analisa_kredit')->name('cetak.analisa_kredit');
-            Route::get('/cetak/penolakan/kredit', 'data_penolakan_kredit')->name('data_penolakan.kredit');
+
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/cetak/penolakan/kredit', 'data_penolakan_kredit')->name('data_penolakan.kredit');
+            });
         });
 
 
         Route::controller(FiduciaController::class)->group(function () {
-            Route::get('/fiducia', 'index')->name('fiducia');
+            Route::group(['middleware' => ['role:Realisasi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/fiducia', 'index')->name('fiducia');
+            });
         });
     });
     //====Route Analisa====//
-
 
     Route::controller(PerhitunganController::class)->group(function () {
         Route::get('/perhitungan/flat', 'flat')->name('flat');

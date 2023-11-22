@@ -67,7 +67,7 @@
                 </li>
             @endcan
 
-            <li class="treeview">
+            <li class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
@@ -93,8 +93,8 @@
                     </li>
 
                     <li
-                        class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('pengajuan.index') }}" title="Otorisasi Pengajuan">
+                        class="{{ request()->is('otorisasi/pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.otorisasi') }}" title="Otorisasi Pengajuan">
                             <i class="fa fa-check"></i>
                             Otor Pengajuan
                         </a>
@@ -104,7 +104,7 @@
                 </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview {{ request()->is('analisa/penjadwalan', 'themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa', 'themes/komite/kredit', 'themes/penolakan/pengajuan', 'themes/penolakan/tambah', 'themes/penolakan/edit', 'themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-suitcase"></i>
                     <span>Analisa Kredit</span>
@@ -152,11 +152,43 @@
                 </ul>
             </li>
 
-            @can('menu cetak')
-                <li class="header">CETAK BERKAS</li>
-            @endcan
-
             <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-file-text"></i>
+                    <span>Administratif</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-plus"></i>
+                            Add Notifikasi
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-check"></i>
+                            Otor Notifikasi
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-exclamation-circle"></i>
+                            Perjanjian Kredit
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="fa fa-flag"></i>
+                            Realisasi Kredit
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ request()->is('cetak/pengajuan', 'themes/cetak/analisa/kredit', 'themes/notifikasi/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -217,7 +249,7 @@
                 </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/survei') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -226,31 +258,31 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="">
+                    <li class="{{ request()->is('laporan/fasilitas') ? 'active' : '' }}">
                         <a href="/laporan/fasilitas">
                             <i class="fa fa-bank"></i>
                             Fasilitas Kredit
                         </a>
                     </li>
-                    <li class="">
+                    <li class="{{ request()->is('laporan/realisasi') ? 'active' : '' }}">
                         <a href="/laporan/realisasi">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
                         </a>
                     </li>
-                    <li class="">
+                    <li class="{{ request()->is('laporan/penolakan') ? 'active' : '' }}">
                         <a href="/laporan/penolakan">
                             <i class="fa fa-close"></i>
                             Penolakan Kredit
                         </a>
                     </li>
-                    <li class="">
+                    <li class="{{ request()->is('laporan/pendaftaran') ? 'active' : '' }}">
                         <a href="/laporan/pendaftaran">
                             <i class="fa fa-users"></i>
                             Pendaftaran Kredit
                         </a>
                     </li>
-                    <li class="">
+                    <li class="{{ request()->is('laporan/survei') ? 'active' : '' }}">
                         <a href="/laporan/survei">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
@@ -260,7 +292,7 @@
             </li>
 
             <li class="header">TOOLS</li>
-            <li class="treeview">
+            <li class="treeview {{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman', 'perhitungan/simulasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Alat Bantu</span>

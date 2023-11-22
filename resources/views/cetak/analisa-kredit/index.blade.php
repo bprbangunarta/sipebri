@@ -1,4 +1,4 @@
-@section('title', 'Survey dan Analisa')
+@section('title', 'Cetak Analisa Kredit')
 @extends('theme.app')
 
 @section('content')
@@ -9,9 +9,24 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">ANALISA KREDIT</h3>
+                            <i class="fa fa-print"></i>
+                            <h3 class="box-title">CETAK ANALISA KREDIT</h3>
+
+                            <div class="box-tools">
+                                <form action="/themes/cetak/analisa/kredit" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="{{ request('name') }}" placeholder="Search">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
+
                         <div class="box-body">
                             <table class="table table-bordered">
                                 <thead>
@@ -70,15 +85,9 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="#" data-toggle="modal" data-target="#modal-catatan"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-yellow" style="width: 120px;">Lihat Analisa</span>
-                                                </a>
-
-                                                <p style="margin-top:-5px;"></p>
                                                 <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
                                                     target="_blank">
-                                                    <span class="btn bg-blue" style="width: 120px;">Cetak Surat</span>
+                                                    <span class="btn bg-blue" style="width: 120px;">Cetak Berkas</span>
                                                 </a>
 
                                             </td>
@@ -95,53 +104,17 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            {{ $data->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
 
     </div>
-
-    {{-- <div class="modal fade" id="modal-catatan">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-blue">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">CATATAN KOMITE</h4>
-                </div>
-                <form action="#" method="POST">
-                    @csrf
-                    <div class="modal-body">
-
-                        <div class="box-body">
-                            <div class="row">
-
-                                <div style="margin-top: -15px;">
-                                    <span class="fw-bold">STAFF ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="staff_analis" readonly>Catatan dari staff analis</textarea>
-                                </div>
-
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KASI ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kasi_analiss" readonly>Catatan dari kasi analis</textarea>
-                                </div>
-
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KABAG ANALIS</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="kabag_analis" readonly>Catatan dari kabag analis</textarea>
-                                </div>
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">DIREKSI</span>
-                                    <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
 
 @endsection
 

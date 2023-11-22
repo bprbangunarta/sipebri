@@ -534,8 +534,10 @@ class DataCetakController extends Controller
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
     }
+
     public function analisa_kredit(Request $request)
     {
+        $name = request('name');
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -545,6 +547,11 @@ class DataCetakController extends Controller
             ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
             ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
             ->where('data_pengajuan.on_current', '=', '0')
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
