@@ -462,7 +462,11 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/notifikasi/perjanjian/kredit/spk/{kode}', 'get_spk')->name('get.spk');
             Route::post('/notifikasi/perjanjian/simpan', 'simpan_spk')->name('simpan.spk');
-            Route::get('/notifikasi/realisasi/kredit', 'realisasi_kredit')->name('realisasi.kredit');
+
+            Route::group(['middleware' => ['role:Realisasi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/notifikasi/realisasi/kredit', 'realisasi_kredit')->name('realisasi.kredit');
+            });
+
             Route::get('/notifikasi/realisasi/kredit/{kode}', 'get_realisasi')->name('get.realisasi');
             Route::get('/notifikasi/realisasi/kredit/foto/{kode}', 'get_foto_realisasi')->name('getfoto.realisasi');
             Route::post('/notifikasi/realisasi/kredit/simpan', 'simpan_realisasi')->name('simpan.realisasi');
