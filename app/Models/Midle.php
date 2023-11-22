@@ -920,8 +920,8 @@ class Midle extends Model
     }
     public static function cetak_dokumen_analisa_usaha_lain($kode)
     {
-        $data = DB::table('au_lain')
-            ->where('au_lain.pengajuan_kode', $kode)->get();
+        $data = DB::table('au_lainnya')
+            ->where('au_lainnya.pengajuan_kode', $kode)->get();
         return $data;
     }
 }

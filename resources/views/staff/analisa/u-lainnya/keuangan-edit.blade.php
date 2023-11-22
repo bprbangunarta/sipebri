@@ -62,7 +62,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">BIAYA BAHAN BAKU</span>
                             <input class="form-control input-sm form-border" type="text"
-                                value="{{ 'Rp. ' . ' ' . number_format($lain->pengeluaran, 0, ',', '.') }}"
+                                value="{{ 'Rp. ' . ' ' . number_format($lain->biaya_bahan, 0, ',', '.') }}"
                                 name="bahan_baku" id="bahan_baku" readonly>
                         </div>
 

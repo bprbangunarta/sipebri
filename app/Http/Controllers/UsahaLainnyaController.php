@@ -217,6 +217,7 @@ class UsahaLainnyaController extends Controller
                 }
             }
             $total_sum = array_sum($total);
+            $lain->biaya_bahan = $total_sum ?? 0;
             // dd($total_sum, $total, $lain);
             return view('staff.analisa.u-lainnya.keuangan-edit', [
                 'data' => $cek[0],

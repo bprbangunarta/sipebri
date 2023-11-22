@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var totalpendapatan = document.getElementById("penus");
     var totalbiaya = document.getElementById("biayaop");
     var hasilbersih = document.getElementById("hasilbersih");
+    var biaya_bahan = document.getElementById("bahan_baku");
 
     // Event listener ketika input berubah
     input1.addEventListener("input", pendapatan);
@@ -129,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var value4 = input4.value.replace("Rp. ", "").replace(/\./g, "");
         var values = inputs.value.replace("Rp. ", "").replace(/\./g, "");
         var tb = totalbiaya.value.replace("Rp. ", "").replace(/\./g, "");
+        var bb = biaya_bahan.value.replace("Rp. ", "").replace(/\./g, "");
         var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
 
         // Mengubah nilai ke angka float
@@ -139,10 +141,11 @@ document.addEventListener("DOMContentLoaded", function () {
         values = parseFloat(values) || 0;
         tb = parseFloat(tb) || 0;
         tpro = parseFloat(tpro) || 0;
+        bb = parseFloat(bb) || 0;
 
         // Melakukan perhitungan total
         var total = value1 + value2 + value3 + value4 + values;
-        var hs = total + tpro - tb;
+        var hs = (total + tpro) - (tb + bb);
         // Memperbarui elemen total
         totalpendapatan.value = "Rp. " + total.toLocaleString("id-ID");
         hasilbersih.value = "Rp. " + hs.toLocaleString("id-ID");
@@ -156,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var value8 = input8.value.replace("Rp. ", "").replace(/\./g, "");
         var value9 = input9.value.replace("Rp. ", "").replace(/\./g, "");
         var tp = totalpendapatan.value.replace("Rp. ", "").replace(/\./g, "");
+        var bb = biaya_bahan.value.replace("Rp. ", "").replace(/\./g, "");
         var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
 
         // Mengubah nilai ke angka float
@@ -166,10 +170,11 @@ document.addEventListener("DOMContentLoaded", function () {
         value9 = parseFloat(value9) || 0;
         tp = parseFloat(tp) || 0;
         tpro = parseFloat(tpro) || 0;
+        bb = parseFloat(bb) || 0;
 
         // Melakukan perhitungan total
         var total = value5 + value6 + value7 + value8 + value9;
-        var hs = tp + tpro - total;
+        var hs = (tp + tpro) - (total + bb);
 
         // Memperbarui elemen total
         totalbiaya.value = "Rp. " + total.toLocaleString("id-ID");
@@ -181,14 +186,16 @@ document.addEventListener("DOMContentLoaded", function () {
         var rpph = pro.value.replace("Rp. ", "").replace(/\./g, "");
         var tb = totalbiaya.value.replace("Rp. ", "").replace(/\./g, "");
         var tp = totalpendapatan.value.replace("Rp. ", "").replace(/\./g, "");
+        var bb = biaya_bahan.value.replace("Rp. ", "").replace(/\./g, "");
 
         // Mengubah nilai ke angka float
         rpph = parseFloat(rpph) || 0;
         tb = parseFloat(tb) || 0;
         tp = parseFloat(tp) || 0;
+        bb = parseFloat(bb) || 0;
 
         // Melakukan perhitungan total
-        var hs = rpph + tp - tb;
+        var hs = (rpph + tp) - (tb + bb);
 
         // Memperbarui elemen total
         hasilbersih.value = "Rp. " + hs.toLocaleString("id-ID");
