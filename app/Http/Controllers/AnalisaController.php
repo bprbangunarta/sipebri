@@ -169,9 +169,4 @@ class AnalisaController extends Controller
             return redirect()->back()->with('error', 'Anda gagal melakukan pembatalan survei');
         }
     }
-
-    public function survei_analisa()
-    {
-        //
-    }
 }

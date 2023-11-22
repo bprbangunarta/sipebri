@@ -442,19 +442,19 @@
                         {{ 'Rp.' . ' ' . number_format($perdagangan->sewa_tempat, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
-                    <td class="text-center" style="border:1px solid black;">8.</td>
-                    <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
-                    <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($perdagangan->penambahan, 0, ',', '.') }} &nbsp;</td>
-                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                </tr>
-                <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">#</td>
                     <th style="border:1px solid black;">&nbsp; Total</th>
                     <th style="border:1px solid black;text-align:right;">
                         {{ 'Rp.' . ' ' . number_format($perdagangan->pendapatan, 0, ',', '.') }} &nbsp;</th>
                     <th style="border:1px solid black;text-align:right;">
                         {{ 'Rp.' . ' ' . number_format($perdagangan->pengeluaran, 0, ',', '.') }} &nbsp;</th>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">8.</td>
+                    <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->penambahan, 0, ',', '.') }} &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <th class="text-center" colspan="2" style="border:1px solid black;">Hasil Bersih Usaha</th>
@@ -658,6 +658,7 @@
                 <td style="border:1px solid black;text-align:right;">
                     {{ 'Rp.' . ' ' . number_format($pertanian->pinjaman_bank, 0, ',', '.') }} &nbsp;</td>
             </tr>
+
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">#</td>
                 <th style="border:1px solid black;">&nbsp; Total</th>
@@ -717,23 +718,22 @@
             <tr>
                 <td>Kode Usaha</td>
                 <td class="text-center"> : </td>
-                <td style="text-align: justify;">AUJ00003</td>
+                <td style="text-align: justify;">{{ $jasa->kode_usaha }}</td>
             </tr>
             <tr>
                 <td>Nama Usaha</td>
                 <td class="text-center"> : </td>
-                <td style="text-align: justify;">Karyawan</td>
+                <td style="text-align: justify;">{{ $jasa->nama_usaha }}</td>
             </tr>
             <tr>
                 <td>Lama Usaha</td>
                 <td class="text-center"> : </td>
-                <td style="text-align: justify;">1 Tahun</td>
+                <td style="text-align: justify;">{{ $jasa->lama_usaha }}</td>
             </tr>
             <tr>
                 <td style="vertical-align: text-top;">Alamat Usaha</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM -
-                    SUBANG</td>
+                <td style="text-align: justify;">{{ $jasa->lokasi_usaha }}</td>
             </tr>
         </table>
 
@@ -752,7 +752,8 @@
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">1.</td>
                 <td style="border:1px solid black;">&nbsp; Pendapatan Usaha</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.505.000 &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($jasa->pendapatan, 0, ',', '.') }} &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
             </tr>
             <tr style="border:1px solid black;">

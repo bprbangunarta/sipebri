@@ -898,16 +898,24 @@ class Midle extends Model
         $data = DB::table('au_perdagangan')
             ->leftJoin('bu_perdagangan', 'au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
             ->select('au_perdagangan.*', 'bu_perdagangan.*')
-            ->where('au_perdagangan.pengajuan_kode', $kode)->first();
+            ->where('au_perdagangan.pengajuan_kode', $kode)->get();
         return $data;
     }
+
     public static function cetak_dokumen_analisa_usaha_pertanian($kode)
     {
         $data = DB::table('au_pertanian')
             ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
             ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
             ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*')
-            ->where('au_pertanian.pengajuan_kode', $kode)->first();
+            ->where('au_pertanian.pengajuan_kode', $kode)->get();
+        return $data;
+    }
+
+    public static function cetak_dokumen_analisa_usaha_jasa($kode)
+    {
+        $data = DB::table('au_jasa')
+            ->where('au_jasa.pengajuan_kode', $kode)->get();
         return $data;
     }
 }
