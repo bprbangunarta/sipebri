@@ -538,15 +538,18 @@ class DataCetakController extends Controller
     public function analisa_kredit(Request $request)
     {
         $name = request('name');
+        $usr = Auth::user()->code_user;
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->where('data_survei.surveyor_kode', $usr)
+            ->where('data_pengajuan.on_current', '=', '0')
             ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
             ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
             ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
             ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
-            ->where('data_pengajuan.on_current', '=', '0')
+            ->orWhere('data_pengajuan.status', 'Disetujui')
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')

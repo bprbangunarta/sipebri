@@ -62,8 +62,8 @@ class PengajuanController extends Controller
                 'data_nasabah.no_cif'
             )
             ->where(function ($query) {
-                $query->where('data_pengajuan.status', 'Lengkapi Data')
-                    ->where('data_pengajuan.status', 'Lengkapi Data')
+                $query->where('data_pengajuan.on_current', '0')
+                    ->orWhere('data_pengajuan.status', 'Lengkapi Data')
                     ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
                     ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
             })
