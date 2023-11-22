@@ -797,4 +797,46 @@ class Midle extends Model
         }
         return $hasil;
     }
+
+    public static function cetak_dokumen_analisa($kode)
+    {
+        $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->select(
+                'data_pengajuan.*',
+                'data_pengajuan.created_at as tgl_pengajuan',
+                'data_pengajuan.input_user as input_user_pengajuan',
+                'data_nasabah.*',
+                'data_nasabah.created_at as tgl_nasabah',
+                'data_nasabah.photo as photo_nasabah',
+                'data_nasabah.input_user as input_user_nasabah',
+                'data_pendamping.*',
+                'v_users.nama_user as nama_surveyor',
+                'data_survei.*',
+                'data_survei.created_at as tgl_survei',
+                'data_survei.input_user as input_user_survei',
+                'data_kantor.nama_kantor',
+            )
+            ->where('data_pengajuan.kode_pengajuan', $kode)
+            ->get();
+        //
+        //Kasi
+        $kasi = DB::table('v_users')->where('code_user', $data[0]->kasi_kode)->first();
+        $data[0]->nama_kasi = $kasi->nama_user;
+        //Input User Pengajuan
+        $up = DB::table('v_users')->where('code_user', $data[0]->input_user_pengajuan)->first();
+        $data[0]->nama_cs = $up->nama_user;
+        //Input User Nasabah
+        $un = DB::table('v_users')->where('code_user', $data[0]->input_user_nasabah)->first();
+        $data[0]->nama_input_nasabah = $un->nama_user;
+        //Input User Survei
+        $ks = DB::table('v_users')->where('code_user', $data[0]->input_user_survei)->first();
+        $data[0]->nama_input_survei = $ks->nama_user;
+
+        return $data;
+    }
 }

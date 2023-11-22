@@ -571,13 +571,15 @@ class DataCetakController extends Controller
         ]);
     }
 
-    public function cetak_analisa_kredit_detail(Request $request)
+    public function cetak_analisa_kredit(Request $request)
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-
-            return view('cetak.analisa-kredit.cetak-analisa-kredit', [
+            $data = Midle::cetak_dokumen_analisa($enc);
+            // dd($data);
+            return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
+                'cetak' => $data[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

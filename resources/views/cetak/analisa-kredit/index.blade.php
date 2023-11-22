@@ -76,8 +76,8 @@
                                                 </a>
 
                                                 <p style="margin-top:-5px;"></p>
-                                                <a
-                                                    href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;">Cetak Surat</span>
                                                 </a>
 

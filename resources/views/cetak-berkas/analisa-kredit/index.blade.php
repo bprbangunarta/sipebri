@@ -76,6 +76,7 @@
                 padding-left: 2cm;
                 padding-right: 2cm;
             }
+
             .page-break {
                 page-break-before: always;
             }
@@ -93,10 +94,12 @@
         <table>
             <tr>
                 <td class="text-center" width="27%">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/KPU_Tamara_Geraldine.jpg" style="width:150px;hight:225px;border: 1px solid black;">
+                    <img src="{{ asset('storage/image/photo/' . $cetak->photo_nasabah) }}"
+                        style="width:150px;hight:225px;border: 1px solid black;">
                 </td>
                 <td class="text-center" width="27%">
-                    <img src="https://air.eng.ui.ac.id/images/4/43/4x6_Pas_Photo_Darell_Jeremia_Sitompul.jpg" style="width:150px;hight:225px;border: 1px solid black;">
+                    <img src="{{ asset('storage/image/photo/' . $cetak->photo) }}"
+                        style="width:150px;hight:225px;border: 1px solid black;">
                 </td>
                 <td></td>
             </tr>
@@ -120,87 +123,87 @@
                 <td class="text-center" width="2%"> 1. </td>
                 <td width="17%">Kode Pengajuan</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">00339950</td>
+                <td style="text-align: justify;">{{ $cetak->kode_pengajuan }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 2. </td>
                 <td width="17%">Nama Nasabah</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">CICIH CAHYATI</td>
+                <td style="text-align: justify;">{{ $cetak->kode_pengajuan }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
                 <td width="17%" style="vertical-align: text-top;">Alamat</td>
                 <td class="text-center" width="3%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG
+                    {{ $cetak->alamat_ktp }}
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 4. </td>
                 <td width="17%">No. KTP</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">3213070701980004</td>
+                <td style="text-align: justify;">{{ $cetak->no_identitas }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 5. </td>
                 <td width="17%">No. Telp</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">082320099971/ 082320099977</td>
+                <td style="text-align: justify;">{{ $cetak->no_telp }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 6. </td>
                 <td width="17%">Metode RPS</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">EFEKTIF ANUITAS</td>
+                <td style="text-align: justify;">{{ $cetak->metode_rps }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 7. </td>
                 <td width="17%">Plafon</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">Rp. 50.000.000</td>
+                <td style="text-align: justify;">{{ $cetak->plafon }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 8. </td>
                 <td width="17%">Penggunaan</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">KONSUMTIF - BIAYA NIKAH</td>
+                <td style="text-align: justify;">{{ $cetak->penggunaan }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 9. </td>
                 <td width="17%">Tgl. Pendaftaran</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">21-11-2023</td>
+                <td style="text-align: justify;">{{ \Carbon\Carbon::parse($cetak->created_at)->format('Y-m-d') }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 10. </td>
                 <td width="17%">Jangka Waktu</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">36 Bulan</td>
+                <td style="text-align: justify;">{{ $cetak->jangka_waktu }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 11. </td>
                 <td width="17%">Suku Bunga</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">32% p.a</td>
+                <td style="text-align: justify;">{{ $cetak->suku_bunga }} % p.a</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 12. </td>
                 <td width="17%">Surveyor</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">DIDI JUNAEDI</td>
+                <td style="text-align: justify;">{{ $cetak->nama_surveyor }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 13. </td>
                 <td width="17%">Wilayah</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">KALIJATI</td>
+                <td style="text-align: justify;">{{ $cetak->nama_kantor }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 14. </td>
                 <td width="17%">Kasi Analis</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">DEDE DONI</td>
+                <td style="text-align: justify;">{{ $cetak->nama_kasi }}</td>
             </tr>
         </table>
 
@@ -219,22 +222,25 @@
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 1. </td>
                 <td style="border:1px solid black;">&nbsp; Permohonan</td>
-                <td class="text-center" style="border:1px solid black;">20-11-2023</td>
-                <td class="text-center" style="border:1px solid black;">CANDRA</td>
+                <td class="text-center" style="border:1px solid black;">
+                    {{ \Carbon\Carbon::parse($cetak->tgl_pengajuan)->format('Y-m-d') }}</td>
+                <td class="text-center" style="border:1px solid black;">{{ $cetak->nama_cs }}</td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 2. </td>
                 <td style="border:1px solid black;">&nbsp; Terima Berkas</td>
-                <td class="text-center" style="border:1px solid black;"></td>
-                <td class="text-center" style="border:1px solid black;"></td>
+                <td class="text-center" style="border:1px solid black;">
+                    {{ \Carbon\Carbon::parse($cetak->tgl_nasabah)->format('Y-m-d') }}</td>
+                <td class="text-center" style="border:1px solid black;">{{ $cetak->nama_input_nasabah }}</td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 3. </td>
                 <td style="border:1px solid black;">&nbsp; Proses Survey</td>
-                <td class="text-center" style="border:1px solid black;"></td>
-                <td class="text-center" style="border:1px solid black;"></td>
+                <td class="text-center" style="border:1px solid black;">
+                    {{ \Carbon\Carbon::parse($cetak->tgl_survei)->format('Y-m-d') }}</td>
+                <td class="text-center" style="border:1px solid black;">{{ $cetak->nama_input_survei }}</td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
@@ -280,7 +286,8 @@
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
-                <th style="border:1px solid black;vertical-align: text-top;" colspan="3" rowspan="4">Keterangan :</th>
+                <th style="border:1px solid black;vertical-align: text-top;" colspan="3" rowspan="4">Keterangan
+                    :</th>
                 <th class="text-center" style="border:1px solid black;">Agen BRI Link</th>
                 <th class="text-center" style="border:1px solid black;">Alamat</th>
             </tr>
@@ -303,7 +310,7 @@
     <div class="content" style="margin-top: -57px;">
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
-        
+
         <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
 
         <table>
@@ -330,7 +337,8 @@
             <tr>
                 <td style="vertical-align: text-top;">Alamat Usaha</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG</td>
+                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM -
+                    SUBANG</td>
             </tr>
         </table>
 
@@ -451,7 +459,7 @@
         </table>
 
         <p></p>
-        
+
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
                 <th class="text-center" colspan="4" style="border:1px solid black;">Analisa Keuangan</th>
@@ -605,12 +613,13 @@
             <tr>
                 <td style="vertical-align: text-top;">Alamat Usaha</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;" colspan="4">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG</td>
+                <td style="text-align: justify;" colspan="4">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI
+                    KECAMATAN. CIKAUM - SUBANG</td>
             </tr>
         </table>
 
         <p></p>
-        
+
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
                 <th class="text-center" colspan="4" style="border:1px solid black;">Analisa Keuangan</th>
@@ -770,12 +779,13 @@
             <tr>
                 <td style="vertical-align: text-top;">Alamat Usaha</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG</td>
+                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM -
+                    SUBANG</td>
             </tr>
         </table>
 
         <p></p>
-        
+
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
                 <th class="text-center" colspan="4" style="border:1px solid black;">Analisa Keuangan</th>
@@ -854,12 +864,13 @@
             <tr>
                 <td style="vertical-align: text-top;">Alamat Usaha</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG</td>
+                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM -
+                    SUBANG</td>
             </tr>
         </table>
 
         <p></p>
-        
+
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
                 <th class="text-center" colspan="4" style="border:1px solid black;">Analisa Keuangan</th>
@@ -1056,9 +1067,10 @@
                 <th style="border:1px solid black;text-align:right;">Rp. 4.000.000 &nbsp;</th>
                 <th style="border:1px solid black;text-align:right;">Rp. 800.000 &nbsp;</th>
             </tr>
-            
+
             <tr style="border:1px solid black;">
-                <th class="text-center" colspan="2" style="border:1px solid black;">Kemampuan Keuangan Perbulan</th>
+                <th class="text-center" colspan="2" style="border:1px solid black;">Kemampuan Keuangan Perbulan
+                </th>
                 <th class="text-center" colspan="2" style="border:1px solid black;">Rp. 3.200.000</th>
             </tr>
         </table>
@@ -1161,12 +1173,14 @@
 
             {{-- Character --}}
             <tr>
-                <th style="border-top:1px solid black;border-right:1px solid black;" width="40%">&nbsp; 1. Character</th>
+                <th style="border-top:1px solid black;border-right:1px solid black;" width="40%">&nbsp; 1.
+                    Character</th>
                 <th style="border-top:1px solid black;border-right:1px solid black;" width="40%"></th>
                 <th style="border-top:1px solid black;" width="20%"></th>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Tidak Melakukan Hal-Hal Tercela</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Tidak Melakukan Hal-Hal
+                    Tercela</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; -</td>
             </tr>
@@ -1181,17 +1195,20 @@
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Kepetuhan Terhadap Kewajiban</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Kepetuhan Terhadap
+                    Kewajiban</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Keharmonisan Rumah Tangga</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Keharmonisan Rumah Tangga
+                </td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Hubungan Sosial dengan Lingkungan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Hubungan Sosial dengan
+                    Lingkungan</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; -</td>
             </tr>
@@ -1216,17 +1233,20 @@
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Pengalaman Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
+                    Pengalaman Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Pertumbuhan Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
+                    Pertumbuhan Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. kontinuitas Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.
+                    kontinuitas Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
@@ -1236,12 +1256,14 @@
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Aset Terkait Usaha (Likuid)</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
+                    Aset Terkait Usaha (Likuid)</td>
                 <td style="border-right:1px solid black;">&nbsp; Mengcover</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Aset Diluar Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
+                    Aset Diluar Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Likuid</td>
                 <td>&nbsp; Baik</td>
             </tr>
@@ -1251,12 +1273,14 @@
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Pendataan Laporan Keuangan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Pendataan Laporan Keuangan
+                </td>
                 <td style="border-right:1px solid black;">&nbsp; Mencatat Transaksi Harian</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Kredit Masa Lalu</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Kredit Masa
+                    Lalu</td>
                 <td style="border-right:1px solid black;">&nbsp; Lancar Tidak Ada Tunggakan</td>
                 <td>&nbsp; Baik</td>
             </tr>
@@ -1296,12 +1320,14 @@
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Agunan Utama</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
+                    Agunan Utama</td>
                 <td style="border-right:1px solid black;">&nbsp; Milik Sendiri</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Agunan Tambahan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
+                    Agunan Tambahan</td>
                 <td style="border-right:1px solid black;">&nbsp; -</td>
                 <td>&nbsp; -</td>
             </tr>
@@ -1311,12 +1337,14 @@
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Agunan Utama</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
+                    Agunan Utama</td>
                 <td style="border-right:1px solid black;">&nbsp; -</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Agunan Tambahan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
+                    Agunan Tambahan</td>
                 <td style="border-right:1px solid black;">&nbsp; -</td>
                 <td>&nbsp; -</td>
             </tr>
@@ -1331,22 +1359,26 @@
                 <td>&nbsp; Kurang Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Lokasi atau Kondisi Fisik Agunan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Lokasi atau Kondisi Fisik
+                    Agunan</td>
                 <td style="border-right:1px solid black;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Kendaraan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
+                    Kendaraan</td>
                 <td style="border-right:1px solid black;">&nbsp; -</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. SHM</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
+                    SHM</td>
                 <td style="border-right:1px solid black;">&nbsp; -</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Permohonan Thd Taksasi Agunan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Permohonan Thd Taksasi
+                    Agunan</td>
                 <td style="border-right:1px solid black;">&nbsp; 169%</td>
                 <td>&nbsp; Tidak baik</td>
             </tr>
@@ -1699,7 +1731,7 @@
                 </td>
             </tr>
         </table>
-        
+
     </div>
 
     {{-- Memorandum --}}
@@ -1825,7 +1857,7 @@
                 <td> : </td>
                 <td>&nbsp; Strategis</td>
             </tr>
-            
+
             <tr>
                 <th>
                     &nbsp; 2. Analisa dan Evaluasi Kredit
@@ -2031,7 +2063,7 @@
                 </td>
             </tr>
         </table>
-        
+
     </div>
 
     <script>
