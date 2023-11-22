@@ -1705,10 +1705,7 @@
     {{-- Memorandum --}}
     <div class="page-break"></div>
     <div class="content" style="margin-top: -57px;">
-        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
-        <hr style="border: 1px solid 034871;">
-
-        <h4 style="text-align: center;font-size: 12pt;">MEMORANDUM USULAN KREDIT (MUK)</h4>
+        <h4 style="text-align: center;font-size: 12pt;margin-top:-1px;">MEMORANDUM USULAN KREDIT (MUK)</h4>
         <table style="border:1px solid black;">
             <tr>
                 <th width="44%">&nbsp; 1. Identitas Pemohon dan Usulan</th>
@@ -1837,27 +1834,23 @@
                 <td></td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Analisa Watak (Character)</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Analisa Karakter</td>
                 <td> : </td>
-                <td>&nbsp; Cukup Baik</td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; Cukup Baik</div>
+                    <div style="width:59%;float:right">d. Analisa Agunan : Cukup Baik</div>
+                </td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Analisa Kemampuan (Capacity)</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Analisa Kemampuan</td>
                 <td> : </td>
-                <td>&nbsp; Cukup Baik</td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; Cukup Baik</div>
+                    <div style="width:59%;float:right">e. Analisa Kondisi : Cukup Baik</div>
+                </td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Analisa Modal (Capital)</td>
-                <td> : </td>
-                <td>&nbsp; Cukup Baik</td>
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Analisa Agunan (Collateral)</td>
-                <td> : </td>
-                <td>&nbsp; Cukup Baik</td>
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Analisa Kondisi (Condition)</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Analisa Modal</td>
                 <td> : </td>
                 <td>&nbsp; Cukup Baik</td>
             </tr>
@@ -1868,28 +1861,28 @@
             </tr>
             <tr>
                 <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kekuatan (Strength)
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kekuatan
                 </td>
                 <td> : </td>
                 <td>&nbsp; Karyawan Tetap</td>
             </tr>
             <tr>
                 <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kelemahan (Weakness)
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kelemahan
                 </td>
                 <td> : </td>
                 <td>&nbsp; Kesehatan Menurun</td>
             </tr>
             <tr>
                 <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Peluang (Opportunities)
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Peluang
                 </td>
                 <td> : </td>
                 <td>&nbsp; Naik Jabatan</td>
             </tr>
             <tr>
                 <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Ancaman (Treats)
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Ancaman
                 </td>
                 <td> : </td>
                 <td>&nbsp; PHK</td>
@@ -2022,6 +2015,20 @@
                 </td>
                 <td> : </td>
                 <td>&nbsp; USER M-BANKING</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td width="70%"></td>
+                <td class="text-center">
+                    Pamanukan, 22 November 2023 <br>
+                    Surveyor, <br>
+                    <p style="margin-top:55px;"></p>
+
+
+                    <b>DIDI JUNAEDI</b>
+                </td>
             </tr>
         </table>
         
