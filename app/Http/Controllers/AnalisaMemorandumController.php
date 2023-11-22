@@ -251,6 +251,7 @@ class AnalisaMemorandumController extends Controller
                     'sebelum_realisasi' => null,
                     'syarat_tambahan' => null,
                     'syarat_lainnya' => null,
+                    'pengikatan' => null,
                 ];
             } else {
                 $usulan->kebutuhan_dana = $kdana;
