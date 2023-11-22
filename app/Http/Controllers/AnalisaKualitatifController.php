@@ -139,4 +139,18 @@ class AnalisaKualitatifController extends Controller
         }
         return redirect()->back()->with('success', 'Gagal mengubah data');
     }
+
+    public function analisa_swot(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+
+            return view('staff.analisa.kualitatif.swot', [
+                'data' => $cek[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 }

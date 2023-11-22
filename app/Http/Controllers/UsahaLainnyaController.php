@@ -105,6 +105,28 @@ class UsahaLainnyaController extends Controller
         }
     }
 
+    public function bahan_baku(Request $request)
+    {
+        try {
+            $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
+
+            $cek = Midle::analisa_usaha($encpengajuan);
+
+            //Data USaha Lainnya
+            $enc = Crypt::decrypt($request->query('kode_usaha'));
+
+            $lain = Lain::where('kode_usaha', $enc)->first();
+            $lain->kd_usaha = Crypt::encrypt($lain->kode_usaha);
+
+            return view('staff.analisa.u-lainnya.bahan-baku', [
+                'data' => $cek[0],
+                'lain' => $lain,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
     public function keuangan(Request $request)
     {
 

@@ -30,8 +30,10 @@
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('themes/analisa/bahan-baku/usaha/lainnya') ? 'active' : '' }}">
-                                    <a href="/themes/analisa/bahan-baku/usaha/lainnya" class="{{ request()->is('themes/analisa/bahan-baku/usaha/lainnya') ? 'text-bold' : '' }}">
+                                <li
+                                    class="{{ request()->is('themes/analisa/bahanbaku/usaha/lainnya') ? 'active' : '' }}">
+                                    <a href="{{ route('lain.bahan_baku', ['pengajuan' => $pengajuan, 'kode_usaha' => $kode_usaha]) }}"
+                                        class="{{ request()->is('themes/analisa/bahanbaku/usaha/lainnya') ? 'text-bold' : '' }}">
                                         BAHAN BAKU
                                     </a>
                                 </li>
