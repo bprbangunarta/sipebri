@@ -9,6 +9,7 @@
                 <form action="{{ route('perdagangan.simpanbarang', ['kode_usaha' => $barang->kd_usaha]) }}" method="POST">
                     @csrf
                     <div class="box-body table-responsive no-padding">
+
                         <div style="overflow: auto; width: 100%; height: 355px;">
                             <table class="table table-hover" style="font-size: 12px;">
                                 <thead>
@@ -385,8 +386,7 @@
                         </table>
                     </div>
 
-                    <button type="submit" class="btn btn-sm btn-primary"
-                        style="margin-top:10px;width:100%;">SIMPAN</button>
+                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%;">SIMPAN</button>
                 </form>
 
             </div>

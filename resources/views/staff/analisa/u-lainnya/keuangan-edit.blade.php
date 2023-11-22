@@ -26,17 +26,17 @@
                                     value="{{ 'Rp. ' . ' ' . number_format($item->nominal, 0, ',', '.') }}">
                             </div>
                         @endforeach
-
+                            
                         @foreach ($biaya as $item)
-                            <div style="margin-top:20px;width: 49.5%;float:left;">
-                                <span class="fw-bold">PENGELUARAN UNTUK</span>
+                            <div style="width: 49.5%;float:left;">
+                                <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
                                 <input type="text" name="kod{{ $loop->iteration }}" value="{{ $item->kode_lain }}"
                                     hidden>
                                 <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
                                     name="nampe{{ $loop->iteration }}" value="{{ $item->pengeluaran }}">
                             </div>
-                            <div style="margin-top:20px;width: 49.5%;float:right;">
-                                <span class="fw-bold">NOMINAL PENGELUARAN</span>
+                            <div style="width: 49.5%;float:right;">
+                                <span class="fw-bold text-red">NOMINAL PENGELUARAN</span>
                                 <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                     name="pengeluaran{{ $loop->iteration }}" id="pengeluaran{{ $loop->iteration }}"
                                     value="{{ 'Rp. ' . ' ' . number_format($item->nominal, 0, ',', '.') }}">
