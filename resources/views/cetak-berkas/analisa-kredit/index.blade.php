@@ -344,7 +344,7 @@
 
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
-                <th class="text-center" colspan="7" style="border:1px solid black;">Analisa Barang Dagang</th>
+                <th class="text-center" colspan="7" style="border:1px solid black;">Biaya Barang Dagang</th>
             </tr>
             <tr style="border:1px solid black;">
                 <th class="text-center" width="4%" style="border:1px solid black;">No</th>
@@ -866,6 +866,29 @@
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM -
                     SUBANG</td>
+            </tr>
+        </table>
+
+        <p></p>
+
+        <table style="border:1px solid black;">
+            <tr style="border:1px solid black;">
+                <th class="text-center" colspan="7" style="border:1px solid black;">Biaya Bahan Baku</th>
+            </tr>
+            <tr style="border:1px solid black;">
+                <th class="text-center" width="4%" style="border:1px solid black;">No</th>
+                <th class="text-center" style="border:1px solid black;" width="36%">Bahan Baku</th>
+                <th class="text-center" style="border:1px solid black;" width="10%">Jumlah</th>
+                <th class="text-center" style="border:1px solid black;" width="25%">Harga</th>
+                <th class="text-center" style="border:1px solid black;" width="25%">Total</th>
+            </tr>
+
+            <tr style="border:1px solid black;">
+                <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
+                <td style="border:1px solid black;">&nbsp; Boled</td>
+                <td class="text-center" style="border:1px solid black;">10</td>
+                <td style="border:1px solid black;text-align:right;">Rp. 5.000 &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">Rp. 50.000 &nbsp;</td>
             </tr>
         </table>
 
