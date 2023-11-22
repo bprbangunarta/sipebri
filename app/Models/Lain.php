@@ -41,43 +41,61 @@ class Lain extends Model
 
     public static function du_kodeacak($length)
     {
-        
+
         $kode_acak = '';
-        for ($j=0; $j < $length; $j++) { 
+        for ($j = 0; $j < $length; $j++) {
             $digit = rand(0, 9); // Menghasilkan angka acak dari 0 hingga 9
             $kode_acak .= $digit;
         }
-        
+
         // Cek apakah kode sudah ada dalam database
         if (!DB::table('du_lainnya')->where('kode_lain', $kode_acak)->exists()) {
             return $kode_acak;
-        }else{
+        } else {
             return null;
         }
     }
 
     public static function bu_kodeacak($length)
     {
-        
+
         $kode_acak = '';
-        for ($j=0; $j < $length; $j++) { 
+        for ($j = 0; $j < $length; $j++) {
             $digit = rand(0, 9); // Menghasilkan angka acak dari 0 hingga 9
             $kode_acak .= $digit;
         }
-        
+
         // Cek apakah kode sudah ada dalam database
         if (!DB::table('bu_lainnya')->where('kode_lain', $kode_acak)->exists()) {
             return $kode_acak;
-        }else{
+        } else {
             return null;
         }
     }
+
+    public static function bahan_baku_kodeacak($length)
+    {
+
+        $kode_acak = '';
+        for ($j = 0; $j < $length; $j++) {
+            $digit = rand(0, 9); // Menghasilkan angka acak dari 0 hingga 9
+            $kode_acak .= $digit;
+        }
+
+        // Cek apakah kode sudah ada dalam database
+        if (!DB::table('bu_bahan_baku_lainnya')->where('kode_barang', $kode_acak)->exists()) {
+            return $kode_acak;
+        } else {
+            return null;
+        }
+    }
+
 
     public static function editlainnya($data)
     {
         $biaya = DB::table('bu_lainnya')->where('usaha_kode', $data)->get();
         $data2 = DB::table('du_lainnya')->where('usaha_kode', $data)->get();
-        
+
         return [$biaya, $data2];
     }
 }

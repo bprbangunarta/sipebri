@@ -26,7 +26,7 @@
                                     value="{{ 'Rp. ' . ' ' . number_format($item->nominal, 0, ',', '.') }}">
                             </div>
                         @endforeach
-                            
+
                         @foreach ($biaya as $item)
                             <div style="width: 49.5%;float:left;">
                                 <span class="fw-bold text-red">PENGELUARAN UNTUK</span>

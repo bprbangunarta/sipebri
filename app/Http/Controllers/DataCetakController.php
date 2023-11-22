@@ -639,7 +639,6 @@ class DataCetakController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = Midle::cetak_dokumen_analisa($enc);
             $perdagangan = Midle::cetak_dokumen_analisa_usaha_perdagangan($enc);
-
             if (count($perdagangan) != 0) {
                 for ($i = 0; $i < count($perdagangan); $i++) {
                     $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan[$i]->kode_usaha)->get();
@@ -649,7 +648,6 @@ class DataCetakController extends Controller
             }
 
             $pertanian = Midle::cetak_dokumen_analisa_usaha_pertanian($enc);
-
             if (count($pertanian) != 0) {
                 for ($i = 0; $i < count($pertanian); $i++) {
                     $jml = ((int)$pertanian[$i]->laba_bersih * 70) / 100;
@@ -658,14 +656,16 @@ class DataCetakController extends Controller
             }
 
             $jasa = Midle::cetak_dokumen_analisa_usaha_jasa($enc);
+            $lain = Midle::cetak_dokumen_analisa_usaha_lain($enc);
 
-            // dd($perdagangan, $biaya_perdagangan);
+            // dd($jasa);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
                 'perdagangan' => $perdagangan,
                 'pertanian' => $pertanian,
                 'jasa' => $jasa,
+                'lain' => $lain,
                 'biayaperdagangan' => $biaya_perdagangan,
             ]);
         } catch (DecryptException $e) {

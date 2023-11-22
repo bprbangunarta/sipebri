@@ -91,11 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var input2 = document.getElementById("nominal2");
     var input3 = document.getElementById("nominal3");
     var input4 = document.getElementById("nominal4");
+    var inputs = document.getElementById("nominal5");
 
     var input5 = document.getElementById("pengeluaran1");
     var input6 = document.getElementById("pengeluaran2");
     var input7 = document.getElementById("pengeluaran3");
     var input8 = document.getElementById("pengeluaran4");
+    var input9 = document.getElementById("pengeluaran5");
 
     var pro = document.getElementById("pph");
 
@@ -109,11 +111,13 @@ document.addEventListener("DOMContentLoaded", function () {
     input2.addEventListener("input", pendapatan);
     input3.addEventListener("input", pendapatan);
     input4.addEventListener("input", pendapatan);
+    inputs.addEventListener("input", pendapatan);
 
     input5.addEventListener("input", semuabiaya);
     input6.addEventListener("input", semuabiaya);
     input7.addEventListener("input", semuabiaya);
     input8.addEventListener("input", semuabiaya);
+    input9.addEventListener("input", semuabiaya);
 
     pro.addEventListener("input", proyeksi);
 
@@ -123,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var value2 = input2.value.replace("Rp. ", "").replace(/\./g, "");
         var value3 = input3.value.replace("Rp. ", "").replace(/\./g, "");
         var value4 = input4.value.replace("Rp. ", "").replace(/\./g, "");
+        var values = inputs.value.replace("Rp. ", "").replace(/\./g, "");
         var tb = totalbiaya.value.replace("Rp. ", "").replace(/\./g, "");
         var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
 
@@ -131,11 +136,12 @@ document.addEventListener("DOMContentLoaded", function () {
         value2 = parseFloat(value2) || 0;
         value3 = parseFloat(value3) || 0;
         value4 = parseFloat(value4) || 0;
+        values = parseFloat(values) || 0;
         tb = parseFloat(tb) || 0;
         tpro = parseFloat(tpro) || 0;
 
         // Melakukan perhitungan total
-        var total = value1 + value2 + value3 + value4;
+        var total = value1 + value2 + value3 + value4 + values;
         var hs = total + tpro - tb;
         // Memperbarui elemen total
         totalpendapatan.value = "Rp. " + total.toLocaleString("id-ID");
@@ -148,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var value6 = input6.value.replace("Rp. ", "").replace(/\./g, "");
         var value7 = input7.value.replace("Rp. ", "").replace(/\./g, "");
         var value8 = input8.value.replace("Rp. ", "").replace(/\./g, "");
+        var value9 = input9.value.replace("Rp. ", "").replace(/\./g, "");
         var tp = totalpendapatan.value.replace("Rp. ", "").replace(/\./g, "");
         var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
 
@@ -156,11 +163,12 @@ document.addEventListener("DOMContentLoaded", function () {
         value6 = parseFloat(value6) || 0;
         value7 = parseFloat(value7) || 0;
         value8 = parseFloat(value8) || 0;
+        value9 = parseFloat(value9) || 0;
         tp = parseFloat(tp) || 0;
         tpro = parseFloat(tpro) || 0;
 
         // Melakukan perhitungan total
-        var total = value5 + value6 + value7 + value8;
+        var total = value5 + value6 + value7 + value8 + value9;
         var hs = tp + tpro - total;
 
         // Memperbarui elemen total
