@@ -20,7 +20,8 @@
                             <h3 class="box-title">PENOLAKAN KREDIT</h3>
 
                             <div class="box-tools">
-                                <form action="#" method="GET">
+                                <form action="{{ route('laporan.penolakan-kredit') }}" method="POST">
+                                    @csrf
                                     <div class="input-group input-group-sm hidden-xs pull-right" style="width: 335px;">
                                         <input type="date" class="form-control pull-left" style="width: 150px;"
                                             name="tgl1" id="tgl1" value="">

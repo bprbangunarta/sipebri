@@ -454,9 +454,13 @@ Route::middleware('auth')->group(function () {
     Route::controller(CetakLaporanController::class)->group(function () {
         Route::get('/laporan/fasilitas', 'laporan_fasilitas')->name('laporan.fasilitas');
         Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
+        Route::post('/laporan/realisasi/kredit', 'post_laporan_realisasi')->name('laporan.realisasi-kredit');
         Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
+        Route::post('/laporan/penolakan/kredit', 'post_laporan_penolakan')->name('laporan.penolakan-kredit');
         Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
-        Route::get('/laporan/survey', 'laporan_survey_analisa')->name('laporan.survey');
+        Route::post('/laporan/pendaftaran/kredit', 'post_laporan_pendaftaran')->name('laporan.pendaftaran-kredit');
+        Route::get('/laporan/survei', 'laporan_survey_analisa')->name('laporan.survey');
+        Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');
     });
     //====Route Cetak Laporan====//
 

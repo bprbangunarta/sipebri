@@ -20,7 +20,8 @@
                             <h3 class="box-title">SURVEY DAN ANALISA</h3>
 
                             <div class="box-tools">
-                                <form method="get" action="{{ route('laporan.survey') }}">
+                                <form method="POST" action="{{ route('laporan.survey-analisa') }}">
+                                    @csrf
                                     <div class="input-group input-group-sm hidden-xs pull-right" style="width: 370px;">
                                         <input type="date" class="form-control pull-left" style="width: 150px;"
                                             name="tgl1" id="tgl1" value="" required>

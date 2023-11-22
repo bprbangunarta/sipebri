@@ -251,7 +251,7 @@
                         </a>
                     </li>
                     <li class="">
-                        <a href="/laporan/survey">
+                        <a href="/laporan/survei">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
                         </a>
