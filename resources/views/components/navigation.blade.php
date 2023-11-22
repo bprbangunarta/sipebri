@@ -27,11 +27,11 @@
             <li class="header">MAIN MENU</li>
 
             @hasanyrole($roles)
-                <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
-                    <a href="/dashboard" title="Dashboard">
-                        <i class="fa fa-laptop"></i> <span>Dashboard</span>
-                    </a>
-                </li>
+            <li class="{{ request()->is('dashboard', 'themes/dashboard') ? 'active' : '' }}">
+                <a href="/dashboard" title="Dashboard">
+                    <i class="fa fa-laptop"></i> <span>Dashboard</span>
+                </a>
+            </li>
             @endhasanyrole
 
             <li
@@ -99,20 +99,21 @@
                     </li>
 
                     <li class="{{ request()->is('themes/komite/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('komite.kredit') }}" title="Input Persetujuan">
+                        <a @can('komite kredit') href="{{ route('komite.kredit') }}" @endcan title="Komite Kredit">
                             <i class="fa fa-file-text-o"></i>
                             Input Persetujuan
                         </a>
                     </li>
+
                     <li
                         class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah', 'themes/penolakan/edit') ? 'active' : '' }}">
-                        <a href="{{ route('penolakan.pengajuan') }}" title="Input Penolakan">
+                        <a @can('input penolakan') href="{{ route('penolakan.pengajuan') }}" @endcan title="Input Penolakan">
                             <i class="fa fa-close"></i>
                             Input Penolakan
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
-                        <a href="{{ route('survei.analisa') }}">
+                        <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan title="Survey dan Analisa">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
                         </a>
@@ -131,25 +132,28 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('notifikasi_kredit') }}" title="Tambah Notifikasi">
-                            <i class="fa fa-plus"></i>
-                            Add Notifikasi
+                        <a @can('generate notifikasi') href="{{ route('notifikasi_kredit') }}" @endcan title="Notifikasi Kredit">
+                            <i class="fa fa-bell"></i>
+                            Notifikasi Kredit
                         </a>
                     </li>
-                    <li class="">
-                        <a href="">
-                            <i class="fa fa-check"></i>
-                            Otor Notifikasi
-                        </a>
-                    </li>
+
                     <li class="{{ request()->is('themes/notifikasi/perjanjian/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('perjanjian.kredit') }}" title="Perjanjian Kredit">
+                        <a @can('generate pk') href="{{ route('perjanjian.kredit') }}" @endcan title="Add Perjanjian Kredit">
                             <i class="fa fa-exclamation-circle"></i>
-                            Perjanjian Kredit
+                            Add Perjanjian Kredit
                         </a>
                     </li>
+
+                    <li class="">
+                        <a @can('otor pk') href="#" @endcan title="Otor Perjanjian Kredit">
+                            <i class="fa fa-check"></i>
+                            Otor Perjanjian Kredit
+                        </a>
+                    </li>
+
                     <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('realisasi.kredit') }}" title="Realisasi Kredit">
+                        <a @can('realisasi kredit') href="{{ route('realisasi.kredit') }}" @endcan title="Realisasi Kredit">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
                         </a>
@@ -169,48 +173,48 @@
                 <ul class="treeview-menu">
 
                     <li class="{{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail') ? 'active' : '' }}">
-                        <a href="{{ route('cetak.pengajuan.index') }}" title="Berkas Pengajuan">
+                        <a @can('cetak pengajuan kredit') href="{{ route('cetak.pengajuan.index') }}" @endcan title="Cetak Pengajuan">
                             <i class="fa fa-users"></i>
                             Pengajuan
                         </a>
                     </li>
 
                     <li class="{{ request()->is('themes/cetak/analisa/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('analisa.kredit') }}" title="Cetak Analisa Kredit">
+                        <a @can('cetak analisa kredit') href="{{ route('analisa.kredit') }}" @endcan title="Cetak Analisa Kredit">
                             <i class="fa fa-suitcase"></i>
                             Analisa Kredit
                         </a>
                     </li>
                     <li class="">
-                        <a href="#">
+                        <a @can('cetak persetujuan kredit') href="#" @endcan title="Cetak Persetujuan Kredit">
                             <i class="fa fa-file-text-o"></i>
                             Persetujuan Kredit
                         </a>
                     </li>
 
                     <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('notifikasi_kredit') }}" title="Cetak Notifikasi">
+                        <a @can('cetak notifikasi kredi') href="{{ route('notifikasi_kredit') }}" @endcan title="Cetak Notifikasi Kredit">
                             <i class="fa fa-bell-o"></i>
                             Notifikasi Kredit
                         </a>
                     </li>
 
                     <li class="{{ request()->is('themes/fiducia') ? 'active' : '' }}">
-                        <a href="{{ route('fiducia') }}" title="Perhitungan Kredit">
+                        <a @can('cetak penjaminan fiducia') href="{{ route('fiducia') }}" @endcan title="Cetak Penjaminan Fiducia">
                             <i class="fa fa-truck"></i>
                             Penjaminan Fiducia
                         </a>
                     </li>
 
                     <li class="{{ request()->is('themes/notifikasi/perjanjian/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('perjanjian.kredit') }}" title="Cetak Perjanjian Kredit">
+                        <a @can('cetak perjanjian kredit') href="{{ route('perjanjian.kredit') }}" @endcan title="Cetak Perjanjian Kredit">
                             <i class="fa fa-exclamation-circle"></i>
                             Perjanjian Kredit
                         </a>
                     </li>
 
                     <li class="{{ request()->is('themes/cetak/penolakan/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('data_penolakan.kredit') }}" title="Cetak Penolakan">
+                        <a @can('cetak penolakan kredit') href="{{ route('data_penolakan.kredit') }}" @endcan title="Cetak Penolakan Kredit">
                             <i class="fa fa-close"></i>
                             Penolakan Kredit
                         </a>
