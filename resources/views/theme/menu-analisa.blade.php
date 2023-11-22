@@ -76,7 +76,7 @@
             </li>
 
             <li
-                class="{{ request()->is('themes/analisa/kualitatif/karakter*', 'themes/analisa/kualitatif/usaha*') ? 'active' : '' }}">
+                class="{{ request()->is('themes/analisa/kualitatif/karakter*', 'themes/analisa/kualitatif/usaha*', 'themes/analisa/kualitatif/swot*') ? 'active' : '' }}">
                 <a href="{{ route('kualitatif.karakter', ['pengajuan' => $pengajuan]) }}">
                     <i class="fa fa-folder-o"></i> Kualitatif
                 </a>

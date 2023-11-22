@@ -55,46 +55,46 @@
                         </div>
 
 
-                        <div style="margin-top:20px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PENGELUARAN UNTUK</span>
+                        <div style="width: 49.5%;float:left;">
+                            <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
                                 name="nampe1" value="{{ old('nampe1') }}">
                         </div>
-                        <div style="margin-top:20px;width: 49.5%;float:right;">
-                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
+                        <div style="width: 49.5%;float:right;">
+                            <span class="fw-bold text-red">NOMINAL PENGELUARAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="pengeluaran1" id="pengeluaran1" value="{{ old('pengeluaran1') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PENGELUARAN UNTUK</span>
+                            <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
                                 name="nampe2" value="{{ old('nampe2') }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
+                            <span class="fw-bold text-red">NOMINAL PENGELUARAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="pengeluaran2" id="pengeluaran2" value="{{ old('pengeluaran2') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PENGELUARAN UNTUK</span>
+                            <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
                                 name="nampe3" value="{{ old('nampe3') }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
+                            <span class="fw-bold text-red">NOMINAL PENGELUARAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="pengeluaran3" id="pengeluaran3" value="{{ old('pengeluaran3') }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">PENGELUARAN UNTUK</span>
+                            <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
                                 name="nampe4" value="{{ old('nampe4') }}">
                         </div>
                         <div style="margin-top:5px;width: 49.5%;float:right;">
-                            <span class="fw-bold">NOMINAL PENGELUARAN</span>
+                            <span class="fw-bold text-red">NOMINAL PENGELUARAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="pengeluaran4" id="pengeluaran4" value="{{ old('pengeluaran4') }}">
                         </div>
