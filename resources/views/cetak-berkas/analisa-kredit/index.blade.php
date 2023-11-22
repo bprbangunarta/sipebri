@@ -217,69 +217,69 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 1. </td>
-                <td style="border:1px solid black;">Permohonan</td>
+                <td style="border:1px solid black;">&nbsp; Permohonan</td>
                 <td class="text-center" style="border:1px solid black;">20-11-2023</td>
                 <td class="text-center" style="border:1px solid black;">CANDRA</td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 2. </td>
-                <td style="border:1px solid black;">Terima Berkas</td>
+                <td style="border:1px solid black;">&nbsp; Terima Berkas</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 3. </td>
-                <td style="border:1px solid black;">Proses Survey</td>
+                <td style="border:1px solid black;">&nbsp; Proses Survey</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 4. </td>
-                <td style="border:1px solid black;">Proses Analisa</td>
+                <td style="border:1px solid black;">&nbsp; Proses Analisa</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 5. </td>
-                <td style="border:1px solid black;">Berkas Naik Kasi</td>
+                <td style="border:1px solid black;">&nbsp; Berkas Naik Kasi</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 6. </td>
-                <td style="border:1px solid black;">Berkas Diterima Kas</td>
+                <td style="border:1px solid black;">&nbsp; Berkas Diterima Kas</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 7. </td>
-                <td style="border:1px solid black;">Survey Kasi</td>
+                <td style="border:1px solid black;">&nbsp; Survey Kasi</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 8. </td>
-                <td style="border:1px solid black;">Keputusan Komite</td>
+                <td style="border:1px solid black;">&nbsp; Keputusan Komite</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 9. </td>
-                <td style="border:1px solid black;">Notifikasi Kredit</td>
+                <td style="border:1px solid black;">&nbsp; Notifikasi Kredit</td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td class="text-center" style="border:1px solid black;"></td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
-                <th style="border:1px solid black;vertical-align: text-top;" colspan="3" rowspan="4">Keterangan</th>
+                <th style="border:1px solid black;vertical-align: text-top;" colspan="3" rowspan="4">Keterangan :</th>
                 <th class="text-center" style="border:1px solid black;">Agen BRI Link</th>
                 <th class="text-center" style="border:1px solid black;">Alamat</th>
             </tr>
@@ -349,7 +349,7 @@
 
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -358,7 +358,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">2.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -367,7 +367,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -376,7 +376,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">4.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -385,7 +385,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">5.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -394,7 +394,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">6.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -403,7 +403,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">7.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -412,7 +412,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">8.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -421,7 +421,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">9.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -430,7 +430,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">10.</td>
-                <td style="border:1px solid black;">Sampurna Mild</td>
+                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
@@ -1072,57 +1072,57 @@
 
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
-                <td style="border:1px solid black;">Rumah</td>
+                <td style="border:1px solid black;">&nbsp; Rumah</td>
                 <td class="text-center" style="border:1px solid black;">Permanen</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">2.</td>
-                <td style="border:1px solid black;">Mobil</td>
+                <td style="border:1px solid black;">&nbsp; Mobil</td>
                 <td class="text-center" style="border:1px solid black;">Tidak Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
-                <td style="border:1px solid black;">Motor</td>
+                <td style="border:1px solid black;">&nbsp; Motor</td>
                 <td class="text-center" style="border:1px solid black;">3 Unit</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">4.</td>
-                <td style="border:1px solid black;">Komputer</td>
+                <td style="border:1px solid black;">&nbsp; Komputer</td>
                 <td class="text-center" style="border:1px solid black;">Tidak Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">5.</td>
-                <td style="border:1px solid black;">Mesin Cuci</td>
+                <td style="border:1px solid black;">&nbsp; Mesin Cuci</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">6.</td>
-                <td style="border:1px solid black;">Kursi Tamu</td>
+                <td style="border:1px solid black;">&nbsp; Kursi Tamu</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">7.</td>
-                <td style="border:1px solid black;">Lemari Panjang</td>
+                <td style="border:1px solid black;">&nbsp; Lemari Panjang</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">8.</td>
-                <td style="border:1px solid black;">Harta Lainnya</td>
+                <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">9.</td>
-                <td style="border:1px solid black;">Harta Lainnya</td>
+                <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">10.</td>
-                <td style="border:1px solid black;">Harta Lainnya</td>
+                <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" width="4%" style="border:1px solid black;">11.</td>
-                <td style="border:1px solid black;">Harta Lainnya</td>
+                <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
                 <td class="text-center" style="border:1px solid black;">Ada</td>
             </tr>
         </table>
@@ -1160,107 +1160,107 @@
 
             {{-- Character --}}
             <tr>
-                <th style="border-top:1px solid black;border-right:1px solid black;" width="40%">1. Character</th>
+                <th style="border-top:1px solid black;border-right:1px solid black;" width="40%">&nbsp; 1. Character</th>
                 <th style="border-top:1px solid black;border-right:1px solid black;" width="40%"></th>
                 <th style="border-top:1px solid black;" width="20%"></th>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; a. Tidak Melakukan Hal-Hal Tercela</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Tidak Melakukan Hal-Hal Tercela</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; b. Terbuka dan Konsisten</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Terbuka dan Konsisten</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; c. Gaya Hidup</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Gaya Hidup</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; d. Kepetuhan Terhadap Kewajiban</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Kepetuhan Terhadap Kewajiban</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; e. Keharmonisan Rumah Tangga</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Keharmonisan Rumah Tangga</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; f. Hubungan Sosial dengan Lingkungan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Hubungan Sosial dengan Lingkungan</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; g. Pengendalian Emosi</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Pengendalian Emosi</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp;</td>
+                <td>&nbsp; -</td>
             </tr>
 
             {{-- Capacity --}}
             <tr>
                 <th style="border-right:1px solid black;">
                     <br>
-                    2. Capacity
+                    &nbsp; 2. Capacity
                 </th>
                 <th style="border-right:1px solid black;" width="25%"></th>
                 <th width="25%"></th>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; a. Riwayat Hidup</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Riwayat Hidup</td>
                 <td style="border-right:1px solid black;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Pengalaman Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Pengalaman Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Pertumbuhan Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Pertumbuhan Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. kontinuitas Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. kontinuitas Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; b. Aset / Kekayaan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Aset / Kekayaan</td>
                 <td style="border-right:1px solid black;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Aset Terkait Usaha (Likuid)</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Aset Terkait Usaha (Likuid)</td>
                 <td style="border-right:1px solid black;">&nbsp; Mengcover</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Aset Diluar Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Aset Diluar Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Likuid</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; c. Repacyment Capacity</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Repacyment Capacity</td>
                 <td style="border-right:1px solid black;">&nbsp; 15%</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; d. Pendataan Laporan Keuangan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Pendataan Laporan Keuangan</td>
                 <td style="border-right:1px solid black;">&nbsp; Mencatat Transaksi Harian</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; e. Pengalaman Kredit Masa Lalu</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Kredit Masa Lalu</td>
                 <td style="border-right:1px solid black;">&nbsp; Lancar Tidak Ada Tunggakan</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; f. SLIK</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. SLIK</td>
                 <td style="border-right:1px solid black;">&nbsp; Lancar</td>
                 <td>&nbsp; Baik</td>
             </tr>
@@ -1269,13 +1269,13 @@
             <tr>
                 <th style="border-right:1px solid black;">
                     <br>
-                    3. Capital
+                    &nbsp; 3. Capital
                 </th>
                 <th style="border-right:1px solid black;" width="30%"></th>
                 <th width="30%"></th>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; a. Sumber Permodalan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Sumber Permodalan</td>
                 <td style="border-right:1px solid black;">&nbsp; Modal Sendiri</td>
                 <td>&nbsp; Baik</td>
             </tr>
@@ -1284,73 +1284,73 @@
             <tr>
                 <th style="border-right:1px solid black;">
                     <br>
-                    4. Collateral
+                    &nbsp; 4. Collateral
                 </th>
                 <th style="border-right:1px solid black;" width="30%"></th>
                 <th width="30%"></th>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; a. Kepemilikan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Kepemilikan</td>
                 <td style="border-right:1px solid black;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Agunan Utama</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Agunan Utama</td>
                 <td style="border-right:1px solid black;">&nbsp; Milik Sendiri</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Agunan Tambahan</td>
-                <td style="border-right:1px solid black;">&nbsp; </td>
-                <td>&nbsp; </td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Agunan Tambahan</td>
+                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; b. Legalitas Kepemilikan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Legalitas Kepemilikan</td>
                 <td style="border-right:1px solid black;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Agunan Utama</td>
-                <td style="border-right:1px solid black;">&nbsp; </td>
-                <td>&nbsp; </td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Agunan Utama</td>
+                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Agunan Tambahan</td>
-                <td style="border-right:1px solid black;">&nbsp; </td>
-                <td>&nbsp; </td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Agunan Tambahan</td>
+                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; c. Mudah Diuangkan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Mudah Diuangkan</td>
                 <td style="border-right:1px solid black;">&nbsp; Baik</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; d. Stabilitas Harga</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Stabilitas Harga</td>
                 <td style="border-right:1px solid black;">&nbsp; Lainnya</td>
                 <td>&nbsp; Kurang Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; e. Lokasi atau Kondisi Fisik Agunan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Lokasi atau Kondisi Fisik Agunan</td>
                 <td style="border-right:1px solid black;"></td>
                 <td></td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Kendaraan</td>
-                <td style="border-right:1px solid black;">&nbsp; </td>
-                <td>&nbsp; </td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Kendaraan</td>
+                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. SHM</td>
-                <td style="border-right:1px solid black;">&nbsp; </td>
-                <td>&nbsp; </td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. SHM</td>
+                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; f. Permohonan Thd Taksasi Agunan</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Permohonan Thd Taksasi Agunan</td>
                 <td style="border-right:1px solid black;">&nbsp; 169%</td>
                 <td>&nbsp; Tidak baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; g. Aspek Hukum</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Aspek Hukum</td>
                 <td style="border-right:1px solid black;">&nbsp; Agunan lain yang tidak memenuhi syarat</td>
                 <td>&nbsp; Tidak Baik</td>
             </tr>
@@ -1359,23 +1359,23 @@
             <tr>
                 <th style="border-right:1px solid black;">
                     <br>
-                    5. Condition
+                    &nbsp; 5. Condition
                 </th>
                 <th style="border-right:1px solid black;" width="30%"></th>
                 <th width="30%"></th>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; a. Persaingan Usaha</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Persaingan Usaha</td>
                 <td style="border-right:1px solid black;">&nbsp; Persaingan Usaha Tidak Ketat</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; b. Kondisi Alam</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kondisi Alam</td>
                 <td style="border-right:1px solid black;">&nbsp; Resiko Sangat Rendah</td>
                 <td>&nbsp; Baik</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp; &nbsp; c. Regulisai Pemerintah</td>
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Regulisai Pemerintah</td>
                 <td style="border-right:1px solid black;">&nbsp; Tidak Mendukung</td>
                 <td>&nbsp; Baik</td>
             </tr>
@@ -1389,8 +1389,316 @@
         <hr style="border: 1px solid 034871;">
 
         <h4 style="text-align: center;font-size: 12pt;">CREDIT RISK RATING (CRR)</h4>
+        <table style="border:1px solid black;">
+            <tr>
+                <th class="text-center" width="50%">Jenis Resiko</th>
+                <th class="text-center" width="50%">Rating Resiko</th>
+            </tr>
+
+            <tr>
+                <th style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; 1. Resiko Industri (Resiko Ekonomi)
+                </th>
+                <td style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; 4 &nbsp;&nbsp;&nbsp; ( Tinggi )
+                </td>
+            </tr>
+
+            <tr>
+                <th style="border-right:1px solid black;">
+                    &nbsp; 2. Resiko Nasabah
+                </th>
+                <td style="border-right:1px solid black;"></td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Karakter
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 3 &nbsp;&nbsp;&nbsp; ( Sedang )
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Pengalaman Usaha
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 3 &nbsp;&nbsp;&nbsp; ( Sedang )
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Nilai Agunan / Kredit
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 3 &nbsp;&nbsp;&nbsp; ( Sedang )
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Aspek Hukum Agunan
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 3 &nbsp;&nbsp;&nbsp; ( Sedang )
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Debt Service Coverage Ratio (DSR)
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 1 &nbsp;&nbsp;&nbsp; ( Sangat Rendah )
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Jangka Waktu
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 1 &nbsp;&nbsp;&nbsp; ( Sedang )
+                </td>
+            </tr>
+
+            <tr>
+                <th style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; Credit Risk Rating (CRR)
+                </th>
+                <th style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; 3 &nbsp;&nbsp;&nbsp; ( Sedang )
+                </th>
+            </tr>
+        </table>
+
         <h4 style="text-align: center;font-size: 12pt;">ANALISA KUALITATIF</h4>
+        <table style="border:1px solid black;">
+            <tr>
+                <th class="text-center" width="50%">Kategori</th>
+                <th class="text-center" width="50%">Keterangan</th>
+            </tr>
+
+            <tr>
+                <th style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; 1. Karakter Debitur
+                </th>
+                <td style="border-top:1px solid black;border-right:1px solid black;"></td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. SLIK (Sumber Informasi SID Bank Indonesia)
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Lancar
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kewajiban Kepada Pihal Lain
+                </td>
+                <td style="border-right:1px solid black;"></td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 1
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; -
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 2
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; -
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 3
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; -
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Judi / Urusan dengan Pihak Berwajib
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Tidak Pernah
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Hubungan dengan Tetangga / Masyarakat
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Baik
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Menjadi Tenaga Kerja Indonesia (TKI)
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Tidak Pernah (Pemohon)
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Keberadaan Dirumah
+                </td>
+                <td style="border-right:1px solid black;"></td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pemohon
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Jam 17:00
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pendamping
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Jam 17:00
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Sumber Informasi Masyarakat
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Info Pak Bambang
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. SLIK (Sumber Informasi SID Bank Indonesia)
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Lancar
+                </td>
+            </tr>
+
+            <tr>
+                <th style="border-right:1px solid black;">
+                    &nbsp; 2. Usaha Debitur Saat Ini
+                </th>
+                <td style="border-right:1px solid black;"></td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Sumber Bahan Baku
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Karyawan Tetap
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Proses Pengolahan
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Aktifitas dilakukan setiap hari
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Market Wilayah
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Subang
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Sistem Pembayaran
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Transfer
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Faktor Pendukung Usaha
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Naik Jabatan
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Faktor Pengurang Usaha
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Kesehatan Menurun
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;vertical-align: text-top;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Trade Checking
+                </td>
+                <td style="border-right:1px solid black;">
+                    {{-- &nbsp; --}}
+                    <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
+                        INFO PAK BAMBANG BENAR BAHWA YBS MASIH AKTIF BEKERJA SAMPAI SAAT INI DAN TIDAK MENAJUKAN PHK
+                    </div>
+                </td>
+            </tr>
+        </table>
+
         <h4 style="text-align: center;font-size: 12pt;">KEBUTUHAN DANA</h4>
+        <table style="border:1px solid black;">
+            <tr>
+                <th class="text-center" width="50%">Kebutuhan</th>
+                <th class="text-center" width="50%">Nominal</th>
+            </tr>
+
+            <tr>
+                <td style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; 1. Modal Kerja
+                </td>
+                <td style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; Rp. 0
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 2. Investasi
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Rp. 0
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 3. Konsumtif
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Rp. 10.000.000
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 4. Pelunasan Kredit
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Rp. 0
+                </td>
+            </tr>
+            <tr>
+                <td style="border-right:1px solid black;">
+                    &nbsp; 5. Take Over
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; Rp. 0
+                </td>
+            </tr>
+        </table>
         
     </div>
 
