@@ -34,39 +34,6 @@
                 </li>
             @endhasanyrole
 
-            {{-- MENU ADMIN --}}
-            @can('master data')
-                <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-cube"></i>
-                        <span>Data Master</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
-                            <a href="{{ route('user.index') }}" title=" Data User">
-                                <i class="fa fa-circle-o"></i>
-                                Data User
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
-                            <a href="{{ route('role.index') }}" title="Data Role">
-                                <i class="fa fa-circle-o"></i>
-                                Data Role
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
-                            <a href="{{ route('permission.index') }}" title="Permission">
-                                <i class="fa fa-circle-o"></i>
-                                Permission
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            @endcan
-
             <li
                 class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan') ? 'active' : '' }}">
                 <a href="#">
@@ -80,14 +47,14 @@
 
                     <li
                         class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('pengajuan.index') }}" title="Permission" title="Input Pengajuan">
+                        <a @can('tambah pengajuan kredit') href="{{ route('pengajuan.index') }}" @endcan title="Add Pengajuan" title="Input Pengajuan">
                             <i class="fa fa-plus"></i>
                             Add Pengajuan
                         </a>
                     </li>
 
                     <li class="{{ request()->is('data/pengajuan', 'tracking/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('pengajuan.data') }}" title="Data Pengajuan">
+                        <a href="{{ route('pengajuan.data') }}" title="List Pengajuan">
                             <i class="fa fa-bars"></i>
                             List Pengajuan
                         </a>
@@ -95,7 +62,7 @@
 
                     <li
                         class="{{ request()->is('otor/pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('otor.pengajuan') }}" title="Otorisasi Pengajuan">
+                        <a @can('otorisasi pengajuan kredit') href="{{ route('otor.pengajuan') }}" @endcan title="Otorisasi Pengajuan">
                             <i class="fa fa-check"></i>
                             Otor Pengajuan
                         </a>
@@ -117,7 +84,7 @@
                 <ul class="treeview-menu">
 
                     <li class="{{ request()->is('analisa/penjadwalan') ? 'active' : '' }}">
-                        <a href="{{ route('analisa.penjadwalan') }}" title="Penjadwalan Survey">
+                        <a @can('penjadwalan survey') href="{{ route('analisa.penjadwalan') }}" @endcan title="Penjadwalan Survey">
                             <i class="fa fa-calendar"></i>
                             Penjadwalan
                         </a>
@@ -125,7 +92,7 @@
 
                     <li
                         class="{{ request()->is('themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa')? 'active': '' }}">
-                        <a href="{{ route('permohonan.analisa') }}">
+                        <a @can('input analisa') href="{{ route('permohonan.analisa') }}" @endcan title="Input Analisa">
                             <i class="fa fa-edit"></i>
                             Input Analisa
                         </a>
@@ -294,6 +261,39 @@
                     </li>
                 </ul>
             </li>
+
+            @can('master data')
+            <li class="header">ADMINISTRATOR</li>
+                <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-cube"></i>
+                        <span>Data Master</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                            <a href="{{ route('user.index') }}" title=" Data User">
+                                <i class="fa fa-circle-o"></i>
+                                Data User
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
+                            <a href="{{ route('role.index') }}" title="Data Role">
+                                <i class="fa fa-circle-o"></i>
+                                Data Role
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
+                            <a href="{{ route('permission.index') }}" title="Permission">
+                                <i class="fa fa-circle-o"></i>
+                                Permission
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
 
             <li class="header">TOOLS</li>
             <li
