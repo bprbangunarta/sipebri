@@ -68,7 +68,7 @@
             @endcan
 
             <li
-                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
@@ -94,8 +94,8 @@
                     </li>
 
                     <li
-                        class="{{ request()->is('otorisasi/pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('pengajuan.otorisasi') }}" title="Otorisasi Pengajuan">
+                        class="{{ request()->is('otor/pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('otor.pengajuan') }}" title="Otorisasi Pengajuan">
                             <i class="fa fa-check"></i>
                             Otor Pengajuan
                         </a>

@@ -35,10 +35,6 @@
                                         <th class="text-center" width="40%">ALAMAT</th>
                                         <th class="text-center" width="17%">PENGAJUAN</th>
                                         <th class="text-center" width="10%">AKSI</th>
-
-                                        {{-- @can('hapus pengajuan kredit')
-                                            <th class="text-center" width="3%">HAPUS</th>
-                                        @endcan --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -78,7 +74,6 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                @can('edit pengajuan kredit')
                                                     @if ($item->status == 'Lengkapi Data')
                                                         <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
                                                             <span class="btn bg-red"
@@ -94,49 +89,8 @@
                                                             <span class="btn bg-green"
                                                                 style="width: 120px;hight:100%;">{{ $item->status }}</span>
                                                         </a>
-                                                        {{-- <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                        <span class="btn bg-green"
-                                                            style="width: 120px;float:left;">{{ $item->status }}</span>
-                                                    </a> --}}
                                                     @endif
-
-                                                    <p style="margin-top:-5px;"></p>
-                                                    @if (IS_NULL($item->no_cif))
-                                                        <a href="#">
-                                                            <span class="btn bg-red" style="width: 120px;hight:100%;">
-                                                                Sinkronisasi
-                                                            </span>
-                                                        </a>
-                                                    @else
-                                                        <a href="#">
-                                                            <span class="btn bg-blue" style="width: 120px;hight:100%;">
-                                                                Sinkronisasi
-                                                            </span>
-                                                        </a>
-                                                    @endif
-                                                @endcan
-
-                                                @can('otorisasi pengajuan kredit')
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}">
-                                                        <span class="btn bg-red" style="width: 120px;hight:100%;">Otorisasi
-                                                            Data</span>
-                                                    </a>
-                                                @endcan
                                             </td>
-
-                                            @can('hapus pengajuan kredit')
-                                                <td class="text-center" style="vertical-align: middle;">
-                                                    <form action="{{ route('pengajuan.destroy', ['pengajuan' => $item->id]) }}"
-                                                        method="POST">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-danger">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            @endcan
                                         </tr>
                                         @php
                                             $no++;

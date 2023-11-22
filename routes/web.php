@@ -153,7 +153,7 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::group(['middleware' => ['role:Head Teller|Kabag Operasional']], function () {
-                Route::get('/otorisasi/pengajuan', 'otorisasi')->name('pengajuan.otorisasi');
+                Route::get('/otor/pengajuan', 'otorisasi')->name('otor.pengajuan');
             });
 
             Route::get('/data/pengajuan', 'all')->name('pengajuan.data');
