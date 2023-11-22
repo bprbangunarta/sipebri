@@ -515,14 +515,15 @@ class Midle extends Model
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->where(function ($query) use ($user, $role) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
                     ->where('data_pengajuan.tracking', '=', $role);
             })
-            ->orWhere(function ($query) use ($user, $role) {
+            ->orWhere(function ($query) {
                 $query->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_notifikasi.pengajuan_kode', '=', null);
+                    ->whereNull('data_notifikasi.pengajuan_kode');
             })
             // ->orWhere('data_survei.surveyor_kode', '=', $user)
             // ->where('data_pengajuan.tracking', '=', $role)
@@ -806,6 +807,7 @@ class Midle extends Model
             ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_tracking', 'data_pengajuan.kode_pengajuan', '=', 'data_tracking.pengajuan_kode')
             ->select(
                 'data_pengajuan.*',
                 'data_pengajuan.created_at as tgl_pengajuan',
@@ -820,6 +822,7 @@ class Midle extends Model
                 'data_survei.created_at as tgl_survei',
                 'data_survei.input_user as input_user_survei',
                 'data_kantor.nama_kantor',
+                'data_tracking.*',
             )
             ->where('data_pengajuan.kode_pengajuan', $kode)
             ->get();
@@ -837,6 +840,24 @@ class Midle extends Model
         $ks = DB::table('v_users')->where('code_user', $data[0]->input_user_survei)->first();
         $data[0]->nama_input_survei = $ks->nama_user;
 
+        return $data;
+    }
+
+    public static function cetak_dokumen_analisa_usaha_perdagangan($kode)
+    {
+        $data = DB::table('au_perdagangan')
+            ->leftJoin('bu_perdagangan', 'au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
+            ->select('au_perdagangan.*', 'bu_perdagangan.*')
+            ->where('au_perdagangan.pengajuan_kode', $kode)->first();
+        return $data;
+    }
+    public static function cetak_dokumen_analisa_usaha_pertanian($kode)
+    {
+        $data = DB::table('au_pertanian')
+            ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
+            ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
+            ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*')
+            ->where('au_pertanian.pengajuan_kode', $kode)->first();
         return $data;
     }
 }

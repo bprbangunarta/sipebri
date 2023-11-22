@@ -91,7 +91,7 @@ class KomiteController extends Controller
         try {
             $usr = Auth::user()->code_user;
             $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
-            $cek = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+            $kom = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             $cek = Midle::analisa_usaha($request->kode_pengajuan);
 
             // //Data Tracking
@@ -123,7 +123,7 @@ class KomiteController extends Controller
             }
 
 
-            if (is_null($cek)) {
+            if (is_null($kom)) {
                 $name = 'KMT';
                 $length = 5;
                 $kode = Midle::kode_komite($name, $length);
