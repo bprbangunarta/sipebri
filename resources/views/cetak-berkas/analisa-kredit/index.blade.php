@@ -1643,7 +1643,6 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Trade Checking
                 </td>
                 <td style="border-right:1px solid black;">
-                    {{-- &nbsp; --}}
                     <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
                         INFO PAK BAMBANG BENAR BAHWA YBS MASIH AKTIF BEKERJA SAMPAI SAAT INI DAN TIDAK MENAJUKAN PHK
                     </div>
@@ -1709,6 +1708,70 @@
         <hr style="border: 1px solid 034871;">
 
         <h4 style="text-align: center;font-size: 12pt;">MEMORANDUM USULAN KREDIT (MUK)</h4>
+        <table style="border:1px solid black;">
+            <tr>
+                <th width="44%">&nbsp; 1. Identitas Pemohon dan Usulan</th>
+                <td width="1%"></td>
+                <td width="55%"></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Nama Lengkap Pemohon</td>
+                <td> : </td>
+                <td>&nbsp; Zulfadli Rizal</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Alamat</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="vertical-align: text-top;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Rumah
+                </td>
+                <td style="vertical-align: text-top;"> : </td>
+                <td>
+                    <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
+                        DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kantor
+                </td>
+                <td> : </td>
+                <td>&nbsp; -</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Usaha
+                </td>
+                <td> : </td>
+                <td>&nbsp; -</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - No. Telepon
+                </td>
+                <td> : </td>
+                <td>&nbsp; 082320099971 / 0823200999777</td>
+            </tr>
+
+            <tr>
+                <th>
+                    &nbsp; 2. Analisa dan Evaluasi Kredit
+                </th>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <th>
+                    &nbsp; 3. Rekomendasi
+                </th>
+                <td></td>
+                <td></td>
+        </table>
         
     </div>
 
