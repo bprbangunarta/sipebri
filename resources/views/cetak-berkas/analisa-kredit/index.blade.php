@@ -84,6 +84,7 @@
 </head>
 
 <body>
+    {{-- Data Nasabah --}}
     <div class="content" style="margin-top: -57px;">
 
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
@@ -991,7 +992,7 @@
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">6.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Kesehatan/td>
+                <td style="border:1px solid black;">&nbsp; Biaya Kesehatan</td>
                 <td style="border:1px solid black;text-align:right;"></td>
                 <td style="border:1px solid black;text-align:right;">Rp. 100.000 &nbsp;</td>
             </tr>
@@ -1720,14 +1721,7 @@
                 <td>&nbsp; Zulfadli Rizal</td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Alamat</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td style="vertical-align: text-top;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Rumah
-                </td>
+                <td style="vertical-align: text-top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Alamat</td>
                 <td style="vertical-align: text-top;"> : </td>
                 <td>
                     <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
@@ -1736,33 +1730,179 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kantor
-                </td>
-                <td> : </td>
-                <td>&nbsp; -</td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Usaha
-                </td>
-                <td> : </td>
-                <td>&nbsp; -</td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - No. Telepon
-                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. No. Telepon</td>
                 <td> : </td>
                 <td>&nbsp; 082320099971 / 0823200999777</td>
             </tr>
-
+            {{-- <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Bentuk Usaha</td>
+                <td> : </td>
+                <td>&nbsp; PT</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Usaha</td>
+                <td> : </td>
+                <td>&nbsp; Bukan Lapangan Usaha - Lainnya</td>
+            </tr> --}}
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Susunan Pengurus & Pemegang Saham</td>
+                <td> : </td>
+                <td>&nbsp; -</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Riwayat Usaha dan Grup</td>
+                <td> : </td>
+                <td>&nbsp; >5 Tahun, Meningkat</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Riwayat Pinjaman di Bank Lain</td>
+                <td> : </td>
+                <td>&nbsp; Lancar</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Legalitas dan Izin Usaha</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - KTP
+                </td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; 3213070701980004</div>
+                    <div style="width:59%;float:right">- SIUP &nbsp;&nbsp;&nbsp;&nbsp; : -</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Akta Pendirian
+                </td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; -</div>
+                    <div style="width:59%;float:right">- TDP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : -</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - NPWP
+                </td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; -</div>
+                    <div style="width:59%;float:right">- TDPP &nbsp;&nbsp;&nbsp; : -</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - SITU
+                </td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; -</div>
+                    <div style="width:59%;float:right">- Lainnya : -</div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h. Permohonan Kredit</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Besar Permohonan
+                </td>
+                <td> : </td>
+                <td>&nbsp; Rp. 50.000.000</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Obyek yang Dibiayai
+                </td>
+                <td> : </td>
+                <td>&nbsp; Kredit Konsumsi Lainnya ( Konsumtif )</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i. Lokasi Usaha dan atau Lokasi Kantor</td>
+                <td> : </td>
+                <td>&nbsp; Strategis</td>
+            </tr>
+            
             <tr>
                 <th>
                     &nbsp; 2. Analisa dan Evaluasi Kredit
                 </th>
                 <td></td>
                 <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Analisa Watak (Character)</td>
+                <td> : </td>
+                <td>&nbsp; Cukup Baik</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Analisa Kemampuan (Capacity)</td>
+                <td> : </td>
+                <td>&nbsp; Cukup Baik</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Analisa Modal (Capital)</td>
+                <td> : </td>
+                <td>&nbsp; Cukup Baik</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Analisa Agunan (Collateral)</td>
+                <td> : </td>
+                <td>&nbsp; Cukup Baik</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Analisa Kondisi (Condition)</td>
+                <td> : </td>
+                <td>&nbsp; Cukup Baik</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Analisa SWOT</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kekuatan (Strength)
+                </td>
+                <td> : </td>
+                <td>&nbsp; Karyawan Tetap</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kelemahan (Weakness)
+                </td>
+                <td> : </td>
+                <td>&nbsp; Kesehatan Menurun</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Peluang (Opportunities)
+                </td>
+                <td> : </td>
+                <td>&nbsp; Naik Jabatan</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Ancaman (Treats)
+                </td>
+                <td> : </td>
+                <td>&nbsp; PHK</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. CRR</td>
+                <td> : </td>
+                <td>&nbsp; 3 (Sedang )</td>
+            </tr>
+            <tr>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kesimpulan</th>
+                <td> : </td>
+                <th>&nbsp; Dengan demikian usaha debitur LAYAK untuk dibiayai</th>
             </tr>
 
             <tr>
@@ -1771,6 +1911,118 @@
                 </th>
                 <td></td>
                 <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Nama Peminjam</td>
+                <td> : </td>
+                <td>&nbsp; Zulfadli Rizal</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Plafon Maksimum yang Bisa Dibiayai</td>
+                <td> : </td>
+                <td>&nbsp; Rp. 138.726.000</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Usulan Plafon Kredit</td>
+                <td> : </td>
+                <th>&nbsp; Rp. 50.000.000</th>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Jenis Kredit</td>
+                <td> : </td>
+                <td>&nbsp; KRU - Kedit Umum</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Tujuan Penggunaan</td>
+                <td> : </td>
+                <td>&nbsp; Konsumtif - Modal Nikah</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Sektor Ekonomi</td>
+                <td> : </td>
+                <td>&nbsp; 1020. Bukan Lapangan Usaha - Lainnya</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Jangka Waktu</td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; <b>36 Bulan</b></div>
+                    <div style="width:59%;float:right">h. Suku Bunga &nbsp; : <b>32%</b></div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i. Sistem Angsuran</td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; <b>EFEKTIF ANUITAS</b></div>
+                    <div style="width:59%;float:right">j. Biaya Provisi : <b>1.00%</b></div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k. Biaya Penalti</td>
+                <td> : </td>
+                <td>
+                    <div style="width:40%;float:left">&nbsp; <b>0.10% per hari</b></div>
+                    <div style="width:59%;float:right">l. Biaya Admin : <b>4.00%</b></div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m. Pengikatan Agunan</td>
+                <td> : </td>
+                <th>&nbsp; Tanpa Pengikatan</th>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n. Kepesertaan Asuransi</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kendaraan (TLO)
+                </td>
+                <td> : </td>
+                <td>&nbsp; Tidak</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Jiwa (Wkawaktu)
+                </td>
+                <td> : </td>
+                <td>&nbsp; Ya</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kecelakaan Plus
+                </td>
+                <td> : </td>
+                <td>&nbsp; Tidak</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p. Syarat-Syarat Kredit</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Sebelum Realisasi
+                </td>
+                <td> : </td>
+                <td>&nbsp; ATM, BUTAB, KARTU JAMSOSTEK, SK KARYAWAN</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Syarat Tambahan
+                </td>
+                <td> : </td>
+                <td>&nbsp; IJAZAH TERAKHIR SMP, KK ASLI</td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Syarat Lainnya
+                </td>
+                <td> : </td>
+                <td>&nbsp; USER M-BANKING</td>
+            </tr>
         </table>
         
     </div>
