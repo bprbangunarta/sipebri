@@ -37,6 +37,7 @@ class KomiteController extends Controller
         $c = $cek->get();
         $count = count($c);
         $data = $cek->paginate(10);
+
         $usul1 = "Staff Analis";
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
@@ -51,6 +52,30 @@ class KomiteController extends Controller
             }
         }
 
+
+        if ($user->role_name == 'Customer Service') {
+            $usul1 = "Customer Service";
+            for ($i = 0; $i < $count; $i++) {
+                if ($data->isNotEmpty()) {
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                }
+            }
+        } elseif ($user->role_name == 'Kepala Kantor Kas') {
+            $usul1 = "Kepala Kantor Kas";
+            for ($i = 0; $i < $count; $i++) {
+                if ($data->isNotEmpty()) {
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                }
+            }
+        }
         $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first('role_name');
         return view('komite.index', [
             'data' => $data,
@@ -183,6 +208,11 @@ class KomiteController extends Controller
                 ];
             }
 
+            //Cek Data Usulan
+            $du = DB::table('data_usulan')
+                ->where('pengajuan_kode', $request->kode_pengajuan)
+                ->where('input_user', $usr)
+                ->get();
 
             $usulan = [
                 'pengajuan_kode' => $request->kode_pengajuan,
@@ -197,11 +227,15 @@ class KomiteController extends Controller
                 'catatan' => $request->catatan,
                 'created_at' => now(),
             ];
+
+            if (!is_null($du)) {
+                DB::table('data_usulan')->where('id', $du[0]->id)->update($usulan);
+            } else {
+                DB::table('data_usulan')->insert($usulan);
+            }
             $capacity = ['rc' => (float) str_replace('%', '', $request->rc)];
-            // dd($request->all(), $usulan);
             DB::transaction(function () use ($request, $data2, $usulan, $capacity) {
                 DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-                DB::table('data_usulan')->insert($usulan);
                 DB::table('a5c_capacity')->where('pengajuan_kode', $request->kode_pengajuan)->update($capacity);
             });
 
