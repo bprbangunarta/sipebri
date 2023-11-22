@@ -51,20 +51,29 @@
                                 value="{{ 'Rp. ' . ' ' . number_format($lain->pendapatan, 0, ',', '.') }}"
                                 name="pendapatan" id="penus" readonly>
                         </div>
-                        <div style="margin-top: 5px;">
+
+                        <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA OPERASIONAL</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="{{ 'Rp. ' . ' ' . number_format($lain->pengeluaran, 0, ',', '.') }}"
                                 name="pengeluaran" id="biayaop" readonly>
                         </div>
 
-                        <div style="margin-top: 5px;">
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                            <span class="fw-bold">BIAYA BAHAN BAKU</span>
+                            <input class="form-control input-sm form-border" type="text"
+                                value="{{ 'Rp. ' . ' ' . number_format($lain->pengeluaran, 0, ',', '.') }}"
+                                name="bahan_baku" id="bahan_baku" readonly>
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">PROYEKSI PENAMBAHAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="proyeksi" value="{{ 'Rp. ' . ' ' . number_format($lain->proyeksi, 0, ',', '.') }}"
                                 id="pph">
                         </div>
-                        <div style="margin-top: 5px;">
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">HASIL USAHA BERSIH</span>
                             <input class="form-control input-sm form-border bg-blue" type="text"
                                 value="{{ 'Rp. ' . ' ' . number_format($lain->laba_bersih, 0, ',', '.') }}"

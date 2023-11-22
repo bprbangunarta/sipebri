@@ -106,18 +106,25 @@
                             <input class="form-control input-sm form-border" type="text"
                                 value="Rp. {{ old('pendapatan') }}" name="pendapatan" id="penus" readonly>
                         </div>
-                        <div style="margin-top: 5px;">
+
+                        <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">BIAYA OPERASIONAL</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="Rp. {{ old('pengeluaran') }}" name="pengeluaran" id="biayaop" readonly>
                         </div>
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                            <span class="fw-bold">BIAYA BAHAN BAKU</span>
+                            <input class="form-control input-sm form-border" type="text"
+                                value="Rp. {{ old('bahan_baku') }}" name="bahan_baku" id="bahan_baku" readonly>
+                        </div>
 
-                        <div style="margin-top: 5px;">
+                        <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">PROYEKSI PENAMBAHAN</span>
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="proyeksi" value="Rp. {{ old('proyeksi') }}" id="pph">
                         </div>
-                        <div style="margin-top: 5px;">
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">HASIL USAHA BERSIH</span>
                             <input class="form-control input-sm form-border bg-blue" type="text"
                                 value="Rp. {{ old('laba_bersih') }}" name="laba_bersih" id="hasilbersih">

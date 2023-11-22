@@ -35,6 +35,13 @@
                                         USAHA NASABAH
                                     </a>
                                 </li>
+
+                                <li class="{{ request()->is('themes/analisa/kualitatif/usaha') ? 'active' : '' }}">
+                                    <a href="{{ route('kualitatif.usaha', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/kualitatif/usaha') ? 'text-bold' : '' }}">
+                                        ANALISA SWOT
+                                    </a>
+                                </li>
                             </ul>
 
                             @yield('content')

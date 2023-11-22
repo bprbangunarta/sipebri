@@ -484,4 +484,6 @@ Route::prefix('cetak-berkas')->group(function () {
 });
 
 Route::view('/usaha_perdagangan', 'cetak.analisa.usaha_perdagangan');
+Route::view('/themes/analisa/bahan-baku/usaha/lainnya', 'staff.analisa.u-lainnya.bahan-baku');
+
 require __DIR__ . '/auth.php';
