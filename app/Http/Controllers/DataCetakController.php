@@ -583,10 +583,26 @@ class DataCetakController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = Midle::cetak_dokumen_analisa($enc);
-            // dd($data);
+            $perdagangan = Midle::cetak_dokumen_analisa_usaha_perdagangan($enc);
+            if (!is_null($perdagangan)) {
+                $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan->kode_usaha)->get();
+            } else {
+                $biaya_perdagangan = null;
+            }
+
+            $pertanian = Midle::cetak_dokumen_analisa_usaha_pertanian($enc);
+            if (!is_null($pertanian)) {
+                $jml = ((int)$pertanian->laba_bersih * 70) / 100;
+                $pertanian->saving = $jml;
+            }
+
+            // dd($pertanian);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
+                'perdagangan' => $perdagangan,
+                'pertanian' => $pertanian,
+                'biayaperdagangan' => $biaya_perdagangan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

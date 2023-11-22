@@ -246,8 +246,9 @@
             <tr style="border:1px solid black;">
                 <td class="text-center" width="2%" style="border:1px solid black;"> 4. </td>
                 <td style="border:1px solid black;">&nbsp; Proses Analisa</td>
-                <td class="text-center" style="border:1px solid black;"></td>
-                <td class="text-center" style="border:1px solid black;"></td>
+                <td class="text-center" style="border:1px solid black;">
+                    {{ \Carbon\Carbon::parse($cetak->analisa_kredit)->format('Y-m-d') }}</td>
+                <td class="text-center" style="border:1px solid black;">{{ $cetak->nama_surveyor }}</td>
                 <td style="border:1px solid black;"></td>
             </tr>
             <tr style="border:1px solid black;">
@@ -306,254 +307,190 @@
     </div>
 
     {{-- Analisa Usaha Perdagangan --}}
-    <div class="page-break"></div>
-    <div class="content" style="margin-top: -57px;">
-        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
-        <hr style="border: 1px solid 034871;">
+    @if (!is_null($perdagangan))
+        <div class="page-break"></div>
+        <div class="content" style="margin-top: -57px;">
+            <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+            <hr style="border: 1px solid 034871;">
 
-        <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
+            <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
 
-        <table>
-            <tr>
-                <td width="13%">Jenis Usaha</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">PERDAGANGAN</td>
-            </tr>
-            <tr>
-                <td>Kode Usaha</td>
-                <td class="text-center"> : </td>
-                <td style="text-align: justify;">AUPG00002</td>
-            </tr>
-            <tr>
-                <td>Nama Usaha</td>
-                <td class="text-center"> : </td>
-                <td style="text-align: justify;">Warung Sembako</td>
-            </tr>
-            <tr>
-                <td>Lama Usaha</td>
-                <td class="text-center"> : </td>
-                <td style="text-align: justify;">3 Tahun</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: text-top;">Alamat Usaha</td>
-                <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM -
-                    SUBANG</td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <td width="13%">Jenis Usaha</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">PERDAGANGAN</td>
+                </tr>
+                <tr>
+                    <td>Kode Usaha</td>
+                    <td class="text-center"> : </td>
+                    <td style="text-align: justify;">{{ $perdagangan->kode_usaha }}</td>
+                </tr>
+                <tr>
+                    <td>Nama Usaha</td>
+                    <td class="text-center"> : </td>
+                    <td style="text-align: justify;">{{ $perdagangan->nama_usaha }}</td>
+                </tr>
+                <tr>
+                    <td>Lama Usaha</td>
+                    <td class="text-center"> : </td>
+                    <td style="text-align: justify;">{{ $perdagangan->lama_usaha }}</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: text-top;">Alamat Usaha</td>
+                    <td class="text-center" style="vertical-align: text-top;"> : </td>
+                    <td style="text-align: justify;">{{ $perdagangan->lokasi_usaha }}</td>
+                </tr>
+            </table>
 
-        <table style="border:1px solid black;">
-            <tr style="border:1px solid black;">
-                <th class="text-center" colspan="7" style="border:1px solid black;">Biaya Barang Dagang</th>
-            </tr>
-            <tr style="border:1px solid black;">
-                <th class="text-center" width="4%" style="border:1px solid black;">No</th>
-                <th class="text-center" style="border:1px solid black;">Nama Barang</th>
-                <th class="text-center" style="border:1px solid black;">Harga Beli</th>
-                <th class="text-center" style="border:1px solid black;">Harga Jual</th>
-                <th class="text-center" style="border:1px solid black;">Laba</th>
-                <th class="text-center" style="border:1px solid black;">Stok</th>
-                <th class="text-center" style="border:1px solid black;">%</th>
-            </tr>
+            <table style="border:1px solid black;">
+                <tr style="border:1px solid black;">
+                    <th class="text-center" colspan="7" style="border:1px solid black;">Biaya Barang Dagang</th>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <th class="text-center" width="4%" style="border:1px solid black;">No</th>
+                    <th class="text-center" style="border:1px solid black;">Nama Barang</th>
+                    <th class="text-center" style="border:1px solid black;">Harga Beli</th>
+                    <th class="text-center" style="border:1px solid black;">Harga Jual</th>
+                    <th class="text-center" style="border:1px solid black;">Laba</th>
+                    <th class="text-center" style="border:1px solid black;">Stok</th>
+                    <th class="text-center" style="border:1px solid black;">%</th>
+                </tr>
+                @php
+                    $no = 1;
+                @endphp
+                @forelse ($biayaperdagangan as $item)
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">{{ $no }}
+                        </td>
+                        <td style="border:1px solid black;">&nbsp; {{ $item->nama_barang }}</td>
+                        <td style="border:1px solid black;text-align:right;">
+                            {{ 'Rp.' . ' ' . number_format($item->harga_beli, 0, ',', '.') }} &nbsp;</td>
+                        <td style="border:1px solid black;text-align:right;">
+                            {{ 'Rp.' . ' ' . number_format($item->harga_jual, 0, ',', '.') }} &nbsp;</td>
+                        <td style="border:1px solid black;text-align:right;">
+                            {{ 'Rp.' . ' ' . number_format($item->laba, 0, ',', '.') }} &nbsp;</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $item->stok }}</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $item->presentase_laba }}%</td>
+                    </tr>
+                    @php
+                        $no++;
+                    @endphp
+                @empty
+                @endforelse
+            </table>
 
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">2.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">4.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">5.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">6.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">7.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">8.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">9.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" width="4%" style="border:1px solid black;">10.</td>
-                <td style="border:1px solid black;">&nbsp; Sampurna Mild</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 20.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 25.000.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.000.000 &nbsp;</td>
-                <td class="text-center" style="border:1px solid black;">10</td>
-                <td class="text-center" style="border:1px solid black;">50.00%</td>
-            </tr>
+            <p></p>
 
-            <tr style="border:1px solid black;">
-                <th class="text-center" width="4%" style="border:1px solid black;">#</th>
-                <th class="text-center" style="border:1px solid black;">Semua Barang</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 200.000.000 &nbsp;</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 250.000.000 &nbsp;</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 50.000 &nbsp;</th>
-                <th class="text-center" style="border:1px solid black;">100</th>
-                <th class="text-center" style="border:1px solid black;">50.00%</th>
-            </tr>
-        </table>
+            <table style="border:1px solid black;">
+                <tr style="border:1px solid black;">
+                    <th class="text-center" colspan="4" style="border:1px solid black;">Analisa Keuangan</th>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <th class="text-center" width="4%" style="border:1px solid black;">No</th>
+                    <th class="text-center" style="border:1px solid black;">Keterangan</th>
+                    <th class="text-center" width="25%" style="border:1px solid black;">Pendapatan</th>
+                    <th class="text-center" width="25%" style="border:1px solid black;">Pengeluaran</th>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">1.</td>
+                    <td style="border:1px solid black;">&nbsp; Pendapatan Dagang Perbulan</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->pendapatan, 0, ',', '.') }} &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">2.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Transportasi</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->transportasi, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">3.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Bongkar Muat</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->bongkar_muat, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">4.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Pegawai</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->pegawai, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">5.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Gas Telepon Listrik</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->gatel, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">6.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Retribusi</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->retribusi, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">7.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Sewa Tempat</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->sewa_tempat, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">8.</td>
+                    <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->penambahan, 0, ',', '.') }} &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">#</td>
+                    <th style="border:1px solid black;">&nbsp; Total</th>
+                    <th style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->pendapatan, 0, ',', '.') }} &nbsp;</th>
+                    <th style="border:1px solid black;text-align:right;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->pengeluaran, 0, ',', '.') }} &nbsp;</th>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <th class="text-center" colspan="2" style="border:1px solid black;">Hasil Bersih Usaha</th>
+                    <th class="text-center" colspan="2" style="border:1px solid black;">
+                        {{ 'Rp.' . ' ' . number_format($perdagangan->laba_bersih, 0, ',', '.') }}</th>
+                </tr>
+            </table>
 
-        <p></p>
+            <p></p>
 
-        <table style="border:1px solid black;">
-            <tr style="border:1px solid black;">
-                <th class="text-center" colspan="4" style="border:1px solid black;">Analisa Keuangan</th>
-            </tr>
-            <tr style="border:1px solid black;">
-                <th class="text-center" width="4%" style="border:1px solid black;">No</th>
-                <th class="text-center" style="border:1px solid black;">Keterangan</th>
-                <th class="text-center" width="25%" style="border:1px solid black;">Pendapatan</th>
-                <th class="text-center" width="25%" style="border:1px solid black;">Pengeluaran</th>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">1.</td>
-                <td style="border:1px solid black;">&nbsp; Pendapatan Dagang Perbulan</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.505.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">2.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Transportasi</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 120.000 &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">3.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Bongkar Muat</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">4.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Pegawai</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">5.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Gas Telepon Listrik</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">6.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Retribusi</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">7.</td>
-                <td style="border:1px solid black;">&nbsp; Biaya Sewa Tempat</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">8.</td>
-                <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 100.000 &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-            </tr>
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">#</td>
-                <th style="border:1px solid black;">&nbsp; Total</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 5.605.000 &nbsp;</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 120.000 &nbsp;</th>
-            </tr>
-            <tr style="border:1px solid black;">
-                <th class="text-center" colspan="2" style="border:1px solid black;">Hasil Bersih Usaha</th>
-                <th class="text-center" colspan="2" style="border:1px solid black;">Rp. 5.485.000</th>
-            </tr>
-        </table>
-
-        <p></p>
-
-        <table>
-            <tr>
-                <td width="20%">Periode Belanja</td>
-                <td class="text-center" width="3%">:</td>
-                <td>Rp. 200.000 | Harian</td>
-            </tr>
-            <tr>
-                <td>Omset Harian</td>
-                <td class="text-center" width="3%">:</td>
-                <td>Rp. 300.000</td>
-            </tr>
-            <tr>
-                <td>Harga Pokok Penjualan</td>
-                <td class="text-center" width="3%">:</td>
-                <td>Rp. 200.000 | Omset Harian / (1 + rata-rata % laba)</td>
-            </tr>
-            <tr>
-                <td>Laba Penjualan Harian</td>
-                <td class="text-center" width="3%">:</td>
-                <td>Rp. 100.000 | Omset Harian - Harga Pokok Penjualan</td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <td width="20%">Periode Belanja</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($perdagangan->belanja_harian, 0, ',', '.') }} | Harian</td>
+                </tr>
+                <tr>
+                    <td>Omset Harian</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($perdagangan->omset_harian, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td>Harga Pokok Penjualan</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($perdagangan->pokok_penjualan, 0, ',', '.') }} | Omset Harian /
+                        (1
+                        + rata-rata % laba)</td>
+                </tr>
+                <tr>
+                    <td>Laba Penjualan Harian</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($perdagangan->pokok_penjualan, 0, ',', '.') }} | Omset Harian -
+                        Harga Pokok Penjualan</td>
+                </tr>
+            </table>
+    @endif
     </div>
 
     {{-- Analisa Usaha Pertanian --}}
@@ -572,25 +509,25 @@
 
                 <td width="16%">Luas Milik Sendiri</td>
                 <td style="text-align: right;" width="3%"> : </td>
-                <td style="text-align: right;"> 18.000 M2 </td>
+                <td style="text-align: right;">{{ number_format($pertanian->luas_sendiri, 0, ',', '.') }} M2 </td>
             </tr>
             <tr>
                 <td>Kode Usaha</td>
                 <td class="text-center"> : </td>
-                <td style="text-align: justify;">AUP00001</td>
+                <td style="text-align: justify;">{{ $pertanian->kode_usaha }}</td>
 
                 <td>Luas Hasil Gadai</td>
                 <td style="text-align: right;" width="3%"> : </td>
-                <td style="text-align: right;"> 18.000 M2 </td>
+                <td style="text-align: right;"> {{ number_format($pertanian->luas_gadai, 0, ',', '.') }} M2 </td>
             </tr>
             <tr>
                 <td>Nama Usaha</td>
                 <td class="text-center"> : </td>
-                <td style="text-align: justify;">Padi Ketan</td>
+                <td style="text-align: justify;">{{ $pertanian->nama_usaha }}</td>
 
                 <td>Luas Hasil Sewa</td>
                 <td style="text-align: right;" width="3%"> : </td>
-                <td style="text-align: right;"> 18.000 M2 </td>
+                <td style="text-align: right;"> {{ number_format($pertanian->luas_sewa, 0, ',', '.') }} M2 </td>
             </tr>
             <tr>
                 <td>Sektor Ekonomi</td>
@@ -599,22 +536,22 @@
 
                 <td>Hasil Panen</td>
                 <td style="text-align: right;" width="3%"> : </td>
-                <td style="text-align: right;"> 120 KW </td>
+                <td style="text-align: right;"> {{ $pertanian->hasil_panen }} KW </td>
             </tr>
             <tr>
                 <td>Jenis Tanaman</td>
                 <td class="text-center"> : </td>
-                <td style="text-align: justify;">Padi Ketan</td>
+                <td style="text-align: justify;">{{ $pertanian->jenis_tanaman }}</td>
 
                 <td>Harga Per Kwintal</td>
                 <td style="text-align: right;" width="3%"> : </td>
-                <td style="text-align: right;"> 450.000 </td>
+                <td style="text-align: right;"> {{ 'Rp. ' . ' ' . number_format($pertanian->harga, 0, ',', '.') }}
+                </td>
             </tr>
             <tr>
                 <td style="vertical-align: text-top;">Alamat Usaha</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;" colspan="4">DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI
-                    KECAMATAN. CIKAUM - SUBANG</td>
+                <td style="text-align: justify;" colspan="4">{{ $pertanian->lokasi_usaha }}</td>
             </tr>
         </table>
 
@@ -633,96 +570,113 @@
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">1.</td>
                 <td style="border:1px solid black;">&nbsp; Pendapatan Hasil Panen</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 5.505.000 &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pendapatan, 0, ',', '.') }} &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">2.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Pengolahan Tanah</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 120.000 &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pengolahan_tanah, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">3.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Bibit</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->bibit, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">4.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Pupuk</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pupuk, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">5.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Pestisida</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pestisida, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">6.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Pengairan</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pengairan, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">7.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Panen</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->panen, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">8.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Penggarap</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->penggarap, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">9.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Tenaga Kerja</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->tenaga_kerja, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">10.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Pajak</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pajak, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">11.</td>
                 <td style="border:1px solid black;">&nbsp; Iuran Desa</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->iuran_desa, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">12.</td>
                 <td style="border:1px solid black;">&nbsp; Biaya Amortisasi</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->amortisasi, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">13.</td>
                 <td style="border:1px solid black;">&nbsp; Pinjaman Bank Lain</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pinjaman_bank, 0, ',', '.') }} &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">14.</td>
                 <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
-                <td style="border:1px solid black;text-align:right;">Rp. 100.000 &nbsp;</td>
+                <td style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->penambahan, 0, ',', '.') }} &nbsp;</td>
                 <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
             </tr>
             <tr style="border:1px solid black;">
                 <td class="text-center" style="border:1px solid black;">#</td>
                 <th style="border:1px solid black;">&nbsp; Total</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 5.605.000 &nbsp;</th>
-                <th style="border:1px solid black;text-align:right;">Rp. 120.000 &nbsp;</th>
+                <th style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pendapatan, 0, ',', '.') }} &nbsp;</th>
+                <th style="border:1px solid black;text-align:right;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->pengeluaran, 0, ',', '.') }} &nbsp;</th>
             </tr>
             <tr style="border:1px solid black;">
                 <th class="text-center" colspan="2" style="border:1px solid black;">Hasil Bersih Usaha</th>
-                <th class="text-center" colspan="2" style="border:1px solid black;">Rp. 5.485.000</th>
+                <th class="text-center" colspan="2" style="border:1px solid black;">
+                    {{ 'Rp.' . ' ' . number_format($pertanian->laba_bersih, 0, ',', '.') }}</th>
             </tr>
         </table>
 
@@ -732,17 +686,18 @@
             <tr>
                 <td width="23%">Hasil Bersih Usaha (70%)</td>
                 <td class="text-center" width="3%">:</td>
-                <td>Rp. 104.930.000</td>
+                <td>{{ 'Rp.' . ' ' . number_format($pertanian->laba_bersih, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>Saving Pokok</td>
                 <td class="text-center" width="3%">:</td>
-                <td>Rp. 30.000.000</td>
+                <td>{{ 'Rp.' . ' ' . number_format($pertanian->saving, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>Pendapatan Perbulan</td>
                 <td class="text-center" width="3%">:</td>
-                <td>Rp. 2.500.000 | Hasil Bersih Usaha (70%) - Saving Pokok / 6 Bulan</td>
+                <td>{{ 'Rp.' . ' ' . number_format($pertanian->laba_perbulan, 0, ',', '.') }} | Hasil Bersih Usaha
+                    (70%) - Saving Pokok / 6 Bulan</td>
             </tr>
         </table>
     </div>
