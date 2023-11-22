@@ -122,7 +122,7 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-    public function laporan_survey_analisa()
+    public function laporan_survey_analisa(Request $request)
     {
         $tgl1 = request('tgl1');
         $tgl2 = request('tgl2');

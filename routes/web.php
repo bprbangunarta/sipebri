@@ -456,7 +456,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
         Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
         Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
-        Route::get('/laporan/survey', 'laporan_survey_analisa')->name('laporan.survey-analisa');
+        Route::get('/laporan/survey', 'laporan_survey_analisa')->name('laporan.survey');
     });
     //====Route Cetak Laporan====//
 
