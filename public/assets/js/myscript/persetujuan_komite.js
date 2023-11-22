@@ -24,6 +24,7 @@ function formatRupiah(angka, prefix) {
 $(document).ready(function () {
     $("#modal-persetujuan").on("show.bs.modal", function (event) {
         $("#komite").empty();
+        $("#metode").empty();
         var button = $(event.relatedTarget);
         var pengajuan = button.data("pengajuan");
         var token = $('meta[name="csrf-token"]').attr("content");
