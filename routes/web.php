@@ -396,6 +396,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/kualitatif/usaha', 'usaha')->name('kualitatif.usaha');
             Route::put('/analisa/kualitatif/usaha', 'updateusaha')->name('kualitatif.updateusaha');
             Route::get('/analisa/kualitatif/swot', 'analisa_swot')->name('kualitatif.analisa_swot');
+            Route::POST('/analisa/kualitatif/swot', 'simpan_analisa_swot')->name('simpan_.analisa_swot');
         });
 
         Route::controller(AnalisaMemorandumController::class)->group(function () {

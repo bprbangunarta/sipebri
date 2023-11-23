@@ -145,12 +145,48 @@ class AnalisaKualitatifController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
+            $data = DB::table('a_swot')->where('pengajuan_kode', $enc)->first();
 
             return view('staff.analisa.kualitatif.swot', [
                 'data' => $cek[0],
+                'analisa' => $data,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function simpan_analisa_swot(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = DB::table('a_swot')->where('pengajuan_kode', $enc)->first();
+            if (is_null($cek)) {
+                $data = [
+                    'pengajuan_kode' => $enc,
+                    'kekuatan' => strtoupper($request->kekuatan),
+                    'kelemahan' => strtoupper($request->kelemahan),
+                    'peluang' => strtoupper($request->peluang),
+                    'ancaman' => strtoupper($request->ancaman),
+                    'created_at' => now(),
+                ];
+                DB::table('a_swot')->insert($data);
+                return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            } else {
+                $data = [
+                    'pengajuan_kode' => $enc,
+                    'kekuatan' => strtoupper($request->kekuatan),
+                    'kelemahan' => strtoupper($request->kelemahan),
+                    'peluang' => strtoupper($request->peluang),
+                    'ancaman' => strtoupper($request->ancaman),
+                    'created_at' => now(),
+                ];
+                DB::table('a_swot')->where('pengajuan_kode', $enc)->update($data);
+                return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return redirect()->back()->with('success', 'Gagal menambahkan data');
     }
 }
