@@ -537,16 +537,47 @@ class DataCetakController extends Controller
 
     public function analisa_kredit(Request $request)
     {
+        $usr = Auth::user()->code_user;
+        $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
+
         $name = request('name');
+        $usr = Auth::user()->code_user;
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
-            ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
-            ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
-            ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
-            ->where('data_pengajuan.on_current', '=', '0')
+            ->where(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Persetujuan Komite');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Naik Kasi');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Naik Komite I');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Naik Komite II');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.status', 'Disetujui');
+            })
+            // ->where('data_survei.surveyor_kode', $usr)
+            // ->where('data_pengajuan.on_current', '=', '0')
+            // ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
+            // ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
+            // ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
+            // ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
+            // ->orWhere('data_pengajuan.status', 'Disetujui')
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
@@ -573,6 +604,30 @@ class DataCetakController extends Controller
             $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
         }
 
+        if ($user->role_name == 'Customer Service') {
+            $usul1 = "Customer Service";
+            for ($i = 0; $i < $count; $i++) {
+                if ($data->isNotEmpty()) {
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                }
+            }
+        } elseif ($user->role_name == 'Kepala Kantor Kas') {
+            $usul1 = "Kepala Kantor Kas";
+            for ($i = 0; $i < $count; $i++) {
+                if ($data->isNotEmpty()) {
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                }
+            }
+        }
+        // dd($data, $user);
         return view('cetak.analisa-kredit.index', [
             'data' => $data,
         ]);
@@ -584,24 +639,33 @@ class DataCetakController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = Midle::cetak_dokumen_analisa($enc);
             $perdagangan = Midle::cetak_dokumen_analisa_usaha_perdagangan($enc);
-            if (!is_null($perdagangan)) {
-                $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan->kode_usaha)->get();
+            if (count($perdagangan) != 0) {
+                for ($i = 0; $i < count($perdagangan); $i++) {
+                    $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan[$i]->kode_usaha)->get();
+                }
             } else {
                 $biaya_perdagangan = null;
             }
 
             $pertanian = Midle::cetak_dokumen_analisa_usaha_pertanian($enc);
-            if (!is_null($pertanian)) {
-                $jml = ((int)$pertanian->laba_bersih * 70) / 100;
-                $pertanian->saving = $jml;
+            if (count($pertanian) != 0) {
+                for ($i = 0; $i < count($pertanian); $i++) {
+                    $jml = ((int)$pertanian[$i]->laba_bersih * 70) / 100;
+                    $pertanian[$i]->saving = $jml;
+                }
             }
 
-            // dd($pertanian);
+            $jasa = Midle::cetak_dokumen_analisa_usaha_jasa($enc);
+            $lain = Midle::cetak_dokumen_analisa_usaha_lain($enc);
+
+            // dd($jasa);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
                 'perdagangan' => $perdagangan,
                 'pertanian' => $pertanian,
+                'jasa' => $jasa,
+                'lain' => $lain,
                 'biayaperdagangan' => $biaya_perdagangan,
             ]);
         } catch (DecryptException $e) {

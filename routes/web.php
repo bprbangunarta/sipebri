@@ -337,6 +337,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/identitas/usaha/lainnya', 'identitas')->name('lain.identitas');
             Route::put('/analisa/identitas/usaha/lainnya', 'simpanidentitas')->name('lain.simpanidentitas');
             Route::get('/analisa/bahanbaku/usaha/lainnya', 'bahan_baku')->name('lain.bahan_baku');
+            Route::post('/analisa/bahanbaku/usaha/lainnya/simpan', 'simpan_bahan_baku')->name('simpan.bahan_baku');
+            Route::put('/analisa/bahanbaku/usaha/lainnya/update', 'update_bahan_baku')->name('update.bahan_baku');
             Route::get('/analisa/keuangan/usaha/lainnya', 'keuangan')->name('lain.keuangan');
             Route::post('/analisa/keuangan/usaha/lainnya', 'simpankeuangan')->name('lain.simpankeuangan');
             Route::put('/analisa/keuangan/usaha/lainnya', 'updatekeuangan')->name('lain.updatekeuangan');
@@ -394,6 +396,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/kualitatif/usaha', 'usaha')->name('kualitatif.usaha');
             Route::put('/analisa/kualitatif/usaha', 'updateusaha')->name('kualitatif.updateusaha');
             Route::get('/analisa/kualitatif/swot', 'analisa_swot')->name('kualitatif.analisa_swot');
+            Route::POST('/analisa/kualitatif/swot', 'simpan_analisa_swot')->name('simpan_.analisa_swot');
         });
 
         Route::controller(AnalisaMemorandumController::class)->group(function () {

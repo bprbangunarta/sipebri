@@ -5,7 +5,8 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('simpan.bahan_baku', ['kode_usaha' => $lain->kd_usaha]) }}" method="POST">
+            <form action="{{ route('update.bahan_baku', ['kode_usaha' => $lain->kd_usaha]) }}" method="POST">
+                @method('put')
                 @csrf
                 <div class="box-body table-responsive no-padding">
                     <div style="overflow: auto; width: 100%; height: 355px;">
@@ -19,26 +20,63 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <input class="form-control input-sm form-border" type="text" name="bahan_baku1"
-                                            id="bahan_baku1" placeholder="ENTRI" value="{{ old('bahan_baku1') }}">
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-sm form-border text-center" type="text"
-                                            name="jumlah1" id="jumlah1" value="{{ old('jumlah1') }}" placeholder="0">
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-sm form-border" type="text" name="hrg1"
-                                            id="hrg1" placeholder="Rp. " value="{{ old('hrg1') }}">
-                                    </td>
-                                    <td>
-                                        <input class="form-control input-sm form-border" type="text" name="total1"
-                                            id="total1" placeholder="Rp. " readonly>
-                                    </td>
-                                </tr>
+                                @for ($i = 0; $i < count($bahan); $i++)
+                                    <tr>
+                                        <td>
+                                            <input class="form-control input-sm form-border" type="hidden"
+                                                name="kode_barang{{ $i }}" id="kode_barang{{ $i }}"
+                                                placeholder="ENTRI" value="{{ $bahan[$i]->kode_barang }}">
+                                            <input class="form-control input-sm form-border" type="text"
+                                                name="bahan_baku{{ $i }}" id="bahan_baku{{ $i }}"
+                                                placeholder="ENTRI"
+                                                value="{{ old('bahan_baku' . $i) ?? $bahan[$i]->bahan_baku }}">
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-sm form-border text-center" type="text"
+                                                name="jumlah{{ $i }}" id="jumlah{{ $i }}"
+                                                value="{{ old('jumlah' . $i) ?? $bahan[$i]->jumlah }}" placeholder="0">
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-sm form-border" type="text"
+                                                name="hrg{{ $i }}" id="hrg{{ $i }}"
+                                                placeholder="Rp. "
+                                                value="{{ old('hrg' . $i) ?? 'Rp. ' . ' ' . number_format($bahan[$i]->harga, 0, ',', '.') }}">
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-sm form-border" type="text"
+                                                name="total{{ $i }}" id="total{{ $i }}"
+                                                value="{{ 'Rp. ' . ' ' . number_format($bahan[$i]->total, 0, ',', '.') }}"
+                                                placeholder="Rp. " readonly>
+                                        </td>
+                                    </tr>
+                                @endfor
 
-                                <tr>
+
+                                {{-- @for ($i = 1; $i < count($bahan); $i++)
+                                    <tr>
+                                        <td>
+                                            <input class="form-control input-sm form-border" type="text"
+                                                name="bahan_baku".$i id="bahan_baku" .$iplaceholder="ENTRI"
+                                                value="{{ old('bahan_baku' . $i) }}">
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-sm form-border text-center" type="text"
+                                                name="jumlah".$i id="jumlah".$i value="{{ old('jumlah') . $i }}"
+                                                placeholder="0">
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-sm form-border" type="text"
+                                                name="hrg".$i id="hrg" .$iplaceholder="Rp. "
+                                                value="{{ old('hrg') . $i }}">
+                                        </td>
+                                        <td>
+                                            <input class="form-control input-sm form-border" type="text"
+                                                name="total".$i id="total".$i placeholder="Rp. " readonly>
+                                        </td>
+                                    </tr>
+                                @endfor --}}
+
+                                {{-- <tr>
                                     <td>
                                         <input class="form-control input-sm form-border" type="text" name="bahan_baku2"
                                             id="bahan_baku2" placeholder="ENTRI" value="{{ old('bahan_baku2') }}">
@@ -214,7 +252,7 @@
                                         <input class="form-control input-sm form-border" type="text" name="total10"
                                             id="total10" placeholder="Rp. " readonly>
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                         </table>
                     </div>

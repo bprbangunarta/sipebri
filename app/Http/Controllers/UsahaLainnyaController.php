@@ -109,19 +109,77 @@ class UsahaLainnyaController extends Controller
     {
         try {
             $encpengajuan = Crypt::decrypt($request->query('pengajuan'));
-
             $cek = Midle::analisa_usaha($encpengajuan);
 
-            //Data USaha Lainnya
+            //Data Usaha Lainnya
             $enc = Crypt::decrypt($request->query('kode_usaha'));
-
             $lain = Lain::where('kode_usaha', $enc)->first();
             $lain->kd_usaha = Crypt::encrypt($lain->kode_usaha);
 
-            return view('staff.analisa.u-lainnya.bahan-baku', [
+            $bahan = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain->kode_usaha)->get();
+            if (count($bahan) == 0) {
+                return view('staff.analisa.u-lainnya.bahan-baku', [
+                    'data' => $cek[0],
+                    'lain' => $lain,
+                ]);
+            }
+
+            // dd($bahan);
+            return view('staff.analisa.u-lainnya.bahan-baku-edit', [
                 'data' => $cek[0],
                 'lain' => $lain,
+                'bahan' => $bahan,
             ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpan_bahan_baku(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('kode_usaha'));
+
+            for ($i = 1; $i <= 10; $i++) {
+                $length = 10;
+                $kode = Lain::bahan_baku_kodeacak($length);
+                $data = [
+                    'usaha_kode' => $enc,
+                    'kode_barang' => $kode,
+                    'bahan_baku' => ucwords($request->input('bahan_baku' . $i)) ?? null,
+                    'jumlah' => $request->input('jumlah' . $i) ?? 0,
+                    'harga' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg' . $i)) ?? 0,
+                    'total' => (int)str_replace(["Rp.", " ", "."], "", $request->input('total' . $i)) ?? 0,
+                ];
+                DB::table('bu_bahan_baku_lainnya')->insert($data);
+            }
+
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function update_bahan_baku(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('kode_usaha'));
+
+            for ($i = 0; $i <= 9; $i++) {
+                $length = 10;
+                $kode = Lain::bahan_baku_kodeacak($length);
+                $data = [
+                    'usaha_kode' => $enc,
+                    'kode_barang' => $kode,
+                    'bahan_baku' => ucwords($request->input('bahan_baku' . $i)) ?? null,
+                    'jumlah' => $request->input('jumlah' . $i) ?? 0,
+                    'harga' => (int)str_replace(["Rp.", " ", "."], "", $request->input('hrg' . $i)) ?? 0,
+                    'total' => (int)str_replace(["Rp.", " ", "."], "", $request->input('total' . $i)) ?? 0,
+                ];
+                DB::table('bu_bahan_baku_lainnya')->where('kode_barang', $request->input('kode_barang' . $i))->update($data);
+            }
+
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
@@ -151,7 +209,16 @@ class UsahaLainnyaController extends Controller
 
             $bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_lainnya')->where('usaha_kode', $enc)->get();
-
+            $bahan = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain->kode_usaha)->get();
+            $total = [];
+            if (count($bahan) != 0) {
+                for ($i = 0; $i < count($bahan); $i++) {
+                    $total[$i] = $bahan[$i]->total;
+                }
+            }
+            $total_sum = array_sum($total);
+            $lain->biaya_bahan = $total_sum ?? 0;
+            // dd($total_sum, $total, $lain);
             return view('staff.analisa.u-lainnya.keuangan-edit', [
                 'data' => $cek[0],
                 'lain' => $lain,
@@ -167,7 +234,7 @@ class UsahaLainnyaController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('kode_usaha'));
-            // dd($request);
+            dd($request);
             DB::transaction(function () use ($enc, $request) {
                 for ($i = 1; $i <= 5; $i++) {
                     $length = 10;

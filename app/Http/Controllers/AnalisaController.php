@@ -29,7 +29,8 @@ class AnalisaController extends Controller
                             ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
                             ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
                             ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
-                            ->orWhere('data_pengajuan.tracking', 'Naik Komite II');
+                            ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
+                            ->orWhere('data_pengajuan.status', 'Disetujui');
                     });
             })
 
@@ -167,10 +168,5 @@ class AnalisaController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Anda gagal melakukan pembatalan survei');
         }
-    }
-
-    public function survei_analisa()
-    {
-        //
     }
 }

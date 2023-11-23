@@ -508,7 +508,7 @@ class Midle extends Model
         return $cek->usulan_plafon;
     }
 
-    public static function persetujuan_komite_staff($user, $role)
+    public static function persetujuan_komite_cs_kksk($user)
     {
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -516,17 +516,18 @@ class Midle extends Model
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            ->where(function ($query) use ($user, $role) {
+            ->where(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
-                    ->where('data_pengajuan.tracking', '=', $role);
+                    ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
+                    ->where('data_pengajuan.tracking', '=', 'Persetujuan Komite')
+                    ->where('data_pengajuan.on_current', '=', '0');
             })
-            ->orWhere(function ($query) {
-                $query->where('data_pengajuan.status', '=', 'Disetujui')
+            ->orWhere(function ($query) use ($user) {
+                $query->where('data_survei.surveyor_kode', '=', $user)
+                    ->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
-            // ->orWhere('data_survei.surveyor_kode', '=', $user)
-            // ->where('data_pengajuan.tracking', '=', $role)
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
@@ -552,6 +553,55 @@ class Midle extends Model
                 'data_pengajuan.jangka_waktu as jk'
             );
         //  
+        // dd($role);
+        return $cek;
+    }
+
+    public static function persetujuan_komite_staff($user, $role)
+    {
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+            ->where(function ($query) use ($user, $role) {
+                $query->where('data_survei.surveyor_kode', '=', $user)
+                    ->where('data_pengajuan.tracking', '=', $role);
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('data_survei.surveyor_kode', '=', $user)
+                    ->where('data_pengajuan.status', '=', 'Disetujui')
+                    ->where('data_pengajuan.tracking', '=', 'Selesai')
+                    ->whereNull('data_notifikasi.pengajuan_kode');
+            })
+
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_pengajuan.plafon',
+                'data_pengajuan.created_at',
+                'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name',
+                'data_pengajuan.jangka_waktu as jk'
+            );
+        //  
+        // dd($role);
         return $cek;
     }
 
@@ -568,12 +618,12 @@ class Midle extends Model
                     ->where('data_pengajuan.tracking', '=', $role);
             })
             ->orWhere(function ($query) use ($user, $role) {
-                $query->where('data_pengajuan.status', '=', 'Disetujui')
+                $query->where('data_survei.kasi_kode', '=', $user)
+                    ->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_notifikasi.pengajuan_kode', '=', null);
+                    ->whereNull('data_notifikasi.pengajuan_kode');
             })
-            // ->orWhere('data_survei.kasi_kode', '=', $user)
-            // ->where('data_pengajuan.tracking', '=', $role)
+
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
@@ -848,16 +898,30 @@ class Midle extends Model
         $data = DB::table('au_perdagangan')
             ->leftJoin('bu_perdagangan', 'au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
             ->select('au_perdagangan.*', 'bu_perdagangan.*')
-            ->where('au_perdagangan.pengajuan_kode', $kode)->first();
+            ->where('au_perdagangan.pengajuan_kode', $kode)->get();
         return $data;
     }
+
     public static function cetak_dokumen_analisa_usaha_pertanian($kode)
     {
         $data = DB::table('au_pertanian')
             ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
             ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
             ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*')
-            ->where('au_pertanian.pengajuan_kode', $kode)->first();
+            ->where('au_pertanian.pengajuan_kode', $kode)->get();
+        return $data;
+    }
+
+    public static function cetak_dokumen_analisa_usaha_jasa($kode)
+    {
+        $data = DB::table('au_jasa')
+            ->where('au_jasa.pengajuan_kode', $kode)->get();
+        return $data;
+    }
+    public static function cetak_dokumen_analisa_usaha_lain($kode)
+    {
+        $data = DB::table('au_lainnya')
+            ->where('au_lainnya.pengajuan_kode', $kode)->get();
         return $data;
     }
 }

@@ -408,11 +408,11 @@ class CetakController extends Controller
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal'
             )
-            ->where('data_pengajuan.status', 'Sudah Otorisasi')
+            ->where('data_pengajuan.on_current', '0')
             ->where(function ($query) {
-                $query->where('data_pengajuan.status', 'Lengkapi Data')
-                    ->where('data_pengajuan.status', 'Lengkapi Data')
+                $query->orWhere('data_pengajuan.status', 'Lengkapi Data')
                     ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
+                    ->orWhere('data_pengajuan.status', 'Disetujui')
                     ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
             })
             ->where(function ($query) use ($name) {

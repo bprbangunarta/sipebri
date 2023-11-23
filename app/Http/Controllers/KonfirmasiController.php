@@ -358,7 +358,7 @@ class KonfirmasiController extends Controller
                 Pengajuan::where('kode_pengajuan', $enc)->update($data);
             });
 
-            return redirect()->route('survei.analisa')->with('success', 'Konfirmasi berhasil');
+            return redirect()->route('komite.kredit')->with('success', 'Konfirmasi berhasil');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
