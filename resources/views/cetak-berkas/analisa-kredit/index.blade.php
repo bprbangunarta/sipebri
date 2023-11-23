@@ -161,7 +161,7 @@
                 <td class="text-center" width="2%"> 7. </td>
                 <td width="17%">Plafon</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->plafon }}</td>
+                <td style="text-align: justify;">{{ 'Rp.' . ' ' . number_format($cetak->plafon, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 8. </td>
@@ -179,7 +179,7 @@
                 <td class="text-center" width="2%"> 10. </td>
                 <td width="17%">Jangka Waktu</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->jangka_waktu }}</td>
+                <td style="text-align: justify;">{{ $cetak->jangka_waktu }} Bulan</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 11. </td>
