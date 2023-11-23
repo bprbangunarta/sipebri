@@ -571,13 +571,7 @@ class DataCetakController extends Controller
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.status', 'Disetujui');
             })
-            // ->where('data_survei.surveyor_kode', $usr)
-            // ->where('data_pengajuan.on_current', '=', '0')
-            // ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
-            // ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
-            // ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
-            // ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
-            // ->orWhere('data_pengajuan.status', 'Disetujui')
+
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
@@ -657,8 +651,28 @@ class DataCetakController extends Controller
 
             $jasa = Midle::cetak_dokumen_analisa_usaha_jasa($enc);
             $lain = Midle::cetak_dokumen_analisa_usaha_lain($enc);
+            if (count($lain) != 0) {
+                for ($i = 0; $i < count($lain); $i++) {
+                    $bahan = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
+                    $bu = DB::table('bu_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
+                    $du = DB::table('du_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
+                }
+            }
 
-            // dd($jasa);
+            $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
+            if (count($keuangan) != 0) {
+                $nominal = [];
+                $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[0]->kode_keuangan)->get();
+                for ($i = 0; $i < count($bu_keuangan); $i++) {
+                    $nominal[$i] = $bu_keuangan[$i]->nominal;
+                }
+                $arr = array_sum($nominal) ?? 0;
+
+                for ($i = 0; $i < count($keuangan); $i++) {
+                    $keuangan[$i]->bu_total = $arr ?? 0;
+                }
+            }
+            // dd($keuangan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -666,6 +680,11 @@ class DataCetakController extends Controller
                 'pertanian' => $pertanian,
                 'jasa' => $jasa,
                 'lain' => $lain,
+                'bahan' => $bahan,
+                'bu' => $bu,
+                'du' => $du,
+                'keuangan' => $keuangan,
+                'bu_keuangan' => $bu_keuangan,
                 'biayaperdagangan' => $biaya_perdagangan,
             ]);
         } catch (DecryptException $e) {
@@ -675,13 +694,19 @@ class DataCetakController extends Controller
 
     public function data_penolakan_kredit(Request $request)
     {
+        $usr = Auth::user()->code_user;
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('data_penolakan', 'data_pengajuan.kode_pengajuan', '=', 'data_penolakan.pengajuan_kode')
-            ->where('data_pengajuan.status', '=', 'Ditolak')
-            ->where('data_pengajuan.kode_pengajuan', '=', 'data_penolakan.pengajuan_kode')
+            // ->where('data_pengajuan.status', '=', 'Ditolak')
+            // ->where('data_pengajuan.kode_pengajuan', '=', 'data_penolakan.pengajuan_kode')
+            ->where(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.status', '=', 'Ditolak')
+                    ->where('data_pengajuan.on_current', '=', '0');
+            })
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
