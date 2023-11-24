@@ -924,4 +924,21 @@ class Midle extends Model
             ->where('au_lainnya.pengajuan_kode', $kode)->get();
         return $data;
     }
+    public static function cetak_dokumen_analisa_keuangan($kode)
+    {
+        $data = DB::table('au_keuangan')
+            ->leftjoin('au_perdagangan', 'au_keuangan.pengajuan_kode', '=', 'au_perdagangan.pengajuan_kode')
+            ->leftjoin('au_pertanian', 'au_keuangan.pengajuan_kode', '=', 'au_pertanian.pengajuan_kode')
+            ->leftjoin('au_jasa', 'au_keuangan.pengajuan_kode', '=', 'au_jasa.pengajuan_kode')
+            ->leftjoin('au_lainnya', 'au_keuangan.pengajuan_kode', '=', 'au_lainnya.pengajuan_kode')
+            ->select(
+                'au_keuangan.*',
+                'au_perdagangan.laba_bersih as laba_bersih_perdagangan' ?? null,
+                'au_pertanian.laba_perbulan as laba_bersih_pertanian' ?? null,
+                'au_jasa.laba_bersih as laba_bersih_jasa' ?? null,
+                'au_lainnya.laba_bersih as laba_bersih_lainnya' ?? null,
+            )
+            ->where('au_keuangan.pengajuan_kode', $kode)->get();
+        return $data;
+    }
 }
