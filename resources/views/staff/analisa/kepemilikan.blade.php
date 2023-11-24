@@ -52,7 +52,7 @@
                                                     <option value="3 UNIT">3 UNIT</option>
                                                     <option value="4 UNIT">4 UNIT</option>
                                                     <option value="5 UNIT">5 UNIT</option>
-                                                    <option value="0">TIDAK ADA</option>
+                                                    <option value="TIDAK ADA">TIDAK ADA</option>
                                                 </select>
                                             </div>
 

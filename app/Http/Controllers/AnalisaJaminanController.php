@@ -258,6 +258,7 @@ class AnalisaJaminanController extends Controller
             $data = [
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
+                'updated_at' => now(),
             ];
 
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
@@ -309,6 +310,7 @@ class AnalisaJaminanController extends Controller
             $data = [
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
+                'updated_at' => now(),
                 'catatan' => $request->catatan,
             ];
 

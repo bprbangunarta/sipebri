@@ -931,14 +931,29 @@ class Midle extends Model
             ->leftjoin('au_pertanian', 'au_keuangan.pengajuan_kode', '=', 'au_pertanian.pengajuan_kode')
             ->leftjoin('au_jasa', 'au_keuangan.pengajuan_kode', '=', 'au_jasa.pengajuan_kode')
             ->leftjoin('au_lainnya', 'au_keuangan.pengajuan_kode', '=', 'au_lainnya.pengajuan_kode')
+            ->leftjoin('data_kepemilikan', 'au_keuangan.pengajuan_kode', '=', 'data_kepemilikan.pengajuan_kode')
             ->select(
                 'au_keuangan.*',
                 'au_perdagangan.laba_bersih as laba_bersih_perdagangan' ?? null,
                 'au_pertanian.laba_perbulan as laba_bersih_pertanian' ?? null,
                 'au_jasa.laba_bersih as laba_bersih_jasa' ?? null,
                 'au_lainnya.laba_bersih as laba_bersih_lainnya' ?? null,
+                'data_kepemilikan.*',
             )
             ->where('au_keuangan.pengajuan_kode', $kode)->get();
         return $data;
+    }
+
+    public static function cetak_dokumen_jaminan_analisa_keuangan($data)
+    {
+        $jaminan = DB::table('data_jaminan')
+            ->leftjoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->select(
+                'data_jaminan.*' ?? null,
+                'data_jenis_dokumen.jenis_dokumen as nama_jenis_dokumen' ?? null,
+            )
+            ->where('pengajuan_kode', $data)->get();
+
+        return $jaminan;
     }
 }

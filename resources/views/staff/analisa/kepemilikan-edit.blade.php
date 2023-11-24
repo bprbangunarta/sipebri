@@ -72,8 +72,8 @@
                                                     <option value="5 UNIT"
                                                         {{ old('mobil') == '5 UNIT' || $milik->mobil == '5 UNIT' ? 'selected' : '' }}>
                                                         5 UNIT</option>
-                                                    <option value="0"
-                                                        {{ old('mobil') == '0' || $milik->mobil == '0' ? 'selected' : '' }}>
+                                                    <option value="TIDAK ADA"
+                                                        {{ old('mobil') == 'TIDAK ADA' || $milik->mobil == 'TIDAK ADA' ? 'selected' : '' }}>
                                                         TIDAK ADA</option>
                                                 </select>
                                             </div>

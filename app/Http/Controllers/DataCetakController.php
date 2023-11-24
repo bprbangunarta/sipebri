@@ -662,17 +662,29 @@ class DataCetakController extends Controller
             $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
             if (count($keuangan) != 0) {
                 $nominal = [];
-                $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[0]->kode_keuangan)->get();
-                for ($i = 0; $i < count($bu_keuangan); $i++) {
+
+                for ($i = 0; $i < count($keuangan); $i++) {
+                    $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[$i]->kode_keuangan)->get();
                     $nominal[$i] = $bu_keuangan[$i]->nominal;
+
+                    $jaminan = Midle::cetak_dokumen_jaminan_analisa_keuangan($keuangan[$i]->pengajuan_kode);
                 }
                 $arr = array_sum($nominal) ?? 0;
-
                 for ($i = 0; $i < count($keuangan); $i++) {
                     $keuangan[$i]->bu_total = $arr ?? 0;
                 }
+
+                $jml_jaminan = [];
+                for ($i = 0; $i < count($jaminan); $i++) {
+                    $jml_jaminan[$i] = $jaminan[$i]->nilai_taksasi;
+                }
+
+                $dj = array_sum($jml_jaminan) ?? 0;
+                for ($i = 0; $i < count($jaminan); $i++) {
+                    $jaminan[$i]->total_taksasi = $dj ?? 0;
+                }
             }
-            // dd($keuangan);
+            // dd($jaminan, $dj);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -685,6 +697,7 @@ class DataCetakController extends Controller
                 'du' => $du,
                 'keuangan' => $keuangan,
                 'bu_keuangan' => $bu_keuangan,
+                'jaminan' => $jaminan,
                 'biayaperdagangan' => $biaya_perdagangan,
             ]);
         } catch (DecryptException $e) {

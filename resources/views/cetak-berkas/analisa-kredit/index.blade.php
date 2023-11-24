@@ -1040,57 +1040,62 @@
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
                     <td style="border:1px solid black;">&nbsp; Rumah</td>
-                    <td class="text-center" style="border:1px solid black;">Permanen</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->rumah }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">2.</td>
                     <td style="border:1px solid black;">&nbsp; Mobil</td>
-                    <td class="text-center" style="border:1px solid black;">Tidak Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->mobil }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
                     <td style="border:1px solid black;">&nbsp; Motor</td>
-                    <td class="text-center" style="border:1px solid black;">3 Unit</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->motor }}</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
+                    <td style="border:1px solid black;">&nbsp; Televisi</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->televisi }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">4.</td>
                     <td style="border:1px solid black;">&nbsp; Komputer</td>
-                    <td class="text-center" style="border:1px solid black;">Tidak Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->komputer }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">5.</td>
                     <td style="border:1px solid black;">&nbsp; Mesin Cuci</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->mesin_cuci }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">6.</td>
                     <td style="border:1px solid black;">&nbsp; Kursi Tamu</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->kursi_tamu }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">7.</td>
                     <td style="border:1px solid black;">&nbsp; Lemari Panjang</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->lemari_panjang }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">8.</td>
                     <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain1 }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">9.</td>
                     <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain2 }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">10.</td>
                     <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain3 }}</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" width="4%" style="border:1px solid black;">11.</td>
                     <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">Ada</td>
+                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain4 }}</td>
                 </tr>
             </table>
 
@@ -1101,14 +1106,39 @@
                     <th class="text-center" style="border:1px solid black;">Agunan</th>
                     <th class="text-center" width="17%" style="border:1px solid black;">Nilai Taksasi</th>
                 </tr>
+                @forelse ($jaminan as $item)
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">
+                            {{ $loop->iteration }}</td>
+                        @if ($item->jenis_jaminan == 'Kendaraan')
+                            <td style="border:1px solid black;">
+                                {{ $item->catatan }}
+                            </td>
+                            <td style="border:1px solid black;text-align:right;">
+                                {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
+                        @elseif ($item->jenis_jaminan == 'Tanah')
+                            <td style="border:1px solid black;">
+                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                            </td>
+                            <td style="border:1px solid black;text-align:right;">
+                                {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
+                        @elseif ($item->jenis_jaminan == 'Lainnya')
+                            <td style="border:1px solid black;">
+                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                            </td>
+                            <td style="border:1px solid black;text-align:right;">
+                                {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
+                        @endif
 
+                    </tr>
+                @empty
+                @endforelse
                 <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
-                    <td style="border:1px solid black;">
-                        KARTU DAN SALDO JAMSOSTEK ATAS NAMA CICIH CAHYATI NO 06K90147831
-                    </td>
-                    <td style="border:1px solid black;text-align:right;">Rp. 29.000.000</td>
+                    <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai Taksasi
+                        Agunan</td>
+                    <td>{{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
                 </tr>
+
             </table>
         </div>
     @empty
