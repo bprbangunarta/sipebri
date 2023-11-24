@@ -209,7 +209,7 @@ class KonfirmasiController extends Controller
             try {
                 $nas = Pengajuan::where('kode_pengajuan', $enc)->get();
                 Pengajuan::where('id', $nas[0]->id)->update($data);
-                return redirect()->route('otor.pengajuan')->with('success', 'Status telah diperbaharui');
+                return redirect()->route('pengajuan.index')->with('success', 'Status telah diperbaharui');
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', 'Ada data yang tidak terisi');
             }
