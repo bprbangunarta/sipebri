@@ -75,7 +75,7 @@ use App\Http\Controllers\AnalisaKepemilikanController;
 
 Route::get('/', function () {
     // $role = Role::find(10);
-    // $permission = Permission::find(45);
+    // $permission = Permission::find(46);
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);
@@ -148,7 +148,7 @@ Route::middleware('auth')->group(function () {
         //======Pendaftaran Nasabah======//
         Route::controller(PengajuanController::class)->group(function () {
 
-            Route::group(['middleware' => ['role:Customer Service']], function () {
+            Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/pengajuan', 'index')->name('pengajuan.index');
             });
 
