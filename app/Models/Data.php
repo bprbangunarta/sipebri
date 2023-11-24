@@ -531,11 +531,11 @@ class Data extends Model
         }
 
         $data = [
-            'bi_checking' => $bi,
-            'kewajiban_pihak_lain' => $kwj,
-            'pihak_berwajib' => $jd,
-            'hubungan_tetangga' => $dt,
-            'pengalaman_tki' => $pt,
+            'bi_checking' => $bi ?? null,
+            'kewajiban_pihak_lain' => $kwj ?? null,
+            'pihak_berwajib' => $jd ?? null,
+            'hubungan_tetangga' => $dt ?? null,
+            'pengalaman_tki' => $pt ?? null,
         ];
 
         return $data;
@@ -568,5 +568,200 @@ class Data extends Model
         } elseif ($bulan == 12) {
             return 'XII';
         }
+    }
+
+    public static function a5c_capacity($data)
+    {
+
+        if ($data->kontinuitas == 1) {
+            $kontinuitas =  'Tidak Tentu';
+        } else if ($data->kontinuitas == 2) {
+            $kontinuitas =  'Kadang-kadang';
+        } else if ($data->kontinuitas == 3) {
+            $kontinuitas =  'Terus Menerus';
+        }
+
+        if ($data->pertumbuhan_usaha == 1) {
+            $pertumbuhan_usaha = 'Turun';
+        } else if ($data->pertumbuhan_usaha == 2) {
+            $pertumbuhan_usaha = 'Tetap';
+        } else if ($data->pertumbuhan_usaha == 3) {
+            $pertumbuhan_usaha = 'Meningkat';
+        }
+
+        if ($data->laporan_keuangan == 1) {
+            $laporan_keuangan = 'Tidak Ada';
+        } else if ($data->laporan_keuangan == 2) {
+            $laporan_keuangan = 'Transaksi Harian';
+        } else if ($data->laporan_keuangan == 3) {
+            $laporan_keuangan = 'Mengumpulkan Bukti';
+        }
+
+        if ($data->catatan_kredit == 1) {
+            $catatan_kredit = 'Menunggak > 2 Bulan';
+        } else if ($data->catatan_kredit == 2) {
+            $catatan_kredit = 'Lancar Menunggak 2 Bulan';
+        } else if ($data->catatan_kredit == 3) {
+            $catatan_kredit = 'Lancar';
+        }
+
+        if ($data->kondisi_slik == 1) {
+            $kondisi_slik = 'Tidak Baik';
+        } else if ($data->kondisi_slik == 2) {
+            $kondisi_slik = 'Tidak Ada';
+        } else if ($data->kondisi_slik == 3) {
+            $kondisi_slik = 'Lancar';
+        }
+
+        if ($data->aset_diluar_usaha == 1) {
+            $aset_diluar_usaha = 'Tidak Liquid';
+        } else if ($data->aset_diluar_usaha == 2) {
+            $aset_diluar_usaha = 'Cukup Liquid';
+        } else if ($data->aset_diluar_usaha == 3) {
+            $aset_diluar_usaha = 'Liquid';
+        }
+
+        if ($data->aset_terkait_usaha == 1) {
+            $aset_terkait_usaha = 'Tidak Mengcover';
+        } else if ($data->aset_terkait_usaha == 2) {
+            $aset_terkait_usaha = 'Cukup Mengcover';
+        } else if ($data->aset_terkait_usaha == 3) {
+            $aset_terkait_usaha = 'Mengcover';
+        }
+
+        if ($data->capital_sumber_modal == 1) {
+            $capital_sumber_modal = 'Pihak Lain';
+        } else if ($data->capital_sumber_modal == 2) {
+            $capital_sumber_modal = 'Kerjasama';
+        } else if ($data->capital_sumber_modal == 3) {
+            $capital_sumber_modal = 'Modal Sendiri';
+        }
+
+        if ($data->catatan_kredit == 1) {
+            $catatan_kredit = 'Lancar Menunggak 2 Bulan';
+        } else if ($data->catatan_kredit == 2) {
+            $catatan_kredit = 'Menunggak > 2 Bulan';
+        } else if ($data->catatan_kredit == 3) {
+            $catatan_kredit = 'Lancar';
+        }
+
+        if ($data->pengalaman_usaha == 1) {
+            $pengalaman_usaha = '0 Tahun';
+        } else if ($data->pengalaman_usaha == 2) {
+            $pengalaman_usaha = '< 1 Tahun';
+        } else if ($data->pengalaman_usaha == 3) {
+            $pengalaman_usaha = '1 - 3 Tahun';
+        } else if ($data->pengalaman_usaha == 4) {
+            $pengalaman_usaha = '> 3 - 5 Tahun';
+        } else if ($data->pengalaman_usaha == 5) {
+            $pengalaman_usaha = '> 5 Tahun';
+        }
+
+        $hasil = (object) [
+            'kontinuitas' => $kontinuitas ?? null,
+            'pengalaman_usaha' => $pengalaman_usaha ?? null,
+            'pertumbuhan_usaha' => $pertumbuhan_usaha ?? null,
+            'laporan_keuangan' => $laporan_keuangan ?? null,
+            'laporan_keuangan' => $laporan_keuangan ?? null,
+            'catatan_kredit' => $catatan_kredit ?? null,
+            'kondisi_slik' => $kondisi_slik ?? null,
+            'aset_diluar_usaha' => $aset_diluar_usaha ?? null,
+            'aset_terkait_usaha' => $aset_terkait_usaha ?? null,
+            'capital_sumber_modal' => $capital_sumber_modal ?? null,
+            'capital_evaluasi_capital' => self::analisa5c_number($data->capital_evaluasi_capital) ?? null,
+            'rc' => $data->rc ?? null,
+            'evaluasi_capacity' => self::analisa5c_number($data->evaluasi_capacity) ?? null,
+        ];
+
+        return $hasil;
+    }
+
+    public static function a5c_collateral($data)
+    {
+        // dd($data);
+        if ($data->agunan_utama == 1) {
+            $agunan_utama = 'Milik Sendiri';
+        } elseif ($data->agunan_utama == 3) {
+            $agunan_utama = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
+        }
+
+        if ($data->agunan_tambahan == 1) {
+            $agunan_tambahan = 'Milik Sendiri';
+        } elseif ($data->agunan_tambahan == 3) {
+            $agunan_tambahan = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
+        }
+
+        if ($data->legalitas_agunan == 1) {
+            $legalitas_agunan = 'Milik Sendiri';
+        } elseif ($data->legalitas_agunan == 3) {
+            $legalitas_agunan = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
+        }
+
+        if ($data->legalitas_agunan_tambahan == 1) {
+            $legalitas_agunan_tambahan = 'Milik Sendiri';
+        } elseif ($data->legalitas_agunan_tambahan == 3) {
+            $legalitas_agunan_tambahan = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
+        }
+
+        if ($data->mudah_diuangkan == 1) {
+            $mudah_diuangkan = 'Lainnya';
+        } elseif ($data->mudah_diuangkan == 2) {
+            $mudah_diuangkan = 'BPKB, SHM';
+        } elseif ($data->mudah_diuangkan == 3) {
+            $mudah_diuangkan = 'Deposito,Tabungan, Emas';
+        }
+
+        if ($data->stabilitas_harga == 1) {
+            $stabilitas_harga = 'BPKB';
+        } elseif ($data->stabilitas_harga == 2) {
+            $stabilitas_harga = 'Deposito,Tabungan, Emas';
+        } elseif ($data->stabilitas_harga == 3) {
+            $stabilitas_harga = 'SHM';
+        } elseif ($data->stabilitas_harga == 0) {
+            $stabilitas_harga = 'Lainnya';
+        }
+
+        if ($data->lokasi_shm == 1) {
+            $lokasi_shm = 'Strategis dan atau Produktif';
+        } elseif ($data->lokasi_shm == 2) {
+            $lokasi_shm = 'Strategis dan Produktif (Atau Sebaliknya)';
+        } elseif ($data->lokasi_shm == 3) {
+            $lokasi_shm = 'SHM';
+        }
+
+        if ($data->kondisi_kendaraan == 1) {
+            $kondisi_kendaraan = 'Tidak Original, Tidak Lengkap, Cacat';
+        } elseif ($data->kondisi_kendaraan == 2) {
+            $kondisi_kendaraan = 'Original, Tidak Lengkap';
+        } elseif ($data->kondisi_kendaraan == 3) {
+            $kondisi_kendaraan = 'Original, Lengkap, Tidak Cacat';
+        }
+
+        if ($data->aspek_hukum == 1) {
+            $aspek_hukum = 'Agunan lain yang tidak memenuhi syarat';
+        } elseif ($data->aspek_hukum == 2) {
+            $aspek_hukum = 'AJB / SPOP (dilengkapi dengan SPPT tahun berjalan atau 1 tahun yang lalu) tanpa pengikatan hak';
+        } elseif ($data->aspek_hukum == 3) {
+            $aspek_hukum = 'SHM (dilengkapi dengan SPPT tahun berjalan atau 1 tahun yang lalu) / BPKB tanpa pengikatan';
+        } elseif ($data->aspek_hukum == 4) {
+            $aspek_hukum = 'SHM (dilengkapi dengan SPPT tahun berjalan atau 1 tahun yang lalu) diikat dengan hak tanggungan / BPKB (Kendaraan) diikat dengan fidusia';
+        } elseif ($data->aspek_hukum == 5) {
+            $aspek_hukum = 'Emas dan deposito/tabungan yang saldonya di blokir dan dilengkapi dengan surat kuasa pencairan';
+        }
+
+        $hasil = (object) [
+            'agunan_utama' => $agunan_utama ?? null,
+            'agunan_tambahan' => $agunan_tambahan ?? null,
+            'legalitas_agunan' => $legalitas_agunan ?? null,
+            'legalitas_agunan_tambahan' => $legalitas_agunan_tambahan ?? null,
+            'mudah_diuangkan' => $mudah_diuangkan ?? null,
+            'stabilitas_harga' => $stabilitas_harga ?? null,
+            'lokasi_shm' => $lokasi_shm ?? null,
+            'taksasi_agunan' => $data->taksasi_agunan ?? null,
+            'kondisi_kendaraan' => $kondisi_kendaraan ?? null,
+            'aspek_hukum' => $aspek_hukum ?? null,
+            'aspek_hukum' => self::analisa5c_number($data->evaluasi_collateral) ?? null,
+        ];
+        return $hasil;
     }
 }

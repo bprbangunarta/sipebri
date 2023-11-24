@@ -684,7 +684,13 @@ class DataCetakController extends Controller
                     $jaminan[$i]->total_taksasi = $dj ?? 0;
                 }
             }
-            // dd($jaminan, $dj);
+
+            $character = Midle::cetak_data_analisa5C_character($enc);
+            $capacity = Midle::cetak_data_analisa5C_capacity($enc);
+            $collateral = Midle::cetak_data_analisa5C_collateral($enc);
+            $condition = Midle::cetak_data_analisa5C_condition($enc);
+
+            // dd($capacity);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -698,6 +704,10 @@ class DataCetakController extends Controller
                 'keuangan' => $keuangan,
                 'bu_keuangan' => $bu_keuangan,
                 'jaminan' => $jaminan,
+                'character' => $character,
+                'capacity' => $capacity,
+                'collateral' => $collateral,
+                'condition' => $condition,
                 'biayaperdagangan' => $biaya_perdagangan,
             ]);
         } catch (DecryptException $e) {

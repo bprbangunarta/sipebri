@@ -7,6 +7,7 @@ use App\Models\Midle;
 use App\Models\Keuangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -58,6 +59,8 @@ class DataAnalisa5CController extends Controller
                 'kepatuhan' => $request->kepatuhan,
                 'hubungan_sosial' => $request->hubungan_sosial,
                 'nilai_karakter' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
             ];
             // dd($data);
             DB::table('a5c_character')->insert($data);
@@ -82,8 +85,10 @@ class DataAnalisa5CController extends Controller
                 'kepatuhan' => $request->kepatuhan,
                 'hubungan_sosial' => $request->hubungan_sosial,
                 'nilai_karakter' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'updated_at' => now(),
             ];
-            // dd($data);
+
             DB::table('a5c_character')->where('pengajuan_kode', $enc)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $th) {
@@ -146,7 +151,7 @@ class DataAnalisa5CController extends Controller
             if (is_null($character)) {
                 return redirect()->back()->with('error', 'Lengkapi A5C CHARACTER terlebih dahulu');
             }
-            // dd($character);
+
             $nilai = Data::analisa5c_text($request->evaluasi_capacity);
             $data = [
                 'kode_analisa' => $character->kode_analisa,
@@ -161,6 +166,8 @@ class DataAnalisa5CController extends Controller
                 'aset_terkait_usaha' => $request->aset_terkait_usaha,
                 'rc' => str_replace(array(' ', '%'), '', $request->rc),
                 'evaluasi_capacity' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
             ];
             DB::table('a5c_capacity')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -186,6 +193,8 @@ class DataAnalisa5CController extends Controller
                 'aset_terkait_usaha' => $request->aset_terkait_usaha,
                 'rc' => str_replace(array(' ', '%'), '', $request->rc),
                 'evaluasi_capacity' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'updated_at' => now(),
             ];
             // dd($data);
             DB::table('a5c_capacity')->where('kode_analisa', $request->kode_analisa)->update($data);
@@ -287,6 +296,8 @@ class DataAnalisa5CController extends Controller
                 'lokasi_shm' => $request->lokasi_shm,
                 'taksasi_agunan' => str_replace(array(' ', '%'), '', $request->taksasi_agunan),
                 'evaluasi_collateral' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
             ];
 
             DB::table('a5c_collateral')->insert($data);
@@ -315,6 +326,8 @@ class DataAnalisa5CController extends Controller
                 'lokasi_shm' => $request->lokasi_shm,
                 'taksasi_agunan' => str_replace(array(' ', '%'), '', $request->taksasi_agunan),
                 'evaluasi_collateral' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'updated_at' => now(),
             ];
             // dd($data, $request->all());
             DB::table('a5c_collateral')->where('kode_analisa', $request->kode_analisa)->update($data);
@@ -363,6 +376,8 @@ class DataAnalisa5CController extends Controller
                 'kondisi_alam' => $request->kondisi_alam,
                 'regulasi_pemerintah' => $request->regulasi_pemerintah,
                 'evaluasi_condition' => $nilai,
+                'created_at' => Auth::user()->code_user,
+                'updated_at' => now(),
             ];
             DB::table('a5c_condition')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -382,6 +397,8 @@ class DataAnalisa5CController extends Controller
                 'kondisi_alam' => $request->kondisi_alam,
                 'regulasi_pemerintah' => $request->regulasi_pemerintah,
                 'evaluasi_condition' => $nilai,
+                'input_user' => Auth::user()->code_user,
+                'updated_at' => now(),
             ];
 
             DB::table('a5c_condition')->where('kode_analisa', $request->kode_analisa)->update($data);

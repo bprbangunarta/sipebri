@@ -956,4 +956,69 @@ class Midle extends Model
 
         return $jaminan;
     }
+
+    public static function cetak_data_analisa5C_character($data)
+    {
+        $character = DB::table('a5c_character')->where('pengajuan_kode', $data)->first();
+        $analisa5C = (object) Data::cetak_a5c_character($character);
+
+        return $analisa5C;
+    }
+
+    public static function cetak_data_analisa5C_capacity($data)
+    {
+        $capacity = DB::table('a5c_capacity')->where('pengajuan_kode', $data)->first();
+        $analisa5C = (object)Data::a5c_capacity($capacity);
+        return $analisa5C;
+    }
+
+    public static function cetak_data_analisa5C_collateral($data)
+    {
+        $collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $data)->first();
+        $analisa5C = (object)Data::a5c_collateral($collateral);
+        return $analisa5C;
+    }
+
+    public static function cetak_data_analisa5C_condition($data)
+    {
+        $condition = DB::table('a5c_condition')->where('pengajuan_kode', $data)->first();
+        if ($condition->persaingan_usaha == 1) {
+            $persaingan_usaha = 'Persaingan Usaha Ketat';
+        } elseif ($condition->persaingan_usaha == 2) {
+            $persaingan_usaha = 'Persaingan Usaha Kurang Ketat';
+        } elseif ($condition->persaingan_usaha == 3) {
+            $persaingan_usaha = 'Persaingan Usaha Tidak Ketat';
+        }
+
+        if ($condition->kondisi_alam == 1) {
+            $kondisi_alam = 'Resiko Sangat Tinggi';
+        } elseif ($condition->kondisi_alam == 2) {
+            $kondisi_alam = 'Resiko Tinggi';
+        } elseif ($condition->kondisi_alam == 3) {
+            $kondisi_alam = 'Resiko Sedang';
+        } elseif ($condition->kondisi_alam == 4) {
+            $kondisi_alam = 'Resiko Rendah';
+        } elseif ($condition->kondisi_alam == 5) {
+            $kondisi_alam = 'Resiko Sangat Rendah';
+        }
+
+        if ($condition->regulasi_pemerintah == 1) {
+            $regulasi_pemerintah = 'TIDAK MENDUKUNG';
+        } elseif ($condition->regulasi_pemerintah == 2) {
+            $regulasi_pemerintah = 'KURANG MENDUKUNG';
+        } elseif ($condition->regulasi_pemerintah == 3) {
+            $regulasi_pemerintah = 'MENDUKUNG';
+        } elseif ($condition->regulasi_pemerintah == 4) {
+            $regulasi_pemerintah = 'MENDUKUNG';
+        }
+
+        $hasil = (object) [
+            'persaingan_usaha' => $persaingan_usaha,
+            'kondisi_alam' => $kondisi_alam,
+            'regulasi_pemerintah' => $regulasi_pemerintah,
+            'evaluasi_condition' => Data::analisa5c_number($condition->evaluasi_condition),
+        ];
+
+        return $hasil;
+    }
 }

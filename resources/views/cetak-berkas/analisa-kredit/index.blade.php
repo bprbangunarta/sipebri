@@ -1167,40 +1167,40 @@
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Tidak Melakukan Hal-Hal
                     Tercela</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->perbuatan_tercela }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Terbuka dan Konsisten</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->konsisten }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Gaya Hidup</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->gaya_hidup }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Kepetuhan Terhadap
+                <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Kepatuhan Terhadap
                     Kewajiban</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->kepatuhan }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Keharmonisan Rumah Tangga
                 </td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->harmonis }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Hubungan Sosial dengan
                     Lingkungan</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->hubungan_sosial }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Pengendalian Emosi</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $character->pengendalian_emosi }}</td>
                 <td>&nbsp; -</td>
             </tr>
 
@@ -1221,59 +1221,59 @@
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
                     Pengalaman Usaha</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->pengalaman_usaha }}</td>
+                <td>&nbsp; </td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
                     Pertumbuhan Usaha</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->pertumbuhan_usaha }}</td>
+                <td>&nbsp; </td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.
                     kontinuitas Usaha</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->kontinuitas }}</td>
+                <td>&nbsp; </td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Aset / Kekayaan</td>
-                <td style="border-right:1px solid black;"></td>
+                <td style="border-right:1px solid black;">{{ $capacity->kontinuitas }}</td>
                 <td></td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
                     Aset Terkait Usaha (Likuid)</td>
-                <td style="border-right:1px solid black;">&nbsp; Mengcover</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->aset_terkait_usaha }}</td>
+                <td>&nbsp; {{ $capacity->evaluasi_capacity }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
                     Aset Diluar Usaha</td>
-                <td style="border-right:1px solid black;">&nbsp; Likuid</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->aset_diluar_usaha }}</td>
+                <td>&nbsp; {{ $capacity->evaluasi_capacity }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Repacyment Capacity</td>
-                <td style="border-right:1px solid black;">&nbsp; 15%</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->rc }}%</td>
+                <td>&nbsp; {{ $capacity->evaluasi_capacity }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Pendataan Laporan Keuangan
                 </td>
-                <td style="border-right:1px solid black;">&nbsp; Mencatat Transaksi Harian</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->laporan_keuangan }}</td>
+                <td>&nbsp; {{ $capacity->evaluasi_capacity }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Kredit Masa
                     Lalu</td>
-                <td style="border-right:1px solid black;">&nbsp; Lancar Tidak Ada Tunggakan</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->catatan_kredit }}</td>
+                <td>&nbsp; {{ $capacity->evaluasi_capacity }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. SLIK</td>
-                <td style="border-right:1px solid black;">&nbsp; Lancar</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->kondisi_slik }}</td>
+                <td>&nbsp; {{ $capacity->evaluasi_capacity }}</td>
             </tr>
 
             {{-- Capital --}}
@@ -1287,8 +1287,8 @@
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Sumber Permodalan</td>
-                <td style="border-right:1px solid black;">&nbsp; Modal Sendiri</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->capital_sumber_modal }}</td>
+                <td>&nbsp; {{ $capacity->capital_evaluasi_capital }}</td>
             </tr>
 
             {{-- Collateral --}}
@@ -1308,13 +1308,13 @@
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
                     Agunan Utama</td>
-                <td style="border-right:1px solid black;">&nbsp; Milik Sendiri</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->agunan_utama }}</td>
+                <td>&nbsp; {{ $collateral->evaluasi_collateral }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
                     Agunan Tambahan</td>
-                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->agunan_tambahan }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
@@ -1325,53 +1325,53 @@
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
                     Agunan Utama</td>
-                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->legalitas_agunan }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
                     Agunan Tambahan</td>
-                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->legalitas_agunan_tambahan }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Mudah Diuangkan</td>
-                <td style="border-right:1px solid black;">&nbsp; Baik</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->mudah_diuangkan }}</td>
+                <td>&nbsp; {{ $collateral->evaluasi_collateral }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Stabilitas Harga</td>
-                <td style="border-right:1px solid black;">&nbsp; Lainnya</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->stabilitas_harga }}</td>
                 <td>&nbsp; Kurang Baik</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Lokasi atau Kondisi Fisik
                     Agunan</td>
-                <td style="border-right:1px solid black;"></td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->lokasi_shm }}</td>
                 <td></td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.
                     Kendaraan</td>
-                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->kondisi_kendaraan }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.
                     SHM</td>
-                <td style="border-right:1px solid black;">&nbsp; -</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->lokasi_shm }}</td>
                 <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Permohonan Thd Taksasi
                     Agunan</td>
-                <td style="border-right:1px solid black;">&nbsp; 169%</td>
-                <td>&nbsp; Tidak baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->taksasi_agunan }}%</td>
+                <td>&nbsp; {{ $collateral->evaluasi_collateral }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Aspek Hukum</td>
-                <td style="border-right:1px solid black;">&nbsp; Agunan lain yang tidak memenuhi syarat</td>
-                <td>&nbsp; Tidak Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->aspek_hukum }}</td>
+                <td>&nbsp; {{ $collateral->evaluasi_collateral }}</td>
             </tr>
 
             {{-- Condition --}}
@@ -1385,18 +1385,18 @@
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Persaingan Usaha</td>
-                <td style="border-right:1px solid black;">&nbsp; Persaingan Usaha Tidak Ketat</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $condition->persaingan_usaha }}</td>
+                <td>&nbsp; {{ $condition->evaluasi_condition }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kondisi Alam</td>
-                <td style="border-right:1px solid black;">&nbsp; Resiko Sangat Rendah</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $condition->kondisi_alam }}</td>
+                <td>&nbsp; {{ $condition->evaluasi_condition }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Regulisai Pemerintah</td>
-                <td style="border-right:1px solid black;">&nbsp; Tidak Mendukung</td>
-                <td>&nbsp; Baik</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $condition->regulasi_pemerintah }}</td>
+                <td>&nbsp; {{ $condition->evaluasi_condition }}</td>
             </tr>
         </table>
     </div>
