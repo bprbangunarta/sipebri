@@ -229,10 +229,6 @@ class CetakController extends Controller
                         ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 2');
                 })->get();
 
-            if (count($data) == 0) {
-                return redirect()->back()->with('error', 'Jaminan kendaraan tidak ada');
-            }
-
             for ($i = 0; $i < count($data); $i++) {
                 $surveyor = DB::table('v_users')
                     ->where('code_user', $data[$i]->surveyor_kode)
@@ -305,18 +301,6 @@ class CetakController extends Controller
                 $data[$i]->role_name = $surveyor[$i]->role_name;
             }
 
-            // //Surveyor
-            // $surveyor = DB::table('v_users')
-            //     ->where('code_user', $data[0]->surveyor_kode)
-            //     ->select('nama_user', 'role_name')->get();
-
-            // $data[0]->nama_user = $surveyor[0]->nama_user;
-            // $data[0]->role_name = $surveyor[0]->role_name;
-
-            // //Tahun
-            // $thn = Carbon::now()->year;
-            // $data[0]->thn = $thn;
-            // dd($data);
             return view('cetak.layouts.tanah', [
                 'data' => $data
             ]);
@@ -353,10 +337,6 @@ class CetakController extends Controller
                         ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
                 })->get();
 
-            if (count($data) == 0) {
-                return redirect()->back()->with('error', 'Jaminan kendaraan tidak ada');
-            }
-
             for ($i = 0; $i < count($data); $i++) {
                 $surveyor = DB::table('v_users')
                     ->where('code_user', $data[$i]->surveyor_kode)
@@ -367,7 +347,6 @@ class CetakController extends Controller
                 $data[$i]->nama_user = $surveyor[$i]->nama_user;
                 $data[$i]->role_name = $surveyor[$i]->role_name;
             }
-
 
             return view('cetak.layouts.mobil', [
                 'data' => $data
