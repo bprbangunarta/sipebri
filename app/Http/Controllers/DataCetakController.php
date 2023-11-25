@@ -808,18 +808,50 @@ class DataCetakController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = DB::table('data_pengajuan')
-                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->join('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
+                    'a_administrasi.administrasi as biaya_admin',
                 )->first();
 
-            //
+            //Taksasi
+            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
+            if (count($taksasi) != 0) {
+                $total = [];
+                for ($i = 0; $i < count($taksasi); $i++) {
+                    $total[] = $taksasi[$i]->nilai_taksasi;
+                }
+                $total_taksasi = array_sum($total) ?? 0;
+            }
+            $cek->total_taksasi = $total_taksasi ?? 0;
 
-            dd($cek);
+            //Data Usulan
+            $usulan = DB::table('data_usulan')->where('pengajuan_kode', $enc)->get();
+            if (count($usulan) != 0) {
+                $data = [];
+                $rc = [];
+                for ($i = 0; $i < count($usulan); $i++) {
+                    $data[] = $usulan[$i];
+                    $rc[] = $usulan[$i]->rc;
+                }
+                $total_taksasi = array_sum($total) ?? 0;
+
+                //RC
+                $rc_akhir = end($rc);
+                $data_akhir = end($data);
+            }
+            $cek->total_taksasi = $total_taksasi ?? 0;
+            $cek->rc_akhir = $rc_akhir ?? 0;
+            $cek->plafon_usulan = $data_akhir->usulan_plafon ?? 0;
+            $cek->sb_usulan = $data_akhir->suku_bunga ?? null;
+
+            // dd($usulan);
             return view('cetak.persetujuan-kredit.cetak-persetujuan-kredit', [
-                'cek' => $cek,
+                'data' => $cek,
+                'usulan' => $usulan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

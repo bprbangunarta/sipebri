@@ -133,19 +133,19 @@
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Penggunaan</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">39. Konsumsi Lainnya</td>
+                <td style="width: 15%;">{{ $data->penggunaan }}</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Nilai Taksasi Agunan</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">Rp 70.323.436</td>
+                <td style="width: 15%;">{{ 'Rp. ' . ' ' . number_format($data->total_taksasi, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Repayment Capacity</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">41.06 %</td>
+                <td style="width: 15%;">{{ $data->rc_akhir }} %</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;">3.</td>
@@ -157,19 +157,19 @@
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Plafon</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">Rp 52.000.000</td>
+                <td style="width: 15%;">{{ 'Rp. ' . ' ' . number_format($data->plafon_usulan, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Jangka Waktu</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">36 Bulan</td>
+                <td style="width: 15%;">{{ $data->jangka_waktu }} Bulan</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Suku Bunga</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">13 %</td>
+                <td style="width: 15%;">{{ $data->sb_usulan }} %</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;">4.</td>
@@ -177,7 +177,41 @@
                 <td style="width: 0.3%;"></td>
                 <td style="width: 15%;"></td>
             </tr>
-            <tr>
+            @forelse ($usulan as $item)
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">Komentar :</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">{{ $loop->iteration }}. {{ ucwords($item->catatan) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td colspan="2">Layak untuk diberikan pinjaman sebesar
+                        {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="align-content: center; text-align:center;">
+                        <div
+                            style="width: 70%; border-bottom: 1px solid black;margin-bottom: -10px; display: inline-block;">
+                        </div>
+                        <div style="width: 70%; border-bottom: 1px solid black; display: inline-block;"></div>
+                        <div style="margin-bottom: 5px;">{{ $item->role_name }}</div>
+                    </td>
+                    <td colspan="2" style="text-align:justify;">Dengan suku bunga {{ $data->suku_bunga }} % / bulan
+                        ............................ untuk jangka
+                        waktu {{ $data->jangka_waktu }} bulan
+                        Biaya ADM {{ $data->biaya_admin }}
+                    </td>
+                </tr>
+            @empty
+            @endforelse
+            {{-- <tr>
                 <td colspan="2"></td>
                 <td colspan="2">Komentar :</td>
             </tr>
@@ -348,7 +382,7 @@
                     Biaya ADM
                     ....................................................................................................................................
                 </td>
-            </tr>
+            </tr> --}}
         </table>
     </div>
 
