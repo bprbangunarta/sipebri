@@ -87,7 +87,7 @@
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
-                <td class="text-center"> : </td>
+                <td class="text-center" style="width: 3%;"> : </td>
                 <td>{{ $data->no_identitas }}</td>
 
             </tr>
@@ -114,7 +114,7 @@
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
-                <td class="text-center"> : </td>
+                <td class="text-center" style="width: 3%;"> : </td>
                 <td>{{ $data->iden }}</td>
 
             </tr>
