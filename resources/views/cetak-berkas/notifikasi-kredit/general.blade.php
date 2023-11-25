@@ -287,18 +287,43 @@
 
         <table style="margin-top:-15px;">
             <tr>
-                <td class="text-center" width="2%" style="vertical-align: text-top;"> 13. </td>
+                <td class="text-center" width="2%"> 13. </td>
+                <td width="27%">Untuk Jaminan Tanah</td>
+                <td class="text-center" width="3%" colspan="2"> : </td>
+                <td></td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td class="text-center" width="2%"></td>
                 <td style="text-align: justify;">
-                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau karyawan PT BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali jasa survey sebesar Rp. 20.000,- yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surve. Apabila dikemudian hari deiketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan Pejabat atau petugas BANK dapat dikenakan sanksi sesuai ketentuan BANK.
+                    <ol type='a' style="margin-left: -20px;margin-top:-1px;tetxt-align:justify;">
+                        <li>
+                            Debitur tidak akan menjaminkan atau menggunakannya sebagai jaminan pinjaman, menjual atau memindahtangankan dengan cara apapun kepada pihak manapun sampai seluruh Hutang dinyatakan lunas oleh pihak Bank.
+                        </li>
+                        <li>
+                            Apabila debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau pokok pinjaman selama 3 (tiga) bulan atau lebih, maka Bank berhak melakukan tindakan-tindakan yang mendorong untuk penyelesaian tunggakan termasuk dalam hal ini BPR BANGUNARTA melakkukan tindakan pemasangan plakat "TANAH INI SEDANG DIJAMINKAN KE BPR BANGUNARTA" sampai tunggakan tersebut dapat terselesaikan atau Bank melakukan upaya-upaya yang mengarah pada penguasaan agunan untuk penyelesaian kredit tersebut dan dalam hal ini Debitur tidak berhak untuk menolak, mempersulit, menghalang-halangi, maupun menghambat.
+                        </li>
+                    </ol>
+                </td>
+            </tr>
+        </table>
+
+        <table style="margin-top:-15px;">
+            <tr>
+                <td class="text-center" width="2%" style="vertical-align: text-top;"> 14. </td>
+                <td style="text-align: justify;">
+                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surveY. Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
                 </td>
             </tr>
         </table>
 
         <table>
             <tr>
-                <td class="text-center" width="2%" style="vertical-align: text-top;"> 14. </td>
+                <td class="text-center" width="2%" style="vertical-align: text-top;"> 15. </td>
                 <td style="text-align: justify;">
-                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut syarat umum Perjanjian Kredit Konsumsi Lainnya PT BPR BANGUNARTA.
+                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
                 </td>
             </tr>
         </table>
@@ -316,10 +341,8 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center" width="40%">
-                    Surat ini tidak memerlukan tanda tangan <br>
-                    dari pejabat Bank karena dicetak secara <br>
-                    Komputerisasi
+                <td class="text-center" style="vertical-align: text-top;" width="40%">
+                    PT. BPR BANGUNARTA
                 </td>
                 <td></td>
                 <td style="text-align: justify" width="42%">
@@ -328,7 +351,18 @@
                 </td>
             </tr>
             <tr>
-                <td width="40%"></td>
+                <td class="text-center" width="40%">
+                    <center>
+                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png" alt="" style="width: 100px;hight:100px;margin-top:-32px;">
+                    </center>
+                    <u>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Surveyor
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </u>
+                    <br>
+                    MUHIDIN PRASETYO
+                </td>
                 <td></td>
                 <td class="text-center" width="40%">
                     <p style="margin-top:70px;"></p>
@@ -353,9 +387,9 @@
         </ol>
     </div>
 
-    {{-- <script>
+    <script>
         window.print();
-    </script> --}}
+    </script>
 </body>
 
 </html>

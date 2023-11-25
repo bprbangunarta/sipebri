@@ -532,10 +532,7 @@ Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetu
 Route::view('/rekap/analisa', 'rekap.analisa');
 
 Route::prefix('cetak-berkas')->group(function () {
-    Route::view('notifikasi-kredit/tanah', 'cetak-berkas.notifikasi-kredit.tanah');
-    Route::view('notifikasi-kredit/bpkp', 'cetak-berkas.notifikasi-kredit.bpkb');
-    Route::view('notifikasi-kredit/bpkp-nonbpkp', 'cetak-berkas.notifikasi-kredit.bpkp-nonbpkp');
-
+    Route::view('notifikasi-kredit', 'cetak-berkas.notifikasi-kredit.general');
     Route::view('analisa-kredit', 'cetak-berkas.analisa-kredit.index');
 });
 
