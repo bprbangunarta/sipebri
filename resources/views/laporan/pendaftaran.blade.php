@@ -6,7 +6,7 @@
         <section class="content-header">
             <h1>LAPORAN
 
-                <a href="#" class="btn btn-sm btn-success pull-right">
+                <a data-toggle="modal" data-target="#modal-export" class="btn btn-sm btn-success pull-right">
                     <i class="fa fa-download"></i>&nbsp; Export Data
                 </a>
             </h1>
@@ -35,7 +35,6 @@
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                         </div>
                         <div class="box-body">
@@ -81,6 +80,45 @@
                 </div>
             </div>
         </section>
+    </div>
 
+    <div class="modal fade" id="modal-export">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT DATA</h4>
+                </div>
+                <form action="{{ route('export.pendaftaran') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="text" name="alamat" id="alamat" hidden>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection

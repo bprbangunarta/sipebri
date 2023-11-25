@@ -61,6 +61,7 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\ExportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -518,7 +519,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/survei', 'laporan_survey_analisa')->name('laporan.survey');
         Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');
     });
-    //====Route Cetak Laporan====//
+
+     // Export Data
+     Route::controller(ExportController::class)->group(function () {
+        Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
+    });
 
 });
 
