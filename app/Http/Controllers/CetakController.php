@@ -165,6 +165,7 @@ class CetakController extends Controller
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_pekerjaan', 'data_pekerjaan.kode_pekerjaan', '=', 'data_nasabah.pekerjaan_kode')
                 ->select(
                     'data_pendamping.no_identitas',
                     'data_pendamping.nama_pendamping',
@@ -176,7 +177,8 @@ class CetakController extends Controller
                     'data_nasabah.tempat_lahir as tempat',
                     'data_nasabah.tanggal_lahir as ttl',
                     'data_nasabah.pendidikan_kode',
-                    'data_nasabah.alamat_ktp'
+                    'data_nasabah.alamat_ktp',
+                    'data_pekerjaan.nama_pekerjaan'
                 )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 

@@ -103,18 +103,6 @@
                 <td class="text-center"> : </td>
                 <td>{{ $data->tempat_lahir . ',' . ' ' . $data->tanggal_lahir }}</td>
             </tr>
-            <tr>
-                <td></td>
-                <td>Pekerjaan</td>
-                <td class="text-center"> : </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Alamat</td>
-                <td class="text-center"> : </td>
-                <td></td>
-            </tr>
         </table>
 
         <p>
@@ -146,7 +134,7 @@
                 <td></td>
                 <td>Pekerjaan</td>
                 <td class="text-center"> : </td>
-                <td>-</td>
+                <td>&nbsp;{{ $data->nama_pekerjaan }}-</td>
             </tr>
             <tr>
                 <td></td>
