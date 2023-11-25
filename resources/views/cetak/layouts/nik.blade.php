@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Pengecekan NIK</title>
+    <title>Form Pengecekan NIK</title>
     <style>
         @page {
             size: A4;
