@@ -60,7 +60,9 @@
                     <i class="fa fa-folder-o"></i> Kepemilikan
                 </a>
             </li>
-
+            {{-- @if ($data->produk_kode == 'KTA')
+            @else
+            @endif --}}
             <li
                 class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tanah', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
                 <a href="{{ route('taksasi.kendaraan', ['pengajuan' => $pengajuan]) }}">

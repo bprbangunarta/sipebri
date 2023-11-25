@@ -499,6 +499,12 @@ Route::middleware('auth')->group(function () {
     });
     //====Route Analisa====//
 
+    //====Route OTORISASI PK====//
+    Route::controller(KonfirmasiController::class)->group(function () {
+        Route::get('otor/perjanjian/kredit', 'otor_perjanjian_kredit')->name('otor.perjanjian_kredit');
+    });
+    //====Route OTORISASI PK====//
+
     Route::controller(PerhitunganController::class)->group(function () {
         Route::get('/perhitungan/flat', 'flat')->name('flat');
         Route::get('/perhitungan/efektif_musiman', 'efektif_musiman')->name('efektif_musiman');
@@ -520,11 +526,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');
     });
 
-     // Export Data
-     Route::controller(ExportController::class)->group(function () {
+    // Export Data
+    Route::controller(ExportController::class)->group(function () {
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
     });
-
 });
 
 Route::view('/analisa/index', 'analisa.index');

@@ -24,7 +24,7 @@ class UsahaPerdaganganController extends Controller
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
                 $item->kode_id = Crypt::encrypt($item->id);
             }
-            // dd($cek[0]);
+            // dd($cek);
             return view('staff.analisa.u-perdagangan.index', [
                 'data' => $cek[0],
                 'perdagangan' => $au,
