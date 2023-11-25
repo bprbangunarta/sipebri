@@ -263,6 +263,12 @@
                             Survey dan Analisa
                         </a>
                     </li>
+                    <li class="{{ request()->is('laporan/penjadwalan') ? 'active' : '' }}">
+                        <a href="/laporan/penjadwalan">
+                            <i class="fa fa-calendar"></i>
+                            Penjadwalan Survey
+                        </a>
+                    </li>
                 </ul>
             </li>
 

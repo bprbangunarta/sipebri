@@ -115,7 +115,7 @@ class CetakLaporanController extends Controller
             })
 
             ->orderBy('data_pengajuan.created_at', 'asc');
-        $data = $query->paginate(7);
+        $data = $query->paginate(10);
         // dd($data);
         return view('laporan.pendaftaran', [
             'data' => $data,
