@@ -438,7 +438,7 @@ class DataCetakController extends Controller
             ];
             $data4 = [
                 'tracking' => 'Realisasi',
-                'on_current' => '1',
+                // 'on_current' => '1',
             ];
             DB::transaction(function () use ($data, $request, $data2, $data3, $data4) {
                 DB::table('data_spk')->insert($data);

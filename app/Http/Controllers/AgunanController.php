@@ -39,7 +39,7 @@ class AgunanController extends Controller
             //Cek data kendaraan
             if ($request->jenis_agunan_kode == '02') {
                 $jenis_agunan = 'Kendaraan Bermotor Roda 2';
-            } elseif ($request->jenis_agunan_kode == '02') {
+            } elseif ($request->jenis_agunan_kode == '03') {
                 $jenis_agunan = 'Kendaraan Bermotor Roda 4';
             } elseif (is_null($request->jenis_agunan_kode)) {
                 $jenis_agunan = null;
