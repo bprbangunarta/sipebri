@@ -532,6 +532,7 @@ Route::middleware('auth')->group(function () {
     // Export Data
     Route::controller(ExportController::class)->group(function () {
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
+        Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
     });
 });
 

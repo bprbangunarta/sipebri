@@ -46,9 +46,9 @@
                                         <th class="text-center" width="7%">TANGGAL</th>
                                         <th class="text-center" width="7%">KODE</th>
                                         <th class="text-center">NAMA LENGKAP</th>
-                                        <th class="text-center" width="45%">ALAMAT</th>
-                                        <th class="text-center" width="7%">PLAFON</th>
-                                        <th class="text-center" width="7%">STATUS</th>
+                                        <th class="text-center" width="43%">ALAMAT</th>
+                                        <th class="text-center" width="10%">PLAFON</th>
+                                        <th class="text-center" width="10%">STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,7 +64,19 @@
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
                                             <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center">{{ $item->status }}</td>
+                                            <td class="text-center">
+                                                @if ($item->status == "Disetujui")
+                                                    <font class="text-green">{{ $item->status }}</font>
+                                                @elseif ($item->status == "Ditolak")
+                                                    <font class="text-red">{{ $item->status }}</font>
+                                                @elseif ($item->status == "Dibatalkan")
+                                                    <font class="text-red">{{ $item->status }}</font>
+                                                @elseif ($item->status != "Disetujui" || $item->status != "Ditolak" || $item->status != "Dibatalkan")
+                                                    <font class="text-yellow">{{ $item->tracking }}</font>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                         </tr>
                                         @php
                                             $no++;

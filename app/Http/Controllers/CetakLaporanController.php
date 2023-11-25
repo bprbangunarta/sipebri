@@ -40,22 +40,24 @@ class CetakLaporanController extends Controller
 
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
-            ->where(function ($query) {
-                $query->where('data_pengajuan.status', '=', 'Disetujui')
-                    ->where('data_spk.pengajuan_kode', '!=', null);
-            })
+            ->join('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->join('data_tracking', 'data_pengajuan.kode_pengajuan', '=', 'data_tracking.pengajuan_kode')
+            // ->where(function ($query) {
+            //     $query->where('data_pengajuan.status', '=', 'Disetujui')
+            //         ->where('data_spk.pengajuan_kode', '!=', null);
+            // })
 
             ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+                return $query->whereBetween('data_tracking.pencairan_dana', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
             })
 
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
+                'data_tracking.*',
             )
-            ->orderBy('data_pengajuan.created_at', 'asc');
-        $data = $query->paginate(7);
+            ->orderBy('data_pengajuan.created_at', 'desc');
+        $data = $query->paginate(10);
 
         return view('laporan.realisasi', [
             'data' => $data,
@@ -104,7 +106,7 @@ class CetakLaporanController extends Controller
 
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
+            // ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',

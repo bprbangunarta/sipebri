@@ -172,7 +172,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/notifikasi/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/notifikasi/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -197,9 +197,8 @@
                             Analisa Kredit
                         </a>
                     </li>
-                    <li class="">
-                        {{-- <a @can('cetak persetujuan kredit') href="#" @endcan title="Cetak Persetujuan Kredit"> --}}
-                        <a href="{{ route('persetujuan.kredit') }}" title="Cetak Persetujuan Kredit">
+                    <li class="{{ request()->is('themes/persetujuan/kredit') ? 'active' : '' }}">
+                        <a @can('cetak persetujuan kredit') href="{{ route('persetujuan.kredit') }}" @endcan title="Cetak Persetujuan Kredit">
                             <i class="fa fa-file-text-o"></i>
                             Persetujuan Kredit
                         </a>

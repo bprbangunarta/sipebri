@@ -4,12 +4,12 @@
 @section('content')
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>LAPORAN
-
-                <a href="#" class="btn btn-sm btn-success pull-right">
-                    <i class="fa fa-download"></i>&nbsp; Export Data
-                </a>
-            </h1>
+            <h1>LAPORAN</h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ route('dashboard') }}"><i class="fa fa-laptop"></i> Dashboard</a></li>
+                <li>Laporan</li>
+                <li class="active">Realisasi</li>
+            </ol>
         </section>
 
         <section class="content">
@@ -38,6 +38,7 @@
 
                             </div>
                         </div>
+
                         <div class="box-body">
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
@@ -45,10 +46,10 @@
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center" width="7%">TANGGAL</th>
                                         <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center" width="7%">NO. SPK</th>
                                         <th class="text-center">NAMA LENGKAP</th>
                                         <th class="text-center" width="45%">ALAMAT</th>
                                         <th class="text-center" width="7%">PLAFON</th>
-                                        <th class="text-center" width="7%">STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,12 +60,13 @@
                                         <tr class="text-uppercase">
                                             <td class="text-center">{{ $no }}</td>
                                             <td class="text-center">
-                                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
+                                                {{ \Carbon\Carbon::parse($item->pencairan_dana)->format('Y-m-d') }}
+                                            </td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center">{{ $item->no_spk }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
                                             <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center">{{ $item->status }}</td>
                                         </tr>
                                         @php
                                             $no++;
@@ -77,10 +79,56 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
+
+                            {{ $data->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
+    </div>
 
+    <div class="modal fade" id="modal-export">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT DATA</h4>
+                </div>
+                <form action="{{ route('export.realisasi') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="text" name="alamat" id="alamat" hidden>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
