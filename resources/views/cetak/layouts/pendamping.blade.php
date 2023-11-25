@@ -87,20 +87,20 @@
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->no_identitas }}</td>
 
             </tr>
             <tr>
                 <td></td>
                 <td>Nama Pendamping</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->nama_pendamping }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tempat, Tanggal Lahir</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->tempat_lahir . ',' . ' ' . $data->tanggal_lahir }}</td>
             </tr>
         </table>
@@ -114,32 +114,32 @@
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width: 23%;">No. KTP</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->iden }}</td>
 
             </tr>
             <tr>
                 <td></td>
                 <td>Nama</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tempat, Tanggal Lahir</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->tempat . ',' . ' ' . $data->ttl }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Pekerjaan</td>
-                <td class="text-center">&nbsp; : &nbsp;</td>
+                <td class="text-center"> : </td>
                 <td>{{ $data->nama_pekerjaan }}-</td>
             </tr>
             <tr>
                 <td></td>
                 <td style="position: absolute;vertical-align: text-top;">Alamat</td>
-                <td class="text-center" style="vertical-align: text-top;">&nbsp; : &nbsp;</td>
+                <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td>{{ $data->alamat_ktp }}</td>
             </tr>
         </table>
