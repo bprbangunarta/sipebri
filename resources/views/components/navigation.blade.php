@@ -172,7 +172,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'themes/cetak/analisa/kredit', 'themes/notifikasi/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/notifikasi/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
