@@ -240,7 +240,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/survei') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -255,19 +255,19 @@
                             Fasilitas Kredit
                         </a>
                     </li>
-                    <li class="{{ request()->is('laporan/realisasi') ? 'active' : '' }}">
+                    <li class="{{ request()->is('laporan/realisasi', 'laporan/realisasi/kredit') ? 'active' : '' }}">
                         <a href="/laporan/realisasi">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
                         </a>
                     </li>
-                    <li class="{{ request()->is('laporan/penolakan') ? 'active' : '' }}">
-                        <a href="/laporan/penolakan">
+                    <li class="{{ request()->is('laporan/siap-realisasi') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.siap-realisasi') }}">
                             <i class="fa fa-close"></i>
-                            Penolakan Kredit
+                            Data Siap Realisasi
                         </a>
                     </li>
-                    <li class="{{ request()->is('laporan/pendaftaran') ? 'active' : '' }}">
+                    <li class="{{ request()->is('laporan/pendaftaran', 'laporan/pendaftaran/kredit') ? 'active' : '' }}">
                         <a href="/laporan/pendaftaran">
                             <i class="fa fa-users"></i>
                             Pendaftaran Kredit
