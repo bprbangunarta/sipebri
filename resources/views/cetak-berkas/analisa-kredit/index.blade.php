@@ -1713,7 +1713,7 @@
 
     {{-- Memorandum --}}
     <div class="page-break"></div>
-    <div class="content" style="margin-top: -57px;">
+    <div class="content" style="margin-top: -57px;font-size:12.5px;">
         <h4 style="text-align: center;font-size: 12pt;margin-top:-1px;">MEMORANDUM USULAN KREDIT (MUK)</h4>
         <table style="border:1px solid black;">
             <tr>
@@ -2037,11 +2037,11 @@
             <tr>
                 <td width="70%"></td>
                 <td class="text-center">
+                    <p style="margin-top: -10.5px;"></p>
                     Pamanukan, {{ $memorandum->hari }} <br>
-                    Surveyor, <br>
-                    <p style="margin-top:55px;"></p>
-
-
+                    <center>
+                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png?hl=id" style="width:100px;hight:100px;">
+                    </center>
                     <b>DIDI JUNAEDI</b>
                 </td>
             </tr>
