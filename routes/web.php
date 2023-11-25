@@ -515,6 +515,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/laporan/realisasi/kredit', 'post_laporan_realisasi')->name('laporan.realisasi-kredit');
         Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
         Route::get('/laporan/survei', 'laporan_survey_analisa')->name('laporan.survey');
+        Route::get('/laporan/penjadwalan', 'laporan_penjadwalan')->name('laporan.penjadwalan');
     });
 
      // Export Data
