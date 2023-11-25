@@ -1506,21 +1506,21 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. SLIK (Sumber Informasi SID Bank Indonesia)
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Lancar
+                    &nbsp; {{ $kualitatif->bi_checking }}
                 </td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kewajiban Kepada Pihal Lain
                 </td>
-                <td style="border-right:1px solid black;"></td>
+                <td style="border-right:1px solid black;">{{ $kualitatif->bi_checking }}</td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 1
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; -
+                    &nbsp; {{ $kualitatif->kewajiban1 }} - {{ $kualitatif->ket_kewajiban1 }}
                 </td>
             </tr>
             <tr>
@@ -1528,7 +1528,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 2
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; -
+                    &nbsp; {{ $kualitatif->kewajiban2 }} - {{ $kualitatif->ket_kewajiban3 }}
                 </td>
             </tr>
             <tr>
@@ -1536,7 +1536,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 3
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; -
+                    &nbsp; {{ $kualitatif->kewajiban3 }} - {{ $kualitatif->ket_kewajiban3 }}
                 </td>
             </tr>
             <tr>
@@ -1544,7 +1544,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Judi / Urusan dengan Pihak Berwajib
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Tidak Pernah
+                    &nbsp; {{ $kualitatif->pihak_berwajib }}
                 </td>
             </tr>
             <tr>
@@ -1552,7 +1552,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Hubungan dengan Tetangga / Masyarakat
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Baik
+                    &nbsp; {{ $kualitatif->hubungan_tetangga }}
                 </td>
             </tr>
             <tr>
@@ -1560,7 +1560,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Menjadi Tenaga Kerja Indonesia (TKI)
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Tidak Pernah (Pemohon)
+                    &nbsp; {{ $kualitatif->pengalaman_tki }} ({{ $kualitatif->ket_pengalaman }})
                 </td>
             </tr>
             <tr>
@@ -1574,7 +1574,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pemohon
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Jam 17:00
+                    &nbsp; Jam {{ $kualitatif->pemohon_ada }}
                 </td>
             </tr>
             <tr>
@@ -1582,7 +1582,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pendamping
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Jam 17:00
+                    &nbsp; Jam {{ $kualitatif->pendamping_ada }}
                 </td>
             </tr>
             <tr>
@@ -1590,16 +1590,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Sumber Informasi Masyarakat
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Info Pak Bambang
-                </td>
-            </tr>
-
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. SLIK (Sumber Informasi SID Bank Indonesia)
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; Lancar
+                    &nbsp; {{ $kualitatif->info_masyarakat }}
                 </td>
             </tr>
 
@@ -1614,7 +1605,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Sumber Bahan Baku
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Karyawan Tetap
+                    &nbsp; {{ $kualitatif->bahan_baku }}
                 </td>
             </tr>
             <tr>
@@ -1622,7 +1613,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Proses Pengolahan
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Aktifitas dilakukan setiap hari
+                    &nbsp; {{ $kualitatif->proses_olah }}
                 </td>
             </tr>
             <tr>
@@ -1630,7 +1621,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Market Wilayah
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Subang
+                    &nbsp; {{ $kualitatif->target_market }}
                 </td>
             </tr>
             <tr>
@@ -1638,7 +1629,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Sistem Pembayaran
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Transfer
+                    &nbsp; {{ $kualitatif->pembayaran }}
                 </td>
             </tr>
             <tr>
@@ -1646,7 +1637,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Faktor Pendukung Usaha
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Naik Jabatan
+                    &nbsp; {{ $kualitatif->pendukung_usaha }}
                 </td>
             </tr>
             <tr>
@@ -1654,7 +1645,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Faktor Pengurang Usaha
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Kesehatan Menurun
+                    &nbsp; {{ $kualitatif->pengurang_usaha }}
                 </td>
             </tr>
             <tr>
@@ -1663,7 +1654,7 @@
                 </td>
                 <td style="border-right:1px solid black;">
                     <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
-                        INFO PAK BAMBANG BENAR BAHWA YBS MASIH AKTIF BEKERJA SAMPAI SAAT INI DAN TIDAK MENAJUKAN PHK
+                        {{ $kualitatif->trade_checking }}
                     </div>
                 </td>
             </tr>
@@ -1681,7 +1672,7 @@
                     &nbsp; 1. Modal Kerja
                 </td>
                 <td style="border-top:1px solid black;border-right:1px solid black;">
-                    &nbsp; Rp. 0
+                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->modal_kerja, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
@@ -1689,7 +1680,7 @@
                     &nbsp; 2. Investasi
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Rp. 0
+                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->investasi, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
@@ -1697,7 +1688,7 @@
                     &nbsp; 3. Konsumtif
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Rp. 10.000.000
+                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->konsumtif, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
@@ -1705,7 +1696,7 @@
                     &nbsp; 4. Pelunasan Kredit
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Rp. 0
+                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->pelunasan_kredit, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
@@ -1713,7 +1704,7 @@
                     &nbsp; 5. Take Over
                 </td>
                 <td style="border-right:1px solid black;">
-                    &nbsp; Rp. 0
+                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->take_over, 0, ',', '.') }}
                 </td>
             </tr>
         </table>

@@ -29,11 +29,15 @@
                             <select class="form-control input-sm form-border text-uppercase" name="kewajiban1"
                                 id="">
                                 <option value="">--Pilih--</option>
-                                <option value="Bank Umum" {{ old('kewajiban1') == 5 ? 'selected' : '' }}>Bank Umum</option>
-                                <option value="BPR" {{ old('kewajiban1') == 4 ? 'selected' : '' }}>BPR</option>
-                                <option value="Koperasi" {{ old('kewajiban1') == 3 ? 'selected' : '' }}>Koperasi</option>
-                                <option value="Leasing" {{ old('kewajiban1') == 1 ? 'selected' : '' }}>Leasing</option>
-                                <option value="lainnya" {{ old('kewajiban1') == 1 ? 'selected' : '' }}>lainnya</option>
+                                <option value="Bank Umum" {{ old('kewajiban1') == 'Bank Umum' ? 'selected' : '' }}>Bank Umum
+                                </option>
+                                <option value="BPR" {{ old('kewajiban1') == 'BPR' ? 'selected' : '' }}>BPR</option>
+                                <option value="Koperasi" {{ old('kewajiban1') == 'Koperasi' ? 'selected' : '' }}>Koperasi
+                                </option>
+                                <option value="Leasing" {{ old('kewajiban1') == 'Leasing' ? 'selected' : '' }}>Leasing
+                                </option>
+                                <option value="lainnya" {{ old('kewajiban1') == 'lainnya' ? 'selected' : '' }}>lainnya
+                                </option>
                             </select>
                         </div>
 
@@ -48,13 +52,17 @@
                             <select class="form-control input-sm form-border text-uppercase" name="kewajiban2"
                                 id="">
                                 <option value="">--Pilih--</option>
-                                <option value="Bank Umum" {{ old('ket_kewajiban2') == 5 ? 'selected' : '' }}>Bank Umum
+                                <option value="Bank Umum" {{ old('ket_kewajiban2') == 'Bank Umum' ? 'selected' : '' }}>Bank
+                                    Umum
                                 </option>
-                                <option value="BPR" {{ old('ket_kewajiban2') == 4 ? 'selected' : '' }}>BPR</option>
-                                <option value="Koperasi" {{ old('ket_kewajiban2') == 3 ? 'selected' : '' }}>Koperasi
+                                <option value="BPR" {{ old('ket_kewajiban2') == 'BPR' ? 'selected' : '' }}>BPR</option>
+                                <option value="Koperasi" {{ old('ket_kewajiban2') == 'Koperasi' ? 'selected' : '' }}>
+                                    Koperasi
                                 </option>
-                                <option value="Leasing" {{ old('ket_kewajiban2') == 1 ? 'selected' : '' }}>Leasing</option>
-                                <option value="lainnya" {{ old('ket_kewajiban2') == 1 ? 'selected' : '' }}>lainnya</option>
+                                <option value="Leasing" {{ old('ket_kewajiban2') == 'Leasing' ? 'selected' : '' }}>Leasing
+                                </option>
+                                <option value="lainnya" {{ old('ket_kewajiban2') == 'lainnya' ? 'selected' : '' }}>lainnya
+                                </option>
                             </select>
                         </div>
 
@@ -69,11 +77,15 @@
                             <select class="form-control input-sm form-border text-uppercase" name="kewajiban3"
                                 id="">
                                 <option value="">--Pilih--</option>
-                                <option value="Bank Umum" {{ old('kewajiban3') == 5 ? 'selected' : '' }}>Bank Umum</option>
-                                <option value="BPR" {{ old('kewajiban3') == 4 ? 'selected' : '' }}>BPR</option>
-                                <option value="Koperasi" {{ old('kewajiban3') == 3 ? 'selected' : '' }}>Koperasi</option>
-                                <option value="Leasing" {{ old('kewajiban3') == 1 ? 'selected' : '' }}>Leasing</option>
-                                <option value="lainnya" {{ old('kewajiban3') == 1 ? 'selected' : '' }}>lainnya</option>
+                                <option value="Bank Umum" {{ old('kewajiban3') == 'Bank Umum' ? 'selected' : '' }}>Bank
+                                    Umum</option>
+                                <option value="BPR" {{ old('kewajiban3') == 'BPR' ? 'selected' : '' }}>BPR</option>
+                                <option value="Koperasi" {{ old('kewajiban3') == 'Koperasi' ? 'selected' : '' }}>Koperasi
+                                </option>
+                                <option value="Leasing" {{ old('kewajiban3') == 'Leasing' ? 'selected' : '' }}>Leasing
+                                </option>
+                                <option value="lainnya" {{ old('kewajiban3') == 'lainnya' ? 'selected' : '' }}>lainnya
+                                </option>
                             </select>
                         </div>
 

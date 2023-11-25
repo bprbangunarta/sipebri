@@ -229,7 +229,7 @@ class KomiteController extends Controller
             ];
 
             if (!is_null($du)) {
-                DB::table('data_usulan')->where('id', $du[0]->id)->update($usulan);
+                DB::table('data_usulan')->where('pengajuan_kode', $request->kode_pengajuan)->update($usulan);
             } else {
                 DB::table('data_usulan')->insert($usulan);
             }

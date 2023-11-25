@@ -760,7 +760,7 @@ class Data extends Model
             'taksasi_agunan' => $data->taksasi_agunan ?? null,
             'kondisi_kendaraan' => $kondisi_kendaraan ?? null,
             'aspek_hukum' => $aspek_hukum ?? null,
-            'aspek_hukum' => self::analisa5c_number($data->evaluasi_collateral) ?? null,
+            'evaluasi_collateral' => self::analisa5c_number($data->evaluasi_collateral) ?? null,
         ];
         return $hasil;
     }

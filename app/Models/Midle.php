@@ -1021,4 +1021,25 @@ class Midle extends Model
 
         return $hasil;
     }
+
+    public static function cetak_data_kualitatif($data)
+    {
+        $kualitatif = DB::table('au_kualitatif')->where('pengajuan_kode', $data)->first();
+        if ($kualitatif->bi_checking == 1) {
+            $kualitatif->bi_checking = 'Macet';
+        } elseif ($kualitatif->bi_checking == 2) {
+            $kualitatif->bi_checking = 'Diragukan';
+        } elseif ($kualitatif->bi_checking == 3) {
+            $kualitatif->bi_checking = 'Kurang Lancar';
+        } elseif ($kualitatif->bi_checking == 4) {
+            $kualitatif->bi_checking = 'Lancar';
+        }
+
+        if ($kualitatif->pihak_berwajib == 1) {
+            $kualitatif->pihak_berwajib = 'Tidak Pernah';
+        } elseif ($kualitatif->pihak_berwajib == 2) {
+            $kualitatif->pihak_berwajib = 'Pernah';
+        }
+        return $kualitatif;
+    }
 }

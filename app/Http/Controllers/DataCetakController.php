@@ -689,8 +689,10 @@ class DataCetakController extends Controller
             $capacity = Midle::cetak_data_analisa5C_capacity($enc);
             $collateral = Midle::cetak_data_analisa5C_collateral($enc);
             $condition = Midle::cetak_data_analisa5C_condition($enc);
+            $kualitatif = Midle::cetak_data_kualitatif($enc);
+            $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
 
-            // dd($capacity);
+            // dd($collateral);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -707,6 +709,8 @@ class DataCetakController extends Controller
                 'character' => $character,
                 'capacity' => $capacity,
                 'collateral' => $collateral,
+                'kualitatif' => $kualitatif,
+                'kebutuhan_dana' => $kebutuhan_dana,
                 'condition' => $condition,
                 'biayaperdagangan' => $biaya_perdagangan,
             ]);
