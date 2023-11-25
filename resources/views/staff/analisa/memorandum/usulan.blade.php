@@ -33,7 +33,8 @@
                             <input type="text" id="total_taksasi" value="{{ $total_taksasi }}" hidden>
                             <input type="text" class="form-control text-uppercase" name="usulan_plafond"
                                 id="usulan_plafon" placeholder="RP."
-                                value="{{ 'Rp.' . ' ' . number_format($usulan->usulan_plafond, 0, ',', '.') }}" required>
+                                value="{{ 'Rp.' . ' ' . number_format($usulan->usulan_plafond, 0, ',', '.') ?? null }}"
+                                required>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">

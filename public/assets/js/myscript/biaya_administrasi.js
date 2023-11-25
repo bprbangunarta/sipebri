@@ -105,3 +105,21 @@ function formatRupiah(angka, prefix) {
     rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
     return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
 }
+
+// $(document).ready(function(){
+//     $('#proses_apht, #by_fiducia').on('input', function(){
+//         var apht = $('#proses_apht').val()
+//         var fiducia = $('#by_fiducia').val()
+//         // let adm = document.getElementsByName('administrasi');
+//         var adm = $('input[name="administrasi"]');
+//         var rapht = parseFloat(apht.replace(/[^\d]/g, "")) || 0;
+//         var rfiducia = parseFloat(fiducia.replace(/[^\d]/g, "")) || 0;
+//         var radmin = parseFloat(adm.val().replace(/[^\d]/g, "")) || 0;
+        
+//         var jml = radmin - rapht + rfiducia;
+        
+//         var hasil = "Rp " + jml.toLocaleString("id-ID");
+//         adm.val(hasil);
+//         console.log(jml)
+//     })
+// })

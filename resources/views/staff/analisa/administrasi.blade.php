@@ -34,7 +34,7 @@
                                                 <span class="fw-bold">ADMINISTRASI</span>
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
-                                                    name="administrasi" placeholder="Rp."
+                                                    name="administrasi" placeholder="Rp." id="administrasi"
                                                     value="{{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }}"
                                                     readonly>
                                             </div>

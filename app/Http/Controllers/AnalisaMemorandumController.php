@@ -325,6 +325,10 @@ class AnalisaMemorandumController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = Midle::analisa_usaha($enc);
+            $usul = str_replace(["Rp", " ", "."], "", $request->usulan_plafond);
+            if ($usul < 500000) {
+                return redirect()->back()->with('error', 'Usulan plafon tidak boleh 500.000 dan sesuaikan dengan kebutuhan');
+            }
 
             $data = [
                 'max_plafond' => (int)str_replace(["Rp", " ", "."], "", $request->max_plafond),

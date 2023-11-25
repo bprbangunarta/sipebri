@@ -86,9 +86,9 @@ class AdministrasiController extends Controller
                 'by_fiducia' =>  (int)str_replace(["Rp", " ", "."], "", $request->by_fiducia),
             ];
 
-            DB::transaction(function () use ($data, $data2) {
+            DB::transaction(function () use ($data, $data2, $enc) {
                 DB::table('a_administrasi')->insert($data);
-                DB::table('a_memorandum')->insert($data2);
+                DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data2);
             });
 
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
