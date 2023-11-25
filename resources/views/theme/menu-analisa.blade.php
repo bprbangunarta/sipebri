@@ -55,20 +55,20 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
-                <a href="{{ route('kepemilikan.index', ['pengajuan' => $pengajuan]) }}">
-                    <i class="fa fa-folder-o"></i> Kepemilikan
-                </a>
-            </li>
-            {{-- @if ($data->produk_kode == 'KTA')
-            @else
-            @endif --}}
-            <li
-                class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tanah', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
-                <a href="{{ route('taksasi.kendaraan', ['pengajuan' => $pengajuan]) }}">
-                    <i class="fa fa-folder-o"></i> Jaminan
-                </a>
-            </li>
+            @if ($data->produk_kode != 'KTA')
+                <li class="{{ request()->is('themes/analisa/kepemilikan') ? 'active' : '' }}">
+                    <a href="{{ route('kepemilikan.index', ['pengajuan' => $pengajuan]) }}">
+                        <i class="fa fa-folder-o"></i> Kepemilikan
+                    </a>
+                </li>
+
+                <li
+                    class="{{ request()->is('themes/analisa/jaminan/kendaraan', 'themes/analisa/jaminan/tanah', 'themes/analisa/jaminan/lainnya') ? 'active' : '' }}">
+                    <a href="{{ route('taksasi.kendaraan', ['pengajuan' => $pengajuan]) }}">
+                        <i class="fa fa-folder-o"></i> Jaminan
+                    </a>
+                </li>
+            @endif
 
             <li
                 class="{{ request()->is('themes/analisa/5c/character*', 'themes/analisa/5c/capacity*', 'themes/analisa/5c/capital*', 'themes/analisa/5c/collateral*', 'themes/analisa/5c/condition*') ? 'active' : '' }}">
@@ -77,13 +77,14 @@
                 </a>
             </li>
 
-            <li
-                class="{{ request()->is('themes/analisa/kualitatif/karakter*', 'themes/analisa/kualitatif/usaha*', 'themes/analisa/kualitatif/swot*') ? 'active' : '' }}">
-                <a href="{{ route('kualitatif.karakter', ['pengajuan' => $pengajuan]) }}">
-                    <i class="fa fa-folder-o"></i> Kualitatif
-                </a>
-            </li>
-
+            @if ($data->produk_kode != 'KTA')
+                <li
+                    class="{{ request()->is('themes/analisa/kualitatif/karakter*', 'themes/analisa/kualitatif/usaha*', 'themes/analisa/kualitatif/swot*') ? 'active' : '' }}">
+                    <a href="{{ route('kualitatif.karakter', ['pengajuan' => $pengajuan]) }}">
+                        <i class="fa fa-folder-o"></i> Kualitatif
+                    </a>
+                </li>
+            @endif
             <li
                 class="{{ request()->is('themes/analisa/memorandum/kebutuhan', 'themes/analisa/memorandum/sandi', 'themes/analisa/memorandum/usulan') ? 'active' : '' }}">
                 <a href="{{ route('memorandum.kebutuhan', ['pengajuan' => $pengajuan]) }}">
@@ -91,11 +92,13 @@
                 </a>
             </li>
 
-            <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
-                <a href="{{ route('administrasi.index', ['pengajuan' => $pengajuan]) }}">
-                    <i class="fa fa-folder-o"></i> Administrasi
-                </a>
-            </li>
+            @if ($data->produk_kode != 'KTA')
+                <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
+                    <a href="{{ route('administrasi.index', ['pengajuan' => $pengajuan]) }}">
+                        <i class="fa fa-folder-o"></i> Administrasi
+                    </a>
+                </li>
+            @endif
 
             <li class="{{ request()->is('themes/analisa/konfirmasi/analisa') ? 'active' : '' }}">
                 <a href="{{ route('konfirmasi.analisa', ['pengajuan' => $pengajuan]) }}">
