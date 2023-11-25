@@ -138,8 +138,8 @@
             </tr>
             <tr>
                 <td></td>
-                <td style="position: absolute;">Alamat</td>
-                <td class="text-center"> : </td>
+                <td style="position: absolute;vertical-align: text-top;">Alamat</td>
+                <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td>&nbsp;{{ $data->alamat_ktp }}</td>
             </tr>
         </table>
