@@ -87,6 +87,7 @@ class CetakController extends Controller
                     'data_pekerjaan.nama_pekerjaan',
                     'data_nasabah.nama_ibu_kandung',
                     'data_pendamping.nama_pendamping',
+                    'data_pendamping.status as status_pendamping',
                     'data_pendamping.no_hp',
                     'data_pendamping.no_identitas as no_identitas_p',
                     'data_pendamping.tempat_lahir as tempat_lahir_p',

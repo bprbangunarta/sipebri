@@ -143,7 +143,7 @@
                 <tr>
                     <td>Jth. Tempo ID</td>
                     <td style="width:10px;"><center> : </center></td>
-                    <td>{{ $data->masa_identitas_n }} (format: 07/01/2099)</td>
+                    <td>{{ $data->masa_identitas_n }}</td>
                 </tr>
 
 
@@ -162,7 +162,7 @@
                 <tr>
                     <td>Tempat, Tgl. Lahir</td>
                     <td style="width:10px;"><center> : </center></td>
-                    <td>{{ $data->kota_n }}, {{ $data->ttl_n }} (format: 07/01/2099)</td>
+                    <td>{{ $data->kota_n }}, {{ $data->ttl_n }}</td>
                 </tr>
 
                 <tr>
@@ -256,7 +256,7 @@
                 <tr>
                     <td style="width:145px;vertical-align: text-top;">
                         Nama Pendamping <br>
-                        (istri/suami)
+                        ({{ $data->status_pendamping }})
                     </td>
                     <td style="width:10px;vertical-align: text-top;"><center> : </center></td>
                     <td style="vertical-align: text-top;">{{ $data->nama_pendamping }}</td>
@@ -283,13 +283,13 @@
                 <tr>
                     <td>Tempat, Tgl. Lahir</td>
                     <td style="width:10px;"><center> : </center></td>
-                    <td>{{ $data->tempat_lahir_p }}, {{ $data->ttl_p }} (format: 07/01/2099)</td>
+                    <td>{{ $data->tempat_lahir_p }}, {{ $data->ttl_p }}</td>
                 </tr>
 
                 <tr>
                     <td>Jth. Tempo ID</td>
                     <td style="width:10px;"><center> : </center></td>
-                    <td>{{ $data->masa_identitas_p }} (format: 07/01/2099)</td>
+                    <td>{{ $data->masa_identitas_p }}</td>
                 </tr>
             </table>
         </div>
