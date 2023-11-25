@@ -103,8 +103,8 @@
                 <td>{{ $data->no_telp }}</td>
             </tr>
             <tr>
-                <td style="position: absolute;">Alamat Sesuai Identitas</td>
-                <td class="text-center"> : </td>
+                <td style="position: absolute;vertical-align: text-top;">Alamat Sesuai Identitas</td>
+                <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td>
                     {{ $data->alamat_ktp }}
                 </td>
