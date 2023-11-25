@@ -228,11 +228,12 @@ class KomiteController extends Controller
                 'created_at' => now(),
             ];
 
-            if (!is_null($du)) {
-                DB::table('data_usulan')->where('pengajuan_kode', $request->kode_pengajuan)->update($usulan);
-            } else {
+            if (count($du) == 0) {
                 DB::table('data_usulan')->insert($usulan);
+            } else {
+                DB::table('data_usulan')->where('id', $du[0]->id)->update($usulan);
             }
+
             $capacity = ['rc' => (float) str_replace('%', '', $request->rc)];
             DB::transaction(function () use ($request, $data2, $usulan, $capacity) {
                 DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);

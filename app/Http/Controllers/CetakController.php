@@ -80,6 +80,7 @@ class CetakController extends Controller
                     'data_nasabah.alamat_ktp as alamat_ktp_n',
                     'data_nasabah.kode_pos',
                     'data_nasabah.no_telp',
+                    'data_nasabah.no_telp_darurat',
                     'data_nasabah.jenis_kelamin',
                     'data_nasabah.agama',
                     'data_nasabah.status_pernikahan',

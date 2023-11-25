@@ -84,8 +84,6 @@
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <span data-toggle="modal" data-target="#modal-penjadwalan" data-id="{{ $item->kode_pengajuan }}" class="btn bg-yellow" style="width: 120px;hight:100%;">Jadwalkan</span>
-                                                <p style="margin-top:-5px;"></p>
-                                                <span class="btn bg-blue" style="width: 120px;hight:100%;">Info Nasabah</span>
                                             </td>
                                         </tr>
                                         @php

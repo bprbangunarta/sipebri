@@ -308,7 +308,7 @@
                 <tr>
                     <td>No. HP</td>
                     <td style="width:10px;"><center> : </center></td>
-                    <td>......................................................</td>
+                    <td>{{ $data->no_telp_darurat }}</td>
                 </tr>
 
                 <tr>
@@ -602,9 +602,9 @@
         </div>
     </div>
 
-    {{-- <script>
+    <script>
         window.print();
-    </script> --}}
+    </script>
 </body>
 
 </html>
