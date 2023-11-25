@@ -478,6 +478,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/notifikasi/penolakan/kredit', 'penolakan_kredit')->name('penolakan.kredit');
             Route::get('/notifikasi/penolakan/kredit/{kode}', 'get_penolakan')->name('kode.penolakan');
             Route::post('/notifikasi/penolakan/simpan', 'simpan_penolakan')->name('simpan.penolakan');
+            Route::get('/persetujuan/kredit', 'persetujuan_kredit')->name('persetujuan.kredit');
+            Route::get('/cetak/persetujuan/kredit', 'cetak_persetujuan_kredit')->name('cetak.persetujuan_kredit');
 
             Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/cetak/analisa/kredit', 'analisa_kredit')->name('analisa.kredit');

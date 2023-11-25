@@ -198,7 +198,8 @@
                         </a>
                     </li>
                     <li class="">
-                        <a @can('cetak persetujuan kredit') href="#" @endcan title="Cetak Persetujuan Kredit">
+                        {{-- <a @can('cetak persetujuan kredit') href="#" @endcan title="Cetak Persetujuan Kredit"> --}}
+                        <a href="{{ route('persetujuan.kredit') }}" title="Cetak Persetujuan Kredit">
                             <i class="fa fa-file-text-o"></i>
                             Persetujuan Kredit
                         </a>

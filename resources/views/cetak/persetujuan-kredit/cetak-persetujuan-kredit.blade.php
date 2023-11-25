@@ -95,20 +95,20 @@
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Kode Nasabah</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">00028728-004</td>
+                <td style="width: 15%;">{{ $data->nasabah_kode }}</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Nama</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%; text-align:left;">YUDHA SAKTI PRATAMA</td>
+                <td style="width: 15%; text-align:left;">{{ Str::upper($data->nama_nasabah) }}</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Alamat</td>
                 <td style="width: 0.3%;">:</td>
                 <td style="width: 15%; text-align:left;">
-                    KAMPUNG KRAJAN BARAT RT. 07/02 DS. PASIRBUNGUR - PURWADADI - SUBANG
+                    {{ Str::upper($data->alamat_ktp) }}
                 </td>
             </tr>
             <tr>
@@ -121,13 +121,13 @@
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Plafon</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">Rp 55.000.000</td>
+                <td style="width: 15%;">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
                 <td style="width: 16%;">Jangka Waktu</td>
                 <td style="width: 0.3%;">:</td>
-                <td style="width: 15%;">36 Bulan</td>
+                <td style="width: 15%;">{{ $data->jangka_waktu }} Bulan</td>
             </tr>
             <tr>
                 <td style="width: 0.3%;"></td>
