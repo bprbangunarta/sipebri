@@ -35,7 +35,7 @@
             @endhasanyrole
 
             <li
-                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan', 'tracking/pengajuan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
