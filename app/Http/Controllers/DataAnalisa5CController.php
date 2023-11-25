@@ -376,8 +376,8 @@ class DataAnalisa5CController extends Controller
                 'kondisi_alam' => $request->kondisi_alam,
                 'regulasi_pemerintah' => $request->regulasi_pemerintah,
                 'evaluasi_condition' => $nilai,
-                'created_at' => Auth::user()->code_user,
-                'updated_at' => now(),
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
             ];
             DB::table('a5c_condition')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -400,7 +400,6 @@ class DataAnalisa5CController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'updated_at' => now(),
             ];
-
             DB::table('a5c_condition')->where('kode_analisa', $request->kode_analisa)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
