@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var totalbiaya = document.getElementById("biayaop");
     var hasilbersih = document.getElementById("hasilbersih");
     var biaya_bahan = document.getElementById("bahan_baku");
-
+    
     // Event listener ketika input berubah
     input1.addEventListener("input", pendapatan);
     input2.addEventListener("input", pendapatan);
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var tb = totalbiaya.value.replace("Rp. ", "").replace(/\./g, "");
         var bb = biaya_bahan.value.replace("Rp. ", "").replace(/\./g, "");
         var tpro = pro.value.replace("Rp. ", "").replace(/\./g, "");
-
+        
         // Mengubah nilai ke angka float
         value1 = parseFloat(value1) || 0;
         value2 = parseFloat(value2) || 0;
@@ -142,10 +142,11 @@ document.addEventListener("DOMContentLoaded", function () {
         tb = parseFloat(tb) || 0;
         tpro = parseFloat(tpro) || 0;
         bb = parseFloat(bb) || 0;
-
+        
         // Melakukan perhitungan total
         var total = value1 + value2 + value3 + value4 + values;
         var hs = (total + tpro) - (tb + bb);
+
         // Memperbarui elemen total
         totalpendapatan.value = "Rp. " + total.toLocaleString("id-ID");
         hasilbersih.value = "Rp. " + hs.toLocaleString("id-ID");

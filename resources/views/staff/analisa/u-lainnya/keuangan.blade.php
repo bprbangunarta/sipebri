@@ -54,6 +54,17 @@
                                 name="nominal4" id="nominal4" value="{{ old('nominal4') }}">
                         </div>
 
+                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                            <span class="fw-bold">NAMA PENDAPATAN</span>
+                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
+                                name="nama5" value="{{ old('nama5') }}">
+                        </div>
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                            <span class="fw-bold">NOMINAL PENDAPATAN</span>
+                            <input class="form-control input-sm form-border" type="text" placeholder="Rp."
+                                name="nominal5" id="nominal5" value="{{ old('nominal5') }}">
+                        </div>
+
 
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
@@ -98,6 +109,17 @@
                             <input class="form-control input-sm form-border" type="text" placeholder="Rp."
                                 name="pengeluaran4" id="pengeluaran4" value="{{ old('pengeluaran4') }}">
                         </div>
+
+                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                            <span class="fw-bold text-red">PENGELUARAN UNTUK</span>
+                            <input class="form-control input-sm form-border" type="text" placeholder="ENTRI"
+                                name="nampe5" value="{{ old('nampe5') }}">
+                        </div>
+                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                            <span class="fw-bold text-red">NOMINAL PENGELUARAN</span>
+                            <input class="form-control input-sm form-border" type="text" placeholder="Rp."
+                                name="pengeluaran5" id="pengeluaran5" value="{{ old('pengeluaran5') }}">
+                        </div>
                     </div>
 
                     <div class="div-right">
@@ -115,7 +137,8 @@
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">BIAYA BAHAN BAKU</span>
                             <input class="form-control input-sm form-border" type="text"
-                                value="Rp. {{ old('bahan_baku') }}" name="bahan_baku" id="bahan_baku" readonly>
+                                value="Rp. {{ number_format($lain->biaya_bahan, 0, ',', '.') }}" name="bahan_baku"
+                                id="bahan_baku" readonly>
                         </div>
 
                         <div style="margin-top:5px;width: 100%;float:left;">

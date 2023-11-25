@@ -199,6 +199,16 @@ class UsahaLainnyaController extends Controller
             $cek_bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
             $lain->kd_usaha = Crypt::encrypt($lain->kode_usaha);
 
+            $bahan = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain->kode_usaha)->get();
+            $total = [];
+            if (count($bahan) != 0) {
+                for ($i = 0; $i < count($bahan); $i++) {
+                    $total[$i] = $bahan[$i]->total;
+                }
+            }
+            $total_sum = array_sum($total);
+            $lain->biaya_bahan = $total_sum ?? 0;
+            // dd($lain);
             //cek data biaya sudah ada atau tidak
             if (count($cek_bu) == 0) {
                 return view('staff.analisa.u-lainnya.keuangan', [
@@ -209,15 +219,7 @@ class UsahaLainnyaController extends Controller
 
             $bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_lainnya')->where('usaha_kode', $enc)->get();
-            $bahan = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain->kode_usaha)->get();
-            $total = [];
-            if (count($bahan) != 0) {
-                for ($i = 0; $i < count($bahan); $i++) {
-                    $total[$i] = $bahan[$i]->total;
-                }
-            }
-            $total_sum = array_sum($total);
-            $lain->biaya_bahan = $total_sum ?? 0;
+
             // dd($total_sum, $total, $lain);
             return view('staff.analisa.u-lainnya.keuangan-edit', [
                 'data' => $cek[0],
@@ -234,7 +236,7 @@ class UsahaLainnyaController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('kode_usaha'));
-            dd($request);
+
             DB::transaction(function () use ($enc, $request) {
                 for ($i = 1; $i <= 5; $i++) {
                     $length = 10;
