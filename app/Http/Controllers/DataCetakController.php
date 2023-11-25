@@ -683,6 +683,15 @@ class DataCetakController extends Controller
                 for ($i = 0; $i < count($jaminan); $i++) {
                     $jaminan[$i]->total_taksasi = $dj ?? 0;
                 }
+            } else {
+                $jaminan = (object) [
+                    'nilai_taksasi' => 0,
+                    'total_taksasi' => 0,
+                ];
+
+                for ($i = 0; $i < count($keuangan); $i++) {
+                    $keuangan[$i]->total_taksasi = 0;
+                }
             }
 
             $character = Midle::cetak_data_analisa5C_character($enc);
@@ -690,9 +699,10 @@ class DataCetakController extends Controller
             $collateral = Midle::cetak_data_analisa5C_collateral($enc);
             $condition = Midle::cetak_data_analisa5C_condition($enc);
             $kualitatif = Midle::cetak_data_kualitatif($enc);
+            $memorandum = Midle::cetak_data_memorandum($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
 
-            // dd($collateral);
+            // dd($memorandum);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -700,9 +710,9 @@ class DataCetakController extends Controller
                 'pertanian' => $pertanian,
                 'jasa' => $jasa,
                 'lain' => $lain,
-                'bahan' => $bahan,
-                'bu' => $bu,
-                'du' => $du,
+                'bahan' => $bahan ?? null,
+                'bu' => $bu ?? null,
+                'du' => $du ?? null,
                 'keuangan' => $keuangan,
                 'bu_keuangan' => $bu_keuangan,
                 'jaminan' => $jaminan,
@@ -713,6 +723,7 @@ class DataCetakController extends Controller
                 'kebutuhan_dana' => $kebutuhan_dana,
                 'condition' => $condition,
                 'biayaperdagangan' => $biaya_perdagangan,
+                'memorandum' => $memorandum,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

@@ -764,4 +764,52 @@ class Data extends Model
         ];
         return $hasil;
     }
+
+    public static function a5c_capacity_pengalaman_usaha($data)
+    {
+        if ($data == 1) {
+            return '0 Tahun';
+        } elseif ($data == 2) {
+            return '1 Tahun';
+        } elseif ($data == 3) {
+            return '1 - 3 Tahun';
+        } elseif ($data == 4) {
+            return '3 - 5 Tahun';
+        } elseif ($data == 5) {
+            return '5 Tahun';
+        }
+    }
+
+    public static function a5c_capacity_pertumbuhan_usaha($data)
+    {
+        if ($data == 1) {
+            return 'Turun';
+        } elseif ($data == 2) {
+            return 'Tetap';
+        } elseif ($data == 3) {
+            return 'Meningkat';
+        }
+    }
+
+    public static function a5c_capacity_catatan_kredit($data)
+    {
+        if ($data == 1) {
+            return 'Lancar Menunggak 2 Bulan';
+        } elseif ($data == 2) {
+            return 'Menunggak > 2 Bulan';
+        } elseif ($data == 3) {
+            return 'Lancar';
+        }
+    }
+
+    public static function a5c_capacity_lokasi_shm($data)
+    {
+        if ($data == 1) {
+            return 'Kurang Strategis dan Kurang Produktif';
+        } elseif ($data == 2) {
+            return 'Strategis dan Produktif (Atau Sebaliknya)';
+        } elseif ($data == 3) {
+            return 'Strategis dan atau Produktif';
+        }
+    }
 }

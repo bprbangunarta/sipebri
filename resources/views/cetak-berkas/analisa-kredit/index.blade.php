@@ -1131,13 +1131,13 @@
                         @endif
 
                     </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai Taksasi
+                            Agunan</td>
+                        <td>{{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
+                    </tr>
                 @empty
                 @endforelse
-                <tr style="border:1px solid black;">
-                    <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai Taksasi
-                        Agunan</td>
-                    <td>{{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
-                </tr>
 
             </table>
         </div>
@@ -1724,21 +1724,21 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Nama Lengkap Pemohon</td>
                 <td> : </td>
-                <td>&nbsp; Zulfadli Rizal</td>
+                <td>&nbsp; {{ $memorandum->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td style="vertical-align: text-top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Alamat</td>
                 <td style="vertical-align: text-top;"> : </td>
                 <td>
                     <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
-                        DUSUN PABUARAN RT/RW 03/01 DESA. SINDANGSARI KECAMATAN. CIKAUM - SUBANG
+                        {{ $memorandum->alamat_ktp }}
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. No. Telepon</td>
                 <td> : </td>
-                <td>&nbsp; 082320099971 / 0823200999777</td>
+                <td>&nbsp; {{ $memorandum->no_telp }} / {{ $memorandum->no_telp_darurat }}</td>
             </tr>
             {{-- <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Bentuk Usaha</td>
@@ -1758,12 +1758,12 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Riwayat Usaha dan Grup</td>
                 <td> : </td>
-                <td>&nbsp; >5 Tahun, Meningkat</td>
+                <td>&nbsp; {{ $memorandum->pengalaman_usaha }}, {{ $memorandum->pertumbuhan_usaha }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Riwayat Pinjaman di Bank Lain</td>
                 <td> : </td>
-                <td>&nbsp; Lancar</td>
+                <td>&nbsp; {{ $memorandum->catatan_kredit }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Legalitas dan Izin Usaha</td>
@@ -1776,7 +1776,7 @@
                 </td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; 3213070701980004</div>
+                    <div style="width:40%;float:left">&nbsp; {{ $memorandum->no_identitas }}</div>
                     <div style="width:59%;float:right">- SIUP &nbsp;&nbsp;&nbsp;&nbsp; : -</div>
                 </td>
             </tr>
@@ -1796,7 +1796,7 @@
                 </td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; -</div>
+                    <div style="width:40%;float:left">&nbsp; {{ $memorandum->no_npwp }}</div>
                     <div style="width:59%;float:right">- TDPP &nbsp;&nbsp;&nbsp; : -</div>
                 </td>
             </tr>
@@ -1820,7 +1820,7 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Besar Permohonan
                 </td>
                 <td> : </td>
-                <td>&nbsp; Rp. 50.000.000</td>
+                <td>&nbsp; {{ 'Rp. ' . ' ' . number_format($memorandum->temp_plafon, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>
@@ -1832,7 +1832,12 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i. Lokasi Usaha dan atau Lokasi Kantor</td>
                 <td> : </td>
-                <td>&nbsp; Strategis</td>
+                <td>&nbsp; {{ $memorandum->lokasi_shm }}</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j. Sumber Dana Pelunasan</td>
+                <td> : </td>
+                <td>&nbsp; {{ $memorandum->sumber_dana_pelunasan }}</td>
             </tr>
 
             <tr>
@@ -1846,22 +1851,22 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Analisa Karakter</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; Cukup Baik</div>
-                    <div style="width:59%;float:right">d. Analisa Agunan : Cukup Baik</div>
+                    <div style="width:40%;float:left">&nbsp; {{ $memorandum->nilai_karakter }}</div>
+                    <div style="width:59%;float:right">d. Analisa Agunan : {{ $memorandum->nilai_collateral }}</div>
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Analisa Kemampuan</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; Cukup Baik</div>
-                    <div style="width:59%;float:right">e. Analisa Kondisi : Cukup Baik</div>
+                    <div style="width:40%;float:left">&nbsp; {{ $memorandum->evaluasi_capacity }}</div>
+                    <div style="width:59%;float:right">e. Analisa Kondisi : {{ $memorandum->nilai_condition }}</div>
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Analisa Modal</td>
                 <td> : </td>
-                <td>&nbsp; Cukup Baik</td>
+                <td>&nbsp; {{ $memorandum->capital_evaluasi_capital }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Analisa SWOT</td>
@@ -1917,55 +1922,56 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Nama Peminjam</td>
                 <td> : </td>
-                <td>&nbsp; Zulfadli Rizal</td>
+                <td>&nbsp; {{ $memorandum->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Plafon Maksimum yang Bisa Dibiayai</td>
                 <td> : </td>
-                <td>&nbsp; Rp. 138.726.000</td>
+                <td>&nbsp; {{ 'Rp. ' . ' ' . number_format($memorandum->max_plafond, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Usulan Plafon Kredit</td>
                 <td> : </td>
-                <th>&nbsp; Rp. 50.000.000</th>
+                <th>&nbsp; {{ 'Rp. ' . ' ' . number_format($memorandum->plafon_usulan, 0, ',', '.') }}</th>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Jenis Kredit</td>
                 <td> : </td>
-                <td>&nbsp; KRU - Kedit Umum</td>
+                <td>&nbsp; {{ $memorandum->produk_kode }} - {{ $memorandum->nama_produk }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Tujuan Penggunaan</td>
                 <td> : </td>
-                <td>&nbsp; Konsumtif - Modal Nikah</td>
+                <td>&nbsp; {{ $memorandum->penggunaan }} - {{ $memorandum->keterangan }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Sektor Ekonomi</td>
                 <td> : </td>
-                <td>&nbsp; 1020. Bukan Lapangan Usaha - Lainnya</td>
+                <td>&nbsp; {{ $memorandum->bi_sek_ekonomi_kode }}. {{ $memorandum->ket_sektor_ekonomi }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Jangka Waktu</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; <b>36 Bulan</b></div>
-                    <div style="width:59%;float:right">h. Suku Bunga &nbsp; : <b>32%</b></div>
+                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->jangka_waktu }} Bulan</b></div>
+                    <div style="width:59%;float:right">h. Suku Bunga &nbsp; : <b>{{ $memorandum->suku_bunga }}%</b>
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i. Sistem Angsuran</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; <b>EFEKTIF ANUITAS</b></div>
-                    <div style="width:59%;float:right">j. Biaya Provisi : <b>1.00%</b></div>
+                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->metode_rps }}</b></div>
+                    <div style="width:59%;float:right">j. Biaya Provisi : <b>{{ $memorandum->b_provisi }}%</b></div>
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k. Biaya Penalti</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; <b>0.10% per hari</b></div>
-                    <div style="width:59%;float:right">l. Biaya Admin : <b>4.00%</b></div>
+                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->b_penalti }}% per hari</b></div>
+                    <div style="width:59%;float:right">l. Biaya Admin : <b>{{ $memorandum->b_admin }}%</b></div>
                 </td>
             </tr>
             <tr>
@@ -2009,21 +2015,21 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Sebelum Realisasi
                 </td>
                 <td> : </td>
-                <td>&nbsp; ATM, BUTAB, KARTU JAMSOSTEK, SK KARYAWAN</td>
+                <td>&nbsp; {{ $memorandum->sebelum_realisasi }}</td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Syarat Tambahan
                 </td>
                 <td> : </td>
-                <td>&nbsp; IJAZAH TERAKHIR SMP, KK ASLI</td>
+                <td>&nbsp; {{ $memorandum->syarat_tambahan }}</td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Syarat Lainnya
                 </td>
                 <td> : </td>
-                <td>&nbsp; USER M-BANKING</td>
+                <td>&nbsp; {{ $memorandum->syarat_lainnya }}</td>
             </tr>
         </table>
 
@@ -2031,7 +2037,7 @@
             <tr>
                 <td width="70%"></td>
                 <td class="text-center">
-                    Pamanukan, 22 November 2023 <br>
+                    Pamanukan, {{ $memorandum->hari }} <br>
                     Surveyor, <br>
                     <p style="margin-top:55px;"></p>
 

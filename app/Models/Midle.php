@@ -1025,21 +1025,103 @@ class Midle extends Model
     public static function cetak_data_kualitatif($data)
     {
         $kualitatif = DB::table('au_kualitatif')->where('pengajuan_kode', $data)->first();
-        if ($kualitatif->bi_checking == 1) {
-            $kualitatif->bi_checking = 'Macet';
-        } elseif ($kualitatif->bi_checking == 2) {
-            $kualitatif->bi_checking = 'Diragukan';
-        } elseif ($kualitatif->bi_checking == 3) {
-            $kualitatif->bi_checking = 'Kurang Lancar';
-        } elseif ($kualitatif->bi_checking == 4) {
-            $kualitatif->bi_checking = 'Lancar';
-        }
+        if (!is_null($kualitatif)) {
 
-        if ($kualitatif->pihak_berwajib == 1) {
-            $kualitatif->pihak_berwajib = 'Tidak Pernah';
-        } elseif ($kualitatif->pihak_berwajib == 2) {
-            $kualitatif->pihak_berwajib = 'Pernah';
+            if ($kualitatif->bi_checking == 1) {
+                $kualitatif->bi_checking = 'Macet';
+            } elseif ($kualitatif->bi_checking == 2) {
+                $kualitatif->bi_checking = 'Diragukan';
+            } elseif ($kualitatif->bi_checking == 3) {
+                $kualitatif->bi_checking = 'Kurang Lancar';
+            } elseif ($kualitatif->bi_checking == 4) {
+                $kualitatif->bi_checking = 'Lancar';
+            }
+
+            if ($kualitatif->pihak_berwajib == 1) {
+                $kualitatif->pihak_berwajib = 'Tidak Pernah';
+            } elseif ($kualitatif->pihak_berwajib == 2) {
+                $kualitatif->pihak_berwajib = 'Pernah';
+            }
+        } else {
+            $kualitatif = (object)[
+                'bi_checking' => null,
+                'kewajiban1' => null,
+                'ket_kewajiban1' => null,
+                'kewajiban2' => null,
+                'ket_kewajiban2' => null,
+                'kewajiban3' => null,
+                'ket_kewajiban3' => null,
+                'pihak_berwajib' => null,
+                'hubungan_tetangga' => null,
+                'pengalaman_tki' => null,
+                'ket_pengalaman' => null,
+                'pemohon_ada' => null,
+                'pemohon_ada' => null,
+                'pendamping_ada' => null,
+                'info_masyarakat' => null,
+                'bahan_baku' => null,
+                'proses_olah' => null,
+                'target_market' => null,
+                'pembayaran' => null,
+                'pendukung_usaha' => null,
+                'pengurang_usaha' => null,
+                'trade_checking' => null,
+            ];
         }
         return $kualitatif;
+    }
+
+    public static function cetak_data_memorandum($data)
+    {
+        $memorandum = DB::table('a_memorandum')
+            ->join('data_pengajuan', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('a5c_capacity', 'data_pengajuan.kode_pengajuan', '=', 'a5c_capacity.pengajuan_kode')
+            ->join('a5c_character', 'data_pengajuan.kode_pengajuan', '=', 'a5c_character.pengajuan_kode')
+            ->join('a5c_collateral', 'data_pengajuan.kode_pengajuan', '=', 'a5c_collateral.pengajuan_kode')
+            ->join('a5c_condition', 'data_pengajuan.kode_pengajuan', '=', 'a5c_condition.pengajuan_kode')
+            ->join('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
+            ->join('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
+            ->join('bi_sumber_dana_pelunasan', 'a_memorandum.bi_sumber_pelunasan_kode', '=', 'bi_sumber_dana_pelunasan.sandi')
+            ->select(
+                'a_memorandum.*',
+                'data_pengajuan.*',
+                'data_nasabah.*',
+                'a5c_capacity.*',
+                'a_memorandum.*',
+                'data_produk.nama_produk',
+                'bi_sumber_dana_pelunasan.keterangan as sumber_dana_pelunasan',
+                'bi_sektor_ekonomi.keterangan as ket_sektor_ekonomi',
+                'a5c_character.nilai_karakter',
+                'a5c_collateral.evaluasi_collateral as nilai_collateral',
+                'a5c_collateral.lokasi_shm',
+                'a5c_condition.evaluasi_condition as nilai_condition',
+            )
+            ->where('a_memorandum.pengajuan_kode', $data)->first();
+        //
+
+        $usulan = DB::table('data_usulan')->where('pengajuan_kode', $data)->get();
+        $dasu = [];
+        for ($i = 0; $i < count($usulan); $i++) {
+            $dasu[] = $usulan[$i]->usulan_plafon;
+        }
+        $memorandum->plafon_usulan = end($dasu);
+
+
+        $memorandum->capital_evaluasi_capital = Data::analisa5c_number($memorandum->capital_evaluasi_capital);
+        $memorandum->evaluasi_capacity = Data::analisa5c_number($memorandum->evaluasi_capacity);
+        $memorandum->nilai_karakter = Data::analisa5c_number($memorandum->nilai_karakter);
+        $memorandum->nilai_collateral = Data::analisa5c_number($memorandum->nilai_collateral);
+        $memorandum->nilai_condition = Data::analisa5c_number($memorandum->nilai_condition);
+        $memorandum->pengalaman_usaha = Data::a5c_capacity_pengalaman_usaha($memorandum->pengalaman_usaha);
+        $memorandum->pertumbuhan_usaha = Data::a5c_capacity_pertumbuhan_usaha($memorandum->pertumbuhan_usaha);
+        $memorandum->catatan_kredit = Data::a5c_capacity_catatan_kredit($memorandum->catatan_kredit);
+        $memorandum->lokasi_shm = Data::a5c_capacity_lokasi_shm($memorandum->lokasi_shm);
+
+        //Hari
+        $hari = Carbon::today();
+        $memorandum->hari = $hari->isoformat('D MMMM Y');
+
+        return $memorandum;
     }
 }
