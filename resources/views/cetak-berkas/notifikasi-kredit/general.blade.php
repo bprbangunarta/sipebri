@@ -92,26 +92,26 @@
             <tr>
                 <td width="14%">Nomor</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>184/NK/PBA/XI/2023</td>
+                <td>{{ $data->no_notifikasi }}</td>
             </tr>
             <tr>
                 <td>Tanggal</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>13 November 2023</td>
+                <td>{{ $data->tgl_notifikasi }}</td>
             </tr>
             <tr>
                 <td>Kode Pengajuan</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>00339950</td>
+                <td>{{ $data->kode_pengajuan }}</td>
             </tr>
         </table>
 
         <p></p>
 
         Kepada Yth. <br>
-        Bapak/Ibu AKSAN / LILIS MUMINAH <br>
+        Bapak/Ibu {{ $data->nama_nasabah }} <br>
         Di <br>
-        KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG No. Telp/HP : 082320099971
+        {{ $data->alamat_ktp }} No. Telp/HP : {{ $data->no_telp }}
 
         <p></p>
 
@@ -125,7 +125,9 @@
 
         <p></p>
 
-        Menunjuk permohonan fasilitas kredit Konsumsi Lainnya atas nama Bapak/Ibu, dengan ini kami beritahukan bahwa PT BPR BANGUNARTA dapat menyetujui permohonan kredit Bapak/Ibu tersebut, dengan ketentuan-ketentuan dan syarat-syarat sebagai berikut :
+        Menunjuk permohonan fasilitas kredit Konsumsi Lainnya atas nama Bapak/Ibu, dengan ini kami beritahukan bahwa PT
+        BPR BANGUNARTA dapat menyetujui permohonan kredit Bapak/Ibu tersebut, dengan ketentuan-ketentuan dan
+        syarat-syarat sebagai berikut :
 
         <p></p>
 
@@ -134,75 +136,86 @@
                 <td class="text-center" width="2%"> 1. </td>
                 <td width="27%">Limit Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">Rp 52.000.000 ( lima puluh dua juta rupiah )</td>
+                <td style="text-align: justify;">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 2. </td>
                 <td width="27%">Jenis Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">Konsumtif Lainnya</td>
+                <td style="text-align: justify;">{{ Str::upper($data->penggunaan) }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
                 <td width="27%" style="vertical-align: text-top;">Tujuan Penggunaan Kredit</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    KONSUMTIF. Sepanjang tidak bertentangan dengan ketentuan hukum yang berlaku, norma kesusilaan dan ketertiban umum.
+                    {{ Str::upper($data->penggunaan) }}. Sepanjang tidak bertentangan dengan ketentuan hukum yang
+                    berlaku, norma kesusilaan dan
+                    ketertiban umum.
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 4. </td>
                 <td width="27%">Sektor Ekonomi</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">1020. Bukan Lapangan Usaha - Lainnya</td>
+                <td style="text-align: justify;">{{ $data->sandi_sektor_ekonomi }}.
+                    {{ $data->keterangan_sektor_ekonomi }}</td>
             </tr>
+
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 5. </td>
                 <td width="27%" style="vertical-align: text-top;">Agunan</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
                     1 ( Satu ) <br>
-                    <ol style="margin-left: -27px;text-align: justify;">
-                        <li>
-                            BPKB KENDARAAN RODA	2, HONDA V1J02Q32L1 A/T, 2021 MH1KF7114MK018142, KF71E1018243, T2173XB,	Q-07118481,	HITAM, YUDHA SAKTI PRATAMA, KRAJAN BARAT 07/02 PASIRBUNGUR PURWADADI SUBANG
-                        </li>
-                        <li>
-                            BPKB KENDARAAN RODA 2, YAMAHA RG10, 2016, MH3RG1020GK01946 G401E0046643, T3391YM, M-13758144,    PUTIH, YUDHA SAKTI PRATAMA, KRAJAN BARAT 07/02 PASIRBUNGUR PURWADADI SUBANG
-                        </li>
-                        <li>
-                            KARTU DAN SALDO JAMSOSTEK ATAS NAMA YUDHA SAKTI PRATAM NO 21035199716
-                        </li>
-                        <li>
-                            SK DIREKSI NO 29/SK.DIR/PBA/V/2021
-                        </li>
-                    </ol>
+                    @forelse ($agunan as $item)
+                        <ol style="margin-left: -27px;text-align: justify;">
+                            @if ($item->jenis_jaminan == 'Tanah')
+                                <li>
+                                    {{ Str::upper($item->nama_jenis_dokumen) . ',' . ' ' . Str::upper($item->jenis_jaminan) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                                </li>
+                            @elseif ($item->jenis_jaminan == 'Kendaraan')
+                                <li>
+                                    {{ $item->catatan }}
+                                </li>
+                            @elseif ($item->jenis_jaminan == 'Lainnya')
+                                <li>
+                                    {{ Str::upper($item->nama_jenis_dokumen) . ',' . ' ' . Str::upper($item->jenis_jaminan) . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                                </li>
+                            @endif
+                        </ol>
+                    @empty
+                    @endforelse
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 6. </td>
                 <td width="27%">Jangka Waktu Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">36 ( Tiga Puluh Enam ) bulan terhitung sejak akad kredit.</td>
+                <td style="text-align: justify;">{{ $data->jangka_waktu }} bulan terhitung sejak akad kredit.</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 7. </td>
                 <td width="27%" style="vertical-align: text-top;">Pembayaran Kembali</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    Wajib dilakukan dalam 36 (Tiga Puluh Enam) kali angsuran, yang dibayarkan setiap bulan selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran dibayarkan satu bulan setelah tanggal akad kredit.
+                    Wajib dilakukan dalam {{ $data->jangka_waktu }} kali angsuran, yang dibayarkan setiap bulan
+                    selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
+                    dibayarkan satu bulan setelah tanggal akad kredit.
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 8. </td>
                 <td width="27%">Suku Bunga</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">13 % EFEKTIF ANUITAS / Tahun</td>
+                <td style="text-align: justify;">{{ $data->suku_bunga }} % {{ $data->metode_rps }} / Tahun</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 9. </td>
                 <td width="27%">Denda</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.10 % per hari dari angsuran pokok dan atau bunga yang tertunggak</td>
+                <td style="text-align: justify;">{{ $data->b_penalti }} % per hari dari angsuran pokok dan atau bunga
+                    yang tertunggak</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 10. </td>
@@ -214,19 +227,22 @@
                 <td class="text-center" width="2%"></td>
                 <td width="27%">a. Provisi Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.50 % Rp. 260.000</td>
+                <td style="text-align: justify;">{{ $data->b_provisi ?? 0 }} %
+                    {{ 'Rp. ' . '' . number_format($data->b_provisi, 0, ',', '.') ?? 0 }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">b. Administrasi Bank Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">2.50 % Rp. 750.000</td>
+                <td style="text-align: justify;">{{ $data->b_admin }} %
+                    {{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">c. APHT</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.00 % Rp. 0</td>
+                <td style="text-align: justify;">{{ $data->persen_apht }} %
+                    {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 11. </td>
@@ -254,67 +270,117 @@
             </tr>
         </table>
 
-        <table>
-            <tr>
-                <td class="text-center" width="2%"> 12. </td>
-                <td width="27%">Untuk Jaminan Kendaraan</td>
-                <td class="text-center" width="3%" colspan="2"> : </td>
-                <td></td>
-            </tr>
-        </table>
+        @forelse ($jaminan as $item)
+            @if ($item->jenis_jaminan == 'Kendaraan')
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%"> 12. </td>
+                        <td width="27%">Untuk Jaminan Kendaraan</td>
+                        <td class="text-center" width="3%" colspan="2"> : </td>
+                        <td></td>
+                    </tr>
+                </table>
 
-        <table>
-            <tr>
-                <td class="text-center" width="2%"></td>
-                <td style="text-align: justify;">
-                    <ol type='a' style="margin-left: -20px;margin-top:-1px;tetxt-align:justify;">
-                        <li>
-                            Debitur	tidak	akan menjaminkan atau menggunakannnya sebagai jaminan pinjaman,	menjual	atau memindahtangankan dengan cara apapun kepada pihak manapun dan	menggunakan kendaraan tersebut		hanya untuk pemakaian pribadi sampai seluruh Hutang dinyatakan lunas oleh pihak Bank.
-                        </li>
-                        <li>
-                            Apabla debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau pokok pinjaman selama 3 (tiga) bulan, maka Bank berhak melelang atau menjual dibawah tangan, barang jaminan kendaraan tersebut diatas kepada pihak ketiga guna mengangsur atau melunasi Hutang Debitur kepada Bank.
-                        </li>
-                        <li>
-                            Jika batas maksimal pinjaman berikut bunga telah melebihi jaminan yang dimiliki debitur, maka dengan Debitur menyatakan pula bahwa kepemilikan barang-barang jaminan kendaraan tersebut telah dialihkan    kepada Bank dengan kewajiban Debitur untuk meyerahkan barang-barang jaminan kendaraan tersebut kepada Bank.
-                        </li>
-                        <li>
-                            Dalam hal kejadian diatas ( sesuai nomor b dan c), Debitur tidak dapat memenuhi kewajibannya untuk menyerahkan barang jaminan kendaraann, maka Debitur bersedia untuk diajukan ke proses peradilan pidana karena telah melakukan penggelapan atas barang yang sudah bukan lagi miliknya, sesuai dengan yang tercantum dalam pasal 372 KUHP.
-                        </li>
-                    </ol>
-                </td>
-            </tr>
-        </table>
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%"></td>
+                        <td style="text-align: justify;">
+                            <ol type='a' style="margin-left: -20px;margin-top:-1px;tetxt-align:justify;">
+                                <li>
+                                    Debitur tidak akan menjaminkan atau menggunakannnya sebagai jaminan pinjaman,
+                                    menjual atau
+                                    memindahtangankan dengan cara apapun kepada pihak manapun dan menggunakan kendaraan
+                                    tersebut
+                                    hanya untuk pemakaian pribadi sampai seluruh Hutang dinyatakan lunas oleh pihak
+                                    Bank.
+                                </li>
+                                <li>
+                                    Apabla debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau pokok
+                                    pinjaman selama 3 (tiga) bulan, maka Bank berhak melelang atau menjual dibawah
+                                    tangan,
+                                    barang jaminan kendaraan tersebut diatas kepada pihak ketiga guna mengangsur atau
+                                    melunasi
+                                    Hutang Debitur kepada Bank.
+                                </li>
+                                <li>
+                                    Jika batas maksimal pinjaman berikut bunga telah melebihi jaminan yang dimiliki
+                                    debitur,
+                                    maka dengan Debitur menyatakan pula bahwa kepemilikan barang-barang jaminan
+                                    kendaraan
+                                    tersebut telah dialihkan kepada Bank dengan kewajiban Debitur untuk meyerahkan
+                                    barang-barang
+                                    jaminan kendaraan tersebut kepada Bank.
+                                </li>
+                                <li>
+                                    Dalam hal kejadian diatas ( sesuai nomor b dan c), Debitur tidak dapat memenuhi
+                                    kewajibannya
+                                    untuk menyerahkan barang jaminan kendaraann, maka Debitur bersedia untuk diajukan ke
+                                    proses
+                                    peradilan pidana karena telah melakukan penggelapan atas barang yang sudah bukan
+                                    lagi
+                                    miliknya, sesuai dengan yang tercantum dalam pasal 372 KUHP.
+                                </li>
+                            </ol>
+                        </td>
+                    </tr>
+                </table>
+            @elseif ($item->jenis_jaminan == 'Tanah')
+                <table style="margin-top:-15px;">
+                    <tr>
+                        <td class="text-center" width="2%"> 13. </td>
+                        <td width="27%">Untuk Jaminan Tanah</td>
+                        <td class="text-center" width="3%" colspan="2"> : </td>
+                        <td></td>
+                    </tr>
+                </table>
 
-        <table style="margin-top:-15px;">
-            <tr>
-                <td class="text-center" width="2%"> 13. </td>
-                <td width="27%">Untuk Jaminan Tanah</td>
-                <td class="text-center" width="3%" colspan="2"> : </td>
-                <td></td>
-            </tr>
-        </table>
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%"></td>
+                        <td style="text-align: justify;">
+                            <ol type='a' style="margin-left: -20px;margin-top:-1px;tetxt-align:justify;">
+                                <li>
+                                    Debitur tidak akan menjaminkan atau menggunakannya sebagai jaminan pinjaman, menjual
+                                    atau
+                                    memindahtangankan dengan cara apapun kepada pihak manapun sampai seluruh Hutang
+                                    dinyatakan
+                                    lunas oleh pihak Bank.
+                                </li>
+                                <li>
+                                    Apabila debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau
+                                    pokok
+                                    pinjaman selama 3 (tiga) bulan atau lebih, maka Bank berhak melakukan
+                                    tindakan-tindakan yang
+                                    mendorong untuk penyelesaian tunggakan termasuk dalam hal ini BPR BANGUNARTA
+                                    melakkukan
+                                    tindakan pemasangan plakat "TANAH INI SEDANG DIJAMINKAN KE BPR BANGUNARTA" sampai
+                                    tunggakan
+                                    tersebut dapat terselesaikan atau Bank melakukan upaya-upaya yang mengarah pada
+                                    penguasaan
+                                    agunan untuk penyelesaian kredit tersebut dan dalam hal ini Debitur tidak berhak
+                                    untuk
+                                    menolak, mempersulit, menghalang-halangi, maupun menghambat.
+                                </li>
+                            </ol>
+                        </td>
+                    </tr>
+                </table>
+            @elseif ($item->jenis_jaminan == 'Lainnya')
+            @endif
+        @empty
+        @endforelse
 
-        <table>
-            <tr>
-                <td class="text-center" width="2%"></td>
-                <td style="text-align: justify;">
-                    <ol type='a' style="margin-left: -20px;margin-top:-1px;tetxt-align:justify;">
-                        <li>
-                            Debitur tidak akan menjaminkan atau menggunakannya sebagai jaminan pinjaman, menjual atau memindahtangankan dengan cara apapun kepada pihak manapun sampai seluruh Hutang dinyatakan lunas oleh pihak Bank.
-                        </li>
-                        <li>
-                            Apabila debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau pokok pinjaman selama 3 (tiga) bulan atau lebih, maka Bank berhak melakukan tindakan-tindakan yang mendorong untuk penyelesaian tunggakan termasuk dalam hal ini BPR BANGUNARTA melakkukan tindakan pemasangan plakat "TANAH INI SEDANG DIJAMINKAN KE BPR BANGUNARTA" sampai tunggakan tersebut dapat terselesaikan atau Bank melakukan upaya-upaya yang mengarah pada penguasaan agunan untuk penyelesaian kredit tersebut dan dalam hal ini Debitur tidak berhak untuk menolak, mempersulit, menghalang-halangi, maupun menghambat.
-                        </li>
-                    </ol>
-                </td>
-            </tr>
-        </table>
+
 
         <table style="margin-top:-15px;">
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 14. </td>
                 <td style="text-align: justify;">
-                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surveY. Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau
+                    karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey
+                    yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surveY.
+                    Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan
+                    Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
                 </td>
             </tr>
         </table>
@@ -323,12 +389,14 @@
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 15. </td>
                 <td style="text-align: justify;">
-                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut
+                    syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
                 </td>
             </tr>
         </table>
 
-        Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas. Demikian agar Bapak / Ibu maklum.
+        Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas. Demikian
+        agar Bapak / Ibu maklum.
 
         <p></p>
 
@@ -337,7 +405,7 @@
                 <td width="40%"></td>
                 <td></td>
                 <td style="text-align: justify" width="40%">
-                    Pamanukan, 13 November 2023
+                    Pamanukan, {{ $data->tgl_notifikasi_hari_ini }}
                 </td>
             </tr>
             <tr>
@@ -347,13 +415,14 @@
                 <td></td>
                 <td style="text-align: justify" width="42%">
                     Dengan ini saya menyatakan telah membaca mengetahui dan menyetujui isi Notifikasi Kredit <br>
-                    No. 184/NK/PBA/XI/2023
+                    No. {{ $data->no_notifikasi }}
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png" alt="" style="width: 100px;hight:100px;margin-top:-32px;">
+                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png"
+                            alt="" style="width: 100px;hight:100px;margin-top:-32px;">
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -361,7 +430,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    MUHIDIN PRASETYO
+                    {{ $data->nama_user }}
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
@@ -372,7 +441,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    ZULFADLI RIZAL
+                    {{ $data->nama_nasabah }}
                 </td>
             </tr>
         </table>

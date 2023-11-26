@@ -1143,4 +1143,38 @@ class Midle extends Model
         }
         return $swot;
     }
+
+    public static function notifikasi_general($data)
+    {
+        $cek = DB::table('data_jaminan')
+            ->join('data_pengajuan', 'data_jaminan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftjoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->select(
+                'data_jaminan.*',
+                'data_pengajuan.*',
+                'data_jenis_dokumen.jenis_dokumen as nama_jenis_dokumen' ?? null,
+            )
+            ->where('data_pengajuan.kode_pengajuan', $data)
+            ->get();
+
+        //
+        return $cek;
+    }
+
+    public static function cek_jaminan($data)
+    {
+        $cek = DB::table('data_jaminan')->where('data_jaminan.pengajuan_kode', '00339940')->get();
+
+        if (count($cek) != 0) {
+            $jaminan = $cek;
+        } else {
+            $jaminan = collect([
+                (object)['jenis_jaminan' => null],
+                (object)['jenis_jaminan' => null],
+                (object)['jenis_jaminan' => null],
+            ]);
+        }
+        //
+        return $jaminan;
+    }
 }

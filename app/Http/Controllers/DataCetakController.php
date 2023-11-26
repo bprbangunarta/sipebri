@@ -115,18 +115,21 @@ class DataCetakController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = DB::table('data_pengajuan')
-                ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                ->join('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
-                ->join('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-                ->join('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
-                ->join('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
-                ->where('data_pengajuan.kode_pengajuan', $enc)
+                ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->leftJoin('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
+                ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+                ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
+                ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
+                ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
+                ->where('data_pengajuan.kode_pengajuan', '00339935')
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
                     'data_notifikasi.*',
                     'data_survei.*',
+                    'a_administrasi.*',
+                    'a_memorandum.*',
                     'v_users.*',
                     'data_notifikasi.created_at as tgl_notifikasi',
                     'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',
@@ -134,6 +137,7 @@ class DataCetakController extends Controller
                 )->first();
             //
 
+            $cek->produk_kode = 'KRU';
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
@@ -142,8 +146,27 @@ class DataCetakController extends Controller
                     'data' => $cek,
                 ]);
             } else {
+                $notifikasi_general = Midle::notifikasi_general($enc);
+
+                if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
+                    $cek->persen_apht = 0.75;
+                    $cek->persen_fiducia = 0.00;
+                } elseif ($cek->proses_apht == 0 && $cek->by_fiducia > 0) {
+                    $cek->persen_fiducia = 0.75;
+                    $cek->persen_apht = 0.00;
+                } elseif ($cek->proses_apht == 0 && $cek->by_fiducia == 0) {
+                    $cek->persen_fiducia = 0.00;
+                    $cek->persen_apht = 0.00;
+                }
+
+                $hari = Carbon::now();
+                $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
+                $cek_jaminan = (object)Midle::cek_jaminan($enc);
+                // dd($cek);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
+                    'agunan' => $notifikasi_general,
+                    'jaminan' => $cek_jaminan,
                 ]);
             }
         } catch (DecryptException $e) {
