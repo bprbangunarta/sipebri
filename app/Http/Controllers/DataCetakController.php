@@ -700,9 +700,10 @@ class DataCetakController extends Controller
             $condition = Midle::cetak_data_analisa5C_condition($enc);
             $kualitatif = Midle::cetak_data_kualitatif($enc);
             $memorandum = Midle::cetak_data_memorandum($enc);
+            $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
 
-            // dd($memorandum);
+            dd($swot);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -724,6 +725,7 @@ class DataCetakController extends Controller
                 'condition' => $condition,
                 'biayaperdagangan' => $biaya_perdagangan,
                 'memorandum' => $memorandum,
+                'swot' => $swot,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

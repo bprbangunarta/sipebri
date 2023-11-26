@@ -1878,28 +1878,28 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kekuatan
                 </td>
                 <td> : </td>
-                <td>&nbsp; Karyawan Tetap</td>
+                <td>&nbsp; {{ $swot->kekuatan }}</td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kelemahan
                 </td>
                 <td> : </td>
-                <td>&nbsp; Kesehatan Menurun</td>
+                <td>&nbsp; {{ $swot->kelemahan }}</td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Peluang
                 </td>
                 <td> : </td>
-                <td>&nbsp; Naik Jabatan</td>
+                <td>&nbsp; {{ $swot->peluang }}</td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Ancaman
                 </td>
                 <td> : </td>
-                <td>&nbsp; PHK</td>
+                <td>&nbsp; {{ $swot->ancaman }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. CRR</td>

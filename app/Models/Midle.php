@@ -1124,4 +1124,20 @@ class Midle extends Model
 
         return $memorandum;
     }
+
+    public static function cetak_data_swot($data)
+    {
+        $swot = DB::table('a_swot')->where('pengajuan_kode', $data)->first();
+        if (!is_null($swot)) {
+            return $swot;
+        } else {
+            $swot = (object) [
+                'kekuatan' => null,
+                'kelemahan' => null,
+                'peluang' => null,
+                'ancaman' => null,
+            ];
+        }
+        return $swot;
+    }
 }
