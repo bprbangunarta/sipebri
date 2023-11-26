@@ -128,7 +128,7 @@
                 </ul>
             </li>
 
-            <li class="treeview {{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
+            <li class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -153,9 +153,8 @@
                         </a>
                     </li>
 
-                    <li class="">
-                        {{-- <a @can('otor pk') href="{{ route('otor.perjanjian_kredit') }}" @endcan --}}
-                        <a href="{{ route('otor.perjanjian_kredit') }}" title="Otor Perjanjian Kredit">
+                    <li class="{{ request()->is('otor/perjanjian/kredit') ? 'active' : '' }}">
+                        <a @can('otor pk') href="{{ route('otor.perjanjian_kredit') }}" @endcan title="Otor Perjanjian Kredit">
                             <i class="fa fa-check"></i>
                             Otor Perjanjian Kredit
                         </a>
