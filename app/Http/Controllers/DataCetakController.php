@@ -784,6 +784,7 @@ class DataCetakController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where('data_pengajuan.status', 'Disetujui')
+            ->where('data_pengajuan.on_current', '0')
             ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
