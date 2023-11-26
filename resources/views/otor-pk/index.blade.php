@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Otor PK')
+@section('title', 'Otorisasi Perjanjian Kredit')
 
 @section('content')
     <div class="content-wrapper">
@@ -69,28 +69,16 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-
-                                                <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-green" style="width: 120px;hight:100%;">Generate
-                                                        Nomor</span>
+                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Preview</span>
                                                 </a>
 
-                                                @if (is_null($item->no_spk))
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a href="#">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
-                                                            Notifikasi</span>
-                                                    </a>
-                                                @else
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a
-                                                        href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
-                                                            Perjanjian</span>
-                                                    </a>
-                                                @endif
-
+                                                <p style="margin-top:-5px;"></p>
+                                                <a data-toggle="modal" data-target="#generate-code"
+                                                    data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-green" style="width: 120px;hight:100%;">
+                                                        Otorisasi</span>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php
@@ -117,9 +105,9 @@
                 <div class="modal-header bg-green">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">GENERATE NOMOR</h4>
+                    <h4 class="modal-title">OTORISASI PERJANJIAN KREDIT</h4>
                 </div>
-                <form action="{{ Route('simpan.spk') }}" method="POST">
+                <form action="{{ route('simpan.spk') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -157,7 +145,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" id="smb" class="btn btn-success">SIMPAN</button>
+                        <button type="submit" id="smb" class="btn btn-success">OTORISASI</button>
                     </div>
                 </form>
             </div>

@@ -65,23 +65,9 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-
                                                 <a data-toggle="modal" data-target="#generate-code" data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-green" style="width: 120px;hight:100%;">Generate Nomor</span>
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Generate</span>
                                                 </a>
-
-                                                @if (is_null($item->no_spk))
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a href="#">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
-                                                    </a>
-                                                @else
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Perjanjian</span>
-                                                    </a>
-                                                @endif
-
                                             </td>
                                         </tr>
                                         @php
@@ -105,7 +91,7 @@
     <div class="modal fade" id="generate-code">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-green">
+                <div class="modal-header bg-blue">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">GENERATE NOMOR</h4>
@@ -148,7 +134,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" id="smb" class="btn btn-success">SIMPAN</button>
+                        <button type="submit" id="smb" class="btn btn-primary">GENERATE</button>
                     </div>
                 </form>
             </div>

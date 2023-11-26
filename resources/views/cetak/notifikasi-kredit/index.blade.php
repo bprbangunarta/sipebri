@@ -72,24 +72,13 @@
 
                                                 <a data-toggle="modal" data-target="#generate-code"
                                                     data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Generate
-                                                        Nomor</span>
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Generate</span>
                                                 </a>
 
-                                                @if (is_null($item->no_notifikasi))
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a href="#">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
-                                                            Notifikasi</span>
-                                                    </a>
-                                                @else
-                                                    <p style="margin-top:-5px;"></p>
-                                                    <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        target="_blank">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
-                                                            Notifikasi</span>
-                                                    </a>
-                                                @endif
+                                                <p style="margin-top:-5px;"></p>
+                                                <a data-toggle="modal" data-target="#catatan">
+                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Catatan</span>
+                                                </a>
 
                                             </td>
                                         </tr>
@@ -108,13 +97,12 @@
                 </div>
             </div>
         </section>
-
     </div>
 
     <div class="modal fade" id="generate-code">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-yellow">
+                <div class="modal-header bg-blue">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">GENERATE NOMOR</h4>
@@ -150,7 +138,47 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-warning">SIMPAN</button>
+                        <button type="submit" class="btn btn-primary">GENERATE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="catatan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">CATATAN</h4>
+                </div>
+                <form action="{{ Route('simpan.spk') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row">
+
+                                <div style="margin-top: -15px;">
+                                    <span class="fw-bold">KETERANGAN BY PHONE</span>
+                                    <input type="text" id="kode" hidden>
+                                    <input type="text" id="nomor" name="nomor" hidden>
+                                    <input type="text" id="kode_produk" name="kode_produk" hidden>
+
+                                    <textarea class="form-control" name="keterangan" id="keterangan" rows="5"></textarea>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">RENCANA REALISASI</span>
+                                    <textarea class="form-control" name="rencana_realisasi" id="rencana_realisasi" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" id="smb" class="btn btn-warning">SIMPAN</button>
                     </div>
                 </form>
             </div>
