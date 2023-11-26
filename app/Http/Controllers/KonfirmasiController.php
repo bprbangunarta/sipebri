@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Throwable;
+use Carbon\Carbon;
+use App\Models\Data;
 use App\Models\Midle;
 use App\Models\Agunan;
+use App\Models\Produk;
 use App\Models\Survei;
 use App\Models\Nasabah;
 use App\Models\Pengajuan;
@@ -457,8 +460,51 @@ class KonfirmasiController extends Controller
         ]);
     }
 
+    public function get_otor_perjanjian_kredit($kode)
+    {
+        $data = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.produk_kode', 'data_nasabah.nama_nasabah', 'data_nasabah.no_cif', 'data_spk.no_spk')
+            ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
+        //
+
+        $produk = Produk::where('kode_produk', $data[0]->produk_kode)->first();
+
+        $count = (int) $produk->no_spk + 1;
+        $lengths = 4;
+        $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $romawi = Data::romawi($bulan);
+
+        $notif = $kodes . '/' . $data[0]->produk_kode . '/' . $romawi . '/' . $now->year;
+
+        $data[0]->kode_notif = $notif;
+
+        $data[0]->kode_produk = $data[0]->produk_kode;
+
+
+        return response()->json($data[0]);
+    }
     public function simpan_otor_perjanjian_kredit(Request $request)
     {
-        //
+        try {
+            $cek = DB::table('data_spk')->where('pengajuan_kode', $request->kode_pengajuan)->get();
+            if (!count($cek) != 0) {
+                $user = Auth::user()->code_user;
+                $data = [
+                    'otorisasi' => 'A',
+                    'auth_user' => $user,
+                    'updated_at' => now(),
+                ];
+                DB::table('data_spk')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
+            }
+            return redirect()->back()->with('success', 'Berhasil Otorisasi data');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal Otorisasi data');
+        }
     }
 }

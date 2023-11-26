@@ -69,8 +69,10 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Preview</span>
+                                                <a
+                                                    href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                    <span class="btn bg-blue"
+                                                        style="width: 120px;hight:100%;">Preview</span>
                                                 </a>
 
                                                 <p style="margin-top:-5px;"></p>
@@ -107,7 +109,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">OTORISASI PERJANJIAN KREDIT</h4>
                 </div>
-                <form action="{{ route('simpan.spk') }}" method="POST">
+                <form action="{{ route('otor.simpan_perjanjian_kredit') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -155,7 +157,7 @@
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_spk.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/get-otor-pk.js') }}"></script>
     <script>
         $("button[data-target='#generate-code']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik

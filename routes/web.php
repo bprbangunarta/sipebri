@@ -506,7 +506,8 @@ Route::middleware('auth')->group(function () {
     //====Route OTORISASI PK====//
     Route::controller(KonfirmasiController::class)->group(function () {
         Route::get('otor/perjanjian/kredit', 'otor_perjanjian_kredit')->name('otor.perjanjian_kredit');
-        Route::get('otor/perjanjian/kredit/simpan', 'simpan_otor_perjanjian_kredit')->name('otor.simpan_perjanjian_kredit');
+        Route::POST('otor/perjanjian/kredit/simpan', 'simpan_otor_perjanjian_kredit')->name('otor.simpan_perjanjian_kredit');
+        Route::get('otor/perjanjian/kredit/get/{kode}', 'get_otor_perjanjian_kredit')->name('otor.get_perjanjian_kredit');
     });
     //====Route OTORISASI PK====//
 
