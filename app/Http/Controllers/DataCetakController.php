@@ -122,7 +122,7 @@ class DataCetakController extends Controller
                 ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
                 ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
-                ->where('data_pengajuan.kode_pengajuan', '00339935')
+                ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',

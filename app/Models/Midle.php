@@ -1163,7 +1163,7 @@ class Midle extends Model
 
     public static function cek_jaminan($data)
     {
-        $cek = DB::table('data_jaminan')->where('data_jaminan.pengajuan_kode', '00339940')->get();
+        $cek = DB::table('data_jaminan')->where('data_jaminan.pengajuan_kode', $data)->get();
 
         if (count($cek) != 0) {
             $jaminan = $cek;
