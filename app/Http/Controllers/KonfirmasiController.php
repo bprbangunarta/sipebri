@@ -423,7 +423,7 @@ class KonfirmasiController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->join('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->where('data_spk.otorisasi', 'N')
             ->select(
@@ -493,7 +493,7 @@ class KonfirmasiController extends Controller
     {
         try {
             $cek = DB::table('data_spk')->where('pengajuan_kode', $request->kode_pengajuan)->get();
-            if (!count($cek) != 0) {
+            if (count($cek) != 0) {
                 $user = Auth::user()->code_user;
                 $data = [
                     'otorisasi' => 'A',
@@ -502,6 +502,7 @@ class KonfirmasiController extends Controller
                 ];
                 DB::table('data_spk')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
             }
+
             return redirect()->back()->with('success', 'Berhasil Otorisasi data');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal Otorisasi data');
