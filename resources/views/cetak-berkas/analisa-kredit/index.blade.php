@@ -129,7 +129,7 @@
                 <td class="text-center" width="2%"> 2. </td>
                 <td width="17%">Nama Nasabah</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->kode_pengajuan }}</td>
+                <td style="text-align: justify;">{{ $cetak->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
@@ -2040,7 +2040,8 @@
                     <p style="margin-top: -10.5px;"></p>
                     Pamanukan, {{ $memorandum->hari }} <br>
                     <center>
-                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png?hl=id" style="width:100px;hight:100px;">
+                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png?hl=id"
+                            style="width:100px;hight:100px;">
                     </center>
                     <b>DIDI JUNAEDI</b>
                 </td>
