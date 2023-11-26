@@ -552,6 +552,7 @@ Route::view('/rekap/analisa', 'rekap.analisa');
 
 Route::prefix('cetak-berkas')->group(function () {
     Route::view('notifikasi-kredit', 'cetak-berkas.notifikasi-kredit.general');
+    Route::view('notifikasi-kredit/kta', 'cetak-berkas.notifikasi-kredit.kta');
     Route::view('analisa-kredit', 'cetak-berkas.analisa-kredit.index');
 });
 
