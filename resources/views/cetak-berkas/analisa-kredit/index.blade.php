@@ -2047,7 +2047,7 @@
                         <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png?hl=id"
                             style="width:100px;hight:100px;">
                     </center>
-                    <b>DIDI JUNAEDI</b>
+                    <b><font style="text-transform: uppercase;">{{ $memorandum->nama_surveyor }}</font></b>
                 </td>
             </tr>
         </table>

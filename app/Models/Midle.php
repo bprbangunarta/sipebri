@@ -1076,6 +1076,8 @@ class Midle extends Model
         $memorandum = DB::table('a_memorandum')
             ->join('data_pengajuan', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
             ->join('a5c_capacity', 'data_pengajuan.kode_pengajuan', '=', 'a5c_capacity.pengajuan_kode')
             ->join('a5c_character', 'data_pengajuan.kode_pengajuan', '=', 'a5c_character.pengajuan_kode')
             ->join('a5c_collateral', 'data_pengajuan.kode_pengajuan', '=', 'a5c_collateral.pengajuan_kode')
@@ -1096,6 +1098,7 @@ class Midle extends Model
                 'a5c_collateral.evaluasi_collateral as nilai_collateral',
                 'a5c_collateral.lokasi_shm',
                 'a5c_condition.evaluasi_condition as nilai_condition',
+                'v_users.nama_user as nama_surveyor',
             )
             ->where('a_memorandum.pengajuan_kode', $data)->first();
         //
