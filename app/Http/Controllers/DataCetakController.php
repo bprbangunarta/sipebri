@@ -871,7 +871,7 @@ class DataCetakController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $cek = DB::table('data_pengajuan')
                 ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->join('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
+                ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
                     'data_pengajuan.*',
@@ -899,7 +899,7 @@ class DataCetakController extends Controller
                     $data[] = $usulan[$i];
                     $rc[] = $usulan[$i]->rc;
                 }
-                $total_taksasi = array_sum($total) ?? 0;
+                // $total_taksasi = array_sum($total) ?? 0;
 
                 //RC
                 $rc_akhir = end($rc);
