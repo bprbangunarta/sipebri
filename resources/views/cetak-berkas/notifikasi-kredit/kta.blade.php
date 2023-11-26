@@ -136,7 +136,10 @@
                 <td class="text-center" width="2%"> 1. </td>
                 <td width="27%">Limit Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
+                <td style="text-align: justify;">
+                    {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}
+                    ( <font style="text-transform: capitalize;">{{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah )
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 2. </td>

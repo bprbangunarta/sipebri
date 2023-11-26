@@ -15,6 +15,7 @@
         "maatwebsite/excel": "^1.1",
         "phpoffice/phpspreadsheet": "^1.29",
         "realrashid/sweet-alert": "^7.0",
+        "riskihajar/terbilang": "^2.0",
         "spatie/laravel-permission": "^5.10"
     },
     "require-dev": {
