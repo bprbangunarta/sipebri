@@ -428,4 +428,54 @@ class CetakController extends Controller
             'auth' => $auth,
         ]);
     }
+
+    public function index_notifikasi_kredit(Request $request)
+    {
+        $user = Auth::user()->code_user;
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+            ->where(function ($query) use ($user) {
+                $query->where('data_pengajuan.tracking', '=', 'Selesai')
+                    ->where('data_survei.surveyor_kode', '=', $user)
+                    ->where('data_pengajuan.status', '=', 'Disetujui')
+                    ->where('data_spk.no_spk', '!=', null)
+                    ->where('data_pengajuan.on_current', '=', '0');
+            })
+            ->select(
+                'data_notifikasi.*',
+                'data_pengajuan.*',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name',
+                'data_survei.kantor_kode',
+            );
+
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        for ($i = 0; $i < $count; $i++) {
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            }
+        }
+
+        return view('cetak-berkas.notifikasi-kredit.index', [
+            'data' => $data
+        ]);
+    }
 }
