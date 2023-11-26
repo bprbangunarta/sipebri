@@ -703,7 +703,6 @@ class DataCetakController extends Controller
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
 
-            dd($swot);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

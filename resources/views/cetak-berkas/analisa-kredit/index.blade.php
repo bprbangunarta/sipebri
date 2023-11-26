@@ -2006,7 +2006,7 @@
                 <td>&nbsp; Tidak</td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p. Syarat-Syarat Kredit</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; o. Syarat-Syarat Kredit</td>
                 <td></td>
                 <td></td>
             </tr>
