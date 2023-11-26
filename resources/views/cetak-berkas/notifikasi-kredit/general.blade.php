@@ -136,7 +136,11 @@
                 <td class="text-center" width="2%"> 1. </td>
                 <td width="27%">Limit Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
+                <td style="text-align: justify;">
+                    {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}
+                    ( <font style="text-transform: capitalize;">
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah )
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 2. </td>
@@ -168,19 +172,23 @@
                 <td width="27%" style="vertical-align: text-top;">Agunan</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    1 ( Satu ) <br>
+                    {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
                     @forelse ($agunan as $item)
-                        <ol style="margin-left: -27px;text-align: justify;">
+                        <ol style="margin-left: -40px;text-align: justify; list-style-type:none;">
                             @if ($item->jenis_jaminan == 'Tanah')
                                 <li>
+                                    {{ $loop->iteration }}.
                                     {{ Str::upper($item->nama_jenis_dokumen) . ',' . ' ' . Str::upper($item->jenis_jaminan) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Kendaraan')
                                 <li>
+                                    {{ $loop->iteration }}.
                                     {{ $item->catatan }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Lainnya')
                                 <li>
+                                    {{ $loop->iteration }}.
                                     {{ Str::upper($item->nama_jenis_dokumen) . ',' . ' ' . Str::upper($item->jenis_jaminan) . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
                                 </li>
                             @endif
@@ -275,7 +283,7 @@
             @if ($item->jenis_jaminan == 'Kendaraan')
                 <table>
                     <tr>
-                        <td class="text-center" width="2%"> 12. </td>
+                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }} </td>
                         <td width="27%">Untuk Jaminan Kendaraan</td>
                         <td class="text-center" width="3%" colspan="2"> : </td>
                         <td></td>
@@ -296,7 +304,8 @@
                                     Bank.
                                 </li>
                                 <li>
-                                    Apabla debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau pokok
+                                    Apabila debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau
+                                    pokok
                                     pinjaman selama 3 (tiga) bulan, maka Bank berhak melelang atau menjual dibawah
                                     tangan,
                                     barang jaminan kendaraan tersebut diatas kepada pihak ketiga guna mengangsur atau
@@ -326,9 +335,9 @@
                     </tr>
                 </table>
             @elseif ($item->jenis_jaminan == 'Tanah')
-                <table style="margin-top:-15px;">
+                <table>
                     <tr>
-                        <td class="text-center" width="2%"> 13. </td>
+                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }} </td>
                         <td width="27%">Untuk Jaminan Tanah</td>
                         <td class="text-center" width="3%" colspan="2"> : </td>
                         <td></td>
@@ -367,6 +376,59 @@
                     </tr>
                 </table>
             @elseif ($item->jenis_jaminan == 'Lainnya')
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }} </td>
+                        <td width="27%">Untuk Jaminan Lainnya</td>
+                        <td class="text-center" width="3%" colspan="2"> : </td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%"></td>
+                        <td style="text-align: justify;">
+                            <ol type='a' style="margin-left: -20px;margin-top:-1px;tetxt-align:justify;">
+                                <li>
+                                    Debitur tidak akan menjaminkan atau menggunakannnya sebagai jaminan pinjaman,
+                                    menjual atau
+                                    memindahtangankan dengan cara apapun kepada pihak manapun dan menggunakan kendaraan
+                                    tersebut
+                                    hanya untuk pemakaian pribadi sampai seluruh Hutang dinyatakan lunas oleh pihak
+                                    Bank.
+                                </li>
+                                <li>
+                                    Apabila debitur lalai dari kewajiban atau tidak dapat mengangsur bunga dan atau
+                                    pokok
+                                    pinjaman selama 3 (tiga) bulan, maka Bank berhak melelang atau menjual dibawah
+                                    tangan,
+                                    barang jaminan kendaraan tersebut diatas kepada pihak ketiga guna mengangsur atau
+                                    melunasi
+                                    Hutang Debitur kepada Bank.
+                                </li>
+                                <li>
+                                    Jika batas maksimal pinjaman berikut bunga telah melebihi jaminan yang dimiliki
+                                    debitur,
+                                    maka dengan Debitur menyatakan pula bahwa kepemilikan barang-barang jaminan
+                                    kendaraan
+                                    tersebut telah dialihkan kepada Bank dengan kewajiban Debitur untuk meyerahkan
+                                    barang-barang
+                                    jaminan kendaraan tersebut kepada Bank.
+                                </li>
+                                <li>
+                                    Dalam hal kejadian diatas ( sesuai nomor b dan c), Debitur tidak dapat memenuhi
+                                    kewajibannya
+                                    untuk menyerahkan barang jaminan kendaraann, maka Debitur bersedia untuk diajukan ke
+                                    proses
+                                    peradilan pidana karena telah melakukan penggelapan atas barang yang sudah bukan
+                                    lagi
+                                    miliknya, sesuai dengan yang tercantum dalam pasal 372 KUHP.
+                                </li>
+                            </ol>
+                        </td>
+                    </tr>
+                </table>
             @endif
         @empty
         @endforelse
@@ -431,7 +493,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    {{ $data->nama_user }}
+                    <font style="text-transform: uppercase;">{{ $data->nama_user }}</font>
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
@@ -442,7 +504,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    {{ $data->nama_nasabah }}
+                    <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                 </td>
             </tr>
         </table>

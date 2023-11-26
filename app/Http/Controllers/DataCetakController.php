@@ -138,8 +138,7 @@ class DataCetakController extends Controller
                     'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
                 )->first();
             //
-
-
+            
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
@@ -164,7 +163,8 @@ class DataCetakController extends Controller
                 $hari = Carbon::now();
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
-
+                $cek->count_jaminan = count($notifikasi_general);
+                // dd($cek->count_jaminan);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
