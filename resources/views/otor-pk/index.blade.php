@@ -69,8 +69,8 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a
-                                                    href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank">
                                                     <span class="btn bg-blue"
                                                         style="width: 120px;hight:100%;">Preview</span>
                                                 </a>

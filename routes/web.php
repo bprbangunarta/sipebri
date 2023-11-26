@@ -471,6 +471,8 @@ Route::middleware('auth')->group(function () {
                 Route::get('/notifikasi/realisasi/kredit', 'realisasi_kredit')->name('realisasi.kredit');
             });
 
+            Route::get('/otor/perjanjian/kredit/cetak', 'cetak_otor_perjanjian_kredit')->name('cetak.otor_perjanjian_kredit');
+
             Route::get('/notifikasi/realisasi/kredit/{kode}', 'get_realisasi')->name('get.realisasi');
             Route::get('/notifikasi/realisasi/kredit/foto/{kode}', 'get_foto_realisasi')->name('getfoto.realisasi');
             Route::post('/notifikasi/realisasi/kredit/simpan', 'simpan_realisasi')->name('simpan.realisasi');

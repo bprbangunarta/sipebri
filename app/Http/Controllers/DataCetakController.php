@@ -138,7 +138,7 @@ class DataCetakController extends Controller
                     'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
                 )->first();
             //
-            
+
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
@@ -986,6 +986,43 @@ class DataCetakController extends Controller
                 'data' => $cek,
                 'usulan' => $usulan,
             ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function cetak_otor_perjanjian_kredit(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
+                ->join('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+                ->leftJoin('data_pekerjaan', 'data_nasabah.pekerjaan_kode', '=', 'data_pekerjaan.kode_pekerjaan')
+                ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
+                ->where('data_pengajuan.kode_pengajuan', $enc)
+                ->where('data_pengajuan.on_current', 0)
+                ->select(
+                    'data_pengajuan.*',
+                    'data_nasabah.*',
+                    'data_spk.*',
+                    'data_pekerjaan.*',
+                    'data_pendamping.*',
+                    'a_administrasi.administrasi as biaya_admin',
+                )->first();
+            //
+            // dd($cek);
+
+            if ($cek->produk_kode == 'KTA') {
+                return view('otor-pk.cetak-pk', [
+                    'data' => $cek,
+                ]);
+            } else {
+                return view('otor-pk.preview-pk', [
+                    'data' => $cek,
+                ]);
+            }
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
