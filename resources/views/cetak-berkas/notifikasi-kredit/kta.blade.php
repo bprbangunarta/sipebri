@@ -142,7 +142,7 @@
                 <td class="text-center" width="2%"> 2. </td>
                 <td width="27%">Jenis Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">{{ Str::upper($data->penggunaan) }}</td>
+                <td style="text-align: justify;">{{ Str::upper($data->produk_kode) }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>

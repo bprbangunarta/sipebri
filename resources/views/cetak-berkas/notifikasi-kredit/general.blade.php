@@ -450,9 +450,9 @@
         Adapun kelengkapan dokumen yang harus diserahkan saat realisasi kredit adalah : <br>
 
         <ol>
-            <li>BPKB PCX ASLI, BPKB R25, SKPG, SP TDK IKUT TLO, KK</li>
-            <li>SK ASLI, KARTU JHT, PAS FOTO SUAMI ISTRI, STNK AKF</li>
-            <li>FOTO MOTOR, GOSOKAN NO MESIN & RANGKA, SRT NIKAH</li>
+            <li>{{ $data->sebelum_realisasi }}</li>
+            <li>{{ $data->syarat_tambahan }}</li>
+            <li>{{ $data->syarat_lainnya }}</li>
         </ol>
     </div>
 
