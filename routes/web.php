@@ -233,6 +233,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/mobil', [CetakController::class, 'mobil'])->name('cetak.mobil');
         Route::get('/cetak/tanah', [CetakController::class, 'tanah'])->name('cetak.tanah');
 
+        // Cetak Notifikasi Kredit
+        Route::get('/cetak/notifikasi-kredit', [CetakController::class, 'index_notifikasi_kredit'])->name('cetak.notifikasi.index');
+        
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 
