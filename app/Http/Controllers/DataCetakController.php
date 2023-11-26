@@ -774,42 +774,92 @@ class DataCetakController extends Controller
 
     public function persetujuan_kredit()
     {
-        $cek = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+        $usr = Auth::user()->code_user;
+        $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
+
+        $name = request('name');
+        $usr = Auth::user()->code_user;
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
-            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            ->where('data_spk.otorisasi', 'N')
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->where(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Persetujuan Komite');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Naik Kasi');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Naik Komite I');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.tracking', 'Naik Komite II');
+            })
+            ->orWhere(function ($query) use ($usr) {
+                $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.status', 'Disetujui');
+            })
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
             ->select(
-                'data_spk.*',
                 'data_pengajuan.*',
-                'data_notifikasi.*',
-                'data_pengajuan.*',
-                'data_nasabah.kode_nasabah',
-                'data_nasabah.nama_nasabah',
-                'data_nasabah.alamat_ktp',
-                'data_nasabah.kelurahan',
-                'data_nasabah.kecamatan',
-                'data_pengajuan.plafon',
+                'data_nasabah.*',
                 'data_kantor.kode_kantor',
-                'data_survei.surveyor_kode',
-                'data_survei.tgl_survei',
-                'data_survei.tgl_jadul_1',
-                'data_survei.tgl_jadul_2',
-                'users.name'
             );
 
-        //Enkripsi kode pengajuan
-        $c = $cek->get();
+        $c = $query->get();
         $count = count($c);
-        $data = $cek->paginate(10);
+        $data = $query->paginate(10);
+        $usul1 = "Staff Analis";
+        $usul2 = "Kasi Analis";
+        $usul3 = "Kabag Analis";
+        $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
-            if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+            $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+            $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+            $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+        }
+
+        if ($user->role_name == 'Customer Service') {
+            $usul1 = "Customer Service";
+            for ($i = 0; $i < $count; $i++) {
+                if ($data->isNotEmpty()) {
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                }
+            }
+        } elseif ($user->role_name == 'Kepala Kantor Kas') {
+            $usul1 = "Kepala Kantor Kas";
+            for ($i = 0; $i < $count; $i++) {
+                if ($data->isNotEmpty()) {
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                }
             }
         }
+
         return view('cetak.persetujuan-kredit.index', [
             'data' => $data,
         ]);
