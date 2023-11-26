@@ -72,7 +72,7 @@ class DataCetakController extends Controller
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->where(function ($query) use ($user) {
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_survei.surveyor_code', '=', $user)
+                    ->where('data_survei.surveyor_kode', '=', $user)
                     ->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_spk.no_spk', '=', null);
             })
