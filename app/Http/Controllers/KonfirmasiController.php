@@ -456,4 +456,9 @@ class KonfirmasiController extends Controller
             'data' => $data
         ]);
     }
+
+    public function simpan_otor_perjanjian_kredit(Request $request)
+    {
+        //
+    }
 }
