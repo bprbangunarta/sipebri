@@ -137,7 +137,7 @@ class DataCetakController extends Controller
                 )->first();
             //
 
-            $cek->produk_kode = 'KRU';
+
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
