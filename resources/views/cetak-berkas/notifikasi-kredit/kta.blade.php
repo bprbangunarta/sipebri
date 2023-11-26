@@ -299,7 +299,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    {{ $data->nama_user }}
+                    <font style="text-transform: uppercase;">{{ $data->nama_user }}</font>
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
@@ -310,7 +310,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    {{ $data->nama_nasabah }}
+                    <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                 </td>
             </tr>
         </table>
