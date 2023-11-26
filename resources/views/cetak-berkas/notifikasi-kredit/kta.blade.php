@@ -142,7 +142,8 @@
                 <td class="text-center" width="2%"> 2. </td>
                 <td width="27%">Jenis Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">{{ Str::upper($data->produk_kode) }}</td>
+                <td style="text-align: justify;">{{ Str::upper($data->produk_kode) }} -
+                    {{ Str::upper($data->nama_produk) }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
@@ -273,7 +274,7 @@
                 <td width="40%"></td>
                 <td></td>
                 <td style="text-align: justify" width="40%">
-                    Pamanukan, tgl_notifikasi
+                    Pamanukan, {{ $data->tgl_notifikasi }}
                 </td>
             </tr>
             <tr>

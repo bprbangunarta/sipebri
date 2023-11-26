@@ -122,6 +122,7 @@ class DataCetakController extends Controller
                 ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
                 ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
+                ->leftJoin('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
                     'data_pengajuan.*',
@@ -130,6 +131,7 @@ class DataCetakController extends Controller
                     'data_survei.*',
                     'a_administrasi.*',
                     'a_memorandum.*',
+                    'data_produk.*',
                     'v_users.*',
                     'data_notifikasi.created_at as tgl_notifikasi',
                     'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',
@@ -162,7 +164,7 @@ class DataCetakController extends Controller
                 $hari = Carbon::now();
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
-                // dd($cek);
+
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
