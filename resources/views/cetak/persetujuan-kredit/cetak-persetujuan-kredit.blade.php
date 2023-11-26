@@ -204,9 +204,10 @@
                         <div style="margin-bottom: 5px;">{{ $item->role_name }}</div>
                     </td>
                     <td colspan="2" style="text-align:justify;">Dengan suku bunga {{ $data->suku_bunga }} % / bulan
-                        ............................ untuk jangka
+                        {{ $item->metode_rps }} untuk jangka
                         waktu {{ $data->jangka_waktu }} bulan
-                        Biaya ADM {{ $data->biaya_admin }}
+                        Biaya ADM
+                        {{ 'Rp. ' . ' ' . number_format($data->biaya_admin, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }}
                     </td>
                 </tr>
             @empty
