@@ -128,7 +128,7 @@
                 </ul>
             </li>
 
-            <li class="treeview">
+            <li class="treeview {{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -172,7 +172,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/notifikasi/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/notifikasi/perjanjian/kredit', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -204,8 +204,8 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('themes/notifikasi/kredit') ? 'active' : '' }}">
-                        <a @can('cetak notifikasi kredi') href="{{ route('notifikasi_kredit') }}" @endcan
+                    <li class="">
+                        <a @can('cetak notifikasi kredi') href="#" @endcan
                             title="Cetak Notifikasi Kredit">
                             <i class="fa fa-bell-o"></i>
                             Notifikasi Kredit
