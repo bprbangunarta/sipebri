@@ -62,7 +62,7 @@ class UserController extends Controller
         $cek['name'] = strtoupper($cek['name']); //Huruf kapital
         $cek['code_user'] = strtoupper($cek['code_user']); //Huruf kapital
         $cek['password'] = bcrypt('12345');
-        dd($cek);
+        // dd($cek);
         if ($cek) {
             User::create($cek);
             return redirect()->back()->with('success', 'Data user berhasil ditambahkan');

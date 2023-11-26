@@ -1137,6 +1137,10 @@
                         <td>{{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
                     </tr>
                 @empty
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;" colspan="3">
+                        TIDAK ADA AGUNAN
+                </tr>
                 @endforelse
 
             </table>
