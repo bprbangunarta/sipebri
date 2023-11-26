@@ -92,26 +92,26 @@
             <tr>
                 <td width="14%">Nomor</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>184/NK/PBA/XI/2023</td>
+                <td>{{ $data->no_notifikasi }}</td>
             </tr>
             <tr>
                 <td>Tanggal</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>13 November 2023</td>
+                <td>{{ $data->tgl_notifikasi }}</td>
             </tr>
             <tr>
                 <td>Kode Pengajuan</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>00339950</td>
+                <td>{{ $data->kode_pengajuan }}</td>
             </tr>
         </table>
 
         <p></p>
 
         Kepada Yth. <br>
-        Bapak/Ibu AKSAN / LILIS MUMINAH <br>
+        Bapak/Ibu {{ $data->nama_nasabah }} <br>
         Di <br>
-        KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG No. Telp/HP : 082320099971
+        {{ $data->alamat_ktp }} No. Telp/HP : {{ $data->no_telp }}
 
         <p></p>
 
@@ -125,7 +125,9 @@
 
         <p></p>
 
-        Menunjuk permohonan fasilitas kredit Konsumsi Lainnya atas nama Bapak/Ibu, dengan ini kami beritahukan bahwa PT BPR BANGUNARTA dapat menyetujui permohonan kredit Bapak/Ibu tersebut, dengan ketentuan-ketentuan dan syarat-syarat sebagai berikut :
+        Menunjuk permohonan fasilitas kredit Konsumsi Lainnya atas nama Bapak/Ibu, dengan ini kami beritahukan bahwa PT
+        BPR BANGUNARTA dapat menyetujui permohonan kredit Bapak/Ibu tersebut, dengan ketentuan-ketentuan dan
+        syarat-syarat sebagai berikut :
 
         <p></p>
 
@@ -134,71 +136,77 @@
                 <td class="text-center" width="2%"> 1. </td>
                 <td width="27%">Limit Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">Rp 52.000.000 ( lima puluh dua juta rupiah )</td>
+                <td style="text-align: justify;">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 2. </td>
                 <td width="27%">Jenis Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">Konsumtif Lainnya</td>
+                <td style="text-align: justify;">{{ Str::upper($data->penggunaan) }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
                 <td width="27%" style="vertical-align: text-top;">Tujuan Penggunaan Kredit</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    KONSUMTIF. Sepanjang tidak bertentangan dengan ketentuan hukum yang berlaku, norma kesusilaan dan ketertiban umum.
+                    {{ Str::upper($data->penggunaan) }}. Sepanjang tidak bertentangan dengan ketentuan hukum yang
+                    berlaku, norma kesusilaan dan
+                    ketertiban umum.
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 4. </td>
                 <td width="27%">Sektor Ekonomi</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">1020. Bukan Lapangan Usaha - Lainnya</td>
+                <td style="text-align: justify;">{{ $data->sandi_sektor_ekonomi }}.
+                    {{ $data->keterangan_sektor_ekonomi }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 5. </td>
                 <td width="27%">Jangka Waktu Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">36 ( Tiga Puluh Enam ) bulan terhitung sejak akad kredit.</td>
+                <td style="text-align: justify;">{{ $data->jangka_waktu }} bulan terhitung sejak akad kredit.</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 6. </td>
                 <td width="27%" style="vertical-align: text-top;">Pembayaran Kembali</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    Wajib dilakukan dalam 36 (Tiga Puluh Enam) kali angsuran, yang dibayarkan setiap bulan selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran dibayarkan satu bulan setelah tanggal akad kredit.
+                    Wajib dilakukan dalam {{ $data->jangka_waktu }} kali angsuran, yang dibayarkan setiap bulan
+                    selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
+                    dibayarkan satu bulan setelah tanggal akad kredit.
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 7. </td>
                 <td width="27%">Suku Bunga</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">13 % EFEKTIF ANUITAS / Tahun</td>
+                <td style="text-align: justify;">{{ $data->suku_bunga }} % {{ $data->metode_rps }} / Tahun</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 8. </td>
                 <td width="27%">Denda</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.10 % per hari dari angsuran pokok dan atau bunga yang tertunggak</td>
+                <td style="text-align: justify;">{{ $data->b_penalti }} % per hari dari angsuran pokok dan atau bunga
+                    yang tertunggak</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 9. </td>
                 <td width="27%">Biaya Kredit</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.50 % dari plafon kredit</td>
+                <td style="text-align: justify;">0.00 % dari plafon kredit</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">a. Provisi Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.50 % Rp. 260.000</td>
+                <td style="text-align: justify;">0.00 % Rp. 0</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">b. Administrasi Bank Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">2.50 % Rp. 750.000</td>
+                <td style="text-align: justify;">0.00 % Rp. 0</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
@@ -236,7 +244,11 @@
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 11. </td>
                 <td style="text-align: justify;">
-                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surveY. Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau
+                    karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey
+                    yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surveY.
+                    Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan
+                    Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
                 </td>
             </tr>
         </table>
@@ -245,12 +257,14 @@
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 12. </td>
                 <td style="text-align: justify;">
-                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut
+                    syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
                 </td>
             </tr>
         </table>
 
-        Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas. Demikian agar Bapak / Ibu maklum.
+        Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas. Demikian
+        agar Bapak / Ibu maklum.
 
         <p></p>
 
@@ -259,7 +273,7 @@
                 <td width="40%"></td>
                 <td></td>
                 <td style="text-align: justify" width="40%">
-                    Pamanukan, 13 November 2023
+                    Pamanukan, tgl_notifikasi
                 </td>
             </tr>
             <tr>
@@ -269,13 +283,14 @@
                 <td></td>
                 <td style="text-align: justify" width="42%">
                     Dengan ini saya menyatakan telah membaca mengetahui dan menyetujui isi Notifikasi Kredit <br>
-                    No. 184/NK/PBA/XI/2023
+                    No. {{ $data->no_notifikasi }}
                 </td>
             </tr>
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png" alt="" style="width: 100px;hight:100px;margin-top:-32px;">
+                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png"
+                            alt="" style="width: 100px;hight:100px;margin-top:-32px;">
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -283,7 +298,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    MUHIDIN PRASETYO
+                    {{ $data->nama_user }}
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
@@ -294,7 +309,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    ZULFADLI RIZAL
+                    {{ $data->nama_nasabah }}
                 </td>
             </tr>
         </table>

@@ -36,9 +36,11 @@
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
                                                 @if (is_null($item->no_notifikasi))
-                                                <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK ADA</span>
-                                                @else    
-                                                <span class="label label-warning" style="font-size: 12px;">{{ $item->no_notifikasi }}</span>
+                                                    <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK
+                                                        ADA</span>
+                                                @else
+                                                    <span class="label label-warning"
+                                                        style="font-size: 12px;">{{ $item->no_notifikasi }}</span>
                                                 @endif
                                             </td>
 
@@ -51,7 +53,8 @@
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
-                                                <b>PLAFON :</b> {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
+                                                <b>PLAFON :</b>
+                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }}
                                             </td>
 
@@ -60,25 +63,31 @@
 
                                                 <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }}% <br>
                                                 <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
-                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
+                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b>
+                                                {{ number_format($item->b_provisi, 2) }} <br>
                                                 <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
 
-                                                <a data-toggle="modal" data-target="#generate-code" data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Generate Nomor</span>
+                                                <a data-toggle="modal" data-target="#generate-code"
+                                                    data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Generate
+                                                        Nomor</span>
                                                 </a>
 
                                                 @if (is_null($item->no_notifikasi))
                                                     <p style="margin-top:-5px;"></p>
                                                     <a href="#">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
+                                                            Notifikasi</span>
                                                     </a>
                                                 @else
                                                     <p style="margin-top:-5px;"></p>
-                                                    <a href="{{ route('analisa5c.analisa', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Notifikasi</span>
+                                                    <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank">
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak
+                                                            Notifikasi</span>
                                                     </a>
                                                 @endif
 

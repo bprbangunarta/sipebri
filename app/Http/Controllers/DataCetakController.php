@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Data;
+use NumberFormatter;
 use App\Models\Midle;
 use App\Models\Produk;
 use App\Models\Survei;
@@ -107,6 +108,48 @@ class DataCetakController extends Controller
         return view('cetak.notifikasi-kredit.index', [
             'data' => $data
         ]);
+    }
+
+    public function cetak_notifikasi_kredit(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+                ->join('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
+                ->join('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+                ->join('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
+                ->join('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
+                ->where('data_pengajuan.kode_pengajuan', $enc)
+                ->select(
+                    'data_pengajuan.*',
+                    'data_nasabah.*',
+                    'data_notifikasi.*',
+                    'data_survei.*',
+                    'v_users.*',
+                    'data_notifikasi.created_at as tgl_notifikasi',
+                    'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',
+                    'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
+                )->first();
+            //
+
+            if ($cek->produk_kode == 'KTA') {
+                $hari = $cek->tgl_notifikasi;
+                $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
+                // dd($cek);
+                return view('cetak-berkas.notifikasi-kredit.kta', [
+                    'data' => $cek,
+                ]);
+            } else {
+                return view('cetak-berkas.notifikasi-kredit.general', [
+                    'data' => $cek,
+                ]);
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+        return view('cetak-berkas.notifikasi-kredit.kta');
     }
 
     public function get_notifikasi($kode)

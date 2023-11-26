@@ -487,6 +487,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/cetak/analisa/kredit/detail', 'cetak_analisa_kredit')->name('cetak.analisa_kredit');
 
+            Route::get('/cetak/notifikasi/kredit/detail', 'cetak_notifikasi_kredit')->name('cetak.notifikasi_kredit');
+
             Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/cetak/penolakan/kredit', 'data_penolakan_kredit')->name('data_penolakan.kredit');
             });
