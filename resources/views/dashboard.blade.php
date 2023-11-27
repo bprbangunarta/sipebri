@@ -60,7 +60,7 @@
                         <span class="info-box-icon"><i class="fa fa-check"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">REALISASI</span>
+                            <span class="info-box-text">DISETUJUI</span>
                             <span class="info-box-number">{{ $disetujui }} USER</span>
 
                             <div class="progress">
