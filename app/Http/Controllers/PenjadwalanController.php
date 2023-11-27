@@ -79,6 +79,11 @@ class PenjadwalanController extends Controller
             return $value !== "-" && !is_null($value);
         });
 
+        // $cek_produk = DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->first();
+        // ($cek_produk->$cek_produk == 'KTA'){
+
+        // }
+        // dd($request, $cek_produk);
         //Data Tracking
         $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
         if (!is_null($trc)) {
