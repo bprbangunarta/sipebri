@@ -40,6 +40,7 @@ class PengajuanController extends Controller
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->where('data_pengajuan.status', '!=', 'Batal')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
                 'data_pengajuan.produk_kode',
