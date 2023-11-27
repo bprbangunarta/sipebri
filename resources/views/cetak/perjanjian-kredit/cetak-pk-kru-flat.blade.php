@@ -179,8 +179,12 @@
                 Bunga sebesar : {{ $data->suku_bunga }} % per tahun dihitung secara merata setiap bulannya.
             </li>
             <li>
-                Provisi sebesar Rp. 1.095.000,- ( Satu Juta Sembilan Puluh Lima Ribu Rupiah ) dan Biaya Administrasi
-                sebesar Rp. 1.642.500,- ( Satu Juta Enam Ratus Empat Puluh Dua Ribu Lima Ratus Rupiah ) didebetkan dari
+                Provisi sebesar {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},- ( <font
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> ) dan Biaya Administrasi
+                sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},- ( <font
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}</font> ) didebetkan dari
                 Rekening Tabungan PEMINJAM yang ada pada BANK.
             </li>
         </ol>
@@ -222,7 +226,7 @@
     <div style="page-break-before: always;"></div>
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <p style="text-align: justify;">
@@ -249,14 +253,23 @@
                 ya timbul dari perjanjian ini, maka PEMINJAM dan atau PENJAMIN menyerahkan jaminan kebendaan yang cukup
                 berupa :
                 <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;">
-                    <li>
-                        KARTU DAN SALDO JAMSOSTEK ATAS NAMA NANO SUMARNA NO 19050910561 KARTU DAN SALDO JAMSOSTEK ATAS
-                        NAMA NANO SUMARNA NO 19050910561
-                    </li>
-                    <li>
-                        KARTU DAN SALDO JAMSOSTEK ATAS NAMA NANO SUMARNA NO 19050910561 KARTU DAN SALDO JAMSOSTEK ATAS
-                        NAMA NANO SUMARNA NO 19050910561
-                    </li>
+                    @forelse ($jaminan as $item)
+                        @if ($item->jenis_jaminan == 'Kendaraan')
+                            <li>
+                                {{ $item->catatan }}
+                            </li>
+                        @elseif ($item->jenis_jaminan == 'Tanah')
+                            <li>
+                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                            </li>
+                        @elseif ($item->jenis_jaminan == 'Lainnya')
+                            <li>
+                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                            </li>
+                        @endif
+                    @empty
+                    @endforelse
+
                 </ol>
                 Mengenai pengaturan dan pelaksanaan perikatan jaminan akan dilakukan dengan perjanjian tersendiri sesuai
                 peraturan dan perundang-undangan yang berlaku. Perjanjian perikatan agunan tersebut merupakan satu
@@ -336,7 +349,7 @@
     <div style="page-break-before: always;"></div>
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <p style="text-align: justify;">
@@ -352,6 +365,7 @@
                 benjanji untuk melaksanakan semua kewajibannya terkait pinjamannya ini dengan baik, namun apabila
                 ternyata :
                 <ol type="a" style="margin-left: -25px;">
+
                     <li>
                         PEMINJAM tidak membayar baik pokok dan atau bunga sesuai jadwal angsuran, atau
                     </li>
@@ -374,15 +388,31 @@
             <!-- JIKA AGUNAN KENDARAAN DAN TANAH GUNAKAN SEMUA -->
 
             <!-- JIKA AGUNAN KENDARAAN SAJA -->
-            <li>
-                Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak melakukan pengamanan
-                agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
-            </li>
+            @forelse ($agunan as $item)
+                @if (
+                    ($item->jenis_jaminan == 'Kendaraan' && $item->jenis_jaminan == 'Tanah') ||
+                        $item->jenis_jaminan == 'Kendaraan' ||
+                        $item->jenis_jaminan == 'Lainnya')
+                    <li>
+                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak melakukan
+                        pengamanan
+                        agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
+                    </li>
+                @endif
 
-            <!-- JIKA AGUNAN TANAH SAJA -->
-            <!-- <li>
-                    Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi ijin kepada BANK untuk melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah agunan dengan tulisan “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
-                </li> -->
+                <!-- JIKA AGUNAN TANAH SAJA -->
+                @if (($item->jenis_jaminan == 'Kendaraan' && $item->jenis_jaminan == 'Tanah') || $item->jenis_jaminan == 'Tanah')
+                    <li>
+                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi ijin kepada BANK
+                        untuk
+                        melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah agunan dengan
+                        tulisan
+                        “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
+                    </li>
+                @endif
+
+            @empty
+            @endforelse
 
             <li>
                 Bilamana PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak untuk melakukan
@@ -431,7 +461,7 @@
                 Pasal 11 <br>
                 DOMISILI DAN PEMBERITAHUAN
             </center>
-            Para PIHAK dengan ini menyatakan bahwa :
+            PARA PIHAK dengan ini menyatakan bahwa :
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
                 Alamat BANK dan PEMINJAM sebagaimana tercantum pada awal Perjanjian Kredit ini merupakan alamat tetap
@@ -439,7 +469,7 @@
                 diantara PARA PIHAK.
             </li>
             <li>
-                Apabila ada perubahan alamat maka para PIHAK wajib memberitahukan secara tertulis alamat barunya kepada
+                Apabila ada perubahan alamat maka PARA PIHAK wajib memberitahukan secara tertulis alamat barunya kepada
                 pihak lainnya paling lambat 7 ( Tujuh ) hari sejak terjadinya perubahan alamat.
             </li>
             <li>
@@ -458,11 +488,11 @@
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
                 Dalam hal terjadi perbedaan pendapat dalam memahami atau menafsirkan bagian-bagian dari isi perjanjian
-                atau terjadi perselisihan dalam melaksanakan perjanjian ini, maka para PIHAK sepakat untuk menyelesaikan
+                atau terjadi perselisihan dalam melaksanakan perjanjian ini, maka PARA PIHAK sepakat untuk menyelesaikan
                 secara musyawarah dan mufakat.
             </li>
             <li>
-                Apabila penyelesaian secara musyawarah dan mufakat tidak dapat menyelesaikan permasalahan maka para
+                Apabila penyelesaian secara musyawarah dan mufakat tidak dapat menyelesaikan permasalahan maka PARA
                 PIHAK sepakat untuk memilih domisili hukum di kantor Panitera Pengadilan Negeri Subang.
             </li>
         </ol>
@@ -473,7 +503,7 @@
     <div style="page-break-before: always;"></div>
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <p style="text-align: justify;">
@@ -523,7 +553,7 @@
                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
                     <p style="margin-top:70px;"></p>
                     <u style="text-transform: uppercase;">
-                        ZULFADLI RIZAL
+                        <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                     </u>
                     <br>
                     M&nbsp;E&nbsp;N&nbsp;Y&nbsp;E&nbsp;T&nbsp;U&nbsp;J&nbsp;U&nbsp;I
@@ -543,7 +573,7 @@
                 <td class="text-center" width="40%">
                     <br><br>
                     <u style="text-transform: uppercase;">
-                        ZULFADLI RIZAL
+                        <font style="text-transform: uppercase;">{{ $data->nama_pendamping }}</font>
                     </u>
                     <br>
                     SAKSI 1, <br>

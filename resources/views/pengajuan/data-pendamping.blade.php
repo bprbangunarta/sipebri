@@ -129,7 +129,7 @@
                                                     <option value="SUAMI">SUAMI</option>
                                                     <option value="ORANG TUA">ORANG TUA</option>
                                                     <option value="SAUDARA">SAUDARA</option>
-                                                    <option value="SAUDARA">LAINNYA</option>
+                                                    <option value="LAINNYA">LAINNYA</option>
                                                 </select>
                                             </div>
 

@@ -1029,7 +1029,7 @@ class DataCetakController extends Controller
                     'data_pendamping.*',
                     'a_memorandum.*',
                     'a_administrasi.*',
-                    'bi_penggunaan_debitur.keterangan as penggunaan_debitur*',
+                    'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                     'data_pendamping.status as status_pendamping',
                     'a_administrasi.administrasi as biaya_admin',
                 )->first();
@@ -1047,7 +1047,15 @@ class DataCetakController extends Controller
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
             $cek->tgl_jth_tmp = $formattedDate;
 
-            dd($cek, $formattedDate);
+            $jaminan = Midle::notifikasi_general($enc);
+            $cek_jaminan = (object)Midle::cek_jaminan($enc);
+            if (is_null($cek->provisi)) {
+                $cek->provisi = 0.00;
+            }
+            if (is_null($cek->administrasi)) {
+                $cek->administrasi = 0.00;
+            }
+
             $cek->produk_kode = 'KRU';
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
@@ -1056,6 +1064,8 @@ class DataCetakController extends Controller
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
                 ]);
             } elseif ($cek->produk_kode == 'KTO') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kto', [
