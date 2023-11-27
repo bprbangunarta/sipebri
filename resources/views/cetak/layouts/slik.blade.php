@@ -120,8 +120,8 @@
                 </td>
             </tr>
             <tr>
-                <td style="position: absolute;">Tujuan Penggunaan</td>
-                <td class="text-center"> : </td>
+                <td style="vertical-align: text-top;">Tujuan Penggunaan</td>
+                <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td>
                     <input type="checkbox"> Pemeriksaan Calon Debitur&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox"> Dalam Rangka Audit<br>
@@ -197,8 +197,8 @@
                 </td>
             </tr>
             <tr>
-                <td style="position: absolute;">Tujuan Penggunaan</td>
-                <td class="text-center"> : </td>
+                <td style="vertical-align: text-top;">Tujuan Penggunaan</td>
+                <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td>
                     <input type="checkbox"> Pemeriksaan Calon Debitur&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="checkbox"> Dalam Rangka Audit<br>
