@@ -1056,11 +1056,13 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-            $cek->produk_kode = 'KRU';
+            // $cek->produk_kode = 'KRU';
+            //Done
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
                 ]);
+                //Done
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
