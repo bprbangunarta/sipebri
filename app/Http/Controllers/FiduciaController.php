@@ -60,8 +60,8 @@ class FiduciaController extends Controller
                 )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-            dd($data);
-            return view('cetak.perjanjian-kredit.cetak-pk-kta', [
+
+            return view('cetak-berkas.fiducia.cetak-fiducia', [
                 'data' => $data,
             ]);
         } catch (DecryptException $e) {
