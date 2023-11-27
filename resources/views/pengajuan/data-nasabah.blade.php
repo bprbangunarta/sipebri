@@ -91,29 +91,36 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KELURAHAN</span>
-                                                <select class="form-control text-uppercase kel kelurahan"
-                                                    style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan"
-                                                    id="select-kelurahan" required>
-                                                    @if (is_null($nasabah->kelurahan))
+                                                <span class="fw-bold">KABUPATEN</span>
+                                                <select class="form-control text-uppercase kab" style="width: 100%;"
+                                                    name="kode_dati" id="select-kabupaten" required>
+                                                    @if (is_null($nasabah->kode_dati))
                                                         <option value="">--PILIH--</option>
                                                     @else
-                                                        <option value="{{ $nasabah->kelurahan }}">
-                                                            {{ $nasabah->kelurahan }}
+                                                        <option class="text-uppercase" value="{{ $nasabah->kode_dati }}">
+                                                            {{ $nasabah->nm_dati }}
                                                         </option>
                                                     @endif
+
+                                                    @foreach ($kab as $item)
+                                                        <option class="text-uppercase" value="{{ $item->kode_dati }}">
+                                                            {{ $item->nama_dati }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">WILAYAH</span>
-                                                @if (is_null($nasabah->kota))
-                                                    <input class="form-control dati2" type="text" name="kota"
-                                                        id="kota" placeholder="Kota" value="{{ old('kota') }}">
-                                                @else
-                                                    <input class="form-control" type="text" name="kota"
-                                                        id="kota" placeholder="Kota"
-                                                        value="{{ old('kota', $nasabah->kota) }}">
-                                                @endif
+                                                <span class="fw-bold">KECAMATAN</span>
+                                                <select class="form-control text-uppercase kec kecamatan"
+                                                    style="width: 100%;" name="kecamatan" id="select-kecamatan" required>
+                                                    @if (is_null($nasabah->kecamatan))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $nasabah->kecamatan }}">
+                                                            {{ $nasabah->kecamatan }}
+                                                        </option>
+                                                    @endif
+                                                </select>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -265,36 +272,29 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KABUPATEN</span>
-                                                <select class="form-control text-uppercase kab" style="width: 100%;"
-                                                    name="kode_dati" id="select-kabupaten" required>
-                                                    @if (is_null($nasabah->kode_dati))
+                                                <span class="fw-bold">KELURAHAN</span>
+                                                <select class="form-control text-uppercase kel kelurahan"
+                                                    style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan"
+                                                    id="select-kelurahan" required>
+                                                    @if (is_null($nasabah->kelurahan))
                                                         <option value="">--PILIH--</option>
                                                     @else
-                                                        <option class="text-uppercase" value="{{ $nasabah->kode_dati }}">
-                                                            {{ $nasabah->nm_dati }}
+                                                        <option value="{{ $nasabah->kelurahan }}">
+                                                            {{ $nasabah->kelurahan }}
                                                         </option>
                                                     @endif
-
-                                                    @foreach ($kab as $item)
-                                                        <option class="text-uppercase" value="{{ $item->kode_dati }}">
-                                                            {{ $item->nama_dati }}
-                                                        </option>
-                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">KECAMATAN</span>
-                                                <select class="form-control text-uppercase kec kecamatan"
-                                                    style="width: 100%;" name="kecamatan" id="select-kecamatan" required>
-                                                    @if (is_null($nasabah->kecamatan))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->kecamatan }}">
-                                                            {{ $nasabah->kecamatan }}
-                                                        </option>
-                                                    @endif
-                                                </select>
+                                                <span class="fw-bold">WILAYAH</span>
+                                                @if (is_null($nasabah->kota))
+                                                    <input class="form-control dati2" type="text" name="kota"
+                                                        id="kota" placeholder="Kota" value="{{ old('kota') }}">
+                                                @else
+                                                    <input class="form-control" type="text" name="kota"
+                                                        id="kota" placeholder="Kota"
+                                                        value="{{ old('kota', $nasabah->kota) }}">
+                                                @endif
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
