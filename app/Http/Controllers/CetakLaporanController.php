@@ -55,6 +55,7 @@ class CetakLaporanController extends Controller
                 'data_pengajuan.*',
                 'data_nasabah.*',
                 'data_tracking.*',
+                'data_spk.*',
             )
             ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
