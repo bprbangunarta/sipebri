@@ -688,10 +688,10 @@ class DataCetakController extends Controller
             for ($i = 0; $i < $count; $i++) {
                 if ($data->isNotEmpty()) {
                     $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
-                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
-                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
-                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4) ?? null;
                 }
             }
         } elseif ($user->role_name == 'Kepala Kantor Kas') {
@@ -699,10 +699,10 @@ class DataCetakController extends Controller
             for ($i = 0; $i < $count; $i++) {
                 if ($data->isNotEmpty()) {
                     $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
-                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
-                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
-                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
+                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
+                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
+                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4) ?? null;
                 }
             }
         }
@@ -1057,7 +1057,9 @@ class DataCetakController extends Controller
             }
 
             // $cek->produk_kode = 'KRU';
-            //Done
+            // $cek->metode_rps = 'EFEKTIF MUSIMAN';
+            // dd($enc);
+            // //Done
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
@@ -1073,13 +1075,17 @@ class DataCetakController extends Controller
                 return view('cetak.perjanjian-kredit.cetak-pk-kto', [
                     'data' => $cek,
                 ]);
+                //Done
             } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kps-kpj', [
                     'data' => $cek,
+                    'jaminan' => $jaminan,
                 ]);
             } elseif ($cek->produk_kode == 'KRU' || $cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-kbt-musiman', [
                     'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
                 ]);
             } else {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [

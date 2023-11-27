@@ -124,7 +124,7 @@
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
                     Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
-                    {{ $data->status_pendamping }} {{ $data->nama_pendamping }} yang ikut serta menandatangani
+                    {{ $data->status_pendamping }}.' '.{{ $data->nama_pendamping }} yang ikut serta menandatangani
                     perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
                     Tingkat Perusahaan {{ $data->tempat_kerja }}. Untuk selanjutnya disebut PEMINJAM.
                 </td>

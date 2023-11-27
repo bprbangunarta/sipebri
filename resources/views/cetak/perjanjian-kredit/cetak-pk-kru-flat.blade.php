@@ -123,8 +123,10 @@
             <tr>
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
-                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari ISTRI bernama
-                    ICEM MUYANI yang ikut serta menandatangani perjanjian ini. Untuk selanjutnya disebut PEMINJAM.
+                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
+                    {{ $data->status_pendamping }} bernama
+                    {{ $data->nama_pendamping }} yang ikut serta menandatangani perjanjian ini. Untuk selanjutnya
+                    disebut PEMINJAM.
                 </td>
             </tr>
 
@@ -202,8 +204,8 @@
                 {{ $data->jangka_waktu }} ( <font style="text-transform: capitalize;">
                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) kali
                 angsuran setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
-                pada​tanggal {{ $data->tgl_bln_thn }} dan demikian seterusnya hingga berakhir pada tanggal 02 Oktober
-                2021.
+                pada​tanggal {{ $data->tgl_bln_thn }} dan demikian seterusnya hingga berakhir pada tanggal
+                {{ $data->tgl_jth_tmp }}.
             </li>
             <li>
                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran sebagaimana
