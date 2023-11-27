@@ -530,8 +530,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
         Route::post('z', 'post_laporan_realisasi')->name('laporan.realisasi-kredit');
 
-        Route::get('/laporan/siap-realisasi', 'laporan_penolakan')->name('laporan.siap-realisasi');
-        Route::post('/laporan/penolakan/kredit', 'post_laporan_penolakan')->name('laporan.penolakan-kredit');
+        Route::get('/laporan/siap-realisasi', 'siap_realisasi')->name('laporan.siap-realisasi');
+        Route::post('/laporan/siap-realisasi/kredit', 'post_siap_realisasi')->name('laporan.post.siap_realisasi');
 
         Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
         Route::post('/laporan/pendaftaran/kredit', 'post_laporan_pendaftaran')->name('laporan.pendaftaran-kredit');
@@ -546,6 +546,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(ExportController::class)->group(function () {
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
         Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
+        Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');
     });
 });
 
