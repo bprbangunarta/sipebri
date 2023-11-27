@@ -1104,11 +1104,15 @@ class Midle extends Model
         //
 
         $usulan = DB::table('data_usulan')->where('pengajuan_kode', $data)->get();
-        $dasu = [];
-        for ($i = 0; $i < count($usulan); $i++) {
-            $dasu[] = $usulan[$i]->usulan_plafon;
+        if (count($usulan) != 0) {
+            $dasu = [];
+            for ($i = 0; $i < count($usulan); $i++) {
+                $dasu[] = $usulan[$i]->usulan_plafon;
+            }
+            $memorandum->plafon_usulan = end($dasu);
+        } else {
+            $memorandum->plafon_usulan = 0;
         }
-        $memorandum->plafon_usulan = end($dasu);
 
 
         $memorandum->capital_evaluasi_capital = Data::analisa5c_number($memorandum->capital_evaluasi_capital);
