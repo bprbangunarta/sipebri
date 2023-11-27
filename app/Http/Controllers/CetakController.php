@@ -501,7 +501,7 @@ class CetakController extends Controller
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->where('data_survei.surveyor_kode', '=', $user)
                     ->where('data_pengajuan.status', '=', 'Disetujui')
-                    ->where('data_spk.no_spk', '!=', null)
+                    // ->where('data_spk.no_spk', '!=', null)
                     ->where('data_pengajuan.on_current', '=', '0');
             })
             ->select(
