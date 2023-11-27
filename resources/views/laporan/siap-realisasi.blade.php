@@ -64,7 +64,7 @@
                                             <td style="vertical-align: middle;">
                                                 <b>Wilayah : </b> {{ $item->wilayah }} <br>
                                                 <b>Plafon : </b> {{ number_format($item->plafon, 0, ',', '.') }} <br>
-                                                <b>Surveyor : </b> MUHIDIN
+                                                <b>Surveyor : </b> {{ $item->surveyor }}
                                             </td>
                                             <td style="vertical-align: middle;">
                                                 {{ $item->keterangan }}
