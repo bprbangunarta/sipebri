@@ -236,6 +236,12 @@ Route::middleware('auth')->group(function () {
         // Cetak Notifikasi Kredit
         Route::get('/cetak/notifikasi-kredit', [CetakController::class, 'index_notifikasi_kredit'])->name('cetak.notifikasi.index');
 
+<<<<<<< HEAD
+=======
+        // Cetak Perjanjian Kredit
+        Route::get('/cetak/perjanjian-kredit', [CetakController::class, 'index_perjanjian_kredit'])->name('cetak.perjanjian.index');
+
+>>>>>>> c64fb5c247a915a337542be2c3fd28e15b6319c8
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 

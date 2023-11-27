@@ -128,7 +128,7 @@
                 </ul>
             </li>
 
-            <li class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit') ? 'active' : '' }}">
+            <li class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -171,7 +171,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', '') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -204,7 +204,7 @@
                     </li>
 
                     <li class="{{ request()->is('cetak/notifikasi-kredit') ? 'active' : '' }}">
-                        <a href="/cetak/notifikasi-kredit" title="Cetak Notifikasi Kredit">
+                        <a href="{{ route('cetak.notifikasi.index') }}" title="Cetak Notifikasi Kredit">
                             <i class="fa fa-bell-o"></i>
                             Notifikasi Kredit
                         </a>
@@ -218,8 +218,8 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a @can('cetak perjanjian kredit') href="{{ route('perjanjian.kredit') }}" @endcan
+                    <li class="{{ request()->is('cetak/perjanjian-kredit') ? 'active' : '' }}">
+                        <a @can('cetak perjanjian kredit') href="{{ route('cetak.perjanjian.index') }}" @endcan
                             title="Cetak Perjanjian Kredit">
                             <i class="fa fa-exclamation-circle"></i>
                             Perjanjian Kredit
