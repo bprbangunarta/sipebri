@@ -143,12 +143,14 @@ class CetakLaporanController extends Controller
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
             ->where('data_pengajuan.on_current', '0')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
                 'data_notifikasi.*',
                 'data_survei.kantor_kode as wilayah',
+                'users.name as surveyor',
             )
 
             ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
