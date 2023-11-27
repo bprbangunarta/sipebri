@@ -1028,6 +1028,7 @@ class DataCetakController extends Controller
                     'data_pekerjaan.*',
                     'data_pendamping.*',
                     'a_memorandum.*',
+                    'a_administrasi.*',
                     'bi_penggunaan_debitur.keterangan as penggunaan_debitur*',
                     'data_pendamping.status as status_pendamping',
                     'a_administrasi.administrasi as biaya_admin',
@@ -1040,10 +1041,13 @@ class DataCetakController extends Controller
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
             $cek->hari = $hari->isoformat('dddd');
 
-            // $targetDate = Carbon::createFromFormat('j F Y', $cek->tgl_pengajuan);
-            // $tenMonthsLater = $targetDate->addMonths(10);
+            $targetDate = Carbon::now();
+            $tenMonthsLater = $targetDate->copy()->addMonths(10);
+            $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
+            $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
+            $cek->tgl_jth_tmp = $formattedDate;
 
-            // dd($cek, $targetDate);
+            dd($cek, $formattedDate);
             $cek->produk_kode = 'KRU';
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [

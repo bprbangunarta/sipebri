@@ -150,10 +150,11 @@
         </p>
 
         <p style="text-align: justify;">
-            Bahwa guna keperluan Konsumsi Lainnya PEMINJAM telah mengajukan permohonan pinjam uang secara tertulis
-            kepada BANK tanggal 01 Oktober 2020 dan BANK telah memberi persetujuan secara tertulis pada tanggal 02
-            Oktober 2020 dengan ketentuan pokok yang telah disetujui PEMINJAM. Ketentuan pokok tersebut akan diuraikan
-            lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit dalam pasal-pasal sebagai berikut :
+            Bahwa guna keperluan {{ $data->penggunaan_debitur }} PEMINJAM telah mengajukan permohonan pinjam uang
+            secara tertulis kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi persetujuan secara
+            tertulis pada tanggal {{ $data->tgl_bln_thn }} dengan ketentuan pokok yang telah disetujui PEMINJAM.
+            Ketentuan pokok tersebut akan diuraikan lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit
+            dalam pasal-pasal sebagai berikut :
         </p>
 
         <p style="text-align: justify;">
@@ -161,8 +162,10 @@
                 Pasal 1 <br>
                 FASILITAS PINJAMAN
             </center>
-            BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar Rp. 3,000,000 (
-            Tiga Juta Rupiah ) yang akan dipindah bukukan kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
+            BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
+            {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }} ( <font style="text-transform: capitalize;">
+                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah
+            bukukan kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
         </p>
 
         <p style="text-align: justify;">
@@ -173,7 +176,7 @@
             Atas pinjaman tersebut diatas, PEMINJAM wajib membayar kepada BANK :
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                Bunga sebesar : 17.04 % per tahun dihitung secara merata setiap bulannya.
+                Bunga sebesar : {{ $data->suku_bunga }} % per tahun dihitung secara merata setiap bulannya.
             </li>
             <li>
                 Provisi sebesar Rp. 1.095.000,- ( Satu Juta Sembilan Puluh Lima Ribu Rupiah ) dan Biaya Administrasi
@@ -191,9 +194,12 @@
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
                 Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (
-                selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam 12 ( Dua Belas ) kali
-                angsuran setiap tanggal 02 ( selanjutnya disebut tanggal angsuran ) yang dimulai pada​tanggal 02
-                November 2020 dan demikian seterusnya hingga berakhir pada tanggal 02 Oktober 2021.
+                selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
+                {{ $data->jangka_waktu }} ( <font style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) kali
+                angsuran setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
+                pada​tanggal {{ $data->tgl_bln_thn }} dan demikian seterusnya hingga berakhir pada tanggal 02 Oktober
+                2021.
             </li>
             <li>
                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran sebagaimana

@@ -191,8 +191,9 @@
                 selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
                 {{ $data->jangka_waktu }} ( <font style="text-transform: capitalize;">
                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) kali
-                angsuran setiap tanggal 02 ( selanjutnya disebut tanggal angsuran ) yang dimulai pada​tanggal 02
-                November 2020 dan demikian seterusnya hingga berakhir pada tanggal 02 Oktober 2021.
+                angsuran setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
+                pada ​tanggal {{ $data->tgl_bln_thn }} dan demikian seterusnya hingga berakhir pada tanggal
+                {{ $data->tgl_jth_tmp }}.
             </li>
             <li>
                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran sebagaimana
