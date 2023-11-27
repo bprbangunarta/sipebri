@@ -34,8 +34,7 @@
                                                 <input type="hidden" value="{{ $pengajuan->auth }}" name="input_user">
                                                 <input type="text" class="form-control" name="plafon" id="plafon"
                                                     placeholder="10.000.000"
-                                                    value="{{ $pengajuan->plafon = 'Rp. ' . number_format($pengajuan->plafon, 0, ',', '.') }}"
-                                                    readonly>
+                                                    value="{{ $pengajuan->plafon = 'Rp. ' . number_format($pengajuan->plafon, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
