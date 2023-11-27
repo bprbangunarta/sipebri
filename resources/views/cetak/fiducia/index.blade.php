@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Permohonan Analisa')
+@section('title', 'Surat Penjaminan Fiducia')
 
 @section('content')
     <div class="content-wrapper">
@@ -58,8 +58,8 @@
                                         </td>
                                         
                                         <td class="text-center" style="vertical-align: middle;">
-                                            <a href="#">
-                                                <span class="btn bg-blue" style="width: 120px;">Cetak</span>
+                                            <a href="#" target="_blank">
+                                                <span class="btn bg-blue" style="width: 120px;">Cetak Berkas</span>
                                             </a>
                                         </td>
                                     </tr>

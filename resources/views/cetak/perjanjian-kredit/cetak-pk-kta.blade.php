@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PK KTA</title>
+    <title>Surat Perjanjian Kredit</title>
     <style>
         @page {
             size: A4;
@@ -84,7 +84,7 @@
     <!-- Halaman 1 -->
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <h4 style="text-align: center;font-size: 12pt;">
@@ -216,7 +216,7 @@
     <div style="page-break-before: always;"></div>
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <p style="text-align: justify;">
@@ -346,7 +346,7 @@
     <div style="page-break-before: always;"></div>
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <p style="text-align: justify;">
