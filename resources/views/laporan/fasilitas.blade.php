@@ -4,12 +4,12 @@
 @section('content')
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>LAPORAN
-
-                <a href="#" class="btn btn-sm btn-success pull-right">
-                    <i class="fa fa-download"></i>&nbsp; Export Data
-                </a>
-            </h1>
+            <h1>LAPORAN</h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ route('dashboard') }}"><i class="fa fa-laptop"></i> Dashboard</a></li>
+                <li>Laporan</li>
+                <li class="active">Fasilitas</li>
+            </ol>
         </section>
 
         <section class="content">
@@ -72,10 +72,16 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
+
+                            {{ $data->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
             </div>
         </section>
-
     </div>
 @endsection
