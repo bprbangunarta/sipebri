@@ -139,7 +139,8 @@ class CetakController extends Controller
             $enc = Crypt::decrypt($kode);
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah')
+                ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_pendamping.no_identitas as no_identitas_pendamping', 'data_pendamping.nama_pendamping')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             //Hari ini

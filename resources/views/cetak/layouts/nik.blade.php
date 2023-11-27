@@ -148,14 +148,14 @@
                 <td style="width: 5%;"></td>
                 <td>NIK</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->no_identitas }}</td>
+                <td>{{ $data->no_identitas_pendamping }}</td>
 
             </tr>
             <tr>
                 <td style="width: 5%;"></td>
                 <td style="width:5%;">Nama</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td>{{ $data->nama_nasabah }}</td>
+                <td>{{ $data->nama_pendamping }}</td>
             </tr>
         </table>
 
@@ -177,7 +177,7 @@
                 <td class="text-center">
                     Yang Menyatakan,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_nasabah }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_pendamping }}</font>
                 </td>
                 <td class="text-center">
                     Petugas Pengecek NIK,<br><br><br><br><br>
