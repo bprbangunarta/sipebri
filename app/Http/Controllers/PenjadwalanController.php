@@ -79,11 +79,25 @@ class PenjadwalanController extends Controller
             return $value !== "-" && !is_null($value);
         });
 
-        // $cek_produk = DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->first();
-        // ($cek_produk->$cek_produk == 'KTA'){
+        $cek_produk = DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->first();
+        if ($cek_produk->produk_kode == 'KTA') {
+            $tracking = [
+                'proses_survey' => now(),
+            ];
 
-        // }
-        // dd($field);
+            $pengajuan = [
+                'tracking' => 'Proses Analisa',
+                'updated_at' => now(),
+            ];
+
+            DB::transaction(function () use ($tracking, $pengajuan, $request, $filteredArray) {
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($pengajuan);
+                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
+                Survei::where('pengajuan_kode', $request->kode_pengajuan)->update($filteredArray);
+            });
+            return redirect()->route('permohonan.analisa')->with('success', "Penjadwalan telah dibuat");
+        }
+
         //Data Tracking
         $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
         if (!is_null($trc)) {
