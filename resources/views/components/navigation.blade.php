@@ -238,7 +238,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -259,9 +259,9 @@
                             Realisasi Kredit
                         </a>
                     </li>
-                    <li class="{{ request()->is('laporan/siap-realisasi') ? 'active' : '' }}">
+                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
                         <a href="{{ route('laporan.siap-realisasi') }}">
-                            <i class="fa fa-close"></i>
+                            <i class="fa fa-check"></i>
                             Data Siap Realisasi
                         </a>
                     </li>
