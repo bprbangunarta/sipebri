@@ -953,7 +953,8 @@
                     <td class="text-center" style="border:1px solid black;">1.</td>
                     <td style="border:1px solid black;">&nbsp; Hasil Usaha Perdagangan</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp. ' . ' ' . number_format($items->laba_bersih_perdagangan, 0, ',', '.') }} &nbsp;</td>
+                        {{ 'Rp. ' . ' ' . number_format($items->laba_bersih_perdagangan, 0, ',', '.') }} &nbsp;
+                    </td>
                     <td style="border:1px solid black;text-align:right;"></td>
                 </tr>
                 <tr style="border:1px solid black;">
@@ -1029,76 +1030,77 @@
                 </tr>
             </table>
 
-            <h4 style="text-align: center;font-size: 12pt;">HARTA KEPEMILIKAN</h4>
-            <table style="border:1px solid black;">
-                <tr style="border:1px solid black;">
-                    <th class="text-center" width="4%" style="border:1px solid black;">No</th>
-                    <th class="text-center" style="border:1px solid black;">Nama Harta</th>
-                    <th class="text-center" width="20%" style="border:1px solid black;">Keterangan</th>
-                </tr>
+            @if ($cetak->produk_kode != 'KTA')
+                <h4 style="text-align: center;font-size: 12pt;">HARTA KEPEMILIKAN</h4>
+                <table style="border:1px solid black;">
+                    <tr style="border:1px solid black;">
+                        <th class="text-center" width="4%" style="border:1px solid black;">No</th>
+                        <th class="text-center" style="border:1px solid black;">Nama Harta</th>
+                        <th class="text-center" width="20%" style="border:1px solid black;">Keterangan</th>
+                    </tr>
 
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
-                    <td style="border:1px solid black;">&nbsp; Rumah</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->rumah }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">2.</td>
-                    <td style="border:1px solid black;">&nbsp; Mobil</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->mobil }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
-                    <td style="border:1px solid black;">&nbsp; Motor</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->motor }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
-                    <td style="border:1px solid black;">&nbsp; Televisi</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->televisi }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">4.</td>
-                    <td style="border:1px solid black;">&nbsp; Komputer</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->komputer }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">5.</td>
-                    <td style="border:1px solid black;">&nbsp; Mesin Cuci</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->mesin_cuci }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">6.</td>
-                    <td style="border:1px solid black;">&nbsp; Kursi Tamu</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->kursi_tamu }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">7.</td>
-                    <td style="border:1px solid black;">&nbsp; Lemari Panjang</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->lemari_panjang }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">8.</td>
-                    <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain1 }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">9.</td>
-                    <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain2 }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">10.</td>
-                    <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain3 }}</td>
-                </tr>
-                <tr style="border:1px solid black;">
-                    <td class="text-center" width="4%" style="border:1px solid black;">11.</td>
-                    <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
-                    <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain4 }}</td>
-                </tr>
-            </table>
-
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">1.</td>
+                        <td style="border:1px solid black;">&nbsp; Rumah</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->rumah }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">2.</td>
+                        <td style="border:1px solid black;">&nbsp; Mobil</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->mobil }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
+                        <td style="border:1px solid black;">&nbsp; Motor</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->motor }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">3.</td>
+                        <td style="border:1px solid black;">&nbsp; Televisi</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->televisi }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">4.</td>
+                        <td style="border:1px solid black;">&nbsp; Komputer</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->komputer }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">5.</td>
+                        <td style="border:1px solid black;">&nbsp; Mesin Cuci</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->mesin_cuci }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">6.</td>
+                        <td style="border:1px solid black;">&nbsp; Kursi Tamu</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->kursi_tamu }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">7.</td>
+                        <td style="border:1px solid black;">&nbsp; Lemari Panjang</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->lemari_panjang }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">8.</td>
+                        <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain1 }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">9.</td>
+                        <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain2 }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">10.</td>
+                        <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain3 }}</td>
+                    </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" width="4%" style="border:1px solid black;">11.</td>
+                        <td style="border:1px solid black;">&nbsp; Harta Lainnya</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->nama_lain4 }}</td>
+                    </tr>
+                </table>
+            @endif
             <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
             <table style="border:1px solid black;">
                 <tr style="border:1px solid black;">
@@ -1132,21 +1134,24 @@
 
                     </tr>
                     <tr style="border:1px solid black;">
-                        <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai Taksasi
+                        <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai
+                            Taksasi
                             Agunan</td>
                         <td>{{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
                     </tr>
                 @empty
-                <tr style="border:1px solid black;">
-                    <td class="text-center" style="border:1px solid black;" colspan="3">
-                        TIDAK ADA AGUNAN
-                </tr>
+                    <tr style="border:1px solid black;">
+                        <td class="text-center" style="border:1px solid black;" colspan="3">
+                            TIDAK ADA AGUNAN
+                    </tr>
                 @endforelse
 
             </table>
         </div>
     @empty
     @endforelse
+
+
 
     {{-- Analisa 5C --}}
     <div class="page-break"></div>
@@ -1406,6 +1411,7 @@
     </div>
 
     {{-- CRR || Analisa Kualitatif || Kebutuhan Dana --}}
+
     <div class="page-break"></div>
     <div class="content" style="margin-top: -57px;">
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
@@ -1491,179 +1497,179 @@
                 </th>
             </tr>
         </table>
+        @if ($cetak->produk_kode != 'KTA')
+            <h4 style="text-align: center;font-size: 12pt;">ANALISA KUALITATIF</h4>
+            <table style="border:1px solid black;">
+                <tr>
+                    <th class="text-center" width="50%">Kategori</th>
+                    <th class="text-center" width="50%">Keterangan</th>
+                </tr>
 
-        <h4 style="text-align: center;font-size: 12pt;">ANALISA KUALITATIF</h4>
-        <table style="border:1px solid black;">
-            <tr>
-                <th class="text-center" width="50%">Kategori</th>
-                <th class="text-center" width="50%">Keterangan</th>
-            </tr>
+                <tr>
+                    <th style="border-top:1px solid black;border-right:1px solid black;">
+                        &nbsp; 1. Karakter Debitur
+                    </th>
+                    <td style="border-top:1px solid black;border-right:1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. SLIK (Sumber Informasi SID Bank Indonesia)
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->bi_checking }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kewajiban Kepada Pihal Lain
+                    </td>
+                    <td style="border-right:1px solid black;">{{ $kualitatif->bi_checking }}</td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 1
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->kewajiban1 }} - {{ $kualitatif->ket_kewajiban1 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 2
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->kewajiban2 }} - {{ $kualitatif->ket_kewajiban3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 3
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->kewajiban3 }} - {{ $kualitatif->ket_kewajiban3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Judi / Urusan dengan Pihak Berwajib
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->pihak_berwajib }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Hubungan dengan Tetangga / Masyarakat
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->hubungan_tetangga }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Menjadi Tenaga Kerja Indonesia (TKI)
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->pengalaman_tki }} ({{ $kualitatif->ket_pengalaman }})
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Keberadaan Dirumah
+                    </td>
+                    <td style="border-right:1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pemohon
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; Jam {{ $kualitatif->pemohon_ada }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pendamping
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; Jam {{ $kualitatif->pendamping_ada }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Sumber Informasi Masyarakat
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->info_masyarakat }}
+                    </td>
+                </tr>
 
-            <tr>
-                <th style="border-top:1px solid black;border-right:1px solid black;">
-                    &nbsp; 1. Karakter Debitur
-                </th>
-                <td style="border-top:1px solid black;border-right:1px solid black;"></td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. SLIK (Sumber Informasi SID Bank Indonesia)
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->bi_checking }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kewajiban Kepada Pihal Lain
-                </td>
-                <td style="border-right:1px solid black;">{{ $kualitatif->bi_checking }}</td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 1
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->kewajiban1 }} - {{ $kualitatif->ket_kewajiban1 }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 2
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->kewajiban2 }} - {{ $kualitatif->ket_kewajiban3 }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 3
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->kewajiban3 }} - {{ $kualitatif->ket_kewajiban3 }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Judi / Urusan dengan Pihak Berwajib
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->pihak_berwajib }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Hubungan dengan Tetangga / Masyarakat
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->hubungan_tetangga }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Menjadi Tenaga Kerja Indonesia (TKI)
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->pengalaman_tki }} ({{ $kualitatif->ket_pengalaman }})
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Keberadaan Dirumah
-                </td>
-                <td style="border-right:1px solid black;"></td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pemohon
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; Jam {{ $kualitatif->pemohon_ada }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Pendamping
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; Jam {{ $kualitatif->pendamping_ada }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Sumber Informasi Masyarakat
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->info_masyarakat }}
-                </td>
-            </tr>
-
-            <tr>
-                <th style="border-right:1px solid black;">
-                    &nbsp; 2. Usaha Debitur Saat Ini
-                </th>
-                <td style="border-right:1px solid black;"></td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Sumber Bahan Baku
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->bahan_baku }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Proses Pengolahan
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->proses_olah }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Market Wilayah
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->target_market }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Sistem Pembayaran
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->pembayaran }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Faktor Pendukung Usaha
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->pendukung_usaha }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Faktor Pengurang Usaha
-                </td>
-                <td style="border-right:1px solid black;">
-                    &nbsp; {{ $kualitatif->pengurang_usaha }}
-                </td>
-            </tr>
-            <tr>
-                <td style="border-right:1px solid black;vertical-align: text-top;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Trade Checking
-                </td>
-                <td style="border-right:1px solid black;">
-                    <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
-                        {{ $kualitatif->trade_checking }}
-                    </div>
-                </td>
-            </tr>
-        </table>
-
+                <tr>
+                    <th style="border-right:1px solid black;">
+                        &nbsp; 2. Usaha Debitur Saat Ini
+                    </th>
+                    <td style="border-right:1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. Sumber Bahan Baku
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->bahan_baku }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Proses Pengolahan
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->proses_olah }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. Market Wilayah
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->target_market }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Sistem Pembayaran
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->pembayaran }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Faktor Pendukung Usaha
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->pendukung_usaha }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Faktor Pengurang Usaha
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->pengurang_usaha }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;vertical-align: text-top;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Trade Checking
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
+                            {{ $kualitatif->trade_checking }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        @endif
         <h4 style="text-align: center;font-size: 12pt;">KEBUTUHAN DANA</h4>
         <table style="border:1px solid black;">
             <tr>
@@ -2047,7 +2053,9 @@
                         <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png?hl=id"
                             style="width:100px;hight:100px;">
                     </center>
-                    <b><font style="text-transform: uppercase;">{{ $memorandum->nama_surveyor }}</font></b>
+                    <b>
+                        <font style="text-transform: uppercase;">{{ $memorandum->nama_surveyor }}</font>
+                    </b>
                 </td>
             </tr>
         </table>

@@ -772,7 +772,7 @@ class DataCetakController extends Controller
             $memorandum = Midle::cetak_data_memorandum($enc);
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
-
+            // dd($data);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -1013,13 +1013,28 @@ class DataCetakController extends Controller
                 )->first();
             //
             // dd($cek);
-
             if ($cek->produk_kode == 'KTA') {
-                return view('otor-pk.cetak-pk', [
+                return view('cetak.perjanjian-kredit.cetak-pk-kta', [
+                    'data' => $cek,
+                ]);
+            } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
+                return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
+                    'data' => $cek,
+                ]);
+            } elseif ($cek->produk_kode == 'KTO') {
+                return view('cetak.perjanjian-kredit.cetak-pk-kto', [
+                    'data' => $cek,
+                ]);
+            } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ') {
+                return view('cetak.perjanjian-kredit.cetak-pk-kps-kpj', [
+                    'data' => $cek,
+                ]);
+            } elseif ($cek->produk_kode == 'KRU' || $cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
+                return view('cetak.perjanjian-kredit.cetak-pk-kru-kbt-musiman', [
                     'data' => $cek,
                 ]);
             } else {
-                return view('otor-pk.preview-pk', [
+                return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
                 ]);
             }
