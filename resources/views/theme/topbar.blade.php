@@ -26,7 +26,7 @@
                             <img src="{{ asset('theme/dist/img/user2-160x160.jpg') }}" class="img-circle"
                                 alt="User Image">
                             <p>
-                                Web Developer
+                                <font style="text-transform: uppercase;">{{ Auth::user()->username }}</font>
                                 <small>{{ Auth::user()->email }}</small>
                             </p>
                         </li>
