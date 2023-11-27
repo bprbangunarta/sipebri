@@ -57,7 +57,7 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center">{{ $no }}</td>
+                                            <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
