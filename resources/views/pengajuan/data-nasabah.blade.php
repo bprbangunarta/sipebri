@@ -33,15 +33,13 @@
                                 <div class="tab-pane active" id="nasabah">
                                     <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
+                                        {{-- Hidden form --}}
+                                        <input type="hidden" value="{{ $nasabah->kode_user }}" name="input_user">
+                                        <input type="hidden" class="form-control" name="no_cif" id="no_cif" value="{{ $nasabah->nocif }}">
+
+                                        {{-- Bagian kiri --}}
                                         <div class="div-left">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">NO CIF</span>
-                                                <input type="hidden" value="{{ $nasabah->kode_user }}" name="input_user">
-                                                <input type="text" class="form-control" name="no_cif" id="no_cif"
-                                                    value="{{ $nasabah->nocif }}" readonly>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">JENIS ID</span>
                                                 <select class="form-control text-uppercase ktp" style="width: 100%;"
                                                     name="identitas" required>
@@ -53,40 +51,11 @@
                                                     <option value="9">LAINNYA</option>
                                                 </select>
                                             </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO IDENTITAS</span>
                                                 <input type="text" class="form-control" name="no_identitas"
                                                     id="no_identitas" placeholder="ENTRI"
                                                     value="{{ old('no_identitas', $nasabah->no_identitas) }}" required>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">MASA IDENTITAS</span>
-                                                @if (is_null($nasabah->masa_identitas))
-                                                    <input class="form-control" placeholder="YYYY-MM-DD"
-                                                        name="masa_identitas" id="min"
-                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask />
-                                                @else
-                                                    <input class="form-control" placeholder="YYYY-MM-DD"
-                                                        name="masa_identitas" id="mio"
-                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask
-                                                        value="{{ $nasabah->masa_identitas }}" />
-                                                @endif
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">NAMA PANGGILAN</span>
-                                                <input type="text" class="form-control" name="nama_panggilan"
-                                                    id="nama_panggilan" placeholder="ENTRI"
-                                                    value="{{ old('nama_panggilan', $nasabah->sname) }}" required>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">NAMA LENGKAP</span>
-                                                <input type="text" class="form-control" name="nama_nasabah"
-                                                    id="nama_nasabah" placeholder="ENTRI"
-                                                    value="{{ old('nama_nasabah', $nasabah->nama_nasabah) }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -95,7 +64,6 @@
                                                     id="tempat_lahir" placeholder="ENTRI"
                                                     value="{{ old('tempat_lahir', $nasabah->tempat_lahir) }}" required>
                                             </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TANGGAL LAHIR</span>
                                                 @if (is_null($nasabah->tanggal_lahir))
@@ -105,6 +73,20 @@
                                                     <input class="form-control" placeholder="YYYY-MM-DD"
                                                         name="tanggal_lahir" id="ttlo"
                                                         value="{{ $nasabah->tanggal_lahir }}" />
+                                                @endif                              
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 100%;float:left;">
+                                                <span class="fw-bold">ALAMAT KTP</span>
+                                                @if (is_null($nasabah->alamat_ktp))
+                                                    <input type="text" class="form-control" name="alamat_ktp"
+                                                        id="alamat_ktp" value="{{ old('alamat_ktp') }}"
+                                                        placeholder="ENTRI" required>
+                                                @else
+                                                    <input type="text" class="form-control" name="alamat_ktp"
+                                                        id="alamat_ktp"
+                                                        value="{{ old('alamat_ktp', $nasabah->alamat_ktp) }}"
+                                                        placeholder="ENTRI" required>
                                                 @endif
                                             </div>
 
@@ -127,7 +109,6 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">KECAMATAN</span>
                                                 <select class="form-control text-uppercase kec kecamatan"
@@ -139,101 +120,6 @@
                                                             {{ $nasabah->kecamatan }}
                                                         </option>
                                                     @endif
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">KELURAHAN</span>
-                                                <select class="form-control text-uppercase kel kelurahan"
-                                                    style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan"
-                                                    id="select-kelurahan" required>
-                                                    @if (is_null($nasabah->kelurahan))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->kelurahan }}">
-                                                            {{ $nasabah->kelurahan }}
-                                                        </option>
-                                                    @endif
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">WILAYAH</span>
-                                                @if (is_null($nasabah->kota))
-                                                    <input class="form-control dati2" type="text" name="kota"
-                                                        id="kota" placeholder="Kota" value="{{ old('kota') }}">
-                                                @else
-                                                    <input class="form-control" type="text" name="kota"
-                                                        id="kota" placeholder="Kota"
-                                                        value="{{ old('kota', $nasabah->kota) }}">
-                                                @endif
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 100%;float:right;">
-                                                <span class="fw-bold">ALAMAT KTP</span>
-                                                @if (is_null($nasabah->alamat_ktp))
-                                                    <input type="text" class="form-control" name="alamat_ktp"
-                                                        id="alamat_ktp" value="{{ old('alamat_ktp') }}"
-                                                        placeholder="ENTRI" required>
-                                                @else
-                                                    <input type="text" class="form-control" name="alamat_ktp"
-                                                        id="alamat_ktp"
-                                                        value="{{ old('alamat_ktp', $nasabah->alamat_ktp) }}"
-                                                        placeholder="ENTRI" required>
-                                                @endif
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 100%;float:right;">
-                                                <span class="fw-bold">ALAMAT SEKARANG</span>
-                                                @if (is_null($nasabah->alamat_sekarang))
-                                                    <input type="text" class="form-control" name="alamat_sekarang"
-                                                        value="{{ old('alamat_sekarang') }}" placeholder="ENTRI"
-                                                        required>
-                                                @else
-                                                    <input type="text" class="form-control" name="alamat_sekarang"
-                                                        id="alamat_sekarang"
-                                                        value="{{ old('alamat_sekarang', $nasabah->alamat_sekarang) }}"
-                                                        placeholder="ENTRI" required>
-                                                @endif
-                                            </div>
-                                        </div>
-
-
-                                        <div class="div-right">
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">AGAMA</span>
-                                                <select class="form-control text-uppercase agama" style="width: 100%;"
-                                                    name="agama" required>
-                                                    @if (is_null($nasabah->religi))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->agama }}">
-                                                            {{ $nasabah->religi }}
-                                                        </option>
-                                                    @endif
-
-                                                    <option value="1">ISLAM</option>
-                                                    <option value="2">KATOLIK</option>
-                                                    <option value="3">KRISTEN</option>
-                                                    <option value="4">HINDU</option>
-                                                    <option value="5">BUDHA</option>
-                                                    <option value="6">KONG HU CU</option>
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">KELAMIN</span>
-                                                <select class="form-control text-uppercase kelamin" style="width: 100%;"
-                                                    name="jenis_kelamin" required>
-                                                    @if (is_null($nasabah->jk))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->jenis_kelamin }}">
-                                                            {{ $nasabah->jk }}</option>
-                                                    @endif
-
-                                                    <option value="1">PRIA</option>
-                                                    <option value="2">WANITA</option>
                                                 </select>
                                             </div>
 
@@ -251,28 +137,168 @@
                                                     @endif
                                                 </select>
                                             </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">GELAR</span>
-                                                <select type="text" class="form-control text-uppercase gelar"
-                                                    name="pendidikan_kode">
-                                                    @if (is_null($nasabah->pendidikan_kode))
-                                                        <option value=""></option>
-                                                    @else
-                                                        <option value="{{ $nasabah->pendidikan_kode }}">
-                                                            {{ $nasabah->std }}
-                                                        </option>
-                                                    @endif
-
-                                                    @foreach ($pend as $item)
-                                                        <option value="{{ $item->kode_pendidikan }}">
-                                                            {{ $item->nama_pendidikan }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <span class="fw-bold">MASA IDENTITAS</span>
+                                                @if (is_null($nasabah->masa_identitas))
+                                                    <input class="form-control" placeholder="YYYY-MM-DD"
+                                                        name="masa_identitas" id="min"
+                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask />
+                                                @else
+                                                    <input class="form-control" placeholder="YYYY-MM-DD"
+                                                        name="masa_identitas" id="mio"
+                                                        data-inputmask="'alias': 'YYYY-MM-DD'" data-mask
+                                                        value="{{ $nasabah->masa_identitas }}" />
+                                                @endif
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">STATUS</span>
+                                                <span class="fw-bold">REKENING BANK UMUM</span>
+                                                <input type="number" class="form-control" name="no_rekening"
+                                                    id="no_rekening" placeholder="ENTRI"
+                                                    value="{{ old('no_rekening', $nasabah->no_rekening) }}">
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">NOMOR NPWP</span>
+                                                <input type="text" class="form-control" name="no_npwp" id="no_npwp"
+                                                    placeholder="ENTRI" value="{{ old('no_npwp', $nasabah->no_npwp) }}">
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">EMAIL ADDRES</span>
+                                                <input type="email" class="form-control" name="email" id="email"
+                                                    placeholder="ENTRI" value="{{ old('email', $nasabah->email) }}">
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">SUMBER DANA</span>
+                                                <select type="text" class="form-control text-uppercase sumber_dana"
+                                                    style="width: 100%;" name="sumber_dana" required>
+                                                    @if (is_null($nasabah->sumber_dana))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $nasabah->sumber_dana }}">
+                                                            {{ $nasabah->dana }}</option>
+                                                    @endif
+
+                                                    <option value="1">Hibah</option>
+                                                    <option value="2">Lain2</option>
+                                                    <option value="3">Penghasilan</option>
+                                                    <option value="4">Warisan</option>
+                                                </select>
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 100%;float:left;">
+                                                <span class="fw-bold">PENGHASILAN UTAMA</span>
+                                                <select type="text" class="form-control text-uppercase penghasilan_u"
+                                                    style="width: 100%;" name="penghasilan_utama" required>
+                                                    @if (is_null($nasabah->penghasilan_utama))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $nasabah->penghasilan_utama }}">
+                                                            {{ $nasabah->hasil }}</option>
+                                                    @endif
+
+                                                    <option value="1">s/d 2,5 jt</option>
+                                                    <option value="2">s/d 2,5 - 5 jt</option>
+                                                    <option value="3">s/d 5 - 7,5 jt</option>
+                                                    <option value="4">s/d 7,5 - 10 jt</option>
+                                                    <option value="5"> 10 jt</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        {{-- Bagian kanan --}}
+                                        <div class="div-right">
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">NAMA LENGKAP</span>
+                                                <input type="text" class="form-control" name="nama_nasabah"
+                                                    id="nama_nasabah" placeholder="ENTRI"
+                                                    value="{{ old('nama_nasabah', $nasabah->nama_nasabah) }}">
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">NAMA PANGGILAN</span>
+                                                <input type="text" class="form-control" name="nama_panggilan"
+                                                    id="nama_panggilan" placeholder="ENTRI"
+                                                    value="{{ old('nama_panggilan', $nasabah->sname) }}" required>                                        
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">KELAMIN</span>
+                                                <select class="form-control text-uppercase kelamin" style="width: 100%;"
+                                                    name="jenis_kelamin" required>
+                                                    @if (is_null($nasabah->jk))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $nasabah->jenis_kelamin }}">
+                                                            {{ $nasabah->jk }}</option>
+                                                    @endif
+
+                                                    <option value="1">PRIA</option>
+                                                    <option value="2">WANITA</option>
+                                                </select>
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">AGAMA</span>
+                                                <select class="form-control text-uppercase agama" style="width: 100%;"
+                                                    name="agama" required>
+                                                    @if (is_null($nasabah->religi))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $nasabah->agama }}">
+                                                            {{ $nasabah->religi }}
+                                                        </option>
+                                                    @endif
+
+                                                    <option value="1">ISLAM</option>
+                                                    <option value="2">KATOLIK</option>
+                                                    <option value="3">KRISTEN</option>
+                                                    <option value="4">HINDU</option>
+                                                    <option value="5">BUDHA</option>
+                                                    <option value="6">KONG HU CU</option>
+                                                </select>                                                
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 100%;float:right;">
+                                                <span class="fw-bold">ALAMAT SEKARANG</span>
+                                                @if (is_null($nasabah->alamat_sekarang))
+                                                    <input type="text" class="form-control" name="alamat_sekarang"
+                                                        value="{{ old('alamat_sekarang') }}" placeholder="ENTRI"
+                                                        required>
+                                                @else
+                                                    <input type="text" class="form-control" name="alamat_sekarang"
+                                                        id="alamat_sekarang"
+                                                        value="{{ old('alamat_sekarang', $nasabah->alamat_sekarang) }}"
+                                                        placeholder="ENTRI" required>
+                                                @endif
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">KELURAHAN</span>
+                                                <select class="form-control text-uppercase kel kelurahan"
+                                                    style="width: 100%;" placeholder="Pilih Kelurahan" name="kelurahan"
+                                                    id="select-kelurahan" required>
+                                                    @if (is_null($nasabah->kelurahan))
+                                                        <option value="">--PILIH--</option>
+                                                    @else
+                                                        <option value="{{ $nasabah->kelurahan }}">
+                                                            {{ $nasabah->kelurahan }}
+                                                        </option>
+                                                    @endif
+                                                </select>
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">WILAYAH</span>
+                                                @if (is_null($nasabah->kota))
+                                                    <input class="form-control dati2" type="text" name="kota"
+                                                        id="kota" placeholder="Kota" value="{{ old('kota') }}">
+                                                @else
+                                                    <input class="form-control" type="text" name="kota"
+                                                        id="kota" placeholder="Kota"
+                                                        value="{{ old('kota', $nasabah->kota) }}">
+                                                @endif
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">STATUS PERKAWINAN</span>
                                                 <select class="form-control text-uppercase status" style="width: 100%;"
                                                     name="status_pernikahan" required>
                                                     @if (is_null($nasabah->st))
@@ -288,7 +314,6 @@
                                                     <option value="J">JANDA</option>
                                                 </select>
                                             </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">PEKERJAAN</span>
                                                 <select type="text" class="form-control text-uppercase pekerjaan"
@@ -310,18 +335,29 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">PENDIDIKAN/ GELAR</span>
+                                                <select type="text" class="form-control text-uppercase gelar"
+                                                    name="pendidikan_kode">
+                                                    @if (is_null($nasabah->pendidikan_kode))
+                                                        <option value=""></option>
+                                                    @else
+                                                        <option value="{{ $nasabah->pendidikan_kode }}">
+                                                            {{ $nasabah->std }}
+                                                        </option>
+                                                    @endif
+
+                                                    @foreach ($pend as $item)
+                                                        <option value="{{ $item->kode_pendidikan }}">
+                                                            {{ $item->nama_pendidikan }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NAMA IBU KANDUNG</span>
                                                 <input type="text" class="form-control" name="nama_ibu_kandung"
                                                     id="nama_ibu_kandung" placeholder="ENTRI"
                                                     value="{{ old('nama_ibu_kandung', $nasabah->nama_ibu_kandung) }}"
                                                     required>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">REKENING BANK UMUM</span>
-                                                <input type="number" class="form-control" name="no_rekening"
-                                                    id="no_rekening" placeholder="ENTRI"
-                                                    value="{{ old('no_rekening', $nasabah->no_rekening) }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -330,7 +366,6 @@
                                                     placeholder="ENTRI" value="{{ old('no_telp', $nasabah->no_telp) }}"
                                                     required>
                                             </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">NO TELP DARURAT</span>
                                                 <input type="text" class="form-control" name="no_telp_darurat"
@@ -339,56 +374,7 @@
                                                     required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">NOMOR NPWP</span>
-                                                <input type="text" class="form-control" name="no_npwp" id="no_npwp"
-                                                    placeholder="ENTRI" value="{{ old('no_npwp', $nasabah->no_npwp) }}">
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">EMAIL ADDRES</span>
-                                                <input type="email" class="form-control" name="email" id="email"
-                                                    placeholder="ENTRI" value="{{ old('email', $nasabah->email) }}">
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 100%;float:left;">
-                                                <span class="fw-bold">SUMBER DANA</span>
-                                                <select type="text" class="form-control text-uppercase sumber_dana"
-                                                    style="width: 100%;" name="sumber_dana" required>
-                                                    @if (is_null($nasabah->sumber_dana))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->sumber_dana }}">
-                                                            {{ $nasabah->dana }}</option>
-                                                    @endif
-
-                                                    <option value="1">Hibah</option>
-                                                    <option value="2">Lain2</option>
-                                                    <option value="3">Penghasilan</option>
-                                                    <option value="4">Warisan</option>
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">PENGHASILAN UTAMA</span>
-                                                <select type="text" class="form-control text-uppercase penghasilan_u"
-                                                    style="width: 100%;" name="penghasilan_utama" required>
-                                                    @if (is_null($nasabah->penghasilan_utama))
-                                                        <option value="">--PILIH--</option>
-                                                    @else
-                                                        <option value="{{ $nasabah->penghasilan_utama }}">
-                                                            {{ $nasabah->hasil }}</option>
-                                                    @endif
-
-                                                    <option value="1">s/d 2,5 jt</option>
-                                                    <option value="2">s/d 2,5 - 5 jt</option>
-                                                    <option value="3">s/d 5 - 7,5 jt</option>
-                                                    <option value="4">s/d 7,5 - 10 jt</option>
-                                                    <option value="5"> 10 jt</option>
-                                                </select>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                            <div style="margin-top:5px;width: 100%;float:right;">
                                                 <span class="fw-bold">PENGHASILAN LAINNYA</span>
                                                 <select type="text" class="form-control text-uppercase penghasilan_l"
                                                     style="width: 100%;" name="penghasilan_lainnya" required>
@@ -407,6 +393,7 @@
                                                 </select>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 
