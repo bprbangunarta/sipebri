@@ -94,23 +94,29 @@
         <table>
             <tr>
                 <td class="text-center" width="27%">
-                    <img src="{{ asset('storage/image/photo/' . $cetak->photo_nasabah) }}"
-                        style="width:150px;hight:225px;border: 1px solid black;">
+                    @if ($cetak->photo_nasabah == null)
+                    <img src="{{ asset('assets/img/default.png') }}" style="width:150px;hight:225px;border: 1px solid black;">
+                    @else
+                        <img src="{{ asset('storage/image/photo/' . $cetak->photo_nasabah) }}" style="width:150px;hight:225px;border: 1px solid black;">
+                    @endif
                 </td>
                 <td class="text-center" width="27%">
-                    <img src="{{ asset('storage/image/photo/' . $cetak->photo) }}"
-                        style="width:150px;hight:225px;border: 1px solid black;">
+                    @if ($cetak->photo == null)
+                    <img src="{{ asset('assets/img/default.png') }}" style="width:150px;hight:225px;border: 1px solid black;">
+                    @else
+                        <img src="{{ asset('storage/image/photo/' . $cetak->photo) }}" style="width:150px;hight:225px;border: 1px solid black;">
+                    @endif
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td class="text-center">
                     <b>Photo Pemohon</b> <br>
-                    CICIH CAHYATI
+                    {{ $cetak->nama_nasabah }} 
                 </td>
                 <td class="text-center">
                     <b>Photo Pendamping</b> <br>
-                    SURYANA
+                    {{ $cetak->nama_pendamping }}
                 </td>
                 <td></td>
             </tr>
