@@ -235,7 +235,7 @@ Route::middleware('auth')->group(function () {
 
         // Cetak Notifikasi Kredit
         Route::get('/cetak/notifikasi-kredit', [CetakController::class, 'index_notifikasi_kredit'])->name('cetak.notifikasi.index');
-        
+
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 
@@ -503,6 +503,7 @@ Route::middleware('auth')->group(function () {
         Route::controller(FiduciaController::class)->group(function () {
             Route::group(['middleware' => ['role:Realisasi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/fiducia', 'index')->name('fiducia');
+                Route::get('/cetak/fiducia', 'cetak_fiducia')->name('cetak.fiducia');
             });
         });
     });

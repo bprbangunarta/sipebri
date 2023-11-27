@@ -1012,7 +1012,7 @@ class DataCetakController extends Controller
                     'a_administrasi.administrasi as biaya_admin',
                 )->first();
             //
-            // dd($cek);
+
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,

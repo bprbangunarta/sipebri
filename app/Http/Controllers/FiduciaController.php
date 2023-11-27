@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class FiduciaController extends Controller
 {
@@ -43,5 +44,28 @@ class FiduciaController extends Controller
         return view('cetak.fiducia.index', [
             'data' => $data
         ]);
+    }
+
+    public function cetak_fiducia(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $data = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->select(
+                    'data_pengajuan.*',
+                    'data_nasabah.*',
+                    'data_jaminan.*',
+                )
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                ->get();
+            dd($data);
+            return view('cetak.perjanjian-kredit.cetak-pk-kta', [
+                'data' => $data,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 }
