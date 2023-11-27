@@ -1096,4 +1096,19 @@ class DataCetakController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+    public function simpan_catatan_notifikasi_kredit(Request $request)
+    {
+        try {
+            $data = [
+                'keterangan' => $request->keterangan,
+                'rencana_realisasi' => $request->rencana_realisasi,
+            ];
+            // dd($request->all(), );
+            DB::table('data_notifikasi')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
 }

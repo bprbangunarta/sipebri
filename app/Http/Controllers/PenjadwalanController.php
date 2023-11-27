@@ -83,7 +83,7 @@ class PenjadwalanController extends Controller
         // ($cek_produk->$cek_produk == 'KTA'){
 
         // }
-        // dd($request, $cek_produk);
+        // dd($field);
         //Data Tracking
         $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
         if (!is_null($trc)) {

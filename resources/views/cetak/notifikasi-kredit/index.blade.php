@@ -72,12 +72,17 @@
 
                                                 <a data-toggle="modal" data-target="#generate-code"
                                                     data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Generate</span>
+                                                    <span class="btn bg-blue"
+                                                        style="width: 120px;hight:100%;">Generate</span>
                                                 </a>
 
                                                 <p style="margin-top:-5px;"></p>
-                                                <a data-toggle="modal" data-target="#catatan">
-                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Catatan</span>
+                                                <a data-toggle="modal" data-target="#catatan"
+                                                    data-id="{{ $item->kode_pengajuan }}">
+                                                    <span
+                                                        class="btn
+                                                    bg-yellow"
+                                                        style="width: 120px;hight:100%;">Catatan</span>
                                                 </a>
 
                                             </td>
@@ -153,7 +158,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">CATATAN</h4>
                 </div>
-                <form action="{{ Route('simpan.spk') }}" method="POST">
+                <form action="{{ Route('simpan.catatan_notifikasi_kredit') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
@@ -162,9 +167,7 @@
 
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">KETERANGAN BY PHONE</span>
-                                    <input type="text" id="kode" hidden>
-                                    <input type="text" id="nomor" name="nomor" hidden>
-                                    <input type="text" id="kode_produk" name="kode_produk" hidden>
+                                    <input type="text" id="kodes" name="kode_pengajuan" hidden>
 
                                     <textarea class="form-control" name="keterangan" id="keterangan" rows="5"></textarea>
                                 </div>
@@ -194,6 +197,13 @@
             // Mendapatkan nilai 'id' dari tombol yang diklik
             var kode = $(this).data('id');
             $('#kode').val(kode);
+        });
+
+        $("a[data-target='#catatan']").click(function() {
+            // Mendapatkan nilai 'id' dari tombol yang diklik
+            var kode = $(this).data('id');
+
+            $('#kodes').val(kode);
         });
     </script>
 @endpush
