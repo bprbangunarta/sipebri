@@ -448,10 +448,11 @@ class CetakController extends Controller
             )
             ->where('data_pengajuan.on_current', '0')
             ->where(function ($query) {
-                $query->orWhere('data_pengajuan.status', 'Lengkapi Data')
+                $query
+                    // ->orWhere('data_pengajuan.status', 'Lengkapi Data')
+                    // ->orWhere('data_pengajuan.status', 'Minta Otorisasi')
                     ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
-                    ->orWhere('data_pengajuan.status', 'Disetujui')
-                    ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
+                    ->orWhere('data_pengajuan.status', 'Disetujui');
             })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
