@@ -1111,7 +1111,9 @@ class Midle extends Model
             }
             $memorandum->plafon_usulan = end($dasu);
         } else {
-            $memorandum->plafon_usulan = 0;
+            $memorandum = (object) [
+                'plafon_usulan' => 0,
+            ];
         }
 
 
