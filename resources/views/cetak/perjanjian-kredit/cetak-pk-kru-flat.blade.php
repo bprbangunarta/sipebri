@@ -84,40 +84,41 @@
     <!-- Halaman 1 -->
     <div class="content" style="margin-top: -57px;">
 
-        <img src="http://sipebri.test/assets/img/pba.png" style="width:200px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <h4 style="text-align: center;font-size: 12pt;">
             <u>PERJANJIAN KREDIT</u> <br>
-            No. 042/KRU/XI/2023
+            No. {{ $data->no_spk }}
         </h4>
 
-        Pada hari ini Kamis, tanggal 16 November 2023 telah disepakati Perjanjian Kredit oleh dan antara :
+        Pada hari ini {{ $data->hari }}, tanggal {{ $data->tgl_bln_thn }} telah disepakati Perjanjian Kredit oleh dan
+        antara :
 
         <table>
             <tr>
                 <td width="2%">I. </td>
                 <td width="15%">Nama</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>NANO SUMARNA</td>
+                <td>{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Pekerjaan</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>WIRASWASTA</td>
+                <td>{{ $data->nama_pekerjaan }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tanda Pengenal</td>
                 <td class="text-center"> : </td>
-                <td>KTP Nomor : 3213070701980004</td>
+                <td>KTP Nomor : {{ $data->no_identitas }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td style="vertical-align: text-top;">Alamat</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td>KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG PROVINSI JAWA BARAT</td>
+                <td>{{ $data->alamat_ktp }}</td>
             </tr>
             <tr>
                 <td></td>

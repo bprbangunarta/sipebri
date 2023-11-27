@@ -149,14 +149,14 @@
                 <td class="text-center">
                     Menyetujui,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
-                        $data->kasi_kode }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        {{ $data->kasi_kode }}</font>
                 </td>
                 <td class="text-center">
                     Pemohon,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
-                        $data->surveyor_kode }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        {{ $data->surveyor_kode }}</font>
                 </td>
             </tr>
         </table>
@@ -172,28 +172,28 @@
             <tr>
                 <td>Nomot KTP</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->no_identitas }}</td>
+                <td>{{ $data->no_identitas_p }}</td>
             </tr>
             <tr>
                 <td style="width: 23%;">Nama Sesuai Identitas</td>
                 <td class="text-center" style="width: 3%;"> : </td>
-                <td>{{ $data->nama_nasabah }}</td>
+                <td>{{ $data->nama_pendamping }}</td>
             </tr>
             <tr>
                 <td>Tempat. Tanggal Lahir</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->tempat_lahir . ',' . ' ' . $data->tanggal_lahir }}</td>
+                <td>{{ $data->tempat_lahir_p . ',' . ' ' . $data->tanggal_lahir_p }}</td>
             </tr>
             <tr>
                 <td>Nomor Telepon</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->no_telp }}</td>
+                <td>{{ $data->no_telp_p }}</td>
             </tr>
             <tr>
                 <td style="position: absolute;vertical-align: text-top;">Alamat Sesuai Identitas</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
                 <td>
-                    {{ $data->alamat_ktp }}
+                    -
                 </td>
             </tr>
             <tr>
@@ -226,14 +226,14 @@
                 <td class="text-center">
                     Menyetujui,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
-                        $data->kasi_kode }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        {{ $data->kasi_kode }}</font>
                 </td>
                 <td class="text-center">
                     Pemohon,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">{{
-                        $data->surveyor_kode }}</font>
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        {{ $data->surveyor_kode }}</font>
                 </td>
             </tr>
         </table>

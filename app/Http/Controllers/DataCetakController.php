@@ -27,8 +27,23 @@ class DataCetakController extends Controller
             $enc = Crypt::decrypt($kode);
             $data = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                ->select('data_nasabah.no_identitas', 'data_nasabah.nama_nasabah', 'data_nasabah.tempat_lahir', 'data_nasabah.tanggal_lahir', 'data_nasabah.no_telp', 'data_nasabah.alamat_ktp', 'data_survei.kasi_kode', 'data_survei.surveyor_kode')
+                ->select(
+                    'data_pendamping.no_identitas as no_identitas_p',
+                    'data_pendamping.nama_pendamping',
+                    'data_pendamping.tempat_lahir as tempat_lahir_p',
+                    'data_pendamping.tanggal_lahir as tanggal_lahir_p',
+                    'data_pendamping.no_hp as no_telp_p',
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir',
+                    'data_nasabah.tanggal_lahir',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.alamat_ktp',
+                    'data_survei.kasi_kode',
+                    'data_survei.surveyor_kode'
+                )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             //Surveyor dan Kasi
@@ -1001,18 +1016,35 @@ class DataCetakController extends Controller
                 ->join('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
                 ->leftJoin('data_pekerjaan', 'data_nasabah.pekerjaan_kode', '=', 'data_pekerjaan.kode_pekerjaan')
                 ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
+                ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
+                ->leftJoin('bi_penggunaan_debitur', 'a_memorandum.bi_penggunaan_kode', '=', 'bi_penggunaan_debitur.sandi')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->where('data_pengajuan.on_current', 0)
                 ->select(
                     'data_pengajuan.*',
+                    'data_pengajuan.created_at as tgl_pengajuan',
                     'data_nasabah.*',
                     'data_spk.*',
                     'data_pekerjaan.*',
                     'data_pendamping.*',
+                    'a_memorandum.*',
+                    'bi_penggunaan_debitur.keterangan as penggunaan_debitur*',
+                    'data_pendamping.status as status_pendamping',
                     'a_administrasi.administrasi as biaya_admin',
                 )->first();
             //
+            //Hari
+            $hari = Carbon::today();
+            $cek->tgl_bln_thn = $hari->isoformat('D MMMM Y');
+            $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
+            $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
+            $cek->hari = $hari->isoformat('dddd');
 
+            // $targetDate = Carbon::createFromFormat('j F Y', $cek->tgl_pengajuan);
+            // $tenMonthsLater = $targetDate->addMonths(10);
+
+            // dd($cek, $targetDate);
+            $cek->produk_kode = 'KRU';
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
