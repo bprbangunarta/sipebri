@@ -52,7 +52,7 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center">{{ $no }}</td>
+                                            <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
@@ -76,7 +76,7 @@
                         <div class="box-footer clearfix">
                             <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
 
-                            {{ $data->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>
