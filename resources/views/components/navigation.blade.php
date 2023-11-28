@@ -238,10 +238,36 @@
             </li>
 
             <li
+                class="treeview {{ request()->is('') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-folder-open"></i>
+                    <span>Rekapitulasi</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li
+                        class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
+                        <a href="{{ route('flat') }}" title="Perhitungan Kredit">
+                            <i class="fa fa-calculator"></i>
+                            Simulasi Kredit
+                        </a>
+                    </li>
+                    <li class="{{ request()->is('perhitungan/simulasi') ? 'active' : '' }}">
+                        <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
+                            <i class="fa fa-calculator"></i>
+                            Simulasi Asuransi
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li
                 class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/notifikasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
-                    <span>Laporan</span>
+                    <span>Data Laporan</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>

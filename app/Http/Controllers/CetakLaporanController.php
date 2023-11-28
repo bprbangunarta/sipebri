@@ -368,6 +368,7 @@ class CetakLaporanController extends Controller
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
@@ -376,12 +377,17 @@ class CetakLaporanController extends Controller
             })
 
             ->select(
-                'data_pengajuan.*',
-                'data_nasabah.*',
+                'data_notifikasi.created_at as tgl_notifikasi',
+                'data_pengajuan.kode_pengajuan',
+                'data_notifikasi.no_notifikasi',
+                'data_nasabah.nama_nasabah',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'users.name as surveyor',
             )
             ->orderBy('data_pengajuan.created_at', 'desc');
-        $data = $query->paginate(10);
 
+        $data = $query->paginate(10);
         return view('laporan.rekap-notifikasi', [
             'data' => $data,
         ]);
