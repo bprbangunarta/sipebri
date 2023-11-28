@@ -506,7 +506,8 @@ class CetakController extends Controller
             })
             ->orWhere(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
-                    ->where('data_notifikasi.input_user', '=', $user);
+                    ->where('data_notifikasi.input_user', '=', $user)
+                    ->where('data_pengajuan.on_current', '=', '0');
             })
             ->select(
                 'data_notifikasi.*',

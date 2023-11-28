@@ -138,7 +138,8 @@
                 <td class="text-center" width="1%"> : </td>
                 <td style="text-align: justify;">
                     {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}
-                    ( <font style="text-transform: capitalize;">{{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah )
+                    ( <font style="text-transform: capitalize;">
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah )
                 </td>
             </tr>
             <tr>
@@ -293,8 +294,7 @@
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png"
-                            alt="" style="width: 100px;hight:100px;margin-top:-32px;">
+
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
