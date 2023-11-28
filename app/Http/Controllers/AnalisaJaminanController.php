@@ -29,10 +29,32 @@ class AnalisaJaminanController extends Controller
                 ->get();
 
             //
+            //Agunan Kendaraan
+            $jenis_kendaraan = DB::table('ja_kendaraan')->get();
+            $data_kendaraan = DB::table('da_kendaraan')->get();
+
+            //Agunan Tanah
+            $jenis_tanah = DB::table('ja_tanah')->get();
+            $data_tanah = DB::table('da_tanah')->get();
+
+            //Agunan Lain
+            $jenis_lain = DB::table('ja_lainnya')->get();
+            $data_lain = DB::table('da_lainnya')->get();
+
+            //Data dati
+            $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
+
             // dd($cek[0]);
             return view('staff.analisa.jaminan.kendaraan', [
+                'jenis_kendaraan' => $jenis_kendaraan,
+                'data_kendaraan' => $data_kendaraan,
+                'jenis_tanah' => $jenis_tanah,
+                'data_tanah' => $data_tanah,
+                'jenis_lain' => $jenis_lain,
+                'data_lain' => $data_lain,
                 'data' => $cek[0],
                 'jaminan' => $au,
+                'dati' => $kab,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -229,10 +251,32 @@ class AnalisaJaminanController extends Controller
                 ->orWhere('data_jaminan.jenis_jaminan', '=', 'Tanah')
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-            // dd($au);
+            //
+            //Agunan Kendaraan
+            $jenis_kendaraan = DB::table('ja_kendaraan')->get();
+            $data_kendaraan = DB::table('da_kendaraan')->get();
+
+            //Agunan Tanah
+            $jenis_tanah = DB::table('ja_tanah')->get();
+            $data_tanah = DB::table('da_tanah')->get();
+
+            //Agunan Lain
+            $jenis_lain = DB::table('ja_lainnya')->get();
+            $data_lain = DB::table('da_lainnya')->get();
+
+            //Data dati
+            $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
+
             return view('staff.analisa.jaminan.tanah', [
+                'jenis_kendaraan' => $jenis_kendaraan,
+                'data_kendaraan' => $data_kendaraan,
+                'jenis_tanah' => $jenis_tanah,
+                'data_tanah' => $data_tanah,
+                'jenis_lain' => $jenis_lain,
+                'data_lain' => $data_lain,
                 'data' => $cek[0],
                 'jaminan' => $au,
+                'dati' => $kab,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -283,9 +327,19 @@ class AnalisaJaminanController extends Controller
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
             // dd($au);
+
+            //Agunan Lain
+            $jenis_lain = DB::table('ja_lainnya')->get();
+            $data_lain = DB::table('da_lainnya')->get();
+
+            //Data dati
+            $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
             return view('staff.analisa.jaminan.lainnya', [
+                'jenis_lain' => $jenis_lain,
+                'data_lain' => $data_lain,
                 'data' => $cek[0],
                 'jaminan' => $au,
+                'dati' => $kab,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

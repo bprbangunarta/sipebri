@@ -249,4 +249,105 @@ class AgunanController extends Controller
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
     }
+
+    public function analis_simpan_kendaraan(Request $request)
+    {
+        try {
+            $cek = $request->validate([
+                'pengajuan_kode' => 'required',
+                'jenis_agunan_kode' => 'required',
+                'jenis_jaminan' => 'required',
+                'jenis_dokumen_kode' => 'required',
+                'no_dokumen' => 'required',
+                'atas_nama' => 'required',
+                'no_mesin' => 'required',
+                'no_polisi' => 'required',
+                'no_rangka' => 'required',
+                'tipe_kendaraan' => 'required',
+                'merek' => 'required',
+                'tahun' => 'required',
+                'warna' => 'required',
+                'kode_dati' => 'required',
+                'lokasi' => '',
+                'catatan' => '',
+            ]);
+
+            $cek['atas_nama'] = strtoupper($request->atas_nama);
+            $cek['merek'] = strtoupper($request->merek);
+            $cek['is_entry'] = 1;
+            $cek['otorisasi'] = 'A';
+            $cek['input_user'] = Auth::user()->code_user;
+            $cek['created_at'] = now();
+            // dd($request);
+            //Cek data kendaraan
+            if ($request->jenis_agunan_kode == '02') {
+                $jenis_agunan = 'Kendaraan Bermotor Roda 2';
+            } elseif ($request->jenis_agunan_kode == '03') {
+                $jenis_agunan = 'Kendaraan Bermotor Roda 4';
+            } elseif (is_null($request->jenis_agunan_kode)) {
+                $jenis_agunan = null;
+            }
+
+            $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
+
+            DB::table('data_jaminan')->insert($cek);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
+    }
+
+    public function analis_simpan_tanah(Request $request)
+    {
+        try {
+            $cek = $request->validate([
+                'pengajuan_kode' => 'required',
+                'jenis_jaminan' => 'required',
+                'jenis_agunan_kode' => 'required',
+                'jenis_dokumen_kode' => 'required',
+                'no_dokumen' => 'required',
+                'atas_nama' => 'required',
+                'luas' => 'required',
+                'kode_dati' => 'required',
+                'lokasi' => 'required',
+            ]);
+
+            $cek['is_entry'] = 1;
+            $cek['luas'] = str_replace('.', '', $request->luas);
+            $cek['created_at'] = now();
+            $cek['otorisasi'] = 'A';
+            $cek['input_user'] = Auth::user()->code_user;
+            // dd($cek);
+            DB::table('data_jaminan')->insert($cek);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
+    }
+
+    public function analis_simpan_lain(Request $request)
+    {
+        try {
+            $cek = $request->validate([
+                'pengajuan_kode' => 'required',
+                'jenis_jaminan' => 'required',
+                'jenis_agunan_kode' => 'required',
+                'jenis_dokumen_kode' => 'required',
+                'no_dokumen' => 'required',
+                'atas_nama' => 'required',
+                'lokasi' => '',
+                'catatan' => '',
+            ]);
+
+            $cek['is_entry'] = 1;
+            $cek['otorisasi'] = 'A';
+            $cek['input_user'] = Auth::user()->code_user;
+            $cek['created_at'] = now();
+            // dd($cek);
+            DB::table('data_jaminan')->insert($cek);
+            return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal ditambahkan');
+        }
+    }
 }
