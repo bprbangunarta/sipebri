@@ -78,6 +78,7 @@ class DataCetakController extends Controller
 
     public function notifikasi_kredit(Request $request)
     {
+        $name = request('name');
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -91,6 +92,11 @@ class DataCetakController extends Controller
                     ->where('data_survei.surveyor_kode', '=', $user)
                     ->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_spk.no_spk', '=', null);
+            })
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
             ->select(
                 'data_notifikasi.*',
@@ -335,7 +341,7 @@ class DataCetakController extends Controller
         $data = $cek->paginate(10);
         for ($i = 0; $i < $count; $i++) {
             if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                // $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
         dd($data);
