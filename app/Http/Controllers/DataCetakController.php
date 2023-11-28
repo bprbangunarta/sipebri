@@ -790,8 +790,8 @@ class DataCetakController extends Controller
                     'total_taksasi' => 0,
                 ];
 
-                for ($i = 0; $i < count($keuangan); $i++) {
-                    $keuangan[$i]->total_taksasi = 0;
+                for ($i = 0; $i < count($jaminan); $i++) {
+                    $jaminan[$i]->total_taksasi = 0;
                 }
             }
 
@@ -803,7 +803,7 @@ class DataCetakController extends Controller
             $memorandum = Midle::cetak_data_memorandum($enc);
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
-            // dd($data);
+            // dd($collateral);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

@@ -763,6 +763,7 @@ class Midle extends Model
         }
 
         $totaltaksasi = array_sum($tak);
+
         if (count($taksasi) != 0 && $totaltaksasi != 0) {
             $hasiltaksasi = (intval($plafon) / $totaltaksasi) * 100;
         } else {
@@ -975,6 +976,7 @@ class Midle extends Model
     public static function cetak_data_analisa5C_collateral($data)
     {
         $collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $data)->first();
+
         if (!is_null($collateral)) {
             $analisa5C = (object)Data::a5c_collateral($collateral);
         } else {
@@ -992,6 +994,7 @@ class Midle extends Model
                 'evaluasi_collateral' => null,
             ];
         }
+
         return $analisa5C;
     }
 
