@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PK KRU - FLAT</title>
+    <title>Surat Perjanjian Kredit</title>
     <style>
         @page {
             size: A4;
@@ -545,7 +545,7 @@
             <tr>
                 <td class="text-center" width="40%">
                     B&nbsp;A&nbsp;N&nbsp;K
-                    <p style="margin-top:70px;"></p>
+                    <p style="margin-top:95px;"></p>
                     MOHAMAD MUKSIN
                     <br>
                     &nbsp;
@@ -553,7 +553,7 @@
                 <td></td>
                 <td class="text-center" width="40%">
                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
-                    <p style="margin-top:70px;"></p>
+                    <p style="margin-top:95px;"></p>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                     </u>
@@ -564,22 +564,22 @@
 
             <tr>
                 <td class="text-center" width="40%">
-                    <br><br>
+                    <p style="margin-top:80px;"></p>
                     &nbsp;
                     <br>
                     SAKSI 2, <br>
-                    <p style="margin-top:70px;"></p>
+                    <p style="margin-top:60px;"></p>
                     (<u>...........................................</u>)
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
-                    <br><br>
+                    <p style="margin-top:80px;"></p>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_pendamping }}</font>
                     </u>
                     <br>
                     SAKSI 1, <br>
-                    <p style="margin-top:70px;"></p>
+                    <p style="margin-top:65px;"></p>
                     (<u>...........................................</u>)
                 </td>
             </tr>

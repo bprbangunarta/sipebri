@@ -126,7 +126,7 @@
                     Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
                     {{ $data->status_pendamping }}.' '.{{ $data->nama_pendamping }} yang ikut serta menandatangani
                     perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
-                    Tingkat Perusahaan {{ $data->tempat_kerja }}. Untuk selanjutnya disebut PEMINJAM.
+                    Tingkat Perusahaan {{ $data->nama_resort }}. Untuk selanjutnya disebut PEMINJAM.
                 </td>
             </tr>
 
@@ -251,9 +251,14 @@
                 Pasal 5 <br>
                 PELUNASAN SEBELUM JATUH TEMPO
             </center>
+
+            @if ( $data->kode_resort == "091" )
+            PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar 1(satu)  angsuran bunga serta hutang denda.
+            @else
             PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
             cara melunasi seluruh sisa pokok dan bunga yang di hitung sesuai dengan jangka waktu pinjaman serta hutang
             denda.
+            @endif
         </p>
 
         <p style="text-align: justify;">
@@ -434,7 +439,7 @@
             <tr>
                 <td class="text-center" width="40%">
                     B&nbsp;A&nbsp;N&nbsp;K
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:95px;"></p>
                     MOHAMAD MUKSIN
                     <br>
                     &nbsp;
@@ -442,7 +447,7 @@
                 <td></td>
                 <td class="text-center" width="40%">
                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:95px;"></p>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                     </u>
@@ -453,22 +458,22 @@
 
             <tr>
                 <td class="text-center" width="40%">
-                    <br><br>
+                    <p style="margin-top:80px;"></p>
                     &nbsp;
                     <br>
                     SAKSI 2, <br>
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:60px;"></p>
                     (<u>...........................................</u>)
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
-                    <br><br>
+                    <p style="margin-top:80px;"></p>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_pendamping }}</font>
                     </u>
                     <br>
                     SAKSI 1, <br>
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:65px;"></p>
                     (<u>...........................................</u>)
                 </td>
             </tr>
