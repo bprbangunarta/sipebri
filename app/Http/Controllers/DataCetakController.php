@@ -344,7 +344,7 @@ class DataCetakController extends Controller
                 // $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-        dd($data);
+
         return view('cetak.realisasi-kredit.index', [
             'data' => $data
         ]);
