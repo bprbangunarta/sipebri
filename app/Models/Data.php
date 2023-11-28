@@ -678,7 +678,10 @@ class Data extends Model
 
     public static function a5c_collateral($data)
     {
-        // dd($data);
+        if (is_null($data)) {
+            return null;
+        }
+
         if ($data->agunan_utama == 1) {
             $agunan_utama = 'Milik Sendiri';
         } elseif ($data->agunan_utama == 3) {

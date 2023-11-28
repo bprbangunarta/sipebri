@@ -975,7 +975,23 @@ class Midle extends Model
     public static function cetak_data_analisa5C_collateral($data)
     {
         $collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $data)->first();
-        $analisa5C = (object)Data::a5c_collateral($collateral);
+        if (!is_null($collateral)) {
+            $analisa5C = (object)Data::a5c_collateral($collateral);
+        } else {
+            $analisa5C = (object)[
+                'agunan_utama' => null,
+                'agunan_tambahan' => null,
+                'legalitas_agunan' => null,
+                'legalitas_agunan_tambahan' => null,
+                'mudah_diuangkan' => null,
+                'stabilitas_harga' => null,
+                'lokasi_shm' => null,
+                'kondisi_kendaraan' => null,
+                'aspek_hukum' => null,
+                'taksasi_agunan' => null,
+                'evaluasi_collateral' => null,
+            ];
+        }
         return $analisa5C;
     }
 
@@ -1074,17 +1090,17 @@ class Midle extends Model
     public static function cetak_data_memorandum($data)
     {
         $memorandum = DB::table('a_memorandum')
-            ->join('data_pengajuan', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->join('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
-            ->join('a5c_capacity', 'data_pengajuan.kode_pengajuan', '=', 'a5c_capacity.pengajuan_kode')
-            ->join('a5c_character', 'data_pengajuan.kode_pengajuan', '=', 'a5c_character.pengajuan_kode')
-            ->join('a5c_collateral', 'data_pengajuan.kode_pengajuan', '=', 'a5c_collateral.pengajuan_kode')
-            ->join('a5c_condition', 'data_pengajuan.kode_pengajuan', '=', 'a5c_condition.pengajuan_kode')
-            ->join('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
-            ->join('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
-            ->join('bi_sumber_dana_pelunasan', 'a_memorandum.bi_sumber_pelunasan_kode', '=', 'bi_sumber_dana_pelunasan.sandi')
+            ->leftJoin('data_pengajuan', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
+            ->leftJoin('a5c_capacity', 'data_pengajuan.kode_pengajuan', '=', 'a5c_capacity.pengajuan_kode')
+            ->leftJoin('a5c_character', 'data_pengajuan.kode_pengajuan', '=', 'a5c_character.pengajuan_kode')
+            ->leftJoin('a5c_collateral', 'data_pengajuan.kode_pengajuan', '=', 'a5c_collateral.pengajuan_kode')
+            ->leftJoin('a5c_condition', 'data_pengajuan.kode_pengajuan', '=', 'a5c_condition.pengajuan_kode')
+            ->leftJoin('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
+            ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
+            ->leftJoin('bi_sumber_dana_pelunasan', 'a_memorandum.bi_sumber_pelunasan_kode', '=', 'bi_sumber_dana_pelunasan.sandi')
             ->select(
                 'a_memorandum.*',
                 'data_pengajuan.*',
@@ -1104,12 +1120,16 @@ class Midle extends Model
         //
 
         $usulan = DB::table('data_usulan')->where('pengajuan_kode', $data)->get();
-
-        $dasu = [];
-        for ($i = 0; $i < count($usulan); $i++) {
-            $dasu[] = $usulan[$i]->usulan_plafon;
+        // dd($usulan);
+        if (count($usulan) != 0) {
+            $dasu = [];
+            for ($i = 0; $i < count($usulan); $i++) {
+                $dasu[] = $usulan[$i]->usulan_plafon;
+            }
+            $memorandum->plafon_usulan = end($dasu);
+        } else {
+            $memorandum->plafon_usulan = 0;
         }
-        $memorandum->plafon_usulan = end($dasu);
 
 
 

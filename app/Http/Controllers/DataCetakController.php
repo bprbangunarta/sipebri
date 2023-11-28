@@ -1027,6 +1027,7 @@ class DataCetakController extends Controller
                     'data_spk.*',
                     'data_pekerjaan.*',
                     'data_pendamping.*',
+                    'data_pendamping.no_identitas as no_identitas_p',
                     'a_memorandum.*',
                     'a_administrasi.*',
                     'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
@@ -1058,7 +1059,7 @@ class DataCetakController extends Controller
 
             // $cek->produk_kode = 'KRU';
             // $cek->metode_rps = 'EFEKTIF MUSIMAN';
-            // dd($enc);
+            // dd($cek);
             // //Done
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
