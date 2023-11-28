@@ -33,6 +33,7 @@
                                         <th class="text-center">INFORMASI NASABAH</th>
                                         <th class="text-center" width="40%">ALAMAT</th>
                                         <th class="text-center" width="17%">PENGAJUAN</th>
+                                        <th class="text-center" width="10%">DIRECT</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -64,6 +65,17 @@
                                                 <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jk }} BULAN <br>
                                                 <b>PLAFON :</b> {{ $item->plafon }}
+                                            </td>
+
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a data-toggle="modal" data-target="#tolak">
+                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">Ditolak</span>
+                                                </a>
+
+                                                <p style="margin-top:-5px;"></p>
+                                                <a data-toggle="modal" data-target="#batal">
+                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Dibatalkan</span>
+                                                </a>
                                             </td>
                                             
                                             <td class="text-center" style="vertical-align: middle;">
@@ -141,6 +153,96 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
+                                    <textarea class="form-control text-uppercase" name="keterangan" id=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tolak">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">TOLAK PENGAJUAN</h4>
+                </div>
+                <form action="#" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row">
+
+                                <div style="margin-top: -15px;">
+                                    <span class="fw-bold">KODE PENGAJUAN</span>
+                                    <input type="text" id="id" name="id" hidden>
+                                    <input class="form-control text-uppercase" type="text" value="123456789S"
+                                        name="kode_pengajuan" id="kd_pengajuan" readonly>
+                                    <input type="text" value="" name="tgl_survei" id="tgl_survei" hidden>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">NAMA NASABAH</span>
+                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                        type="text" value="ZULFADLI RIZAL" readonly>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">ALASAN PENOLAKAN</span>
+                                    <textarea class="form-control text-uppercase" name="keterangan" id=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="batal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">BATAL PENGAJUAN</h4>
+                </div>
+                <form action="#" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row">
+
+                                <div style="margin-top: -15px;">
+                                    <span class="fw-bold">KODE PENGAJUAN</span>
+                                    <input type="text" id="id" name="id" hidden>
+                                    <input class="form-control text-uppercase" type="text" value="123456789S"
+                                        name="kode_pengajuan" id="kd_pengajuan" readonly>
+                                    <input type="text" value="" name="tgl_survei" id="tgl_survei" hidden>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">NAMA NASABAH</span>
+                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                        type="text" value="ZULFADLI RIZAL" readonly>
+                                </div>
+
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">ALASAN PEMBATALAN</span>
                                     <textarea class="form-control text-uppercase" name="keterangan" id=""></textarea>
                                 </div>
                             </div>
