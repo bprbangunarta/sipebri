@@ -11,6 +11,19 @@
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
                             <h3 class="box-title">NOTIFIKASI KREDIT</h3>
+
+                            <div class="box-tools">
+                                <form href="{{ route('notifikasi_kredit') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="{{ request('name') }}" placeholder="Search">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -98,6 +111,11 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
             </div>
