@@ -40,7 +40,7 @@
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center" width="10%">TANGGAL</th>
                                         <th class="text-center" width="10%">KODE</th>
-                                        <th class="text-center" width="10%">NO. SPK</th>
+                                        <th class="text-center" width="10%">NO. NOTIFIKASI</th>
                                         <th class="text-center">NAMA LENGKAP</th>
                                         <th class="text-center" width="10%">PLAFON</th>
                                         <th class="text-center">WILAYAH</th>
