@@ -76,6 +76,7 @@ class KomiteController extends Controller
                 }
             }
         }
+
         $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first('role_name');
         return view('komite.index', [
             'data' => $data,
