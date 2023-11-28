@@ -28,6 +28,7 @@ class DashboardController extends Controller
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->leftJoin('data_tracking', 'data_pengajuan.kode_pengajuan', '=', 'data_tracking.pengajuan_kode')
+            ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
@@ -51,7 +52,7 @@ class DashboardController extends Controller
                 'users.username as surveyor'
             )
             ->where('data_pengajuan.status', 'Disetujui')
-            ->whereDate('data_tracking.selesai', now()->format('Y-m-d'))
+            ->whereDate('data_spk.created_at', now()->format('Y-m-d'))
             ->where('data_pengajuan.on_current', '1')
             ->orderBy('data_pengajuan.created_at', 'asc');
         //
