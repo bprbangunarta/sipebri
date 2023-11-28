@@ -360,6 +360,7 @@ class KonfirmasiController extends Controller
 
             //By pas jika produk KTA
             $pengajuan = DB::table('data_pengajuan')->where('kode_pengajuan', $enc)->first();
+
             if ($pengajuan->produk_kode == 'KTA') {
                 $name = 'ADM';
                 $length = 5;
@@ -387,22 +388,19 @@ class KonfirmasiController extends Controller
                     'created_at' => now(),
                 ];
 
+                $data3 = ['tracking' => 'Persetujuan Komite'];
+                $data2 = ['analisa_kredit' => now()];
+
                 $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
                 if (is_null($adm)) {
-                    DB::table('a_administrasi')->insert($data);
-
-                    $data3 = ['tracking' => 'Persetujuan Komite'];
-                    $data2 = ['analisa_kredit' => now()];
-
-                    DB::transaction(function () use ($enc, $data3, $data2) {
+                    DB::transaction(function () use ($enc, $data, $data3, $data2) {
                         DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
+                        DB::table('a_administrasi')->insert($data);
                         Pengajuan::where('kode_pengajuan', $enc)->update($data3);
                     });
-
-                    return redirect()->route('komite.kredit')->with('success', 'Konfirmasi berhasil');
                 }
             }
-            // dd($data, $adm);
+
 
             $data = ['tracking' => 'Persetujuan Komite'];
             $data2 = ['analisa_kredit' => now()];
