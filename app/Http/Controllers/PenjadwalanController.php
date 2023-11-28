@@ -95,7 +95,7 @@ class PenjadwalanController extends Controller
                 DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
                 Survei::where('pengajuan_kode', $request->kode_pengajuan)->update($filteredArray);
             });
-            return redirect()->route('permohonan.analisa')->with('success', "Penjadwalan telah dibuat");
+            return redirect()->route('permohonan.analisa')->with('success', "Berhasil Menambahkan Data");
         }
 
         //Data Tracking
