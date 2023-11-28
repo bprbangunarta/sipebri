@@ -692,11 +692,13 @@ class DataCetakController extends Controller
         $usul3 = "Kabag Analis";
         $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
-            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
-            $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
-            $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
-            $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
-            $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
+                $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+            }
         }
 
         if ($user->role_name == 'Customer Service') {
@@ -861,11 +863,13 @@ class DataCetakController extends Controller
         $usul3 = "Kabag Analis";
         $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
-            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-            $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
-            $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
-            $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
-            $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+            }
         }
         // dd($data);
         return view('cetak.penolakan-kredit.penolakan_kredit', [
@@ -932,11 +936,13 @@ class DataCetakController extends Controller
         $usul4 = "Direksi";
         // dd($user->role_name);
         for ($i = 0; $i < $count; $i++) {
-            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
-            $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
-            $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
-            $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
-            $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+            if ($data->isNotEmpty()) {
+                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
+                $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
+                $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
+                $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
+                $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4);
+            }
         }
 
         if ($user->role_name == 'Customer Service') {
