@@ -692,7 +692,7 @@ class DataCetakController extends Controller
         $usul3 = "Kabag Analis";
         $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
-            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
             $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
             $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
             $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
@@ -703,7 +703,7 @@ class DataCetakController extends Controller
             $usul1 = "Customer Service";
             for ($i = 0; $i < $count; $i++) {
                 if ($data->isNotEmpty()) {
-                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
                     $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
                     $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
                     $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
@@ -714,7 +714,7 @@ class DataCetakController extends Controller
             $usul1 = "Kepala Kantor Kas";
             for ($i = 0; $i < $count; $i++) {
                 if ($data->isNotEmpty()) {
-                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
                     $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
                     $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
                     $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
@@ -930,8 +930,9 @@ class DataCetakController extends Controller
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
         $usul4 = "Direksi";
+        // dd($user->role_name);
         for ($i = 0; $i < $count; $i++) {
-            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+            $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
             $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
             $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
             $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
@@ -942,7 +943,7 @@ class DataCetakController extends Controller
             $usul1 = "Customer Service";
             for ($i = 0; $i < $count; $i++) {
                 if ($data->isNotEmpty()) {
-                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
                     $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
                     $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
                     $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
@@ -953,7 +954,7 @@ class DataCetakController extends Controller
             $usul1 = "Kepala Kantor Kas";
             for ($i = 0; $i < $count; $i++) {
                 if ($data->isNotEmpty()) {
-                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
                     $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
                     $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
                     $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);
