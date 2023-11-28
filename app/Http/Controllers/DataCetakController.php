@@ -1026,12 +1026,18 @@ class DataCetakController extends Controller
                     'data_nasabah.*',
                     'data_spk.*',
                     'data_pekerjaan.*',
+<<<<<<< HEAD
                     'data_pendamping.*',
                     'data_pendamping.no_identitas as no_identitas_p',
+=======
+                    // 'data_pendamping.*',
+>>>>>>> 88d4c1cbbbbaf8a6b4f60131c8fe906654e3751b
                     'a_memorandum.*',
                     'a_administrasi.*',
                     'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                     'data_pendamping.status as status_pendamping',
+                    'data_pendamping.no_identitas as no_identitas_pendamping',
+                    'data_pendamping.nama_pendamping',
                     'a_administrasi.administrasi as biaya_admin',
                 )->first();
             //

@@ -92,13 +92,19 @@
                 </a>
             </li>
 
-            @if ($data->produk_kode != 'KTA')
+            <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
+                <a href="{{ route('administrasi.index', ['pengajuan' => $pengajuan]) }}">
+                    <i class="fa fa-folder-o"></i> Administrasi
+                </a>
+            </li>
+
+            {{-- @if ($data->produk_kode != 'KTA')
                 <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
                     <a href="{{ route('administrasi.index', ['pengajuan' => $pengajuan]) }}">
                         <i class="fa fa-folder-o"></i> Administrasi
                     </a>
                 </li>
-            @endif
+            @endif --}}
 
             <li class="{{ request()->is('themes/analisa/konfirmasi/analisa') ? 'active' : '' }}">
                 <a href="{{ route('konfirmasi.analisa', ['pengajuan' => $pengajuan]) }}">
