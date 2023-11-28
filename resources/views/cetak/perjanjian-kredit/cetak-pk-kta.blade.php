@@ -439,7 +439,7 @@
             <tr>
                 <td class="text-center" width="40%">
                     B&nbsp;A&nbsp;N&nbsp;K
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:95px;"></p>
                     MOHAMAD MUKSIN
                     <br>
                     &nbsp;
@@ -447,7 +447,7 @@
                 <td></td>
                 <td class="text-center" width="40%">
                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:95px;"></p>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                     </u>
@@ -458,22 +458,22 @@
 
             <tr>
                 <td class="text-center" width="40%">
-                    <br>
+                    <p style="margin-top:80px;"></p>
                     &nbsp;
                     <br>
                     SAKSI 2, <br>
-                    <p style="margin-top:120px;"></p>
+                    <p style="margin-top:60px;"></p>
                     (<u>...........................................</u>)
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
-                    <br>
+                    <p style="margin-top:80px;"></p>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_pendamping }}</font>
                     </u>
                     <br>
                     SAKSI 1, <br>
-                    <p style="margin-top:120px;"></p>
+                    <p style="margin-top:65px;"></p>
                     (<u>...........................................</u>)
                 </td>
             </tr>
