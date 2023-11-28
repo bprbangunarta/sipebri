@@ -269,9 +269,9 @@ class PengajuanController extends Controller
             // mencari nama
 
             if (!is_null($peng->resort_kode)) {
-                $query = DB::connection('sqlsrv')->table('resort')->select('kode', 'ket')
-                    ->where('kode', $peng->resort_kode ?? null)->first();
-                $peng->nama_resort = $query->ket;
+                $query = DB::table('v_resort')->select('kode_resort', 'nama_resort')
+                    ->where('kode_resort', $peng->resort_kode ?? null)->first();
+                $peng->nama_resort = $query->nama_resort;
             } else {
                 $peng->nama_resort = null;
             }
@@ -286,10 +286,7 @@ class PengajuanController extends Controller
             $peng->auth = $user[0]->code_user;
 
             //Data resort
-            $resort = DB::connection('sqlsrv')
-                ->table('resort')
-                ->select('kode', 'ket')
-                ->get();
+            $resort = DB::table('v_resort')->select('kode_resort', 'nama_resort')->get();
 
             $nasabah[0]->kd_nasabah = Crypt::encrypt($nasabah[0]->kode_nasabah);
             $peng->kode_pengajuan = Crypt::encrypt($peng->kode_pengajuan);

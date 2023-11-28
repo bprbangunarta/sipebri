@@ -182,7 +182,7 @@
                                                     @endif
 
                                                     @foreach ($resort as $item)
-                                                        <option value="{{ $item->kode }}">{{ $item->ket }}
+                                                        <option value="{{ $item->kode_resort }}">{{ $item->nama_resort }}
                                                         </option>
                                                     @endforeach
                                                 </select>

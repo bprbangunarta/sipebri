@@ -1104,7 +1104,7 @@ class DataCetakController extends Controller
                     'agunan' => $cek_jaminan,
                 ]);
             } else {
-                return view('cetak.perjanjian-kredit.cetak-pk-kta', [
+                return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
                 ]);
             }
