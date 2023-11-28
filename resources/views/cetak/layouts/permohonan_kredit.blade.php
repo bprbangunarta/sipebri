@@ -584,7 +584,7 @@
                     <td style="width:50%">
                         <p style="margin-top:65px;"></p>
                         <center>
-                            {{ $data->nama_nasabah }}
+                            {{ $data->nama_pendamping }}
                             <u>...............................................................</u> <br>
                             Tanggal :................................................
                         </center>
@@ -592,7 +592,7 @@
                     <td>
                         <p style="margin-top:65px;"></p>
                         <center>
-                            {{ $data->nama_pendamping }}
+                            {{ $data->nama_nasabah }}
                             <u>...............................................................</u> <br>
                             Tanggal :................................................
                         </center>
