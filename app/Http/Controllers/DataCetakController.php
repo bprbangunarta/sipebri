@@ -1074,9 +1074,7 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-            $cek->produk_kode = 'KBT';
-            $cek->metode_rps = 'EFEKTIF MUSIMAN';
-            // dd($cek);
+
             // //Done
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
