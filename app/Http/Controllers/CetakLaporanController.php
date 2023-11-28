@@ -13,10 +13,15 @@ class CetakLaporanController extends Controller
         $name = request('name');
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where('data_pengajuan.status', 'Disetujui')
+
             ->where(function ($query) use ($name) {
-                $query->orWhere('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%');
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
             ->select(
                 'data_pengajuan.*',
