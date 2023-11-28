@@ -705,6 +705,7 @@
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/jaminan_kendaraan.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script>
         $('a[data-target="#modal-foto-kendaraan"]').click(function() {

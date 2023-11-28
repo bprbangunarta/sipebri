@@ -45,7 +45,6 @@ class AnalisaController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-        // dd($data);
         return view('staff.analisa.index', [
             'data' => $data
         ]);
