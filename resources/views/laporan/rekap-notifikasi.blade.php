@@ -55,15 +55,15 @@
                                     @forelse ($data as $item)
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                        <td class="text-center">2023-11-28</td>
-                                        <td class="text-center">00339987</td>
-                                        <td class="text-center">1734/KTA/XI/2023</td>
-                                        <td>TIA TRI MEGA JULIANA</td>
-                                        <td class="text-right">3.0000.000</td>
-                                        <td class="text-center">SUKAMANDI</td>
-                                        <td>WAWAN IRAWAN</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($item->tgl_notifikasi)->format('Y-m-d') }}</td>
+                                        <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                        <td class="text-center">{{ $item->no_notifikasi }}</td>
+                                        <td>{{ $item->nama_nasabah }}</td>
+                                        <td class="text-right">{{ number_format($item->plafon, 0, ',', '.');}}</td>
+                                        <td class="text-center">{{ $item->kode_kantor }}</td>
+                                        <td>{{ $item->surveyor }}</td>
                                         <td class="text-center">
-                                            <a href="" class="btn-circle btn-sm btn-primary">
+                                            <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kode_pengajuan]) }}" target="_blank"" class="btn-circle btn-sm btn-primary">
                                                 <i class="fa fa-print"></i>
                                             </a>
                                         </td>
@@ -83,7 +83,7 @@
                         <div class="box-footer clearfix">
                             <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
 
-                            {{ $data->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>

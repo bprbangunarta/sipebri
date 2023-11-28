@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            {{ $data->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>
