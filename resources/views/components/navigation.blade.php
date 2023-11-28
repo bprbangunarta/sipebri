@@ -238,7 +238,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/notifikasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -253,6 +253,14 @@
                             Fasilitas Kredit
                         </a>
                     </li>
+
+                    <li class="{{ request()->is('laporan/notifikasi') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.notifikasi') }}">
+                            <i class="fa fa-bell"></i>
+                            Rekap Notifikasi
+                        </a>
+                    </li>
+
                     <li class="{{ request()->is('laporan/realisasi', 'laporan/realisasi/kredit') ? 'active' : '' }}">
                         <a href="/laporan/realisasi">
                             <i class="fa fa-flag"></i>
@@ -277,6 +285,7 @@
                             Survey dan Analisa
                         </a>
                     </li>
+
                     {{-- <li class="{{ request()->is('laporan/penjadwalan') ? 'active' : '' }}">
                         <a href="/laporan/penjadwalan">
                             <i class="fa fa-calendar"></i>

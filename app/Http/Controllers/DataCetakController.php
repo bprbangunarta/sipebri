@@ -1027,11 +1027,6 @@ class DataCetakController extends Controller
                     'data_spk.*',
                     'data_pekerjaan.*',
 
-                    'data_pendamping.*',
-                    'data_pendamping.no_identitas as no_identitas_p',
-
-                    // 'data_pendamping.*',
-
                     'a_memorandum.*',
                     'a_administrasi.*',
                     'bi_penggunaan_debitur.keterangan as penggunaan_debitur',

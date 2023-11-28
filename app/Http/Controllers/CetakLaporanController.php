@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class CetakLaporanController extends Controller
 {
@@ -353,6 +354,35 @@ class CetakLaporanController extends Controller
         $data = $query->paginate(7);
 
         return view('laporan.penolakan', [
+            'data' => $data,
+        ]);
+    }
+
+
+    public function laporan_notifikasi(Request $request)
+    {
+        $name = request('name');
+
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+            )
+            ->orderBy('data_pengajuan.created_at', 'desc');
+        $data = $query->paginate(10);
+
+        return view('laporan.rekap-notifikasi', [
             'data' => $data,
         ]);
     }
