@@ -306,10 +306,25 @@ class AnalisaMemorandumController extends Controller
             $cek[0]->keuangan = $keuangan;
             $cek[0]->laba_usaha_pertanian = $saving ?? null;
 
-            $hasiltaksasi = Midle::taksasi_agunan($enc, (int)$cek[0]->plafon);
+            // $hasiltaksasi = Midle::taksasi_agunan($enc, (int)$cek[0]->plafon);
+            //Taksasi
+            $taksasi = DB::table('data_jaminan')->where('pengajuan_kode', $enc)->get();
+            //total semua nilai taksasi
+            $tak = [];
+            for ($i = 0; $i < count($taksasi); $i++) {
+                $tak[] = $taksasi[$i]->nilai_taksasi ?? 0;
+            }
+
+            $totaltaksasi = array_sum($tak);
+
+            if (count($taksasi) != 0 && $totaltaksasi != 0) {
+                $hasiltaksasi = (intval((int)$cek[0]->plafon) / $totaltaksasi) * 100;
+            } else {
+                $hasiltaksasi = 0;
+            }
 
             $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? 0;
-            // dd($usulan);
+
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,
