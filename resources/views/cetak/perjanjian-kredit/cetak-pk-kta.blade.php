@@ -251,9 +251,14 @@
                 Pasal 5 <br>
                 PELUNASAN SEBELUM JATUH TEMPO
             </center>
+
+            @if ( $data->tempat_kerja == "PT HYUNDONG" )
+            PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar 1(satu)  angsuran bunga serta hutang denda.
+            @else
             PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
             cara melunasi seluruh sisa pokok dan bunga yang di hitung sesuai dengan jangka waktu pinjaman serta hutang
             denda.
+            @endif
         </p>
 
         <p style="text-align: justify;">
@@ -453,22 +458,22 @@
 
             <tr>
                 <td class="text-center" width="40%">
-                    <br><br>
+                    <br>
                     &nbsp;
                     <br>
                     SAKSI 2, <br>
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:120px;"></p>
                     (<u>...........................................</u>)
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">
-                    <br><br>
+                    <br>
                     <u style="text-transform: uppercase;">
                         <font style="text-transform: uppercase;">{{ $data->nama_pendamping }}</font>
                     </u>
                     <br>
                     SAKSI 1, <br>
-                    <p style="margin-top:100px;"></p>
+                    <p style="margin-top:120px;"></p>
                     (<u>...........................................</u>)
                 </td>
             </tr>
