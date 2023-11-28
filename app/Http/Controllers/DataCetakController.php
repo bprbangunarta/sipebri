@@ -304,6 +304,8 @@ class DataCetakController extends Controller
     public function realisasi_kredit()
     {
 
+        $name = request('name');
+
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -316,6 +318,14 @@ class DataCetakController extends Controller
             ->where('data_pengajuan.on_current', '1')
             ->whereNull('data_tracking.selesai')
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_spk.pengajuan_kode')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
             ->select(
                 'data_spk.*',
                 'data_pengajuan.*',
