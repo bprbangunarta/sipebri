@@ -89,6 +89,11 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="box-footer clearfix">
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                        </div>
+                        
                     </div>
                 </div>
             </div>
