@@ -541,6 +541,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');
 
         Route::get('/laporan/penjadwalan', 'laporan_penjadwalan')->name('laporan.penjadwalan');
+
+        Route::get('/laporan/notifikasi', 'laporan_notifikasi')->name('laporan.notifikasi');
     });
 
     // Export Data
