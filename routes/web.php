@@ -238,7 +238,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/notifikasi-kredit', [CetakController::class, 'index_notifikasi_kredit'])->name('cetak.notifikasi.index');
 
         // Cetak Perjanjian Kredit
-        Route::get('/cetak/perjanjian-kredit', [CetakController::class, 'index_perjanjian_kredit'])->name('cetak.perjanjian.index');        //Penjadawlan
+        Route::get('/cetak/perjanjian-kredit', [CetakController::class, 'index_perjanjian_kredit'])->name('cetak.perjanjian.index');
+
+        //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 
             Route::group(['middleware' => ['role:Kasi Analis|Kepala Kantor Kas']], function () {
