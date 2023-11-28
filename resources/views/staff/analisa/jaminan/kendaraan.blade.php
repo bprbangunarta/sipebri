@@ -283,14 +283,14 @@
                     <h4 class="modal-title">AGUNAN KENDARAAN</h4>
                 </div>
 
-                <form action="{{ route('kendaraan.simpan') }}" method="POST">
+                <form action="{{ route('analis.simpan_kendaraan') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="box-body">
                             <div class="row">
 
                                 <input type="text" value="" name="input_user" hidden>
-                                <input type="text" value="" name="pengajuan_kode" hidden>
+                                <input type="text" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode" hidden>
                                 <input type="text" name="jenis_jaminan" value="Kendaraan" hidden>
 
                                 <div class="div-left">
@@ -407,6 +407,7 @@
             </div>
         </div>
     </div>
+
 
 @endsection
 

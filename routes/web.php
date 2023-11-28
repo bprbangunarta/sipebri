@@ -179,6 +179,11 @@ Route::middleware('auth')->group(function () {
             Route::put('/pengajuan/agunan/tanah', 'update_tanah')->name('tanah.update');
             Route::post('/pengajuan/agunan/lainnya', 'tambah_lain')->name('lain.simpan');
             Route::put('/pengajuan/agunan/lainnya', 'update_lain')->name('lain.update');
+
+            //Analisa Tambah Agunan
+            Route::post('analisa/jaminan/kendaraan/tambah', 'analis_simpan_kendaraan')->name('analis.simpan_kendaraan');
+            Route::post('analisa/jaminan/tanah/tambah', 'analis_simpan_tanah')->name('analis.simpan_tanah');
+            Route::post('analisa/jaminan/lain/tambah', 'analis_simpan_lain')->name('analis.simpan_lain');
         });
 
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
