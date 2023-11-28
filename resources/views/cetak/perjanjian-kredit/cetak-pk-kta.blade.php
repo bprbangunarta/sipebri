@@ -126,7 +126,7 @@
                     Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
                     {{ $data->status_pendamping }}.' '.{{ $data->nama_pendamping }} yang ikut serta menandatangani
                     perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
-                    Tingkat Perusahaan {{ $data->tempat_kerja }}. Untuk selanjutnya disebut PEMINJAM.
+                    Tingkat Perusahaan {{ $data->nama_resort }}. Untuk selanjutnya disebut PEMINJAM.
                 </td>
             </tr>
 
@@ -252,7 +252,7 @@
                 PELUNASAN SEBELUM JATUH TEMPO
             </center>
 
-            @if ( $data->tempat_kerja == "PT HYUNDONG" )
+            @if ( $data->kode_resort == "091" )
             PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar 1(satu)  angsuran bunga serta hutang denda.
             @else
             PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan

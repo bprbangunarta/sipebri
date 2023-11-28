@@ -1034,6 +1034,7 @@ class DataCetakController extends Controller
                 ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
                 ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->leftJoin('bi_penggunaan_debitur', 'a_memorandum.bi_penggunaan_kode', '=', 'bi_penggunaan_debitur.sandi')
+                ->leftJoin('data_resort', 'data_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->where('data_pengajuan.on_current', 0)
                 ->select(
@@ -1050,6 +1051,8 @@ class DataCetakController extends Controller
                     'data_pendamping.no_identitas as no_identitas_pendamping',
                     'data_pendamping.nama_pendamping',
                     'a_administrasi.administrasi as biaya_admin',
+                    'data_resort.kode_resort',
+                    'data_resort.nama_resort',
                 )->first();
             //
             //Hari
