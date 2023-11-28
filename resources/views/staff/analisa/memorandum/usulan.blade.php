@@ -68,12 +68,20 @@
                             <span class="fw-bold">SEBELUM REALISASI</span>
                             <input type="text" class="form-control text-uppercase" name="sebelum_realisasi"
                                 id="" placeholder="ENTRI" value="{{ $usulan->sebelum_realisasi }}">
-                        </div>
+                        </div>  
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">BIAYA PROVISI (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="b_provisi" id="b_provisi"
+                            <div style="width: 49.5%;float:left;">
+                                <span class="fw-bold">B.PROVISI (%)</span>
+                                <input type="text" class="form-control text-uppercase" name="b_provisi" id="b_provisi"
                                 placeholder="ENTRI" value="{{ $data->b_provisi }}" required>
+                            </div>
+
+                            <div style="width: 49.5%;float:right;">
+                                <span class="fw-bold">B.PENALTI (%)</span>
+                                <input type="text" class="form-control text-uppercase" name="b_penalti" id="b_penalti"
+                                placeholder="ENTRI" value="{{ $data->b_penalti }}" required>
+                            </div>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -84,8 +92,6 @@
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">PENGIKATAN ASURANSI</span>
-                            <input type="hidden" class="form-control text-uppercase" name="b_penalti" id=""
-                                value="{{ $data->b_penalti }}">
 
                             <select class="form-control" name="pengikatan" id="pengikatan" required>
                                 <option value="1"
