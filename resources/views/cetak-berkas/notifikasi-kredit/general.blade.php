@@ -484,8 +484,7 @@
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png"
-                            alt="" style="width: 100px;hight:100px;margin-top:-32px;">
+
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
