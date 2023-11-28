@@ -553,7 +553,7 @@
                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
                     <p style="margin-top:70px;"></p>
                     <u style="text-transform: uppercase;">
-                        Z<font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
+                        <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                     </u>
                     <br>
                     M&nbsp;E&nbsp;N&nbsp;Y&nbsp;E&nbsp;T&nbsp;U&nbsp;J&nbsp;U&nbsp;I

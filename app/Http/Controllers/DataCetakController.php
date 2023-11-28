@@ -1058,8 +1058,8 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-            // $cek->produk_kode = 'KRU';
-            // $cek->metode_rps = 'EFEKTIF MUSIMAN';
+            $cek->produk_kode = 'KBT';
+            $cek->metode_rps = 'EFEKTIF MUSIMAN';
             // dd($cek);
             // //Done
             if ($cek->produk_kode == 'KTA') {
