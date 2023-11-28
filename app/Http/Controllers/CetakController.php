@@ -152,7 +152,7 @@ class CetakController extends Controller
                     'data_nasabah.created_at as tgl_nasabah',
                     'data_nasabah.photo as photo_nasabah',
                     'data_nasabah.input_user as input_user_nasabah',
-                    'data_pendamping.*',
+                    'data_pendamping.nama_pendamping',
                     'v_users.nama_user as nama_surveyor',
                     'data_survei.*',
                     'data_survei.created_at as tgl_survei',
