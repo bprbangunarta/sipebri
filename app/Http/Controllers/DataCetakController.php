@@ -874,7 +874,7 @@ class DataCetakController extends Controller
         $usul4 = "Direksi";
         for ($i = 0; $i < $count; $i++) {
             if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
+                // $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
                 $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1);
                 $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2);
                 $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3);

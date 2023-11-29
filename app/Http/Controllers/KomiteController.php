@@ -36,7 +36,7 @@ class KomiteController extends Controller
         //Enkripsi kode pengajuan
         $c = $cek->get();
         $count = count($c);
-        $data = $cek->paginate(10);
+        $data = $cek->paginate(7);
         $usul1 = "Staff Analis";
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
