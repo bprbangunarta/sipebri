@@ -318,6 +318,7 @@ class KomiteController extends Controller
 
     public function survei_analisa()
     {
+        $name = request('name');
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -331,6 +332,13 @@ class KomiteController extends Controller
             ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
             ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
             ->where('data_pengajuan.on_current', '=', '0')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
@@ -358,7 +366,7 @@ class KomiteController extends Controller
         //
         $c = $cek->get();
         $count = count($c);
-        $data = $cek->paginate(10);
+        $data = $cek->paginate(7);
         $usul1 = "Staff Analis";
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
