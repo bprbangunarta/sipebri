@@ -124,7 +124,7 @@
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
                     Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
-                    {{ $data->status_pendamping }}.' '.{{ $data->nama_pendamping }} yang ikut serta menandatangani
+                    {{ $data->status_pendamping }} {{ $data->nama_pendamping }} yang ikut serta menandatangani
                     perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
                     Tingkat Perusahaan {{ $data->nama_resort }}. Untuk selanjutnya disebut PEMINJAM.
                 </td>
@@ -154,7 +154,7 @@
         <p style="text-align: justify;">
             Bahwa guna keperluan {{ $data->penggunaan_debitur }} PEMINJAM telah mengajukan permohonan pinjam uang
             secara tertulis kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi persetujuan secara
-            tertulis pada tanggal {{ $data->tgl_bln_thn }} dengan ketentuan pokok yang telah disetujui PEMINJAM.
+            tertulis pada tanggal {{ $data->keputusan_komite }} dengan ketentuan pokok yang telah disetujui PEMINJAM.
             Ketentuan pokok tersebut akan diuraikan lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit
             dalam pasal-pasal sebagai berikut :
         </p>
@@ -252,12 +252,15 @@
                 PELUNASAN SEBELUM JATUH TEMPO
             </center>
 
-            @if ( $data->kode_resort == "091" )
-            PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar 1(satu)  angsuran bunga serta hutang denda.
+            @if ($data->kode_resort == '091')
+                PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
+                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar 1(satu) angsuran
+                bunga serta hutang denda.
             @else
-            PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
-            cara melunasi seluruh sisa pokok dan bunga yang di hitung sesuai dengan jangka waktu pinjaman serta hutang
-            denda.
+                PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
+                cara melunasi seluruh sisa pokok dan bunga yang di hitung sesuai dengan jangka waktu pinjaman serta
+                hutang
+                denda.
             @endif
         </p>
 

@@ -1042,6 +1042,7 @@ class DataCetakController extends Controller
                 ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
                 ->join('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
                 ->leftJoin('data_pekerjaan', 'data_nasabah.pekerjaan_kode', '=', 'data_pekerjaan.kode_pekerjaan')
+                ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->leftJoin('data_pendamping', 'data_pengajuan.kode_pengajuan', '=', 'data_pendamping.pengajuan_kode')
                 ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->leftJoin('bi_penggunaan_debitur', 'a_memorandum.bi_penggunaan_kode', '=', 'bi_penggunaan_debitur.sandi')
@@ -1054,8 +1055,8 @@ class DataCetakController extends Controller
                     'data_nasabah.*',
                     'data_spk.*',
                     'data_pekerjaan.*',
-
                     'a_memorandum.*',
+                    'data_tracking.keputusan_komite as keputusan_komite',
                     'a_administrasi.*',
                     'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                     'data_pendamping.status as status_pendamping',
@@ -1069,13 +1070,17 @@ class DataCetakController extends Controller
             //Hari
 
             $hari = Carbon::today();
+            $hari->addMonths(1);
             $cek->tgl_bln_thn = $hari->isoformat('D MMMM Y');
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
             $cek->hari = $hari->isoformat('dddd');
+            $keputusan_komite = Carbon::parse($cek->keputusan_komite);
+            $cek->keputusan_komite = $keputusan_komite->isoformat('D MMMM Y');
 
             $targetDate = Carbon::now();
             $tenMonthsLater = $targetDate->copy()->addMonths($cek->jangka_waktu);
+            $tenMonthsLater->addMonths(1);
             $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
             $cek->tgl_jth_tmp = $formattedDate;
@@ -1089,8 +1094,8 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-
-            // //Done
+            // dd($cek);
+            // //Done   
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
