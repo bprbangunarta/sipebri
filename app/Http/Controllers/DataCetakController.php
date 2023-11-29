@@ -1074,7 +1074,7 @@ class DataCetakController extends Controller
             $cek->hari = $hari->isoformat('dddd');
 
             $targetDate = Carbon::now();
-            $tenMonthsLater = $targetDate->copy()->addMonths(10);
+            $tenMonthsLater = $targetDate->copy()->addMonths($cek->jangka_waktu);
             $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
             $cek->tgl_jth_tmp = $formattedDate;
@@ -1087,7 +1087,6 @@ class DataCetakController extends Controller
             if (is_null($cek->administrasi)) {
                 $cek->administrasi = 0.00;
             }
-
 
             // //Done
             if ($cek->produk_kode == 'KTA') {
