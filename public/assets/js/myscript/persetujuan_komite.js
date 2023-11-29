@@ -54,6 +54,7 @@ $(document).ready(function () {
                 $("#pengajuan").val(pengajuan);
                 var komite = $("#komite");
                 var role = hasil.role_user;
+                var kategori =hasil.kategori
 
                 var pal = hasil.plafon;
                 var pl = formatRupiah(pal);
@@ -61,9 +62,31 @@ $(document).ready(function () {
                 $("#provisi").val(hasil.b_provisi);
                 $("#bunga").val(hasil.suku_bunga);
                 $("#admin").val(hasil.b_admin);
-
+                console.log(kategori);
                 //Persetujuan
-                if (role === "Staff Analis" && pal >= 1000 && pal <= 10000000) {
+
+                if( kategori === "RELOAN"){
+                    if (role === "Staff Analis") {
+                        var options = [
+                        { value: "Naik Kasi", text: "Naik Kasi" }
+                    ];
+                    }else if (role == "Kasi Analis") {
+                        var options = [
+                        { value: "Naik Komite I", text: "Naik Komite I" }
+                        ];
+                    }else if (role == "Kabag Analis") {
+                        var options = [
+                        { value: "Naik Komite II", text: "Naik Komite II" }
+                        ];
+                    }else if (role == "Direksi") {
+                        var options = [
+                        { value: "Disetujui", text: "Disetujui" },
+                        { value: "Dibatalkan", text: "Dibatalkan" },
+                        { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+                }else{
+                    if (role === "Staff Analis" && pal >= 1000 && pal <= 10000000) {
                     var options = [
                         { value: "Disetujui", text: "Disetujui" },
                         { value: "Dibatalkan", text: "Dibatalkan" },
@@ -132,6 +155,10 @@ $(document).ready(function () {
                         { value: "Ditolak", text: "Ditolak" },
                     ];
                 }
+                }
+
+                
+                
 
                 $("#metode").append(
                     $("<option>", {

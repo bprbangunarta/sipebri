@@ -19,7 +19,8 @@
                                             value="{{ request('name') }}" placeholder="Search">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -59,7 +60,7 @@
                                             </td>
 
                                             @php
-                                            $item->plafon = number_format($item->plafon, 0, ',', '.');
+                                                $item->plafon = number_format($item->plafon, 0, ',', '.');
                                             @endphp
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
@@ -74,28 +75,38 @@
 
                                                 <p style="margin-top:-5px;"></p>
                                                 <a data-toggle="modal" data-target="#batal">
-                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Dibatalkan</span>
+                                                    <span class="btn bg-yellow"
+                                                        style="width: 120px;hight:100%;">Dibatalkan</span>
                                                 </a>
                                             </td>
-                                            
+
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->tracking == 'Proses Survei')
-                                                <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" style="pointer-events: none; text-decoration: none; cursor: default;" title="Input Analisa" disabled="disabled">
-                                                    <span class="btn bg-gray" style="width: 120px;hight:100%;">Input Analisa</span>
-                                                </a>
+                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        style="pointer-events: none; text-decoration: none; cursor: default;"
+                                                        title="Input Analisa" disabled="disabled">
+                                                        <span class="btn bg-gray" style="width: 120px;hight:100%;">Input
+                                                            Analisa</span>
+                                                    </a>
                                                 @elseif($item->tracking == 'Proses Analisa')
-                                                <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" title="Input Analisa">
-                                                    <span class="btn bg-yellow" style="width: 120px;hight:100%;">Input Analisa</span>
-                                                </a>
+                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        title="Input Analisa">
+                                                        <span class="btn bg-yellow" style="width: 120px;hight:100%;">Input
+                                                            Analisa</span>
+                                                    </a>
                                                 @else
-                                                <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" title="Input Analisa">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Input Analisa</span>
-                                                </a>
+                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        title="Input Analisa">
+                                                        <span class="btn bg-blue" style="width: 120px;hight:100%;">Input
+                                                            Analisa</span>
+                                                    </a>
                                                 @endif
 
                                                 <p style="margin-top:-5px;"></p>
-                                                <a data-toggle="modal" data-target="#jadwal-ulang" data-pengajuan="{{ $item->kode_pengajuan }}" title="Jadwal Ulang">
-                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">Jadwal Ulang</span>
+                                                <a data-toggle="modal" data-target="#jadwal-ulang"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}" title="Jadwal Ulang">
+                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">Jadwal
+                                                        Ulang</span>
                                                 </a>
                                             </td>
                                         </tr>

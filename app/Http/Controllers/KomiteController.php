@@ -37,7 +37,6 @@ class KomiteController extends Controller
         $c = $cek->get();
         $count = count($c);
         $data = $cek->paginate(10);
-
         $usul1 = "Staff Analis";
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
@@ -101,6 +100,7 @@ class KomiteController extends Controller
                 'data_pengajuan.b_provisi',
                 'data_pengajuan.b_admin',
                 'data_pengajuan.metode_rps',
+                'data_pengajuan.kategori',
                 'data_nasabah.nama_nasabah',
                 'a_memorandum.max_plafond',
                 'au_keuangan.keuangan_perbulan',

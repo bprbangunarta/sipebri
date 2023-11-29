@@ -812,7 +812,10 @@ class DataCetakController extends Controller
             $memorandum = Midle::cetak_data_memorandum($enc);
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
-            // dd($collateral);
+            if (is_null($kebutuhan_dana)) {
+                return redirect()->back()->with('error', 'Memorandum Kebutuhan Dana belum diisi');
+            }
+
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
