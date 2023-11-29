@@ -489,6 +489,7 @@ class CetakController extends Controller
 
     public function index_notifikasi_kredit(Request $request)
     {
+        $name = request('name');
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -500,15 +501,22 @@ class CetakController extends Controller
             ->where(function ($query) use ($user) {
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->where('data_survei.surveyor_kode', '=', $user)
-                    ->where('data_pengajuan.status', '=', 'Disetujui')
-                    // ->where('data_spk.no_spk', '!=', null)
-                    ->where('data_pengajuan.on_current', '=', '0');
+                    ->where('data_pengajuan.status', '=', 'Disetujui');
+                // ->where('data_spk.no_spk', '!=', null)
+                // ->where('data_pengajuan.on_current', '=', '0');
             })
             ->orWhere(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
-                    ->where('data_notifikasi.input_user', '=', $user)
-                    ->where('data_pengajuan.on_current', '=', '0');
+                    ->where('data_notifikasi.input_user', '=', $user);
+                // ->where('data_pengajuan.on_current', '=', '0');
             })
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
             ->select(
                 'data_notifikasi.*',
                 'data_pengajuan.*',
