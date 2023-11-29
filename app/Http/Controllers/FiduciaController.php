@@ -11,17 +11,26 @@ class FiduciaController extends Controller
 {
     public function index()
     {
+        $name = request('name');
         $cek = DB::table('data_jaminan')
             ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
             ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('data_jenis_agunan', 'data_jenis_agunan.kode', '=', 'data_jaminan.jenis_agunan_kode')
             ->where(function ($query) {
                 $query->where('data_jaminan.jenis_jaminan', 'Kendaraan')
-                    ->where('data_pengajuan.status', 'Disetujui')
-                    ->where('data_jaminan.on_current', '0');
+                    ->where('data_pengajuan.status', 'Disetujui');
+                // ->where('data_jaminan.on_current', '0');
             })
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
             ->select(
                 'data_pengajuan.*',
                 'data_spk.*',
