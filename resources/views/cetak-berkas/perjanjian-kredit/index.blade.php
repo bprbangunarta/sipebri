@@ -11,6 +11,20 @@
                         <div class="box-header with-border">
                             <i class="fa fa-print"></i>
                             <h3 class="box-title">CETAK PERJANJIAN KREDIT</h3>
+
+                            <div class="box-tools">
+                                <form action="{{ route('cetak.perjanjian.index') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="" placeholder="Search">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
 
                         <div class="box-body">
@@ -81,6 +95,10 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="box-footer clearfix">
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>
