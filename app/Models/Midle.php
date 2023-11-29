@@ -634,6 +634,12 @@ class Midle extends Model
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('data_survei.kasi_kode', '=', $user)
+                    ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
+                    ->where('data_pengajuan.tracking', '=', 'Persetujuan Komite')
+                    ->whereNull('data_notifikasi.pengajuan_kode');
+            })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')

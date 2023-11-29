@@ -92,7 +92,8 @@
             No. 042/KTO/XI/2023
         </h4>
 
-        Pada hari ini Kamis, tanggal 16 November 2023 telah disepakati Perjanjian Kredit oleh dan antara :
+        Pada hari ini {{ $data->hari }}, tanggal {{ $data->tgl_bln_thn }} telah disepakati Perjanjian Kredit oleh dan
+        antara :
 
         <table>
             <tr>

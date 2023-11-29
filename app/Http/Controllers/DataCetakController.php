@@ -903,23 +903,27 @@ class DataCetakController extends Controller
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Persetujuan Komite');
             })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
+            ->where(function ($query) use ($usr) {
+                $query->where('data_survei.kasi_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Kasi');
             })
-            ->orWhere(function ($query) use ($usr) {
+            ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Komite I');
             })
-            ->orWhere(function ($query) use ($usr) {
+            ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Komite II');
             })
             ->orWhere(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.status', 'Disetujui');
             })
@@ -1094,7 +1098,6 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-            // dd($cek);
             // //Done   
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
