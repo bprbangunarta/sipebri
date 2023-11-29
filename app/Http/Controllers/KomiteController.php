@@ -19,18 +19,23 @@ class KomiteController extends Controller
 
         if ($user->role_name == 'Staff Analis') {
             $role = "Persetujuan Komite";
-            $cek = Midle::persetujuan_komite_staff($usr, $role);
+            $name = request('name');
+            $cek = Midle::persetujuan_komite_staff($usr, $role, $name);
         } elseif ($user->role_name == 'Kasi Analis') {
             $role = "Naik Kasi";
-            $cek = Midle::persetujuan_komite_kasi($usr, $role);
+            $name = request('name');
+            $cek = Midle::persetujuan_komite_kasi($usr, $role, $name);
         } elseif ($user->role_name == 'Kabag Analis') {
             $role = "Naik Komite I";
-            $cek = Midle::persetujuan_komite_kabag($role);
+            $name = request('name');
+            $cek = Midle::persetujuan_komite_kabag($role, $name);
         } elseif ($user->role_name == 'Direksi') {
             $role = "Naik Komite II";
-            $cek = Midle::persetujuan_komite_direksi($role);
+            $name = request('name');
+            $cek = Midle::persetujuan_komite_direksi($role, $name);
         } elseif ($user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
-            $cek = Midle::persetujuan_komite_cs_kksk($usr);
+            $name = request('name');
+            $cek = Midle::persetujuan_komite_cs_kksk($usr, $name);
         }
 
         //Enkripsi kode pengajuan

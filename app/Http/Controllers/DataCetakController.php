@@ -950,7 +950,7 @@ class DataCetakController extends Controller
             $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
             $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
         }
-
+        // dd($data);
         if ($user->role_name == 'Customer Service') {
             $usul1 = "Customer Service";
             foreach ($data as $item) {

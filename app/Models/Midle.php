@@ -508,7 +508,7 @@ class Midle extends Model
         return $cek->usulan_plafon;
     }
 
-    public static function persetujuan_komite_cs_kksk($user)
+    public static function persetujuan_komite_cs_kksk($user, $name)
     {
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -528,6 +528,11 @@ class Midle extends Model
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
@@ -553,11 +558,11 @@ class Midle extends Model
                 'data_pengajuan.jangka_waktu as jk'
             );
         //  
-        // dd($role);
+
         return $cek;
     }
 
-    public static function persetujuan_komite_staff($user, $role)
+    public static function persetujuan_komite_staff($user, $role, $name)
     {
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -575,6 +580,12 @@ class Midle extends Model
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
 
             ->select(
                 'data_pengajuan.kode_pengajuan',
@@ -605,25 +616,29 @@ class Midle extends Model
         return $cek;
     }
 
-    public static function persetujuan_komite_kasi($user, $role)
+    public static function persetujuan_komite_kasi($user, $role, $name)
     {
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->where(function ($query) use ($user, $role) {
                 $query->where('data_survei.kasi_kode', '=', $user)
                     ->where('data_pengajuan.tracking', '=', $role);
             })
-            ->orWhere(function ($query) use ($user, $role) {
+            ->orWhere(function ($query) use ($user) {
                 $query->where('data_survei.kasi_kode', '=', $user)
                     ->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
-
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
@@ -649,12 +664,10 @@ class Midle extends Model
                 'users.name',
                 'data_pengajuan.jangka_waktu as jk'
             );
-        //
-
         return $cek;
     }
 
-    public static function persetujuan_komite_kabag($role)
+    public static function persetujuan_komite_kabag($role, $name)
     {
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -667,6 +680,11 @@ class Midle extends Model
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
@@ -697,7 +715,7 @@ class Midle extends Model
         return $cek;
     }
 
-    public static function persetujuan_komite_direksi($role)
+    public static function persetujuan_komite_direksi($role, $name)
     {
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -709,6 +727,11 @@ class Midle extends Model
             ->orWhere(function ($query) {
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->where('data_notifikasi.pengajuan_kode', '=', null);
+            })
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
             ->select(
                 'data_pengajuan.kode_pengajuan',
