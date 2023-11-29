@@ -327,9 +327,9 @@
 
             <table>
                 <tr>
-                    <td width="13%">Jenis Usaha</td>
+                    <td width="13%">Nama Nasabah</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">PERDAGANGAN</td>
+                    <td style="text-align: justify;">{{ $item->kode_usaha }}</td>
                 </tr>
                 <tr>
                     <td>Kode Usaha</td>
@@ -516,9 +516,9 @@
 
             <table>
                 <tr>
-                    <td width="14%">Jenis Usaha</td>
+                    <td width="14%">Nama Nasabah</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td width="53%" style="text-align: justify;">PERTANIAN</td>
+                    <td width="53%" style="text-align: justify;">{{ $item->nama_nasabah }}</td>
 
                     <td width="16%">Luas Milik Sendiri</td>
                     <td style="text-align: right;" width="3%"> : </td>
@@ -729,9 +729,9 @@
 
             <table>
                 <tr>
-                    <td width="13%">Jenis Usaha</td>
+                    <td width="13%">Nama Nasabah</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">JASA</td>
+                    <td style="text-align: justify;">{{ $item->nama_nasabah }}</td>
                 </tr>
                 <tr>
                     <td>Kode Usaha</td>
@@ -817,9 +817,9 @@
 
             <table>
                 <tr>
-                    <td width="14%">Jenis Usaha</td>
+                    <td width="14%">Nama Nasabah</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">LAINNYA</td>
+                    <td style="text-align: justify;">{{ $item->nama_nasabah }}</td>
                 </tr>
                 <tr>
                     <td>Kode Usaha</td>

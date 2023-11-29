@@ -923,7 +923,9 @@ class Midle extends Model
     {
         $data = DB::table('au_perdagangan')
             ->leftJoin('bu_perdagangan', 'au_perdagangan.kode_usaha', '=', 'bu_perdagangan.usaha_kode')
-            ->select('au_perdagangan.*', 'bu_perdagangan.*')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'au_perdagangan.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select('au_perdagangan.*', 'bu_perdagangan.*', 'data_nasabah.nama_nasabah')
             ->where('au_perdagangan.pengajuan_kode', $kode)->get();
         return $data;
     }
@@ -933,7 +935,9 @@ class Midle extends Model
         $data = DB::table('au_pertanian')
             ->leftJoin('bu_pertanian', 'au_pertanian.kode_usaha', '=', 'bu_pertanian.usaha_kode')
             ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
-            ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'au_pertanian.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*', 'data_nasabah.nama_nasabah')
             ->where('au_pertanian.pengajuan_kode', $kode)->get();
         return $data;
     }
@@ -941,12 +945,16 @@ class Midle extends Model
     public static function cetak_dokumen_analisa_usaha_jasa($kode)
     {
         $data = DB::table('au_jasa')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'au_jasa.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->where('au_jasa.pengajuan_kode', $kode)->get();
         return $data;
     }
     public static function cetak_dokumen_analisa_usaha_lain($kode)
     {
         $data = DB::table('au_lainnya')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'au_lainnya.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->where('au_lainnya.pengajuan_kode', $kode)->get();
         return $data;
     }
