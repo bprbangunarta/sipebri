@@ -90,6 +90,7 @@ class DataCetakController extends Controller
             ->where(function ($query) use ($user) {
                 $query->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->where('data_survei.surveyor_kode', '=', $user)
+                    ->orWhere('data_survei.kasi_kode', '=', $user)
                     ->where('data_pengajuan.status', '=', 'Disetujui')
                     ->where('data_spk.no_spk', '=', null);
             })
@@ -652,6 +653,7 @@ class DataCetakController extends Controller
             })
             ->orWhere(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Kasi');
             })
@@ -667,6 +669,7 @@ class DataCetakController extends Controller
             })
             ->orWhere(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.status', 'Disetujui');
             })
@@ -887,6 +890,7 @@ class DataCetakController extends Controller
 
     public function persetujuan_kredit()
     {
+        $name = request('name');
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
 
@@ -897,20 +901,22 @@ class DataCetakController extends Controller
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where('data_pengajuan.status', 'Disetujui')
-            // ->where('data_pengajuan.on_current', '0')
+
+            ->where('data_pengajuan.on_current', '0')
+
             ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
-                    // ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Persetujuan Komite');
             })
             ->orWhere(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
-                    // ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Kasi');
             })
             ->orWhere(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
-                    // ->where('data_pengajuan.on_current', '=', '0')
+                    ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Komite I');
             })
             ->orWhere(function ($query) use ($usr) {
@@ -920,7 +926,8 @@ class DataCetakController extends Controller
             })
             ->orWhere(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
-                    // ->where('data_pengajuan.on_current', '=', '0')
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
+                    ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.status', 'Disetujui');
             })
 
@@ -929,6 +936,7 @@ class DataCetakController extends Controller
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
+
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',

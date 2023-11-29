@@ -1990,7 +1990,7 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k. Biaya Penalti</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->b_penalti }}% per hari</b></div>
+                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->b_penalti }}%</b></div>
                     <div style="width:59%;float:right">l. Biaya Admin : <b>{{ $memorandum->b_admin }}%</b></div>
                 </td>
             </tr>
