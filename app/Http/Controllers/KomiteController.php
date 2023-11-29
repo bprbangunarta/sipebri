@@ -79,12 +79,22 @@ class KomiteController extends Controller
 
     public function getdata(Request $request)
     {
+        $name = request('name');
         $kode = $request->input('field');
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('au_keuangan', 'data_pengajuan.kode_pengajuan', '=', 'au_keuangan.pengajuan_kode')
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.plafon',
