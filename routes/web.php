@@ -75,8 +75,8 @@ use App\Http\Controllers\ExportController;
 */
 
 Route::get('/', function () {
-    // $role = Role::find(10);
-    // $permission = Permission::find(46);
+    // $role = Role::find(2);
+    // $permission = Permission::find(47);
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);
@@ -492,7 +492,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/persetujuan/kredit', 'persetujuan_kredit')->name('persetujuan.kredit');
             Route::get('/cetak/persetujuan/kredit', 'cetak_persetujuan_kredit')->name('cetak.persetujuan_kredit');
 
-            Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas|Kasi Analis|Kabag Analis|Direksi']], function () {
                 Route::get('/cetak/analisa/kredit', 'analisa_kredit')->name('analisa.kredit');
             });
 

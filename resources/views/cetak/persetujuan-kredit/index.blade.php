@@ -11,6 +11,20 @@
                         <div class="box-header with-border">
                             <i class="fa fa-print"></i>
                             <h3 class="box-title">CETAK PERSETUJUAN KREDIT</h3>
+
+                            <div class="box-tools">
+                                <form action="{{ route('persetujuan.kredit') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
+                                        <input type="text" class="form-control pull-right" name="name" id="name"
+                                            value="" placeholder="Search">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
 
                         <div class="box-body">
@@ -31,7 +45,7 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
 
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>

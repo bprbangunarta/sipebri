@@ -45,7 +45,7 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
 
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
