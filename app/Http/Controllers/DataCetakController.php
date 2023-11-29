@@ -771,6 +771,7 @@ class DataCetakController extends Controller
             }
 
             $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
+
             if (count($keuangan) != 0) {
                 $nominal = [];
 
@@ -1081,8 +1082,9 @@ class DataCetakController extends Controller
             //Hari
 
             $hari = Carbon::today();
-            $hari->addMonths(1);
             $cek->tgl_bln_thn = $hari->isoformat('D MMMM Y');
+            $hari->addMonths(1);
+            $cek->tgl_bln_thn_tempo = $hari->isoformat('D MMMM Y');
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
             $cek->hari = $hari->isoformat('dddd');
@@ -1091,7 +1093,6 @@ class DataCetakController extends Controller
 
             $targetDate = Carbon::now();
             $tenMonthsLater = $targetDate->copy()->addMonths($cek->jangka_waktu);
-            $tenMonthsLater->addMonths(1);
             $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
             $cek->tgl_jth_tmp = $formattedDate;
@@ -1104,7 +1105,7 @@ class DataCetakController extends Controller
             if (is_null($cek->administrasi)) {
                 $cek->administrasi = 0.00;
             }
-
+            // dd($cek);
             // //Done   
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
