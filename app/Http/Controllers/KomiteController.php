@@ -41,38 +41,32 @@ class KomiteController extends Controller
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
         $usul4 = "Direksi";
-        for ($i = 0; $i < $count; $i++) {
-            if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
-                $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
-                $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
-                $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
-                $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4) ?? null;
-            }
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+            $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
+            $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
+            $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
+            $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
         }
 
 
         if ($user->role_name == 'Customer Service') {
             $usul1 = "Customer Service";
-            for ($i = 0; $i < $count; $i++) {
-                if ($data->isNotEmpty()) {
-                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
-                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
-                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
-                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
-                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4) ?? null;
-                }
+            foreach ($data as $item) {
+                $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+                $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
+                $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
+                $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
+                $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
             }
         } elseif ($user->role_name == 'Kepala Kantor Kas') {
             $usul1 = "Kepala Kantor Kas";
-            for ($i = 0; $i < $count; $i++) {
-                if ($data->isNotEmpty()) {
-                    $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
-                    $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
-                    $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
-                    $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
-                    $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4) ?? null;
-                }
+            foreach ($data as $item) {
+                $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+                $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
+                $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
+                $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
+                $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
             }
         }
 
