@@ -118,7 +118,7 @@
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
-                        <a href="{{ route('survei.analisa') }}" 
+                        <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
                             title="Survey dan Analisa">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
@@ -238,7 +238,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/notifikasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit',) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
