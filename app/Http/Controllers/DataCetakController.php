@@ -1047,7 +1047,7 @@ class DataCetakController extends Controller
                 ->leftJoin('bi_penggunaan_debitur', 'a_memorandum.bi_penggunaan_kode', '=', 'bi_penggunaan_debitur.sandi')
                 ->leftJoin('data_resort', 'data_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
-                ->where('data_pengajuan.on_current', 0)
+                // ->where('data_pengajuan.on_current', 0)
                 ->select(
                     'data_pengajuan.*',
                     'data_pengajuan.created_at as tgl_pengajuan',
@@ -1067,6 +1067,7 @@ class DataCetakController extends Controller
                 )->first();
             //
             //Hari
+
             $hari = Carbon::today();
             $cek->tgl_bln_thn = $hari->isoformat('D MMMM Y');
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
