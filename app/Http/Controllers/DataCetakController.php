@@ -1081,13 +1081,13 @@ class DataCetakController extends Controller
             //
             //Hari
 
-            $hari = Carbon::today();
-            $cek->tgl_bln_thn = $hari->isoformat('D MMMM Y');
-            $hari->addMonths(1);
-            $cek->tgl_bln_thn_tempo = $hari->isoformat('D MMMM Y');
+            $now = Carbon::today();
+            $cek->tgl_bln_thn = $now->isoformat('D MMMM Y');
+            $now->addMonths(1);
+            $cek->tgl_bln_thn_tempo = $now->isoformat('D MMMM Y');
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
-            $cek->hari = $hari->isoformat('dddd');
+            $cek->hari = Carbon::now()->isoFormat('dddd');
             $keputusan_komite = Carbon::parse($cek->keputusan_komite);
             $cek->keputusan_komite = $keputusan_komite->isoformat('D MMMM Y');
 
@@ -1105,7 +1105,7 @@ class DataCetakController extends Controller
             if (is_null($cek->administrasi)) {
                 $cek->administrasi = 0.00;
             }
-            // dd($cek);
+
             // //Done   
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
@@ -1121,6 +1121,8 @@ class DataCetakController extends Controller
             } elseif ($cek->produk_kode == 'KTO') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kto', [
                     'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
                 ]);
                 //Done
             } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ') {

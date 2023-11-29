@@ -89,7 +89,7 @@
 
         <h4 style="text-align: center;font-size: 12pt;">
             <u>PERJANJIAN KREDIT</u> <br>
-            No. 042/KTO/XI/2023
+            No. {{ $data->no_spk }}
         </h4>
 
         Pada hari ini {{ $data->hari }}, tanggal {{ $data->tgl_bln_thn }} telah disepakati Perjanjian Kredit oleh dan
@@ -100,31 +100,33 @@
                 <td width="2%">I. </td>
                 <td width="15%">Nama</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>NANO SUMARNA</td>
+                <td>{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Pekerjaan</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>WIRASWASTA</td>
+                <td>{{ $data->nama_pekerjaan }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td>Tanda Pengenal</td>
                 <td class="text-center"> : </td>
-                <td>KTP Nomor : 3213070701980004</td>
+                <td>KTP Nomor : {{ $data->no_identitas }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td style="vertical-align: text-top;">Alamat</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td>KAMPUNG SUKAGALIH RT/RW 030/008 SUKAMULYA PAGADEN SUBANG PROVINSI JAWA BARAT</td>
+                <td>{{ $data->alamat_ktp }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
-                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari ISTRI bernama
-                    ICEM MUYANI yang ikut serta menandatangani perjanjian ini. Untuk selanjutnya disebut PEMINJAM.
+                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
+                    {{ $data->status_pendamping }} bernama
+                    {{ $data->nama_pendamping }} yang ikut serta menandatangani perjanjian ini. Untuk selanjutnya
+                    disebut PEMINJAM.
                 </td>
             </tr>
 
@@ -150,9 +152,11 @@
         </p>
 
         <p style="text-align: justify;">
-            Bahwa guna keperluan Konsumsi Lainnya PEMINJAM telah mengajukan permohonan pinjam uang secara tertulis
-            kepada BANK tanggal 01 Oktober 2020 dan BANK telah memberi persetujuan secara tertulis pada tanggal 02
-            Oktober 2020 dengan ketentuan pokok yang telah disetujui PEMINJAM. Ketentuan pokok tersebut akan diuraikan
+            Bahwa guna keperluan {{ $data->penggunaan_debitur }} PEMINJAM telah mengajukan permohonan pinjam uang
+            secara tertulis
+            kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi persetujuan secara tertulis pada
+            tanggal {{ $data->keputusan_komite }} dengan ketentuan pokok yang telah disetujui PEMINJAM. Ketentuan pokok
+            tersebut akan diuraikan
             lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit dalam pasal-pasal sebagai berikut :
         </p>
 
@@ -161,8 +165,10 @@
                 Pasal 1 <br>
                 FASILITAS PINJAMAN
             </center>
-            BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar Rp. 3,000,000 (
-            Tiga Juta Rupiah ) yang akan dipindah bukukan kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
+            BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
+            {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }} ( <font style="text-transform: capitalize;">
+                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah bukukan
+            kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
         </p>
 
         <p style="text-align: justify;">
@@ -173,11 +179,15 @@
             Atas pinjaman tersebut diatas, PEMINJAM wajib membayar kepada BANK :
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                Bunga sebesar : 17.04 % per tahun dihitung secara merata setiap bulannya.
+                Bunga sebesar : {{ $data->suku_bunga }} % per tahun dihitung secara merata setiap bulannya.
             </li>
             <li>
-                Provisi sebesar Rp. 1.095.000,- ( Satu Juta Sembilan Puluh Lima Ribu Rupiah ) dan Biaya Administrasi
-                sebesar Rp. 1.642.500,- ( Satu Juta Enam Ratus Empat Puluh Dua Ribu Lima Ratus Rupiah ) didebetkan dari
+                Provisi sebesar {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},- ( <font
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> ) dan Biaya Administrasi
+                sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},- ( <font
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}</font> ) didebetkan dari
                 Rekening Tabungan PEMINJAM yang ada pada BANK.
             </li>
         </ol>
@@ -191,9 +201,12 @@
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
                 Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (
-                selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam 12 ( Dua Belas ) kali
-                angsuran setiap tanggal 02 ( selanjutnya disebut tanggal angsuran ) yang dimulai pada​tanggal 02
-                November 2020 dan demikian seterusnya hingga berakhir pada tanggal 02 Oktober 2021.
+                selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
+                {{ $data->jangka_waktu }} ( <font style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) kali
+                angsuran setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
+                pada​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
+                {{ $data->tgl_jth_tmp }}.
             </li>
             <li>
                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran sebagaimana
@@ -243,14 +256,22 @@
                 ya timbul dari perjanjian ini, maka PEMINJAM dan atau PENJAMIN menyerahkan jaminan kebendaan yang cukup
                 berupa :
                 <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;">
-                    <li>
-                        KARTU DAN SALDO JAMSOSTEK ATAS NAMA NANO SUMARNA NO 19050910561 KARTU DAN SALDO JAMSOSTEK ATAS
-                        NAMA NANO SUMARNA NO 19050910561
-                    </li>
-                    <li>
-                        KARTU DAN SALDO JAMSOSTEK ATAS NAMA NANO SUMARNA NO 19050910561 KARTU DAN SALDO JAMSOSTEK ATAS
-                        NAMA NANO SUMARNA NO 19050910561
-                    </li>
+                    @forelse ($jaminan as $item)
+                        @if ($item->jenis_jaminan == 'Kendaraan')
+                            <li>
+                                {{ $item->catatan }}
+                            </li>
+                        @elseif ($item->jenis_jaminan == 'Tanah')
+                            <li>
+                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                            </li>
+                        @elseif ($item->jenis_jaminan == 'Lainnya')
+                            <li>
+                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                            </li>
+                        @endif
+                    @empty
+                    @endforelse
                 </ol>
                 Mengenai pengaturan dan pelaksanaan perikatan jaminan akan dilakukan dengan perjanjian tersendiri sesuai
                 peraturan dan perundang-undangan yang berlaku. Perjanjian perikatan agunan tersebut merupakan satu
@@ -365,18 +386,31 @@
             </li>
 
             <!-- JIKA AGUNAN KENDARAAN DAN TANAH GUNAKAN SEMUA -->
+            @forelse ($agunan as $item)
+                @if (
+                    ($item->jenis_jaminan == 'Kendaraan' && $item->jenis_jaminan == 'Tanah') ||
+                        $item->jenis_jaminan == 'Kendaraan' ||
+                        $item->jenis_jaminan == 'Lainnya')
+                    <li>
+                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak melakukan
+                        pengamanan
+                        agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
+                    </li>
+                @endif
 
-            <!-- JIKA AGUNAN KENDARAAN SAJA -->
-            <li>
-                Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak melakukan pengamanan
-                agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
-            </li>
+                <!-- JIKA AGUNAN TANAH SAJA -->
+                @if (($item->jenis_jaminan == 'Kendaraan' && $item->jenis_jaminan == 'Tanah') || $item->jenis_jaminan == 'Tanah')
+                    <li>
+                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi ijin kepada BANK
+                        untuk
+                        melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah agunan dengan
+                        tulisan
+                        “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
+                    </li>
+                @endif
 
-            <!-- JIKA AGUNAN TANAH SAJA -->
-            <!-- <li>
-                    Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi ijin kepada BANK untuk melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah agunan dengan tulisan “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
-                </li> -->
-
+            @empty
+            @endforelse
             <li>
                 Bilamana PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak untuk melakukan
                 tindakan hukum yang diperlukan sesuai ketentuan yang berlaku, baik yang diatur dalam perjanjian ini,
