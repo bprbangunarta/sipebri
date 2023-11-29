@@ -208,11 +208,6 @@
                 pada​tanggal {{ $data->tgl_bln_thn }} dan demikian seterusnya hingga berakhir pada tanggal
                 {{ $data->tgl_jth_tmp }}.
             </li>
-
-            {{-- YANG DIGUNAKAN --}}
-            <li style="font-color:red;">
-                Pembayaran angsuran pokok atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK ( selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara 6 ( Enam) bulan dalam 2 (dua) kali angsuran setiap tanggal 02 ( selanjutnya disebut tanggal angsuran ) yang dimulai pada tanggal 02 April 2021 dan demikian seterusnya hingga berakhir pada tanggal 02 Oktober 2021. Sedangkan pembayaran bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (selanjutnya disebut setoran bunga) wajib dilakukan oleh PEMINJAM secara bulanan dalam 12 ( dua belas ) kali setoran bunga setiap tanggal 2 ( dua ) (selanjutnya disebut tanggal setoran bunga) yang dimulai pada tanggal 02 November 2020 dan demikian seterusnya hingga berakhir pada 02 Oktober 2021.
-            </li>
             <li>
                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran sebagaimana
                 terlampir, yang merupakan suatu kesatuan yang tidak terpisahkan dengan Perjanjian Kredit ini.
