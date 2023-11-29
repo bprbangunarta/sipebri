@@ -118,7 +118,7 @@
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
-                        <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
+                        <a href="{{ route('survei.analisa') }}" 
                             title="Survey dan Analisa">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
