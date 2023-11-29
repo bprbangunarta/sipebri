@@ -140,7 +140,7 @@ class PengajuanController extends Controller
             ->orderBy('data_pengajuan.created_at', 'asc');
         //
 
-        $pengajuan = $query->paginate(20);
+        $pengajuan = $query->paginate(7);
 
         foreach ($pengajuan as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
