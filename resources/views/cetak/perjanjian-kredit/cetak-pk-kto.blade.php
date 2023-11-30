@@ -311,7 +311,8 @@
                 DENDA
             </center>
             Dalam hal PEMINJAM tidak membayar angsuran dan setoran bunga tepat pada waktunya sebagaimana telah
-            ditentukan dalam Pasal 2 perjanjian kredit ini, oleh sebab itu PEMINJAM dikenakan denda sebesar 0,1 %
+            ditentukan dalam Pasal 2 perjanjian kredit ini, oleh sebab itu PEMINJAM dikenakan denda sebesar
+            {{ $data->b_denda }} %
             perhari keterlambatan dari jumlah angsuran dan setoran bunga yang menjadi kewajibannya.
         </p>
 

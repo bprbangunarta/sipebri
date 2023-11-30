@@ -1250,7 +1250,32 @@ class Midle extends Model
     public static function get_qrcode($data)
     {
         $user = Auth::user()->code_user;
-        $gbr = Auth::user()->ttd;
-        dd($user);
+        $gbr = DB::table('users')->where('code_user', $user)->first();
+        // // Cek apakah hasil query tidak kosong dan kolom 'ttd' memiliki nilai
+        // if ($gbr && isset($gbr->ttd)) {
+        //     $imageName = $gbr->ttd;
+        //     $imagePath = asset('public/image/tanda_tangan/') . '/' . $imageName;
+        //     dd($imagePath);
+        //     // Cek apakah file gambar ada
+        //     if (Storage::disk('public')->exists($imagePath)) {
+        //         $fileInfo = pathinfo(storage_path("app/{$imagePath}"));
+
+        //         // Mengembalikan informasi tentang file gambar
+        //         return [
+        //             'Nama File' => $fileInfo['filename'],
+        //             'Ekstensi' => $fileInfo['extension'],
+        //             'Path' => $imagePath,
+        //         ];
+        //     }
+        // }
+
+        // // Pesan jika tidak ada gambar atau masalah dengan nama file gambar
+        // return "Gambar tidak ditemukan atau ada masalah dengan nama file gambar.";
+
+        // Path ke gambar di dalam direktori 'storage/app/public/image'
+        $imagePath = 'public/image/tanda_tangan/TTD_JAE.jpg'; // Ganti dengan path gambar Anda
+
+        // Mendownload gambar
+        return Storage::download($imagePath);
     }
 }
