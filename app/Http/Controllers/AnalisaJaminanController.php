@@ -44,7 +44,7 @@ class AnalisaJaminanController extends Controller
             //Data dati
             $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
 
-            // dd($cek[0]);
+            // dd($au);
             return view('staff.analisa.jaminan.kendaraan', [
                 'jenis_kendaraan' => $jenis_kendaraan,
                 'data_kendaraan' => $data_kendaraan,
@@ -111,6 +111,8 @@ class AnalisaJaminanController extends Controller
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_taksasi')) ?? 0,
                 'updated_at' => now(),
             ];
+            // dd($request);
+            // $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
             DB::table('data_jaminan')->where('id', $request->id)->update($nilai);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {

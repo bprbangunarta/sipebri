@@ -29,7 +29,7 @@
                                 {{ $item->atas_nama }} <br>
                                 <p></p>
                                 <b>No Doukumen: </b><br>
-                                {{ $item->no_dokumen }}
+                                {{-- {{ $item->jenis_dokumen }} --}}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Merek: </b> {{ $item->merek ?? null }} <br>
@@ -390,11 +390,10 @@
                                         </select>
                                     </div>
 
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">CATATAN AGUNAN</span>
-                                        <input class="form-control text-uppercase" type="text" name="catatan"
-                                            {{ old('catatan') }} placeholder="ENTRI">
-                                    </div>
+                                    <input class="form-control text-uppercase" type="hidden" name="catatan"
+                                        {{ old('catatan') }} placeholder="ENTRI">
+
+
                                 </div>
                             </div>
                         </div>

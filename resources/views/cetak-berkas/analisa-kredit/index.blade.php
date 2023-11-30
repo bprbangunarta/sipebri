@@ -719,14 +719,14 @@
 
 
     {{-- Analisa Usaha Jasa --}}
-    <div class="page-break"></div>
-    <div class="content" style="margin-top: -57px;">
-        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
-        <hr style="border: 1px solid 034871;">
+    @forelse ($jasa as $item)
+        <div class="page-break"></div>
+        <div class="content" style="margin-top: -57px;">
+            <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+            <hr style="border: 1px solid 034871;">
 
-        <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA JASA</h4>
+            <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA JASA</h4>
 
-        @forelse ($jasa as $item)
             <table>
                 <tr>
                     <td width="13%">Nama Nasabah</td>
@@ -804,7 +804,7 @@
             </table>
             <br>
         @empty
-        @endforelse
+    @endforelse
     </div>
 
     {{-- Analisa Usaha Lainnya --}}
@@ -820,7 +820,7 @@
                 <tr>
                     <td width="14%">Nama Nasabah</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">{{ $item->nama_nasabah }}</td>
+                    <td style="text-align: justify;">{{ $cetak->nama_nasabah }}</td>
                 </tr>
                 <tr>
                     <td>Kode Usaha</td>
