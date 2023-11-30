@@ -13,7 +13,7 @@
                             <h3 class="box-title">CETAK ANALISA KREDIT</h3>
 
                             <div class="box-tools">
-                                <form action="/themes/cetak/analisa/kredit" method="GET">
+                                <form action="{{ route('analisa.kredit') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
                                         <input type="text" class="form-control pull-right" name="name" id="name"
                                             value="{{ request('name') }}" placeholder="Search">

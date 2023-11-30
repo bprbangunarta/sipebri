@@ -642,11 +642,10 @@ class DataCetakController extends Controller
 
     public function analisa_kredit(Request $request)
     {
+        $name = request('name');
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
 
-        $name = request('name');
-        $usr = Auth::user()->code_user;
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -684,6 +683,7 @@ class DataCetakController extends Controller
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
+
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
