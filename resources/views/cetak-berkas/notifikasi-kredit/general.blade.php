@@ -97,7 +97,7 @@
             <tr>
                 <td>Tanggal</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>{{ $data->tgl_notifikasi }}</td>
+                <td>{{ $data->tgl_notifikasi_hari_ini }}</td>
             </tr>
             <tr>
                 <td>Kode Pengajuan</td>
