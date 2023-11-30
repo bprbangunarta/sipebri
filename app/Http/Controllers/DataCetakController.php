@@ -185,7 +185,12 @@ class DataCetakController extends Controller
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin;
-                // dd($cek);
+
+                //QRCode 
+                $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
+                    $cek->role_name . '_' . $cek->nama_user;
+                $qr = Midle::get_qrcode($text);
+                dd($qr);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Midle extends Model
@@ -1244,5 +1245,12 @@ class Midle extends Model
         }
         //
         return $jaminan;
+    }
+
+    public static function get_qrcode($data)
+    {
+        $user = Auth::user()->code_user;
+        $gbr = Auth::user()->ttd;
+        dd($user);
     }
 }
