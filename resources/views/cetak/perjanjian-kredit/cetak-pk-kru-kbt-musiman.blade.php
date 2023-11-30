@@ -179,7 +179,7 @@
             Atas pinjaman tersebut diatas, PEMINJAM wajib membayar kepada BANK :
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                Bunga sebesar : {{ $data->suku_bunga }} % per tahun dihitung secara merata setiap bulannya.
+                Bunga sebesar : {{ $data->suku_bunga }} % per tahun dihitung secara menurun setiap bulannya.
             </li>
             <li>
                 Provisi sebesar {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},- ( <font
