@@ -19,7 +19,8 @@
                                             value="{{ request('name') }}" placeholder="Search">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -38,12 +39,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
 
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
@@ -65,7 +64,8 @@
 
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
+                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN
+                                                <br>
                                                 <b>PLAFON :</b>
                                                 {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }}
@@ -100,9 +100,6 @@
 
                                             </td>
                                         </tr>
-                                        @php
-                                            $no++;
-                                        @endphp
                                     @empty
                                         <tr>
                                             <td class="text-center text-uppercase" colspan="7">Tidak Ada Data.</td>

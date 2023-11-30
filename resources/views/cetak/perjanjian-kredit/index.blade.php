@@ -30,15 +30,18 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
 
                                             <td style="vertical-align: middle;">
                                                 <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
                                                 <b>AN. </b>{{ $item->nama_nasabah }} <br>
                                                 @if (is_null($item->no_spk))
-                                                <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK ADA</span>
-                                                @else    
-                                                <span class="label label-success" style="font-size: 12px;">{{ $item->no_spk }}</span>
+                                                    <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK
+                                                        ADA</span>
+                                                @else
+                                                    <span class="label label-success"
+                                                        style="font-size: 12px;">{{ $item->no_spk }}</span>
                                                 @endif
                                             </td>
 
@@ -51,7 +54,8 @@
                                             <td style="vertical-align: middle;">
                                                 <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
                                                 <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
-                                                <b>PLAFON :</b> {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
+                                                <b>PLAFON :</b>
+                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
                                                 <b>METODE :</b> {{ $item->metode_rps }}
                                             </td>
 
@@ -60,13 +64,16 @@
 
                                                 <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }}% <br>
                                                 <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
-                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
+                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b>
+                                                {{ number_format($item->b_provisi, 2) }} <br>
                                                 <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#generate-code" data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Generate</span>
+                                                <a data-toggle="modal" data-target="#generate-code"
+                                                    data-id="{{ $item->kode_pengajuan }}">
+                                                    <span class="btn bg-blue"
+                                                        style="width: 120px;hight:100%;">Generate</span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -80,6 +87,9 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="box-footer clearfix">
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
                     </div>
                 </div>

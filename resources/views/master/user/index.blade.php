@@ -71,17 +71,21 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                <a data-toggle="modal" data-target="#modal-edit" data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
+                                                <a data-toggle="modal" data-target="#modal-edit"
+                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#modal-akses" data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-success">
+                                                <a data-toggle="modal" data-target="#modal-akses"
+                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-success">
                                                     <i class="fa fa-user"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#modal-password" data-user="{{ $data->code_user }}" class="btn-circle btn-sm btn-danger">
+                                                <a data-toggle="modal" data-target="#modal-password"
+                                                    data-user="{{ $data->code_user }}"
+                                                    class="btn-circle btn-sm btn-danger">
                                                     <i class="fa fa-key"></i>
                                                 </a>
                                             </td>
@@ -301,7 +305,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>HAK AKSES</label>
-                                    <select class="form-control role" style="width: 100%;" name="role_id" id="roles_id"></select>
+                                    <select class="form-control role" style="width: 100%;" name="role_id"
+                                        id="roles_id"></select>
                                 </div>
                             </div>
                         </div>
@@ -340,7 +345,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>EMAIL ADDRESS</label>
-                                    <input type="password" class="form-control" name="reset" id="reset" value="123456" readonly>
+                                    <input type="password" class="form-control" name="reset" id="reset"
+                                        value="123456" readonly>
                                 </div>
                             </div>
                         </div>

@@ -490,6 +490,7 @@ class CetakController extends Controller
     public function index_notifikasi_kredit(Request $request)
     {
         $name = request('name');
+        $kantor = Auth::user()->kantor_kode;
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -497,24 +498,13 @@ class CetakController extends Controller
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
-            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            ->where(function ($query) use ($user) {
-                $query->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_survei.surveyor_kode', '=', $user)
-                    ->orWhere('data_survei.kasi_kode', '=', $user)
-                    ->where('data_pengajuan.status', '=', 'Disetujui');
-                // ->where('data_spk.no_spk', '!=', null)
-                // ->where('data_pengajuan.on_current', '=', '0');
-            })
-            ->orWhere(function ($query) use ($user) {
-                $query->where('data_survei.surveyor_kode', '=', $user)
-                    ->where('data_notifikasi.input_user', '=', $user);
-                // ->where('data_pengajuan.on_current', '=', '0');
-            })
-
+            ->join('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+            ->where('data_survei.kantor_kode', $kantor)
+            
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
 

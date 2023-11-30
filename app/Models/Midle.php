@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Midle extends Model
@@ -634,6 +635,12 @@ class Midle extends Model
                     ->where('data_pengajuan.tracking', '=', 'Selesai')
                     ->whereNull('data_notifikasi.pengajuan_kode');
             })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('data_survei.kasi_kode', '=', $user)
+                    ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
+                    ->where('data_pengajuan.tracking', '=', 'Persetujuan Komite')
+                    ->whereNull('data_notifikasi.pengajuan_kode');
+            })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
@@ -1238,5 +1245,37 @@ class Midle extends Model
         }
         //
         return $jaminan;
+    }
+
+    public static function get_qrcode($data)
+    {
+        $user = Auth::user()->code_user;
+        $gbr = DB::table('users')->where('code_user', $user)->first();
+        // // Cek apakah hasil query tidak kosong dan kolom 'ttd' memiliki nilai
+        // if ($gbr && isset($gbr->ttd)) {
+        //     $imageName = $gbr->ttd;
+        //     $imagePath = asset('public/image/tanda_tangan/') . '/' . $imageName;
+        //     dd($imagePath);
+        //     // Cek apakah file gambar ada
+        //     if (Storage::disk('public')->exists($imagePath)) {
+        //         $fileInfo = pathinfo(storage_path("app/{$imagePath}"));
+
+        //         // Mengembalikan informasi tentang file gambar
+        //         return [
+        //             'Nama File' => $fileInfo['filename'],
+        //             'Ekstensi' => $fileInfo['extension'],
+        //             'Path' => $imagePath,
+        //         ];
+        //     }
+        // }
+
+        // // Pesan jika tidak ada gambar atau masalah dengan nama file gambar
+        // return "Gambar tidak ditemukan atau ada masalah dengan nama file gambar.";
+
+        // Path ke gambar di dalam direktori 'storage/app/public/image'
+        $imagePath = 'public/image/tanda_tangan/TTD_JAE.jpg'; // Ganti dengan path gambar Anda
+
+        // Mendownload gambar
+        return Storage::download($imagePath);
     }
 }

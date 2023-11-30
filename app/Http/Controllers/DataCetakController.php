@@ -119,7 +119,6 @@ class DataCetakController extends Controller
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
-        $count = count($c);
         $data = $cek->paginate(10);
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
@@ -184,7 +183,13 @@ class DataCetakController extends Controller
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
-                // dd($cek->count_jaminan);
+                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin;
+
+                //QRCode 
+                // $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
+                //     $cek->role_name . '_' . $cek->nama_user;
+                // $qr = Midle::get_qrcode($text);
+                // dd($qr);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
@@ -771,6 +776,7 @@ class DataCetakController extends Controller
             }
 
             $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
+
             if (count($keuangan) != 0) {
                 $nominal = [];
 
@@ -811,6 +817,7 @@ class DataCetakController extends Controller
             $condition = Midle::cetak_data_analisa5C_condition($enc);
             $kualitatif = Midle::cetak_data_kualitatif($enc);
             $memorandum = Midle::cetak_data_memorandum($enc);
+            $memorandum->biaya_denda = $data[0]->b_denda ?? 0;
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
             if (is_null($kebutuhan_dana)) {
@@ -909,18 +916,21 @@ class DataCetakController extends Controller
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Persetujuan Komite');
             })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
+            ->where(function ($query) use ($usr) {
+                $query->where('data_survei.kasi_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Kasi');
             })
-            ->orWhere(function ($query) use ($usr) {
+            ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Komite I');
             })
-            ->orWhere(function ($query) use ($usr) {
+            ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
+                    ->orWhere('data_survei.kasi_kode', '=', $usr)
                     ->where('data_pengajuan.on_current', '=', '0')
                     ->where('data_pengajuan.tracking', 'Naik Komite II');
             })
@@ -1077,18 +1087,18 @@ class DataCetakController extends Controller
             //
             //Hari
 
-            $hari = Carbon::today();
-            $hari->addMonths(1);
-            $cek->tgl_bln_thn = $hari->isoformat('D MMMM Y');
+            $now = Carbon::today();
+            $cek->tgl_bln_thn = $now->isoformat('D MMMM Y');
+            $now->addMonths(1);
+            $cek->tgl_bln_thn_tempo = $now->isoformat('D MMMM Y');
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
-            $cek->hari = $hari->isoformat('dddd');
+            $cek->hari = Carbon::now()->isoFormat('dddd');
             $keputusan_komite = Carbon::parse($cek->keputusan_komite);
             $cek->keputusan_komite = $keputusan_komite->isoformat('D MMMM Y');
 
             $targetDate = Carbon::now();
             $tenMonthsLater = $targetDate->copy()->addMonths($cek->jangka_waktu);
-            $tenMonthsLater->addMonths(1);
             $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
             $cek->tgl_jth_tmp = $formattedDate;
@@ -1102,7 +1112,6 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-            // dd($cek);
             // //Done   
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
@@ -1118,6 +1127,8 @@ class DataCetakController extends Controller
             } elseif ($cek->produk_kode == 'KTO') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kto', [
                     'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
                 ]);
                 //Done
             } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ') {

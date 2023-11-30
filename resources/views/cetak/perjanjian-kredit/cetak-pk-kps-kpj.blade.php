@@ -153,11 +153,10 @@
 
         <p style="text-align: justify;">
             Bahwa guna keperluan {{ $data->penggunaan_debitur }} PEMINJAM telah mengajukan permohonan pinjam uang
-            secara tertulis
-            kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi persetujuan secara tertulis pada
-            tanggal {{ $data->tgl_bln_thn }} dengan ketentuan pokok yang telah disetujui PEMINJAM. Ketentuan pokok
-            tersebut akan diuraikan lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit dalam pasal-pasal
-            sebagai berikut :
+            secara tertulis kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi persetujuan secara
+            tertulis pada tanggal {{ $data->keputusan_komite }} dengan ketentuan pokok yang telah disetujui PEMINJAM.
+            Ketentuan pokok tersebut akan diuraikan lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit
+            dalam pasal-pasal sebagai berikut :
         </p>
 
         <p style="text-align: justify;">
@@ -205,7 +204,7 @@
                 {{ $data->jangka_waktu }} ( <font style="text-transform: capitalize;">
                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) kali
                 angsuran setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
-                pada​tanggal {{ $data->tgl_bln_thn }} dan demikian seterusnya hingga berakhir pada tanggal
+                pada​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
                 {{ $data->tgl_jth_tmp }}.
             </li>
             <li>
@@ -325,7 +324,7 @@
             </center>
             Dalam hal PEMINJAM tidak membayar angsuran dan setoran bunga tepat pada waktunya sebagaimana telah
             ditentukan dalam Pasal 2 perjanjian kredit ini, oleh sebab itu PEMINJAM dikenakan denda sebesar
-            {{ $data->b_penalti }} %
+            {{ $data->b_denda }} %
             perhari keterlambatan dari jumlah angsuran dan setoran bunga yang menjadi kewajibannya.
         </p>
 
