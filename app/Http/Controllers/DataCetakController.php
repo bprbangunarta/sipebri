@@ -186,10 +186,10 @@ class DataCetakController extends Controller
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin;
 
                 //QRCode 
-                $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
-                    $cek->role_name . '_' . $cek->nama_user;
-                $qr = Midle::get_qrcode($text);
-                dd($qr);
+                // $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
+                //     $cek->role_name . '_' . $cek->nama_user;
+                // $qr = Midle::get_qrcode($text);
+                // dd($qr);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
