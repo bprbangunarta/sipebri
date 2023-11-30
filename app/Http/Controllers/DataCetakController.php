@@ -189,7 +189,7 @@ class DataCetakController extends Controller
                 // $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
                 //     $cek->role_name . '_' . $cek->nama_user;
                 // $qr = Midle::get_qrcode($text);
-                // dd($qr);
+                // dd($qr); 
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
@@ -776,16 +776,16 @@ class DataCetakController extends Controller
             }
 
             $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
+            $total_usaha = Midle::cetak_dokumen_analisa_usaha_total($enc);
 
             if (count($keuangan) != 0) {
                 $nominal = [];
 
-                for ($i = 0; $i < count($keuangan); $i++) {
-                    $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[$i]->kode_keuangan)->get();
+                $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[0]->kode_keuangan)->get();
+                for ($i = 0; $i < count($bu_keuangan); $i++) {
                     $nominal[$i] = $bu_keuangan[$i]->nominal;
-
-                    $jaminan = Midle::cetak_dokumen_jaminan_analisa_keuangan($keuangan[$i]->pengajuan_kode);
                 }
+                $jaminan = Midle::cetak_dokumen_jaminan_analisa_keuangan($enc);
                 $arr = array_sum($nominal) ?? 0;
                 for ($i = 0; $i < count($keuangan); $i++) {
                     $keuangan[$i]->bu_total = $arr ?? 0;
@@ -835,6 +835,7 @@ class DataCetakController extends Controller
                 'bu' => $bu ?? null,
                 'du' => $du ?? null,
                 'keuangan' => $keuangan,
+                'total_usaha' => $total_usaha,
                 'bu_keuangan' => $bu_keuangan,
                 'jaminan' => $jaminan,
                 'character' => $character,

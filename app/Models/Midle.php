@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -955,6 +956,30 @@ class Midle extends Model
             ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'au_jasa.pengajuan_kode')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->where('au_jasa.pengajuan_kode', $kode)->get();
+
+        //
+        // if (count($data) != 0) {
+        //     $pendapatan = [];
+        //     $biaya_pajak = [];
+        //     $pengeluaran = [];
+        //     foreach ($data as $item) {
+        //         $pendapatan[] = $item->laba_bersih ?? 0;
+        //         $biaya_pajak[] = $item->b_pajak ?? 0;
+        //         $pengeluaran[] = $item->pengeluaran ?? 0;
+        //     }
+        //     $total_pendapatan = array_sum($pendapatan);
+        //     $total_biaya_pajak = array_sum($biaya_pajak);
+        //     $total_pengeluaran = array_sum($pengeluaran);
+        //     $total = $total_pendapatan - ($total_pengeluaran + $total_biaya_pajak) ?? 0;
+
+        //     $jasa = (object) [
+        //         'pendapatan' => $total_pendapatan,
+        //         'biaya_pajak' => $total_biaya_pajak,
+        //         'pengeluaran' => $total_pengeluaran,
+        //         'total_usaha_jasa' => $total,
+        //     ];
+        // };
+
         return $data;
     }
     public static function cetak_dokumen_analisa_usaha_lain($kode)
@@ -968,20 +993,62 @@ class Midle extends Model
     public static function cetak_dokumen_analisa_keuangan($kode)
     {
         $data = DB::table('au_keuangan')
-            ->leftjoin('au_perdagangan', 'au_keuangan.pengajuan_kode', '=', 'au_perdagangan.pengajuan_kode')
-            ->leftjoin('au_pertanian', 'au_keuangan.pengajuan_kode', '=', 'au_pertanian.pengajuan_kode')
-            ->leftjoin('au_jasa', 'au_keuangan.pengajuan_kode', '=', 'au_jasa.pengajuan_kode')
-            ->leftjoin('au_lainnya', 'au_keuangan.pengajuan_kode', '=', 'au_lainnya.pengajuan_kode')
             ->leftjoin('data_kepemilikan', 'au_keuangan.pengajuan_kode', '=', 'data_kepemilikan.pengajuan_kode')
             ->select(
                 'au_keuangan.*',
-                'au_perdagangan.laba_bersih as laba_bersih_perdagangan' ?? null,
-                'au_pertanian.laba_perbulan as laba_bersih_pertanian' ?? null,
-                'au_jasa.laba_bersih as laba_bersih_jasa' ?? null,
-                'au_lainnya.laba_bersih as laba_bersih_lainnya' ?? null,
                 'data_kepemilikan.*',
             )
             ->where('au_keuangan.pengajuan_kode', $kode)->get();
+        return $data;
+    }
+
+    public static function cetak_dokumen_analisa_usaha_total($kode)
+    {
+        $perdagangan = DB::table('au_perdagangan')->where('pengajuan_kode', $kode)->get();
+        if (count($perdagangan) != 0) {
+            $tperdagangan = [];
+            foreach ($perdagangan as $item) {
+                $tperdagangan[] = $item->laba_bersih;
+            }
+            $tp = array_sum($tperdagangan) ?? 0;
+        }
+
+        $pertanian = DB::table('au_pertanian')->where('pengajuan_kode', $kode)->get();
+        if (count($pertanian) != 0) {
+            $tpertanian = [];
+            foreach ($pertanian as $item) {
+                $tpertanian[] = $item->laba_bersih;
+            }
+            $tpt = array_sum($tpertanian) ?? 0;
+        }
+
+        $jasa = DB::table('au_jasa')->where('pengajuan_kode', $kode)->get();
+        if (count($jasa) != 0) {
+            $tjasa = [];
+            foreach ($jasa as $item) {
+                $tjasa[] = $item->laba_bersih;
+            }
+            $tj = array_sum($tjasa) ?? 0;
+        }
+
+        $lainnya = DB::table('au_lainnya')->where('pengajuan_kode', $kode)->get();
+        if (count($lainnya) != 0) {
+            $tlainnya = [];
+            foreach ($lainnya as $item) {
+                $tlainnya[] = $item->laba_bersih;
+            }
+            $tln = array_sum($tlainnya) ?? 0;
+        }
+
+        $total_all = ($tp ?? 0) + ($tpt ?? 0) + ($tj ?? 0) + ($tln ?? 0);
+
+        $data = (object)[
+            'laba_bersih_perdagangan' => $tp ?? 0,
+            'laba_bersih_pertanian' => $tpt ?? 0,
+            'laba_bersih_jasa' => $tj ?? 0,
+            'laba_bersih_lainnya' => $tln ?? 0,
+            'total_laba_usaha' => $total_all ?? 0,
+        ];
         return $data;
     }
 
@@ -1249,33 +1316,31 @@ class Midle extends Model
 
     public static function get_qrcode($data)
     {
-        $user = Auth::user()->code_user;
-        $gbr = DB::table('users')->where('code_user', $user)->first();
-        // // Cek apakah hasil query tidak kosong dan kolom 'ttd' memiliki nilai
-        // if ($gbr && isset($gbr->ttd)) {
-        //     $imageName = $gbr->ttd;
-        //     $imagePath = asset('public/image/tanda_tangan/') . '/' . $imageName;
-        //     dd($imagePath);
-        //     // Cek apakah file gambar ada
-        //     if (Storage::disk('public')->exists($imagePath)) {
-        //         $fileInfo = pathinfo(storage_path("app/{$imagePath}"));
+        // $user = Auth::user()->code_user;
+        // $gbr = DB::table('users')->where('code_user', $user)->first();
 
-        //         // Mengembalikan informasi tentang file gambar
-        //         return [
-        //             'Nama File' => $fileInfo['filename'],
-        //             'Ekstensi' => $fileInfo['extension'],
-        //             'Path' => $imagePath,
-        //         ];
-        //     }
-        // }
+        // $image = Storage::files('app/public/image/tanda_tangan/' . $gbr->ttd);
 
-        // // Pesan jika tidak ada gambar atau masalah dengan nama file gambar
-        // return "Gambar tidak ditemukan atau ada masalah dengan nama file gambar.";
+        // $imagePath = $image->store('app/public/image/temp_ttd');
 
-        // Path ke gambar di dalam direktori 'storage/app/public/image'
-        $imagePath = 'public/image/tanda_tangan/TTD_JAE.jpg'; // Ganti dengan path gambar Anda
+        // $img = Image::canvas(300, 300, '#ffffff'); // Ganti ukuran sesuai kebutuhan
+        // $uploadedImage  = Image::make(storage_path("app/$imagePath"));
+        // $img->insert($uploadedImage, 'center');
 
-        // Mendownload gambar
-        return Storage::download($imagePath);
+        // // Tambahkan teks ke gambar dengan latar belakang putih
+        // $img->text($data, $img->width() / 2, 20, function ($font) {
+        //     $font->size(48); // Ukuran teks besar
+        //     $font->color('#000000'); // Warna teks hitam
+        //     $font->align('center'); // Posisi teks di tengah
+        //     $font->valign('top'); // Posisi teks di atas
+        // });
+
+        // $strpath = storage_path('app/public/image/tanda_tangan');
+        // $imgname = 'qrcode_ttd.png';
+        // $url = 'https://sipebri.bprbangunarta.co.id/images?qrcode=';
+        // $chartUrl = 'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=' . $url . $gbr->ttd;
+        // $imgpath = $strpath . '/' . $imgname;
+        // file_put_contents($imgpath, file_get_contents($chartUrl));
+        // return $imgname;
     }
 }
