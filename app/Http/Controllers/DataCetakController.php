@@ -184,7 +184,8 @@ class DataCetakController extends Controller
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
-                // dd($cek->count_jaminan);
+                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin;
+                // dd($cek);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,

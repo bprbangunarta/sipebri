@@ -223,21 +223,21 @@
                 <td class="text-center" width="2%"> 9. </td>
                 <td width="27%">Denda</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->b_penalti }} % per hari dari angsuran pokok dan atau bunga
+                <td style="text-align: justify;">{{ $data->b_denda }} % per hari dari angsuran pokok dan atau bunga
                     yang tertunggak</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 10. </td>
                 <td width="27%">Biaya Kredit</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.50 % dari plafon kredit</td>
+                <td style="text-align: justify;">{{ $data->biaya_kredit }} % dari plafon kredit</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">a. Provisi Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
                 <td style="text-align: justify;">{{ $data->b_provisi ?? 0 }} %
-                    {{ 'Rp. ' . '' . number_format($data->b_provisi, 0, ',', '.') ?? 0 }}</td>
+                    {{ 'Rp. ' . '' . number_format($data->provisi, 0, ',', '.') ?? 0 }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
@@ -512,9 +512,9 @@
         Adapun kelengkapan dokumen yang harus diserahkan saat realisasi kredit adalah : <br>
 
         <ol>
-            <li>{{ $data->sebelum_realisasi }}</li>
-            <li>{{ $data->syarat_tambahan }}</li>
-            <li>{{ $data->syarat_lainnya }}</li>
+            <li>{{ Str::upper($data->sebelum_realisasi) }}</li>
+            <li>{{ Str::upper($data->syarat_tambahan) }}</li>
+            <li>{{ Str::upper($data->syarat_lainnya) }}</li>
         </ol>
     </div>
 
