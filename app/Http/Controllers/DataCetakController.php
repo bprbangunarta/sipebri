@@ -813,6 +813,7 @@ class DataCetakController extends Controller
             $condition = Midle::cetak_data_analisa5C_condition($enc);
             $kualitatif = Midle::cetak_data_kualitatif($enc);
             $memorandum = Midle::cetak_data_memorandum($enc);
+            $memorandum->biaya_denda = $data[0]->b_denda ?? 0;
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
             if (is_null($kebutuhan_dana)) {
