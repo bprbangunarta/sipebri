@@ -1150,7 +1150,8 @@
                     <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai
                         Taksasi
                         Agunan</td>
-                    <td>{{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
                 </tr>
             @empty
                 <tr style="border:1px solid black;">

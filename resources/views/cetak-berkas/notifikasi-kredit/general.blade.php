@@ -246,13 +246,23 @@
                 <td style="text-align: justify;">{{ $data->b_admin }} %
                     {{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }}</td>
             </tr>
-            <tr>
-                <td class="text-center" width="2%"></td>
-                <td width="27%">c. APHT</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->persen_apht }} %
-                    {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
-            </tr>
+            @if ($data->persen_apht != 0.0)
+                <tr>
+                    <td class="text-center" width="2%"></td>
+                    <td width="27%">c. APHT</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $data->persen_apht }} %
+                        {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
+                </tr>
+            @else
+                <tr>
+                    <td class="text-center" width="2%"></td>
+                    <td width="27%">c. FIDUCIA</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $data->persen_fiducia }} %
+                        {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }}</td>
+                </tr>
+            @endif
             <tr>
                 <td class="text-center" width="2%"> 11. </td>
                 <td width="27%">Jumlah Biaya Asuransi</td>

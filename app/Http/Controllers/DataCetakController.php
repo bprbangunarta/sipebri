@@ -172,8 +172,8 @@ class DataCetakController extends Controller
                     $cek->persen_apht = 0.75;
                     $cek->persen_fiducia = 0.00;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia > 0) {
-                    $cek->persen_fiducia = 0.75;
                     $cek->persen_apht = 0.00;
+                    $cek->persen_fiducia = 0.75;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia == 0) {
                     $cek->persen_fiducia = 0.00;
                     $cek->persen_apht = 0.00;
@@ -187,9 +187,9 @@ class DataCetakController extends Controller
 
                 //QRCode 
                 // $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
-                //     $cek->role_name . '_' . $cek->nama_user;
+                //     $cek->role_name . '_' . $cek->nama_user . '_' . $cek->code_user;
                 // $qr = Midle::get_qrcode($text);
-                // dd($text);
+                // dd($cek);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,

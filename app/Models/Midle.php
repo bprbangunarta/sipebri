@@ -839,7 +839,7 @@ class Midle extends Model
                 'data_pengajuan.*',
                 'a_memorandum.*',
             )->first();
-
+        // dd($memo);
         if (!is_null($memo)) {
             if ($memo->pengikatan == '1') {
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
@@ -852,34 +852,35 @@ class Midle extends Model
             } elseif ($memo->pengikatan == '2') {
                 $jml = ($memo->plafon * 1.5) / 100;
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
-                $has = (int)$adm - (int)$jml;
+                // $has = (int)$adm - (int)$jml;
                 $hasil = (object) [
                     'apht' => (int)$jml,
                     'fiducia' => 0,
-                    'adm' => $has,
+                    'adm' => $adm,
                 ];
             } else  if ($memo->pengikatan == '3') {
                 $jml = ($memo->plafon * 1.5) / 100;
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
-                $has = (int)$adm - (int)$jml;
+                // $has = (int)$adm - (int)$jml;
                 $hasil = (object) [
                     'apht' => 0,
                     'fiducia' => (int)$jml,
-                    'adm' => $has,
+                    'adm' => (int)$adm,
                 ];
             } else  if ($memo->pengikatan == '4') {
                 $jml = ($memo->plafon * 0.75) / 100;
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
-                $has = (int)$adm - ((int)$jml * 2);
+                // $has = (int)$adm - ((int)$jml * 2);
                 $hasil = (object) [
                     'apht' => (int)$jml,
                     'fiducia' => (int)$jml,
-                    'adm' => $has,
+                    'adm' => $adm,
                 ];
             }
         } else {
             return null;
         }
+
         return $hasil;
     }
 

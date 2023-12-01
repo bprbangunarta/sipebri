@@ -368,7 +368,7 @@ class AnalisaMemorandumController extends Controller
 
             //cek data memorandum sudah ada apa belum
             $memorandum = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-
+            // dd($data2);
             if (is_null($memorandum)) {
                 $name = 'AMO';
                 $length = 5;
