@@ -19,17 +19,17 @@
                         <tr>
                             <td style="vertical-align: middle;">
                                 <b>Jenis: </b><br>
-                                Kendaraan Bermotor Roda 2
+                                {{ $item->jenis_agunan }}
                                 <p></p>
                                 <b>Dokumen: </b><br>
-                                {{ $item->jenis_agunan }}
+                                {{ $item->jenis_dokumen }}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Atas Nama: </b><br>
                                 {{ $item->atas_nama }} <br>
                                 <p></p>
                                 <b>No Doukumen: </b><br>
-                                {{-- {{ $item->jenis_dokumen }} --}}
+                                {{ Str::upper($item->no_dokumen) }}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Merek: </b> {{ $item->merek ?? null }} <br>

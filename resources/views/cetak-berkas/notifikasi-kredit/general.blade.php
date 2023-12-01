@@ -254,7 +254,14 @@
                     <td style="text-align: justify;">{{ $data->persen_apht }} %
                         {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
                 </tr>
-            @else
+            @elseif ($data->persen_apht != 0.0 && $data->persen_fiducia != 0.0)
+                <tr>
+                    <td class="text-center" width="2%"></td>
+                    <td width="27%">c. APHT</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $data->persen_apht }} %
+                        {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
+                </tr>
                 <tr>
                     <td class="text-center" width="2%"></td>
                     <td width="27%">c. FIDUCIA</td>

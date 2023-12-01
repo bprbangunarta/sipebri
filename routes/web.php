@@ -562,7 +562,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //====VIEW QRCODE====//
-Route::get('/viewqr/qrcode', [QRController::class, 'index']);
+Route::get('/view/qrcode', [QRController::class, 'index']);
 //====VIEW QRCODE====//
 
 Route::view('/analisa/index', 'analisa.index');

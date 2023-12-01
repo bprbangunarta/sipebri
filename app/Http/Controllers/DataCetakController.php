@@ -169,11 +169,11 @@ class DataCetakController extends Controller
                 $notifikasi_general = Midle::notifikasi_general($enc);
 
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
-                    $cek->persen_apht = 0.75;
+                    $cek->persen_apht = 1.5;
                     $cek->persen_fiducia = 0.00;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia > 0) {
                     $cek->persen_apht = 0.00;
-                    $cek->persen_fiducia = 0.75;
+                    $cek->persen_fiducia = 1.5;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia == 0) {
                     $cek->persen_fiducia = 0.00;
                     $cek->persen_apht = 0.00;
