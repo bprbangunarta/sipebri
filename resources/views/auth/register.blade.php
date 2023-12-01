@@ -10,7 +10,8 @@
                 </a>
             </div>
 
-            <form class="card card-md" method="POST" action="{{ route('register') }}" novalidate>
+            {{-- <form class="card card-md" method="POST" action="{{ route('register') }}" novalidate> --}}
+            <form class="card card-md">
                 @csrf
 
                 <div class="card-body">
