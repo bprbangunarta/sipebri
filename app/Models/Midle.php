@@ -1316,8 +1316,8 @@ class Midle extends Model
 
     public static function get_qrcode($data)
     {
-        // $user = Auth::user()->code_user;
-        // $gbr = DB::table('users')->where('code_user', $user)->first();
+        $user = Auth::user()->code_user;
+        $gbr = DB::table('users')->where('code_user', $user)->first();
 
         // $image = Storage::files('app/public/image/tanda_tangan/' . $gbr->ttd);
 

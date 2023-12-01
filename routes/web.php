@@ -5,6 +5,7 @@ use App\Models\Nasabah;
 use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QRController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
 use App\Http\Controllers\LainController;
@@ -12,6 +13,7 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\AgunanController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\KomiteController;
 use App\Http\Controllers\SurveiController;
 use App\Http\Controllers\AnalisaController;
@@ -61,7 +63,6 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
-use App\Http\Controllers\ExportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -559,6 +560,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');
     });
 });
+
+//====VIEW QRCODE====//
+Route::get('/viewqr/qrcode', [QRController::class, 'index']);
+//====VIEW QRCODE====//
 
 Route::view('/analisa/index', 'analisa.index');
 Route::view('/anuitas', 'perhitungan.anuitas');

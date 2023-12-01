@@ -189,7 +189,7 @@ class DataCetakController extends Controller
                 // $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
                 //     $cek->role_name . '_' . $cek->nama_user;
                 // $qr = Midle::get_qrcode($text);
-                // dd($qr); 
+                // dd($text);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
@@ -823,7 +823,7 @@ class DataCetakController extends Controller
             if (is_null($kebutuhan_dana)) {
                 return redirect()->back()->with('error', 'Memorandum Kebutuhan Dana belum diisi');
             }
-
+            // dd();
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

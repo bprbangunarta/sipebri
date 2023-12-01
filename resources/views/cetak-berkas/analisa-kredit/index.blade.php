@@ -719,12 +719,12 @@
 
 
     {{-- Analisa Usaha Jasa --}}
-    @forelse ($jasa as $item)
-        <div class="page-break"></div>
-        <div class="content" style="margin-top: -57px;">
-            <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
-            <hr style="border: 1px solid 034871;">
+    <div class="page-break"></div>
+    <div class="content" style="margin-top: -57px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr style="border: 1px solid 034871;">
 
+        @forelse ($jasa as $item)
             <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA JASA</h4>
 
             <table>
@@ -804,7 +804,7 @@
             </table>
             <br>
         @empty
-    @endforelse
+        @endforelse
     </div>
 
     {{-- Analisa Usaha Lainnya --}}
