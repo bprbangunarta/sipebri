@@ -56,16 +56,7 @@
           </div>
           <strong>SISTEM PEMBERIAN KREDI</strong>
         </div>
-        <!-- /.container -->
       </footer>
-
-      <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>VERSI</b> 1.1.0
-        </div>
-        <strong>SISTEM PEMBERIAN KREDIT</strong>
-    </footer>
-
     @include('theme.footer')
 </body>
 </html>
