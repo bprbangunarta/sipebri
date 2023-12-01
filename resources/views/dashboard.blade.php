@@ -115,14 +115,14 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <table class="table table-bordered text-uppercase">
+                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" style="width: 15px;">#</th>
                                         <th class="text-center">KODE</th>
                                         <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center">ALAMAT</th>
-                                        <th class="text-center">SURVEYOR</th>
+                                        <th class="text-center">WILAYAH</th>
                                         <th class="text-center">PLAFON</th>
                                     </tr>
                                 </thead>
@@ -135,8 +135,8 @@
                                             <td class="text-center" style="vertical-align: middle;">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
-                                            <td class="text-center">{{ $item->kode }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->nama }}</td>
+                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}
                                             </td>
@@ -156,11 +156,11 @@
                                         </tr>
                                     @endforelse
 
-                                    <tr class="bg-blue">
+                                    {{-- <tr class="bg-blue">
                                         <td class="text-center" colspan="5"><b>TOTAL</b></td>
                                         <td class="text-right"><b>{{ 'Rp. ' . ' ' . number_format($total, 0, ',', '.') }}</b>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </tbody>
                             </table>
                         </div>
