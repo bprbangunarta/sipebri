@@ -60,3 +60,11 @@
         float: right;
     }
 </style>
+<style>
+    /* Custom CSS */
+    @media (min-width: 992px) {
+      .d-lg-none {
+        display: none !important;
+      }
+    }
+  </style>

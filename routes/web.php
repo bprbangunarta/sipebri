@@ -63,6 +63,7 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -561,9 +562,12 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-//====VIEW QRCODE====//
-Route::get('/viewqr/qrcode', [QRController::class, 'index']);
-//====VIEW QRCODE====//
+//====FRONT END====//
+Route::get('/', [FrontController::class, 'index']);
+Route::get('/pengajuan/kredit', [FrontController::class, 'pengajuan']);
+Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
+Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
+//====FRONT END====//
 
 Route::view('/analisa/index', 'analisa.index');
 Route::view('/anuitas', 'perhitungan.anuitas');

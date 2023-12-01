@@ -443,8 +443,6 @@
         @empty
         @endforelse
 
-
-
         <table style="margin-top:-15px;">
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 14. </td>
@@ -494,7 +492,8 @@
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <p style="margin-top:70px;"></p>
+                        {{-- <p style="margin-top:70px;"></p> --}}
+                        <img src="https://images.tokopedia.net/img/cache/700/product-1/2018/11/8/39617213/39617213_91fd0f0c-03c2-43b4-861a-64e9f04e8f24_700_700.jpeg" width="100" height="100" style="margin-top:-30px;">
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
