@@ -499,8 +499,9 @@ class CetakController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->join('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            ->where('data_survei.kantor_kode', $kantor)
-            
+            // ->where('data_survei.kantor_kode', $kantor)
+            ->where('data_pengajuan.on_current', '!=', 1)
+
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
@@ -533,7 +534,7 @@ class CetakController extends Controller
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
         }
-
+        // dd($data);
         return view('cetak-berkas.notifikasi-kredit.index', [
             'data' => $data
         ]);
@@ -586,10 +587,8 @@ class CetakController extends Controller
         $c = $cek->get();
         $count = count($c);
         $data = $cek->paginate(10);
-        for ($i = 0; $i < $count; $i++) {
-            if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-            }
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
         }
 
         return view('cetak-berkas.perjanjian-kredit.index', [
