@@ -238,7 +238,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit',) ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -247,7 +247,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ request()->is('laporan/fasilitas') ? 'active' : '' }}">
+                    <li class="{{ request()->is('laporan/fasilitas', 'filter/laporan/fasilitas') ? 'active' : '' }}">
                         <a href="/laporan/fasilitas">
                             <i class="fa fa-bank"></i>
                             Fasilitas Kredit

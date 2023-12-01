@@ -21,8 +21,12 @@
 
                             <div class="box-tools">
                                 <form action="{{ route('laporan.fasilitas') }}" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" name="name" id="name" value="{{ request('name') }}" placeholder="Nama/ Kode/ Wilayah">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
+                                            <i class="fa fa-filter"></i> Short & Filter
+                                        </a>
+
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -41,7 +45,7 @@
                                         <th class="text-center" width="7%">TANGGAL</th>
                                         <th class="text-center" width="7%">NO. LOAN</th>
                                         <th class="text-center" width="7%">NO. SPK</th>
-                                        <th class="text-center">NAMA LENGKAP</th>
+                                        <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
@@ -51,7 +55,7 @@
                                     @php
                                         $no = 1;
                                     @endphp
-                                    @foreach ($data as $item)
+                                    @forelse ($data as $item)
                                         <tr class="text-uppercase">
                                             <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center">
@@ -72,13 +76,25 @@
                                         @php
                                             $no++;
                                         @endphp
-                                    @endforeach
+                                    @empty
+                                    <tr>
+                                        <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="box-footer clearfix">
-                            <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
+                            <div class="pull-left">
+                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                    <i class="fa fa-download"></i>&nbsp; Export Data
+                                </button>
+
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
 
                             {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
@@ -87,5 +103,78 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="modal-filter">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">SHORT & FILTER</h4>
+                </div>
+                <form action="{{ route('filter.laporan.fasilitas') }}" method="GET">
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1" style="margin-top:-5px;"> 
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2" style="margin-top:-5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">FILTER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-export">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT DATA</h4>
+                </div>
+                <form action="{{ route('export.fasilitas') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1" style="margin-top:-5px;"> 
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2" style="margin-top:-5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection

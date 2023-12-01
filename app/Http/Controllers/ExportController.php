@@ -11,6 +11,75 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ExportController extends Controller
 {
+    function data_laporan_fasilitas()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        $no = 1;
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $data = DB::table('data_pengajuan')
+            ->select(
+                'data_tracking.akad_kredit',
+                'data_pengajuan.no_loan',
+                'data_spk.no_spk',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_kantor.kode_kantor',
+                'data_pengajuan.plafon as plafon',
+            )
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->where('data_pengajuan.on_current', 1)
+
+            ->when(
+                $tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
+                return $query->whereBetween('data_tracking.akad_kredit', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            })
+
+            ->orderBy('data_tracking.akad_kredit', 'desc')
+            ->get();
+
+        $data_array[] = array("NO", "TANGGAL", "NO_LOAN", "NO_SPK", "NAMA_DEBITUR", "ALAMAT", "WIL", "PLAFON");
+        foreach ($data as $item) {
+            $data_array[] = array(
+                'NO'            => $no++,
+                'TANGGAL'       => \Carbon\Carbon::parse($item->akad_kredit)->format('Y-m-d'),
+                'NO_LOAN'       => $item->no_loan,
+                'NO_SPK'        => $item->no_spk,
+                'NAMA_DEBITUR'  => $item->nama_nasabah,
+                'ALAMAT'        => $item->alamat_ktp,
+                'WIL'           => $item->kode_kantor,
+                'PLAFON'        => number_format($item->plafon, 0, ',', '.')
+            );
+        }
+        $this->export_laporan_fasilitas($data_array);
+    }
+    public function export_laporan_fasilitas($data)
+    {
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '4000M');
+        try {
+            $spreadSheet = new Spreadsheet();
+            $spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
+            $spreadSheet->getActiveSheet()->fromArray($data);
+            $Excel_writer = new Xls($spreadSheet);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="fasilitas_kredit.xls"');
+            header('Cache-Control: max-age=0');
+            ob_end_clean();
+            $Excel_writer->save('php://output');
+            exit();
+        } catch (Exception $e) {
+            return;
+        }
+    }
+
     function data_laporan_pendaftaran()
     {
         $tgl1 = request('tgl1');

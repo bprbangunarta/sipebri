@@ -10,34 +10,64 @@ class CetakLaporanController extends Controller
 {
     public function laporan_fasilitas()
     {
-        $name = request('name');
+        $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->where('data_pengajuan.status', 'Disetujui')
+            ->where('data_pengajuan.on_current', 1)
 
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
+
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
                 'data_spk.*',
                 'data_survei.*',
                 'data_tracking.*',
-            )->orderBy('data_pengajuan.created_at', 'desc');
+            )
+            ->orderBy('data_tracking.akad_kredit', 'desc');
 
         $data = $query->paginate(10);
-        $jumlah = $query->count();
         return view('laporan.fasilitas', [
             'data' => $data,
-            'jumlah' => $jumlah,
+        ]);
+    }
+    public function post_laporan_fasilitas()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->where('data_pengajuan.on_current', 1)
+
+            ->when(
+                $tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
+                return $query->whereBetween('data_tracking.akad_kredit', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            })
+
+            ->orderBy('data_tracking.akad_kredit', 'desc');
+        $data = $query->paginate(10);
+        // dd($data);
+        return view('laporan.fasilitas', [
+            'data' => $data,
         ]);
     }
 
@@ -301,7 +331,6 @@ class CetakLaporanController extends Controller
             'data' => $data,
         ]);
     }
-
     public function post_laporan_survey(Request $request)
     {
         $tgl1 = request('tgl1');

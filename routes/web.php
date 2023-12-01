@@ -536,6 +536,7 @@ Route::middleware('auth')->group(function () {
     //====Route Cetak Laporan====//
     Route::controller(CetakLaporanController::class)->group(function () {
         Route::get('/laporan/fasilitas', 'laporan_fasilitas')->name('laporan.fasilitas');
+        Route::get('/filter/laporan/fasilitas', 'post_laporan_fasilitas')->name('filter.laporan.fasilitas');
 
         Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
         Route::post('z', 'post_laporan_realisasi')->name('laporan.realisasi-kredit');
@@ -556,6 +557,7 @@ Route::middleware('auth')->group(function () {
 
     // Export Data
     Route::controller(ExportController::class)->group(function () {
+        Route::post('/export/laporan/fasilitas', 'data_laporan_fasilitas')->name('export.fasilitas');
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
         Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
         Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');
