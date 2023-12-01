@@ -22,12 +22,12 @@
                             <div class="box-tools">
                                 <form action="{{ route('laporan.fasilitas') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name"
-                                            value="" placeholder="Search">
+                                        <input type="text" class="form-control text-uppercase pull-right" name="name" id="name" value="{{ request('name') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i
-                                                    class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -39,36 +39,40 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center" width="7%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center" width="7%">NO. LOAN</th>
+                                        <th class="text-center" width="7%">NO. SPK</th>
                                         <th class="text-center">NAMA LENGKAP</th>
-                                        <th class="text-center" width="45%">ALAMAT</th>
-                                        <th class="text-center" width="7%">PLAFON</th>
-                                        <th class="text-center" width="7%">STATUS</th>
+                                        <th class="text-center" width="41%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="8%">PLAFON</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @php
                                         $no = 1;
                                     @endphp
-                                    @forelse ($data as $item)
+                                    @foreach ($data as $item)
                                         <tr class="text-uppercase">
                                             <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center">
-                                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
-                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                                {{ \Carbon\Carbon::parse($item->akad_kredit)->format('Y-m-d') }}</td>
+                                            <td class="text-center">
+                                                @if (is_null($item->no_loan))
+                                                    {{ $item->kode_pengajuan }}
+                                                @else
+                                                    {{ $item->no_loan }} 
+                                                @endif
+                                            </td>
+                                            <td class="text-center">{{ $item->no_spk }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center">{{ $item->kantor_kode }}</td>
                                             <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center">{{ $item->status }}</td>
                                         </tr>
                                         @php
                                             $no++;
                                         @endphp
-                                    @empty
-                                        <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

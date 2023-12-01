@@ -15,6 +15,8 @@ class CetakLaporanController extends Controller
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->where('data_pengajuan.status', 'Disetujui')
 
             ->where(function ($query) use ($name) {
@@ -25,13 +27,17 @@ class CetakLaporanController extends Controller
             })
             ->select(
                 'data_pengajuan.*',
-                'data_nasabah.*'
-            )->orderBy('data_pengajuan.created_at', 'asc');
+                'data_nasabah.*',
+                'data_spk.*',
+                'data_survei.*',
+                'data_tracking.*',
+            )->orderBy('data_pengajuan.created_at', 'desc');
 
-        $data = $query->paginate(7);
-
+        $data = $query->paginate(10);
+        $jumlah = $query->count();
         return view('laporan.fasilitas', [
             'data' => $data,
+            'jumlah' => $jumlah,
         ]);
     }
 

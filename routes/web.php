@@ -76,7 +76,7 @@ use App\Http\Controllers\FrontController;
 |
 */
 
-Route::get('/register', function () {
+Route::get('/', function () {
     // $role = Role::find(2);
     // $permission = Permission::find(47);
 

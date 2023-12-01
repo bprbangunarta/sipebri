@@ -13,30 +13,10 @@
             </li>
         @endif
 
-        {{-- Pagination Elements --}}
-        @foreach ($elements as $page => $url)
-            {{-- "Three Dots" Separator --}}
-            @if (is_string($page))
-                <li class="disabled" aria-disabled="true">
-                    <span>{{ $page }}</span>
-                </li>
-            @endif
-
-            {{-- Array Of Links --}}
-            @if (is_array($url))
-                @foreach ($url as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <li class="active" aria-current="page">
-                            <span class="page-link">{{ $page }}</span>
-                        </li>
-                    @else
-                        <li>
-                            <a href="{{ $url }}">{{ $page }}</a>
-                        </li>
-                    @endif
-                @endforeach
-            @endif
-        @endforeach
+        {{-- Current Page --}}
+        <li class="active" aria-current="page">
+            <span class="page-link">{{ $paginator->currentPage() }}</span>
+        </li>
 
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())
