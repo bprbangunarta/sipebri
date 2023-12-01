@@ -249,24 +249,25 @@
                 <ul class="treeview-menu">
                     <li class="{{ request()->is('laporan/fasilitas', 'filter/laporan/fasilitas') ? 'active' : '' }}">
                         <a href="/laporan/fasilitas">
-                            <i class="fa fa-bank"></i>
-                            Fasilitas Kredit
-                        </a>
-                    </li>
-
-                    <li class="{{ request()->is('laporan/notifikasi') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.notifikasi') }}">
-                            <i class="fa fa-bell"></i>
-                            Rekap Notifikasi
-                        </a>
-                    </li>
-
-                    <li class="{{ request()->is('laporan/realisasi', 'laporan/realisasi/kredit') ? 'active' : '' }}">
-                        <a href="/laporan/realisasi">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
                         </a>
                     </li>
+
+                    {{-- <li class="{{ request()->is('laporan/notifikasi') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.notifikasi') }}">
+                            <i class="fa fa-bell"></i>
+                            Rekap Notifikasi
+                        </a>
+                    </li> --}}
+
+                    {{-- <li class="{{ request()->is('laporan/realisasi', 'laporan/realisasi/kredit') ? 'active' : '' }}">
+                        <a href="/laporan/realisasi">
+                            <i class="fa fa-flag"></i>
+                            Realisasi Kredit
+                        </a>
+                    </li> --}}
+
                     <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
                         <a href="{{ route('laporan.siap-realisasi') }}">
                             <i class="fa fa-check"></i>

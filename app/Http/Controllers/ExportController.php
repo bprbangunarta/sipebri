@@ -70,7 +70,7 @@ class ExportController extends Controller
             $spreadSheet->getActiveSheet()->fromArray($data);
             $Excel_writer = new Xls($spreadSheet);
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="fasilitas_kredit.xls"');
+            header('Content-Disposition: attachment;filename="realisasi_kredit.xls"');
             header('Cache-Control: max-age=0');
             ob_end_clean();
             $Excel_writer->save('php://output');
@@ -207,48 +207,49 @@ class ExportController extends Controller
     {
         $tgl1 = request('tgl1');
         $tgl2 = request('tgl2');
+        $no = 1;
 
         if (is_null($tgl2)) {
             $tgl2 = $tgl1;
         }
 
         $data = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->where('data_pengajuan.on_current', '0')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-                'data_notifikasi.*',
-                'data_survei.kantor_kode as wilayah',
-
-                'data_pengajuan.created_at as created_at',
-                'data_pengajuan.kode_pengajuan as kode_pengajuan',
-                'data_nasabah.nama_nasabah as nama_nasabah',
-                'data_pengajuan.plafon as plafon',
-                'data_survei.kantor_kode as kantor_kode',
-                'data_notifikasi.rencana_realisasi as rencana_realisasi',
-                'data_notifikasi.keterangan as keterangan',
+                'data_notifikasi.no_notifikasi',
+                'data_notifikasi.created_at as tanggal',
+                'data_notifikasi.keterangan',
+                'data_notifikasi.rencana_realisasi',
+                'data_kantor.kode_kantor',
+                'users.name as surveyor',
             )
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->where('data_pengajuan.on_current', '0')
 
             ->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
-                return $data->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+                return $data->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
             })
 
-            ->orderBy('data_pengajuan.created_at', 'desc')
+            ->orderBy('data_notifikasi.created_at', 'desc')
             ->get();
 
-        $data_array[] = array("TANGGAL", "KODE", "NAMA_LENGKAP", "PLAFON", "WIL", "RENCANA", "KETERANGAN");
+        $data_array[] = array("NO", "TANGGAL", "KODE", "NO_NOTIFIKASI", "NAMA_NASABAH", "PLAFON", "WIL", "RENCANA", "KETERANGAN");
         foreach ($data as $item) {
             $data_array[] = array(
-                'TANGGAL'       => \Carbon\Carbon::parse($item->created_at)->format('Y-m-d'),
+                'NO'            => $no++,
+                'TANGGAL'       => \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d'),
                 'KODE'          => $item->kode_pengajuan,
-                'NAMA_LENGKAP'  => $item->nama_nasabah,
+                'NO_NOTIFIKASI' => $item->no_notifikasi,
+                'NAMA_NASABAH'  => $item->nama_nasabah,
                 'PLAFON'        => number_format($item->plafon, 0, ',', '.'),
-                'WIL'           => $item->kantor_kode,
-                'RENCANA'       => $item->rencana_realisasi,
+                'WIL'           => $item->kode_kantor,
                 'KETERANGAN'    => $item->keterangan,
+                'RENCANA'       => $item->rencana_realisasi,
             );
         }
         $this->export_laporan_siap_realisasi($data_array);
@@ -263,7 +264,7 @@ class ExportController extends Controller
             $spreadSheet->getActiveSheet()->fromArray($data);
             $Excel_writer = new Xls($spreadSheet);
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="rekap_bekas_siap_realisasi.xls"');
+            header('Content-Disposition: attachment;filename="pengajuan_siap_realisasi.xls"');
             header('Cache-Control: max-age=0');
             ob_end_clean();
             $Excel_writer->save('php://output');

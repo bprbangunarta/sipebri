@@ -12,6 +12,13 @@ class CetakLaporanController extends Controller
     {
         $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+                'data_spk.*',
+                'data_survei.*',
+                'data_tracking.*',
+            )
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
@@ -26,18 +33,11 @@ class CetakLaporanController extends Controller
                     ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
-
-            ->select(
-                'data_pengajuan.*',
-                'data_nasabah.*',
-                'data_spk.*',
-                'data_survei.*',
-                'data_tracking.*',
-            )
+            
             ->orderBy('data_tracking.akad_kredit', 'desc');
 
         $data = $query->paginate(10);
-        return view('laporan.fasilitas', [
+        return view('laporan.realisasi', [
             'data' => $data,
         ]);
     }
@@ -174,34 +174,35 @@ class CetakLaporanController extends Controller
 
     public function siap_realisasi()
     {
-        $tgl1 = request('tgl1');
-        $tgl2 = request('tgl2');
-
-        if (is_null($tgl2)) {
-            $tgl2 = $tgl1;
-        }
-
+        $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
-            ->where('data_pengajuan.on_current', '0')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-                'data_notifikasi.*',
+                'data_notifikasi.no_notifikasi',
+                'data_notifikasi.created_at as tanggal',
+                'data_notifikasi.keterangan',
+                'data_notifikasi.rencana_realisasi',
                 'data_survei.kantor_kode as wilayah',
                 'users.name as surveyor',
             )
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->where('data_pengajuan.on_current', '0')
 
-            ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
-            ->orderBy('data_pengajuan.created_at', 'desc');
+            ->orderBy('data_notifikasi.created_at', 'desc');
         $data = $query->paginate(10);
-        // dd($data);
         return view('laporan.siap-realisasi', [
             'data' => $data,
         ]);
@@ -216,24 +217,30 @@ class CetakLaporanController extends Controller
         }
 
         $query = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->where('data_pengajuan.on_current', '0')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-                'data_notifikasi.*',
+                'data_notifikasi.no_notifikasi',
+                'data_notifikasi.created_at as tanggal',
+                'data_notifikasi.keterangan',
+                'data_notifikasi.rencana_realisasi',
                 'data_survei.kantor_kode as wilayah',
+                'users.name as surveyor',
             )
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->where('data_pengajuan.on_current', '0')
 
-            ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            ->when(
+                $tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
+                return $query->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
             })
 
-            ->orderBy('data_pengajuan.created_at', 'desc');
+            ->orderBy('data_notifikasi.created_at', 'desc');
         $data = $query->paginate(10);
-        // dd($data);
         return view('laporan.siap-realisasi', [
             'data' => $data,
         ]);
