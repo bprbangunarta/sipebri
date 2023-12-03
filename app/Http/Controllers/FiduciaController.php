@@ -14,6 +14,7 @@ class FiduciaController extends Controller
         $keyword = request('keyword');
         $cek = DB::table('data_jaminan')
             ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -21,10 +22,8 @@ class FiduciaController extends Controller
             ->join('data_jenis_agunan', 'data_jenis_agunan.kode', '=', 'data_jaminan.jenis_agunan_kode')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
-            ->where(function ($query) {
-                $query->where('data_jaminan.jenis_jaminan', 'Kendaraan')
-                    ->where('data_pengajuan.status', 'Disetujui');
-            })
+            ->where('data_jaminan.jenis_jaminan', 'Kendaraan')
+            ->whereNotNull('data_notifikasi.no_notifikasi')
 
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
