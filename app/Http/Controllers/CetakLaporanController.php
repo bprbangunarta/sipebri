@@ -257,6 +257,7 @@ class CetakLaporanController extends Controller
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
+                'data_survei.*',
             )
 
             ->where(function ($query) use ($keyword) {
@@ -334,7 +335,7 @@ class CetakLaporanController extends Controller
                 'data_nasabah.*',
             )
             ->orderBy('data_pengajuan.created_at', 'asc');
-        $data = $query->paginate(7);
+        $data = $query->paginate(10);
 
         return view('laporan.survey-analisa', [
             'data' => $data,

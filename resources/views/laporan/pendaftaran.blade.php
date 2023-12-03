@@ -37,9 +37,12 @@
                                         <th class="text-center" width="7%">TANGGAL</th>
                                         <th class="text-center" width="7%">KODE</th>
                                         <th class="text-center">NAMA LENGKAP</th>
-                                        <th class="text-center" width="43%">ALAMAT</th>
+                                        <th class="text-center" width="38%">ALAMAT</th>
+                                        <th class="text-center" width="5%">PRODUK</th>
+                                        <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="5%">SRV</th>
                                         <th class="text-center" width="10%">PLAFON</th>
-                                        <th class="text-center" width="10%">STATUS</th>
+                                        {{-- <th class="text-center" width="10%">STATUS</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,14 +51,17 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center">
+                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
-                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
-                                            <td>{{ $item->nama_nasabah }}</td>
-                                            <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center">
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor_kode }}</td>
+                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            {{-- <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->status == "Disetujui")
                                                     <font class="text-green">{{ $item->status }}</font>
                                                 @elseif ($item->status == "Ditolak")
@@ -67,14 +73,14 @@
                                                 @else
                                                     -
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                         @php
                                             $no++;
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="9">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

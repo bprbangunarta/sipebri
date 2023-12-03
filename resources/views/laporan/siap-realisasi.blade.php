@@ -39,6 +39,7 @@
                                         <th class="text-center" width="7%">NOTIFIKASI</th>
                                         <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center" width="41%">ALAMAT</th>
+                                        <th class="text-center" width="5%">PRODUK</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                     </tr>
@@ -49,16 +50,17 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td style="vertical-align: middle;">
+                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
                                             </td>
-                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center">{{ $item->no_notifikasi }}</td>
-                                            <td>{{ $item->nama_nasabah }}</td>
-                                            <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center">{{ $item->wilayah }}</td>
-                                            <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_notifikasi }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
+                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                         </tr>
                                         @php
                                             $no++;
