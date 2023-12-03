@@ -448,7 +448,7 @@ class CetakController extends Controller
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal',
             )
-            ->where('data_pengajuan.on_current', '0')
+            
             ->where(function ($query) {
                 $query->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
                     ->orWhere('data_pengajuan.status', 'Disetujui');
@@ -470,7 +470,7 @@ class CetakController extends Controller
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
-            ->orderBy('data_nasabah.created_at', 'ASC');
+            ->orderBy('data_pengajuan.created_at', 'desc');
         //
 
         if ($role[0]->role_name == 'Customer Service') {
@@ -509,13 +509,12 @@ class CetakController extends Controller
                 'data_survei.surveyor_kode as surveyor',
             )
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
             ->where('data_pengajuan.status', 'Disetujui')
-            ->whereNotNull('data_notifikasi.no_notifikasi')
 
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')

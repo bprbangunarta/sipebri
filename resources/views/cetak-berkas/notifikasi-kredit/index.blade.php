@@ -69,10 +69,16 @@
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    target="_blank" class="btn-circle btn-sm bg-blue">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                @if (is_null($item->no_notifikasi))
+                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
 
@@ -99,5 +105,24 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">NOTIFIKASI KREDIT</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <p>Mohon maaf cetak notifikasi kredit tidak bisa dilakukan karena notifikasi belum diturunkan oleh komite kredit. Silahkan hubungi tim analis. Terimakasih</p>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

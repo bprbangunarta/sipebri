@@ -41,7 +41,7 @@
                                         <th class="text-center" width="8%">MEREK</th>
                                         <th class="text-center" width="8%">NO. POLISI</th>
                                         <th class="text-center" width="8%">TAKSASI</th>
-                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,16 +79,23 @@
                                                 {{ number_format($item->nilai_taksasi, 0, ',', '.') }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#modal-info"
+                                                {{-- <a data-toggle="modal" data-target="#modal-info"
                                                     class="btn-circle btn-sm bg-yellow">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
 
-                                                &nbsp;
-                                                <a href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    target="_blank" class="btn-circle btn-sm bg-blue">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                &nbsp; --}}
+
+                                                @if (is_null($item->no_spk))
+                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php
@@ -228,6 +235,25 @@
                             data-dismiss="modal">TUTUP</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PENJAMINAN FIDUCIA</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <p>Mohon maaf cetak penjaminan fiducia tidak bisa dilakukan karena perjanjian kredit belum diturunkan. Silahkan hubungi bagian realisasi. Terimakasih</p>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                </div>
             </div>
         </div>
     </div>

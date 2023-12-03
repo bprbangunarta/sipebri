@@ -32,10 +32,10 @@
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center" width="7%">TANGGAL</th>
                                         <th class="text-center" width="7%">KODE</th>
-                                        <th class="text-center" width="7%">NOTIFIKASI</th>
                                         <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="5%">SRV</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="5%">AKSI</th>
                                     </tr>
@@ -53,18 +53,10 @@
                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if (is_null($item->no_notifikasi))
-                                                    <span class="label label-danger" style="font-size: 10px;">
-                                                        &nbsp; BELUM DITURUNKAN &nbsp;
-                                                    </span>
-                                                @else
-                                                    {{ $item->no_notifikasi }}
-                                                @endif
-                                            </td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}</td>
                                             <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a href="{{ route('cetak.persetujuan_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
