@@ -40,7 +40,7 @@
                                         <th class="text-center" width="38%">ALAMAT</th>
                                         <th class="text-center" width="5%">PRODUK</th>
                                         <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="5%">SRV</th>
+                                        <th class="text-center" width="5%">INPUT</th>
                                         <th class="text-center" width="10%">PLAFON</th>
                                         {{-- <th class="text-center" width="10%">STATUS</th> --}}
                                     </tr>
@@ -59,7 +59,7 @@
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor_kode }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->input_user }}</td>
                                             <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             {{-- <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->status == "Disetujui")

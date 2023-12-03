@@ -256,6 +256,7 @@ class CetakLaporanController extends Controller
             ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
             ->select(
                 'data_pengajuan.*',
+                'data_pengajuan.input_user',
                 'data_nasabah.*',
                 'data_survei.*',
             )
