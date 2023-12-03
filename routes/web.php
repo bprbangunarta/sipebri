@@ -86,6 +86,15 @@ Route::get('/', function () {
     return redirect('login');
 });
 
+Route::get('/give-permission', function () {
+    $role = Role::find(15);
+    $permission = Permission::find(49);
+
+    $role->givePermissionTo($permission);
+    $permission->assignRole($role);
+    dd($permission);
+});
+
 Route::get('/login', function () {
     return redirect('login');
 });
@@ -571,22 +580,7 @@ Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
 Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
 //====FRONT END====//
 
-Route::view('/analisa/index', 'analisa.index');
 Route::view('/anuitas', 'perhitungan.anuitas');
-Route::view('/cetak/notifikasi-kredit-tanah', 'cetak.notifikasi-kredit.cetak-notifikasi-tanah');
-Route::view('/cetak/notifikasi-kredit-bpkb', 'cetak.notifikasi-kredit.cetak-notifikasi-bpkb');
-Route::view('/cetak/notifikasi-kredit-bpkb-nonbpkb', 'cetak.notifikasi-kredit.cetak-notifikasi-bpkb-nonbpkb');
-Route::view('/cetak/persetujuan-kredit', 'cetak.persetujuan-kredit.cetak-persetujuan-kredit');
-
 Route::view('/rekap/analisa', 'rekap.analisa');
-
-Route::prefix('cetak-berkas')->group(function () {
-    Route::view('notifikasi-kredit', 'cetak-berkas.notifikasi-kredit.general');
-    Route::view('notifikasi-kredit/kta', 'cetak-berkas.notifikasi-kredit.kta');
-    Route::view('analisa-kredit', 'cetak-berkas.analisa-kredit.index');
-});
-
-Route::view('/usaha_perdagangan', 'cetak.analisa.usaha_perdagangan');
-Route::view('/themes/analisa/bahan-baku/usaha/lainnya', 'staff.analisa.u-lainnya.bahan-baku');
 
 require __DIR__ . '/auth.php';

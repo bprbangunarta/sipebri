@@ -26,9 +26,9 @@
                     <a href="/pengajuan/tracking">Tracking Pengajuan</a>
                 </li>
 
-                <li class="{{ request()->is('verifikasi') ? 'active' : '' }}">
+                {{-- <li class="{{ request()->is('verifikasi') ? 'active' : '' }}">
                   <a href="/verifikasi">Verifikasi</a>
-              </li>
+                </li> --}}
               </ul>
             </div>
             

@@ -59,12 +59,8 @@
         width: 49.5%;
         float: right;
     }
-</style>
-<style>
-    /* Custom CSS */
-    @media (min-width: 992px) {
-      .d-lg-none {
-        display: none !important;
-      }
+
+    .text-middle {
+        vertical-align: middle;
     }
-  </style>
+</style>

@@ -642,102 +642,41 @@ class DataCetakController extends Controller
 
     public function analisa_kredit(Request $request)
     {
-        $name = request('name');
-        $usr = Auth::user()->code_user;
-        $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
-
+        $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->where(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Persetujuan Komite');
-            })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->orWhere('data_survei.kasi_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Naik Kasi');
-            })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Naik Komite I');
-            })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Naik Komite II');
-            })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->orWhere('data_survei.kasi_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.status', 'Disetujui');
-            })
-
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
-            })
-
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-                'data_kantor.kode_kantor',
-            );
+                'data_survei.kantor_kode as wilayah',
+                'data_survei.surveyor_kode as surveyor',
+                'data_pengajuan.created_at as tanggal',
+            )
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
-        $c = $query->get();
-        $count = count($c);
+            ->whereNotNull('data_tracking.analisa_kredit')
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
+            })
+
+            ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
-        $usul1 = "Staff Analis";
-        $usul2 = "Kasi Analis";
-        $usul3 = "Kabag Analis";
-        $usul4 = "Direksi";
-
-        for ($i = 0; $i < $count; $i++) {
-            if ($data->isNotEmpty()) {
-                foreach ($data as $item) {
-                    $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-                    $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1);
-                    $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2);
-                    $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3);
-                    $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4);
-                }
+        if ($data->isNotEmpty()) {
+            foreach ($data as $item) {
+                $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
             }
         }
-
-        if ($user->role_name == 'Customer Service') {
-            $usul1 = "Customer Service";
-            for ($i = 0; $i < $count; $i++) {
-                if ($data->isNotEmpty()) {
-                    foreach ($data as $item) {
-                        $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-                        $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1);
-                        $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2);
-                        $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3);
-                        $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4);
-                    }
-                }
-            }
-        } elseif ($user->role_name == 'Kepala Kantor Kas') {
-            $usul1 = "Kepala Kantor Kas";
-            for ($i = 0; $i < $count; $i++) {
-                if ($data->isNotEmpty()) {
-                    foreach ($data as $item) {
-                        $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-                        $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1);
-                        $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2);
-                        $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3);
-                        $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4);
-                    }
-                }
-            }
-        }
-        // dd($data, $user);
         return view('cetak.analisa-kredit.index', [
             'data' => $data,
         ]);
@@ -898,97 +837,40 @@ class DataCetakController extends Controller
 
     public function persetujuan_kredit()
     {
-        $name = request('name');
-        $usr = Auth::user()->code_user;
-        $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
-
-        $name = request('name');
-        $usr = Auth::user()->code_user;
+        $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->where('data_pengajuan.status', 'Disetujui')
-
-            ->where('data_pengajuan.on_current', '0')
-
-            ->where(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Persetujuan Komite');
-            })
-            ->where(function ($query) use ($usr) {
-                $query->where('data_survei.kasi_kode', '=', $usr)
-                    ->orWhere('data_survei.kasi_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Naik Kasi');
-            })
-            ->where(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->orWhere('data_survei.kasi_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Naik Komite I');
-            })
-            ->where(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->orWhere('data_survei.kasi_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.tracking', 'Naik Komite II');
-            })
-            ->orWhere(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->orWhere('data_survei.kasi_kode', '=', $usr)
-                    ->where('data_pengajuan.on_current', '=', '0')
-                    ->where('data_pengajuan.status', 'Disetujui');
-            })
-
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
-            })
-
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
-                'data_kantor.kode_kantor',
-            );
+                'data_notifikasi.no_notifikasi',
+                'data_pengajuan.created_at as tanggal',
+                'data_survei.kantor_kode as wilayah',
+                'data_survei.surveyor_kode as surveyor',
+            )
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
-        $c = $query->get();
-        $count = count($c);
+            ->where('data_pengajuan.status', 'Disetujui')
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
+            })
+
+            ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
-        $usul1 = "Staff Analis";
-        $usul2 = "Kasi Analis";
-        $usul3 = "Kabag Analis";
-        $usul4 = "Direksi";
-        // dd($user->role_name);
-        foreach ($data as $item) {
-            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-            $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
-            $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
-            $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
-            $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
-        }
-        // dd($data);
-        if ($user->role_name == 'Customer Service') {
-            $usul1 = "Customer Service";
+        if ($data->isNotEmpty()) {
             foreach ($data as $item) {
                 $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-                $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
-                $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
-                $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
-                $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
-            }
-        } elseif ($user->role_name == 'Kepala Kantor Kas') {
-            $usul1 = "Kepala Kantor Kas";
-            for ($i = 0; $i < $count; $i++) {
-                foreach ($data as $item) {
-                    $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-                    $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
-                    $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
-                    $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
-                    $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
-                }
             }
         }
 

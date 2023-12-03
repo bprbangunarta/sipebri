@@ -1,42 +1,44 @@
-@section('title', 'Cetak Analisa Kredit')
 @extends('theme.app')
+@section('title', 'Cetak Analisa Kredit Realisasi')
 
 @section('content')
     <div class="content-wrapper">
-
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-print"></i>
+                        <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
                             <h3 class="box-title">CETAK ANALISA KREDIT</h3>
 
                             <div class="box-tools">
                                 <form action="{{ route('analisa.kredit') }}" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name"
-                                            value="{{ request('name') }}" placeholder="Search">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i
-                                                    class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-
+                        
                         <div class="box-body">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">NASABAH</th>
-                                        <th class="text-center" width="30%">ALAMAT</th>
-                                        <th class="text-center" width="17%">PENGAJUAN</th>
-                                        <th class="text-center">KOMITE</th>
-                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center" width="3%">#</th>
+                                        <th class="text-center" width="7%">TANGGAL</th>
+                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center">NAMA DEBITUR</th>
+                                        <th class="text-center" width="41%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="5%">SRV</th>
+                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="7%">STATUS</th>
+                                        <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -44,58 +46,35 @@
                                         $no = 1;
                                     @endphp
                                     @forelse ($data as $item)
-                                        <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
-                                                <b>NAMA :</b> {{ $item->nama_nasabah }} <br>
-                                                <b>TANGGAL :</b>
-                                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}
-                                            </td>
-
-                                            @if (is_null($item->alamat_ktp))
-                                                <td class="text-center" style="vertical-align: middle;">-</td>
-                                            @else
-                                                <td class="text-uppercase" style="vertical-align: middle;">
-                                                    {{ $item->alamat_ktp }} <br>
-                                                    <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
-                                                    </b>{{ $item->kecamatan }}
-                                                </td>
-                                            @endif
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN -
-                                                {{ $item->suku_bunga }}% <br>
-                                                <b>METODE :</b> {{ $item->metode_rps }}<br>
-                                                <b>PLAFON :</b>
-                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>USULAN K1 :</b>
-                                                {{ 'Rp. ' . ' ' . number_format($item->usulan1, 0, ',', '.') }} <br>
-                                                <b>USULAN K2 :</b>
-                                                {{ 'Rp. ' . ' ' . number_format($item->usulan2, 0, ',', '.') }} <br>
-                                                <b>USULAN K3 :</b>
-                                                {{ 'Rp. ' . ' ' . number_format($item->usulan3, 0, ',', '.') }} <br>
-                                                <b>USULAN K4 :</b>
-                                                {{ 'Rp. ' . ' ' . number_format($item->usulan4, 0, ',', '.') }}
-                                            </td>
-
+                                        <tr class="text-uppercase">
+                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    target="_blank">
-                                                    <span class="btn bg-blue" style="width: 120px;">Cetak Berkas</span>
-                                                </a>
-
+                                               {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
                                             </td>
-                                            @php
-                                                $no++;
-                                            @endphp
-
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}</td>
+                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->status == "Disetujui" || $item->status == "Dibatalkan" || $item->status == "Ditolak")
+                                                    {{ $item->status }}
+                                                @else
+                                                    <span class="label label-warning" style="font-size: 10px;">
+                                                        &nbsp; ANALISA &nbsp;
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
                                         </tr>
+                                        @php
+                                            $no++;
+                                        @endphp
                                     @empty
                                         <tr>
                                             <td class="text-center" colspan="10">TIDAK ADA DATA</td>
@@ -106,17 +85,17 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            {{ $data->links('vendor.pagination.adminlte') }}
-                        </div>
+                            <div class="pull-left">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
 
+                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-
     </div>
-
 @endsection
-
-@push('myscript')
-@endpush

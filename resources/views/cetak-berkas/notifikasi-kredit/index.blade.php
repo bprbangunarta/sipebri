@@ -1,41 +1,43 @@
 @extends('theme.app')
-@section('title', 'Notifikasi Kredit')
+@section('title', 'Cetak Notifikasi Kredit')
 
 @section('content')
     <div class="content-wrapper">
-
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-print"></i>
+                        <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
                             <h3 class="box-title">CETAK NOTIFIKASI KREDIT</h3>
 
                             <div class="box-tools">
                                 <form action="{{ route('cetak.notifikasi.index') }}" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name"
-                                            value="" placeholder="Search">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i
-                                                    class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
+                        
                         <div class="box-body">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">NOTIFIKASI</th>
-                                        <th class="text-center" width="33%">ALAMAT</th>
-                                        <th class="text-center" width="18%">PENGAJUAN</th>
-                                        <th class="text-center" width="13%">BIAYA</th>
-                                        <th class="text-center" style="width: 100px">AKSI</th>
+                                        <th class="text-center" width="3%">#</th>
+                                        <th class="text-center" width="7%">TANGGAL</th>
+                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center" width="7%">NOTIFIKASI</th>
+                                        <th class="text-center">NAMA DEBITUR</th>
+                                        <th class="text-center" width="41%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -43,51 +45,29 @@
                                         $no = 1;
                                     @endphp
                                     @forelse ($data as $item)
-                                        <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
-                                                <b>AN. </b>{{ $item->nama_nasabah }} <br>
+                                        <tr class="text-uppercase">
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                               {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
                                                 @if (is_null($item->no_notifikasi))
-                                                    <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK
-                                                        ADA</span>
+                                                <span class="label label-danger" style="font-size: 10px;">&nbsp; BELUM DITURUNKAN &nbsp;</span>
                                                 @else
-                                                    <span class="label label-primary"
-                                                        style="font-size: 12px;">{{ $item->no_notifikasi }}</span>
+                                                    {{ $item->no_notifikasi }}
                                                 @endif
                                             </td>
-
-                                            <td style="text-transform: uppercase;vertical-align: middle;">
-                                                {{ $item->alamat_ktp }} <br>
-                                                <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
-                                                </b>{{ $item->kecamatan }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KANTOR :</b> {{ $item->kantor_kode }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
-                                                <b>PLAFON :</b>
-                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
-                                                <b>METODE :</b> {{ $item->metode_rps }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
-
-                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }}% <br>
-                                                <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
-                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b>
-                                                {{ number_format($item->b_provisi, 2) }} <br>
-                                                <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
-                                            </td>
-
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
+                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
-
-                                                <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Berkas</span>
+                                                <a href="{{ route('cetak.notifikasi_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
+                                                    <i class="fa fa-print"></i>
                                                 </a>
-
                                             </td>
                                         </tr>
                                         @php
@@ -95,7 +75,7 @@
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center text-uppercase" colspan="7">Tidak Ada Data.</td>
+                                            <td class="text-center" colspan="9">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -103,23 +83,17 @@
                         </div>
 
                         <div class="box-footer clearfix">
+                            <div class="pull-left">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
+
                             {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
                         </div>
-
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
-
-@push('myscript')
-    <script src="{{ asset('assets/js/myscript/generate_kode_notifikasi.js') }}"></script>
-    <script>
-        $("button[data-target='#generate-code']").click(function() {
-            // Mendapatkan nilai 'id' dari tombol yang diklik
-            var kode = $(this).data('id');
-            $('#kode').val(kode);
-        });
-    </script>
-@endpush

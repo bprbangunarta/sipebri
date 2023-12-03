@@ -77,7 +77,7 @@
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a
-                                                    href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}">
+                                                    href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank">
                                                     <span class="btn bg-blue" style="width: 120px;">Cetak</span>
                                                 </a>
                                             </td>

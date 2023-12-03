@@ -489,52 +489,44 @@ class CetakController extends Controller
 
     public function index_notifikasi_kredit(Request $request)
     {
-        $name = request('name');
-        $kantor = Auth::user()->kantor_kode;
-        $user = Auth::user()->code_user;
-        $cek = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
-            ->join('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            // ->where('data_survei.kantor_kode', $kantor)
-            ->where('data_pengajuan.on_current', '!=', 1)
+        $keyword = request('keyword');
+        $query = DB::table('data_pengajuan')
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+                'data_notifikasi.no_notifikasi',
+                'data_pengajuan.created_at as tanggal',
+                'data_survei.kantor_kode as wilayah',
+                'data_survei.surveyor_kode as surveyor',
+            )
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->whereNotNull('data_notifikasi.no_notifikasi')
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
-            ->select(
-                'data_notifikasi.*',
-                'data_pengajuan.*',
-                'data_nasabah.kode_nasabah',
-                'data_nasabah.nama_nasabah',
-                'data_nasabah.alamat_ktp',
-                'data_nasabah.kelurahan',
-                'data_nasabah.kecamatan',
-                'data_pengajuan.plafon',
-                'data_kantor.nama_kantor',
-                'data_survei.surveyor_kode',
-                'data_survei.tgl_survei',
-                'data_survei.tgl_jadul_1',
-                'data_survei.tgl_jadul_2',
-                'users.name',
-                'data_survei.kantor_kode',
-            );
-
-        //Enkripsi kode pengajuan
-        $c = $cek->get();
-        $count = count($c);
-        $data = $cek->paginate(10);
-        foreach ($data as $item) {
-            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+            ->orderBy('data_pengajuan.created_at', 'desc');
+        $data = $query->paginate(10);
+        if ($data->isNotEmpty()) {
+            foreach ($data as $item) {
+                $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+            }
         }
-        // dd($data);
+
         return view('cetak-berkas.notifikasi-kredit.index', [
             'data' => $data
         ]);
