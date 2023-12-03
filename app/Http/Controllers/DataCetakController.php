@@ -649,7 +649,6 @@ class DataCetakController extends Controller
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->leftJoin('data_usulan', 'data_pengajuan.kode_pengajuan', '=', 'data_usulan.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
