@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Carbon\Carbon;
 
 class FiduciaController extends Controller
 {
@@ -68,17 +69,27 @@ class FiduciaController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = DB::table('data_pengajuan')
                 ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->join('data_pekerjaan', 'data_pekerjaan.kode_pekerjaan', '=', 'data_nasabah.pekerjaan_kode')
                 ->leftJoin('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
+                ->leftJoin('data_jenis_agunan', 'data_jenis_agunan.kode', '=', 'data_jaminan.jenis_agunan_kode')
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
+                    'data_pekerjaan.nama_pekerjaan',
                     'data_jaminan.*',
+                    'data_spk.no_spk',
+                    'data_jaminan.atas_nama as nama_pemilik_bpkb',
+                    'data_jenis_agunan.jenis_agunan as nama_jenis_jaminan',
                 )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
+            //
+            $hari = Carbon::now();
+            $data[0]->hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
 
             return view('cetak-berkas.fiducia.cetak-fiducia', [
-                'data' => $data,
+                'data' => $data[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

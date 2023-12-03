@@ -13,7 +13,9 @@
                             <div class="box-tools">
                                 <form action="{{ route('fiducia') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 170px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -24,7 +26,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class="box-body">
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
@@ -39,58 +41,63 @@
                                         <th class="text-center" width="8%">MEREK</th>
                                         <th class="text-center" width="8%">NO. POLISI</th>
                                         <th class="text-center" width="8%">TAKSASI</th>
-                                        <th class="text-center" width="8%">AKSI</th>
+                                        <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @php
-                                    $no = 1;
-                                @endphp
-                                @forelse ($data as $item)
-                                
-                                <tr>
-                                    <td class="text-center" style="vertical-align: middle;">
-                                        {{ $loop->iteration + $data->firstItem() - 1 }}
-                                    </td>
-                                    <td class="text-center" style="vertical-align: middle;">
-                                        {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
-                                    </td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">
-                                        @if (is_null($item->no_spk))
-                                            <span class="label label-danger" style="font-size: 10px;">
-                                                BELUM DITURUNKAN
-                                            </span>
-                                        @else
-                                            {{ $item->no_spk }}
-                                        @endif
-                                    </td>
-                                    <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $item->jenis_kendaraan }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $item->merek }}</td>
-                                    <td class="text-center" style="vertical-align: middle;">{{ $item->no_polisi }}</td>
-                                    <td class="text-right" style="vertical-align: middle;">
-                                        {{ number_format($item->nilai_taksasi, 0, ',', '.') }}    
-                                    </td>
-                                    <td class="text-center" style="vertical-align: middle;">
-                                        <a data-toggle="modal" data-target="#modal-info" class="btn-circle btn-sm bg-yellow">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-
-                                        &nbsp;
-                                        <a href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
-                                            <i class="fa fa-print"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                @php
-                                        $no++;
+                                    @php
+                                        $no = 1;
                                     @endphp
-                                @empty
-                                    <tr>
-                                        <td class="text-center" colspan="10">TIDAK ADA DATA</td>
-                                    </tr>
+                                    @forelse ($data as $item)
+                                        <tr>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if (is_null($item->no_spk))
+                                                    <span class="label label-danger" style="font-size: 10px;">
+                                                        BELUM DITURUNKAN
+                                                    </span>
+                                                @else
+                                                    {{ $item->no_spk }}
+                                                @endif
+                                            </td>
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->jenis_kendaraan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->merek }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_polisi }}
+                                            </td>
+                                            <td class="text-right" style="vertical-align: middle;">
+                                                {{ number_format($item->nilai_taksasi, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a data-toggle="modal" data-target="#modal-info"
+                                                    class="btn-circle btn-sm bg-yellow">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+
+                                                &nbsp;
+                                                <a href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $no++;
+                                        @endphp
+                                    @empty
+                                        <tr>
+                                            <td class="text-center" colspan="10">TIDAK ADA DATA</td>
+                                        </tr>
                                 </tbody>
                                 @endforelse
                             </table>
@@ -99,7 +106,8 @@
                         <div class="box-footer clearfix">
                             <div class="pull-left">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
@@ -216,7 +224,8 @@
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
-                        <button type="button" class="btn btn-warning" style="width:100%;" data-dismiss="modal">TUTUP</button>
+                        <button type="button" class="btn btn-warning" style="width:100%;"
+                            data-dismiss="modal">TUTUP</button>
                     </div>
                 </form>
             </div>
