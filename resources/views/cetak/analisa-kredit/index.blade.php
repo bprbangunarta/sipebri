@@ -32,7 +32,7 @@
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center" width="7%">TANGGAL</th>
                                         <th class="text-center" width="7%">KODE</th>
-                                        <th class="text-center">NAMA DEBITUR</th>
+                                        <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="5%">SRV</th>
