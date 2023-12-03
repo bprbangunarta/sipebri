@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Cetak Analisa Kredit Realisasi')
+@section('title', 'Cetak Analisa Kredit')
 
 @section('content')
     <div class="content-wrapper">
@@ -37,7 +37,7 @@
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="5%">SRV</th>
                                         <th class="text-center" width="8%">PLAFON</th>
-                                        <th class="text-center" width="7%">STATUS</th>
+                                        {{-- <th class="text-center" width="7%">STATUS</th> --}}
                                         <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -57,7 +57,7 @@
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}</td>
                                             <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            {{-- <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->status == "Disetujui" || $item->status == "Dibatalkan" || $item->status == "Ditolak")
                                                     {{ $item->status }}
                                                 @else
@@ -65,7 +65,7 @@
                                                         &nbsp; ANALISA &nbsp;
                                                     </span>
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
                                                     <i class="fa fa-print"></i>

@@ -204,7 +204,7 @@
                     </li>
 
                     <li class="{{ request()->is('cetak/notifikasi-kredit') ? 'active' : '' }}">
-                        <a href="{{ route('cetak.notifikasi.index') }}" title="Cetak Notifikasi Kredit">
+                        <a @can('cetak notifikasi kredit') href="{{ route('cetak.notifikasi.index') }}" @endcan title="Cetak Notifikasi Kredit">
                             <i class="fa fa-bell-o"></i>
                             Notifikasi Kredit
                         </a>

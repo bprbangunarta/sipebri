@@ -416,16 +416,17 @@ class CetakController extends Controller
 
     public function index_pengajuan(Request $request)
     {
-        $name = request('name');
+        $keyword = request('keyword');
         $usr = Auth::user()->code_user;
 
         //Cek Role User
         $role = DB::table('v_users')->select('v_users.role_name')->where('code_user', $usr)->get();
 
         $query = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
                 'data_pengajuan.produk_kode',
@@ -433,6 +434,7 @@ class CetakController extends Controller
                 'data_pengajuan.id as id',
                 'data_pengajuan.plafon as plafon',
                 'data_pengajuan.jangka_waktu as jk',
+                'data_pengajuan.input_user',
                 'data_nasabah.nama_nasabah as nama',
                 'data_nasabah.kelurahan',
                 'data_nasabah.kecamatan',
@@ -444,7 +446,7 @@ class CetakController extends Controller
                 'data_nasabah.is_entry as entry',
                 'data_kantor.nama_kantor',
                 'data_survei.kantor_kode as kantor',
-                'data_pengajuan.created_at as tanggal'
+                'data_pengajuan.created_at as tanggal',
             )
             ->where('data_pengajuan.on_current', '0')
             ->where(function ($query) {
@@ -456,11 +458,18 @@ class CetakController extends Controller
                 //     ->orWhere('data_pengajuan.status', 'Disetujui')
                 //     ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
             })
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
+
             ->orderBy('data_nasabah.created_at', 'ASC');
         //
 
@@ -472,7 +481,7 @@ class CetakController extends Controller
             $query->where('data_pengajuan.input_user', '=', $usr);
         }
 
-        $pengajuan = $query->paginate(7);
+        $pengajuan = $query->paginate(10);
         $auth = Auth::user()->code_user;
         $dtu = DB::table('v_users')->where('code_user', $auth)->first();
 
