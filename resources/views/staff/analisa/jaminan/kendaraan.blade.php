@@ -19,24 +19,24 @@
                         <tr>
                             <td style="vertical-align: middle;">
                                 <b>Jenis: </b><br>
-                                {{ $item->jenis_agunan }}
+                                {{ Str::upper($item->jenis_agunan) }}
                                 <p></p>
                                 <b>Dokumen: </b><br>
-                                {{ $item->jenis_dokumen }}
+                                {{ Str::upper($item->jenis_dokumen) }}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Atas Nama: </b><br>
-                                {{ $item->atas_nama }} <br>
+                                {{ Str::upper($item->atas_nama) }} <br>
                                 <p></p>
                                 <b>No Doukumen: </b><br>
                                 {{ Str::upper($item->no_dokumen) }}
                             </td>
                             <td style="vertical-align: middle;">
-                                <b>Merek: </b> {{ $item->merek ?? null }} <br>
-                                <b>Tahun: </b> {{ $item->tahun ?? null }} <br>
-                                <b>No. Rangka: </b> {{ $item->no_rangka ?? null }} <br>
-                                <b>No. Mesin: </b> {{ $item->no_mesin ?? null }} <br>
-                                <b>No. Polisi: </b> {{ $item->no_polisi ?? null }}
+                                <b>Merek: </b> {{ Str::upper($item->merek) ?? null }} <br>
+                                <b>Tahun: </b> {{ Str::upper($item->tahun) ?? null }} <br>
+                                <b>No. Rangka: </b> {{ Str::upper($item->no_rangka) ?? null }} <br>
+                                <b>No. Mesin: </b> {{ Str::upper($item->no_mesin) ?? null }} <br>
+                                <b>No. Polisi: </b> {{ Str::upper($item->no_polisi) ?? null }}
                             </td>
                             <td style="vertical-align: middle;">
                                 {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>

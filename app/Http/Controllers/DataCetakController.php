@@ -189,7 +189,6 @@ class DataCetakController extends Controller
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
-                // dd($cek->code_user_notif);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,

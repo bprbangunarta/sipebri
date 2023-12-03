@@ -19,24 +19,24 @@
                         <tr>
                             <td style="vertical-align: middle;">
                                 <b>Jenis: </b><br>
-                                {{ $item->jenis_agunan }}
+                                {{ Str::upper($item->jenis_agunan) }}
                                 <p></p>
                                 <b>Dokumen: </b><br>
-                                {{ $item->jenis_dokumen }}
+                                {{ Str::upper($item->jenis_dokumen) }}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Atas Nama: </b><br>
-                                {{ $item->atas_nama }} <br>
+                                {{ Str::upper($item->atas_nama) }} <br>
                                 <p></p>
                                 <b>No Doukumen: </b><br>
-                                {{ $item->no_dokumen }}
+                                {{ Str::upper($item->no_dokumen) }}
                             </td>
                             <td style="vertical-align: middle;">
                                 <b>Lokasi: </b> <br>
-                                {{ $item->lokasi }}
+                                {{ Str::upper($item->lokasi) }}
                                 <p></p>
                                 <b>Catatan: </b><br>
-                                {{ $item->catatan }}
+                                {{ Str::upper($item->catatan) }}
                             </td>
                             <td style="vertical-align: middle;">
                                 {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
@@ -276,11 +276,9 @@
                                             placeholder="ENTRI">
                                     </div>
 
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">CATATAN</span>
-                                        <input class="form-control text-uppercase" type="text" name="catatan"
-                                            id="catatan" value="{{ old('catatan') }}" placeholder="ENTRI">
-                                    </div>
+                                    <input class="form-control text-uppercase" type="hidden" name="catatan"
+                                        id="catatan" value="{{ old('catatan') }}" placeholder="ENTRI">
+
                                 </div>
                             </div>
                         </div>

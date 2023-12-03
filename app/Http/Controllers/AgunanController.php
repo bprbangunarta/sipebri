@@ -38,14 +38,14 @@ class AgunanController extends Controller
 
             //Cek data kendaraan
             if ($request->jenis_agunan_kode == '02') {
-                $jenis_agunan = 'Kendaraan Bermotor Roda 2';
+                $jenis_agunan = 'KENDARAAN RODA 2';
             } elseif ($request->jenis_agunan_kode == '03') {
-                $jenis_agunan = 'Kendaraan Bermotor Roda 4';
+                $jenis_agunan = 'KENDARAAN RODA 4';
             } elseif (is_null($request->jenis_agunan_kode)) {
                 $jenis_agunan = null;
             }
 
-            $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
+            $cek['catatan'] = 'BPKB' . ',' . ' ' . $jenis_agunan . ',' . ' ' . strtoupper($request->merek) . ',' . ' ' . strtoupper($request->tipe_kendaraan) . ',' . ' ' . strtoupper($request->no_rangka) . ',' . ' ' . strtoupper($request->no_mesin) . ',' . ' ' . strtoupper($request->no_polisi) . ',' . ' ' . strtoupper($request->no_dokumen) . ',' . ' ' . strtoupper($request->warna) . ',' . ' ' . strtoupper($request->atas_nama) . ',' . ' ' . strtoupper($request->lokasi);
 
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -101,6 +101,16 @@ class AgunanController extends Controller
             $data['is_entry'] = 1;
             $data['otorisasi'] = 'N';
             $data['updated_at'] = now();
+            //Cek data kendaraan
+            if ($request->jenis_agunan_kode == '02') {
+                $jenis_agunan = 'KENDARAAN RODA 2';
+            } elseif ($request->jenis_agunan_kode == '03') {
+                $jenis_agunan = 'KENDARAAN RODA 4';
+            } elseif (is_null($request->jenis_agunan_kode)) {
+                $jenis_agunan = null;
+            }
+
+            $cek['catatan'] = 'BPKB' . ',' . ' ' . $jenis_agunan . ',' . ' ' . strtoupper($request->merek) . ',' . ' ' . strtoupper($request->tipe_kendaraan) . ',' . ' ' . strtoupper($request->no_rangka) . ',' . ' ' . strtoupper($request->no_mesin) . ',' . ' ' . strtoupper($request->no_polisi) . ',' . ' ' . strtoupper($request->no_dokumen) . ',' . ' ' . strtoupper($request->warna) . ',' . ' ' . strtoupper($request->atas_nama) . ',' . ' ' . strtoupper($request->lokasi);
 
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -129,6 +139,15 @@ class AgunanController extends Controller
             $cek['is_entry'] = 1;
             $cek['luas'] = str_replace('.', '', $request->luas);
             $cek['created_at'] = now();
+            if ($request) {
+                $data_catatan = DB::table('data_jenis_agunan')->where('kode', $cek['jenis_agunan_kode'])->first();
+                if ($data_catatan->jenis_agunan == 'Tanah') {
+                    $jenis_agunan = 'SERTIFIKAT TANAH';
+                } else {
+                    $jenis_agunan = $data_catatan->jenis_agunan;
+                }
+            }
+            $cek['catatan'] = strtoupper($jenis_agunan) . ' ' . 'NO' . ' ' . strtoupper($cek['no_dokumen']) . ',' . ' ' . 'LUAS' . ' ' . strtoupper($cek['luas']) . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($cek['atas_nama']) . ',' . ' ' . 'ALAMAT' . ' ' . strtoupper($cek['lokasi']);
             // dd($cek);
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -200,7 +219,17 @@ class AgunanController extends Controller
             $cek['is_entry'] = 1;
             $data['otorisasi'] = 'N';
             $cek['created_at'] = now();
-            // dd($cek);
+
+            if ($request) {
+                $data_catatan = DB::table('data_jenis_agunan')->where('kode', $cek['jenis_agunan_kode'])->first();
+                if ($data_catatan->jenis_agunan == 'Kartu Jamsostek') {
+                    $jenis_agunan = 'KARTU DAN SALDO JAMSOSTEK';
+                } else {
+                    $jenis_agunan = $data_catatan->jenis_agunan;
+                }
+            }
+            $cek['catatan'] = strtoupper($jenis_agunan) . ' ' . 'ATAS NAMA' . ' ' . strtoupper($cek['atas_nama']) . ' ' . 'NO' . ' ' . strtoupper($cek['no_dokumen']) . ' ' . 'ALAMAT' . ' ' . strtoupper($cek['lokasi']);
+
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
@@ -242,6 +271,15 @@ class AgunanController extends Controller
             $cek['is_entry'] = 1;
             $cek['otorisasi'] = 'N';
             $cek['created_at'] = now();
+            if ($request) {
+                $data_catatan = DB::table('data_jenis_agunan')->where('kode', $cek['jenis_agunan_kode'])->first();
+                if ($data_catatan->jenis_agunan == 'Kartu Jamsostek') {
+                    $jenis_agunan = 'KARTU DAN SALDO JAMSOSTEK';
+                } else {
+                    $jenis_agunan = $data_catatan->jenis_agunan;
+                }
+            }
+            $cek['catatan'] = strtoupper($jenis_agunan) . ' ' . 'ATAS NAMA' . ' ' . strtoupper($cek['atas_nama']) . ' ' . 'NO' . ' ' . strtoupper($cek['no_dokumen']) . ' ' . 'ALAMAT' . ' ' . strtoupper($cek['lokasi']);
 
             DB::table('data_jaminan')->where('id', $request->id)->update($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -282,13 +320,15 @@ class AgunanController extends Controller
             //Cek data kendaraan
             if ($request->jenis_agunan_kode == '02') {
                 $jenis_agunan = 'Kendaraan Bermotor Roda 2';
+                $jenis_agunan_catatan = 'KENDARAAN RODA 2';
             } elseif ($request->jenis_agunan_kode == '03') {
                 $jenis_agunan = 'Kendaraan Bermotor Roda 4';
+                $jenis_agunan_catatan = 'KENDARAAN RODA 4';
             } elseif (is_null($request->jenis_agunan_kode)) {
                 $jenis_agunan = null;
             }
 
-            $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
+            $cek['catatan'] = 'BPKB' . ',' . ' ' . $jenis_agunan_catatan . ',' . ' ' . strtoupper($request->merek) . ',' . ' ' . strtoupper($request->tipe_kendaraan) . ',' . ' ' . strtoupper($request->no_rangka) . ',' . ' ' . strtoupper($request->no_mesin) . ',' . ' ' . strtoupper($request->no_polisi) . ',' . ' ' . strtoupper($request->no_dokumen) . ',' . ' ' . strtoupper($request->warna) . ',' . ' ' . strtoupper($request->atas_nama) . ',' . ' ' . strtoupper($request->lokasi);
 
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
@@ -317,7 +357,16 @@ class AgunanController extends Controller
             $cek['created_at'] = now();
             $cek['otorisasi'] = 'A';
             $cek['input_user'] = Auth::user()->code_user;
-            // dd($cek);
+            if ($request) {
+                $data_catatan = DB::table('data_jenis_agunan')->where('kode', $cek['jenis_agunan_kode'])->first();
+                if ($data_catatan->jenis_agunan == 'Tanah') {
+                    $jenis_agunan = 'SERTIFIKAT TANAH';
+                } else {
+                    $jenis_agunan = $data_catatan->jenis_agunan;
+                }
+            }
+            $cek['catatan'] = strtoupper($jenis_agunan) . ' ' . 'NO' . ' ' . strtoupper($cek['no_dokumen']) . ',' . ' ' . 'LUAS' . ' ' . strtoupper($cek['luas']) . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($cek['atas_nama']) . ',' . ' ' . 'ALAMAT' . ' ' . strtoupper($cek['lokasi']);
+
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {
@@ -343,7 +392,17 @@ class AgunanController extends Controller
             $cek['otorisasi'] = 'A';
             $cek['input_user'] = Auth::user()->code_user;
             $cek['created_at'] = now();
-            // dd($cek);
+            $cek['jenis_agunan_kode'] = '12';
+            if ($request) {
+                $data_catatan = DB::table('data_jenis_agunan')->where('kode', $cek['jenis_agunan_kode'])->first();
+                if ($data_catatan->jenis_agunan == 'Kartu Jamsostek') {
+                    $jenis_agunan = 'KARTU DAN SALDO JAMSOSTEK';
+                } else {
+                    $jenis_agunan = $data_catatan->jenis_agunan;
+                }
+            }
+            $cek['catatan'] = strtoupper($jenis_agunan) . ' ' . 'ATAS NAMA' . ' ' . strtoupper($cek['atas_nama']) . ' ' . 'NO' . ' ' . strtoupper($cek['no_dokumen']) . ' ' . 'ALAMAT' . ' ' . strtoupper($cek['lokasi']);
+
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');
         } catch (\Throwable $th) {

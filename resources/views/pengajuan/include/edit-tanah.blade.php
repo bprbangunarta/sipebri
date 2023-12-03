@@ -78,11 +78,9 @@
                                     </select>
                                 </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">CATATAN AGUNAN</span>
-                                    <input class="form-control text-uppercase" type="text" name="catatan"
-                                        value="{{ old('catatan') }}" id="catat" placeholder="ENTRI">
-                                </div>
+                                <input class="form-control text-uppercase" type="hidden" name="catatan"
+                                    value="{{ old('catatan') }}" id="catat" placeholder="ENTRI">
+
                             </div>
                         </div>
                     </div>
