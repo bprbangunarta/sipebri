@@ -1315,33 +1315,28 @@ class Midle extends Model
         return $jaminan;
     }
 
-    public static function get_qrcode($data)
+    public static function get_qrcode($data, $text, $user)
     {
-        $user = Auth::user()->code_user;
-        $gbr = DB::table('users')->where('code_user', $user)->first();
 
-        // $image = Storage::files('app/public/image/tanda_tangan/' . $gbr->ttd);
+        $carbon = Carbon::now();
+        $tgl = $carbon->format('d-m-y');
 
-        // $imagePath = $image->store('app/public/image/temp_ttd');
+        // Path untuk menyimpan QR Code
+        $strpath = storage_path('app/public/image/qr_code');
+        $imgname = $text . '_' . $data . '_' . $user . '_' . $tgl . '.png';
+        $imgpath = $strpath . '/' . $imgname;
 
-        // $img = Image::canvas(300, 300, '#ffffff'); // Ganti ukuran sesuai kebutuhan
-        // $uploadedImage  = Image::make(storage_path("app/$imagePath"));
-        // $img->insert($uploadedImage, 'center');
+        $data_url = $text . '_' . $data . '_' . $user;
 
-        // // Tambahkan teks ke gambar dengan latar belakang putih
-        // $img->text($data, $img->width() / 2, 20, function ($font) {
-        //     $font->size(48); // Ukuran teks besar
-        //     $font->color('#000000'); // Warna teks hitam
-        //     $font->align('center'); // Posisi teks di tengah
-        //     $font->valign('top'); // Posisi teks di atas
-        // });
-
-        // $strpath = storage_path('app/public/image/tanda_tangan');
-        // $imgname = 'qrcode_ttd.png';
+        // URL dan QR Code dari Google Chart API
         // $url = 'https://sipebri.bprbangunarta.co.id/images?qrcode=';
-        // $chartUrl = 'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=' . $url . $gbr->ttd;
-        // $imgpath = $strpath . '/' . $imgname;
-        // file_put_contents($imgpath, file_get_contents($chartUrl));
-        // return $imgname;
+        $url = 'http://127.0.0.1:8000/verifikasi?qrcode=' . $data_url;
+        $uri = urlencode($url);
+        $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
+
+        // Simpan QR Code dari Google Chart API
+        file_put_contents($imgpath, file_get_contents($chartUrl));
+
+        return $imgname;
     }
 }

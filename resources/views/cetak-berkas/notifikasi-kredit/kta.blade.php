@@ -302,7 +302,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    <font style="text-transform: uppercase;">{{ $data->nama_user }}</font>
+                    <font style="text-transform: uppercase;">{{ $data->nama_user_notif }}</font>
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">

@@ -136,8 +136,8 @@ class DataCetakController extends Controller
             $cek = DB::table('data_pengajuan')
                 ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-                ->leftJoin('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
                 ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+                ->leftJoin('v_users', 'data_notifikasi.input_user', '=', 'v_users.code_user')
                 ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
                 ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
@@ -153,6 +153,8 @@ class DataCetakController extends Controller
                     'data_produk.*',
                     'v_users.*',
                     'data_notifikasi.created_at as tgl_notifikasi',
+                    'v_users.nama_user as nama_user_notif',
+                    'v_users.code_user as code_user_notif',
                     'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',
                     'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
                 )->first();
@@ -161,7 +163,7 @@ class DataCetakController extends Controller
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
-                // dd($cek);
+
                 return view('cetak-berkas.notifikasi-kredit.kta', [
                     'data' => $cek,
                 ]);
@@ -186,14 +188,13 @@ class DataCetakController extends Controller
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin;
 
                 //QRCode 
-                // $text = $cek->kode_pengajuan . '_' . $cek->nama_nasabah . '_' .
-                //     $cek->role_name . '_' . $cek->nama_user . '_' . $cek->code_user;
-                // $qr = Midle::get_qrcode($text);
-                // dd($cek);
+                $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
+                // dd($cek->code_user_notif);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
                     'jaminan' => $cek_jaminan,
+                    'qr' => $qr,
                 ]);
             }
         } catch (DecryptException $e) {

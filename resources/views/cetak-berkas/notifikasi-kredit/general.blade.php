@@ -499,8 +499,9 @@
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <p style="margin-top:70px;"></p>
-                        {{-- <img src="https://images.tokopedia.net/img/cache/700/product-1/2018/11/8/39617213/39617213_91fd0f0c-03c2-43b4-861a-64e9f04e8f24_700_700.jpeg" width="100" height="100" style="margin-top:-30px;"> --}}
+                        {{-- <p style="margin-top:10px;"></p> --}}
+                        <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
+                            style="margin-top:-30px;">
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -508,7 +509,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    <font style="text-transform: uppercase;">{{ $data->nama_user }}</font>
+                    <font style="text-transform: uppercase;">{{ $data->nama_user_notif }}</font>
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">

@@ -46,6 +46,7 @@ class KomiteController extends Controller
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
         $usul4 = "Direksi";
+
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
             $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;

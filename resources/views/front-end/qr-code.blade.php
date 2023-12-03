@@ -2,87 +2,95 @@
 @section('title', 'Verifikasi')
 
 @section('content')
-<div class="content-wrapper">
-    <div class="container">
-      <section class="content-header">
-        <h1>
-          VERFIKASI
-        </h1>
-        <ol class="breadcrumb">
-          <li>
-            <a href="/"><i class="fa fa-dashboard"></i> Home</a>
-          </li>
-          <li class="active">Verfikasi</li>
-        </ol>
-      </section>
+    <div class="content-wrapper">
+        <div class="container">
+            <section class="content-header">
+                <h1>
+                    VERFIKASI
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/"><i class="fa fa-dashboard"></i> Home</a>
+                    </li>
+                    <li class="active">Verfikasi</li>
+                </ol>
+            </section>
 
-      <section class="content">
-        
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title">Data Verifikasi</h3>
-          </div>
-          <div class="box-body">
-            
-            <table class="table text-justify">
-              <thead>
-                  <tr class="bg-blue">
-                      <th class="text-center" colspan="2">VERFIKASI QR-CODE</th>
-                  </tr>
-              </thead>
+            <section class="content">
 
-              <tbody>
-                <tr>
-                  <td colspan="2">
-                    Dengan ini, kami dengan senang hati memberitahukan bahwa permohonan kredit yang diajukan oleh <b>[ ZULFADLI RIZAL ]</b> dengan kode pengajuan <b>[ 00339933 ]</b> telah disetujui oleh :
-
-                    <p></p>
-
-                    <div>
-                      <b>Jabatan</b> : Staff Analis <br>
-                      <b>Nama Lengkap</b> : ZULFADLI RIZAL
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Data Verifikasi</h3>
                     </div>
+                    <div class="box-body">
 
-                    <p></p>
+                        <table class="table text-justify">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th class="text-center" colspan="2">VERFIKASI QR-CODE</th>
+                                </tr>
+                            </thead>
 
-                    Kami telah meninjau dengan seksama informasi yang disediakan dalam aplikasi kredit tersebut dan menyimpulkan bahwa peminjam memenuhi persyaratan yang ditetapkan.
+                            <tbody>
+                                <tr>
+                                    <td colspan="2">
+                                        Dengan ini, kami dengan senang hati memberitahukan bahwa permohonan kredit yang
+                                        diajukan oleh <b>[ {{ $data->nama_nasabah }} ]</b> dengan kode pengajuan <b>[
+                                            {{ $data->kode_pengajuan }} ]</b> telah disetujui oleh :
 
-                    <p></p>
+                                        <p></p>
 
-                    <div>
-                      <b>Produk</b> : KTA - Kredit Tanpa Agunan <br>
-                      <b>Plafon</b> : 30.000.000 <br>
-                      <b>Jangka Waktu</b> : 24 Bulan <br>
-                      <b>Suku Bunga</b> : 30% <br>
-                      <b>Metode RPS</b> : EFEKTIF ANUITAS <br>
-                      <b>B. Provisi</b> : 1.00% <br>
-                      <b>B. Administrasi</b> : 4.00% <br>
-                      <b>Repayment Capacity</b> : 24.9% 
+                                        <div>
+                                            <b>Jabatan</b> : {{ $data->role_name }} <br>
+                                            <b>Nama Lengkap</b> : {{ $data->nama_user }}
+                                        </div>
+
+                                        <p></p>
+
+                                        Kami telah meninjau dengan seksama informasi yang disediakan dalam aplikasi kredit
+                                        tersebut dan menyimpulkan bahwa peminjam memenuhi persyaratan yang ditetapkan.
+
+                                        <p></p>
+
+                                        <div>
+                                            <b>Produk</b> : {{ $data->kode_produk }} - {{ $data->nama_produk }} <br>
+                                            <b>Plafon</b> :
+                                            {{ 'Rp. ' . ' ' . number_format($data->usulan_plafon, 0, ',', '.') }}
+                                            <br>
+                                            <b>Jangka Waktu</b> : {{ $data->jangka_waktu }} Bulan <br>
+                                            <b>Suku Bunga</b> : {{ $data->suku_bunga }}% <br>
+                                            <b>Metode RPS</b> : {{ $data->metode_rps }} <br>
+                                            <b>B. Provisi</b> : {{ $data->b_provisi }}% <br>
+                                            <b>B. Administrasi</b> : {{ $data->b_admin }}% <br>
+                                            <b>Repayment Capacity</b> : {{ $data->rc }}%
+                                        </div>
+
+                                        <p></p>
+
+                                        Kredit ini diberikan untuk tujuan yang telah dijelaskan dalam aplikasi, dan kami
+                                        mengharapkan bahwa peminjam akan menggunakan dana dengan bertanggung jawab sesuai
+                                        dengan ketentuan yang telah disepakati.
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center" colspan="2">
+                                        Pamanukan, {{ $data->tanggal_notifikasi }}
+                                        <br>
+                                        <img src="{{ asset('storage/image/tanda_tangan/' . $data->ttd) }}" width="100"
+                                            height="100">
+                                        <br>
+                                        <b>{{ $data->nama_user }}</b>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                     </div>
+                </div>
 
-                    <p></p>
-
-                    Kredit ini diberikan untuk tujuan yang telah dijelaskan dalam aplikasi, dan kami mengharapkan bahwa peminjam akan menggunakan dana dengan bertanggung jawab sesuai dengan ketentuan yang telah disepakati.
-
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="text-center" colspan="2">
-                    Pamanukan, 30 November 2023
-                    <br>
-                    <img src="https://images.tokopedia.net/img/cache/700/product-1/2018/11/8/39617213/39617213_91fd0f0c-03c2-43b4-861a-64e9f04e8f24_700_700.jpeg" width="100" height="100">
-                    <br>
-                    <b>ZULFADLI RIZAL</b>
-                  </td>
-                </tr>
-              </tbody>
-          </table>
-            
-          </div>
+            </section>
         </div>
-
-      </section>
     </div>
-</div>
 @endsection
