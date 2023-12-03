@@ -1337,6 +1337,31 @@ class Midle extends Model
         // Simpan QR Code dari Google Chart API
         file_put_contents($imgpath, file_get_contents($chartUrl));
 
+        $simpan = [
+            'pengajuan_kode' => $data,
+            'keterangan' => $imgname,
+            'user' => $user,
+            'created_at' => now(),
+        ];
+
+        if ($simpan) {
+            $cek = DB::table('log_persetujuan')
+                ->select('log_persetujuan.*')
+                ->where('pengajuan_kode', $data)
+                ->where('keterangan', $imgname)
+                ->where('user', $user)->get();
+            //
+            if ($cek->isEmpty()) {
+                DB::table('log_persetujuan')->insert($simpan);
+            } else {
+                DB::table('log_persetujuan')
+                    ->where('pengajuan_kode', $data)
+                    ->where('keterangan', $imgname)
+                    ->where('user', $user)
+                    ->update($simpan);
+            }
+        }
+
         return $imgname;
     }
 }

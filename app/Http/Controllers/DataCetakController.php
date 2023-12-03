@@ -164,8 +164,12 @@ class DataCetakController extends Controller
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
 
+                //QRCode 
+                $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
+
                 return view('cetak-berkas.notifikasi-kredit.kta', [
                     'data' => $cek,
+                    'qr' => $qr,
                 ]);
             } else {
                 $notifikasi_general = Midle::notifikasi_general($enc);
@@ -762,7 +766,8 @@ class DataCetakController extends Controller
             if (is_null($kebutuhan_dana)) {
                 return redirect()->back()->with('error', 'Memorandum Kebutuhan Dana belum diisi');
             }
-            // dd();
+            //QR
+            $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -786,6 +791,7 @@ class DataCetakController extends Controller
                 'biayaperdagangan' => $biaya_perdagangan,
                 'memorandum' => $memorandum,
                 'swot' => $swot,
+                'qr' => $qr,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

@@ -294,7 +294,9 @@
             <tr>
                 <td class="text-center" width="40%">
                     <center>
-                        <p style="margin-top:70px;"></p>
+                        {{-- <p style="margin-top:10px;"></p> --}}
+                        <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
+                            style="margin-top:-30px;">
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
