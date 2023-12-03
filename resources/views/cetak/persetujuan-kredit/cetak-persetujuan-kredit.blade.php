@@ -197,11 +197,17 @@
                 </tr>
                 <tr>
                     <td colspan="2" style="align-content: center; text-align:center;">
+                        <center>
+                            {{-- <p style="margin-top:10px;"></p> --}}
+                            <img src="{{ asset('storage/image/qr_code/' . $item->qr) }}" width="100" height="100"
+                                style="margin-top:-30px;">
+                        </center>
+                        <div style="margin-bottom: -15px;">{{ $item->nama_user }}</div>
                         <div
                             style="width: 70%; border-bottom: 1px solid black;margin-bottom: -10px; display: inline-block;">
                         </div>
                         <div style="width: 70%; border-bottom: 1px solid black; display: inline-block;"></div>
-                        <div style="margin-bottom: 5px;">{{ $item->role_name }}</div>
+                        <div style="margin-bottom: -15px;">{{ $item->role_name }}</div>
                     </td>
                     <td colspan="2" style="text-align:justify;">Dengan suku bunga {{ $data->suku_bunga }} % / bulan
                         {{ $item->metode_rps }} untuk jangka

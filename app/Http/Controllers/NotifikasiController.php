@@ -80,6 +80,11 @@ class NotifikasiController extends Controller
         }
     }
 
+    public function get_data_penolakan(Request $request)
+    {
+        //
+    }
+
     public function simpan_penolakan(Request $request)
     {
         try {
@@ -131,8 +136,6 @@ class NotifikasiController extends Controller
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
     }
-
-
 
     public function cetak_penolakan()
     {

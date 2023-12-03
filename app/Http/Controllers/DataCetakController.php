@@ -649,6 +649,7 @@ class DataCetakController extends Controller
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_usulan', 'data_pengajuan.kode_pengajuan', '=', 'data_usulan.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
@@ -1023,13 +1024,22 @@ class DataCetakController extends Controller
             $cek->total_taksasi = $total_taksasi ?? 0;
 
             //Data Usulan
-            $usulan = DB::table('data_usulan')->where('pengajuan_kode', $enc)->get();
+            $usulan = DB::table('data_usulan')
+                ->leftJoin('v_users', 'v_users.code_user', '=', 'data_usulan.input_user')
+                ->select(
+                    'data_usulan.*',
+                    'v_users.nama_user',
+                )
+                ->where('pengajuan_kode', $enc)->get();
             if (count($usulan) != 0) {
                 $data = [];
                 $rc = [];
                 for ($i = 0; $i < count($usulan); $i++) {
                     $data[] = $usulan[$i];
                     $rc[] = $usulan[$i]->rc;
+
+                    //QRCode 
+                    $usulan[$i]->qr = Midle::get_qrcode($enc, 'Perjanjian Kredit', $usulan[$i]->input_user);
                 }
                 // $total_taksasi = array_sum($total) ?? 0;
 
