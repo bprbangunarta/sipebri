@@ -51,15 +51,30 @@
                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_penolakan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if (is_null($item->no_penolakan))
+                                                    <span class="label label-danger" style="font-size: 10px;">
+                                                        SURAT PENOLAKAN BELUM DITURUNKAN
+                                                    </span>
+                                                @else
+                                                    {{ $item->no_penolakan }}
+                                                @endif
+                                            </td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
                                             <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.penolakan.kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                @if (is_null($item->no_penolakan))
+                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('cetak.penolakan.kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php
@@ -81,11 +96,30 @@
                                 </button>
                             </div>
 
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PENOLAKAN KREDIT</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <p>Mohon maaf cetak penolakan kredit tidak bisa dilakukan karena surat penolakan belum diturunkan oleh komite kredit. Silahkan hubungi tim analis. Terimakasih</p>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

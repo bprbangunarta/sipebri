@@ -3,35 +3,26 @@
 
 @section('content')
     <div class="content-wrapper">
-        <section class="content-header">
-            <h1>LAPORAN</h1>
-            <ol class="breadcrumb">
-                <li><a href="{{ route('dashboard') }}"><i class="fa fa-laptop"></i> Dashboard</a></li>
-                <li>Laporan</li>
-                <li class="active">Pendaftaran</li>
-            </ol>
-        </section>
-
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
-                            <h3 class="box-title">PENDAFTARAN KREDIT</h3>
+                            <h3 class="box-title">LAPORAN PENDAFTARAN KREDIT</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('laporan.pendaftaran-kredit') }}" method="POST">
-                                    @csrf
-                                    <div class="input-group input-group-sm hidden-xs pull-right" style="width: 335px;">
-                                        <input type="date" class="form-control pull-left" style="width: 150px;"
-                                            name="tgl1" id="tgl1" value="">
+                                <form action="{{ route('laporan.pendaftaran') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
+                                            <i class="fa fa-filter"></i> Short & Filter
+                                        </a>
 
-                                        <input type="date" class="form-control pull-right" style="width: 150px;"
-                                            name="tgl2" id="tgl2" value="">
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-primary"><i
-                                                    class="fa fa-filter"></i></button>
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -91,14 +82,58 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
+                            <div class="pull-left">
+                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                    <i class="fa fa-download"></i>&nbsp; Export Data
+                                </button>
 
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
+
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="modal-filter">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">SHORT & FILTER</h4>
+                </div>
+                <form action="{{ route('filter.laporan.pendaftaran') }}" method="GET">
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1" style="margin-top:-5px;"> 
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2" style="margin-top:-5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">FILTER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="modal-export">

@@ -1,23 +1,14 @@
 @extends('theme.app')
-@section('title', 'Data Siap Realisasi')
+@section('title', 'Laporan Siap Realisasi')
 
 @section('content')
     <div class="content-wrapper">
-        <section class="content-header">
-            <h1>LAPORAN</h1>
-            <ol class="breadcrumb">
-                <li><a href="{{ route('dashboard') }}"><i class="fa fa-laptop"></i> Dashboard</a></li>
-                <li>Laporan</li>
-                <li class="active">Siap Realisasi</li>
-            </ol>
-        </section>
-
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
-                            <h3 class="box-title">PENGAJUAN SIAP REALISASI</h3>
+                            <h3 class="box-title">LAPORAN SIAP REALISASI</h3>
 
                             <div class="box-tools">
                                 <form action="{{ route('laporan.siap-realisasi') }}" method="GET">
@@ -92,7 +83,7 @@
                                 </button>
                             </div>
 
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
                     </div>
                 </div>

@@ -248,28 +248,30 @@ class CetakLaporanController extends Controller
 
     public function laporan_pendaftaran()
     {
-        $tgl1 = request('tgl1');
-        $tgl2 = request('tgl2');
-
-        if (is_null($tgl2)) {
-            $tgl2 = $tgl1;
-        }
-
+        $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            // ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
             )
 
-            ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
             ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
-        // dd($data);
         return view('laporan.pendaftaran', [
             'data' => $data,
         ]);

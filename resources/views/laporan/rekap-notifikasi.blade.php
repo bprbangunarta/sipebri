@@ -83,7 +83,7 @@
                         <div class="box-footer clearfix">
                             <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
 
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>

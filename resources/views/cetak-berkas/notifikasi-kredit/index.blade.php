@@ -99,7 +99,7 @@
                                 </button>
                             </div>
 
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
                     </div>
                 </div>
