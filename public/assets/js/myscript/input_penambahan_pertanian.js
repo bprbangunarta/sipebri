@@ -24,7 +24,7 @@ $(document).ready(function () {
         var penambahan = $("#penambahan").val();
         var lb_perbulan = $("#perbulan").val();
         var rpenambahan = parseFloat(penambahan.replace(/[^\d]/g, "")) || 0;
-        var rperbulan = parseFloat(lb_perbulan.replace(/[^\d]/g, "")) || 0;
+        var rperbulan = parseFloat(lb_perbulan.replace(/[^\d.-]/g, "")) || 0;
 
         var jml = rpenambahan + rperbulan;
 

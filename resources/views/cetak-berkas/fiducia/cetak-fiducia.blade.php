@@ -82,34 +82,33 @@
 
 <body>
     <div class="content" style="margin-top: -57px;">
-
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
         <h4 style="text-align: center;font-size: 12pt;">SURAT KUASA PENDAFTARAN PENJAMINAN FIDUSIA</h4>
 
-        Yang bertanda tangan di bawah ini : 
+        Yang bertanda tangan di bawah ini :
         <table style="margin-left:20px;">
             <tr>
                 <td width="14%">Nama</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>YUDHA SAKTI PRATAMA</td>
+                <td>{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td>Pekerjaan</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>PELAJAR/MAHASISWA</td>
+                <td>{{ $data->nama_pekerjaan }}</td>
             </tr>
             <tr>
                 <td>Alamat</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">KAMPUNG KRAJAN BARAT RT. 07/02 Ds. PASIRBUNGUR Kec. PURWADADI Kab. SUBANG </td>
+                <td style="text-align: justify;">{{ $data->alamat_ktp }}</td>
             </tr>
         </table>
 
         <p></p>
 
-        Dengan ini secara bersama - sama memberi kuasa kepada : 
+        Dengan ini secara bersama - sama memberi kuasa kepada :
         <table style="margin-left:20px;">
             <tr>
                 <td width="14%">Nama</td>
@@ -130,11 +129,12 @@
 
         <p></p>
 
-        Untuk mewakili Pemberi Kuasa melakukan tindakan hukum tersebut di bawah ini : 
+        Untuk mewakili Pemberi Kuasa melakukan tindakan hukum tersebut di bawah ini :
         <table>
             <tr>
                 <td width="3%" style="vertical-align: text-top;">1.</td>
-                <td colspan="3" style="text-align: justify;">Menghadap kepada Notaris, JOICE HAPSARI FENDRINI SH, M.Kn. dan menandatangani akta jaminan Fidusia atas nama Pemberi Kuasa atas sebuah kendaraan : </td>
+                <td colspan="3" style="text-align: justify;">Menghadap kepada Notaris, JOICE HAPSARI FENDRINI SH,
+                    M.Kn. dan menandatangani akta jaminan Fidusia atas nama Pemberi Kuasa atas sebuah kendaraan : </td>
             </tr>
             <tr>
                 <td></td>
@@ -142,7 +142,7 @@
                     Merk / Jenis
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>YAMAHA/RG10 / Sepeda Motor</td>
+                <td>{{ Str::upper($data->merek) }} / {{ Str::upper($data->nama_jenis_jaminan) }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -150,7 +150,7 @@
                     Tahun / Warna
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>2016 / PUTIH</td>
+                <td>{{ $data->tahun }} / {{ $data->warna }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -158,7 +158,7 @@
                     No. Rangka
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>MH3RG1020GK019466</td>
+                <td>{{ Str::upper($data->no_rangka) }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -166,7 +166,7 @@
                     No. Mesin
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>G401E0046643</td>
+                <td>{{ Str::upper($data->no_mesin) }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -174,23 +174,15 @@
                     BPKB Atas Nama
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>YUDHA SAKTI PRATAMA</td>
+                <td>{{ Str::upper($data->nama_pemilik_bpkb) }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td width="20%">
-                    No. Polisi 
+                    No. Polisi
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>T3391YM</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td width="20%">
-                    No. Polisi 
-                </td>
-                <td class="text-center" width="3%"> : </td>
-                <td>T3391YM</td>
+                <td>{{ Str::upper($data->no_polisi) }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -204,35 +196,42 @@
                     Tanggal
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>27 November 2023</td>
+                <td>{{ $data->hari_ini }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td width="20%">
-                    Nomor SPK 
+                    Nomor SPK
                 </td>
                 <td class="text-center" width="3%"> : </td>
-                <td>009/KUP/III/2023</td>
+                <td>{{ Str::upper($data->no_spk) }}</td>
             </tr>
 
             <tr>
                 <td width="3%" style="vertical-align: text-top;">2.</td>
-                <td colspan="3" style="text-align: justify;">Memberikan keterangan - keterangan dan dokumen - dokumen seperlunya kepada Notaris tersebut atas semua hal yang berkaitan dengan Pembuatan Penandatanganan Akta Jaminan Fidusia dan Pendaftarannya.</td>
+                <td colspan="3" style="text-align: justify;">Memberikan keterangan - keterangan dan dokumen - dokumen
+                    seperlunya kepada Notaris tersebut atas semua hal yang berkaitan dengan Pembuatan Penandatanganan
+                    Akta Jaminan Fidusia dan Pendaftarannya.</td>
             </tr>
 
             <tr>
                 <td width="3%" style="vertical-align: text-top;">3.</td>
-                <td colspan="3" style="text-align: justify;">Menerima Sertifikat Fidusia dari Instansi yang berwenang.</td>
+                <td colspan="3" style="text-align: justify;">Menerima Sertifikat Fidusia dari Instansi yang
+                    berwenang.</td>
             </tr>
 
             <tr>
                 <td width="3%" style="vertical-align: text-top;"></td>
-                <td colspan="3" style="text-align: justify;">Kuasa ini merupakan bagian yang sangat penting dan Perjanjian Pembiayaan Konsumen tersebut diatas, oleh karenanya kuasa ini tidak dapat dicabut kembali dan tidak akan berakhir oleh sebab - sebab yang sebagaimana diatur dalam pasal 1813,1814 dan 1818 Kitab Undang - undang Hukum Perdata Indonesia.</td>
+                <td colspan="3" style="text-align: justify;">Kuasa ini merupakan bagian yang sangat penting dan
+                    Perjanjian Pembiayaan Konsumen tersebut diatas, oleh karenanya kuasa ini tidak dapat dicabut kembali
+                    dan tidak akan berakhir oleh sebab - sebab yang sebagaimana diatur dalam pasal 1813,1814 dan 1818
+                    Kitab Undang - undang Hukum Perdata Indonesia.</td>
             </tr>
 
             <tr>
                 <td width="3%" style="vertical-align: text-top;"></td>
-                <td colspan="3" style="text-align: justify;">Demikian Surat Kuasa ini dibuat untuk dipergunakan sesuai keperluannya. </td>
+                <td colspan="3" style="text-align: justify;">Demikian Surat Kuasa ini dibuat untuk dipergunakan
+                    sesuai keperluannya. </td>
             </tr>
         </table>
 
@@ -243,7 +242,7 @@
                 <td width="30%"></td>
                 <td width="40%"></td>
                 <td class="text-center" width="30%">
-                    Subang, 27 November 2023
+                    Subang, {{ $data->hari_ini }}
                 </td>
             </tr>
             <tr>
@@ -256,7 +255,7 @@
                 <td class="text-center">
                     Pemberi Kuasa
                     <p style="margin-top:100px;"></p>
-                    <b>( <u>YUDHA SAKTI PRATAMA</u> )</b>
+                    <b>( <u>{{ Str::upper($data->nama_nasabah) }}</u> )</b>
                 </td>
             </tr>
         </table>

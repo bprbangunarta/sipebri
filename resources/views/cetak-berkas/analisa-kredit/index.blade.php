@@ -2062,7 +2062,12 @@
                 <td class="text-center">
                     <p style="margin-top: -10.5px;"></p>
                     Pamanukan, {{ $memorandum->hari }} <br>
-                    <p style="margin-top: 100px;"></p>
+                    <p style="margin-top: 30px;"></p>
+                    <center>
+                        {{-- <p style="margin-top:10px;"></p> --}}
+                        <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
+                            style="margin-top:-30px;">
+                    </center>
                     <b>
                         <font style="text-transform: uppercase;">{{ $memorandum->nama_surveyor }}</font>
                     </b>
