@@ -92,7 +92,9 @@ class DataCetakController extends Controller
 
             ->where(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
-                    ->orWhere('data_survei.kasi_kode', '=', $user);
+                    ->orWhere('data_survei.kasi_kode', '=', $user)
+                    ->orWhere('data_survei.kabag_kode', '=', $user)
+                    ->orWhere('data_survei.direksi_kode', '=', $user);
             })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
