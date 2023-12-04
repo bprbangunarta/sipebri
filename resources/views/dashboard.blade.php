@@ -102,13 +102,16 @@
                         <div class="box-header with-border">
                             <i class="fa fa-calendar"></i>
                             <h3 class="box-title">REALISASI HARI INI</h3>
+
                             <div class="box-tools">
-                                <form action="#" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name" value="" placeholder="Search">
+                                <form action="{{ route('dashboard') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -118,8 +121,9 @@
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" style="width: 15px;">#</th>
+                                        <th class="text-center" width="3%">#</th>
                                         <th class="text-center">KODE</th>
+                                        <th class="text-center">NO. LOAN</th>
                                         <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center">WILAYAH</th>
@@ -136,9 +140,10 @@
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center">{{ $item->no_loan }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor }}
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->nama_kantor }}
                                             </td>
 
                                             @php
@@ -152,23 +157,27 @@
 
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="6">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
 
-                                    {{-- <tr class="bg-blue">
-                                        <td class="text-center" colspan="5"><b>TOTAL</b></td>
+                                    <tr class="bg-blue">
+                                        <td class="text-center" colspan="6"><b>TOTAL</b></td>
                                         <td class="text-right"><b>{{ 'Rp. ' . ' ' . number_format($total, 0, ',', '.') }}</b>
                                         </td>
-                                    </tr> --}}
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="box-footer clearfix">
-                            <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm pull-left"><i class="fa fa-download"></i>&nbsp; Export Data</button>
+                            <div class="pull-left">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
 
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
                         
                     </div>
