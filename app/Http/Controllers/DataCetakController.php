@@ -81,19 +81,19 @@ class DataCetakController extends Controller
         $name = request('name');
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            // ->where(function ($query) use ($user) {
-            //     $query->where('data_pengajuan.tracking', '=', 'Selesai')
-            //         ->where('data_survei.surveyor_kode', '=', $user)
-            //         ->orWhere('data_survei.kasi_kode', '=', $user)
-            //         ->where('data_pengajuan.status', '=', 'Disetujui')
-            //         ->where('data_spk.no_spk', '=', null);
-            // })
+            ->where('data_pengajuan.status', '=', 'Disetujui')
+            ->whereNull('data_notifikasi.no_notifikasi')
+
+            ->where(function ($query) use ($user) {
+                $query->where('data_survei.surveyor_kode', '=', $user)
+                    ->orWhere('data_survei.kasi_kode', '=', $user);
+            })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
@@ -115,7 +115,8 @@ class DataCetakController extends Controller
                 'data_survei.tgl_jadul_2',
                 'users.name',
                 'data_survei.kantor_kode',
-            );
+            )
+            ->orderBy('data_tracking.keputusan_komite', 'desc');
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
@@ -888,6 +889,7 @@ class DataCetakController extends Controller
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
@@ -904,7 +906,7 @@ class DataCetakController extends Controller
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
-            ->orderBy('data_pengajuan.created_at', 'desc');
+            ->orderBy('data_tracking.keputusan_komite', 'desc');
         $data = $query->paginate(10);
         if ($data->isNotEmpty()) {
             foreach ($data as $item) {
