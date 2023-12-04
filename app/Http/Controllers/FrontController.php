@@ -29,6 +29,7 @@ class FrontController extends Controller
         $img = str_replace('"', '', $req);
 
         $array = (object)explode('_', $img);
+        dd($array);
         $data_nasabah = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->leftJoin('data_usulan', 'data_usulan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -59,7 +60,7 @@ class FrontController extends Controller
         //
         // $hari = Carbon::now();
         $data_nasabah->tanggal_notifikasi = Carbon::parse($data_nasabah->tanggal_notifikasi)->translatedFormat('d F Y');
-
+        dd($array);
         return view('front-end.qr-code', [
             'data' => $data_nasabah,
         ]);

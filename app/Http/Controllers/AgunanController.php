@@ -392,7 +392,7 @@ class AgunanController extends Controller
             $cek['otorisasi'] = 'A';
             $cek['input_user'] = Auth::user()->code_user;
             $cek['created_at'] = now();
-            $cek['jenis_agunan_kode'] = '12';
+
             if ($request) {
                 $data_catatan = DB::table('data_jenis_agunan')->where('kode', $cek['jenis_agunan_kode'])->first();
                 if ($data_catatan->jenis_agunan == 'Kartu Jamsostek') {
