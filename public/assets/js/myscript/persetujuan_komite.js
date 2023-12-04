@@ -62,7 +62,7 @@ $(document).ready(function () {
                 $("#provisi").val(hasil.b_provisi);
                 $("#bunga").val(hasil.suku_bunga);
                 $("#admin").val(hasil.b_admin);
-                console.log(kategori);
+                console.log(hasil);
                 //Persetujuan
 
                 if( kategori === "RELOAN"){

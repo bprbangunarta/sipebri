@@ -682,27 +682,27 @@ class Data extends Model
             return null;
         }
 
-        if ($data->agunan_utama == 1) {
+        if ($data->agunan_utama == 3) {
             $agunan_utama = 'Milik Sendiri';
-        } elseif ($data->agunan_utama == 3) {
+        } elseif ($data->agunan_utama == 1) {
             $agunan_utama = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
         }
 
-        if ($data->agunan_tambahan == 1) {
+        if ($data->agunan_tambahan == 3) {
             $agunan_tambahan = 'Milik Sendiri';
-        } elseif ($data->agunan_tambahan == 3) {
+        } elseif ($data->agunan_tambahan == 1) {
             $agunan_tambahan = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
         }
 
-        if ($data->legalitas_agunan == 1) {
+        if ($data->legalitas_agunan == 3) {
             $legalitas_agunan = 'Milik Sendiri';
-        } elseif ($data->legalitas_agunan == 3) {
+        } elseif ($data->legalitas_agunan == 1) {
             $legalitas_agunan = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
         }
 
-        if ($data->legalitas_agunan_tambahan == 1) {
+        if ($data->legalitas_agunan_tambahan == 3) {
             $legalitas_agunan_tambahan = 'Milik Sendiri';
-        } elseif ($data->legalitas_agunan_tambahan == 3) {
+        } elseif ($data->legalitas_agunan_tambahan == 1) {
             $legalitas_agunan_tambahan = 'Orang Lain/Milik Sendiri dan Orang Lain (Wariasan)';
         }
 
@@ -724,11 +724,11 @@ class Data extends Model
             $stabilitas_harga = 'Lainnya';
         }
 
-        if ($data->lokasi_shm == 1) {
+        if ($data->lokasi_shm == 3) {
             $lokasi_shm = 'Strategis dan atau Produktif';
         } elseif ($data->lokasi_shm == 2) {
             $lokasi_shm = 'Strategis dan Produktif (Atau Sebaliknya)';
-        } elseif ($data->lokasi_shm == 3) {
+        } elseif ($data->lokasi_shm == 1) {
             $lokasi_shm = 'SHM';
         }
 
