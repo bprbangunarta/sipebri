@@ -113,15 +113,15 @@
                         class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah', 'themes/penolakan/edit') ? 'active' : '' }}">
                         <a @can('input penolakan') href="{{ route('penolakan.pengajuan') }}" @endcan
                             title="Input Penolakan">
-                            <i class="fa fa-close"></i>
-                            Input Penolakan
+                            <i class="fa fa-file-text"></i>
+                            Surat Penolakan
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
                         <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
                             title="Survey dan Analisa">
                             <i class="fa fa-hourglass-start"></i>
-                            Survey dan Analisa
+                            Kontrol Survey
                         </a>
                     </li>
 

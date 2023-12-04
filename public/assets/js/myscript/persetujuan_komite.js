@@ -54,7 +54,7 @@ $(document).ready(function () {
                 $("#pengajuan").val(pengajuan);
                 var komite = $("#komite");
                 var role = hasil.role_user;
-                var kategori =hasil.kategori
+                var kategori = hasil.kategori
 
                 var pal = hasil.plafon;
                 var pl = formatRupiah(pal);
@@ -65,100 +65,104 @@ $(document).ready(function () {
                 console.log(hasil);
                 //Persetujuan
 
-                if( kategori === "RELOAN"){
+                if (kategori === "RELOAN") {
                     if (role === "Staff Analis") {
                         var options = [
-                        { value: "Naik Kasi", text: "Naik Kasi" }
-                    ];
-                    }else if (role == "Kasi Analis") {
-                        var options = [
-                        { value: "Naik Komite I", text: "Naik Komite I" }
+                            { value: "Naik Kasi", text: "Naik Kasi" }
                         ];
-                    }else if (role == "Kabag Analis") {
+                    } else if (role == "Kasi Analis") {
                         var options = [
-                        { value: "Naik Komite II", text: "Naik Komite II" }
+                            { value: "Naik Komite I", text: "Naik Komite I" }
                         ];
-                    }else if (role == "Direksi") {
+                    } else if (role == "Kabag Analis") {
                         var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
+                            { value: "Naik Komite II", text: "Naik Komite II" }
+                        ];
+                    } else if (role == "Direksi") {
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
                         ];
                     }
-                }else{
+                } else {
                     if (role === "Staff Analis" && pal >= 1000 && pal <= 10000000) {
-                    var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
-                    ];
-                } else if (role == "Staff Analis" && pal > 10000000) {
-                    var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Staff Analis" && pal > 10000000) {
+                        var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
+                    }
+
+                    if (role === "Customer Service" && pal >= 1000 && pal <= 10000000) {
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Staff Analis" && pal > 10000000) {
+                        var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
+                    }
+
+                    if (role === "Kepala Kantor Kas" && pal >= 1000 && pal <= 10000000) {
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Staff Analis" && pal > 10000000) {
+                        var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
+                    }
+
+                    if (
+                        role === "Kasi Analis" &&
+                        pal > 10000001 &&
+                        pal <= 35000000
+                    ) {
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Kasi Analis" && pal > 35000000) {
+                        var options = [
+                            { value: "Naik Komite I", text: "Naik Komite I" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    if (
+                        role === "Kabag Analis" &&
+                        pal >= 35000001 &&
+                        pal <= 75000000
+                    ) {
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Kabag Analis" && pal > 75000001) {
+                        var options = [
+                            { value: "Naik Komite II", text: "Naik Komite II" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    if (role === "Direksi" && pal > 75000000) {
+                        var options = [
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
                 }
 
-                if (role === "Customer Service" && pal >= 1000 && pal <= 10000000) {
-                    var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
-                    ];
-                } else if (role == "Staff Analis" && pal > 10000000) {
-                    var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
-                }
 
-                if (role === "Kepala Kantor Kas" && pal >= 1000 && pal <= 10000000) {
-                    var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
-                    ];
-                } else if (role == "Staff Analis" && pal > 10000000) {
-                    var options = [{ value: "Naik Kasi", text: "Naik Kasi" }];
-                }
 
-                if (
-                    role === "Kasi Analis" &&
-                    pal > 10000001 &&
-                    pal <= 35000000
-                ) {
-                    var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
-                    ];
-                } else if (role == "Kasi Analis" && pal > 35000000) {
-                    var options = [
-                        { value: "Naik Komite I", text: "Naik Komite I" },
-                    ];
-                }
-
-                if (
-                    role === "Kabag Analis" &&
-                    pal >= 35000001 &&
-                    pal <= 75000000
-                ) {
-                    var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
-                    ];
-                } else if (role == "Kabag Analis" && pal > 75000001) {
-                    var options = [
-                        { value: "Naik Komite II", text: "Naik Komite II" },
-                    ];
-                }
-
-                if (role === "Direksi" && pal > 75000000) {
-                    var options = [
-                        { value: "Disetujui", text: "Disetujui" },
-                        { value: "Dibatalkan", text: "Dibatalkan" },
-                        { value: "Ditolak", text: "Ditolak" },
-                    ];
-                }
-                }
-
-                
-                
 
                 $("#metode").append(
                     $("<option>", {
