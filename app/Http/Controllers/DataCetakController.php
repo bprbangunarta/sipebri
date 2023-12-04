@@ -87,13 +87,13 @@ class DataCetakController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            ->where(function ($query) use ($user) {
-                $query->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_survei.surveyor_kode', '=', $user)
-                    ->orWhere('data_survei.kasi_kode', '=', $user)
-                    ->where('data_pengajuan.status', '=', 'Disetujui')
-                    ->where('data_spk.no_spk', '=', null);
-            })
+            // ->where(function ($query) use ($user) {
+            //     $query->where('data_pengajuan.tracking', '=', 'Selesai')
+            //         ->where('data_survei.surveyor_kode', '=', $user)
+            //         ->orWhere('data_survei.kasi_kode', '=', $user)
+            //         ->where('data_pengajuan.status', '=', 'Disetujui')
+            //         ->where('data_spk.no_spk', '=', null);
+            // })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')

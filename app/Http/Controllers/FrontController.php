@@ -32,7 +32,6 @@ class FrontController extends Controller
         $data_nasabah = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->leftJoin('data_usulan', 'data_usulan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('v_users', 'v_users.code_user', '=', 'data_usulan.input_user')
@@ -43,7 +42,6 @@ class FrontController extends Controller
                 'data_pengajuan.jangka_waktu',
                 'data_usulan.role_name',
                 'data_notifikasi.created_at as tanggal_notifikasi',
-                'data_tracking.analisa_kredit as analisa_kredit',
                 'v_users.nama_user',
                 'users.ttd',
                 'data_produk.kode_produk',
@@ -60,7 +58,7 @@ class FrontController extends Controller
             ->where('data_usulan.input_user', '=', $array->{2})->get()->last();
         //
         // $hari = Carbon::now();
-        $data_nasabah->analisa_kredit = Carbon::parse($data_nasabah->analisa_kredit)->translatedFormat('d F Y');
+        $data_nasabah->tanggal_notifikasi = Carbon::parse($data_nasabah->tanggal_notifikasi)->translatedFormat('d F Y');
 
         return view('front-end.qr-code', [
             'data' => $data_nasabah,
