@@ -66,12 +66,8 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">ASR. JIWA MENURUN 2</span>
-                                                <input type="text"
-                                                    class="form-control input-sm form-border text-uppercase"
-                                                    name="asuransi_jiwa_menurun2" placeholder="Rp."
-                                                    id="asuransi_jiwa_menurun2"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun2, 0, ',', '.') }}">
+                                                <span class="fw-bold text-primary">ASR. JIWA MENURUN 2</span>
+                                                <input type="text" class="form-control input-sm form-border text-uppercase" name="asuransi_jiwa_menurun2" placeholder="Rp." id="asuransi_jiwa_menurun2" style="border:1px solid #3C8DBC;" value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun2, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -173,14 +169,17 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;width:100%">SIMPAN</button>
+                                        <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">
+                                            SIMPAN
+                                        </button>
                                     </div>
                                 </form>
-
-
                             </div>
+                            <p class="text-red" style="margin-top:10px;margin-left:10px;">
+                                *Untuk pengisian biaya asuransi jiwa,  gunakan kolom <b>ASR. JIWA MENURUN 2</b>
+                            </p>
                         </div>
+
                     </div>
                 </div>
         </section>
