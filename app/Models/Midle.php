@@ -732,10 +732,11 @@ class Midle extends Model
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->where('data_pengajuan.tracking', '=', $role)
-            ->orWhere(function ($query) {
-                $query->where('data_pengajuan.tracking', '=', 'Selesai')
-                    ->where('data_notifikasi.pengajuan_kode', '=', null);
-            })
+            ->where('data_pengajuan.tracking', '=', 'Naik Komite II')
+            // ->orWhere(function ($query) {
+            //     $query->where('data_pengajuan.tracking', '=', 'Selesai')
+            //         ->where('data_notifikasi.pengajuan_kode', '=', null);
+            // })
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
