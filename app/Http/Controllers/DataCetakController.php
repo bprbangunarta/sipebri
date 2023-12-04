@@ -818,7 +818,7 @@ class DataCetakController extends Controller
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
             ->where('data_pengajuan.status', 'Ditolak')
-            
+
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
@@ -848,18 +848,21 @@ class DataCetakController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = DB::table('data_pengajuan')
                 ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_alasan_penolakan', 'data_alasan_penolakan.id', '=', 'data_penolakan.alasan_id')
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
                     'data_penolakan.*',
+                    'data_tracking.*',
+                    'data_alasan_penolakan.alasan',
                 )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
 
             return view('cetak.penolakan-kredit.cetak', [
-                'data' => $data,
+                'data' => $data[0],
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

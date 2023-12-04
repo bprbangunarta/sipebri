@@ -1,3 +1,6 @@
+@php
+use Carbon\Carbon;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +12,7 @@
         @page {
             size: A4;
             margin-top: 1.0cm;
-            margin-bottom: 1.0cm;
+            margin-bottom: 0cm;
             margin-left: 0cm;
             margin-right: 0cm;
         }
@@ -92,26 +95,26 @@
             <tr>
                 <td width="14%">Nomor</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>0971/03/KABAG.ANALIS/PBA/XII/2023</td>
+                <td>{{ $data->no_penolakan }}</td>
             </tr>
             <tr>
                 <td>Tanggal</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>01 Desember 2023</td>
+                <td>{{ Carbon::parse(now())->format('d F Y') }}</td>
             </tr>
             <tr>
                 <td>Kode Pengajuan</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>00339931</td>
+                <td>{{ $data->kode_pengajuan }}</td>
             </tr>
         </table>
 
         <p></p>
 
         Kepada Yth. <br>
-        Bapak/Ibu IMAS HARYATI <br>
+        Bapak/Ibu {{ $data->nama_nasabah }} <br>
         Di <br>
-        DUSUN RAJAPOLAH RT/RW 01/04 CIASEM BARU CIASEM SUBANG	 No. Telp/HP : 082320099971
+        {{ $data->alamat_ktp }} No. Telp/HP : {{ $data->no_telp }}
 
         <p></p>
 
@@ -125,10 +128,10 @@
 
         <p></p>
 
-        Dengan Hormar, 
+        Dengan Hormat, 
 
         <p style="text-align: justify;">
-            Menindaklanjuti permohonan kredit yang Bapak/Ibu ajukan kepada kami (PT. BPR Bangunarta), maka dengan ini kami sampaikan bahwa berdasarkan Keputusan Komite Kredit tanggal 03 Desember 2023, permohonan kredit Bapak/Ibu untuk saat ini belum bisa kami kabulkan karena hasil analisa kurang memenuhi standar di Bank kami, semoga Bapak/Ibu berlapang dada menerima keputusan kami ini.
+            Menindaklanjuti permohonan kredit yang Bapak/Ibu ajukan kepada kami (PT. BPR Bangunarta), maka dengan ini kami sampaikan bahwa berdasarkan Keputusan Komite Kredit tanggal {{ Carbon::parse($data->keputusan_komite)->format('d F Y') }}, permohonan kredit Bapak/Ibu untuk saat ini belum bisa kami kabulkan karena {{ $data->alasan }}, semoga Bapak/Ibu berlapang dada menerima keputusan kami ini.
         </p>
 
         <p style="text-align: justify;">
@@ -166,7 +169,7 @@
             </tr>
         </table>
 
-        <p style="margin-top:400px;"></p>
+        <p style="margin-top:420px;"></p>
 
         Catatan : <br>
         <ul style="margin-top:-1px;margin-left:-25px;">
