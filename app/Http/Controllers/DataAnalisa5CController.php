@@ -104,8 +104,8 @@ class DataAnalisa5CController extends Controller
 
             $cek = Midle::analisa_usaha($enc);
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->pluck('keuangan_perbulan')->first();
-
-            if (is_null($keuangan)) {
+            // dd($keuangan);
+            if (is_null($keuangan) || $keuangan == 0) {
                 return redirect()->back()->with('error', 'Keuangan perbulan masih kosong');
             }
 

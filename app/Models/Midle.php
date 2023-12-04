@@ -1102,7 +1102,6 @@ class Midle extends Model
                 'evaluasi_collateral' => null,
             ];
         }
-
         return $analisa5C;
     }
 

@@ -182,7 +182,6 @@ class KomiteController extends Controller
                 DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
             }
 
-
             if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
                 $data2 = [
                     'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
