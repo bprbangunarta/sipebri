@@ -185,7 +185,7 @@
                         <a @can('cetak pengajuan kredit') href="{{ route('cetak.pengajuan.index') }}" @endcan
                             title="Cetak Pengajuan">
                             <i class="fa fa-users"></i>
-                            Pengajuan
+                            Pendaftaran
                         </a>
                     </li>
 

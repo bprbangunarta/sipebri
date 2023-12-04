@@ -163,10 +163,12 @@
                                             style="margin-top:10px;width:100%">SIMPAN</button>
                                     </div>
                                 </form>
-
-
                             </div>
+                            <p class="text-red" style="margin-top:10px;margin-left:10px;">
+                                *Untuk pengisian biaya asuransi jiwa,  gunakan kolom <b>ASR. JIWA MENURUN 2</b>
+                            </p>
                         </div>
+                        
                     </div>
                 </div>
         </section>
