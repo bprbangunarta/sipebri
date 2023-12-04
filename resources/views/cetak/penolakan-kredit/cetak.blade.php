@@ -1,5 +1,5 @@
 @php
-use Carbon\Carbon;
+    use Carbon\Carbon;
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -128,14 +128,19 @@ use Carbon\Carbon;
 
         <p></p>
 
-        Dengan Hormat, 
+        Dengan Hormat,
 
         <p style="text-align: justify;">
-            Menindaklanjuti permohonan kredit yang Bapak/Ibu ajukan kepada kami (PT. BPR Bangunarta), maka dengan ini kami sampaikan bahwa berdasarkan Keputusan Komite Kredit tanggal {{ Carbon::parse($data->keputusan_komite)->format('d F Y') }}, permohonan kredit Bapak/Ibu untuk saat ini belum bisa kami kabulkan karena {{ $data->alasan }}, semoga Bapak/Ibu berlapang dada menerima keputusan kami ini.
+            Menindaklanjuti permohonan kredit yang Bapak/Ibu ajukan kepada kami (PT. BPR Bangunarta), maka dengan ini
+            kami sampaikan bahwa berdasarkan Keputusan Komite Kredit tanggal
+            {{ Carbon::parse($data->keputusan_komite)->format('d F Y') }}, permohonan kredit Bapak/Ibu untuk saat ini
+            belum bisa kami kabulkan karena {{ $data->alasan }}, semoga Bapak/Ibu berlapang dada menerima keputusan kami
+            ini.
         </p>
 
         <p style="text-align: justify;">
-            Demikian surat ini kami sampaikan sebagai pemberitahuan. Atas kepercayaan dan pengertian Bapak/Ibu, kami ucapkan terimakasih.
+            Demikian surat ini kami sampaikan sebagai pemberitahuan. Atas kepercayaan dan pengertian Bapak/Ibu, kami
+            ucapkan terimakasih.
         </p>
 
         <p style="margin-top:30px;"></p>
@@ -153,8 +158,8 @@ use Carbon\Carbon;
                 <td class="text-center" width="40%">
                     <center>
                         <p style="margin-top:80px;"></p>
-                        {{-- <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
-                            style="margin-top:-30px;"> --}}
+                        <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
+                            style="margin-top:-30px;">
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

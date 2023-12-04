@@ -298,15 +298,9 @@ class DataCetakController extends Controller
         $c = $cek->get();
         $count = count($c);
         $data = $cek->paginate(10);
-        // for ($i = 0; $i < $count; $i++) {
-        //     if ($data->isNotEmpty()) {
-        //         $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-        //     }
-        // }
-
         foreach ($data as $item) {
-            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
-        }
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+        }
 
         return view('cetak.perjanjian-kredit.index', [
             'data' => $data
@@ -855,18 +849,23 @@ class DataCetakController extends Controller
                 ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_alasan_penolakan', 'data_alasan_penolakan.id', '=', 'data_penolakan.alasan_id')
+                ->join('v_users', 'v_users.role_name', '=', 'Kabag Analis')
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
                     'data_penolakan.*',
                     'data_tracking.*',
+                    'data_penolakan.input_user as nama_user_penolak',
                     'data_alasan_penolakan.alasan',
                 )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
-
+            //
+            $qr = Midle::get_qrcode($enc, 'Penolakan Kredit', $data[0]->nama_user_penolak);
+            // dd($data[0]);
             return view('cetak.penolakan-kredit.cetak', [
                 'data' => $data[0],
+                'qr' => $qr,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

@@ -87,8 +87,8 @@ Route::get('/', function () {
 });
 
 Route::get('/give-permission', function () {
-    $role = Role::find(15);
-    $permission = Permission::find(52);
+    $role = Role::find(11);
+    $permission = Permission::find(49);
 
     $role->givePermissionTo($permission);
     $permission->assignRole($role);
@@ -251,7 +251,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/monitoring/kredit', [CetakController::class, 'monitoring'])->name('cetak.monitoring');
 
         // Cetak Notifikasi Kredit
-        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit']], function () {
+        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit|Realisasi']], function () {
             Route::get('/cetak/notifikasi-kredit', [CetakController::class, 'index_notifikasi_kredit'])->name('cetak.notifikasi.index');
         });
 
