@@ -40,14 +40,14 @@ class FiduciaController extends Controller
 
             ->select(
                 'data_pengajuan.*',
-                'data_pengajuan.created_at as tanggal',
+                'data_spk.created_at as tanggal',
                 'data_spk.*',
                 'data_nasabah.*',
                 'data_survei.*',
                 'data_jaminan.*',
                 'data_jenis_agunan.jenis_agunan as jenis_kendaraan'
             )
-            ->orderBy('data_pengajuan.created_at', 'desc');
+            ->orderBy('data_spk.created_at', 'desc');
 
         //Enkripsi kode pengajuan
         $c = $cek->get();

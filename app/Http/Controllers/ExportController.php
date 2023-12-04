@@ -238,7 +238,7 @@ class ExportController extends Controller
             ->orderBy('data_notifikasi.created_at', 'desc')
             ->get();
 
-        $data_array[] = array("NO", "TANGGAL", "KODE", "NO_NOTIFIKASI", "NAMA_NASABAH", "PLAFON", "WIL", "RENCANA", "KETERANGAN");
+        $data_array[] = array("NO", "TANGGAL", "KODE", "NO_NOTIFIKASI", "NAMA_NASABAH", "ALAMAT", "PLAFON", "WIL", "RENCANA", "KETERANGAN");
         foreach ($data as $item) {
             $data_array[] = array(
                 'NO'            => $no++,
@@ -246,6 +246,7 @@ class ExportController extends Controller
                 'KODE'          => $item->kode_pengajuan,
                 'NO_NOTIFIKASI' => $item->no_notifikasi,
                 'NAMA_NASABAH'  => $item->nama_nasabah,
+                'ALAMAT'        => $item->alamat_ktp,
                 'PLAFON'        => number_format($item->plafon, 0, ',', '.'),
                 'WIL'           => $item->kode_kantor,
                 'KETERANGAN'    => $item->keterangan,

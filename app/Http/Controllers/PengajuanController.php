@@ -131,7 +131,7 @@ class PengajuanController extends Controller
             )
             ->where('data_pengajuan.status', '!=', 'Batal')
             // ->where('data_pengajuan.tracking', '!=', 'Selesai')
-            ->where('data_pengajuan.on_current', '!=', '1')
+            ->where('data_pengajuan.on_current', '0')
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
