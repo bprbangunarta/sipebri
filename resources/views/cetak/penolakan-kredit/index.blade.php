@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Cetak Penolakan Kredit')
+@section('title', 'Cetak Penolakan')
 
 @section('content')
     <div class="content-wrapper">
@@ -8,6 +8,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
+                            <i class="fa fa-print"></i>
                             <h3 class="box-title">CETAK PENOLAKAN KREDIT</h3>
 
                             <div class="box-tools">
@@ -30,11 +31,11 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="7%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
-                                        <th class="text-center" width="17%">NO. PENOLAKAN</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="8%">KODE</th>
+                                        <th class="text-center" width="8%">NO. ST</th>
                                         <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="32%">ALAMAT</th>
+                                        <th class="text-center" width="37%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="5%">AKSI</th>
@@ -51,13 +52,20 @@
                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            {{-- <td class="text-center" style="vertical-align: middle;">
                                                 @if (is_null($item->no_penolakan))
                                                     <span class="label label-danger" style="font-size: 10px;">
                                                         SURAT PENOLAKAN BELUM DITURUNKAN
                                                     </span>
                                                 @else
                                                     {{ $item->no_penolakan }}
+                                                @endif
+                                            </td> --}}
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if (is_null($item->no_penolakan))
+                                                    -
+                                                @else
+                                                    2176
                                                 @endif
                                             </td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>

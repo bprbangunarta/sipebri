@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Cetak Notifikasi Kredit')
+@section('title', 'Cetak Notifikasi')
 
 @section('content')
     <div class="content-wrapper">
@@ -8,6 +8,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
+                            <i class="fa fa-print"></i>
                             <h3 class="box-title">CETAK NOTIFIKASI KREDIT</h3>
 
                             <div class="box-tools">
@@ -32,11 +33,11 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="7%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="8%">KODE</th>
                                         <th class="text-center" width="7%">NOTIFIKASI</th>
                                         <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="41%">ALAMAT</th>
+                                        <th class="text-center" width="35%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="5%">AKSI</th>

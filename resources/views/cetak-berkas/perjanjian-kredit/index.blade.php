@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Cetak Perjanjian Kredit')
+@section('title', 'Cetak Perjanjian')
 
 @section('content')
     <div class="content-wrapper">
@@ -14,13 +14,15 @@
 
                             <div class="box-tools">
                                 <form action="{{ route('cetak.perjanjian.index') }}" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs" style="width: 170px;">
-                                        <input type="text" class="form-control pull-right" name="name" id="name"
-                                            value="" placeholder="Search">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 170px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i
-                                                    class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -80,9 +82,20 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Cetak Berkas</span>
+                                                <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow" title="Informasi">
+                                                    <i class="fa fa-eye"></i>
                                                 </a>
+
+                                                &nbsp;
+                                                @if (is_null($item->no_spk))
+                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue" title="Cetak Berkas">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php
@@ -98,13 +111,38 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            <div class="pull-left">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
+
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PERJANJIAN KREDIT</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <p>Mohon maaf cetak perjanjian kredit tidak bisa dilakukan karena nomor perjanjian kredit belum diturunkan. Silahkan hubungi bagian realisasi. Terimakasih</p>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Surat Penjaminan Fiducia')
+@section('title', 'Cetak Fiducia')
 
 @section('content')
     <div class="content-wrapper">
@@ -8,6 +8,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
+                            <i class="fa fa-print"></i>
                             <h3 class="box-title">CETAK PENJAMINAN FIDUCIA</h3>
 
                             <div class="box-tools">
@@ -32,12 +33,12 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="7%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="8%">KODE</th>
                                         <th class="text-center" width="7%">NO. SPK</th>
                                         <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="16%">JENIS KENDARAAN</th>
+                                        <th class="text-center" width="18%">JENIS KENDARAAN</th>
                                         <th class="text-center" width="8%">MEREK</th>
                                         <th class="text-center" width="8%">NO. POLISI</th>
                                         <th class="text-center" width="8%">TAKSASI</th>

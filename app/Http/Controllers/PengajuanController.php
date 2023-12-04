@@ -30,16 +30,18 @@ class PengajuanController extends Controller
 
     public function index(Request $request)
     {
-        $name = request('name');
+        $keyword = request('keyword');
         $usr = Auth::user()->code_user;
 
         //Cek Role User
         $role = DB::table('v_users')->select('v_users.role_name')->where('code_user', $usr)->get();
 
         $query = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->where('data_pengajuan.status', '!=', 'Batal')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
@@ -47,6 +49,7 @@ class PengajuanController extends Controller
                 'data_pengajuan.nasabah_kode as kd_nasabah',
                 'data_pengajuan.id as id',
                 'data_pengajuan.plafon as plafon',
+                'data_pengajuan.metode_rps',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_nasabah.nama_nasabah as nama',
                 'data_nasabah.kelurahan',
@@ -60,7 +63,9 @@ class PengajuanController extends Controller
                 'data_kantor.nama_kantor',
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal',
-                'data_nasabah.no_cif'
+                'data_nasabah.no_cif',
+                'data_produk.nama_produk',
+                'users.name as surveyor',
             )
             ->where(function ($query) {
                 $query->where('data_pengajuan.on_current', '0')
@@ -68,12 +73,15 @@ class PengajuanController extends Controller
                     ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
                     ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
             })
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_produk.kode_produk', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_produk.nama_produk', 'like', '%' . $keyword . '%');
             })
-            ->orderBy('data_nasabah.created_at', 'ASC');
+            ->orderBy('data_pengajuan.created_at', 'DESC');
         //
 
         if ($role[0]->role_name == 'Customer Service') {
@@ -84,7 +92,7 @@ class PengajuanController extends Controller
             $query->where('data_pengajuan.input_user', '=', $usr);
         }
 
-        $pengajuan = $query->paginate(7);
+        $pengajuan = $query->paginate(10);
         $auth = Auth::user()->code_user;
         $dtu = DB::table('v_users')->where('code_user', $auth)->first();
 
@@ -102,12 +110,13 @@ class PengajuanController extends Controller
 
     public function all(Request $request)
     {
-        $name = request('name');
-
+        $keyword = request('keyword');
         $query = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
                 'data_pengajuan.produk_kode',
@@ -115,6 +124,7 @@ class PengajuanController extends Controller
                 'data_pengajuan.id as id',
                 'data_pengajuan.plafon as plafon',
                 'data_pengajuan.jangka_waktu as jk',
+                'data_pengajuan.metode_rps',
                 'data_nasabah.nama_nasabah as nama',
                 'data_nasabah.kelurahan',
                 'data_nasabah.kecamatan',
@@ -127,21 +137,23 @@ class PengajuanController extends Controller
                 'data_kantor.nama_kantor',
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal',
-                'data_nasabah.no_cif'
+                'data_nasabah.no_cif',
+                'data_produk.*',
+                'users.name as surveyor',
             )
             ->where('data_pengajuan.status', '!=', 'Batal')
-            // ->where('data_pengajuan.tracking', '!=', 'Selesai')
             ->where('data_pengajuan.on_current', '0')
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_produk.kode_produk', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_produk.nama_produk', 'like', '%' . $keyword . '%');
             })
-            ->orderBy('data_pengajuan.created_at', 'asc');
-        //
+            ->orderBy('data_pengajuan.created_at', 'DESC');
 
-        $pengajuan = $query->paginate(7);
-
+        $pengajuan = $query->paginate(10);
         foreach ($pengajuan as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
@@ -154,16 +166,18 @@ class PengajuanController extends Controller
 
     public function otorisasi(Request $request)
     {
-        $name = request('name');
+        $keyword = request('keyword');
         $usr = Auth::user()->code_user;
 
         //Cek Role User
         $role = DB::table('v_users')->select('v_users.role_name')->where('code_user', $usr)->get();
 
         $query = DB::table('data_pengajuan')
-            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('users', 'users.code_user', '=', 'data_pengajuan.input_user')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
                 'data_pengajuan.produk_kode',
@@ -171,6 +185,7 @@ class PengajuanController extends Controller
                 'data_pengajuan.id as id',
                 'data_pengajuan.plafon as plafon',
                 'data_pengajuan.jangka_waktu as jk',
+                'data_pengajuan.metode_rps',
                 'data_nasabah.nama_nasabah as nama',
                 'data_nasabah.kelurahan',
                 'data_nasabah.kecamatan',
@@ -183,7 +198,9 @@ class PengajuanController extends Controller
                 'data_kantor.nama_kantor',
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal',
-                'data_nasabah.no_cif'
+                'data_nasabah.no_cif',
+                'data_produk.*',
+                'users.name as input_user',
             )
             ->where(function ($query) {
                 $query->where('data_pengajuan.status', 'Lengkapi Data')
@@ -191,12 +208,15 @@ class PengajuanController extends Controller
                     ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
                     ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
             })
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_produk.kode_produk', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_produk.nama_produk', 'like', '%' . $keyword . '%');
             })
-            ->orderBy('data_nasabah.created_at', 'ASC');
+            ->orderBy('data_pengajuan.created_at', 'DESC');
         //
 
         if ($role[0]->role_name == 'Kabag Operasional') {
@@ -205,7 +225,7 @@ class PengajuanController extends Controller
             $query->where('data_pengajuan.status', '=', 'Minta Otorisasi');
         }
 
-        $pengajuan = $query->paginate(7);
+        $pengajuan = $query->paginate(10);
         $auth = Auth::user()->code_user;
         $dtu = DB::table('v_users')->where('code_user', $auth)->first();
 
