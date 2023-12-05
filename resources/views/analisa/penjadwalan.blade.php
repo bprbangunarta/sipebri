@@ -51,13 +51,7 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                @if (is_null($item->tgl_survei))
-                                                <span class="label label-danger" style="font-size: 10px;">
-                                                    BELUM ADA
-                                                </span>
-                                                @else
-                                                    {{ $item->tgl_survei }}
-                                                @endif
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} 
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>

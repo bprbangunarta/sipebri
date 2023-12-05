@@ -61,7 +61,7 @@ class PenjadwalanController extends Controller
                     ->orWhere('data_kantor.kode_kantor', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
-            ->orderBy('data_pengajuan.created_at', 'asc');
+            ->orderBy('data_pengajuan.created_at', 'desc');
             ;
 
         $datas = $cek->paginate(10);
