@@ -23,6 +23,7 @@ $(document).ready(function () {
                 $("#kode_pengajuan").val(hasil.kode_pengajuan);
                 $("#nama_nasabah").val(hasil.nama_nasabah);
                 $("#alamat").val(hasil.alamat_ktp);
+                $("#tanggal").val(hasil.created_at);
 
                 $("#kode_petugas").append(
                     $("<option>", {

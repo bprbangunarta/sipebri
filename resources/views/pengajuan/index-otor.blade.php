@@ -144,7 +144,7 @@
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="8">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

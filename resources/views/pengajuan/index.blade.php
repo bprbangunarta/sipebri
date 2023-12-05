@@ -34,7 +34,8 @@
                                         <th class="text-center" width="8%">TANGGAL</th>
                                         <th class="text-center" width="8%">KODE</th>
                                         <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="47%">ALAMAT</th>
+                                        <th class="text-center" width="42%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
@@ -60,6 +61,10 @@
                                                 {{ $item->alamat }}
                                             </td>
                                             @endif
+
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kantor }}
+                                            </td>
 
                                             @php
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
@@ -149,7 +154,7 @@
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="8">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
