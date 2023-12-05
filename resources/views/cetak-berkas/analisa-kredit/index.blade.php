@@ -693,12 +693,15 @@
                 <tr>
                     <td width="23%">Hasil Bersih Usaha (70%)</td>
                     <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->saving, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
-                    <td>Saving Pokok</td>
+                    <td>Angsuran Pokok</td>
                     <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->saving, 0, ',', '.') }}</td>
+                    @php
+                        $angsuran = $item->plafon / (( $item->jangka_waktu ))
+                    @endphp
+                    <td>{{ 'Rp.' . ' ' . number_format($angsuran, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
                     <td>Proyeksi Penambahan</td>

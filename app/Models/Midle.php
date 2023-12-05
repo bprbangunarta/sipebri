@@ -946,7 +946,7 @@ class Midle extends Model
             ->leftJoin('du_pertanian', 'au_pertanian.kode_usaha', '=', 'du_pertanian.usaha_kode')
             ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'au_pertanian.pengajuan_kode')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-            ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*', 'data_nasabah.nama_nasabah')
+            ->select('au_pertanian.*', 'bu_pertanian.*', 'du_pertanian.*', 'data_nasabah.nama_nasabah', 'data_pengajuan.jangka_waktu', 'data_pengajuan.plafon')
             ->where('au_pertanian.pengajuan_kode', $kode)->get();
         return $data;
     }

@@ -55,7 +55,7 @@
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
-                            <span class="fw-bold">SAVING POKOK</span>
+                            <span class="fw-bold">ANGSURAN POKOK</span>
                             <input class="form-control input-sm form-border" type="text"
                                 value="{{ 'Rp. ' . ' ' . number_format($kalkulasi['saving'], 0, ',', '.') ?? 0 }}"
                                 name="saving_pokok" id="saving_pokok" readonly>
