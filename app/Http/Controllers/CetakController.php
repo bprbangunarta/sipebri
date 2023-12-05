@@ -346,18 +346,42 @@ class CetakController extends Controller
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
                         ->where('data_jaminan.jenis_jaminan', '=', 'Tanah');
                 })->get();
+            
             // ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
-            for ($i = 0; $i < count($data); $i++) {
+            foreach ($data as $item) {
                 $surveyor = DB::table('v_users')
-                    ->where('code_user', $data[$i]->surveyor_kode)
-                    ->select('nama_user', 'role_name')->get();
-
+                    ->where('code_user', $item->surveyor_kode)
+                    ->select('nama_user', 'role_name')
+                    ->first(); // Use first() instead of get()
+            
                 $thn = Carbon::now()->year;
-                $data[$i]->thn = $thn;
-                $data[$i]->nama_user = $surveyor[$i]->nama_user;
-                $data[$i]->role_name = $surveyor[$i]->role_name;
+                $item->thn = $thn;
+            
+                // Check if $surveyor is not null before accessing its properties
+                if ($surveyor) {
+                    $item->nama_user = $surveyor->nama_user;
+                    $item->role_name = $surveyor->role_name;
+                } else {
+                    // Handle the case where no matching user is found
+                    $item->nama_user = null;
+                    $item->role_name = null;
+                }
             }
+            
+
+            // for ($i = 0; $i < count($data); $i++) {
+            //     $surveyor = DB::table('v_users')
+            //         ->where('code_user', $data[$i]->surveyor_kode)
+            //         ->select('nama_user', 'role_name')->get();
+
+
+            //     $thn = Carbon::now()->year;
+            //     $data[$i]->thn = $thn;
+            //     $data[$i]->nama_user = $surveyor[$i]->nama_user;
+            //     $data[$i]->role_name = $surveyor[$i]->role_name;
+            // }
+            
 
             return view('cetak.layouts.tanah', [
                 'data' => $data
@@ -394,7 +418,6 @@ class CetakController extends Controller
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
                         ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
                 })->get();
-
             for ($i = 0; $i < count($data); $i++) {
                 $surveyor = DB::table('v_users')
                     ->where('code_user', $data[$i]->surveyor_kode)

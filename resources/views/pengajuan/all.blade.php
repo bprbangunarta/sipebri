@@ -8,6 +8,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
+                            <i class="fa fa-bars"></i>
                             <h3 class="box-title">LIST PENGAJUAN KREDIT</h3>
 
                             <div class="box-tools">

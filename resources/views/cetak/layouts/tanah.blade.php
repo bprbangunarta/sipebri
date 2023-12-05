@@ -240,6 +240,8 @@
                 </tr>
             </table>
         </div>
+        
+        <div style="page-break-before: always;"></div>
     @empty
         <tr>
             <td class="text-center" colspan="10">TIDAK ADA DATA</td>

@@ -38,10 +38,10 @@ class PengajuanController extends Controller
 
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
-            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->where('data_pengajuan.status', '!=', 'Batal')
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
