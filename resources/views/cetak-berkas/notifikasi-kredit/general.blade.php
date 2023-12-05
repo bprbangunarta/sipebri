@@ -189,7 +189,7 @@
                             @elseif ($item->jenis_jaminan == 'Lainnya')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    {{ Str::upper($item->nama_jenis_dokumen) . ',' . ' ' . Str::upper($item->jenis_jaminan) . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                                    {{ Str::upper($item->nama_jenis_dokumen) . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ' ' . 'NO' . ' ' . $item->no_dokumen }}
                                 </li>
                             @endif
                         </ol>
