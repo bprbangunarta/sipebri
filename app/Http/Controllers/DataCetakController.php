@@ -661,8 +661,10 @@ class DataCetakController extends Controller
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->leftJoin('data_usulan', 'data_pengajuan.kode_pengajuan', '=', 'data_usulan.pengajuan_kode')
 
             ->whereNotNull('data_tracking.analisa_kredit')
+            ->whereNotNull('data_usulan.pengajuan_kode')
 
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
