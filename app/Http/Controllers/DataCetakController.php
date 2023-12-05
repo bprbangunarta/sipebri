@@ -846,6 +846,7 @@ class DataCetakController extends Controller
             'data' => $data,
         ]);
     }
+
     public function cetak_penolakan_kredit(Request $request)
     {
         try {

@@ -1,4 +1,5 @@
 //Harga Jual RP
+var hrg0 = document.getElementById("hrg0");
 var hrg1 = document.getElementById("hrg1");
 var hrg2 = document.getElementById("hrg2");
 var hrg3 = document.getElementById("hrg3");
@@ -10,6 +11,11 @@ var hrg8 = document.getElementById("hrg8");
 var hrg9 = document.getElementById("hrg9");
 var hrg10 = document.getElementById("hrg10");
 
+if (hrg0) {
+    hrg0.addEventListener("keyup", function (e) {
+        hrg0.value = formatRupiah(this.value, "Rp. ");
+    });
+}
 if (hrg1) {
     hrg1.addEventListener("keyup", function (e) {
         hrg1.value = formatRupiah(this.value, "Rp. ");
@@ -99,6 +105,16 @@ function hitungPersentase(hrg, jual, laba, pers) {
 }
 
 
+
+$("#hrg0, #jumlah0").keyup(function () {
+    var hrg0 = parseFloat($("#hrg0").val().replace("Rp. ", "").replace(/\./g, "")) || 0;
+    var jumlah0 = parseFloat($("#jumlah0").val()) || 0;
+
+    var total = hrg0 * jumlah0;
+
+    var totalFormatted = "Rp. " + total.toLocaleString("id-ID");
+    $("#total0").val(totalFormatted);
+});
 
 $("#hrg1, #jumlah1").keyup(function () {
     var hrg1 = parseFloat($("#hrg1").val().replace("Rp. ", "").replace(/\./g, "")) || 0;
