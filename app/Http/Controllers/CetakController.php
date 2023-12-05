@@ -512,7 +512,6 @@ class CetakController extends Controller
             ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
             ->where('data_pengajuan.status', 'Disetujui')
@@ -528,7 +527,7 @@ class CetakController extends Controller
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
-            ->orderBy('data_notifikasi.created_at', 'desc');
+            ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
         if ($data->isNotEmpty()) {
             foreach ($data as $item) {
