@@ -50,8 +50,8 @@ class PenjadwalanController extends Controller
             ->where('data_survei.kasi_kode', '=', $user)
             ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
             ->where('data_pengajuan.tracking', '=', 'Penjadwalan')
-            ->orWhere('data_pengajuan.tracking', '=', 'Proses Survei')
-            
+            // ->orWhere('data_pengajuan.tracking', '=', 'Proses Survei')
+
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
