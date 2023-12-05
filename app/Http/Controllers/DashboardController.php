@@ -25,16 +25,16 @@ class DashboardController extends Controller
             ->count();
 
         $query = DB::table('data_droping')
-        ->where('tgl_perjanjian', '=', date('Y-m-d'))
+            ->where('tgl_perjanjian', '=', date('Y-m-d'))
 
-        ->where(function ($query) use ($keyword) {
-            $query->where('nama_nasabah', 'like', '%' . $keyword . '%')
-                ->orWhere('wilayah', 'like', '%' . $keyword . '%')
-                ->orWhere('kode_pengajuan', 'like', '%' . $keyword . '%')
-                ->orWhere('nama_kantor', 'like', '%' . $keyword . '%');
-        })
+            ->where(function ($query) use ($keyword) {
+                $query->where('nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('wilayah', 'like', '%' . $keyword . '%')
+                    ->orWhere('kode_pengajuan', 'like', '%' . $keyword . '%');
+                // ->orWhere('nama_kantor', 'like', '%' . $keyword . '%');
+            })
 
-        ->orderBy('tgl_perjanjian', 'desc');
+            ->orderBy('tgl_perjanjian', 'desc');
         //
         $dt = $query->get();
         // dd($dt);
