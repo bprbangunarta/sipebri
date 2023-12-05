@@ -246,13 +246,19 @@
                 <td style="text-align: justify;">{{ $data->b_admin }} %
                     {{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }}</td>
             </tr>
+            
+            @if (is_null($data->by_fiducia))
+            
+            @else
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">c. Fiducia</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">1.00 %
+                <td style="text-align: justify;">{{ $data->rate_fiducia }} %
                     {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }}</td>
             </tr>
+            @endif
+            
             @if ($data->persen_apht != 0.0)
                 <tr>
                     <td class="text-center" width="2%"></td>
@@ -291,7 +297,7 @@
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
-                <td width="27%">2. Jiwa (Ekawaktu)</td>
+                <td width="27%">b. Jiwa (Ekawaktu)</td>
                 <td class="text-center" width="3%"> : </td>
                 <td style="text-align: justify;">Rp. 0 (dengan nilai pertanggungan Rp. 0)</td>
             </tr>

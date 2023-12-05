@@ -192,7 +192,7 @@ class DataCetakController extends Controller
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
-                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin;
+                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->rate_fiducia;
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
