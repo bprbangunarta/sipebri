@@ -38,6 +38,10 @@ class AnalisaKeuanganController extends Controller
             /**Ambil data keuangan dengan filed biaya rumah tanggga
                biaya kewajiban lain dan keuangan perbulan untuk jadi pengurangan hasil
                secara realtime ketika ada perubahan nominal dianalisa usaha**/
+            $kemampuan = Midle::kemampuan_keuangan($enc);
+            $total = array_sum($filter);
+            $kemampuan['total'] = $total;
+
             $keuangan = Keuangan::where('pengajuan_kode', $enc)->get();
             //cek ada datanya atau tidak
             if ($keuangan->isEmpty()) {
@@ -75,7 +79,7 @@ class AnalisaKeuanganController extends Controller
                 ];
                 Keuangan::where('pengajuan_kode', $enc)->update($au);
             }
-
+            // dd($kemampuan);
             return view('staff.analisa.keuangan-edit', [
                 'data' => $cek[0],
                 'kemampuan' => $kemampuan,
