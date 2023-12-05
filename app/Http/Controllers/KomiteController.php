@@ -19,29 +19,29 @@ class KomiteController extends Controller
 
         if ($user->role_name == 'Staff Analis') {
             $role = "Persetujuan Komite";
-            $name = request('name');
+            $name = request('keyword');
             $cek = Midle::persetujuan_komite_staff($usr, $role, $name);
         } elseif ($user->role_name == 'Kasi Analis') {
             $role = "Naik Kasi";
-            $name = request('name');
+            $name = request('keyword');
             $cek = Midle::persetujuan_komite_kasi($usr, $role, $name);
         } elseif ($user->role_name == 'Kabag Analis') {
             $role = "Naik Komite I";
-            $name = request('name');
+            $name = request('keyword');
             $cek = Midle::persetujuan_komite_kabag($role, $name);
         } elseif ($user->role_name == 'Direksi') {
             $role = "Naik Komite II";
-            $name = request('name');
+            $name = request('keyword');
             $cek = Midle::persetujuan_komite_direksi($role, $name);
         } elseif ($user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
-            $name = request('name');
+            $name = request('keyword');
             $cek = Midle::persetujuan_komite_cs_kksk($usr, $name);
         }
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
         $count = count($c);
-        $data = $cek->paginate(7);
+        $data = $cek->paginate(10);
         $usul1 = "Staff Analis";
         $usul2 = "Kasi Analis";
         $usul3 = "Kabag Analis";
@@ -318,38 +318,37 @@ class KomiteController extends Controller
 
     public function survei_analisa()
     {
-        $name = request('name');
+        $name = request('keyword');
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->where('data_pengajuan.tracking', 'Penjadwalan')
-            ->orWhere('data_pengajuan.tracking', 'Proses Survei')
-            ->orWhere('data_pengajuan.tracking', 'Proses Analisa')
-            ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
-            ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
-            ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
-            ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
-            ->where('data_pengajuan.on_current', '=', '0')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+
+            ->where('data_pengajuan.tracking', '=', 'Proses Survei')
+            ->whereNot('data_pengajuan.produk_kode', '=', 'KTA')
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $name . '%')
+                    ->orWhere('users.name', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.kode_kantor', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.tgl_survei', 'like', '%' . $name . '%');
             })
-
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
                 'data_pengajuan.status',
-                'data_pengajuan.suku_bunga',
-                'data_pengajuan.metode_rps',
                 'data_pengajuan.plafon',
-                'data_pengajuan.produk_kode',
-                'data_pengajuan.jangka_waktu as jk',
-                'data_pengajuan.created_at',
+                'data_pengajuan.created_at as tanggal',
                 'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -357,38 +356,19 @@ class KomiteController extends Controller
                 'data_nasabah.kecamatan',
                 'data_pengajuan.plafon',
                 'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
                 'data_survei.surveyor_kode',
                 'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
-                'users.name'
-            );
-        //
-        $c = $cek->get();
-        $count = count($c);
-        $data = $cek->paginate(7);
-        $usul1 = "Staff Analis";
-        $usul2 = "Kasi Analis";
-        $usul3 = "Kabag Analis";
-        $usul4 = "Direksi";
-        // dd($data);
+                'users.username as surveyor',
+                'users.name as full_name',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_produk.*'
+            )
+            ->orderBy('data_pengajuan.created_at', 'desc');
 
-        foreach ($data as $item) {
-            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan);
-            $item->usulan1 = Midle::data_usulan($item->kode_pengajuan, $usul1) ?? null;
-            $item->usulan2 = Midle::data_usulan($item->kode_pengajuan, $usul2) ?? null;
-            $item->usulan3 = Midle::data_usulan($item->kode_pengajuan, $usul3) ?? null;
-            $item->usulan4 = Midle::data_usulan($item->kode_pengajuan, $usul4) ?? null;
-        }
-        // for ($i = 0; $i < $count; $i++) {
-        //     if ($data->isNotEmpty()) {
-        //         $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan) ?? null;
-        //         $data[$i]->usulan1 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul1) ?? null;
-        //         $data[$i]->usulan2 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul2) ?? null;
-        //         $data[$i]->usulan3 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul3) ?? null;
-        //         $data[$i]->usulan4 = Midle::data_usulan($data[$i]->kode_pengajuan, $usul4) ?? null;
-        //     }
-        // }
+        $data = $cek->paginate(10);
 
         return view('komite.survei_analisa', [
             'data' => $data,

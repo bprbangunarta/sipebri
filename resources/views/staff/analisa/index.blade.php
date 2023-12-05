@@ -32,10 +32,9 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center" width="8%">TANGGAL</th>
-                                        <th class="text-center" width="8%">KODE</th>
-                                        <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="35%">ALAMAT</th>
-                                        <th class="text-center" width="5%">PRODUK</th>
+                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center" width="16%">NAMA NASABAH</th>
+                                        <th class="text-center" width="40%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="13%">AKSI</th>
@@ -56,7 +55,6 @@
                                             <td class="text-center"  style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
@@ -211,6 +209,25 @@
                         <button type="submit" class="btn btn-danger">SIMPAN</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-gray">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">INPUT ANALISA</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <p>Mohon maaf input analisa kredit tidak bisa dilakukan karena belum melakukan survey, silahkan upload foto survey melalui apliasi client sipebri. Terimakasih</p>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn btn-default" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                </div>
             </div>
         </div>
     </div>

@@ -33,13 +33,9 @@
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center" width="8%">TANGGAL</th>
                                         <th class="text-center" width="8%">KODE</th>
-                                        <th class="text-center">NAMA NASABAH</th>
-                                        {{-- <th class="text-center">ALAMAT</th> --}}
-                                        <th class="text-center" width="15%">KELURAHAN</th>
-                                        <th class="text-center" width="15%">KECAMATAN</th>
-                                        <th class="text-center" width="5%">PRODUK</th>
+                                        <th class="text-center" width="16%">NAMA NASABAH</th>
+                                        <th class="text-center" width="42%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="5%">SRV</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
@@ -67,12 +63,8 @@
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
 
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
-                                            {{-- <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td> --}}
-                                            <td style="vertical-align: middle;">{{ $item->kelurahan }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->kecamatan }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_produk }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->surveyor_kode }}</td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
@@ -86,6 +78,7 @@
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>
+                                            
 
                                             {{-- MODAL INFO --}}
                                             <div class="modal fade" id="info-{{ $item->kode_pengajuan }}">
@@ -114,29 +107,36 @@
                                                                         <label>PLAFON KREDIT</label>
                                                                         <input type="text" class="form-control" value="{{ number_format($item->plafon, 0, ',', '.') }}">
                                                                     </div>
+
+                                                                    <div class="form-group" style="margin-top:-10px;">
+                                                                        <label>JANGKA WAKTU</label>
+                                                                        <input type="text" class="form-control" value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
+                                                                    </div>
                                                                 </div>
                                         
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label>JENGKA WAKTU</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
+                                                                        <label>DESA KECAMATAN</label>
+                                                                        <input type="text" class="form-control" value="{{ $item->kelurahan }} - {{ $item->kecamatan }}">
                                                                     </div>
 
                                                                     <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>KANTOR</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->nama_kantor }}">
+                                                                        <label>SURVEYOR</label>
+                                                                        <input type="text" class="form-control" value="{{ $item->name }}">
                                                                     </div>
                                         
                                                                     <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>INPUT USER</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->name }}">
+                                                                        <label>TRACKING</label>
+                                                                        <input type="text" class="form-control text-uppercase" value="{{ $item->tracking }}">
                                                                     </div>
-                                                                </div>
 
-                                                                <div class="col-md-12">
                                                                     <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>ALAMAT LENGKAP</label>
-                                                                        <textarea class="form-control" rows="2">{{ $item->alamat_ktp }}</textarea>
+                                                                        <label>PERSETUJUAN</label>
+                                                                        @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
+                                                                            <input type="text" class="form-control text-uppercase" value="{{ $item->status }}">
+                                                                        @else
+                                                                            <input type="text" class="form-control text-uppercase" value="BELUM ADA PERSETUJUAN">
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
