@@ -57,6 +57,8 @@
             text-align: center;
         }
 
+        .text-hg {background-color: #f4ff81;color: #000;display: inline;}
+
         .content {
             width: 100%;
             max-width: 100%;
@@ -76,6 +78,7 @@
                 padding-left: 2cm;
                 padding-right: 2cm;
             }
+            
         }
     </style>
 </head>
@@ -89,7 +92,7 @@
 
         <h4 style="text-align: center;font-size: 12pt;">
             <u>PERJANJIAN KREDIT</u> <br>
-            No. {{ $data->no_spk }}
+            No. <font class="text-hg">{{ $data->no_spk }}</font>
         </h4>
 
         Pada hari ini {{ $data->hari }}, tanggal {{ $data->tgl_bln_thn }} telah disepakati Perjanjian Kredit oleh dan
@@ -100,7 +103,7 @@
                 <td width="2%">I. </td>
                 <td width="15%">Nama</td>
                 <td class="text-center" width="1%"> : </td>
-                <td>{{ $data->nama_nasabah }}</td>
+                <td class="text-hg">{{ $data->nama_nasabah }}</td>
             </tr>
             <tr>
                 <td></td>
@@ -112,20 +115,19 @@
                 <td></td>
                 <td>Tanda Pengenal</td>
                 <td class="text-center"> : </td>
-                <td>KTP Nomor : {{ $data->no_identitas }}</td>
+                <td>KTP Nomor : <font class="text-hg">{{ $data->no_identitas }}</font></td>
             </tr>
             <tr>
                 <td></td>
                 <td style="vertical-align: text-top;">Alamat</td>
                 <td class="text-center" style="vertical-align: text-top;"> : </td>
-                <td>{{ $data->alamat_ktp }}</td>
+                <td class="text-hg">{{ $data->alamat_ktp }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
-                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
-                    {{ $data->status_pendamping }} {{ $data->nama_pendamping }} yang ikut serta menandatangani
-                    perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
+                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari <font class="text-hg">{{ $data->status_pendamping }}</font> bernama
+                    <font class="text-hg">{{ $data->nama_pendamping }}</font> yang ikut serta menandatangani perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
                     Tingkat Perusahaan {{ $data->nama_resort }}. Untuk selanjutnya disebut PEMINJAM.
                 </td>
             </tr>
@@ -165,7 +167,7 @@
                 FASILITAS PINJAMAN
             </center>
             BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
-            {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }} ( <font style="text-transform: capitalize;">
+            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
                 {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah
             bukukan kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
         </p>
@@ -176,7 +178,7 @@
                 BUNGA
             </center>
             Atas pinjaman tersebut diatas, PEMINJAM wajib membayar kepada BANK dengan Bunga sebesar :
-            {{ $data->suku_bunga }} % Flate per
+            <font class="text-hg">{{ $data->suku_bunga }} % {{ $data->metode_rps }}</font> per
             tahun dihitung secara merata setiap bulannya.
         </p>
 
@@ -189,9 +191,9 @@
             <li>
                 Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (
                 selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
-                {{ $data->jangka_waktu }} ( <font style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) kali
-                angsuran setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
+                <font class="text-hg">{{ $data->jangka_waktu }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) <font class="text-hg">kali
+                        angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
                 pada ​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
                 {{ $data->tgl_jth_tmp }}.
             </li>
@@ -254,8 +256,8 @@
 
             @if ($data->kode_resort == '091')
                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
-                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar 1(satu) angsuran
-                bunga serta hutang denda.
+                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar <font class="text-center">1(satu) angsuran
+                    bunga serta hutang denda</font>.
             @else
                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
                 cara melunasi seluruh sisa pokok dan bunga yang di hitung sesuai dengan jangka waktu pinjaman serta
