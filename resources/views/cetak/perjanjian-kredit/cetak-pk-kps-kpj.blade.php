@@ -266,7 +266,7 @@
                             </li>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
                             <li>
-                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                                {{ $item->nama_jenis_dokumen . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ' ' . 'NO' . ' ' . $item->no_dokumen }}
                             </li>
                         @endif
                     @empty
