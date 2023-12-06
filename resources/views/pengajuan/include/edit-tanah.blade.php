@@ -1,7 +1,7 @@
 <div class="modal fade" id="modal-edit-tanah">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-blue">
+            <div class="modal-header bg-yellow">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">EDIT AGUNAN TANAH</h4>
@@ -78,16 +78,18 @@
                                     </select>
                                 </div>
 
-                                <input class="form-control text-uppercase" type="hidden" name="catatan"
-                                    value="{{ old('catatan') }}" id="catat" placeholder="ENTRI">
-
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">CATATAN</span>
+                                    <input class="form-control text-uppercase" type="text" name="catatan"
+                                    value="{{ old('catatan') }}" id="catat" readonly>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                    <button type="submit" class="btn btn-primary">SIMPAN</button>
+                    <button type="submit" class="btn bg-yellow">SIMPAN</button>
                 </div>
             </form>
         </div>

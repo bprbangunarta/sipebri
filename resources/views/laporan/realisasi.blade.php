@@ -28,15 +28,17 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="box-body">
-                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
+                            <table class="table table-responsive table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="7%">TANGGAL</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="7%">KODE</th>
                                         <th class="text-center" width="7%">NO. LOAN</th>
                                         <th class="text-center" width="7%">NO. SPK</th>
-                                        <th class="text-center">NAMA DEBITUR</th>
+                                        <th class="text-center" width="20%">NAMA DEBITUR</th>
+                                        <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
@@ -49,6 +51,7 @@
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
                                             <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 {{ \Carbon\Carbon::parse($item->akad_kredit)->format('Y-m-d') }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
@@ -60,6 +63,7 @@
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->no_spk }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
                                             <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>

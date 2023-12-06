@@ -336,5 +336,10 @@
             // Menyalin nilai 'id' ke elemen di dalam modal
             $('#id').val(dataId);
         });
+
+        //Initialize Select2 Elements
+        $('.jenis_agunan').select2()
+        $('.jenis_dokumen').select2()
+        $('.dati2').select2()
     </script>
 @endpush

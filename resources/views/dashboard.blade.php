@@ -123,7 +123,7 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center">KODE</th>
-                                        <th class="text-center">NO. LOAN</th>
+                                        <th class="text-center">NO. SPK</th>
                                         <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center">WILAYAH</th>
@@ -140,7 +140,7 @@
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center">{{ $item->no_loan }}</td>
+                                            <td class="text-center">{{ $item->no_spk }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->nama_kantor }}
@@ -163,7 +163,7 @@
 
                                     <tr class="bg-blue">
                                         <td class="text-center" colspan="6"><b>TOTAL</b></td>
-                                        <td class="text-right"><b>{{ 'Rp. ' . ' ' . number_format($total, 0, ',', '.') }}</b>
+                                        <td class="text-right"><b>{{ number_format($total, 0, ',', '.') }}</b>
                                         </td>
                                     </tr>
                                 </tbody>

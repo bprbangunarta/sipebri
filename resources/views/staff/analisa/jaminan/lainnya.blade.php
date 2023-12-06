@@ -34,9 +34,6 @@
                             <td style="vertical-align: middle;">
                                 <b>Lokasi: </b> <br>
                                 {{ Str::upper($item->lokasi) }}
-                                <p></p>
-                                <b>Catatan: </b><br>
-                                {{ Str::upper($item->catatan) }}
                             </td>
                             <td style="vertical-align: middle;">
                                 {{ 'RP. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
@@ -113,6 +110,12 @@
                                     </div>
 
                                     <div style="margin-top: 5px;">
+                                        <span class="fw-bold">CATATAN</span>
+                                        <input class="form-control input-sm form-border text-uppercase" type="text"
+                                            name="catatan" id="catatan" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
                                         <span class="fw-bold">NILAI PASAR</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
                                             placeholder="Rp." name="nilai_pasar" id="nilai_pasar">
@@ -122,12 +125,6 @@
                                         <span class="fw-bold">NILAI TAKSASI</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
                                             name="nilai_taksasi" id="nilai_taksasi" placeholder="Rp.">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">CATATAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="catatan" id="catatan" placeholder="ENTRI">
                                     </div>
                                 </div>
                             </div>
@@ -271,12 +268,16 @@
                                         <input class="form-control text-uppercase" type="text" name="atas_nama"
                                             id="atas_nama" value="{{ old('atas_nama') }}" placeholder="ENTRI" required>
                                     </div>
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
                                             id="lokasi" value="{{ old('lokasi') ?? $data->alamat_ktp }}"
                                             placeholder="ENTRI">
                                     </div>
+
+                                    <input class="form-control text-uppercase" type="hidden" name="kode_dati"
+                                        {{ old('kode_dati') }} value="0121">
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
@@ -317,5 +318,10 @@
 
             $('#id').val(dataId);
         });
+
+        //Initialize Select2 Elements
+        $('.jenis_agunan').select2()
+        $('.jenis_dokumen').select2()
+        $('.dati2').select2()
     </script>
 @endpush

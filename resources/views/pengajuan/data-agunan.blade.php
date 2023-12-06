@@ -160,7 +160,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                             @forelse ($jaminan as $item)
                                                 @if ($item->jenis_jaminan == 'Tanah')
                                                     <tr class="text-uppercase">
@@ -425,26 +424,21 @@
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR BPKB</span>
-                                        <input class="form-control text-uppercase" type="text" name="no_dokumen"
-                                            placeholder="ENTRI" value="{{ old('no_dokumen') }}" required>
-                                    </div>
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">PEMILIK KENDARAAN</span>
-                                        <input class="form-control text-uppercase" type="text" name="atas_nama"
-                                            placeholder="ENTRI" value="{{ old('atas_nama') }}" required>
+                                        <span class="fw-bold">MEREK KENDARAAN</span>
+                                        <input class="form-control text-uppercase" type="text" name="merek"
+                                            value="{{ old('merek') }}" placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR MESIN</span>
-                                        <input class="form-control text-uppercase" type="text" name="no_mesin"
-                                            value="{{ old('no_mesin') }}" placeholder="ENTRI" required>
+                                        <span class="fw-bold">TIPE KENDARAAN</span>
+                                        <input class="form-control text-uppercase" type="text" name="tipe_kendaraan"
+                                            value="{{ old('tipe_kendaraan') }}" placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR POLISI</span>
-                                        <input class="form-control text-uppercase" type="text" name="no_polisi"
-                                            value="{{ old('no_polisi') }}" placeholder="ENTRI" required>
+                                        <span class="fw-bold">TAHUN KENDARAAN</span>
+                                        <input class="form-control text-uppercase" type="text" name="tahun"
+                                            value="{{ old('tahun') }}" placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -452,31 +446,37 @@
                                         <input class="form-control text-uppercase" type="text" name="no_rangka"
                                             value="{{ old('no_rangka') }}" placeholder="ENTRI" required>
                                     </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">NOMOR MESIN</span>
+                                        <input class="form-control text-uppercase" type="text" name="no_mesin"
+                                            value="{{ old('no_mesin') }}" placeholder="ENTRI" required>
+                                    </div>
                                 </div>
 
                                 <div class="div-right">
                                     <div style="margin-top: -15px;">
-                                        <span class="fw-bold">TIPE KENDARAAN</span>
-                                        <input class="form-control text-uppercase" type="text" name="tipe_kendaraan"
-                                            value="{{ old('tipe_kendaraan') }}" placeholder="ENTRI" required>
+                                        <span class="fw-bold">NOMOR POLISI</span>
+                                        <input class="form-control text-uppercase" type="text" name="no_polisi"
+                                            value="{{ old('no_polisi') }}" placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">MEREK KENDARAAN</span>
-                                        <input class="form-control text-uppercase" type="text" name="merek"
-                                            value="{{ old('merek') }}" placeholder="ENTRI" required>
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">TAHUN PEMBUATAN KENDARAAN</span>
-                                        <input class="form-control text-uppercase" type="text" name="tahun"
-                                            value="{{ old('tahun') }}" placeholder="ENTRI" required>
+                                        <span class="fw-bold">NOMOR BPKB</span>
+                                        <input class="form-control text-uppercase" type="text" name="no_dokumen"
+                                            placeholder="ENTRI" value="{{ old('no_dokumen') }}" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">WARNA KENDARAAN</span>
                                         <input class="form-control text-uppercase" type="text" name="warna"
                                             value="{{ old('warna') }}" placeholder="ENTRI" required>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">PEMILIK KENDARAAN</span>
+                                        <input class="form-control text-uppercase" type="text" name="atas_nama"
+                                            placeholder="ENTRI" value="{{ old('atas_nama') }}" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -676,12 +676,16 @@
                                         <input class="form-control text-uppercase" type="text" name="atas_nama"
                                             id="atas_nama" value="{{ old('atas_nama') }}" placeholder="ENTRI" required>
                                     </div>
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
                                             id="lokasi" value="{{ old('lokasi') ?? $data->alamat_ktp }}"
                                             placeholder="ENTRI">
                                     </div>
+
+                                    <input class="form-control text-uppercase" type="hidden" name="kode_dati"
+                                        {{ old('kode_dati') }} value="0121">
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
@@ -700,8 +704,6 @@
             </div>
         </div>
     </div>
-
-
 @endsection
 
 @push('myscript')

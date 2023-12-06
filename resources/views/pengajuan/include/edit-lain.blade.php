@@ -1,7 +1,7 @@
 <div class="modal fade" id="modal-edit-lain">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-blue">
+            <div class="modal-header bg-yellow">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">EDIT AGUNAN LAINNYA</h4>
@@ -50,22 +50,28 @@
                                     <input class="form-control text-uppercase" type="text" name="atas_nama"
                                         id="atas_namax" value="{{ old('atas_nama') }}" placeholder="ENTRI" required>
                                 </div>
+
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">LOKASI AGUNAN</span>
                                     <input class="form-control text-uppercase" type="text" name="lokasi"
                                         id="lokasix" value="{{ old('lokasi') }}" placeholder="ENTRI">
                                 </div>
 
-                                <input class="form-control text-uppercase" type="hidden" name="catatan" id="catatanx"
-                                    value="{{ old('catatan') }}" placeholder="ENTRI">
+                                <input class="form-control text-uppercase" type="hidden" name="kode_dati"
+                                        {{ old('kode_dati') }} value="0121">
 
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">CATATAN</span>
+                                    <input class="form-control text-uppercase" type="text" name="catatan" id="catatanx"
+                                    value="{{ old('catatan') }}" placeholder="ENTRI" readonly>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                    <button type="submit" class="btn btn-primary">SIMPAN</button>
+                    <button type="submit" class="btn bg-yellow">SIMPAN</button>
                 </div>
             </form>
         </div>
