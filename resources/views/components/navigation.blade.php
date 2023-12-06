@@ -102,6 +102,14 @@
                         </a>
                     </li>
 
+                    <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
+                        <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
+                            title="Survey dan Analisa">
+                            <i class="fa fa-hourglass-start"></i>
+                            Kontrol Survey
+                        </a>
+                    </li>
+
                     <li class="{{ request()->is('themes/komite/kredit') ? 'active' : '' }}">
                         <a @can('komite kredit') href="{{ route('komite.kredit') }}" @endcan title="Komite Kredit">
                             <i class="fa fa-file-text-o"></i>
@@ -117,14 +125,6 @@
                             Surat Penolakan
                         </a>
                     </li>
-                    <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
-                        <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
-                            title="Survey dan Analisa">
-                            <i class="fa fa-hourglass-start"></i>
-                            Kontrol Survey
-                        </a>
-                    </li>
-
                 </ul>
             </li>
 

@@ -33,8 +33,9 @@
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center" width="8%">TANGGAL</th>
                                         <th class="text-center" width="8%">KODE</th>
-                                        <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center" width="47%">ALAMAT</th>
+                                        <th class="text-center" width="16%">NAMA NASABAH</th>
+                                        <th class="text-center" width="42%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
@@ -60,6 +61,10 @@
                                                 {{ $item->alamat }}
                                             </td>
                                             @endif
+
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kantor }}
+                                            </td>
 
                                             @php
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
@@ -115,22 +120,36 @@
                                                                         <label>PLAFON KREDIT</label>
                                                                         <input type="text" class="form-control" value="{{ $item->plafon }}">
                                                                     </div>
+
+                                                                    <div class="form-group" style="margin-top:-10px;">
+                                                                        <label>JANGKA WAKTU</label>
+                                                                        <input type="text" class="form-control" value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
+                                                                    </div>
                                                                 </div>
                                         
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label>JENGKA WAKTU</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>KECAMATAN</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->kecamatan }} - {{ $item->kelurahan }}">
+                                                                        <label>DESA KECAMATAN</label>
+                                                                        <input type="text" class="form-control" value="{{ $item->kelurahan }} - {{ $item->kecamatan }}">
                                                                     </div>
                                         
                                                                     <div class="form-group" style="margin-top:-10px;">
                                                                         <label>SURVEYOR</label>
                                                                         <input type="text" class="form-control" value="{{ $item->surveyor }}">
+                                                                    </div>
+
+                                                                    <div class="form-group" style="margin-top:-10px;">
+                                                                        <label>TRACKING</label>
+                                                                        <input type="text" class="form-control text-uppercase" value="{{ $item->tracking }}">
+                                                                    </div>
+
+                                                                    <div class="form-group" style="margin-top:-10px;">
+                                                                        <label>PERSETUJUAN</label>
+                                                                        @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
+                                                                            <input type="text" class="form-control text-uppercase" value="{{ $item->status }}">
+                                                                        @else
+                                                                            <input type="text" class="form-control text-uppercase" value="BELUM ADA PERSETUJUAN">
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -149,7 +168,7 @@
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="8">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

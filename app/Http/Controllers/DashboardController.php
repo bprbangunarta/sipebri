@@ -30,8 +30,8 @@ class DashboardController extends Controller
             ->where(function ($query) use ($keyword) {
                 $query->where('nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('wilayah', 'like', '%' . $keyword . '%')
-                    ->orWhere('kode_pengajuan', 'like', '%' . $keyword . '%');
-                // ->orWhere('nama_kantor', 'like', '%' . $keyword . '%');
+                    ->orWhere('kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('nama_kantor', 'like', '%' . $keyword . '%');
             })
 
             ->orderBy('tgl_perjanjian', 'desc');

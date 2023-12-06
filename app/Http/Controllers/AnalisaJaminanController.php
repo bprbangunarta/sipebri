@@ -369,7 +369,7 @@ class AnalisaJaminanController extends Controller
                 'updated_at' => now(),
                 'catatan' => $request->catatan,
             ];
-            dd($request);
+            // dd($request);
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {

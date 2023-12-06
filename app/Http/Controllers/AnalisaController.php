@@ -15,10 +15,11 @@ class AnalisaController extends Controller
 {
     public function index()
     {
-        $name = request('name');
+        $keyword = request('keyword');
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
@@ -35,10 +36,14 @@ class AnalisaController extends Controller
                     });
             })
 
-            ->where(function ($query) use ($name) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.kode_kantor', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
 
             ->select(
@@ -61,7 +66,9 @@ class AnalisaController extends Controller
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_pengajuan.created_at as tgl_daftar'
-            );
+            )
+            ->orderBy('data_tracking.proses_survey', 'desc');
+            ;
 
         //Enkripsi kode pengajuan
         $data = $cek->paginate(10);

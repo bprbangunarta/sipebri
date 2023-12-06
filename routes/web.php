@@ -577,7 +577,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //====FRONT END====//
-Route::get('/', [FrontController::class, 'index']);
+// Route::get('/', [FrontController::class, 'index']);
 Route::get('/pengajuan/kredit', [FrontController::class, 'pengajuan']);
 Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
 Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
