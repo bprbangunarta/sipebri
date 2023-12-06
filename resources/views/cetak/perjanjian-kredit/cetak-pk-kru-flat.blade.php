@@ -259,11 +259,11 @@
                     @forelse ($jaminan as $item)
                         @if ($item->jenis_jaminan == 'Kendaraan')
                             <li class="text-hg">
-                                {{ $item->catatan }}
+                                BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}, {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Tanah')
                             <li class="text-hg">
-                                {{ $item->catatan }}
+                                SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
                             <li class="text-hg">
