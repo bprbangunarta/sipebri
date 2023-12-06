@@ -89,7 +89,7 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
+                                                <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue" title="Informasi">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>

@@ -65,7 +65,7 @@
                                                 @if (is_null($item->no_penolakan))
                                                     -
                                                 @else
-                                                    2176
+                                                    {{ $item->no_penolakan }}
                                                 @endif
                                             </td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>

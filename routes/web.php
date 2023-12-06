@@ -464,10 +464,10 @@ Route::middleware('auth')->group(function () {
 
             Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
+                Route::post('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
+                Route::post('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
             });
 
-            Route::get('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
-            Route::get('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
             Route::post('/penolakan/simpan', 'simpan_penolakan')->name('penolakan.simpan');
         });
 

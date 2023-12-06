@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use Carbon\Carbon;
 use App\Models\Data;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Log;
 
 class NotifikasiController extends Controller
 {
@@ -16,9 +18,12 @@ class NotifikasiController extends Controller
     {
         $usr = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->where(function ($query) use ($usr) {
                 $query->where('data_survei.surveyor_kode', '=', $usr)
                     ->where('data_pengajuan.status', '=', 'Ditolak')
@@ -44,9 +49,15 @@ class NotifikasiController extends Controller
                 'data_pengajuan.created_at as tgl_daftar',
                 'data_survei.kantor_kode',
                 'data_pengajuan.produk_kode',
-                'data_pengajuan.jangka_waktu as jk'
-            );
-        //
+                'data_pengajuan.jangka_waktu as jk',
+                'data_tracking.keputusan_komite as tanggal',
+                'data_penolakan.no_penolakan',
+                'data_penolakan.nomor as no_st',
+                'data_penolakan.keterangan as ket_tolak',
+            )
+            ->orderBy('data_tracking.keputusan_komite', 'desc');
+
+        $alasan = DB::table('data_alasan_penolakan')->get();
 
         $c = $cek->get();
         $count = count($c);
@@ -57,26 +68,68 @@ class NotifikasiController extends Controller
             }
         }
         // dd($data);
-        return view('notifikasi.penolakan.index', [
-            'data' => $data,
-        ]);
+        return view('notifikasi.penolakan.index', compact('data', 'alasan'));
     }
 
-    public function tambah_penolakan()
+    public function tambah_penolakan(Request $request)
     {
-        return view('notifikasi.penolakan.tambah');
+        try {
+            // Validasi input
+            $validatedData = $request->validate([
+                'nomor' => 'required',
+                'no_penolakan' => 'required',
+                'kode_pengajuan' => 'required',
+                'alasan' => 'required',
+                'keterangan' => 'required',
+            ]);
+    
+            $data = [
+                'nomor' => $validatedData['nomor'],
+                'no_penolakan' => $validatedData['no_penolakan'],
+                'pengajuan_kode' => $validatedData['kode_pengajuan'],
+                'alasan_id' => $validatedData['alasan'],
+                'keterangan' => strip_tags($validatedData['keterangan']),
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
+            ];
+    
+            // Memasukkan data dengan nomor baru ke dalam tabel data_penolakan
+            DB::table('data_penolakan')->insert($data);
+    
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } catch (\Throwable $th) {
+            // Tambahkan informasi lebih lanjut tentang kesalahan pada log atau output
+            Log::error($th->getMessage());
+    
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
     }
 
     public function edit_penolakan(Request $request)
     {
         try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
-            // dd($enc);
-            return view('notifikasi.penolakan.edit', [
-                'data' => $request->query('pengajuan'),
+            // Validasi input
+            $validatedData = $request->validate([
+                'id' => 'required',
+                'alasan' => 'required',
+                'keterangan' => 'required',
             ]);
-        } catch (DecryptException $e) {
-            return abort(403, 'Permintaan anda di Tolak.');
+
+            $data = [
+                'alasan_id' => $validatedData['alasan'],
+                'keterangan' => strip_tags($validatedData['keterangan']),
+                'updated_at' => now(),
+            ];
+
+            // Melakukan update data berdasarkan ID
+            DB::table('data_penolakan')->where('id', $request->kode_pengajuan)->update($data);
+
+            return redirect()->back()->with('success', 'Berhasil mengupdate data');
+        } catch (\Throwable $th) {
+            // Tambahkan informasi lebih lanjut tentang kesalahan pada log atau output
+            Log::error($th->getMessage());
+
+            return redirect()->back()->with('error', 'Gagal mengupdate data');
         }
     }
 
@@ -120,7 +173,7 @@ class NotifikasiController extends Controller
                 'created_at' => now(),
             ];
 
-            $data['keterangan'] = strip_tags($data['keterangan']);
+            $data['keterangan'] = strtoupper(strip_tags($data['keterangan']));
             // dd($data);
 
             $data2['selesai'] = now();
