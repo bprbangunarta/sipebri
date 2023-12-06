@@ -164,6 +164,7 @@
                 Pasal 1 <br>
                 FASILITAS PINJAMAN
             </center>
+
             BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
             {{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }} ( <font style="text-transform: capitalize;">
                 {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah bukukan
