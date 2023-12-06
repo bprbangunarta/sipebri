@@ -173,7 +173,7 @@
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <span class="fw-bold">LOKASI SHM</span>
                             <select class="form-control input-sm form-border text-uppercase lokasi_shm" name="lokasi_shm"
-                                id="collateral8" required>
+                                id="collateral8">
                                 <option value="">--Pilih--</option>
                                 <option value="3"
                                     {{ old('lokasi_shm') == '3' || $collateral->lokasi_shm == '3' ? 'selected' : '' }}>

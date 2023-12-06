@@ -1319,10 +1319,12 @@ class Midle extends Model
     {
         $cek = DB::table('data_jaminan')
             ->join('data_pengajuan', 'data_jaminan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftjoin('data_jenis_agunan', 'data_jenis_agunan.kode', '=', 'data_jaminan.jenis_agunan_kode')
             ->leftjoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
             ->select(
                 'data_jaminan.*',
                 'data_pengajuan.*',
+                'data_jenis_agunan.jenis_agunan',
                 'data_jenis_dokumen.jenis_dokumen as nama_jenis_dokumen' ?? null,
             )
             ->where('data_pengajuan.kode_pengajuan', $data)
