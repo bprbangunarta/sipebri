@@ -28,6 +28,7 @@
                                 </form>
                             </div>
                         </div>
+
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-responsive table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
@@ -38,7 +39,6 @@
                                         <th class="text-center" width="7%">NO. LOAN</th>
                                         <th class="text-center" width="7%">NO. SPK</th>
                                         <th class="text-center" width="20%">NAMA DEBITUR</th>
-                                        <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="41%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
@@ -64,7 +64,6 @@
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->no_spk }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
                                             <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                         </tr>
@@ -81,7 +80,7 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <div class="pull-left">
+                            <div class="pull-left hidden-xs">
                                 <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Data
                                 </button>

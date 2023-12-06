@@ -26,7 +26,7 @@
                             </div>
                         </div>
 
-                        <div class="box-body">
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered" style="font-size:12px;">
                                 <thead>
                                     <tr class="bg-blue">
@@ -176,7 +176,7 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <div class="pull-left">
+                            <div class="pull-left hidden-xs">
                                 <button data-toggle="modal" data-target="#modal-tambah" class="btn bg-blue btn-sm">
                                     <i class="fa fa-plus"></i>&nbsp; TAMBAH
                                 </button>

@@ -26,11 +26,13 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="box-body">
+
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered" style="font-size:12px;">
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
                                         <th class="text-center" width="7%">KODE</th>
                                         <th class="text-center" width="16%">NAMA NASABAH</th>
                                         {{-- <th class="text-center" width="40%">ALAMAT</th> --}}
@@ -39,7 +41,6 @@
                                         <th class="text-center" width="5%">PRODUK</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center">SURVEYOR</th>
-                                        <th class="text-center" width="8%">DAFTAR</th>
                                         <th class="text-center" width="8%">SURVEY</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
@@ -52,6 +53,10 @@
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
 
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
+                                            </td>
+                                            
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             
@@ -63,9 +68,6 @@
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}</td>
                                             <td class="text-center text-uppercase" style="vertical-align: middle;">{{ $item->surveyor }}</td>
 
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
-                                            </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if(strtotime($item->tgl_survei) < strtotime(date('Y-m-d')))
                                                     <span class="label label-danger" style="font-size: 10px;">
@@ -165,7 +167,7 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <div class="pull-left">
+                            <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
                                 </button>

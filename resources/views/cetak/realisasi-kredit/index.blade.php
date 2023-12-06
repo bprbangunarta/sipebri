@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <i class="fa fa-file-text-o"></i>
+                            <i class="fa fa-flag"></i>
                             <h3 class="box-title">REALISASI KREDIT</h3>
 
                             <div class="box-tools">
@@ -25,7 +25,8 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="box-body">
+
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
@@ -104,7 +105,13 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            {{ $data->withQueryString()->links('vendor.pagination.adminlte') }}
+                            <div class="pull-left hidden-xs">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
+
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>

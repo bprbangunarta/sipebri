@@ -1,26 +1,44 @@
 @extends('theme.app')
-@section('title', 'Penolakan Penolakan')
+@section('title', 'Surat Penolakan')
 
 @section('content')
     <div class="content-wrapper">
-
         <section class="content">
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
-                            <h3 class="box-title">DATA PENOLAKAN</h3>
+                            <h3 class="box-title">SURAT PENOLAKAN</h3>
+
+                            <div class="box-tools">
+                                <form action="{{ route('penolakan.pengajuan') }}" method="GET">
+                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn bg-blue">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="box-body">
-                            <table class="table table-bordered">
+
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
+                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">INFORMASI NASABAH</th>
-                                        <th class="text-center" width="40%">ALAMAT</th>
-                                        <th class="text-center" width="17%">PENGAJUAN</th>
-                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center" width="3%">#</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="8%">KODE</th>
+                                        <th class="text-center" width="8%">NO. ST</th>
+                                        <th class="text-center">NAMA NASABAH</th>
+                                        <th class="text-center" width="37%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -63,13 +81,23 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="9">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                             </table>
-
                         </div>
+
+                        <div class="box-footer clearfix">
+                            <div class="pull-left hidden-xs">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                </button>
+                            </div>
+
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
             </div>

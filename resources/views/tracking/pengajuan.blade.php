@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <div class="box-body">
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">

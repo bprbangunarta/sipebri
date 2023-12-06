@@ -567,7 +567,7 @@ class CetakController extends Controller
     {
         // $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
 
-        $name = request('name');
+        $name = request('keyword');
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -576,13 +576,14 @@ class CetakController extends Controller
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
-            // ->where('data_pengajuan.on_current', '0')
-            ->where('data_spk.otorisasi', 'A')
             ->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode)
+            ->whereNotNull('data_spk.no_spk')
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
@@ -600,11 +601,11 @@ class CetakController extends Controller
                 'data_pengajuan.plafon',
                 'data_kantor.kode_kantor',
                 'data_survei.surveyor_kode',
-                'data_survei.tgl_survei',
-                'data_survei.tgl_jadul_1',
-                'data_survei.tgl_jadul_2',
+                'data_spk.created_at as tanggal',
+                'data_spk.otorisasi as otorpk',
                 'users.name'
-            );
+            )
+            ->orderBy('data_spk.created_at', 'desc');
 
         //Enkripsi kode pengajuan
         $c = $cek->get();

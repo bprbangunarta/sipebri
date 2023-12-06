@@ -26,6 +26,7 @@ class DashboardController extends Controller
 
         $query = DB::table('data_droping')
             ->where('tgl_perjanjian', '=', date('Y-m-d'))
+            ->where('droping', '=', 1)
 
             ->where(function ($query) use ($keyword) {
                 $query->where('nama_nasabah', 'like', '%' . $keyword . '%')

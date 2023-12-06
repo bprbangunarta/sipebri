@@ -26,7 +26,7 @@
                             </div>
                         </div>
 
-                        <div class="box-body">
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered" style="font-size:12px;">
                                 <thead>
                                     <tr class="bg-blue">
@@ -166,7 +166,7 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <div class="pull-left">
+                            <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
                                 </button>

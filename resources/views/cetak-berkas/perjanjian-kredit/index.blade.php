@@ -29,81 +29,58 @@
                             </div>
                         </div>
 
-                        <div class="box-body">
-                            <table class="table table-bordered">
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
+                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">PERJANJIAN</th>
-                                        <th class="text-center" width="33%">ALAMAT</th>
-                                        <th class="text-center" width="18%">PENGAJUAN</th>
-                                        <th class="text-center" width="13%">BIAYA</th>
-                                        <th class="text-center" style="width: 100px">AKSI</th>
+                                        <th class="text-center" width="3%">#</th>
+                                        <th class="text-center" width="8%">TANGGAL</th>
+                                        <th class="text-center" width="8%">KODE</th>
+                                        <th class="text-center" width="7%">NO. SPK</th>
+                                        <th class="text-center">NAMA NASABAH</th>
+                                        <th class="text-center" width="35%">ALAMAT</th>
+                                        <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
                                     @forelse ($data as $item)
-                                        <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
-                                                <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                @if (is_null($item->no_spk))
-                                                <span class="label label-danger" style="font-size: 12px;">NOMOR TIDAK ADA</span>
-                                                @else    
-                                                <span class="label label-success" style="font-size: 12px;">{{ $item->no_spk }}</span>
-                                                @endif
-                                            </td>
-
-                                            <td style="text-transform: uppercase;vertical-align: middle;">
-                                                {{ $item->alamat_ktp }} <br>
-                                                <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
-                                                </b>{{ $item->kecamatan }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
-                                                <b>PLAFON :</b> {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
-                                                <b>METODE :</b> {{ $item->metode_rps }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
-
-                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }}% <br>
-                                                <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
-                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b> {{ number_format($item->b_provisi, 2) }} <br>
-                                                <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
-                                            </td>
-
+                                        <tr class="text-uppercase">
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow" title="Informasi">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-
-                                                &nbsp;
-                                                @if (is_null($item->no_spk))
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->no_spk }}
+                                            </td>
+                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
+                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}
+                                            </td>
+                                            <td class="text-right" style="vertical-align: middle;">
+                                                {{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->otorpk == "N")
                                                     <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue" title="Cetak Berkas">
+                                                    <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @endif
                                             </td>
                                         </tr>
-                                        @php
-                                            $no++;
-                                        @endphp
+
                                     @empty
                                         <tr>
-                                            <td class="text-center text-uppercase" colspan="7">Tidak Ada Data</td>
+                                            <td class="text-center" colspan="9">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -111,9 +88,10 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <div class="pull-left">
+                            <div class="pull-left hidden xs">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
@@ -136,7 +114,7 @@
                 </div>
                 
                 <div class="modal-body">
-                    <p>Mohon maaf cetak perjanjian kredit tidak bisa dilakukan karena nomor perjanjian kredit belum diturunkan. Silahkan hubungi bagian realisasi. Terimakasih</p>
+                    <p>Mohon maaf cetak perjanjian kredit tidak bisa dilakukan karena perjanjian kredit belum di otorisasi. Silahkan hubungi bagian admin kredit. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
                     <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>

@@ -78,7 +78,7 @@ class DataCetakController extends Controller
 
     public function notifikasi_kredit(Request $request)
     {
-        $name = request('name');
+        $name = request('keyword');
         $user = Auth::user()->code_user;
         $cek = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -87,6 +87,7 @@ class DataCetakController extends Controller
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->where('data_pengajuan.status', '=', 'Disetujui')
             ->whereNull('data_notifikasi.no_notifikasi')
 
@@ -96,14 +97,17 @@ class DataCetakController extends Controller
                     ->orWhere('data_survei.kabag_kode', '=', $user)
                     ->orWhere('data_survei.direksi_kode', '=', $user);
             })
+
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
+            
             ->select(
                 'data_notifikasi.*',
                 'data_pengajuan.*',
+                'data_tracking.keputusan_komite as tanggal',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -117,6 +121,7 @@ class DataCetakController extends Controller
                 'data_survei.tgl_jadul_2',
                 'users.name',
                 'data_survei.kantor_kode',
+                'data_produk.nama_produk',
             )
             ->orderBy('data_tracking.keputusan_komite', 'desc');
 
@@ -267,6 +272,7 @@ class DataCetakController extends Controller
     public function perjanjian_kredit(Request $request)
     {
         // $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
+        $name = request('keyword');
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -274,15 +280,29 @@ class DataCetakController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+
             ->where('data_pengajuan.status', 'Disetujui')
             ->where('data_pengajuan.on_current', '0')
             ->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode)
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->whereNull('data_spk.no_spk')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
             ->select(
                 'data_spk.*',
                 'data_pengajuan.*',
                 'data_notifikasi.*',
                 'data_pengajuan.*',
+                'data_nasabah.no_cif',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -294,8 +314,11 @@ class DataCetakController extends Controller
                 'data_survei.tgl_survei',
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
-                'users.name'
-            );
+                'users.name',
+                'data_tracking.keputusan_komite as tanggal',
+                'data_produk.nama_produk'
+            )
+            ->orderBy('data_tracking.keputusan_komite', 'desc');
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
@@ -314,7 +337,6 @@ class DataCetakController extends Controller
     {
 
         $name = request('name');
-
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
