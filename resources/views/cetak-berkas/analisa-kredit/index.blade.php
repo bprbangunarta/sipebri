@@ -224,9 +224,9 @@
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
                 <th class="text-center" width="4%" style="border:1px solid black;"> NO </th>
-                <th class="text-center" width="25%" style="border:1px solid black;">TAHAPAN</th>
+                <th class="text-center" width="20%" style="border:1px solid black;">TAHAPAN</th>
                 <th class="text-center" width="21%" style="border:1px solid black;">PELAKSANAAN</th>
-                <th class="text-center" width="25%" style="border:1px solid black;">PETUGAS</th>
+                <th class="text-center" width="30%" style="border:1px solid black;">PETUGAS</th>
                 <th class="text-center" width="25%" style="border:1px solid black;">PARAF</th>
             </tr>
             <tr style="border:1px solid black;">
@@ -699,7 +699,7 @@
                     <td>Angsuran Pokok</td>
                     <td class="text-center" width="3%">:</td>
                     @php
-                        $angsuran = $item->plafon / (( $item->jangka_waktu ))
+                        $angsuran = $item->plafon / $item->jangka_waktu;
                     @endphp
                     <td>{{ 'Rp.' . ' ' . number_format($angsuran, 0, ',', '.') }}</td>
                 </tr>
