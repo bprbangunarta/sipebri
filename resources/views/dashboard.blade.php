@@ -27,7 +27,7 @@
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
                             <span class="progress-description">
-                                <a href="#" style="color:white;">
+                                <a href="{{ route('laporan.pendaftaran') }}" style="color:white;">
                                     SELENGKAPNYA
                                 </a>
                             </span>
@@ -36,18 +36,38 @@
                 </div>
 
                 <div class="col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box bg-yellow">
-                        <span class="info-box-icon"><i class="fa fa-file-text"></i></span>
+                    <div class="info-box bg-orange">
+                        <span class="info-box-icon"><i class="fa fa-hourglass-start"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">ANALISA</span>
+                            <span class="info-box-text">SURVEI & ANALISA</span>
                             <span class="info-box-number">{{ $survei }} USER</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
                             <span class="progress-description">
-                                <a href="#" style="color:white;">
+                                <a href="{{ route('laporan.survey') }}" style="color:white;">
+                                    SELENGKAPNYA
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-purple">
+                        <span class="info-box-icon"><i class="fa fa-bullhorn"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">SIAP REALISASI</span>
+                            <span class="info-box-number">{{ $siap_realisasi }} USER</span>
+
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                            <span class="progress-description">
+                                <a href="{{ route('laporan.siap-realisasi') }}" style="color:white;">
                                     SELENGKAPNYA
                                 </a>
                             </span>
@@ -57,17 +77,17 @@
 
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-green">
-                        <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                        <span class="info-box-icon"><i class="fa fa-bank"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">DISETUJUI</span>
+                            <span class="info-box-text">REALISASI</span>
                             <span class="info-box-number">{{ $disetujui }} USER</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
                             <span class="progress-description">
-                                <a href="#" style="color:white;">
+                                <a href="{{ route('laporan.fasilitas') }}" style="color:white;">
                                     SELENGKAPNYA
                                 </a>
                             </span>
@@ -75,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                {{-- <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-red">
                         <span class="info-box-icon"><i class="fa fa-close"></i></span>
 
@@ -93,7 +113,7 @@
                             </span>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <div class="row">

@@ -13,8 +13,8 @@
 
         <form action="{{ route('pengajuan.data') }}" method="GET" class="sidebar-form">
             <div class="input-group">
-                <input type="text" name="name" class="form-control" value="{{ Request('name') }}"
-                    placeholder="SEARCH">
+                <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wil/ Produk">
+
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-flat">
                         <i class="fa fa-search"></i>
