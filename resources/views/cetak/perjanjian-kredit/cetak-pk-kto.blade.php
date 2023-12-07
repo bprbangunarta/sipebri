@@ -257,15 +257,15 @@
                 Untuk menjamin kepastian pembayaran kembali seluruh PINJAMAN baik pokok, bunga dan biaya-biaya lainnya
                 ya timbul dari perjanjian ini, maka PEMINJAM dan atau PENJAMIN menyerahkan jaminan kebendaan yang cukup
                 berupa :
-                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;">
+                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                     @forelse ($jaminan as $item)
-                        @if ($item->jenis_jaminan == 'Kendaraan')
+                            @if ($item->jenis_jaminan == 'Kendaraan')
                             <li class="text-hg">
                                 BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}, {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Tanah')
                             <li class="text-hg">
-                                {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                                SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
                             <li class="text-hg">

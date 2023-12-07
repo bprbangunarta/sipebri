@@ -257,27 +257,25 @@
                 Untuk menjamin kepastian pembayaran kembali seluruh PINJAMAN baik pokok, bunga dan biaya-biaya lainnya
                 ya timbul dari perjanjian ini, maka PEMINJAM dan atau PENJAMIN menyerahkan jaminan kebendaan yang cukup
                 berupa :
-                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;">
+                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                     @forelse ($jaminan as $item)
-                        @if ($item->jenis_jaminan == 'Kendaraan')
+                            @if ($item->jenis_jaminan == 'Kendaraan')
                             <li class="text-hg">
                                 BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}, {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Tanah')
                             <li class="text-hg">
-                                <li class="text-hg">
-                                    SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
-                                </li>
+                                SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
-                        <li class="text-hg">
-                            @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
-                                KARTU DAN SALDO JAMSOSTEK 
-                            @else
-                                {{ $item->nama_jenis_dokumen }} 
-                            @endif
-                            ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }} ALAMAT {{  $item->lokasi }}
-                        </li>
+                            <li class="text-hg">
+                                @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
+                                    KARTU DAN SALDO JAMSOSTEK 
+                                @else
+                                    {{ $item->nama_jenis_dokumen }} 
+                                @endif
+                                ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }} ALAMAT {{  $item->lokasi }}
+                            </li>
                         @endif
                     @empty
                     @endforelse

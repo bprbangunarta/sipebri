@@ -255,7 +255,7 @@
                 Untuk menjamin kepastian pembayaran kembali seluruh PINJAMAN baik pokok, bunga dan biaya-biaya lainnya
                 ya timbul dari perjanjian ini, maka PEMINJAM dan atau PENJAMIN menyerahkan jaminan kebendaan yang cukup
                 berupa :
-                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;">
+                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                     @forelse ($jaminan as $item)
                         @if ($item->jenis_jaminan == 'Kendaraan')
                             <li class="text-hg">

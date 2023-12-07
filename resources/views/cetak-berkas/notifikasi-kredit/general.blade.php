@@ -183,21 +183,26 @@
                     {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
                     @forelse ($agunan as $item)
-                        <ol style="margin-left: -40px;text-align: justify; list-style-type:none;">
+                        <ol style="margin-left: -40px;text-align: justify; list-style-type:none;text-transform:uppercase;">
                             @if ($item->jenis_jaminan == 'Tanah')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    {{ Str::upper($item->nama_jenis_dokumen) . ',' . ' ' . Str::upper($item->jenis_jaminan) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                                    SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Kendaraan')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    {{ $item->catatan }}
+                                    BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}, {{ $item->lokasi }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Lainnya')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    {{ Str::upper($item->nama_jenis_dokumen) . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                                    @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
+                                    KARTU DAN SALDO JAMSOSTEK 
+                                    @else
+                                        {{ $item->nama_jenis_dokumen }} 
+                                    @endif
+                                    ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }} ALAMAT {{  $item->lokasi }}
                                 </li>
                             @endif
                         </ol>
