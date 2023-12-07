@@ -375,11 +375,11 @@
                         </td>
                         <td style="border:1px solid black;">&nbsp; {{ $items->nama_barang }}</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp.' . ' ' . number_format($items->harga_beli, 0, ',', '.') }} &nbsp;</td>
+                            {{ number_format($items->harga_beli, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp.' . ' ' . number_format($items->harga_jual, 0, ',', '.') }} &nbsp;</td>
+                            {{ number_format($items->harga_jual, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp.' . ' ' . number_format($items->laba, 0, ',', '.') }} &nbsp;</td>
+                            {{ number_format($items->laba, 0, ',', '.') }} &nbsp;</td>
                         <td class="text-center" style="border:1px solid black;">{{ $items->stok }}</td>
                         <td class="text-center" style="border:1px solid black;">{{ $items->presentase_laba }}%</td>
                     </tr>
@@ -388,6 +388,40 @@
                     @endphp
                 @empty
                 @endforelse
+            </table>
+
+            <p></p>
+
+            <table>
+                <tr>
+                    <td width="21%">Periode Belanja</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->belanja_harian, 0, ',', '.') }} | Harian</td>
+                </tr>
+                <tr>
+                    <td>Omset Harian</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->omset_harian, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td>Harga Pokok Penjualan</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->pokok_penjualan, 0, ',', '.') }} | Omset Harian /
+                        (1
+                        + rata-rata % laba)
+                    </td>
+                </tr>
+                <tr>
+                    <td>Laba Penjualan Harian</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->laba_harian, 0, ',', '.') }} | Omset Harian -
+                        Harga Pokok Penjualan</td>
+                </tr>
+                <tr>
+                    <td>Laba Penjualan Bulanan</td>
+                    <td class="text-center" width="3%">:</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }} | Laba Penjualan Harian * 30 Hari</td>
+                </tr>
             </table>
 
             <p></p>
@@ -476,35 +510,6 @@
                     <th class="text-center" colspan="2" style="border:1px solid black;">Hasil Bersih Usaha</th>
                     <th class="text-center" colspan="2" style="border:1px solid black;">
                         {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</th>
-                </tr>
-            </table>
-
-            <p></p>
-
-            <table>
-                <tr>
-                    <td width="20%">Periode Belanja</td>
-                    <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->belanja_harian, 0, ',', '.') }} | Harian</td>
-                </tr>
-                <tr>
-                    <td>Omset Harian</td>
-                    <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->omset_harian, 0, ',', '.') }}</td>
-                </tr>
-                <tr>
-                    <td>Harga Pokok Penjualan</td>
-                    <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->pokok_penjualan, 0, ',', '.') }} | Omset Harian /
-                        (1
-                        + rata-rata % laba)
-                    </td>
-                </tr>
-                <tr>
-                    <td>Laba Penjualan Harian</td>
-                    <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->pokok_penjualan, 0, ',', '.') }} | Omset Harian -
-                        Harga Pokok Penjualan</td>
                 </tr>
             </table>
         </div>
