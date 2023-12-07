@@ -161,6 +161,7 @@ class DataCetakController extends Controller
                     'data_produk.*',
                     'v_users.*',
                     'data_notifikasi.created_at as tgl_notifikasi',
+                    'data_notifikasi.created_at as tgl_asli',
                     'v_users.nama_user as nama_user_notif',
                     'v_users.code_user as code_user_notif',
                     'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',

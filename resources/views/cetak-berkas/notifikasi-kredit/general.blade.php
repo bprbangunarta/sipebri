@@ -98,6 +98,14 @@
                 <td>Tanggal</td>
                 <td class="text-center" width="1%"> : </td>
                 <td>{{ $data->tgl_notifikasi_hari_ini }}</td>
+
+                {{-- <td>
+                    @if (!is_null($data->tgl_asli))
+                        {{ \Carbon\Carbon::parse($data->tgl_asli)->format('d F Y') }}
+                    @else
+                    {{ $data->tgl_notifikasi_hari_ini }}
+                    @endif
+                </td> --}}
             </tr>
             <tr>
                 <td>Kode Pengajuan</td>
