@@ -366,28 +366,28 @@
                     <th class="text-center" style="border:1px solid black;">Stok</th>
                     <th class="text-center" style="border:1px solid black;">%</th>
                 </tr>
-                {{-- @php
+                @php
                     $no = 1;
                 @endphp
-                @forelse ($biayaperdagangan as $item)
+                @forelse ($biayaperdagangan as $items)
                     <tr style="border:1px solid black;">
                         <td class="text-center" width="4%" style="border:1px solid black;">{{ $no }}
                         </td>
-                        <td style="border:1px solid black;">&nbsp; {{ $item->nama_barang }}</td>
+                        <td style="border:1px solid black;">&nbsp; {{ $items->nama_barang }}</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp.' . ' ' . number_format($item->harga_beli, 0, ',', '.') }} &nbsp;</td>
+                            {{ 'Rp.' . ' ' . number_format($items->harga_beli, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp.' . ' ' . number_format($item->harga_jual, 0, ',', '.') }} &nbsp;</td>
+                            {{ 'Rp.' . ' ' . number_format($items->harga_jual, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp.' . ' ' . number_format($item->laba, 0, ',', '.') }} &nbsp;</td>
-                        <td class="text-center" style="border:1px solid black;">{{ $item->stok }}</td>
-                        <td class="text-center" style="border:1px solid black;">{{ $item->presentase_laba }}%</td>
+                            {{ 'Rp.' . ' ' . number_format($items->laba, 0, ',', '.') }} &nbsp;</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->stok }}</td>
+                        <td class="text-center" style="border:1px solid black;">{{ $items->presentase_laba }}%</td>
                     </tr>
                     @php
                         $no++;
                     @endphp
                 @empty
-                @endforelse --}}
+                @endforelse
             </table>
 
             <p></p>
@@ -414,42 +414,48 @@
                     <td style="border:1px solid black;">&nbsp; Biaya Transportasi</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($item->transportasi, 0, ',', '.') }} &nbsp;</td>
+                        @php $transportasi = $item->transportasi * 30; @endphp
+                        {{ 'Rp.' . ' ' . number_format($transportasi, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">3.</td>
                     <td style="border:1px solid black;">&nbsp; Biaya Bongkar Muat</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($item->bongkar_muat, 0, ',', '.') }} &nbsp;</td>
+                        @php $bongkar_muat = $item->bongkar_muat * 30; @endphp
+                        {{ 'Rp.' . ' ' . number_format($bongkar_muat, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">4.</td>
                     <td style="border:1px solid black;">&nbsp; Biaya Pegawai</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($item->pegawai, 0, ',', '.') }} &nbsp;</td>
+                        @php $pegawai = $item->pegawai * 30; @endphp
+                        {{ 'Rp.' . ' ' . number_format($pegawai, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">5.</td>
                     <td style="border:1px solid black;">&nbsp; Biaya Gas Telepon Listrik</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($item->gatel, 0, ',', '.') }} &nbsp;</td>
+                        @php $gatel = $item->gatel * 30; @endphp
+                        {{ 'Rp.' . ' ' . number_format($gatel, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">6.</td>
                     <td style="border:1px solid black;">&nbsp; Biaya Retribusi</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($item->retribusi, 0, ',', '.') }} &nbsp;</td>
+                        @php $retribusi = $item->retribusi * 30; @endphp
+                        {{ 'Rp.' . ' ' . number_format($retribusi, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">7.</td>
                     <td style="border:1px solid black;">&nbsp; Biaya Sewa Tempat</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp.' . ' ' . number_format($item->sewa_tempat, 0, ',', '.') }} &nbsp;</td>
+                        @php $sewa_tempat = $item->sewa_tempat * 30; @endphp
+                        {{ 'Rp.' . ' ' . number_format($sewa_tempat, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">#</td>
