@@ -1096,9 +1096,11 @@ class Midle extends Model
     {
         $jaminan = DB::table('data_jaminan')
             ->leftjoin('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
+            ->leftjoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
             ->select(
                 'data_jaminan.*' ?? null,
                 'data_jenis_dokumen.jenis_dokumen as nama_jenis_dokumen' ?? null,
+                'data_jenis_agunan.jenis_agunan' ?? null,
             )
             ->where('pengajuan_kode', $data)->get();
 

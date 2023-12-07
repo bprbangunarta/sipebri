@@ -420,7 +420,7 @@
                 <tr>
                     <td>Laba Penjualan Bulanan</td>
                     <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }} | Laba Penjualan Harian * 30 Hari</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }} | Laba Penjualan Harian * 30 Hari</td>
                 </tr>
             </table>
 
@@ -1136,24 +1136,29 @@
                 <th class="text-center" width="17%" style="border:1px solid black;">Nilai Taksasi</th>
             </tr>
             @forelse ($jaminan as $item)
-                <tr style="border:1px solid black;">
+                <tr style="border:1px solid black;text-transform:uppercase;">
                     <td class="text-center" width="4%" style="border:1px solid black;">
                         {{ $loop->iteration }}</td>
                     @if ($item->jenis_jaminan == 'Kendaraan')
                         <td style="border:1px solid black;">
-                            {{ $item->catatan }}
+                            BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                     @elseif ($item->jenis_jaminan == 'Tanah')
                         <td style="border:1px solid black;">
-                            {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen . ',' . ' ' . 'LUAS' . ' ' . number_format($item->luas, 0, ',', '.') . ' ' . 'M2' . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'ALAMAT' . ' ' . $item->lokasi }}
+                            SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                     @elseif ($item->jenis_jaminan == 'Lainnya')
                         <td style="border:1px solid black;">
-                            {{ $item->nama_jenis_dokumen . ',' . ' ' . $item->jenis_jaminan . ',' . ' ' . 'ATAS NAMA' . ' ' . strtoupper($item->atas_nama) . ',' . ' ' . 'NO' . ' ' . $item->no_dokumen }}
+                            @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
+                            KARTU DAN SALDO JAMSOSTEK 
+                            @else
+                                {{ $item->nama_jenis_dokumen }} 
+                            @endif
+                            ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
