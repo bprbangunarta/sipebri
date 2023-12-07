@@ -236,15 +236,15 @@
                 <td class="text-center" width="2%"></td>
                 <td width="27%">a. Provisi Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->b_provisi ?? 0 }} %
-                    {{ 'Rp. ' . '' . number_format($data->provisi, 0, ',', '.') ?? 0 }}</td>
+                <td style="text-align: justify;">
+                    {{ 'Rp. ' . '' . number_format($data->provisi, 0, ',', '.') ?? 0 }} ({{ $data->b_provisi ?? 0 }}%)
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">b. Administrasi Bank Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->b_admin }} %
-                    {{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }}</td>
+                <td style="text-align: justify;">{{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }}</td>
             </tr>
             
             @if (is_null($data->by_fiducia))
@@ -254,8 +254,7 @@
                 <td class="text-center" width="2%"></td>
                 <td width="27%">c. Fiducia</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->rate_fiducia }} %
-                    {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }}</td>
+                <td style="text-align: justify;">{{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }}</td>
             </tr>
             @endif
             

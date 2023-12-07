@@ -15,7 +15,7 @@
                             <li class="{{ request()->is('themes/analisa/administrasi') ? 'active' : '' }}">
                                 <a href="{{ route('administrasi.index') }}"
                                     class="{{ request()->is('themes/analisa/administrasi') ? 'text-bold' : '' }}">
-                                    BIAYA ADMINISTRASI
+                                    BIAYA KREDIT
                                 </a>
                             </li>
                         </ul>
@@ -35,8 +35,7 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="administrasi" placeholder="Rp." id="administrasi"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }}"
-                                                    readonly>
+                                                    value="{{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="width: 49.5%;float:right;">
@@ -165,7 +164,8 @@
                                 </form>
                             </div>
                             <p class="text-red" style="margin-top:10px;margin-left:10px;">
-                                *Untuk pengisian biaya asuransi jiwa,  gunakan kolom <b>ASR. JIWA MENURUN 2</b>
+                                *Untuk pengisian biaya asuransi jiwa,  gunakan kolom <b>ASR. JIWA MENURUN 2</b> <br>
+                                *Jika biaya <b>admin</b>, <b>fiducia</b>, <b>apht</b> tidak sesuai, lakukan perubahan manual dengan memasukan nominal.
                             </p>
                         </div>
                         

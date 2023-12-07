@@ -103,7 +103,7 @@ class DataCetakController extends Controller
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
-            
+
             ->select(
                 'data_notifikasi.*',
                 'data_pengajuan.*',
@@ -673,7 +673,8 @@ class DataCetakController extends Controller
         $query = DB::table('data_pengajuan')
             ->select(
                 'data_pengajuan.*',
-                'data_nasabah.*',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode as wilayah',
                 'data_survei.surveyor_kode as surveyor',
                 'data_pengajuan.created_at as tanggal',
@@ -698,8 +699,8 @@ class DataCetakController extends Controller
                     ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
-
-            ->orderBy('data_pengajuan.created_at', 'desc');
+            ->orderBy('data_pengajuan.created_at', 'desc')
+            ->groupBy('data_pengajuan.kode_pengajuan');
         $data = $query->paginate(10);
         if ($data->isNotEmpty()) {
             foreach ($data as $item) {
