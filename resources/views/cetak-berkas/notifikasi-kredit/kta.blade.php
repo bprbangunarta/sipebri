@@ -251,7 +251,7 @@
                 <td style="text-align: justify;">
                     Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau
                     karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey
-                    yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa surveY.
+                    yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa survey.
                     Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan
                     Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
                 </td>
