@@ -192,7 +192,7 @@
 
                     <p class="text-red" style="margin-top:-10px;margin-left:10px;">
                         *Penggunaan kategori <b>BARU</b> untuk kondisi pengajuan <b>BARU</b> & <b>TOPUP</b> <br>
-                        *Jika biaya <b>admin</b>, <b>fiducia</b>, <b>apht</b> tidak sesuai, lakukan perubahan manual dengan memasukan nominal.
+                        *Penggunaan kategori <b>RELOAN</b> untuk kondisi penyelamatan kredit <br>
                     </p>
                     
                 </div>
