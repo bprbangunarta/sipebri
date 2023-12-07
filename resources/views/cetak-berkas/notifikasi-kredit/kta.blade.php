@@ -192,7 +192,7 @@
                 <td class="text-center" width="2%"> 8. </td>
                 <td width="27%">Denda</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->b_penalti }} % per hari dari angsuran pokok dan atau bunga
+                <td style="text-align: justify;">{{ $data->b_denda }} % per hari dari angsuran pokok dan atau bunga
                     yang tertunggak</td>
             </tr>
             <tr>
