@@ -2003,7 +2003,17 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m. Pengikatan Agunan</td>
                 <td> : </td>
-                <th>&nbsp; Tanpa Pengikatan</th>
+                <th>&nbsp; 
+                    @if ( $memorandum->pengikatan == "1")
+                        Tanpa Pengikatan
+                    @elseif ( $memorandum->pengikatan == "2")
+                        APHT
+                    @elseif ( $memorandum->pengikatan == "3")
+                        Fiducia
+                    @else
+                        AHPT dan Fiducia
+                    @endif
+                </th>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n. Kepesertaan Asuransi</td>

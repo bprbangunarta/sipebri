@@ -780,6 +780,8 @@ class DataCetakController extends Controller
                 }
             }
 
+            // dd($biaya_perdagangan);
+
             $character = Midle::cetak_data_analisa5C_character($enc);
             $capacity = Midle::cetak_data_analisa5C_capacity($enc);
             $collateral = Midle::cetak_data_analisa5C_collateral($enc);

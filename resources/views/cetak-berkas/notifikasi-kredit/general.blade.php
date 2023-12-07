@@ -244,7 +244,13 @@
                 <td class="text-center" width="2%"></td>
                 <td width="27%">b. Administrasi Bank Sebesar</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }}</td>
+                <td style="text-align: justify;">
+                    @php
+                        $persentase = ($data->administrasi / $data->plafon) * 100;
+                        $rate_admin = number_format($persentase, 2, '.', '');
+                    @endphp
+                    {{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }} ({{ $rate_admin }}%)
+                </td>
             </tr>
             
             @if (is_null($data->by_fiducia))
@@ -254,7 +260,14 @@
                 <td class="text-center" width="2%"></td>
                 <td width="27%">c. Fiducia</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }}</td>
+                <td style="text-align: justify;">
+                    @php
+                        $persentase = ($data->by_fiducia / $data->plafon) * 100;
+                        $rate_fiducia = number_format($persentase, 2, '.', '');
+                    @endphp
+
+                    {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }} ({{ $rate_fiducia }}%)
+                </td>
             </tr>
             @endif
             

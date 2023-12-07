@@ -20,8 +20,11 @@
                         style="margin-top:10px;width:100%">KONFIRMASI</button>
                 </div>
             </form>
-
         </div>
+
+        <p class="text-red" style="margin-top:10px;margin-left:10px;">
+            *Perubahan analisa tanpa persetujuan ulang, tidak perlu melakukan konfirmasi.<br>
+        </p>
     </div>
 @endsection
 
