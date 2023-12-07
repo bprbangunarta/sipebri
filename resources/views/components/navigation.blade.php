@@ -44,6 +44,12 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ request()->is('data/pengajuan', 'tracking/pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.data') }}" title="List Pengajuan">
+                            <i class="fa fa-bars"></i>
+                            List Pengajuan
+                        </a>
+                    </li>
 
                     <li
                         class="{{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan') ? 'active' : '' }}">
@@ -51,13 +57,6 @@
                             title="Add Pengajuan" title="Input Pengajuan">
                             <i class="fa fa-plus"></i>
                             Add Pengajuan
-                        </a>
-                    </li>
-
-                    <li class="{{ request()->is('data/pengajuan', 'tracking/pengajuan') ? 'active' : '' }}">
-                        <a href="{{ route('pengajuan.data') }}" title="List Pengajuan">
-                            <i class="fa fa-bars"></i>
-                            List Pengajuan
                         </a>
                     </li>
 
@@ -69,8 +68,6 @@
                             Otor Pengajuan
                         </a>
                     </li>
-
-
                 </ul>
             </li>
 
