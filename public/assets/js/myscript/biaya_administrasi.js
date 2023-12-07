@@ -13,6 +13,7 @@ var select12 = document.getElementById("polis_materai");
 var select13 = document.getElementById("pajak_stnk");
 var select14 = document.getElementById("proses_apht");
 var select15 = document.getElementById("lainnya");
+var select16 = document.getElementById("administrasi");
 
 if (select1) {
     select1.addEventListener("keyup", function (e) {
@@ -87,6 +88,11 @@ if (select14) {
 if (select15) {
     select15.addEventListener("keyup", function (e) {
         select15.value = formatRupiah(this.value, "Rp. ");
+    });
+}
+if (select16) {
+    select16.addEventListener("keyup", function (e) {
+        select16.value = formatRupiah(this.value, "Rp. ");
     });
 }
 
