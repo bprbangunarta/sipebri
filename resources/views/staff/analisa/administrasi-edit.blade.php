@@ -33,10 +33,7 @@
                                             <div style="width: 49.5%;float:left;">
 
                                                 <span class="fw-bold">ADMINISTRASI</span>
-                                                <input type="text"
-                                                    class="form-control input-sm form-border text-uppercase"
-                                                    name="administrasi" placeholder="Rp."
-                                                    value="{{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }}">
+                                                <input type="text" class="form-control input-sm form-border text-uppercase" name="administrasi" placeholder="Rp." value="{{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="width: 49.5%;float:right;">

@@ -284,7 +284,7 @@ class CetakController extends Controller
                 )
                 ->where(function ($query) use ($enc) {
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
-                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 2');
+                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Roda 2');
                 })->get();
 
             for ($i = 0; $i < count($data); $i++) {
@@ -346,7 +346,7 @@ class CetakController extends Controller
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
                         ->where('data_jaminan.jenis_jaminan', '=', 'Tanah');
                 })->get();
-            
+
             // ->where('data_pengajuan.kode_pengajuan', '=', $enc)->get();
 
             foreach ($data as $item) {
@@ -354,10 +354,10 @@ class CetakController extends Controller
                     ->where('code_user', $item->surveyor_kode)
                     ->select('nama_user', 'role_name')
                     ->first(); // Use first() instead of get()
-            
+
                 $thn = Carbon::now()->year;
                 $item->thn = $thn;
-            
+
                 // Check if $surveyor is not null before accessing its properties
                 if ($surveyor) {
                     $item->nama_user = $surveyor->nama_user;
@@ -368,7 +368,7 @@ class CetakController extends Controller
                     $item->role_name = null;
                 }
             }
-            
+
 
             // for ($i = 0; $i < count($data); $i++) {
             //     $surveyor = DB::table('v_users')
@@ -381,7 +381,7 @@ class CetakController extends Controller
             //     $data[$i]->nama_user = $surveyor[$i]->nama_user;
             //     $data[$i]->role_name = $surveyor[$i]->role_name;
             // }
-            
+
 
             return view('cetak.layouts.tanah', [
                 'data' => $data
@@ -416,7 +416,7 @@ class CetakController extends Controller
                 )
                 ->where(function ($query) use ($enc) {
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
-                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Bermotor Roda 4');
+                        ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Roda 4');
                 })->get();
             for ($i = 0; $i < count($data); $i++) {
                 $surveyor = DB::table('v_users')
