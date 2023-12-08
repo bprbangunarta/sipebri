@@ -77,7 +77,7 @@
 
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box bg-green">
-                        <span class="info-box-icon"><i class="fa fa-bank"></i></span>
+                        <span class="info-box-icon"><i class="fa fa-check"></i></span>
 
                         <div class="info-box-content">
                             <span class="info-box-text">REALISASI</span>
