@@ -14,6 +14,7 @@ var select13 = document.getElementById("pajak_stnk");
 var select14 = document.getElementById("proses_apht");
 var select15 = document.getElementById("lainnya");
 var select16 = document.getElementById("administrasi");
+var select17 = document.getElementById("by_fiducia");
 
 if (select1) {
     select1.addEventListener("keyup", function (e) {
@@ -93,6 +94,11 @@ if (select15) {
 if (select16) {
     select16.addEventListener("keyup", function (e) {
         select16.value = formatRupiah(this.value, "Rp. ");
+    });
+}
+if (select17) {
+    select17.addEventListener("keyup", function (e) {
+        select17.value = formatRupiah(this.value, "Rp. ");
     });
 }
 

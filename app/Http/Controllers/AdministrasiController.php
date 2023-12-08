@@ -44,6 +44,11 @@ class AdministrasiController extends Controller
                 ]);
             }
 
+            $administrasi = DB::table('a_administrasi')
+                ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
+                ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
+                ->where('a_administrasi.pengajuan_kode', $enc)->first();
+
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
                 'adm' => $administrasi,

@@ -33,7 +33,10 @@
                                             <div style="width: 49.5%;float:left;">
 
                                                 <span class="fw-bold">ADMINISTRASI</span>
-                                                <input type="text" class="form-control input-sm form-border text-uppercase" name="administrasi" placeholder="Rp." value="{{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }}">
+                                                <input type="text"
+                                                    class="form-control input-sm form-border text-uppercase"
+                                                    name="administrasi" placeholder="Rp." id="administrasi"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->administrasi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="width: 49.5%;float:right;">
@@ -41,7 +44,7 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase" name="privisi"
                                                     placeholder="Rp." id="provisi"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }}">
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->provisi, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -63,7 +66,11 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold text-primary">ASR. JIWA MENURUN 2</span>
-                                                <input type="text" class="form-control input-sm form-border text-uppercase" name="asuransi_jiwa_menurun2" placeholder="Rp." id="asuransi_jiwa_menurun2" style="border:1px solid #3C8DBC;" value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun2, 0, ',', '.') }}">
+                                                <input type="text"
+                                                    class="form-control input-sm form-border text-uppercase"
+                                                    name="asuransi_jiwa_menurun2" placeholder="Rp."
+                                                    id="asuransi_jiwa_menurun2" style="border:1px solid #3C8DBC;"
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->asuransi_jiwa_menurun2, 0, ',', '.') }}">
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -147,8 +154,8 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="proses_apht" placeholder="Rp." id="proses_apht"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($data->apht, 0, ',', '.') }}"
-                                                    @if ($data->apht == 0) @readonly(true) @endif>
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->proses_apht, 0, ',', '.') }}"
+                                                    @if ($adm->proses_apht == 0) @readonly(true) @endif>
                                             </div>
 
                                             {{-- <input type="hidden" class="form-control input-sm form-border text-uppercase"
@@ -160,20 +167,22 @@
                                                 <input type="text"
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="by_fiducia" placeholder="Rp." id="by_fiducia"
-                                                    value="{{ 'Rp. ' . ' ' . number_format($data->fiducia, 0, ',', '.') }}"
-                                                    @if ($data->fiducia == 0) @readonly(true) @endif>
+                                                    value="{{ 'Rp. ' . ' ' . number_format($adm->fiducia, 0, ',', '.') }}"
+                                                    @if ($adm->fiducia == 0) @readonly(true) @endif>
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            style="margin-top:10px;width:100%">
                                             SIMPAN
                                         </button>
                                     </div>
                                 </form>
                             </div>
                             <p class="text-red" style="margin-top:10px;margin-left:10px;">
-                                *Untuk pengisian biaya asuransi jiwa,  gunakan kolom <b>ASR. JIWA MENURUN 2</b> <br>
-                                *Jika biaya <b>admin</b>, <b>fiducia</b>, <b>apht</b> tidak sesuai, lakukan perubahan manual dengan memasukan nominal.
+                                *Untuk pengisian biaya asuransi jiwa, gunakan kolom <b>ASR. JIWA MENURUN 2</b> <br>
+                                *Jika biaya <b>admin</b>, <b>fiducia</b>, <b>apht</b> tidak sesuai, lakukan perubahan manual
+                                dengan memasukan nominal.
                             </p>
                         </div>
 
