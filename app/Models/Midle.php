@@ -581,7 +581,7 @@ class Midle extends Model
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-            
+
             ->where(function ($query) use ($user, $role) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
                     ->where('data_pengajuan.tracking', '=', $role);
@@ -628,7 +628,7 @@ class Midle extends Model
                 'data_produk.*'
             )
             ->orderBy('data_tracking.analisa_kredit', 'desc');
-        
+
         return $cek;
     }
 
@@ -641,7 +641,7 @@ class Midle extends Model
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-            
+
             ->where(function ($query) use ($user, $role) {
                 $query->where('data_survei.kasi_kode', '=', $user)
                     ->where('data_pengajuan.tracking', '=', $role);
@@ -714,7 +714,7 @@ class Midle extends Model
             //     $query->where('data_pengajuan.tracking', '=', 'Naik Komite I')
             //         ->whereNull('data_notifikasi.pengajuan_kode');
             // })
-            
+
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
@@ -1255,6 +1255,7 @@ class Midle extends Model
             ->select(
                 'a_memorandum.*',
                 'data_pengajuan.*',
+                'data_pengajuan.jangka_waktu as jk',
                 'data_nasabah.*',
                 'a5c_capacity.*',
                 'a_memorandum.*',

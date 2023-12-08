@@ -1995,7 +1995,7 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Jangka Waktu</td>
                 <td> : </td>
                 <td>
-                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->jangka_waktu }} Bulan</b></div>
+                    <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->jk }} Bulan</b></div>
                     <div style="width:59%;float:right">h. Suku Bunga &nbsp; : <b>{{ $memorandum->suku_bunga }}%</b>
                     </div>
                 </td>
