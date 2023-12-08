@@ -311,8 +311,9 @@ Route::middleware('auth')->group(function () {
 
 
             Route::get('/permohonan/data_jadul/{pengajuan}', 'data_jadul')->name('permohonan.data_jadul');
-            Route::get('/tolak/permohonan/{kode}', 'get_data_penolakan')->name('tolak.data_penolakan');
             Route::post('/permohonan/data_jadul', 'simpanjadul')->name('permohonan.simpanjadul');
+            Route::get('/tolak/permohonan/{kode}', 'get_data_penolakan')->name('tolak.data_penolakan');
+            Route::post('/simpan/tolak/permohonan', 'simpan_penolakan')->name('tolak.simpan_penolakan');
         });
 
         //Analisa Usaha Perdagangan

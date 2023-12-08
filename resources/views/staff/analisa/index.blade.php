@@ -181,7 +181,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TOLAK / BATAL PENGAJUAN</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('tolak.simpan_penolakan') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 

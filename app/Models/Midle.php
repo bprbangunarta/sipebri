@@ -1057,7 +1057,7 @@ class Midle extends Model
         if (count($pertanian) != 0) {
             $tpertanian = [];
             foreach ($pertanian as $item) {
-                $tpertanian[] = $item->laba_bersih;
+                $tpertanian[] = $item->laba_perbulan;
             }
             $tpt = array_sum($tpertanian) ?? 0;
         }
@@ -1373,8 +1373,8 @@ class Midle extends Model
 
         // URL dan QR Code dari Google Chart API
         // $url = 'https://sipebri.bprbangunarta.co.id/images?qrcode=';
-        $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
-        // $url = 'http://http://127.0.0.1:8000/verifikasi?qrcode=' . $data_url;
+        // $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
+        $url = 'http://http://127.0.0.1:8000/verifikasi?qrcode=' . $data_url;
         $uri = urlencode($url);
         $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
 

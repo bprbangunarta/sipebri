@@ -214,4 +214,19 @@ class AnalisaController extends Controller
             ->get();
         return response()->json($data);
     }
+
+    public function simpan_penolakan(Request $request)
+    {
+        try {
+            if ($request) {
+                return redirect()->back()->with('error', 'Maaf Proses Penolakan Sedang Perbaikan');
+            }
+            // dd($request);
+            // $data = [
+            //     'status' => 
+            // ]
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal melakukan perubahan');
+        }
+    }
 }
