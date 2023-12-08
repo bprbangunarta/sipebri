@@ -320,11 +320,17 @@ class UsahaPertanianController extends Controller
                     'laba_perbulan' => $kalkulasi['laba_perbulan'],
                 ];
                 Pertanian::where('kode_usaha', $eneckode)->update($data);
-            } elseif ($kalkulasi['laba_perbulan'] !== $pertanian->laba_perbulan) {
+            } elseif ($kalkulasi['laba_perbulan'] !== $pertanian->laba_perbulan && $pertanian->penambahan == 0) {
                 $data2 = [
                     'laba_perbulan' => $kalkulasi['laba_perbulan'],
                 ];
                 Pertanian::where('kode_usaha', $eneckode)->update($data2);
+            } elseif ($kalkulasi['laba_perbulan'] !== $pertanian->laba_perbulan && $pertanian->penambahan > 0) {
+                $tot = $kalkulasi['laba_perbulan'] + $pertanian->penambahan;
+                $data3 = [
+                    'laba_perbulan' => $tot,
+                ];
+                Pertanian::where('kode_usaha', $eneckode)->update($data3);
             }
 
             $pertanian2 = Pertanian::where('kode_usaha', $eneckode)->first();
