@@ -67,7 +67,7 @@ class NotifikasiController extends Controller
                 $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
             }
         }
-        // dd($data);
+
         return view('notifikasi.penolakan.index', compact('data', 'alasan'));
     }
 
@@ -82,7 +82,7 @@ class NotifikasiController extends Controller
                 'alasan' => 'required',
                 'keterangan' => 'required',
             ]);
-    
+
             $data = [
                 'nomor' => $validatedData['nomor'],
                 'no_penolakan' => $validatedData['no_penolakan'],
@@ -92,15 +92,15 @@ class NotifikasiController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
-    
+
             // Memasukkan data dengan nomor baru ke dalam tabel data_penolakan
             DB::table('data_penolakan')->insert($data);
-    
+
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
             // Tambahkan informasi lebih lanjut tentang kesalahan pada log atau output
             Log::error($th->getMessage());
-    
+
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
     }

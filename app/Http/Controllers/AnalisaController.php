@@ -218,13 +218,13 @@ class AnalisaController extends Controller
     public function simpan_penolakan(Request $request)
     {
         try {
-            if ($request) {
-                return redirect()->back()->with('error', 'Maaf Proses Penolakan Sedang Perbaikan');
-            }
-            // dd($request);
-            // $data = [
-            //     'status' => 
-            // ]
+            $user = Auth::user()->code_user;
+            $data = [
+                'status' => $request->status,
+            ];
+            // dd($request, $data, $user);
+            Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data);
+            return redirect()->back()->with('success', 'Anda berhasil melakukan perubahan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal melakukan perubahan');
         }

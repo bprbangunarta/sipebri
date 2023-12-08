@@ -944,13 +944,14 @@ class Midle extends Model
                 'v_users.nama_user as nama_surveyor',
                 'data_survei.*',
                 'data_survei.created_at as tgl_survei',
-                'data_survei.input_user as input_user_survei',
+                'data_survei.surveyor_kode as input_user_survei',
                 'data_kantor.nama_kantor',
                 'data_tracking.*',
             )
             ->where('data_pengajuan.kode_pengajuan', $kode)
             ->get();
         //
+        // dd($data[0]);
         //Kasi
         $kasi = DB::table('v_users')->where('code_user', $data[0]->kasi_kode)->first();
         $data[0]->nama_kasi = $kasi->nama_user;
@@ -1370,7 +1371,7 @@ class Midle extends Model
         $imgpath = $strpath . '/' . $imgname;
 
         $data_url = $text . '_' . $data . '_' . $user;
-
+        // dd($user);
         // URL dan QR Code dari Google Chart API
         // $url = 'https://sipebri.bprbangunarta.co.id/images?qrcode=';
         $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;

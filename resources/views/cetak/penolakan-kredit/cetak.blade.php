@@ -167,7 +167,7 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    <font style="text-transform: uppercase;">SOPYAN ASROR</font>
+                    <font style="text-transform: uppercase;">{{ $data->kabag_analis }}</font>
                 </td>
                 <td></td>
                 <td width="40%"></td>

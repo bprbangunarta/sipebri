@@ -795,9 +795,10 @@ class DataCetakController extends Controller
             if (is_null($kebutuhan_dana)) {
                 return redirect()->back()->with('error', 'Memorandum Kebutuhan Dana belum diisi');
             }
+
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
-
+            // dd($data[0]);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -882,20 +883,21 @@ class DataCetakController extends Controller
                 ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_alasan_penolakan', 'data_alasan_penolakan.id', '=', 'data_penolakan.alasan_id')
-                ->join('v_users', 'v_users.role_name', '=', 'Kabag Analis')
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
                     'data_penolakan.*',
                     'data_tracking.*',
                     'data_penolakan.input_user as nama_user_penolak',
-                    'data_alasan_penolakan.alasan',
+                    'data_alasan_penolakan.alasan'
                 )
                 ->where('data_pengajuan.kode_pengajuan', '=', $enc)
                 ->get();
             //
-            $qr = Midle::get_qrcode($enc, 'Penolakan Kredit', $data[0]->nama_user_penolak);
-            // dd($data[0]);
+            $kabag = DB::table('v_users')->where('role_name', 'Kabag Analis')->get();
+            $data[0]->kabag_analis = $kabag[0]->nama_user;
+
+            $qr = Midle::get_qrcode($enc, 'Penolakan Kredit', $kabag[0]->code_user);
             return view('cetak.penolakan-kredit.cetak', [
                 'data' => $data[0],
                 'qr' => $qr,
