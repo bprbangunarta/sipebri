@@ -48,7 +48,7 @@ class AdministrasiController extends Controller
                 ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
                 ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
                 ->where('a_administrasi.pengajuan_kode', $enc)->first();
-
+            // dd($cek[0], $administrasi);
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
                 'adm' => $administrasi,

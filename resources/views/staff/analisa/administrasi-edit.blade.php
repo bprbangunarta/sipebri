@@ -155,7 +155,7 @@
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="proses_apht" placeholder="Rp." id="proses_apht"
                                                     value="{{ 'Rp. ' . ' ' . number_format($adm->proses_apht, 0, ',', '.') }}"
-                                                    @if ($adm->proses_apht == 0) @readonly(true) @endif>
+                                                    @if ($data->apht == 0) @readonly(true) @endif>
                                             </div>
 
                                             {{-- <input type="hidden" class="form-control input-sm form-border text-uppercase"
@@ -168,7 +168,7 @@
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="by_fiducia" placeholder="Rp." id="by_fiducia"
                                                     value="{{ 'Rp. ' . ' ' . number_format($adm->fiducia, 0, ',', '.') }}"
-                                                    @if ($adm->fiducia == 0) @readonly(true) @endif>
+                                                    @if ($data->fiducia == 0) @readonly(true) @endif>
                                             </div>
                                         </div>
 
