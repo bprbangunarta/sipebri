@@ -250,6 +250,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <p style="font-size: 12px;">*Untuk pengajuan tolak/ batal isi <b>usulan plafon</b> sesuai dengan nominal permohonan</p>
                     </div>
                     
                     <div class="modal-footer" style="margin-top: -10px;">

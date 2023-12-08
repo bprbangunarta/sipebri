@@ -388,7 +388,10 @@ class KonfirmasiController extends Controller
                     'created_at' => now(),
                 ];
 
-                $data3 = ['tracking' => 'Persetujuan Komite'];
+                $data3 = [
+                    'tracking' => 'Persetujuan Komite',
+                    'status' => 'Sudah Otorisasi',
+                ];
                 $data2 = ['analisa_kredit' => now()];
 
                 $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
@@ -402,7 +405,10 @@ class KonfirmasiController extends Controller
             }
 
 
-            $data = ['tracking' => 'Persetujuan Komite'];
+            $data = [
+                'tracking' => 'Persetujuan Komite',
+                'status' => 'Sudah Otorisasi',
+            ];
             $data2 = ['analisa_kredit' => now()];
 
             DB::transaction(function () use ($enc, $data, $data2) {
@@ -485,7 +491,7 @@ class KonfirmasiController extends Controller
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
             })
-            
+
             ->select(
                 'data_spk.*',
                 'data_pengajuan.*',

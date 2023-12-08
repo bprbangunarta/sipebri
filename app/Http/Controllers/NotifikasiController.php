@@ -17,6 +17,8 @@ class NotifikasiController extends Controller
     public function data_penolakan()
     {
         $usr = Auth::user()->code_user;
+        $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
+
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -24,11 +26,10 @@ class NotifikasiController extends Controller
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-            ->where(function ($query) use ($usr) {
-                $query->where('data_survei.surveyor_kode', '=', $usr)
-                    ->where('data_pengajuan.status', '=', 'Ditolak')
-                    ->where('data_pengajuan.on_current', '=', '0');
-            })
+
+            ->where('data_pengajuan.status', '=', 'Ditolak')
+            ->orWhere('data_pengajuan.status', '=', 'Dibatalkan')
+
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',

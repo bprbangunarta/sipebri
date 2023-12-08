@@ -91,11 +91,15 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#tolak-batal"
-                                                    data-tolak="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-red" title="Tolak dan Batal">
+                                                @if ($item->tracking == 'Proses Survei' || $item->tracking == 'Proses Analisa')
+                                                    <a data-toggle="modal" data-target="#tolak-batal" data-tolak="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-red" title="Bypass">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+                                                @else
+                                                <a data-toggle="modal" data-target="#danger2" class="btn-circle btn-sm bg-red" title="Bypass">
                                                     <i class="fa fa-times"></i>
                                                 </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @php
@@ -179,7 +183,7 @@
                 <div class="modal-header bg-red">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">TOLAK / BATAL PENGAJUAN</h4>
+                    <h4 class="modal-title">BYPASS ANALISA</h4>
                 </div>
                 <form action="{{ route('tolak.simpan_penolakan') }}" method="POST">
                     @csrf
@@ -202,24 +206,17 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">BATAL / TOLAK</span>
-                                    <select class="form-control text-uppercase" name="status" id="status" required>
-                                        <option value="">--PILIH--</option>
-                                        <option value="Ditolak">Ditolak</option>
-                                        <option value="Dibatalakan">Dibatalkan</option>
-                                    </select>
-                                </div>
-
-                                <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
-                                    <textarea class="form-control text-uppercase" name="keterangan" id="" required></textarea>
+                                    <p class="form-control" style="height: 55px;">
+                                        Fitur ini digunakan untuk proses <b class="text-danger">penolakan</b> atau <b class="text-danger">pembatalan</b> pengajuan kredit dengan kondisi tanpa proses input analisa. Terimakasih
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-danger">SIMPAN</button>
+                        <button type="submit" class="btn btn-danger">BYPASS</button>
                     </div>
                 </form>
             </div>
@@ -241,6 +238,26 @@
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
                     <button type="button" class="btn btn-default" style="width: 100%;"
+                        data-dismiss="modal">TUTUP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="danger2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">BYPASS ANALISA</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>Tracking pengajuan kredit sudah dalam proses persetujuan komite kredit, Anda jangan macam-macam dengan fitur ini. Terimakasih</p>
+                </div>
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="button" class="btn bg-red" style="width: 100%;"
                         data-dismiss="modal">TUTUP</button>
                 </div>
             </div>

@@ -689,6 +689,7 @@ class DataCetakController extends Controller
 
             ->whereNotNull('data_tracking.analisa_kredit')
             ->whereNotNull('data_usulan.pengajuan_kode')
+            // ->whereNotIn('data_pengajuan.status', ['Ditolak', 'Dibatalkan'])
 
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
