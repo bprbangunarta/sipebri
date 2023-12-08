@@ -15,7 +15,9 @@
                             <div class="box-tools">
                                 <form action="{{ route('permohonan.analisa') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -51,39 +53,47 @@
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('Y-m-d') }}    
+                                                {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('Y-m-d') }}
                                             </td>
-                                            <td class="text-center"  style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kode_pengajuan }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}
+                                            </td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if ($item->tracking == 'Proses Survei')
-                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm btn-default" title="Input">
+                                                    <a data-toggle="modal" data-target="#modal-danger"
+                                                        class="btn-circle btn-sm btn-default" title="Input">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                 @elseif($item->tracking == 'Proses Analisa')
-                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" class="btn-circle btn-sm bg-yellow" title="Input">
+                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        class="btn-circle btn-sm bg-yellow" title="Input">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}" class="btn-circle btn-sm bg-green" title="Input">
+                                                    <a href="{{ route('perdagangan.in', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        class="btn-circle btn-sm bg-green" title="Input">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                 @endif
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#jadwal-ulang"
-                                                data-pengajuan="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
                                                     <i class="fa fa-history"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#tolak-batal" class="btn-circle btn-sm bg-red" title="Tolak dan Batal">
+                                                <a data-toggle="modal" data-target="#tolak-batal"
+                                                    data-tolak="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-red" title="Tolak dan Batal">
                                                     <i class="fa fa-times"></i>
                                                 </a>
                                             </td>
@@ -103,7 +113,8 @@
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
@@ -179,13 +190,14 @@
 
                                 <div style="margin-top: -15px;">
                                     <span class="fw-bold">KODE PENGAJUAN</span>
-                                    <input type="text" id="id" name="id" hidden>
-                                    <input class="form-control text-uppercase" type="text" value="" readonly>
+                                    <input type="text" id="kode_pengajuan" name="id" hidden>
+                                    <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
+                                        id="kode" value="" readonly>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">NAMA NASABAH</span>
-                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nama"
                                         type="text" value="" readonly>
                                 </div>
 
@@ -222,12 +234,14 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">INPUT ANALISA</h4>
                 </div>
-                
+
                 <div class="modal-body">
-                    <p>Mohon maaf input analisa kredit tidak bisa dilakukan karena belum melakukan survey, silahkan upload foto survey melalui apliasi client sipebri. Terimakasih</p>
+                    <p>Mohon maaf input analisa kredit tidak bisa dilakukan karena belum melakukan survey, silahkan upload
+                        foto survey melalui apliasi client sipebri. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn btn-default" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                    <button type="button" class="btn btn-default" style="width: 100%;"
+                        data-dismiss="modal">TUTUP</button>
                 </div>
             </div>
         </div>
@@ -236,4 +250,15 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/permintaan_jadul.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/tolak_permohonan.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $("a[data-target='#tolak-batal']").click(function() {
+                // Mendapatkan nilai 'id' dari tombol yang diklik
+                var dataId = $(this).data('tolak');
+
+                $('#kode_pengajuan').val(dataId)
+            });
+        });
+    </script>
 @endpush

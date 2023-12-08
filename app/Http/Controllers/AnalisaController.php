@@ -77,7 +77,7 @@ class AnalisaController extends Controller
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan);
         }
-
+        // dd($data);
         return view('staff.analisa.index', [
             'data' => $data
         ]);
@@ -200,5 +200,18 @@ class AnalisaController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Anda gagal melakukan pembatalan survei');
         }
+    }
+
+    public function get_data_penolakan($kode)
+    {
+        $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_nasabah.nama_nasabah',
+            )
+            ->where('data_pengajuan.kode_pengajuan', '=', $kode)
+            ->get();
+        return response()->json($data);
     }
 }

@@ -303,7 +303,7 @@ Route::middleware('auth')->group(function () {
     //====Route Analisa====//
     Route::prefix('themes')->group(function () {
         // Route::view('/dashboard', 'dashboard.index');
-        ROute::controller(AnalisaController::class)->group(function () {
+        Route::controller(AnalisaController::class)->group(function () {
 
             Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/permohonan/analisa', 'index')->name('permohonan.analisa');
@@ -311,6 +311,7 @@ Route::middleware('auth')->group(function () {
 
 
             Route::get('/permohonan/data_jadul/{pengajuan}', 'data_jadul')->name('permohonan.data_jadul');
+            Route::get('/tolak/permohonan/{kode}', 'get_data_penolakan')->name('tolak.data_penolakan');
             Route::post('/permohonan/data_jadul', 'simpanjadul')->name('permohonan.simpanjadul');
         });
 
