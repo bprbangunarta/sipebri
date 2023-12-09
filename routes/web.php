@@ -468,6 +468,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
                 Route::post('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
                 Route::post('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
+                Route::put('/penolakan/update', 'update_penolakan')->name('penolakan.update');
             });
 
             Route::post('/penolakan/simpan', 'simpan_penolakan')->name('penolakan.simpan');

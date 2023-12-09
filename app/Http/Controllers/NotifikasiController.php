@@ -75,6 +75,16 @@ class NotifikasiController extends Controller
     public function tambah_penolakan(Request $request)
     {
         try {
+            $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
+            if ($user->role_name != 'Kabag Analis') {
+                return redirect()->back()->with('error', 'User Anda Tidak Diizinkan');
+            }
+
+            $cek_penolakan = DB::table('data_penolakan')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+            if (!is_null($cek_penolakan)) {
+                return redirect()->back()->with('error', 'Anda Telah Memiliki Nomor Penolakan');
+            }
+
             // Validasi input
             $validatedData = $request->validate([
                 'nomor' => 'required',
@@ -89,11 +99,11 @@ class NotifikasiController extends Controller
                 'no_penolakan' => $validatedData['no_penolakan'],
                 'pengajuan_kode' => $validatedData['kode_pengajuan'],
                 'alasan_id' => $validatedData['alasan'],
-                'keterangan' => strip_tags($validatedData['keterangan']),
+                'keterangan' => strtoupper($validatedData['keterangan']),
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
-
+            // dd($data);
             // Memasukkan data dengan nomor baru ke dalam tabel data_penolakan
             DB::table('data_penolakan')->insert($data);
 
@@ -108,22 +118,33 @@ class NotifikasiController extends Controller
 
     public function edit_penolakan(Request $request)
     {
+        $kode = $request->input('kd');
+        $data = DB::table('data_penolakan')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_penolakan.pengajuan_kode')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select('data_penolakan.*', 'data_nasabah.nama_nasabah')
+            ->where('pengajuan_kode', $kode)->first();
+        $alasan = DB::table('data_alasan_penolakan')->get();
+        return response()->json([$data, $alasan]);
+    }
+
+    public function update_penolakan(Request $request)
+    {
         try {
             // Validasi input
             $validatedData = $request->validate([
-                'id' => 'required',
                 'alasan' => 'required',
                 'keterangan' => 'required',
             ]);
 
             $data = [
                 'alasan_id' => $validatedData['alasan'],
-                'keterangan' => strip_tags($validatedData['keterangan']),
+                'keterangan' => strtoupper($validatedData['keterangan']),
                 'updated_at' => now(),
             ];
 
             // Melakukan update data berdasarkan ID
-            DB::table('data_penolakan')->where('id', $request->kode_pengajuan)->update($data);
+            DB::table('data_penolakan')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
 
             return redirect()->back()->with('success', 'Berhasil mengupdate data');
         } catch (\Throwable $th) {
@@ -132,11 +153,6 @@ class NotifikasiController extends Controller
 
             return redirect()->back()->with('error', 'Gagal mengupdate data');
         }
-    }
-
-    public function get_data_penolakan(Request $request)
-    {
-        //
     }
 
     public function simpan_penolakan(Request $request)
