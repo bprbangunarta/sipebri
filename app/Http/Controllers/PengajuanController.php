@@ -141,8 +141,9 @@ class PengajuanController extends Controller
                 'data_produk.*',
                 'users.name as surveyor',
             )
-            ->where('data_pengajuan.status', '!=', 'Batal')
             ->where('data_pengajuan.on_current', '0')
+            ->whereNotIn('data_pengajuan.status', ['Batal', 'Dibatalkan', 'Ditolak'])
+
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')

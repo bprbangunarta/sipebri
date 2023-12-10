@@ -244,6 +244,34 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ request()->is('laporan/pendaftaran', 'laporan/pendaftaran/kredit') ? 'active' : '' }}">
+                        <a href="/laporan/pendaftaran">
+                            <i class="fa fa-users"></i>
+                            Pendaftaran Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.siap-realisasi') }}">
+                            <i class="fa fa-ban"></i>
+                            Pengajuan Ditolak
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.siap-realisasi') }}">
+                            <i class="fa fa-check"></i>
+                            Pengajuan Disetujui
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.siap-realisasi') }}">
+                            <i class="fa fa-bullhorn"></i>
+                            Data Siap Realisasi
+                        </a>
+                    </li>
+
                     <li class="{{ request()->is('laporan/fasilitas', 'filter/laporan/fasilitas') ? 'active' : '' }}">
                         <a href="/laporan/fasilitas">
                             <i class="fa fa-flag"></i>
@@ -265,18 +293,7 @@
                         </a>
                     </li> --}}
 
-                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.siap-realisasi') }}">
-                            <i class="fa fa-check"></i>
-                            Data Siap Realisasi
-                        </a>
-                    </li>
-                    <li class="{{ request()->is('laporan/pendaftaran', 'laporan/pendaftaran/kredit') ? 'active' : '' }}">
-                        <a href="/laporan/pendaftaran">
-                            <i class="fa fa-users"></i>
-                            Pendaftaran Kredit
-                        </a>
-                    </li>
+
                     <li class="{{ request()->is('laporan/survei') ? 'active' : '' }}">
                         <a href="/laporan/survei">
                             <i class="fa fa-hourglass-start"></i>
