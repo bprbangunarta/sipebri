@@ -220,7 +220,9 @@ class AnalisaController extends Controller
         try {
             $user = Auth::user()->code_user;
             $data = [
-                'status' => $request->status,
+                'tracking' => 'Persetujuan Komite',
+                'status' => 'Sudah Otorisasi',
+                'input_user' => $user,
             ];
             // dd($request, $data, $user);
             Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data);

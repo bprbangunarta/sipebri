@@ -689,7 +689,6 @@ class DataCetakController extends Controller
 
             ->whereNotNull('data_tracking.analisa_kredit')
             ->whereNotNull('data_usulan.pengajuan_kode')
-            // ->whereNotIn('data_pengajuan.status', ['Ditolak', 'Dibatalkan'])
 
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
@@ -845,7 +844,7 @@ class DataCetakController extends Controller
             ->leftJoin('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
 
