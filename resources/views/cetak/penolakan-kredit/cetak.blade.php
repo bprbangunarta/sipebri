@@ -70,7 +70,7 @@
 
         @media print {
             body {
-                font-size: 10pt;
+                font-size: 12pt;
             }
 
             .content {
@@ -93,6 +93,11 @@
 
         <table>
             <tr>
+                <td>Kode</td>
+                <td class="text-center" width="1%"> : </td>
+                <td>{{ $data->kode_pengajuan }}</td>
+            </tr>
+            <tr>
                 <td width="14%">Nomor</td>
                 <td class="text-center" width="1%"> : </td>
                 <td>{{ $data->no_penolakan }}</td>
@@ -101,11 +106,6 @@
                 <td>Tanggal</td>
                 <td class="text-center" width="1%"> : </td>
                 <td>{{ Carbon::parse(now())->format('d F Y') }}</td>
-            </tr>
-            <tr>
-                <td>Kode Pengajuan</td>
-                <td class="text-center" width="1%"> : </td>
-                <td>{{ $data->kode_pengajuan }}</td>
             </tr>
         </table>
 
@@ -147,7 +147,7 @@
 
         <table>
             <tr>
-                <td class="text-center" width="40%">
+                <td class="text-center" width="30%">
                     Hormat Kami,<br>
                     <b>PT. BPR BANGUNARTA</b>
                 </td>
@@ -155,16 +155,16 @@
                 <td></td>
             </tr>
             <tr>
-                <td class="text-center" width="40%">
+                <td class="text-center">
                     <center>
-                        <p style="margin-top:80px;"></p>
+                        <p style="margin-top:30px;"></p>
                         <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
                             style="margin-top:-30px;">
                     </center>
                     <u>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         Komite Kredit
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
                     <font style="text-transform: uppercase;">{{ $data->kabag_analis }}</font>
@@ -174,7 +174,7 @@
             </tr>
         </table>
 
-        <p style="margin-top:420px;"></p>
+        <p style="margin-top:280px;"></p>
 
         Catatan : <br>
         <ul style="margin-top:-1px;margin-left:-25px;">
