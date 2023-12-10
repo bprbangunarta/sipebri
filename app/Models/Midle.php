@@ -20,7 +20,7 @@ class Midle extends Model
 
         //Cek data Current CIF
         $query = Tabungan::where('noid', $data['no_identitas'])
-            ->where('jttempoid', $data['tanggal_lahir'])
+            // ->where('jttempoid', $data['tanggal_lahir'])
             ->first();
 
         //Ubah identitas dari nomor id menjadi data string
