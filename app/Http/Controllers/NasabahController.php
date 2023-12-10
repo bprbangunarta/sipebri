@@ -42,7 +42,7 @@ class NasabahController extends Controller
             if (is_null($cek->alamat_ktp)) {
 
                 $query = Tabungan::where('noid', $cek->no_identitas)
-                    ->where('jttempoid', $cek->tanggal_lahir)
+                    // ->where('jttempoid', $cek->tanggal_lahir)
                     ->first();
 
                 if (is_null($query)) {
