@@ -120,7 +120,10 @@ class KomiteController extends Controller
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->get();
         $cek[0]->role_user = $user[0]->role_name;
-        return response()->json($cek);
+
+        //Metode
+        $metode = DB::table('data_metode_rps')->get();
+        return response()->json([$cek[0], $metode]);
     }
 
     public function simpan(Request $request)
@@ -130,7 +133,6 @@ class KomiteController extends Controller
             $usr = Auth::user()->code_user;
             $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
             $kom = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
-            $cek = Midle::analisa_usaha($request->kode_pengajuan);
 
             // //Data Tracking
             $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();

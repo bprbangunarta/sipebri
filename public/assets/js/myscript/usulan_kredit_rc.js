@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#usulan_plafon, #jw").keyup(function () {
+    $("#usulan_plafon, #jw, #suku_bunga").keyup(function () {
         var usulan =
             parseFloat($("#usulan_plafon").val().replace(/[^\d]/g, "")) || 0;
         var metode = $("#metode").val();

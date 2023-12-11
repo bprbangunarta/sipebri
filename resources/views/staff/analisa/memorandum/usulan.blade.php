@@ -14,7 +14,6 @@
                         <div style="width: 49.5%;float:left;">
                             <span class="fw-bold">KEBUTUHAN DANA</span>
                             <input type="text" id="metode" value="{{ $data->metode_rps }}" hidden>
-                            <input type="text" id="suku_bunga" value="{{ $data->suku_bunga }}" hidden>
                             <input type="text" id="keuangan" value="{{ $data->keuangan }}" hidden>
                             <input type="text" id="laba_usaha_pertanian" value="{{ $data->laba_usaha_pertanian }}"
                                 hidden>
@@ -58,36 +57,45 @@
 
 
                     <div class="div-right">
+
                         <div style="width: 49.5%;float:left;">
-                            <span class="fw-bold">BIAYA ADMIN (%)</span>
-                            <input type="text" class="form-control text-uppercase" name="b_admin" id="b_admin"
-                                placeholder="ENTRI" value="{{ $data->b_admin }}" required>
+                            <div style="width: 49.5%;float:left;">
+                                <span class="fw-bold">BIAYA ADMIN (%)</span>
+                                <input type="text" class="form-control text-uppercase" name="b_admin" id="b_admin"
+                                    placeholder="ENTRI" value="{{ $data->b_admin }}" required>
+                            </div>
+
+                            <div style="width: 49.5%;float:right;">
+                                <span class="fw-bold">S.BUNGA (%)</span>
+                                <input type="text" class="form-control text-uppercase" name="s_bunga" id="suku_bunga"
+                                    placeholder="ENTRI" value="{{ $data->suku_bunga }}" required>
+                            </div>
                         </div>
 
                         <div style="width: 49.5%;float:right;">
                             <span class="fw-bold">SEBELUM REALISASI</span>
                             <input type="text" class="form-control text-uppercase" name="sebelum_realisasi"
                                 id="" placeholder="ENTRI" value="{{ $usulan->sebelum_realisasi }}">
-                        </div>  
+                        </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">
                             <div style="width: 49.5%;float:left;">
                                 <span class="fw-bold">B.PROVISI (%)</span>
                                 <input type="text" class="form-control text-uppercase" name="b_provisi" id="b_provisi"
-                                placeholder="ENTRI" value="{{ $data->b_provisi }}" required>
+                                    placeholder="ENTRI" value="{{ $data->b_provisi }}" required>
                             </div>
 
                             <div style="width: 49.5%;float:right;">
                                 <span class="fw-bold">B.PENALTI (%)</span>
                                 <input type="text" class="form-control text-uppercase" name="b_penalti" id="b_penalti"
-                                placeholder="ENTRI" value="{{ $data->b_penalti }}" required>
+                                    placeholder="ENTRI" value="{{ $data->b_penalti }}" required>
                             </div>
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:right;">
                             <span class="fw-bold">SYARAT TAMBAHAN</span>
-                            <input type="text" class="form-control text-uppercase" name="syarat_tambahan" id=""
-                                placeholder="ENTRI" value="{{ $usulan->syarat_tambahan }}">
+                            <input type="text" class="form-control text-uppercase" name="syarat_tambahan"
+                                id="" placeholder="ENTRI" value="{{ $usulan->syarat_tambahan }}">
                         </div>
 
                         <div style="margin-top:5px;width: 49.5%;float:left;">

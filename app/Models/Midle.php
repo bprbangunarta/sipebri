@@ -20,7 +20,7 @@ class Midle extends Model
 
         //Cek data Current CIF
         $query = Tabungan::where('noid', $data['no_identitas'])
-            ->where('jttempoid', $data['tanggal_lahir'])
+            // ->where('jttempoid', $data['tanggal_lahir'])
             ->first();
 
         //Ubah identitas dari nomor id menjadi data string
@@ -1373,7 +1373,6 @@ class Midle extends Model
         $data_url = $text . '_' . $data . '_' . $user;
         // dd($user);
         // URL dan QR Code dari Google Chart API
-        // $url = 'https://sipebri.bprbangunarta.co.id/images?qrcode=';
         $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
         // $url = 'http://http://127.0.0.1:8000/verifikasi?qrcode=' . $data_url;
         $uri = urlencode($url);

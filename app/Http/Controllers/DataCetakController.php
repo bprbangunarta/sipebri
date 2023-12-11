@@ -781,7 +781,6 @@ class DataCetakController extends Controller
                 }
             }
 
-            // dd($biaya_perdagangan);
 
             $character = Midle::cetak_data_analisa5C_character($enc);
             $capacity = Midle::cetak_data_analisa5C_capacity($enc);
@@ -798,7 +797,7 @@ class DataCetakController extends Controller
 
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
-            // dd($data[0]);
+            // dd($biaya_perdagangan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

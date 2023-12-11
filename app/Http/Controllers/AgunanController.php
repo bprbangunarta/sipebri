@@ -147,7 +147,7 @@ class AgunanController extends Controller
                     $jenis_agunan = $data_catatan->jenis_agunan;
                 }
             }
-            
+
             $cek['catatan'] = 'SERTIFIKAT ' . strtoupper($jenis_agunan) . ' NO ' . strtoupper($cek['no_dokumen']) . ', LUAS ' . strtoupper($cek['luas']) . ' M2, ' . 'ATAS NAMA ' . strtoupper($cek['atas_nama']) . ', ALAMAT ' . strtoupper($cek['lokasi']);
 
             // dd($cek);
@@ -185,7 +185,7 @@ class AgunanController extends Controller
                     $jenis_agunan = $data_catatan->jenis_agunan;
                 }
             }
-            
+
             $data['catatan'] = 'SERTIFIKAT ' . strtoupper($jenis_agunan) . ' NO ' . strtoupper($data['no_dokumen']) . ', LUAS ' . strtoupper($data['luas']) . ' M2, ' . 'ATAS NAMA ' . strtoupper($data['atas_nama']) . ', ALAMAT ' . strtoupper($data['lokasi']);
 
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
@@ -242,7 +242,6 @@ class AgunanController extends Controller
             }
 
             $cek['catatan'] = strtoupper($jenis_agunan) . ' ATAS NAMA ' . strtoupper($cek['atas_nama']) . ' NO ' . strtoupper($cek['no_dokumen']) . ' ALAMAT ' . strtoupper($cek['lokasi']);
-
 
             DB::table('data_jaminan')->insert($cek);
             return redirect()->back()->with('success', 'Data berhasil ditambahkan');

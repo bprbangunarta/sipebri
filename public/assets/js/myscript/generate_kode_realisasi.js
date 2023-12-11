@@ -9,7 +9,7 @@ $("#generate-code").on("show.bs.modal", function (event) {
         dataType: "json",
         cache: false,
         success: function (response) {
-            console.log(response);
+            
             $("#kd_pengajuan").val(response.kode_pengajuan);
             $("#nm_nasabah").val(response.nama_nasabah);
             $("#generate").val(response.kode_notif);
