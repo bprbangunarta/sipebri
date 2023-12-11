@@ -10,7 +10,7 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
-                console.log(response);
+                
                 $("#id").val(response.id);
                 $("#kd_pengajuan").val(response.kode_pengajuan);
                 $("#tgl_survei").val(response.tgl_survei);
