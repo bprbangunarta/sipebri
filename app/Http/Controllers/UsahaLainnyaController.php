@@ -336,7 +336,8 @@ class UsahaLainnyaController extends Controller
             $data = Lain::where('kode_usaha', $enc)->get();
             $bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_lainnya')->where('usaha_kode', $enc)->get();
-
+            $bahan_baku = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $enc)->get();
+            // dd($bahan_baku, $enc);
             Lain::where('id', $data[0]->id)->delete();
             if (count($bu) !== 0) {
                 for ($i = 0; $i < count($bu); $i++) {
@@ -346,6 +347,11 @@ class UsahaLainnyaController extends Controller
             if (count($du) !== 0) {
                 for ($j = 0; $j < count($du); $j++) {
                     DB::table('du_lainnya')->where('id', $du[$j]->id)->delete();
+                }
+            }
+            if (count($bahan_baku) !== 0) {
+                for ($k = 0; $k < count($bahan_baku); $k++) {
+                    DB::table('bu_bahan_baku_lainnya')->where('id', $bahan_baku[$k]->id)->delete();
                 }
             }
 
