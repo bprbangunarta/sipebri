@@ -14,7 +14,11 @@
                             <div class="box-tools">
                                 <form action="{{ route('pengajuan.data') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
+                                        <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
+                                            <i class="fa fa-filter"></i> Short & Filter
+                                        </a>
+
+                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -179,5 +183,70 @@
                 </div>
             </div>
         </section>
+    </div>
+
+
+    <div class="modal fade" id="modal-filter">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">SHORT & FILTER</h4>
+                </div>
+                <form action="{{ route('filter.laporan.fasilitas') }}" method="GET">
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1" style="margin-top:-5px;"> 
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control" name="" id="" style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="" id="" style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2" style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>METODE RPS</label>
+                                    <select class="form-control" name="" id="" style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                    </select> 
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>SURVEYOR</label>
+                                    <select class="form-control" name="" id="" style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                    </select> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">FILTER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
