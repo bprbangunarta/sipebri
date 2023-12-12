@@ -39,7 +39,6 @@
                                         <th class="text-center" width="16%">NAMA NASABAH</th>
                                         <th class="text-center" width="42%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="5%">JW</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
@@ -65,9 +64,6 @@
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }} </td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}
-                                            </td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ $item->jangka_waktu }}
                                             </td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
@@ -143,30 +139,33 @@
                                         <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
                                             id="kd_pengajuan" readonly>
                                     </div>
-    
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NAMA NASABAH</span>
                                         <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
                                             type="text" readonly>
                                     </div>
-    
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PRODUK KREDIT</span>
-                                        <input type="text" class="form-control" value="KTA - KREDIT TANPA AGUNAN" readonly>
+                                        <input type="text" class="form-control" value="" id="produk"
+                                            readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">PLAFON KREDIT</span>
-                                        <input type="text" class="form-control" value="3.000.000" readonly>
+                                        <input type="text" class="form-control" value="" id="plafon"
+                                            readonly>
                                     </div>
-    
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JANGKA WAKTU</span>
-                                        <input type="text" class="form-control" value="8 BULAN - FLAT" readonly>
+                                        <input type="text" class="form-control" value="" id="jw"
+                                            readonly>
                                     </div>
-    
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">KODE PERJANJIAN KREDIT</span>
                                         <input class="form-control text-uppercase" name="kode_spk" id="generate"

@@ -533,7 +533,18 @@ class KonfirmasiController extends Controller
         $data = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
-            ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.produk_kode', 'data_nasabah.nama_nasabah', 'data_nasabah.no_cif', 'data_spk.no_spk')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.jangka_waktu',
+                'data_pengajuan.metode_rps',
+                'data_pengajuan.plafon',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.no_cif',
+                'data_spk.no_spk',
+                'data_produk.nama_produk',
+            )
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
         //
 
@@ -549,9 +560,7 @@ class KonfirmasiController extends Controller
         $romawi = Data::romawi($bulan);
 
         $notif = $kodes . '/' . $data[0]->produk_kode . '/' . $romawi . '/' . $now->year;
-
         $data[0]->kode_notif = $notif;
-
         $data[0]->kode_produk = $data[0]->produk_kode;
 
 

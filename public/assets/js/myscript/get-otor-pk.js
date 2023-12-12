@@ -9,13 +9,17 @@ $("#generate-code").on("show.bs.modal", function (event) {
         dataType: "json",
         cache: false,
         success: function (response) {
-            
             $("#no_cif").val(response.no_cif);
             $("#kd_pengajuan").val(response.kode_pengajuan);
             $("#nm_nasabah").val(response.nama_nasabah);
             $("#generate").val(response.no_spk);
             $("#nomor").val(response.nomor);
-            $("#kode_produk").val(response.produk_kode);
+            $("#produk").val(response.produk_kode+" "+"-"+" "+response.nama_produk);
+            $("#jw").val(response.jangka_waktu+" "+"BULAN"+" "+"-"+" "+response.metode_rps);
+            
+            var plafon = parseFloat(response.plafon)
+            var pl = "Rp. " + plafon.toLocaleString("id-ID");
+            $("#plafon").val(pl);
 
         },
         error: function (xhr, status, error) {
