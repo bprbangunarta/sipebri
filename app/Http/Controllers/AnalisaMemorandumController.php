@@ -258,7 +258,7 @@ class AnalisaMemorandumController extends Controller
             }
 
             //Menghitung RC
-            if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
+            if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN' || $cek[0]->metode_rps == 'EFEKTIF') {
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
                 $tn = [];

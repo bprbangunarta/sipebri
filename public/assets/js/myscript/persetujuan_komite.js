@@ -193,7 +193,7 @@ $(document).ready(function () {
                         var rc = (angsuran / parseFloat(keuangan)) * 100;
 
                         $("#rc").val(rc.toFixed(2) + " " + "%");
-                    }else if (selectedValue == "EFEKTIF MUSIMAN") {
+                    }else if (selectedValue == "EFEKTIF MUSIMAN" || selectedValue == "EFEKTIF") {
 
                         var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
                         var rc = (bg / keuangan) * 100;

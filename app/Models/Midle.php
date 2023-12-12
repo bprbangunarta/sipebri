@@ -848,7 +848,7 @@ class Midle extends Model
     {
         $keuangan = Keuangan::where('pengajuan_kode', $kode)->pluck('keuangan_perbulan')->first();
 
-        if ($metode == 'EFEKTIF MUSIMAN') {
+        if ($metode == 'EFEKTIF MUSIMAN' || $metode == 'EFEKTIF') {
             $sb = $suku_bunga / 100;
             $plafon_permusim = ($plafon * 70) / 100;
 
