@@ -328,19 +328,11 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
 
-        //Hold Submit
-        // $('#form-pengajuan').submit(function(event) {
-        //     // event.preventDefault();
+        //Hold Submit Ketika diklik 2X
+        $('#form-pengajuan').submit(function(event) {
+            var submitButton = $('#submit-pengajuan');
+            submitButton.prop('disabled', true);
 
-        //     var submitButton = $('#submit-pengajuan');
-        //     submitButton.prop('disabled', true); // Menonaktifkan tombol submit
-
-        //     // // Menutup modal setelah formulir dikirim
-        //     // $('#modal-tambah').modal('hide');
-
-        //     // // Menambah pesan atau animasi jika diperlukan
-        //     // submitButton.val('Mengirim...');
-
-        // });
+        });
     </script>
 @endpush

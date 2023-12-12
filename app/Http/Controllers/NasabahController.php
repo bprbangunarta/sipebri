@@ -110,7 +110,6 @@ class NasabahController extends Controller
 
     public function store(Request $request)
     {
-
         $ceknasabah = $request->validate([
             'kode_nasabah' => '',
             'identitas' => 'required',
