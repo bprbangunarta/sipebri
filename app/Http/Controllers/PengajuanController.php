@@ -111,6 +111,11 @@ class PengajuanController extends Controller
     public function all(Request $request)
     {
         $keyword = request('keyword');
+        $produk = request('kode_produk');
+        $kantor = request('nama_kantor');
+        $metode = request('metode');
+        $surveyor = request('surveyor');
+
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -152,6 +157,13 @@ class PengajuanController extends Controller
                     ->orWhere('data_produk.kode_produk', 'like', '%' . $keyword . '%')
                     ->orWhere('data_produk.nama_produk', 'like', '%' . $keyword . '%');
             })
+
+            ->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
+                $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
+                    ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                    ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
+                    ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+            })
             ->orderBy('data_pengajuan.created_at', 'DESC');
 
         $pengajuan = $query->paginate(10);
@@ -159,9 +171,22 @@ class PengajuanController extends Controller
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
         }
-        // dd($pengajuan);
+
+        //Data Kantor
+        $kantor = DB::table('data_kantor')->get();
+        //Data Produk
+        $produk = DB::table('data_produk')->get();
+        //Data Metode RPS
+        $metode = DB::table('data_metode_rps')->get();
+        //Data Surveyor
+        $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
+
         return view('pengajuan.all', [
             'data' => $pengajuan,
+            'kantor' => $kantor,
+            'produk' => $produk,
+            'metode' => $metode,
+            'surveyor' => $surveyor,
         ]);
     }
 

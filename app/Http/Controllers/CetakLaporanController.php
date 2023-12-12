@@ -33,7 +33,7 @@ class CetakLaporanController extends Controller
                     ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
-            
+
             ->orderBy('data_tracking.akad_kredit', 'desc');
 
         $data = $query->paginate(10);
@@ -54,18 +54,21 @@ class CetakLaporanController extends Controller
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->where('data_pengajuan.on_current', 1)
 
             ->when(
-                $tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_tracking.akad_kredit', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            })
+                $tgl1 && $tgl2,
+                function ($query) use ($tgl1, $tgl2) {
+                    return $query->whereBetween('data_tracking.akad_kredit', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+                }
+            )
 
             ->orderBy('data_tracking.akad_kredit', 'desc');
         $data = $query->paginate(10);
-        // dd($data);
+
         return view('laporan.fasilitas', [
             'data' => $data,
         ]);
@@ -235,9 +238,11 @@ class CetakLaporanController extends Controller
             ->where('data_pengajuan.on_current', '0')
 
             ->when(
-                $tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            })
+                $tgl1 && $tgl2,
+                function ($query) use ($tgl1, $tgl2) {
+                    return $query->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+                }
+            )
 
             ->orderBy('data_notifikasi.created_at', 'desc');
         $data = $query->paginate(10);
