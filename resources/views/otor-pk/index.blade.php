@@ -133,26 +133,45 @@
                         <div class="box-body">
                             <div class="row">
 
-                                <div style="margin-top: -15px;">
-                                    <span class="fw-bold">KODE PENGAJUAN</span>
-                                    <input type="text" id="kode" hidden>
-                                    <input type="text" id="nomor" name="nomor" hidden>
-                                    <input type="text" id="kode_produk" name="kode_produk" hidden>
-                                    <input name="no_cif" id="no_cif" type="text" hidden>
-                                    <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
-                                        id="kd_pengajuan" readonly>
+                                <div class="col-md-6">
+                                    <div style="margin-top: -15px;">
+                                        <span class="fw-bold">KODE PENGAJUAN</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" id="nomor" name="nomor" hidden>
+                                        <input type="text" id="kode_produk" name="kode_produk" hidden>
+                                        <input name="no_cif" id="no_cif" type="text" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
+                                            id="kd_pengajuan" readonly>
+                                    </div>
+    
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">NAMA NASABAH</span>
+                                        <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                            type="text" readonly>
+                                    </div>
+    
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">PRODUK KREDIT</span>
+                                        <input type="text" class="form-control" value="KTA - KREDIT TANPA AGUNAN" readonly>
+                                    </div>
                                 </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">NAMA NASABAH</span>
-                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
-                                        type="text" readonly>
-                                </div>
-
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE PERJANJIAN KREDIT</span>
-                                    <input class="form-control text-uppercase" name="kode_spk" id="generate"
-                                        type="text" readonly>
+                                <div class="col-md-6">
+                                    <div style="margin-top: -15px;">
+                                        <span class="fw-bold">PLAFON KREDIT</span>
+                                        <input type="text" class="form-control" value="3.000.000" readonly>
+                                    </div>
+    
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">JANGKA WAKTU</span>
+                                        <input type="text" class="form-control" value="8 BULAN - FLAT" readonly>
+                                    </div>
+    
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">KODE PERJANJIAN KREDIT</span>
+                                        <input class="form-control text-uppercase" name="kode_spk" id="generate"
+                                            type="text" readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>
