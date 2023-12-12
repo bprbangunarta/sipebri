@@ -255,6 +255,7 @@ class NasabahController extends Controller
             'nama_ibu_kandung' => 'required',
             'no_rekening' => '',
             'no_npwp' => '',
+            'kode_pos' => '',
             'no_telp' => 'required',
             'no_telp_darurat' => 'required',
             'email' => '',
@@ -346,6 +347,7 @@ class NasabahController extends Controller
         $cek['kecamatan'] = strtoupper($cek['kecamatan']);
         $cek['kelurahan'] = strtoupper($cek['kelurahan']);
         $cek['kota'] = strtoupper($cek['kota']);
+        $cek['kode_pos'] = $cek['kode_pos'];
         $cek['alamat_ktp'] = strtoupper($cek['alamat_ktp']);
         $cek['alamat_sekarang'] = strtoupper($cek['alamat_sekarang']);
         $cek['nama_ibu_kandung'] = strtoupper($cek['nama_ibu_kandung']);

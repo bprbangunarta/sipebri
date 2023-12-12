@@ -35,7 +35,8 @@
 
                                         {{-- Hidden form --}}
                                         <input type="hidden" value="{{ $nasabah->kode_user }}" name="input_user">
-                                        <input type="hidden" class="form-control" name="no_cif" id="no_cif" value="{{ $nasabah->nocif }}">
+                                        <input type="hidden" class="form-control" name="no_cif" id="no_cif"
+                                            value="{{ $nasabah->nocif }}">
 
                                         {{-- Bagian kiri --}}
                                         <div class="div-left">
@@ -73,15 +74,15 @@
                                                     <input class="form-control" placeholder="YYYY-MM-DD"
                                                         name="tanggal_lahir" id="ttlo"
                                                         value="{{ $nasabah->tanggal_lahir }}" />
-                                                @endif                              
+                                                @endif
                                             </div>
 
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">ALAMAT KTP</span>
                                                 @if (is_null($nasabah->alamat_ktp))
                                                     <input type="text" class="form-control" name="alamat_ktp"
-                                                        id="alamat_ktp" value="{{ old('alamat_ktp') }}"
-                                                        placeholder="ENTRI" required>
+                                                        id="alamat_ktp" value="{{ old('alamat_ktp') }}" placeholder="ENTRI"
+                                                        required>
                                                 @else
                                                     <input type="text" class="form-control" name="alamat_ktp"
                                                         id="alamat_ktp"
@@ -218,7 +219,7 @@
                                                 <span class="fw-bold">NAMA PANGGILAN</span>
                                                 <input type="text" class="form-control" name="nama_panggilan"
                                                     id="nama_panggilan" placeholder="ENTRI"
-                                                    value="{{ old('nama_panggilan', $nasabah->sname) }}" required>                                        
+                                                    value="{{ old('nama_panggilan', $nasabah->sname) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -254,7 +255,7 @@
                                                     <option value="4">HINDU</option>
                                                     <option value="5">BUDHA</option>
                                                     <option value="6">KONG HU CU</option>
-                                                </select>                                                
+                                                </select>
                                             </div>
 
                                             <div style="margin-top:5px;width: 100%;float:right;">
@@ -287,6 +288,8 @@
                                             </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">WILAYAH</span>
+                                                <input class="form-control" type="hidden" name="kode_pos"
+                                                    id="kode_pos" placeholder="" value="">
                                                 @if (is_null($nasabah->kota))
                                                     <input class="form-control dati2" type="text" name="kota"
                                                         id="kota" placeholder="Kota" value="{{ old('kota') }}">
@@ -820,23 +823,55 @@
                         name: nama
                     },
                     success: function(response) {
+                        // let st = JSON.stringify(response);
+                        // let obj = Object.values(response);
+                        // var ch = []
+                        // for (var i = 0; i < obj.length; i++) {
+                        //     if (ch.indexOf(obj[i].kelurahan) === -1) {
+                        //         ch.push(obj[i].[kelurahan, kode_pos])
+                        //     }
+                        // }
+
+                        // console.log(ch)
+                        // ch.sort()
+                        // ch.forEach(data => {
+                        //     $('#select-kelurahan').append($('<option>', {
+                        //         value: data,
+                        //         text: data
+                        //     }));
+                        // });
+
+
                         let st = JSON.stringify(response);
                         let obj = Object.values(response);
-                        var ch = []
-                        for (var i = 0; i < obj.length; i++) {
-                            if (ch.indexOf(obj[i].kelurahan) === -1) {
-                                ch.push(obj[i].kelurahan)
+                        let ch = [];
 
+                        for (let i = 0; i < obj.length; i++) {
+                            if (!ch.some(item => item.kelurahan === obj[i].kelurahan)) {
+                                ch.push({
+                                    kelurahan: obj[i].kelurahan,
+                                    kode_pos: obj[i].kode_pos
+                                });
                             }
                         }
 
-                        ch.sort()
+                        ch.sort((a, b) => (a.kelurahan > b.kelurahan) ? 1 : -1);
 
                         ch.forEach(data => {
                             $('#select-kelurahan').append($('<option>', {
-                                value: data,
-                                text: data
+                                value: data.kelurahan,
+                                text: data.kelurahan,
+                                'data-kode-pos': JSON.stringify(
+                                    data
+                                ) // Simpan seluruh objek sebagai string di 'data-kode-pos'
                             }));
+                        });
+
+                        $('#select-kelurahan').on('change', function() {
+                            let selectedKelurahan = $(this).val();
+                            let selectedData = $(this).find('option:selected').data(
+                                'kode-pos');
+                            $('#kode_pos').val(selectedData.kode_pos);
                         });
 
                     },
