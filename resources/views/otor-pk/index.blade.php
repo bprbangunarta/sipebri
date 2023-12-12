@@ -89,7 +89,7 @@
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center text-uppercase" colspan="7">Tidak Ada Data</td>
+                                            <td class="text-center text-uppercase" colspan="9">Tidak Ada Data</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
