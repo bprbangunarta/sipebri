@@ -14,7 +14,9 @@
                             <div class="box-tools">
                                 <form action="{{ route('otor.perjanjian_kredit') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -37,6 +39,7 @@
                                         <th class="text-center" width="16%">NAMA NASABAH</th>
                                         <th class="text-center" width="42%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
+                                        <th class="text-center" width="5%">JW</th>
                                         <th class="text-center" width="8%">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
@@ -55,22 +58,31 @@
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
                                             </td>
 
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }} </td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_spk }} </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kode_pengajuan }} </td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_spk }}
+                                            </td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }} </td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_kantor }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->jangka_waktu }}
+                                            </td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#generate-code" data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-green" title="Otorisasi">
+                                                <a data-toggle="modal" data-target="#generate-code"
+                                                    data-id="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-green" title="Otorisasi">
                                                     <i class="fa fa-check-circle"></i>
                                                 </a>
-                                                
+
                                                 &nbsp;
-                                                <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank" class="btn-circle btn-sm bg-blue" title="Catatan">
+                                                <a href="{{ route('cetak.otor_perjanjian_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue" title="Catatan">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
 
@@ -91,7 +103,8 @@
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
@@ -138,8 +151,8 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KODE PERJANJIAN KREDIT</span>
-                                    <input class="form-control text-uppercase" name="kode_spk" id="generate" type="text"
-                                        readonly>
+                                    <input class="form-control text-uppercase" name="kode_spk" id="generate"
+                                        type="text" readonly>
                                 </div>
                             </div>
                         </div>

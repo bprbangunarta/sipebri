@@ -330,16 +330,16 @@
 
         //Hold Submit
         // $('#form-pengajuan').submit(function(event) {
-        //     event.preventDefault(); // Menghentikan aksi bawaan submit
+        //     // event.preventDefault();
 
         //     var submitButton = $('#submit-pengajuan');
         //     submitButton.prop('disabled', true); // Menonaktifkan tombol submit
 
-        //     // Menutup modal setelah formulir dikirim
-        //     $('#modal-tambah').modal('hide');
+        //     // // Menutup modal setelah formulir dikirim
+        //     // $('#modal-tambah').modal('hide');
 
-        //     // Menambah pesan atau animasi jika diperlukan
-        //     submitButton.val('Mengirim...');
+        //     // // Menambah pesan atau animasi jika diperlukan
+        //     // submitButton.val('Mengirim...');
 
         // });
     </script>

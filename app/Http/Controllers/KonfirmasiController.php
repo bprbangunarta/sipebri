@@ -517,7 +517,7 @@ class KonfirmasiController extends Controller
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
-
+        // dd($c);
         $data = $cek->paginate(10);
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
