@@ -517,12 +517,10 @@ class KonfirmasiController extends Controller
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
-        $count = count($c);
+        // dd($c);
         $data = $cek->paginate(10);
-        for ($i = 0; $i < $count; $i++) {
-            if ($data->isNotEmpty()) {
-                $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-            }
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
         }
 
         return view('otor-pk.index', [
