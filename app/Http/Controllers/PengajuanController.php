@@ -116,6 +116,12 @@ class PengajuanController extends Controller
         $metode = request('metode');
         $surveyor = request('surveyor');
 
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -156,14 +162,20 @@ class PengajuanController extends Controller
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%')
                     ->orWhere('data_produk.kode_produk', 'like', '%' . $keyword . '%')
                     ->orWhere('data_produk.nama_produk', 'like', '%' . $keyword . '%');
-            })
+            });
 
-            ->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
-                $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
-                    ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
-                    ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
-                    ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
-            })
+        if ($tgl1 !== null) {
+            $query->where(function ($query) use ($tgl1, $tgl2) {
+                $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            });
+        }
+
+        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
+            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
+                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
+                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+        })
             ->orderBy('data_pengajuan.created_at', 'DESC');
 
         $pengajuan = $query->paginate(10);
