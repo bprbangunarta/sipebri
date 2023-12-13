@@ -74,7 +74,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit','themes/penolakan/pengajuan','themes/penolakan/tambah','themes/penolakan/edit','themes/komite/kredit/survei/analisa')? 'active': '' }}">
+                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit', 'themes/komite/kredit/survei/analisa')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-suitcase"></i>
                     <span>Analisa Kredit</span>
@@ -115,20 +115,11 @@
                             Input Persetujuan
                         </a>
                     </li>
-
-                    <li
-                        class="{{ request()->is('themes/penolakan/pengajuan', 'themes/penolakan/tambah', 'themes/penolakan/edit') ? 'active' : '' }}">
-                        <a @can('input penolakan') href="{{ route('penolakan.pengajuan') }}" @endcan
-                            title="Input Penolakan">
-                            <i class="fa fa-file-text"></i>
-                            Surat Penolakan
-                        </a>
-                    </li>
                 </ul>
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -142,6 +133,14 @@
                             title="Notifikasi Kredit">
                             <i class="fa fa-bell"></i>
                             Notifikasi Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/penolakan/pengajuan') ? 'active' : '' }}">
+                        <a @can('input penolakan') href="{{ route('penolakan.pengajuan') }}" @endcan
+                            title="Input Penolakan">
+                            <i class="fa fa-file-text"></i>
+                            Surat Penolakan
                         </a>
                     </li>
 
@@ -197,6 +196,15 @@
                             Analisa Kredit
                         </a>
                     </li>
+
+                    <li class="{{ request()->is('themes/cetak/penolakan/kredit') ? 'active' : '' }}">
+                        <a @can('cetak penolakan kredit') href="{{ route('data_penolakan.kredit') }}" @endcan
+                            title="Cetak Penolakan Kredit">
+                            <i class="fa fa-close"></i>
+                            Penolakan Kredit
+                        </a>
+                    </li>
+
                     <li class="{{ request()->is('themes/persetujuan/kredit') ? 'active' : '' }}">
                         <a @can('cetak persetujuan kredit') href="{{ route('persetujuan.kredit') }}" @endcan
                             title="Cetak Persetujuan Kredit">
@@ -228,15 +236,6 @@
                             Perjanjian Kredit
                         </a>
                     </li>
-
-                    <li class="{{ request()->is('themes/cetak/penolakan/kredit') ? 'active' : '' }}">
-                        <a @can('cetak penolakan kredit') href="{{ route('data_penolakan.kredit') }}" @endcan
-                            title="Cetak Penolakan Kredit">
-                            <i class="fa fa-close"></i>
-                            Penolakan Kredit
-                        </a>
-                    </li>
-
                 </ul>
             </li>
 

@@ -9,7 +9,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <i class="fa fa-file-text-o"></i>
+                            <i class="fa fa-bell"></i>
                             <h3 class="box-title">NOTIFIKASI KREDIT</h3>
 
                             <div class="box-tools">
