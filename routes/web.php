@@ -564,6 +564,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
 
+        Route::get('/laporan/pengajuan/disetujui', 'pengajuan_disetujui')->name('pengajuan.disetujui');
+
         Route::get('/laporan/survei', 'laporan_survey_analisa')->name('laporan.survey');
         Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');
 

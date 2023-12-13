@@ -38,9 +38,11 @@ class ExportController extends Controller
             ->where('data_pengajuan.on_current', 1)
 
             ->when(
-                $tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_tracking.akad_kredit', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            })
+                $tgl1 && $tgl2,
+                function ($query) use ($tgl1, $tgl2) {
+                    return $query->whereBetween('data_tracking.akad_kredit', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+                }
+            )
 
             ->orderBy('data_tracking.akad_kredit', 'desc')
             ->get();

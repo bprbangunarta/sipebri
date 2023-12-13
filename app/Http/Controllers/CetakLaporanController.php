@@ -146,6 +146,11 @@ class CetakLaporanController extends Controller
 
     public function laporan_penolakan()
     {
+        $keyword = request('keyword');
+        $produk = request('kode_produk');
+        $kantor = request('nama_kantor');
+        $metode = request('metode');
+        $surveyor = request('surveyor');
         $tgl1 = request('tgl1');
         $tgl2 = request('tgl2');
 
@@ -158,21 +163,42 @@ class CetakLaporanController extends Controller
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->where(function ($query) {
-                $query->where('data_pengajuan.status', '=', 'Dibatalkan')
-                    ->orWhere('data_pengajuan.status', '=', 'Ditolak');
-            })
-
-            ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            })
-
+            ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
             ->select(
                 'data_pengajuan.*',
                 'data_nasabah.*',
                 'data_produk.*',
                 'data_kantor.*',
-            )->orderBy('data_pengajuan.created_at', 'asc');
+            )
+            ->where(function ($query) {
+                $query->where('data_pengajuan.status', '=', 'Dibatalkan')
+                    ->orWhere('data_pengajuan.status', '=', 'Ditolak');
+            })
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
+            });
+
+        if ($tgl1 !== null) {
+            $query->where(function ($query) use ($tgl1, $tgl2) {
+                $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            });
+        }
+
+        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
+            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
+                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
+                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+        })
+            ->orderBy('data_pengajuan.created_at', 'asc');
         $data = $query->paginate(10);
 
         //Data Kantor
@@ -313,10 +339,6 @@ class CetakLaporanController extends Controller
                 $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
             });
         }
-
-        // ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-        //     return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-        // })
 
         $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
             $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
@@ -511,40 +533,80 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-    // public function laporan_penolakan(Request $request)
-    // {
-    //     $keyword = request('keyword');
-    //     $query = DB::table('data_pengajuan')
-    //         ->select(
-    //             'data_pengajuan.*',
-    //             'data_nasabah.*',
-    //             'data_survei.kantor_kode as wilayah',
-    //             'data_survei.surveyor_kode as surveyor',
-    //             'data_pengajuan.created_at as tanggal',
-    //             'data_penolakan.no_penolakan',
-    //         )
-    //         ->join('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-    //         ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-    //         ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-    //         ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-    //         ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-    //         ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+    public function pengajuan_disetujui(Request $request)
+    {
+        $keyword = request('keyword');
+        $produk = request('kode_produk');
+        $kantor = request('nama_kantor');
+        $metode = request('metode');
+        $surveyor = request('surveyor');
 
-    //         ->where(function ($query) use ($keyword) {
-    //             $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('users.name', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('users.username', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
-    //                 ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
-    //         })
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
 
-    //         ->orderBy('data_pengajuan.created_at', 'desc');
-    //     $data = $query->paginate(10);
-    //     return view('laporan.data-penolakan', [
-    //         'data' => $data,
-    //     ]);
-    // }
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
+            ->select(
+                'data_pengajuan.*',
+                'data_nasabah.*',
+                'data_produk.*',
+                'data_kantor.*',
+            )
+            ->where(function ($query) {
+                $query->where('data_pengajuan.status', '=', 'Disetujui');
+            })
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.no_loan', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.username', 'like', '%' . $keyword . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
+            });
+
+        if ($tgl1 !== null) {
+            $query->where(function ($query) use ($tgl1, $tgl2) {
+                $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            });
+        }
+
+        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
+            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
+                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
+                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+        })
+            ->orderBy('data_pengajuan.created_at', 'asc');
+        $data = $query->paginate(10);
+
+        //Data Kantor
+        $kantor = DB::table('data_kantor')->get();
+        //Data Produk
+        $produk = DB::table('data_produk')->get();
+        //Data Metode RPS
+        $metode = DB::table('data_metode_rps')->get();
+        //Data Surveyor
+        $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
+
+        $data = $query->paginate(10);
+        // dd($data);
+        return view('laporan.pengajuan-disetujui', [
+            'data' => $data,
+            'kantor' => $kantor,
+            'produk' => $produk,
+            'metode' => $metode,
+            'surveyor' => $surveyor,
+        ]);
+    }
 }

@@ -241,7 +241,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas', 'laporan/penolakan', 'laporan/pengajuan/disetujui') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -259,7 +259,7 @@
                     </li>
 
                     <li
-                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/penolakan') ? 'active' : '' }}">
                         <a href="{{ route('laporan.penolakan') }}">
                             <i class="fa fa-ban"></i>
                             Pengajuan Ditolak
@@ -267,8 +267,8 @@
                     </li>
 
                     <li
-                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.siap-realisasi') }}">
+                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/pengajuan/disetujui') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.disetujui') }}">
                             <i class="fa fa-check"></i>
                             Pengajuan Disetujui
                         </a>
