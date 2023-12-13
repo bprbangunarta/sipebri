@@ -36,9 +36,28 @@ class CetakLaporanController extends Controller
 
             ->orderBy('data_tracking.akad_kredit', 'desc');
 
+        //Data Kantor
+        $kantor = DB::table('data_kantor')->get();
+        //Data Produk
+        $produk = DB::table('data_produk')->get();
+        //Data Metode RPS
+        $metode = DB::table('data_metode_rps')->get();
+        //Data Surveyor
+        $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
+        //Data CGC
+        $cgc = DB::table('v_tabungan')->get();
+        //Data CGC
+        $resort = DB::table('v_resort')->get();
+
         $data = $query->paginate(10);
         return view('laporan.realisasi', [
             'data' => $data,
+            'kantor' => $kantor,
+            'produk' => $produk,
+            'metode' => $metode,
+            'surveyor' => $surveyor,
+            'cgc' => $cgc,
+            'resort' => $resort,
         ]);
     }
     public function post_laporan_fasilitas()
@@ -598,8 +617,6 @@ class CetakLaporanController extends Controller
         $metode = DB::table('data_metode_rps')->get();
         //Data Surveyor
         $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
-
-        $data = $query->paginate(10);
         // dd($data);
         return view('laporan.pengajuan-disetujui', [
             'data' => $data,

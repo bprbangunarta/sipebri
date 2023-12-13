@@ -823,24 +823,6 @@
                         name: nama
                     },
                     success: function(response) {
-                        // let st = JSON.stringify(response);
-                        // let obj = Object.values(response);
-                        // var ch = []
-                        // for (var i = 0; i < obj.length; i++) {
-                        //     if (ch.indexOf(obj[i].kelurahan) === -1) {
-                        //         ch.push(obj[i].[kelurahan, kode_pos])
-                        //     }
-                        // }
-
-                        // console.log(ch)
-                        // ch.sort()
-                        // ch.forEach(data => {
-                        //     $('#select-kelurahan').append($('<option>', {
-                        //         value: data,
-                        //         text: data
-                        //     }));
-                        // });
-
 
                         let st = JSON.stringify(response);
                         let obj = Object.values(response);

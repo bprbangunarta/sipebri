@@ -580,6 +580,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
         Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
         Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');
+
+        Route::post('/export/laporan/export-filter', 'export_filter_realisasi')->name('export.export_filter');
     });
 });
 

@@ -276,4 +276,57 @@ class ExportController extends Controller
             return;
         }
     }
+
+    public function export_filter_realisasi()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        $produk = request('kode_produk');
+        $kantor = request('nama_kantor');
+        $resort = request('resort');
+        $metode = request('metode');
+        $surveyor = request('surveyor');
+        $cgc = request('cgc');
+        // dd(request());
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->select(
+                'data_tracking.akad_kredit',
+                'data_pengajuan.no_loan',
+                'data_spk.no_spk',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_kantor.kode_kantor',
+                'data_pengajuan.plafon as plafon',
+            )
+            ->where('data_pengajuan.on_current', 1);
+
+        if ($tgl1 !== null) {
+            $query->where(function ($query) use ($tgl1, $tgl2) {
+                $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            });
+        }
+
+        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor, $resort, $cgc) {
+            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
+                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
+                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+        })
+
+            ->orderBy('data_tracking.akad_kredit', 'desc');
+        // ->get();
+        $query->paginate(10);
+        //
+        dd($query);
+    }
 }

@@ -91,10 +91,16 @@
                                     <i class="fa fa-download"></i>&nbsp; Export Data
                                 </button>
 
+                                <button data-toggle="modal" data-target="#modal-export-filter"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fa fa-download"></i>&nbsp; Export By Filter
+                                </button>
+
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                                     entries
                                 </button>
+
                             </div>
 
                             {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
@@ -181,4 +187,114 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-export-filter">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT WITH FILTERS</h4>
+                </div>
+                <form action="{{ route('export.export_filter') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1"
+                                        style="margin-top:-5px;">
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control" name="kode_produk" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="nama_kantor" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>RESORT</label>
+                                    <select class="form-control res" name="resort" id=""
+                                        style="margin-top:-5px; width: 100%;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($resort as $item)
+                                            <option value="{{ $item->kode_resort }}">{{ $item->nama_resort }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2"
+                                        style="margin-top:-5px;">
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>METODE RPS</label>
+                                    <select class="form-control" name="metode" id="" style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($metode as $item)
+                                            <option value="{{ $item->nama_metode }}">{{ $item->nama_metode }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>SURVEYOR</label>
+                                    <select class="form-control" name="surveyor" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($surveyor as $item)
+                                            <option value="{{ $item->code_user }}">{{ $item->nama_user }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>CGC</label>
+                                    <select class="form-control cgc" name="cgc" id=""
+                                        style="margin-top:-5px; width: 100%;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($cgc as $item)
+                                            <option value="{{ $item->noacc }}">{{ $item->fnama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+@push('myscript')
+    <script>
+        $('.cgc').select2()
+        $('.res').select2()
+    </script>
+@endpush
