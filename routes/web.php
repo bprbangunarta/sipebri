@@ -550,27 +550,24 @@ Route::middleware('auth')->group(function () {
 
     //====Route Cetak Laporan====//
     Route::controller(CetakLaporanController::class)->group(function () {
+        Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
+        Route::get('/laporan/sebelum/survey', 'laporan_sebelum_survey')->name('laporan.sebelum.survey');
+        Route::get('/laporan/sesudah/survey', 'laporan_sesudah_survey')->name('laporan.sesudah.survey');
+        Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
+        Route::get('/laporan/pengajuan/disetujui', 'pengajuan_disetujui')->name('pengajuan.disetujui');
+        Route::get('/laporan/siap-realisasi', 'siap_realisasi')->name('laporan.siap-realisasi');
+        Route::get('/laporan/pencairan', 'laporan_pencairan')->name('laporan.pencairan');
+        Route::get('/laporan/tracking/pengajuan', 'laporan_tracking_pengajuan')->name('laporan.tracking.pengajuan');
+
+
+        // Hapus rout yang tidak digunakan
         Route::get('/laporan/fasilitas', 'laporan_fasilitas')->name('laporan.fasilitas');
         Route::get('/filter/laporan/fasilitas', 'post_laporan_fasilitas')->name('filter.laporan.fasilitas');
-
-        Route::get('/laporan/realisasi', 'laporan_realisasi')->name('laporan.realisasi');
-        Route::post('z', 'post_laporan_realisasi')->name('laporan.realisasi-kredit');
-
-        Route::get('/laporan/siap-realisasi', 'siap_realisasi')->name('laporan.siap-realisasi');
+        Route::get('/filter/laporan/pencairan', 'post_laporan_pencairan')->name('filter.laporan.pencairan');
         Route::get('/laporan/siap-realisasi/kredit', 'post_siap_realisasi')->name('filter.laporan.siap-realisasi');
-
-        Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
-        // Route::get('/laporan/pendaftaran/kredit', 'post_laporan_pendaftaran')->name('filter.laporan.pendaftaran');
-
-        Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
-
-        Route::get('/laporan/pengajuan/disetujui', 'pengajuan_disetujui')->name('pengajuan.disetujui');
-
         Route::get('/laporan/survei', 'laporan_survey_analisa')->name('laporan.survey');
         Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');
-
         Route::get('/laporan/penjadwalan', 'laporan_penjadwalan')->name('laporan.penjadwalan');
-
         Route::get('/laporan/notifikasi', 'laporan_notifikasi')->name('laporan.notifikasi');
     });
 

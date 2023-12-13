@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Laporan Realisasi Kredit')
+@section('title', 'Laporan Pencairan Kredit')
 
 @section('content')
     <div class="content-wrapper">
@@ -8,10 +8,11 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
-                            <h3 class="box-title">LAPORAN REALISASI KREDIT</h3>
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 class="box-title">LAPORAN PENCAIRAN KREDIT</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('laporan.fasilitas') }}" method="GET">
+                                <form action="{{ route('laporan.pencairan') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
                                             <i class="fa fa-filter"></i> Short & Filter
@@ -36,14 +37,19 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="8%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
-                                        <th class="text-center" width="7%">NO. LOAN</th>
-                                        <th class="text-center" width="7%">NO. SPK</th>
-                                        <th class="text-center" width="20%">NAMA DEBITUR</th>
-                                        <th class="text-center" width="41%">ALAMAT</th>
-                                        <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">NAMA DEBITUR</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">WIL</th>
+                                        <th class="text-center">PDK</th>
+                                        <th class="text-center">PLAFON</th>
+                                        <th class="text-center">USER</th>
+                                        <th class="text-center">NO. SPK</th>
+                                        <th class="text-center">JK</th>
+                                        <th class="text-center">RATE</th>
+                                        <th class="text-center">METODE RPS</th>
+                                        <th class="text-center">JTH. TEMPO</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -52,33 +58,38 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ \Carbon\Carbon::parse($item->akad_kredit)->format('Y-m-d') }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if (is_null($item->no_loan))
-                                                    {{ $item->kode_pengajuan }}
-                                                @else
-                                                    {{ $item->no_loan }}
-                                                @endif
+                                            <td class="text-center">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_spk }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                {{ $item->kantor_kode }}</td>
-                                            <td class="text-right" style="vertical-align: middle;">
-                                                {{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}
+                                            </td>
+                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                            <td>{{ $item->nama_nasabah }}</td>
+                                            <td>{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center">{{ $item->kantor_kode }}</td>
+                                            <td class="text-center">{{ $item->produk_kode }}</td>
+                                            <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td>{{ $item->nama_user }}</td>
+                                            <td class="text-center">{{ $item->no_spk }}</td>
+                                            <td class="text-center">{{ $item->jangka_waktu }}</td>
+                                            <td class="text-center">{{ $item->suku_bunga }}%</td>
+                                            <td class="text-center">{{ $item->metode_rps }}</td>
+
+                                            @php
+                                                $tanggal = \Carbon\Carbon::parse($item->tanggal);
+                                                $jk = $item->jangka_waktu;
+                                                $tempo = $tanggal->addMonths($jk);
+                                                $jth_tempo = $tempo->format('d-m-Y');
+                                            @endphp
+                                            <td class="text-center">{{ $jth_tempo }}</td>
                                         </tr>
                                         @php
                                             $no++;
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="15">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

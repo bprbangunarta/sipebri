@@ -9,7 +9,8 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
-                            <h3 class="box-title">KREDIT DISETUJUI</h3>
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 class="box-title">LAPORAN PENGAJUAN DISETUJUI</h3>
 
                             <div class="box-tools">
                                 <form action="{{ route('pengajuan.disetujui') }}" method="GET">
@@ -31,38 +32,59 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="box-body">
+
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="7%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
+                                        <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">KODE</th>
                                         <th class="text-center">NAMA LENGKAP</th>
-                                        <th class="text-center" width="40%">ALAMAT</th>
-                                        <th class="text-center" width="5%">PRODUK</th>
-                                        <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="5%">PLAFON</th>
-                                        <th class="text-center" width="7%">STATUS</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">WIL</th>
+                                        <th class="text-center">PDK</th>
+                                        <th class="text-center">PLAFON</th>
+                                        <th class="text-center">JK</th>
+                                        <th class="text-center">RATE</th>
+                                        <th class="text-center">METODE RPS</th>
+                                        <th class="text-center">NO. TELEPON</th>
+                                        <th class="text-center">PENDAMPING</th>
+                                        <th class="text-center">USER</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $no = 1;
+                                    @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center">
-                                                {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
-                                            <td class="text-center">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" >
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" >
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
+                                            <td class="text-center" >
+                                                {{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center">{{ $item->produk_kode }}</td>
-                                            <td class="text-center">{{ $item->kode_kantor }}</td>
-                                            <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center">{{ $item->status }}</td>
+                                            <td class="text-center" >{{ $item->kantor_kode }}</td>
+                                            <td class="text-center" >{{ $item->produk_kode }}</td>
+                                            <td class="text-right" >
+                                                {{ number_format($item->plafon, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center">{{$item->jangka_waktu}}</td>
+                                            <td class="text-center">{{$item->suku_bunga}}%</td>
+                                            <td class="text-center">{{$item->metode_rps}}</td>
+                                            <td class="text-center">{{$item->no_telp}}</td>
+                                            <td>{{$item->nama_pendamping}}</td>
+                                            <td>{{$item->nama_user}}</td>
                                         </tr>
+                                        @php
+                                            $no++;
+                                        @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="7">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="15">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

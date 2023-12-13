@@ -8,6 +8,7 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
+                            <i class="fa fa-file-text-o"></i>
                             <h3 class="box-title">LAPORAN SIAP REALISASI</h3>
 
                             <div class="box-tools">
@@ -34,14 +35,17 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center" width="7%">TANGGAL</th>
-                                        <th class="text-center" width="7%">KODE</th>
-                                        <th class="text-center" width="7%">NOTIFIKASI</th>
-                                        <th class="text-center">NAMA DEBITUR</th>
-                                        <th class="text-center" width="41%">ALAMAT</th>
-                                        <th class="text-center" width="5%">PRODUK</th>
-                                        <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">NAMA LENGKAP</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">WIL</th>
+                                        <th class="text-center">PDK</th>
+                                        <th class="text-center">PLAFON</th>
+                                        <th class="text-center">USER</th>
+                                        <th class="text-center">NO. NOTIFIKASI</th>
+                                        <th class="text-center">KETERANGAN HASIL TELEPON</th>
+                                        <th class="text-center">RENCANA TANGGAL REALISAI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -50,24 +54,42 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                               {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
+                                            <td class="text-center" >
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" >
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
+                                            <td class="text-center" >
+                                                {{ $item->kode_pengajuan }}</td>
+                                            <td>{{ $item->nama_nasabah }}</td>
+                                            <td>{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center" >{{ $item->kantor_kode }}</td>
+                                            <td class="text-center" >{{ $item->produk_kode }}</td>
+                                            <td class="text-right" >
+                                                {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_notifikasi }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
-                                            <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->wilayah }}</td>
-                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td>{{$item->nama_user}}</td>
+                                            <td class="text-center">{{$item->no_notifikasi}}</td>
+                                            <td>
+                                                @if(is_null($item->keterangan))
+                                                    <center>-</center>
+                                                @else
+                                                    {{$item->keterangan}}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(is_null($item->rencana))
+                                                    <center>-</center>
+                                                @else
+                                                    {{$item->rencana}}
+                                                @endif
+                                            </td>
                                         </tr>
                                         @php
                                             $no++;
                                         @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="8">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="15">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

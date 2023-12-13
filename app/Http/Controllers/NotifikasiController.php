@@ -76,7 +76,7 @@ class NotifikasiController extends Controller
     {
         try {
             $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
-            if ($user->role_name != 'Kabag Analis') {
+            if ($user->role_name != 'Kabag Analis' && $user->role_name != 'Kasi Analis') {
                 return redirect()->back()->with('error', 'User Anda Tidak Diizinkan');
             }
 

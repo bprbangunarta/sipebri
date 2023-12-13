@@ -241,7 +241,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas', 'laporan/penolakan', 'laporan/pengajuan/disetujui') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas', 'laporan/pengajuan/disetujui', 'laporan/pencairan', 'laporan/sebelum/survey', 'laporan/sesudah/survey', 'laporan/tracking/pengajuan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -258,8 +258,22 @@
                         </a>
                     </li>
 
+                    <li class="{{ request()->is('laporan/sebelum/survey') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.sebelum.survey') }}">
+                            <i class="fa fa-hourglass-start"></i>
+                            Sebelum Survey
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('laporan/sesudah/survey') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.sesudah.survey') }}">
+                            <i class="fa fa-hourglass-end"></i>
+                            Sesudah Survey
+                        </a>
+                    </li>
+
                     <li
-                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/penolakan') ? 'active' : '' }}">
+                        class="{{ request()->is('laporan/penolakan') ? 'active' : '' }}">
                         <a href="{{ route('laporan.penolakan') }}">
                             <i class="fa fa-ban"></i>
                             Pengajuan Ditolak
@@ -267,7 +281,7 @@
                     </li>
 
                     <li
-                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'laporan/pengajuan/disetujui') ? 'active' : '' }}">
+                        class="{{ request()->is('laporan/pengajuan/disetujui') ? 'active' : '' }}">
                         <a href="{{ route('pengajuan.disetujui') }}">
                             <i class="fa fa-check"></i>
                             Pengajuan Disetujui
@@ -282,39 +296,24 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('laporan/fasilitas', 'filter/laporan/fasilitas') ? 'active' : '' }}">
-                        <a href="/laporan/fasilitas">
+                    <li class="{{ request()->is('laporan/pencairan', 'filter/laporan/pencairan') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.pencairan') }}">
                             <i class="fa fa-flag"></i>
-                            Realisasi Kredit
+                            Pencairan Kredit
                         </a>
                     </li>
 
-                    {{-- <li class="{{ request()->is('laporan/notifikasi') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.notifikasi') }}">
-                            <i class="fa fa-bell"></i>
-                            Rekap Notifikasi
+                    <li class="{{ request()->is('laporan/tracking/pengajuan') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.tracking.pengajuan') }}">
+                            <i class="fa fa-truck"></i>
+                            Tracking Pengajuan
                         </a>
-                    </li> --}}
+                    </li>
 
-                    {{-- <li class="{{ request()->is('laporan/realisasi', 'laporan/realisasi/kredit') ? 'active' : '' }}">
-                        <a href="/laporan/realisasi">
-                            <i class="fa fa-flag"></i>
-                            Realisasi Kredit
-                        </a>
-                    </li> --}}
-
-
-                    <li class="{{ request()->is('laporan/survei') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('laporan/tracking/pengajuan') ? 'active' : '' }}">
                         <a href="/laporan/survei">
                             <i class="fa fa-hourglass-start"></i>
                             Survey dan Analisa
-                        </a>
-                    </li>
-
-                    {{-- <li class="{{ request()->is('laporan/penjadwalan') ? 'active' : '' }}">
-                        <a href="/laporan/penjadwalan">
-                            <i class="fa fa-calendar"></i>
-                            Penjadwalan Survey
                         </a>
                     </li> --}}
                 </ul>
@@ -354,30 +353,24 @@
             @endcan
 
             <li class="header">TOOLS</li>
-            <li
-                class="treeview {{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman', 'perhitungan/simulasi') ? 'active' : '' }}">
-                <a href="#">
-                    <i class="fa fa-folder-open"></i>
-                    <span>Alat Bantu</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
+            <li class="">
+                <a href="#" title="Pengecekan CIF">
+                    <i class="fa fa-user"></i>
+                    Pengecekan CIF
                 </a>
-                <ul class="treeview-menu">
-                    <li
-                        class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
-                        <a href="{{ route('flat') }}" title="Perhitungan Kredit">
-                            <i class="fa fa-calculator"></i>
-                            Simulasi Kredit
-                        </a>
-                    </li>
-                    <li class="{{ request()->is('perhitungan/simulasi') ? 'active' : '' }}">
-                        <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
-                            <i class="fa fa-calculator"></i>
-                            Simulasi Asuransi
-                        </a>
-                    </li>
-                </ul>
+            </li>
+            <li
+                class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
+                <a href="{{ route('flat') }}" title="Perhitungan Kredit">
+                    <i class="fa fa-calculator"></i>
+                    Simulasi Kredit
+                </a>
+            </li>
+            <li class="{{ request()->is('perhitungan/simulasi') ? 'active' : '' }}">
+                <a href="{{ route('simulasi_ajk') }}" title="Perhitungan Asuransi">
+                    <i class="fa fa-calculator"></i>
+                    Simulasi Asuransi
+                </a>
             </li>
         </ul>
     </section>
