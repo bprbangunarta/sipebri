@@ -133,7 +133,7 @@
         <p style="text-align: justify;">
             Menindaklanjuti permohonan kredit yang Bapak/Ibu ajukan kepada kami (PT. BPR Bangunarta), maka dengan ini
             kami sampaikan bahwa berdasarkan Keputusan Komite Kredit tanggal
-            {{ Carbon::parse($data->keputusan_komite)->format('d F Y') }}, permohonan kredit Bapak/Ibu untuk saat ini
+            {{ \Carbon\Carbon::parse($data->keputusan_komite)->locale('id')->isoFormat('D MMMM Y') }}, permohonan kredit Bapak/Ibu untuk saat ini
             belum bisa kami kabulkan karena {{ $data->alasan }}, semoga Bapak/Ibu berlapang dada menerima keputusan kami
             ini.
         </p>
@@ -183,6 +183,59 @@
         </ul>
     </div>
 
+    <div style="page-break-after: always"></div>
+
+    <div class="content" style="margin-top: -57px;">
+
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr style="border: 1px solid 034871;">
+
+        <h4 style="text-align: center;font-size: 12pt;">
+            <u>SURAT PENOLAKAN KREDIT</u>
+            <br>
+            <font style="font-size: 12.8px;">{{ $data->no_penolakan }}</font>
+        </h4>
+
+        <p style="text-align: justify;line-height: 1.5;">
+            Berdasarkan analisa terhadap komponen 5C (Character, Capacity, Capital, Collateral, Condition) dan Credit Risk Rating (CRR), maka komite kredit memutuskan untuk menolak permohonan kredit atas nama <b>{{ $data->nama_nasabah }}</b> yang beralamat di {{ $data->alamat_ktp }} dengan pertimbangan sebagai berikut :
+        </p>
+
+        <p style="text-align: justify;text-transform:uppercase">
+            1. {{ $data->alasan_internal }}
+        </p>
+
+        <p style="margin-top:100px;"></p>
+
+        <table>
+            <tr>
+                <td class="text-center" width="35%">
+                    Pamanukan, {{ \Carbon\Carbon::parse($data->tgl_tolak)->locale('id')->isoFormat('D MMMM Y') }}
+                    <br>
+                    <b>PT. BPR BANGUNARTA</b>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="text-center">
+                    <center>
+                        <p style="margin-top:30px;"></p>
+                        <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
+                            style="margin-top:-30px;">
+                    </center>
+                    <u>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Komite Kredit
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </u>
+                    <br>
+                    <font style="text-transform: uppercase;">{{ $data->kabag_analis }}</font>
+                </td>
+                <td></td>
+                <td width="40%"></td>
+            </tr>
+        </table>
+    </div>
     <script>
         window.print();
     </script>
