@@ -133,6 +133,27 @@
                                     <input type="date" class="form-control" name="tgl1" id="tgl1"
                                         style="margin-top:-5px;">
                                 </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control" name="kode_produk" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="nama_kantor" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="col-md-6">
@@ -140,6 +161,27 @@
                                     <label>SAMPAI DENGAN</label>
                                     <input type="date" class="form-control" name="tgl2" id="tgl2"
                                         style="margin-top:-5px;">
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>METODE RPS</label>
+                                    <select class="form-control" name="metode" id="" style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($metode as $item)
+                                            <option value="{{ $item->nama_metode }}">{{ $item->nama_metode }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>SURVEYOR</label>
+                                    <select class="form-control" name="surveyor" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($surveyor as $item)
+                                            <option value="{{ $item->code_user }}">{{ $item->nama_user }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
