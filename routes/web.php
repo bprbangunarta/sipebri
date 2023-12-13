@@ -560,7 +560,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/siap-realisasi/kredit', 'post_siap_realisasi')->name('filter.laporan.siap-realisasi');
 
         Route::get('/laporan/pendaftaran', 'laporan_pendaftaran')->name('laporan.pendaftaran');
-        Route::post('/laporan/pendaftaran/kredit', 'post_laporan_pendaftaran')->name('filter.laporan.pendaftaran');
+        // Route::get('/laporan/pendaftaran/kredit', 'post_laporan_pendaftaran')->name('filter.laporan.pendaftaran');
+
+        Route::get('/laporan/penolakan', 'laporan_penolakan')->name('laporan.penolakan');
 
         Route::get('/laporan/survei', 'laporan_survey_analisa')->name('laporan.survey');
         Route::post('/laporan/survei/analisa', 'post_laporan_survey')->name('laporan.survey-analisa');

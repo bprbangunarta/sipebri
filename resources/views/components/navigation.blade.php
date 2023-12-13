@@ -13,7 +13,9 @@
 
         <form action="{{ route('pengajuan.data') }}" method="GET" class="sidebar-form">
             <div class="input-group">
-                <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wil/ Produk">
+                <input type="text" class="form-control text-uppercase pull-right"
+                    style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
+                    value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wil/ Produk">
 
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-flat">
@@ -125,7 +127,8 @@
                 </ul>
             </li>
 
-            <li class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
+            <li
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -151,7 +154,8 @@
                     </li>
 
                     <li class="{{ request()->is('otor/perjanjian/kredit') ? 'active' : '' }}">
-                        <a @can('otor pk') href="{{ route('otor.perjanjian_kredit') }}" @endcan title="Otor Perjanjian Kredit">
+                        <a @can('otor pk') href="{{ route('otor.perjanjian_kredit') }}" @endcan
+                            title="Otor Perjanjian Kredit">
                             <i class="fa fa-check"></i>
                             Otor Perjanjian Kredit
                         </a>
@@ -194,14 +198,16 @@
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/persetujuan/kredit') ? 'active' : '' }}">
-                        <a @can('cetak persetujuan kredit') href="{{ route('persetujuan.kredit') }}" @endcan title="Cetak Persetujuan Kredit">
+                        <a @can('cetak persetujuan kredit') href="{{ route('persetujuan.kredit') }}" @endcan
+                            title="Cetak Persetujuan Kredit">
                             <i class="fa fa-file-text-o"></i>
                             Persetujuan Kredit
                         </a>
                     </li>
 
                     <li class="{{ request()->is('cetak/notifikasi-kredit') ? 'active' : '' }}">
-                        <a @can('cetak notifikasi kredit') href="{{ route('cetak.notifikasi.index') }}" @endcan title="Cetak Notifikasi Kredit">
+                        <a @can('cetak notifikasi kredit') href="{{ route('cetak.notifikasi.index') }}" @endcan
+                            title="Cetak Notifikasi Kredit">
                             <i class="fa fa-bell-o"></i>
                             Notifikasi Kredit
                         </a>
@@ -244,28 +250,32 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ request()->is('laporan/pendaftaran', 'laporan/pendaftaran/kredit') ? 'active' : '' }}">
+                    <li
+                        class="{{ request()->is('laporan/pendaftaran', 'laporan/pendaftaran/kredit') ? 'active' : '' }}">
                         <a href="/laporan/pendaftaran">
                             <i class="fa fa-users"></i>
                             Pendaftaran Kredit
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
-                        <a href="{{ route('laporan.siap-realisasi') }}">
+                    <li
+                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.penolakan') }}">
                             <i class="fa fa-ban"></i>
                             Pengajuan Ditolak
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                    <li
+                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
                         <a href="{{ route('laporan.siap-realisasi') }}">
                             <i class="fa fa-check"></i>
                             Pengajuan Disetujui
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
+                    <li
+                        class="{{ request()->is('laporan/siap-realisasi', 'laporan/siap-realisasi/kredit') ? 'active' : '' }}">
                         <a href="{{ route('laporan.siap-realisasi') }}">
                             <i class="fa fa-bullhorn"></i>
                             Data Siap Realisasi
