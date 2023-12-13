@@ -87,7 +87,7 @@
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
                             <span class="progress-description">
-                                <a href="{{ route('laporan.fasilitas') }}" style="color:white;">
+                                <a href="{{ route('laporan.pencairan') }}" style="color:white;">
                                     SELENGKAPNYA
                                 </a>
                             </span>
