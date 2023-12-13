@@ -183,26 +183,33 @@
                     {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
                     @forelse ($agunan as $item)
-                        <ol style="margin-left: -40px;text-align: justify; list-style-type:none;text-transform:uppercase;">
+                        <ol
+                            style="margin-left: -40px;text-align: justify; list-style-type:none;text-transform:uppercase;">
                             @if ($item->jenis_jaminan == 'Tanah')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
+                                    SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
+                                    {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA
+                                    {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Kendaraan')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}, {{ $item->lokasi }}
+                                    BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }},
+                                    {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }},
+                                    {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }},
+                                    {{ $item->atas_nama }}, {{ $item->lokasi }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Lainnya')
                                 <li>
                                     {{ $loop->iteration }}.
-                                    @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
-                                    KARTU DAN SALDO JAMSOSTEK 
+                                    @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
+                                        KARTU DAN SALDO JAMSOSTEK
                                     @else
-                                        {{ $item->nama_jenis_dokumen }} 
+                                        {{ $item->nama_jenis_dokumen }}
                                     @endif
-                                    ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }} ALAMAT {{  $item->lokasi }}
+                                    ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }} ALAMAT
+                                    {{ $item->lokasi }}
                                 </li>
                             @endif
                         </ol>
@@ -260,30 +267,31 @@
                 <td style="text-align: justify;">
                     @php
                         $persentase = ($data->administrasi / $data->plafon) * 100;
+
                         $rate_admin = number_format($persentase, 2, '.', '');
                     @endphp
+
                     {{ 'Rp. ' . '' . number_format($data->administrasi, 0, ',', '.') ?? 0 }} ({{ $rate_admin }}%)
                 </td>
             </tr>
-            
-            @if (is_null($data->by_fiducia))
-            
-            @else
-            <tr>
-                <td class="text-center" width="2%"></td>
-                <td width="27%">c. Fiducia</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">
-                    @php
-                        $persentase = ($data->by_fiducia / $data->plafon) * 100;
-                        $rate_fiducia = number_format($persentase, 2, '.', '');
-                    @endphp
 
-                    {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }} ({{ $rate_fiducia }}%)
-                </td>
-            </tr>
+            @if (is_null($data->by_fiducia))
+            @else
+                <tr>
+                    <td class="text-center" width="2%"></td>
+                    <td width="27%">c. Fiducia</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">
+                        @php
+                            $persentase = ($data->by_fiducia / $data->plafon) * 100;
+                            $rate_fiducia = number_format($persentase, 2, '.', '');
+                        @endphp
+
+                        {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }} ({{ $rate_fiducia }}%)
+                    </td>
+                </tr>
             @endif
-            
+
             @if ($data->persen_apht != 0.0)
                 <tr>
                     <td class="text-center" width="2%"></td>

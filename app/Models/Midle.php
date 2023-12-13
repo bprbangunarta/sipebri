@@ -1271,9 +1271,11 @@ class Midle extends Model
             )
             ->where('a_memorandum.pengajuan_kode', $data)->first();
         //
-
+        if (is_null($memorandum)) {
+            return null;
+        }
         $usulan = DB::table('data_usulan')->where('pengajuan_kode', $data)->get();
-        // dd($usulan);
+
         if (count($usulan) != 0) {
             $dasu = [];
             for ($i = 0; $i < count($usulan); $i++) {
@@ -1281,20 +1283,20 @@ class Midle extends Model
             }
             $memorandum->plafon_usulan = end($dasu);
         } else {
-            $memorandum->plafon_usulan = 0;
+            $memorandum = (object) ['plafon_usulan' => 0];
         }
 
 
 
-        $memorandum->capital_evaluasi_capital = Data::analisa5c_number($memorandum->capital_evaluasi_capital);
-        $memorandum->evaluasi_capacity = Data::analisa5c_number($memorandum->evaluasi_capacity);
-        $memorandum->nilai_karakter = Data::analisa5c_number($memorandum->nilai_karakter);
-        $memorandum->nilai_collateral = Data::analisa5c_number($memorandum->nilai_collateral);
-        $memorandum->nilai_condition = Data::analisa5c_number($memorandum->nilai_condition);
-        $memorandum->pengalaman_usaha = Data::a5c_capacity_pengalaman_usaha($memorandum->pengalaman_usaha);
-        $memorandum->pertumbuhan_usaha = Data::a5c_capacity_pertumbuhan_usaha($memorandum->pertumbuhan_usaha);
-        $memorandum->catatan_kredit = Data::a5c_capacity_catatan_kredit($memorandum->catatan_kredit);
-        $memorandum->lokasi_shm = Data::a5c_capacity_lokasi_shm($memorandum->lokasi_shm);
+        $memorandum->capital_evaluasi_capital = Data::analisa5c_number($memorandum->capital_evaluasi_capital) ?? null;
+        $memorandum->evaluasi_capacity = Data::analisa5c_number($memorandum->evaluasi_capacity) ?? null;
+        $memorandum->nilai_karakter = Data::analisa5c_number($memorandum->nilai_karakter) ?? null;
+        $memorandum->nilai_collateral = Data::analisa5c_number($memorandum->nilai_collateral) ?? null;
+        $memorandum->nilai_condition = Data::analisa5c_number($memorandum->nilai_condition) ?? null;
+        $memorandum->pengalaman_usaha = Data::a5c_capacity_pengalaman_usaha($memorandum->pengalaman_usaha) ?? null;
+        $memorandum->pertumbuhan_usaha = Data::a5c_capacity_pertumbuhan_usaha($memorandum->pertumbuhan_usaha) ?? null;
+        $memorandum->catatan_kredit = Data::a5c_capacity_catatan_kredit($memorandum->catatan_kredit) ?? null;
+        $memorandum->lokasi_shm = Data::a5c_capacity_lokasi_shm($memorandum->lokasi_shm) ?? null;
 
         //Hari
         $hari = Carbon::today();

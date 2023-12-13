@@ -202,6 +202,7 @@ class DataCetakController extends Controller
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
+                // dd($cek);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
@@ -544,7 +545,7 @@ class DataCetakController extends Controller
             $cek = DB::table('data_spk')
                 ->where('pengajuan_kode', $request->kode_pengajuan)
                 ->orWhere('nomor', $request->nomor)->first();
-
+            // dd($cek);
             if ($cek) {
                 return back()->with('error', "Anda Sudah Memiliki Nomor PK");
             }
@@ -788,6 +789,9 @@ class DataCetakController extends Controller
             $condition = Midle::cetak_data_analisa5C_condition($enc);
             $kualitatif = Midle::cetak_data_kualitatif($enc);
             $memorandum = Midle::cetak_data_memorandum($enc);
+            if (is_null($memorandum)) {
+                return redirect()->back()->with('error', 'Memorandum belum diisi');
+            }
             $memorandum->biaya_denda = $data[0]->b_denda ?? 0;
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
@@ -797,7 +801,7 @@ class DataCetakController extends Controller
 
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
-            // dd($biaya_perdagangan);
+
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
