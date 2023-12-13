@@ -887,7 +887,9 @@ class DataCetakController extends Controller
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
-                    'data_penolakan.*',
+                    'data_penolakan.no_penolakan',
+                    'data_penolakan.created_at as tgl_tolak',
+                    'data_penolakan.keterangan as alasan_internal',
                     'data_tracking.*',
                     'data_penolakan.input_user as nama_user_penolak',
                     'data_alasan_penolakan.alasan'
