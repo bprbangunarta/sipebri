@@ -14,9 +14,9 @@
                             <div class="box-tools">
                                 <form action="{{ route('laporan.sesudah.survey') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
+                                        {{-- <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
                                             <i class="fa fa-filter"></i> Short & Filter
-                                        </a>
+                                        </a> --}}
 
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 170px;" name="keyword" id="keyword"
@@ -90,9 +90,9 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
-                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                {{-- <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Data
-                                </button>
+                                </button> --}}
 
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
