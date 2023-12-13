@@ -17,7 +17,9 @@
                                             <i class="fa fa-filter"></i> Short & Filter
                                         </a>
 
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 170px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -28,7 +30,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
@@ -51,18 +53,24 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 {{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode_pengajuan }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ $item->kode_pengajuan }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->input_user }}</td>
-                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->produk_kode }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kantor_kode }}
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->input_user }}
+                                            </td>
+                                            <td class="text-right" style="vertical-align: middle;">
+                                                {{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             {{-- <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->status == "Disetujui")
+                                                @if ($item->status == 'Disetujui')
                                                     <font class="text-green">{{ $item->status }}</font>
                                                 @elseif ($item->status == "Ditolak")
                                                     <font class="text-red">{{ $item->status }}</font>
@@ -94,7 +102,8 @@
                                 </button>
 
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
@@ -114,21 +123,23 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">SHORT & FILTER</h4>
                 </div>
-                <form action="{{ route('filter.laporan.pendaftaran') }}" method="GET">
+                <form action="{{ route('laporan.pendaftaran') }}" method="GET">
                     <div class="modal-body">
                         <div class="row">
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>MULAI DARI</label>
-                                    <input type="date" class="form-control" name="tgl1" id="tgl1" style="margin-top:-5px;"> 
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1"
+                                        style="margin-top:-5px;">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>SAMPAI DENGAN</label>
-                                    <input type="date" class="form-control" name="tgl2" id="tgl2" style="margin-top:-5px;">
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2"
+                                        style="margin-top:-5px;">
                                 </div>
                             </div>
                         </div>
