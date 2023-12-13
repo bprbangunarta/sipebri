@@ -139,7 +139,7 @@
                     <li class="{{ request()->is('themes/penolakan/pengajuan') ? 'active' : '' }}">
                         <a @can('input penolakan') href="{{ route('penolakan.pengajuan') }}" @endcan
                             title="Input Penolakan">
-                            <i class="fa fa-file-text"></i>
+                            <i class="fa fa-ban"></i>
                             Surat Penolakan
                         </a>
                     </li>
@@ -200,7 +200,7 @@
                     <li class="{{ request()->is('themes/cetak/penolakan/kredit') ? 'active' : '' }}">
                         <a @can('cetak penolakan kredit') href="{{ route('data_penolakan.kredit') }}" @endcan
                             title="Cetak Penolakan Kredit">
-                            <i class="fa fa-close"></i>
+                            <i class="fa fa-ban"></i>
                             Penolakan Kredit
                         </a>
                     </li>
