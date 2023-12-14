@@ -221,7 +221,7 @@
                 <td class="text-center" width="2%"> 6. </td>
                 <td width="27%">Jangka Waktu Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">{{ $data->jangka_waktu }} bulan terhitung sejak akad kredit.</td>
+                <td style="text-align: justify;">{{ $data->jwt }} bulan terhitung sejak akad kredit.</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 7. </td>

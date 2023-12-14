@@ -153,13 +153,15 @@ class DataCetakController extends Controller
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
                     'data_pengajuan.*',
+                    'data_pengajuan.jangka_waktu as jwt',
                     'data_nasabah.*',
                     'data_notifikasi.*',
                     'data_survei.*',
                     'a_administrasi.*',
                     'a_memorandum.*',
-                    'data_produk.*',
-                    'v_users.*',
+                    'a_memorandum.jangka_waktu as jw',
+                    'data_produk.kode_produk',
+                    'data_produk.nama_produk',
                     'data_notifikasi.created_at as tgl_notifikasi',
                     'data_notifikasi.created_at as tgl_asli',
                     'v_users.nama_user as nama_user_notif',
@@ -168,7 +170,7 @@ class DataCetakController extends Controller
                     'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
                 )->first();
             //
-
+            // dd($cek);
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
@@ -202,7 +204,7 @@ class DataCetakController extends Controller
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
-                // dd($cek);
+
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
