@@ -32,13 +32,14 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center" width="8%">TANGGAL</th>
-                                        <th class="text-center" width="8%">KODE</th>
-                                        <th class="text-center" width="16%">NAMA NASABAH</th>
-                                        <th class="text-center" width="42%">ALAMAT</th>
-                                        <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="8%">PLAFON</th>
-                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">NAMA NASABAH</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">WIL</th>
+                                        <th class="text-center">PLAFON</th>
+                                        <th class="text-center">NO. NOTIFIKASI</th>
+                                        <th class="text-center">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,6 +60,7 @@
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->no_notifikasi }}</td>
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a data-toggle="modal" data-target="#generate-code"
@@ -67,81 +69,11 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue" title="Catatan">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-
-                                                {{-- <a data-toggle="modal" data-target="#catatan"
-                                                data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue" title="Catatan">
+                                                <a data-toggle="modal" data-target="#catatan"
+                                                data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow" title="Catatan">
                                                     <i class="fa fa-comment"></i>
-                                                </a> --}}
+                                                </a>
                                             </td>
-
-                                            {{-- MODAL INFO --}}
-                                            <div class="modal fade" id="info-{{ $item->kode_pengajuan }}">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-blue">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span></button>
-                                                            <h4 class="modal-title">INFORMASI PENGAJUAN</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label>NAMA NASABAH</label>
-                                                                        <input type="text" class="form-control"
-                                                                        value="{{ $item->nama_nasabah }} - {{ $item->kategori }}">
-                                                                    </div>
-                                                                    
-                                                                    <div class="form-group"  style="margin-top:-10px;">
-                                                                        <label>PRODUK KREDIT</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->produk_kode }} - {{ $item->nama_produk }}">
-                                                                    </div>
-                                        
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>PLAFON KREDIT</label>
-                                                                        <input type="text" class="form-control" value="{{ number_format($item->plafon, 0, ',', '.') }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>JANGKA WAKTU</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->jangka_waktu }} BULAN - {{ $item->metode_rps }}">
-                                                                    </div>
-                                                                </div>
-                                        
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label>SUKU BUNGA</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->suku_bunga }}%">
-                                                                    </div>
-                                        
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>BIAYA ADMIN (%)</label>
-                                                                        <input type="text" class="form-control" value="{{ number_format($item->b_admin, 2) }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>BIAYA PROVISI (%)</label>
-                                                                        <input type="text" class="form-control text-uppercase" value="{{ number_format($item->b_provisi, 2) }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>BIAYA PENALTI (%)</label>
-                                                                        <input type="text" class="form-control text-uppercase" value="{{ $item->b_penalti }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                        
-                                                        <div class="modal-footer" style="margin-top: -10px;">
-                                                            <button type="submit" class="btn bg-blue" data-dismiss="modal" style="width: 100%;">TUTUP</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- END MODAL INFO --}}
                                         </tr>
                                     @empty
                                         <tr>
@@ -161,8 +93,10 @@
 
                             {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
-
                     </div>
+
+                    <p class="text-red" style="margin-top: -10px;">Mohon isi keterangan dan rencana realisasi, untuk rekap berkas siap realisai.</p>
+
                 </div>
             </div>
         </section>
@@ -182,25 +116,46 @@
 
                         <div class="box-body">
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div style="margin-top: -15px;">
+                                        <span class="fw-bold">KODE PENGAJUAN</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
+                                            id="kd_pengajuan" readonly>
+                                    </div>
 
-                                <div style="margin-top: -15px;">
-                                    <span class="fw-bold">KODE PENGAJUAN</span>
-                                    <input type="text" id="kode" hidden>
-                                    <input type="text" name="nomor" id="nomor" hidden>
-                                    <input class="form-control text-uppercase" type="text" name="kode_pengajuan"
-                                        id="kd_pengajuan" readonly>
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">NAMA NASABAH</span>
+                                        <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                            type="text" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">PRODUK KREDIT</span>
+                                        <input type="text" class="form-control" name="produk" id="produk"
+                                            readonly>
+                                    </div>
                                 </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">NAMA NASABAH</span>
-                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
-                                        type="text" readonly>
-                                </div>
+                                <div class="col-md-6">
+                                    <div style="margin-top: -15px;">
+                                        <span class="fw-bold">PLAFON KREDIT</span>
+                                        <input type="text" class="form-control" name="plafon" id="plafon"
+                                            readonly>
+                                    </div>
 
-                                <div style="margin-top: 5px;">
-                                    <span class="fw-bold">KODE NOTIFIKASI</span>
-                                    <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
-                                        type="text" readonly>
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">JANGKA WAKTU</span>
+                                        <input type="text" class="form-control" name="jw" id="jw"
+                                            readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">KODE NOTIFIKASI</span>
+                                        <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
+                                            type="text" readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>

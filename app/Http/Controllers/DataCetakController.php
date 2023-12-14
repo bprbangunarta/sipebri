@@ -86,10 +86,12 @@ class DataCetakController extends Controller
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
-            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+
+            ->where('data_pengajuan.on_current', 0)
             ->where('data_pengajuan.status', '=', 'Disetujui')
-            ->whereNull('data_notifikasi.no_notifikasi')
+            // ->whereNull('data_notifikasi.no_notifikasi')
 
             ->where(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', '=', $user)

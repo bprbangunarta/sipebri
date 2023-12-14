@@ -42,7 +42,11 @@ class PengajuanController extends Controller
             ->leftJoin('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
             ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
-            ->where('data_pengajuan.status', '!=', 'Batal')
+
+            ->where('data_pengajuan.on_current', 0)
+            ->whereNotIn('data_pengajuan.status', ['Batal', 'Ditolak', 'Dibatalkan'])
+            // ->whereIn('data_pengajuan.status', ['Lengkapi Data'. 'Sudah Otorisasi', 'Minta Otorisasi'])
+
             ->select(
                 'data_pengajuan.kode_pengajuan as kode',
                 'data_pengajuan.produk_kode',
@@ -67,12 +71,14 @@ class PengajuanController extends Controller
                 'data_produk.nama_produk',
                 'users.name as surveyor',
             )
-            ->where(function ($query) {
-                $query->where('data_pengajuan.on_current', '0')
-                    ->orWhere('data_pengajuan.status', 'Lengkapi Data')
-                    ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
-                    ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
-            })
+
+            // ->where(function ($query) {
+            //     $query->where('data_pengajuan.on_current', '0')
+            //         ->orWhere('data_pengajuan.status', 'Lengkapi Data')
+            //         ->orWhere('data_pengajuan.status', 'Sudah Otorisasi')
+            //         ->orWhere('data_pengajuan.status', 'Minta Otorisasi');
+            // })
+
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')

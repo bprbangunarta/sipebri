@@ -33,12 +33,12 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center" width="8%">TANGGAL</th>
-                                        <th class="text-center" width="8%">KODE</th>
-                                        <th class="text-center" width="16%">NAMA NASABAH</th>
-                                        <th class="text-center" width="42%">ALAMAT</th>
-                                        <th class="text-center" width="5%">WIL</th>
-                                        <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">NAMA NASABAH</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">WIL</th>
+                                        <th class="text-center">PLAFON</th>
                                         <th class="text-center" width="10%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -48,33 +48,33 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr>
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            <td class="text-center">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode }}</td>
-                                            <td style="vertical-align: middle;">{{ strtoupper($item->nama) }}</td>
+                                            <td class="text-center">{{ $item->kode }}</td>
+                                            <td>{{ strtoupper($item->nama) }}</td>
                                             @if (is_null($item->alamat))
-                                                <td class="text-center" style="vertical-align: middle;">-</td>
+                                                <td class="text-center" >-</td>
                                             @else
-                                                <td class="text-uppercase" style="vertical-align: middle;">
+                                                <td class="text-uppercase" >
                                                     {{ $item->alamat }}
                                                 </td>
                                             @endif
 
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            <td class="text-center">
                                                 {{ $item->kantor }}
                                             </td>
 
                                             @php
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
                                             @endphp
-                                            <td class="text-right" style="vertical-align: middle;">
+                                            <td class="text-right">
                                                 {{ $item->plafon }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            <td class="text-center">
                                                 @if ($item->status == 'Lengkapi Data')
                                                     <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
                                                         class="btn-circle btn-sm bg-yellow" title="Lengkapi Data">
@@ -96,6 +96,12 @@
                                                 <a data-toggle="modal" data-target="#info-{{ $item->kode }}"
                                                     class="btn-circle btn-sm bg-blue" title="Informasi">
                                                     <i class="fa fa-eye"></i>
+                                                </a>
+
+                                                &nbsp;
+                                                <a data-toggle="modal" data-target="#hapus"
+                                                    class="btn-circle btn-sm bg-red" title="Hapus">
+                                                    <i class="fa fa-trash"></i>
                                                 </a>
                                             </td>
 
