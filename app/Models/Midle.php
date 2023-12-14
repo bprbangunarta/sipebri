@@ -886,6 +886,7 @@ class Midle extends Model
                 $has = (int)$adm;
                 $hasil = (object) [
                     'apht' => 0,
+                    'pengikatan' => $memo->pengikatan,
                     'fiducia' => 0,
                     'adm' => $has,
                 ];
@@ -894,9 +895,10 @@ class Midle extends Model
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
                 // $has = (int)$adm - (int)$jml;
                 $hasil = (object) [
-                    'apht' => (int)$jml,
+                    'apht' => 0,
+                    'pengikatan' => $memo->pengikatan,
                     'fiducia' => 0,
-                    'adm' => $adm,
+                    'adm' => (int)$adm,
                 ];
             } else  if ($memo->pengikatan == '3') {
                 $jml = ($memo->plafon * 1.5) / 100;
@@ -904,7 +906,8 @@ class Midle extends Model
                 // $has = (int)$adm - (int)$jml;
                 $hasil = (object) [
                     'apht' => 0,
-                    'fiducia' => (int)$jml,
+                    'pengikatan' => $memo->pengikatan,
+                    'fiducia' => 0,
                     'adm' => (int)$adm,
                 ];
             } else  if ($memo->pengikatan == '4') {
@@ -912,15 +915,16 @@ class Midle extends Model
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
                 // $has = (int)$adm - ((int)$jml * 2);
                 $hasil = (object) [
-                    'apht' => (int)$jml,
-                    'fiducia' => (int)$jml,
-                    'adm' => $adm,
+                    'apht' => 0,
+                    'pengikatan' => $memo->pengikatan,
+                    'fiducia' => 0,
+                    'adm' => (int)$adm,
                 ];
             }
         } else {
             return null;
         }
-
+        // dd($hasil);
         return $hasil;
     }
 

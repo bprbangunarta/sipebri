@@ -142,7 +142,7 @@
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="proses_apht" placeholder="Rp." id="proses_apht"
                                                     value="{{ 'Rp. ' . ' ' . number_format($data->apht, 0, ',', '.') }}"
-                                                    @if ($data->apht == 0) @readonly(true) @endif>
+                                                    @if ($data->pengikatan != 2 && $data->pengikatan != 4) readonly="readonly" @endif>
                                             </div>
 
                                             <input type="hidden" class="form-control input-sm form-border text-uppercase"
@@ -154,7 +154,7 @@
                                                     class="form-control input-sm form-border text-uppercase"
                                                     name="by_fiducia" placeholder="Rp." id="by_fiducia"
                                                     value="{{ 'Rp. ' . ' ' . number_format($data->fiducia, 0, ',', '.') }}"
-                                                    @if ($data->fiducia == 0) @readonly(true) @endif>
+                                                    @if ($data->pengikatan != 3 && $data->pengikatan != 4) readonly="readonly" @endif>
                                             </div>
                                         </div>
 
@@ -164,11 +164,12 @@
                                 </form>
                             </div>
                             <p class="text-red" style="margin-top:10px;margin-left:10px;">
-                                *Untuk pengisian biaya asuransi jiwa,  gunakan kolom <b>ASR. JIWA MENURUN 2</b> <br>
-                                *Jika biaya <b>admin</b>, <b>fiducia</b>, <b>apht</b> tidak sesuai, lakukan perubahan manual dengan memasukan nominal.
+                                *Untuk pengisian biaya asuransi jiwa, gunakan kolom <b>ASR. JIWA MENURUN 2</b> <br>
+                                *Jika biaya <b>admin</b>, <b>fiducia</b>, <b>apht</b> tidak sesuai, lakukan perubahan manual
+                                dengan memasukan nominal.
                             </p>
                         </div>
-                        
+
                     </div>
                 </div>
         </section>

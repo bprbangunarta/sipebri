@@ -32,10 +32,12 @@ class AdministrasiController extends Controller
                 $cek[0]->administrasi = (int)$adm;
                 $cek[0]->apht = 0;
                 $cek[0]->fiducia = 0;
+                $cek[0]->pengikatan = 0;
             } else {
                 $cek[0]->administrasi = $apht_fiducia->adm;
                 $cek[0]->apht = $apht_fiducia->apht;
                 $cek[0]->fiducia = $apht_fiducia->fiducia;
+                $cek[0]->pengikatan = $apht_fiducia->pengikatan;
             }
 
             if (is_null($administrasi)) {
@@ -49,34 +51,34 @@ class AdministrasiController extends Controller
                 ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
                 ->where('a_administrasi.pengajuan_kode', $enc)->first();
 
-            //Perubahan Realtime Nominal administrasi
-            if ($cek[0]->administrasi != $administrasi->administrasi) {
-                $adm_real = ['administrasi' => $cek[0]->administrasi];
-                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($adm_real);
-            }
+            // //Perubahan Realtime Nominal administrasi
+            // if ($cek[0]->administrasi != $administrasi->administrasi) {
+            //     $adm_real = ['administrasi' => $cek[0]->administrasi];
+            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($adm_real);
+            // }
 
-            //Perubahan Realtime Nominal Provisi
-            if ($cek[0]->provisi != $administrasi->provisi) {
-                $provisi_real = ['provisi' => $cek[0]->provisi];
-                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
-            }
+            // //Perubahan Realtime Nominal Provisi
+            // if ($cek[0]->provisi != $administrasi->provisi) {
+            //     $provisi_real = ['provisi' => $cek[0]->provisi];
+            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
+            // }
 
-            //Perubahan Realtime APHT
-            if ($cek[0]->apht != $administrasi->proses_apht) {
-                $apht_real = ['proses_apht' => $cek[0]->apht];
-                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
-            }
+            // //Perubahan Realtime APHT
+            // if ($cek[0]->apht != $administrasi->proses_apht) {
+            //     $apht_real = ['proses_apht' => $cek[0]->apht];
+            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
+            // }
 
-            //Perubahan Realtime FIDUCIA
-            if ($cek[0]->fiducia != $administrasi->fiducia) {
-                $fiducia_real = ['by_fiducia' => $cek[0]->fiducia];
-                DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($fiducia_real);
-            }
+            // //Perubahan Realtime FIDUCIA
+            // if ($cek[0]->fiducia != $administrasi->fiducia) {
+            //     $fiducia_real = ['by_fiducia' => $cek[0]->fiducia];
+            //     DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($fiducia_real);
+            // }
 
-            $administrasi = DB::table('a_administrasi')
-                ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
-                ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
-                ->where('a_administrasi.pengajuan_kode', $enc)->first();
+            // $administrasi = DB::table('a_administrasi')
+            //     ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
+            //     ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
+            //     ->where('a_administrasi.pengajuan_kode', $enc)->first();
             //
             // dd($cek[0], $administrasi);
             return view('staff.analisa.administrasi-edit', [

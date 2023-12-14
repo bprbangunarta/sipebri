@@ -23,7 +23,7 @@ class UsahaLainnyaController extends Controller
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
                 $item->kd_pengajuan = Crypt::encrypt($item->pengajuan_kode);
             }
-
+            // dd($au);
             return view('staff.analisa.u-lainnya.index', [
                 'data' => $cek[0],
                 'lain' => $au,

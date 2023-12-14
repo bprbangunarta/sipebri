@@ -788,11 +788,12 @@ class DataCetakController extends Controller
             // //Total Bahan Baku
             // if ($bahan->isNotEmpty()) {
             //     $total_bahan_baku = [];
-            //     for ($i = 0; $i < count($bahan); $i++) {
-            //         $total_bahan_baku[$i]->total = $bahan[$i]->total;
+            //     foreach ($bahan as $item) {
+            //         $total_bahan_baku[] = $item->total;
             //     }
+            //     $lain->total_bahan = array_sum($total_bahan_baku);
             // }
-
+            // dd($lain);
 
             $character = Midle::cetak_data_analisa5C_character($enc);
             $capacity = Midle::cetak_data_analisa5C_capacity($enc);
