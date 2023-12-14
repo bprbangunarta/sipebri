@@ -184,11 +184,11 @@ class DataCetakController extends Controller
                 $notifikasi_general = Midle::notifikasi_general($enc);
 
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
-                    $cek->persen_apht = 1.5;
+                    $cek->persen_apht = ($cek->proses_apht / $cek->plafon) * 100;
                     $cek->persen_fiducia = 0.00;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia > 0) {
                     $cek->persen_apht = 0.00;
-                    $cek->persen_fiducia = 1.5;
+                    $cek->persen_fiducia = ($cek->by_fiducia / $cek->plafon) * 100;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia == 0) {
                     $cek->persen_fiducia = 0.00;
                     $cek->persen_apht = 0.00;
@@ -198,7 +198,7 @@ class DataCetakController extends Controller
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
-                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->rate_fiducia;
+                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->persen_fiducia;
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
@@ -756,6 +756,7 @@ class DataCetakController extends Controller
                 for ($i = 0; $i < count($bu_keuangan); $i++) {
                     $nominal[$i] = $bu_keuangan[$i]->nominal;
                 }
+
                 $jaminan = Midle::cetak_dokumen_jaminan_analisa_keuangan($enc);
                 $arr = array_sum($nominal) ?? 0;
                 for ($i = 0; $i < count($keuangan); $i++) {
@@ -782,6 +783,14 @@ class DataCetakController extends Controller
                 }
             }
 
+            //Total Bahan Baku
+            if ($bahan->isNotEmpty()) {
+                $total_bahan_baku = [];
+                for ($i = 0; $i < count($bahan); $i++) {
+                    $total_bahan_baku[$i]->total = $bahan[$i]->total;
+                }
+            }
+
 
             $character = Midle::cetak_data_analisa5C_character($enc);
             $capacity = Midle::cetak_data_analisa5C_capacity($enc);
@@ -801,7 +810,7 @@ class DataCetakController extends Controller
 
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
-
+            dd($bahan . $total_bahan_baku);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

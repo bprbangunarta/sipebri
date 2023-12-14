@@ -61,11 +61,24 @@ class AdministrasiController extends Controller
                 DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
             }
 
+            //Perubahan Realtime APHT
+            if ($cek[0]->apht != $administrasi->proses_apht) {
+                $apht_real = ['proses_apht' => $cek[0]->apht];
+                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
+            }
+
+            //Perubahan Realtime FIDUCIA
+            // if ($cek[0]->fiducia != $administrasi->proses_apht) {
+            //     $apht_real = ['proses_apht' => $cek[0]->apht];
+            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
+            // }
+
             $administrasi = DB::table('a_administrasi')
                 ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
                 ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
                 ->where('a_administrasi.pengajuan_kode', $enc)->first();
             //
+            // dd($cek[0], $administrasi);
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
                 'adm' => $administrasi,

@@ -420,7 +420,8 @@
                 <tr>
                     <td>Laba Penjualan Bulanan</td>
                     <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }} | Laba Penjualan Harian * 30 Hari</td>
+                    <td>{{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }} | Laba Penjualan Harian * 30
+                        Hari</td>
                 </tr>
             </table>
 
@@ -892,7 +893,10 @@
                     @endif
                 @empty
                 @endforelse
-
+                <tr style="border:1px solid black;">
+                    <th class="text-center" colspan="4" style="border:1px solid black;">Total</th>
+                    <th class="text-center" style="border:1px solid black;"></th>
+                </tr>
             </table>
 
             <p></p>
@@ -1141,24 +1145,28 @@
                         {{ $loop->iteration }}</td>
                     @if ($item->jenis_jaminan == 'Kendaraan')
                         <td style="border:1px solid black;">
-                            BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}.
+                            BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }},
+                            {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }},
+                            {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }},
+                            {{ $item->atas_nama }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                     @elseif ($item->jenis_jaminan == 'Tanah')
                         <td style="border:1px solid black;">
-                            SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}.
+                            SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
+                            {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                     @elseif ($item->jenis_jaminan == 'Lainnya')
                         <td style="border:1px solid black;">
-                            @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
-                            KARTU DAN SALDO JAMSOSTEK 
+                            @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
+                                KARTU DAN SALDO JAMSOSTEK
                             @else
-                                {{ $item->nama_jenis_dokumen }} 
+                                {{ $item->nama_jenis_dokumen }}
                             @endif
-                            ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }}.
+                            ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
@@ -2019,12 +2027,12 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m. Pengikatan Agunan</td>
                 <td> : </td>
-                <th>&nbsp; 
-                    @if ( $memorandum->pengikatan == "1")
+                <th>&nbsp;
+                    @if ($memorandum->pengikatan == '1')
                         Tanpa Pengikatan
-                    @elseif ( $memorandum->pengikatan == "2")
+                    @elseif ($memorandum->pengikatan == '2')
                         APHT
-                    @elseif ( $memorandum->pengikatan == "3")
+                    @elseif ($memorandum->pengikatan == '3')
                         Fiducia
                     @else
                         AHPT dan Fiducia

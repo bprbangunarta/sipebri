@@ -878,7 +878,7 @@ class Midle extends Model
                 'data_pengajuan.*',
                 'a_memorandum.*',
             )->first();
-        // dd($memo);
+
         if (!is_null($memo)) {
             if ($memo->pengikatan == '1') {
                 $adm = ($memo->plafon * $memo->b_admin) / 100;
