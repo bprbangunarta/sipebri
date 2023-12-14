@@ -57,7 +57,11 @@
             text-align: center;
         }
 
-        .text-hg {background-color: #f4ff81;color: #000;display: inline;}
+        .text-hg {
+            background-color: #f4ff81;
+            color: #000;
+            display: inline;
+        }
 
         .content {
             width: 100%;
@@ -114,7 +118,8 @@
                 <td></td>
                 <td>Tanda Pengenal</td>
                 <td class="text-center"> : </td>
-                <td>KTP Nomor : <font class="text-hg">{{ $data->no_identitas }}</font></td>
+                <td>KTP Nomor : <font class="text-hg">{{ $data->no_identitas }}</font>
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -127,7 +132,8 @@
                 <td colspan="3" style="text-align: justify;">
                     Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
                     <font class="text-hg">{{ $data->status_pendamping }}</font> bernama
-                    <font class="text-hg">{{ $data->nama_pendamping }}</font> yang ikut serta menandatangani perjanjian ini. Untuk selanjutnya
+                    <font class="text-hg">{{ $data->nama_pendamping }}</font> yang ikut serta menandatangani perjanjian
+                    ini. Untuk selanjutnya
                     disebut PEMINJAM.
                 </td>
             </tr>
@@ -168,7 +174,8 @@
                 FASILITAS PINJAMAN
             </center>
             BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
-            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
+            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font> ( <font
+                class="text-hg" style="text-transform: capitalize;">
                 {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah bukukan
             kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
         </p>
@@ -181,14 +188,16 @@
             Atas pinjaman tersebut diatas, PEMINJAM wajib membayar kepada BANK :
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                <font class="text-hg">Bunga sebesar : {{ $data->suku_bunga }} %</font> per tahun dihitung secara merata setiap bulannya.
+                <font class="text-hg">Bunga sebesar : {{ $data->suku_bunga }} %</font> per tahun dihitung secara merata
+                setiap bulannya.
             </li>
             <li>
-                <font class="text-hg">Provisi sebesar {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},-</font> ( <font class="text-hg"
-                    style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> ) <font class="text-hg">dan Biaya Administrasi
-                        sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},</font>- ( <font class="text-hg"
-                    style="text-transform: capitalize;">
+                <font class="text-hg">Provisi sebesar {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},-
+                </font> ( <font class="text-hg" style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> ) <font class="text-hg">
+                    dan Biaya Administrasi
+                    sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},</font>- ( <font
+                    class="text-hg" style="text-transform: capitalize;">
                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}</font> ) didebetkan dari
                 Rekening Tabungan PEMINJAM yang ada pada BANK.
             </li>
@@ -204,10 +213,12 @@
             <li>
                 Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (
                 selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
-                <font class="text-hg">{{ $data->jangka_waktu }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) <font class="text-hg">kali
-                        angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
-                pada​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
+                <font class="text-hg">{{ $data->jwt }}</font> ( <font class="text-hg"
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jwt) }}</font> ) <font class="text-hg">kali
+                    angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang
+                dimulai
+                pada​ tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
                 {{ $data->tgl_jth_tmp }}.
             </li>
             <li>
@@ -257,24 +268,31 @@
                 Untuk menjamin kepastian pembayaran kembali seluruh PINJAMAN baik pokok, bunga dan biaya-biaya lainnya
                 ya timbul dari perjanjian ini, maka PEMINJAM dan atau PENJAMIN menyerahkan jaminan kebendaan yang cukup
                 berupa :
-                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
+                <ol
+                    style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                     @forelse ($jaminan as $item)
-                            @if ($item->jenis_jaminan == 'Kendaraan')
+                        @if ($item->jenis_jaminan == 'Kendaraan')
                             <li class="text-hg">
-                                BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }}, {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }}, {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }}, {{ $item->atas_nama }}, {{ $item->lokasi }}
+                                BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }},
+                                {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }},
+                                {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }},
+                                {{ $item->atas_nama }}, {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Tanah')
                             <li class="text-hg">
-                                SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
+                                SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
+                                {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }},
+                                ALAMAT {{ $item->lokasi }}
                             </li>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
                             <li class="text-hg">
-                                @if ($item->nama_jenis_dokumen == "Kartu Jamsostek")
-                                    KARTU DAN SALDO JAMSOSTEK 
+                                @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
+                                    KARTU DAN SALDO JAMSOSTEK
                                 @else
-                                    {{ $item->nama_jenis_dokumen }} 
+                                    {{ $item->nama_jenis_dokumen }}
                                 @endif
-                                ATAS NAMA {{ $item->atas_nama }} NO {{  $item->no_dokumen }} ALAMAT {{  $item->lokasi }}
+                                ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }} ALAMAT
+                                {{ $item->lokasi }}
                             </li>
                         @endif
                     @empty
@@ -330,7 +348,8 @@
             </center>
             PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja, melunasi
             baik pokok, bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya perjanjian ini,
-            sesuai jadwal angsuran pinjaman ditambah dengan penalty pelunasan sebesar <font class="text-hg">1 (satu) kali angsuran</font>.
+            sesuai jadwal angsuran pinjaman ditambah dengan penalty pelunasan sebesar <font class="text-hg">1 (satu)
+                kali angsuran</font>.
         </p>
 
         <p style="text-align: justify;">

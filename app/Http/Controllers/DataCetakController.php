@@ -1048,6 +1048,7 @@ class DataCetakController extends Controller
                 // ->where('data_pengajuan.on_current', 0)
                 ->select(
                     'data_pengajuan.*',
+                    'data_pengajuan.jangka_waktu as jwt',
                     'data_pengajuan.created_at as tgl_pengajuan',
                     'data_nasabah.*',
                     'data_spk.*',
@@ -1077,7 +1078,7 @@ class DataCetakController extends Controller
             $cek->keputusan_komite = $keputusan_komite->isoformat('D MMMM Y');
 
             $targetDate = Carbon::now();
-            $tenMonthsLater = $targetDate->copy()->addMonths($cek->jangka_waktu);
+            $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
             $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
             $cek->tgl_jth_tmp = $formattedDate;
@@ -1090,7 +1091,7 @@ class DataCetakController extends Controller
             if (is_null($cek->administrasi)) {
                 $cek->administrasi = 0.00;
             }
-
+            // dd($cek);
             // //Done   
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [

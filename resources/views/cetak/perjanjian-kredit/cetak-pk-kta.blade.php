@@ -57,7 +57,11 @@
             text-align: center;
         }
 
-        .text-hg {background-color: #f4ff81;color: #000;display: inline;}
+        .text-hg {
+            background-color: #f4ff81;
+            color: #000;
+            display: inline;
+        }
 
         .content {
             width: 100%;
@@ -78,7 +82,7 @@
                 padding-left: 2cm;
                 padding-right: 2cm;
             }
-            
+
         }
     </style>
 </head>
@@ -115,7 +119,8 @@
                 <td></td>
                 <td>Tanda Pengenal</td>
                 <td class="text-center"> : </td>
-                <td>KTP Nomor : <font class="text-hg">{{ $data->no_identitas }}</font></td>
+                <td>KTP Nomor : <font class="text-hg">{{ $data->no_identitas }}</font>
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -126,8 +131,10 @@
             <tr>
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
-                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari <font class="text-hg">{{ $data->status_pendamping }}</font> bernama
-                    <font class="text-hg">{{ $data->nama_pendamping }}</font> yang ikut serta menandatangani perjanjian ini yang kapasitasnya sebagai Ketua Serikat Pekerja
+                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari <font
+                        class="text-hg">{{ $data->status_pendamping }}</font> bernama
+                    <font class="text-hg">{{ $data->nama_pendamping }}</font> yang ikut serta menandatangani perjanjian
+                    ini yang kapasitasnya sebagai Ketua Serikat Pekerja
                     Tingkat Perusahaan {{ $data->nama_resort }}. Untuk selanjutnya disebut PEMINJAM.
                 </td>
             </tr>
@@ -167,7 +174,8 @@
                 FASILITAS PINJAMAN
             </center>
             BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
-            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
+            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font> ( <font
+                class="text-hg" style="text-transform: capitalize;">
                 {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah
             bukukan kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
         </p>
@@ -191,9 +199,11 @@
             <li>
                 Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (
                 selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
-                <font class="text-hg">{{ $data->jangka_waktu }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_waktu) }}</font> ) <font class="text-hg">kali
-                        angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang dimulai
+                <font class="text-hg">{{ $data->jwt }}</font> ( <font class="text-hg"
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jwt) }}</font> ) <font class="text-hg">kali
+                    angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang
+                dimulai
                 pada ​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
                 {{ $data->tgl_jth_tmp }}.
             </li>
@@ -256,7 +266,8 @@
 
             @if ($data->kode_resort == '091')
                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
-                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar <font class="text-center">1(satu) angsuran
+                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar <font
+                    class="text-center">1(satu) angsuran
                     bunga serta hutang denda</font>.
             @else
                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
