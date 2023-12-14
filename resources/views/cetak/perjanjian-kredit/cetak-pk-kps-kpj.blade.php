@@ -218,7 +218,7 @@
                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jwt) }}</font> ) <font class="text-hg">kali
                     angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang
                 dimulai
-                pada​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
+                pada ​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
                 {{ $data->tgl_jth_tmp }}.
             </li>
             <li>
