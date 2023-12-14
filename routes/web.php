@@ -63,6 +63,7 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\FrontController;
 
 /*
@@ -87,8 +88,8 @@ Route::get('/', function () {
 });
 
 Route::get('/give-permission', function () {
-    $role = Role::find(4);
-    $permission = Permission::find(44);
+    $role = Role::find(11);
+    $permission = Permission::find(54);
 
     $role->givePermissionTo($permission);
     $permission->assignRole($role);
@@ -577,8 +578,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
         Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
         Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');
-
         Route::post('/export/laporan/export-filter', 'export_filter_realisasi')->name('export.export_filter');
+    });
+
+    // Export Data
+    Route::controller(DroppingController::class)->group(function () {
+        Route::get('/droping/cif', 'data_cif')->name('dropping.cif');
+        Route::get('/droping/agunan', 'data_agunan')->name('dropping.agunan');
+        Route::get('/droping/kredit', 'data_kredit')->name('dropping.kredit');
     });
 });
 

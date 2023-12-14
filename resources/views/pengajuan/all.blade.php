@@ -79,8 +79,13 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('tracking', ['pengajuan' => $item->kd]) }}"
+                                                {{-- <a href="{{ route('tracking', ['pengajuan' => $item->kd]) }}"
                                                     class="btn-circle btn-sm bg-yellow" title="Tracking Pengajuan">
+                                                    <i class="fa fa-hourglass-start"></i>
+                                                </a> --}}
+
+                                                <a href="/laporan/tracking/pengajuan?keyword={{ $item->kode }}"
+                                                    class="btn-circle btn-sm bg-yellow" title="Tracking Pengajuan" target="_blank">
                                                     <i class="fa fa-hourglass-start"></i>
                                                 </a>
 
