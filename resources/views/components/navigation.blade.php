@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <form action="{{ route('pengajuan.data') }}" method="GET" class="sidebar-form">
+        <form action="{{ route('laporan.tracking.pengajuan') }}" method="GET" class="sidebar-form">
             <div class="input-group">
                 <input type="text" class="form-control text-uppercase pull-right"
                     style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
@@ -315,6 +315,39 @@
                             Survey dan Analisa
                         </a>
                     </li> --}}
+                </ul>
+            </li>
+
+            <li
+                class="treeview {{ request()->is('droping/cif', 'droping/agunan', 'droping/kredit') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-download"></i>
+                    <span>Dropping</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ request()->is('droping/cif') ? 'active' : '' }}">
+                        <a href="{{ route('dropping.cif') }}" title="Pembukaan CIF">
+                            <i class="fa fa-user"></i>
+                            Pembukaan CIF
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('droping/agunan') ? 'active' : '' }}">
+                        <a href="{{ route('dropping.agunan') }}" title="Agunan Kredit">
+                            <i class="fa fa-bank"></i>
+                            Agunan Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('droping/kredit') ? 'active' : '' }}">
+                        <a href="{{ route('dropping.kredit') }}" title="Pengajuan Kredit">
+                            <i class="fa fa-money"></i>
+                            Pengajuan Kredit
+                        </a>
+                    </li>
                 </ul>
             </li>
 
