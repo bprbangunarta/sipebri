@@ -788,13 +788,21 @@ class DataCetakController extends Controller
             }
 
             // //Total Bahan Baku
-            // if ($bahan->isNotEmpty()) {
-            //     $total_bahan_baku = [];
-            //     foreach ($bahan as $item) {
-            //         $total_bahan_baku[] = $item->total;
-            //     }
-            //     $lain->total_bahan = array_sum($total_bahan_baku);
-            // }
+            if ($bahan->isNotEmpty()) {
+                $total_bahan_baku = [];
+                foreach ($bahan as $item) {
+                    $total_bahan_baku[] = $item->total;
+                }
+                $total_bahan = array_sum($total_bahan_baku);
+            } else {
+                $total_bahan = 0;
+            }
+
+            for ($i = 0; $i < count($lain); $i++) {
+                $lain[$i]->total_bahan = $total_bahan;
+                $lain[$i]->total_pengeluaran = $total_bahan + $lain[$i]->pengeluaran;
+            }
+
             // dd($lain);
 
             $character = Midle::cetak_data_analisa5C_character($enc);

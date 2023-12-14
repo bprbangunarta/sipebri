@@ -895,7 +895,8 @@
                 @endforelse
                 <tr style="border:1px solid black;">
                     <th class="text-center" colspan="4" style="border:1px solid black;">Total</th>
-                    <th class="text-center" style="border:1px solid black;"></th>
+                    <th style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($items->total_bahan, 0, ',', '.') }} &nbsp;</th>
                 </tr>
             </table>
 
@@ -941,12 +942,19 @@
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">9.</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Bahan Baku</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($items->total_bahan, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">#</td>
                     <th style="border:1px solid black;">&nbsp; Total</th>
                     <th style="border:1px solid black;text-align:right;">
                         {{ 'Rp. ' . ' ' . number_format($items->pendapatan, 0, ',', '.') }} &nbsp;</th>
                     <th style="border:1px solid black;text-align:right;">
-                        {{ 'Rp. ' . ' ' . number_format($items->pengeluaran, 0, ',', '.') }} &nbsp;</th>
+                        {{ 'Rp. ' . ' ' . number_format($items->total_pengeluaran, 0, ',', '.') }} &nbsp;</th>
                 </tr>
                 <tr style="border:1px solid black;">
                     <th class="text-center" colspan="2" style="border:1px solid black;">Hasil Bersih Usaha</th>
