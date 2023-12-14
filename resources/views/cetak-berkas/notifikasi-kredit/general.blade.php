@@ -228,7 +228,7 @@
                 <td width="27%" style="vertical-align: text-top;">Pembayaran Kembali</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    Wajib dilakukan dalam {{ $data->jangka_waktu }} kali angsuran, yang dibayarkan setiap bulan
+                    Wajib dilakukan dalam {{ $data->jwt }} kali angsuran, yang dibayarkan setiap bulan
                     selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
                     dibayarkan satu bulan setelah tanggal akad kredit.
                 </td>
