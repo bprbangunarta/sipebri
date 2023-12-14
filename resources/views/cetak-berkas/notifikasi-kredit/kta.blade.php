@@ -214,12 +214,6 @@
                 <td style="text-align: justify;">0.00 % Rp. 0</td>
             </tr>
             <tr>
-                <td class="text-center" width="2%"></td>
-                <td width="27%">c. APHT</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">0.00 % Rp. 0</td>
-            </tr>
-            <tr>
                 <td class="text-center" width="2%"> 10. </td>
                 <td width="27%">Jumlah Biaya Asuransi</td>
                 <td class="text-center" width="3%"> : </td>
@@ -271,7 +265,7 @@
         Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas. Demikian
         agar Bapak / Ibu maklum.
 
-        <p></p>
+        <p style="margin-top: 40px;"></p>
 
         <table>
             <tr>
