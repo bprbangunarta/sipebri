@@ -783,13 +783,13 @@ class DataCetakController extends Controller
                 }
             }
 
-            //Total Bahan Baku
-            if ($bahan->isNotEmpty()) {
-                $total_bahan_baku = [];
-                for ($i = 0; $i < count($bahan); $i++) {
-                    $total_bahan_baku[$i]->total = $bahan[$i]->total;
-                }
-            }
+            // //Total Bahan Baku
+            // if ($bahan->isNotEmpty()) {
+            //     $total_bahan_baku = [];
+            //     for ($i = 0; $i < count($bahan); $i++) {
+            //         $total_bahan_baku[$i]->total = $bahan[$i]->total;
+            //     }
+            // }
 
 
             $character = Midle::cetak_data_analisa5C_character($enc);
@@ -810,7 +810,7 @@ class DataCetakController extends Controller
 
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
-            dd($bahan . $total_bahan_baku);
+            // dd($bahan . $total_bahan_baku);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

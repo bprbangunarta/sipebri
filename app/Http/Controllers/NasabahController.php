@@ -94,7 +94,7 @@ class NasabahController extends Controller
                 // $data['nasabah']->tanggal_lahir = Carbon::createFromFormat('m-d-Y', $data['nasabah']->tanggal_lahir)->format('Y-m-d');
                 //tambah data  
                 $cek = Midle::analisa_usaha($enc);
-                // dd($data['nasabah']);
+
                 return view('pengajuan.data-nasabah', [
                     'data' => $cek[0],
                     'pend' => $data['pend'],

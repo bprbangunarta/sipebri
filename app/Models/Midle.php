@@ -184,6 +184,7 @@ class Midle extends Model
 
         $pend = Pendidikan::all();
         $job = Pekerjaan::all();
+
         return [
             'pend' => $pend,
             'job' => $job,

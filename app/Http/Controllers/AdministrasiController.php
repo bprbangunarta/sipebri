@@ -68,10 +68,10 @@ class AdministrasiController extends Controller
             }
 
             //Perubahan Realtime FIDUCIA
-            // if ($cek[0]->fiducia != $administrasi->proses_apht) {
-            //     $apht_real = ['proses_apht' => $cek[0]->apht];
-            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
-            // }
+            if ($cek[0]->fiducia != $administrasi->fiducia) {
+                $fiducia_real = ['by_fiducia' => $cek[0]->fiducia];
+                DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($fiducia_real);
+            }
 
             $administrasi = DB::table('a_administrasi')
                 ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
