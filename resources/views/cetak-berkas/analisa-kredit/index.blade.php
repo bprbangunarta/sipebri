@@ -1140,6 +1140,7 @@
                 </tr>
             </table>
         @endif
+
         <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
         <table style="border:1px solid black;">
             <tr style="border:1px solid black;">
@@ -1177,17 +1178,17 @@
                             ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
+                            {{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
                     @endif
-
                 </tr>
-                <tr style="border:1px solid black;">
+
+                {{-- <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai
                         Taksasi
                         Agunan</td>
                     <td style="border:1px solid black;text-align:right;">
                         {{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
-                </tr>
+                </tr> --}}
             @empty
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;" colspan="3">
