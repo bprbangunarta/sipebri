@@ -587,6 +587,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/droping/agunan', 'data_agunan')->name('dropping.agunan');
         Route::get('/droping/kredit', 'data_kredit')->name('dropping.kredit');
     });
+
+    // Update Password
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/profile/password', 'password_index')->name('password.index');
+    });
 });
 
 //====FRONT END====//
