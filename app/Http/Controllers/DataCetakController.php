@@ -748,6 +748,22 @@ class DataCetakController extends Controller
                     $bu = DB::table('bu_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
                     $du = DB::table('du_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
                 }
+
+                // Total Bahan Baku
+                if ($bahan->isNotEmpty()) {
+                    $total_bahan_baku = [];
+                    foreach ($bahan as $item) {
+                        $total_bahan_baku[] = $item->total;
+                    }
+                    $total_bahan = array_sum($total_bahan_baku);
+                } else {
+                    $total_bahan = 0;
+                }
+
+                for ($i = 0; $i < count($lain); $i++) {
+                    $lain[$i]->total_bahan = $total_bahan;
+                    $lain[$i]->total_pengeluaran = $total_bahan + $lain[$i]->pengeluaran;
+                }
             }
 
             $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
@@ -787,21 +803,7 @@ class DataCetakController extends Controller
                 }
             }
 
-            // Total Bahan Baku
-            if ($bahan->isNotEmpty()) {
-                $total_bahan_baku = [];
-                foreach ($bahan as $item) {
-                    $total_bahan_baku[] = $item->total;
-                }
-                $total_bahan = array_sum($total_bahan_baku);
-            } else {
-                $total_bahan = 0;
-            }
 
-            for ($i = 0; $i < count($lain); $i++) {
-                $lain[$i]->total_bahan = $total_bahan;
-                $lain[$i]->total_pengeluaran = $total_bahan + $lain[$i]->pengeluaran;
-            }
 
             // dd($lain);
 
