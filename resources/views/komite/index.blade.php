@@ -81,6 +81,12 @@
                                                     class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
+
+                                                &nbsp;
+                                                <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank"
+                                                    class="btn-circle btn-sm btn-info" title="Analisa">
+                                                    <i class="fa fa-file-text"></i>
+                                                </a>
                                             </td>
 
                                             {{-- MODAL INFO --}}
