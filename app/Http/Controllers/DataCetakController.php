@@ -224,7 +224,16 @@ class DataCetakController extends Controller
     {
         $data = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->select('data_pengajuan.kode_pengajuan', 'data_nasabah.nama_nasabah')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.plafon',
+                'data_pengajuan.metode_rps',
+                'data_produk.nama_produk',
+                'data_pengajuan.jangka_waktu',
+                'data_nasabah.nama_nasabah'
+            )
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
         //
 
