@@ -118,4 +118,9 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Data gagal dihapus');
         }
     }
+
+    public function password_index()
+    {
+        return view('profile.update-password');
+    }
 }
