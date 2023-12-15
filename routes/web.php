@@ -480,6 +480,7 @@ Route::middleware('auth')->group(function () {
 
             Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
+                Route::get('/notifikasi/kredit/catatan/{kode}', 'get_catatan_notifikasi_kredit')->name('get.catatan_notifikasi_kredit');
                 Route::POST('/notifikasi/kredit/simpan/catatan', 'simpan_catatan_notifikasi_kredit')->name('simpan.catatan_notifikasi_kredit');
             });
 

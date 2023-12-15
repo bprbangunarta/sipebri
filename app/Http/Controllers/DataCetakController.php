@@ -807,14 +807,10 @@ class DataCetakController extends Controller
                     'total_taksasi' => 0,
                 ];
 
-                for ($i = 0; $i < count($jaminan); $i++) {
+                for ($i = 0; $i < 2; $i++) {
                     $jaminan[$i]->total_taksasi = 0;
                 }
             }
-
-
-
-            // dd($lain);
 
             $character = Midle::cetak_data_analisa5C_character($enc);
             $capacity = Midle::cetak_data_analisa5C_capacity($enc);
@@ -1158,14 +1154,25 @@ class DataCetakController extends Controller
     {
         try {
             $data = [
-                'keterangan' => $request->keterangan,
-                'rencana_realisasi' => $request->rencana_realisasi,
+                'keterangan' => strtoupper($request->keterangan),
+                'rencana_realisasi' => strtoupper($request->rencana_realisasi),
             ];
-            // dd($request->all(), );
+
             DB::table('data_notifikasi')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
+    }
+
+    public function get_catatan_notifikasi_kredit($kode)
+    {
+        $data = DB::table('data_notifikasi')->where('pengajuan_kode', $kode)->get();
+
+        foreach ($data as $item) {
+            $item->keterangan = strtoupper($item->keterangan);
+            $item->rencana_realisasi = strtoupper($item->rencana_realisasi);
+        }
+        return response()->json($data);
     }
 }
