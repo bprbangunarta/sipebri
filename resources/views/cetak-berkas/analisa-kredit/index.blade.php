@@ -893,11 +893,11 @@
                     @endif
                 @empty
                 @endforelse
-                {{-- <tr style="border:1px solid black;">
+                <tr style="border:1px solid black;">
                     <th class="text-center" colspan="4" style="border:1px solid black;">Total</th>
                     <th style="border:1px solid black;text-align:right;">
                         {{ 'Rp. ' . ' ' . number_format($items->total_bahan, 0, ',', '.') }} &nbsp;</th>
-                </tr> --}}
+                </tr>
             </table>
 
             <p></p>
