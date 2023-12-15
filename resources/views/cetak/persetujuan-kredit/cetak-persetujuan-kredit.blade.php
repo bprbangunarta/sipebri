@@ -196,7 +196,8 @@
                     <p></p>
 
                     <b>Komentar</b> <br>
-                    {{ ucwords($item->catatan) }}
+                    {{ ucwords($item->catatan) }} <br>
+                    Layak untuk diberikan pinjaman sebesar {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}
                     <p></p>
 
                     Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu {{ $data->jangka_waktu }} bulan
