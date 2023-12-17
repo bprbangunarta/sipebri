@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Kantor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class UserController extends Controller
 {
@@ -121,6 +125,34 @@ class UserController extends Controller
 
     public function password_index()
     {
-        return view('profile.update-password');
+        $user = Auth::user()->code_user;
+        $user_enc = Crypt::encrypt($user);
+        return view('profile.update-password', [
+            'data' => $user_enc,
+        ]);
+    }
+
+    public function ubah_password(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('user'));
+            if (is_null($request->password)) {
+                return redirect()->back()->with('error', 'Harap Isi Password Lama Anda');
+            }
+            $user = Auth::user();
+            if (!Hash::check($request->password, $user->password)) {
+                return redirect()->back()->with('error', 'Password lama salah');
+            }
+            $data = [
+                'password' => bcrypt($request->new_password),
+            ];
+
+            $usr = User::where('code_user', $enc)->first();
+            User::where('id', $usr->id)->update($data);
+
+            return redirect()->back()->with('success', 'Anda Berhasil Merubah Password!!');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 }

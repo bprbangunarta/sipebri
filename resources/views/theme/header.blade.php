@@ -63,8 +63,9 @@
     .text-middle {
         vertical-align: middle;
     }
+
     .div-scroll {
-      width: 100%;
-      overflow-x: auto;
+        width: 100%;
+        overflow-x: auto;
     }
 </style>

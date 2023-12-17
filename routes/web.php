@@ -592,6 +592,7 @@ Route::middleware('auth')->group(function () {
     // Update Password
     Route::controller(UserController::class)->group(function () {
         Route::get('/profile/password', 'password_index')->name('password.index');
+        Route::POST('/profile/password/ubah', 'ubah_password')->name('ubah.password');
     });
 });
 
