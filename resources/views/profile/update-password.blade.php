@@ -14,6 +14,7 @@
 
                         <div id="formpassword" class="box-body"
                             style="overflow: auto;white-space: nowrap;width: 100%;margin-top:-10px;">
+
                             <form role="form" action="{{ route('ubah.password', ['user' => $data]) }}" method="POST">
                                 @csrf
                                 <div class="box-body">
@@ -59,10 +60,16 @@
                                     </div>
 
                                 </div>
-
-                                <div class="box-footer">
-                                    <button type="submit" class="btn bg-blue" style="width: 100%;">SIMPAN</button>
-                                </div>
+                                @if ($role == 'Kasi Analis' || $role == 'Kabag Analis' || $role == 'Direksi' || $role == 'Administrator')
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn bg-blue" style="width: 100%;">SIMPAN</button>
+                                    </div>
+                                @else
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn bg-blue" style="width: 100%;"
+                                            disabled>SIMPAN</button>
+                                    </div>
+                                @endif
                             </form>
                         </div>
 

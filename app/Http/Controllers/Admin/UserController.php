@@ -127,8 +127,12 @@ class UserController extends Controller
     {
         $user = Auth::user()->code_user;
         $user_enc = Crypt::encrypt($user);
+
+        $role = DB::table('v_users')->where('code_user', $user)->first();
+
         return view('profile.update-password', [
             'data' => $user_enc,
+            'role' => $role->role_name,
         ]);
     }
 
