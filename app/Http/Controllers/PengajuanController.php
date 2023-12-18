@@ -198,6 +198,14 @@ class PengajuanController extends Controller
         $metode = DB::table('data_metode_rps')->get();
         //Data Surveyor
         $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
+        //Data Resort
+        $resort = DB::table('v_resort')->get();
+        //Data Kabupaten
+        $kabupaten = DB::table('v_kabupaten')->get();
+        //Data Kecamatan
+        $kecamatan = DB::table('v_kecamatan')->get();
+        //Data Keluarahan
+        $kelurahan = DB::table('v_kelurahan')->get();
 
         return view('pengajuan.all', [
             'data' => $pengajuan,
@@ -205,6 +213,10 @@ class PengajuanController extends Controller
             'produk' => $produk,
             'metode' => $metode,
             'surveyor' => $surveyor,
+            'resort' => $resort,
+            'kabupaten' => $kabupaten,
+            'kecamatan' => $kecamatan,
+            'kelurahan' => $kelurahan,
         ]);
     }
 

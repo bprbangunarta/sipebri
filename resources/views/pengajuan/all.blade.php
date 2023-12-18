@@ -230,22 +230,42 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>PRODUK</label>
-                                    <select class="form-control" name="kode_produk" id=""
-                                        style="margin-top:-5px;">
+                                    <select class="form-control produk" name="kode_produk" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($produk as $item)
-                                            <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>
+                                            <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} - {{ $item->nama_produk }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KANTOR</label>
-                                    <select class="form-control" name="nama_kantor" id=""
-                                        style="margin-top:-5px;">
+                                    <select class="form-control kantor" name="nama_kantor" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($kantor as $item)
                                             <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>RESORT</label>
+                                    <select class="form-control resort" name="resort" id="" style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($resort as $item)
+                                            <option value="{{ $item->kode_resort }}">{{ $item->nama_resort }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KECAMATAN</label>
+                                    <select class="form-control kecamatan" name="kecamatan" id="" style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kecamatan as $item)
+                                            <option value="{{ $item->kecamatan }}">{{ $item->kecamatan }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -260,7 +280,7 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>METODE RPS</label>
-                                    <select class="form-control" name="metode" id="" style="margin-top:-5px;">
+                                    <select class="form-control metode" name="metode" id="" style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($metode as $item)
                                             <option value="{{ $item->nama_metode }}">{{ $item->nama_metode }}</option>
@@ -270,12 +290,32 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>SURVEYOR</label>
-                                    <select class="form-control" name="surveyor" id=""
-                                        style="margin-top:-5px;">
+                                    <select class="form-control surveyor" name="surveyor" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($surveyor as $item)
                                             <option value="{{ $item->code_user }}">{{ $item->nama_user }}
                                             </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KABUPATEN</label>
+                                    <select class="form-control kabupaten" name="kebupaten" id="" style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kabupaten as $item)
+                                            <option value="{{ $item->kabupaten }}">{{ $item->kabupaten }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KELURAHAN</label>
+                                    <select class="form-control kelurahan" name="kelurahan" id="" style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kelurahan as $item)
+                                            <option value="{{ $item->kelurahan }}">{{ $item->kelurahan }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -291,3 +331,17 @@
         </div>
     </div>
 @endsection
+
+@push('myscript')
+    <script>
+        // Select2
+        $('.produk').select2()
+        $('.metode').select2()
+        $('.kantor').select2()
+        $('.surveyor').select2()
+        $('.resort').select2()
+        $('.kabupaten').select2()
+        $('.kecamatan').select2()
+        $('.kelurahan').select2()
+    </script>
+@endpush
