@@ -5,8 +5,7 @@
 
     <title>Tabungan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
 </head>
@@ -22,7 +21,7 @@
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
 
                                 <thead>
-                                
+
                                     <th>No CIF</th>
                                     <th>Nama Lengkap</th>
                                     <th>NIK</th>
@@ -30,13 +29,13 @@
                                 </thead>
 
                                 <tbody>
-                                    @foreach($tabungan as $row)
-                                    <tr>
-                                        <td>{{ $row->nocif }}</td>
-                                        <td>{{ $row->fname }}</td>
-                                        <td>{{ $row->noid }}</td>
-                                        <td>{{ $row->jttempoid }}</td>
-                                    </tr>
+                                    @foreach ($tabungan as $row)
+                                        <tr>
+                                            <td>{{ $row->nocif }}</td>
+                                            <td>{{ $row->fname }}</td>
+                                            <td>{{ $row->noid }}</td>
+                                            <td>{{ $row->tanggal_lahir }}</td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -53,9 +52,9 @@
         <script>
             $(document).ready(function() {
 
-           $('#example').DataTable();
+                $('#example').DataTable();
 
-       } );
+            });
         </script>
 </body>
 

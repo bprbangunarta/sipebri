@@ -74,7 +74,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit', 'themes/komite/kredit/survei/analisa')? 'active': '' }}">
+                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit','themes/komite/kredit/survei/analisa')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-suitcase"></i>
                     <span>Analisa Kredit</span>
@@ -271,16 +271,14 @@
                         </a>
                     </li>
 
-                    <li
-                        class="{{ request()->is('laporan/penolakan') ? 'active' : '' }}">
+                    <li class="{{ request()->is('laporan/penolakan') ? 'active' : '' }}">
                         <a href="{{ route('laporan.penolakan') }}">
                             <i class="fa fa-ban"></i>
                             Pengajuan Ditolak
                         </a>
                     </li>
 
-                    <li
-                        class="{{ request()->is('laporan/pengajuan/disetujui') ? 'active' : '' }}">
+                    <li class="{{ request()->is('laporan/pengajuan/disetujui') ? 'active' : '' }}">
                         <a href="{{ route('pengajuan.disetujui') }}">
                             <i class="fa fa-check"></i>
                             Pengajuan Disetujui
@@ -385,14 +383,13 @@
             @endcan
 
             <li class="header">TOOLS</li>
-            <li class="">
-                <a href="#" title="Pengecekan CIF">
+            <li class="{{ request()->is('cif') ? 'active' : '' }}">
+                <a href="{{ route('cif.index') }}" title="Pengecekan CIF">
                     <i class="fa fa-user"></i>
                     Pengecekan CIF
                 </a>
             </li>
-            <li
-                class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
+            <li class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
                 <a href="{{ route('flat') }}" title="Perhitungan Kredit">
                     <i class="fa fa-calculator"></i>
                     Simulasi Kredit
