@@ -305,7 +305,7 @@
                                     <select class="form-control kabupaten" name="kebupaten" id="" style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($kabupaten as $item)
-                                            <option value="{{ $item->kabupaten }}">{{ $item->kabupaten }}</option>
+                                            <option value="{{ $item->kode_dati }}">{{ $item->kabupaten }}</option>
                                         @endforeach
                                     </select>
                                 </div>

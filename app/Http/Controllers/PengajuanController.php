@@ -121,12 +121,11 @@ class PengajuanController extends Controller
         $kantor = request('nama_kantor');
         $metode = request('metode');
         $surveyor = request('surveyor');
+        $resort = request('resort');
+        $kabupaten = request('kabupaten');
 
         $tgl1 = request('tgl1');
-        $tgl2 = request('tgl2');
-        if (is_null($tgl2)) {
-            $tgl2 = $tgl1;
-        }
+        $tgl2 = request('tgl2') ?? $tgl1;
 
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -155,36 +154,37 @@ class PengajuanController extends Controller
                 'data_survei.kantor_kode as kantor',
                 'data_pengajuan.created_at as tanggal',
                 'data_nasabah.no_cif',
-                'data_produk.*',
+                'data_produk.kode_produk',
+                'data_produk.nama_produk',
                 'users.name as surveyor',
             )
             ->where('data_pengajuan.on_current', '0')
             ->whereNotIn('data_pengajuan.status', ['Batal', 'Dibatalkan', 'Ditolak'])
-
             ->where(function ($query) use ($keyword) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_produk.kode_produk', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_produk.nama_produk', 'like', '%' . $keyword . '%');
+                $query->where('data_nasabah.nama_nasabah', 'like', "%$keyword%")
+                ->orWhere('data_pengajuan.kode_pengajuan', 'like',  "%$keyword%")
+                ->orWhere('data_survei.kantor_kode', 'like', "%$keyword%")
+                ->orWhere('data_kantor.nama_kantor', 'like', "%$keyword%")
+                ->orWhere('data_produk.kode_produk', 'like', "%$keyword%")
+                ->orWhere('data_produk.nama_produk', 'like', "%$keyword%");
             });
 
         if ($tgl1 !== null) {
-            $query->where(function ($query) use ($tgl1, $tgl2) {
-                $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            });
+            $query->whereBetween('data_pengajuan.created_at', ["$tgl1 00:00:00", "$tgl2 23:59:59"]);
         }
 
-        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor) {
-            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
-                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
-                ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
-                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor, $resort) {
+            $query->where('data_produk.kode_produk', 'like', "%$produk%")
+            ->where('data_survei.surveyor_kode', 'like', "%$surveyor%")
+            ->where('data_pengajuan.metode_rps', 'like', "%$metode%")
+            ->where('data_kantor.kode_kantor', 'like', "%$kantor%")
+            ->where('data_pengajuan.resort_kode', 'like', "%$resort%");
         })
-            ->orderBy('data_pengajuan.created_at', 'DESC');
+        ->orderBy('data_pengajuan.created_at', 'DESC');
 
         $pengajuan = $query->paginate(10);
+
+
         foreach ($pengajuan as $item) {
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
