@@ -1122,7 +1122,7 @@ class DataCetakController extends Controller
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
-                    'jaminan' => $jaminan,
+                    'jam' => $jaminan,
                     'agunan' => $cek_jaminan,
                 ]);
             } elseif ($cek->produk_kode == 'KTO') {
@@ -1132,10 +1132,11 @@ class DataCetakController extends Controller
                     'agunan' => $cek_jaminan,
                 ]);
                 //Done
-            } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ') {
+            } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ' || $cek->produk_kode == 'KUP') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kps-kpj', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
                 ]);
             } elseif ($cek->produk_kode == 'KRU' || $cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-kbt-musiman', [
