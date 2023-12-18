@@ -216,37 +216,47 @@ class ExportController extends Controller
         }
 
         $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('v_users', 'v_users.code_user', '=', 'data_pengajuan.input_user')
+            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+
+            ->where('data_pengajuan.on_current', 0)
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->whereNotNull('data_notifikasi.keterangan')
+            ->whereNull('data_spk.no_spk')
+
             ->select(
-                'data_pengajuan.*',
-                'data_nasabah.*',
-                'data_notifikasi.no_notifikasi',
-                'data_notifikasi.created_at as tanggal',
+                'data_pengajuan.created_at as tanggal',
+                'data_pengajuan.kode_pengajuan',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_pengajuan.produk_kode',
+                'v_users.nama_user',
                 'data_notifikasi.keterangan',
                 'data_notifikasi.rencana_realisasi',
-                'data_kantor.kode_kantor',
-                'users.name as surveyor',
             )
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->join('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
-            ->where('data_pengajuan.on_current', '0')
 
             ->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
                 return $data->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
             })
 
-            ->orderBy('data_notifikasi.created_at', 'desc')
+            ->orderBy('data_pengajuan.created_at', 'asc')
             ->get();
 
-        $data_array[] = array("NO", "TANGGAL", "KODE", "NO_NOTIFIKASI", "NAMA_NASABAH", "ALAMAT", "PLAFON", "WIL", "RENCANA", "KETERANGAN");
+        $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "PLAFON", "WIL", "KETERANGAN", "RENCANA");
         foreach ($data as $item) {
             $data_array[] = array(
                 'NO'            => $no++,
                 'TANGGAL'       => \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d'),
                 'KODE'          => $item->kode_pengajuan,
-                'NO_NOTIFIKASI' => $item->no_notifikasi,
                 'NAMA_NASABAH'  => $item->nama_nasabah,
                 'ALAMAT'        => $item->alamat_ktp,
                 'PLAFON'        => number_format($item->plafon, 0, ',', '.'),

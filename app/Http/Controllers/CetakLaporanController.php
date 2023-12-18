@@ -428,7 +428,7 @@ class CetakLaporanController extends Controller
             ->whereNull('data_spk.no_spk')
 
             ->select(
-                'data_notifikasi.created_at as tanggal',
+                'data_pengajuan.created_at as tanggal',
                 'data_pengajuan.kode_pengajuan',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -456,7 +456,7 @@ class CetakLaporanController extends Controller
                     ->orWhere('data_notifikasi.rencana_realisasi', 'like', '%' . $keyword . '%');
             })
 
-            ->orderBy('data_notifikasi.created_at', 'desc');
+            ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
         return view('laporan.siap-realisasi', [
             'data' => $data,
