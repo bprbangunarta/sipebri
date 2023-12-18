@@ -250,7 +250,20 @@
                 <td class="text-center" width="2%"> 10. </td>
                 <td width="27%">Biaya Kredit</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $data->biaya_kredit }} % dari plafon kredit</td>
+                @php
+                    $persen_administrasi = ($data->administrasi / $data->plafon) * 100;
+                    $rate_admin = number_format($persen_administrasi, 2, '.', '');
+
+                    $persen_fiducia = ($data->by_fiducia / $data->plafon) * 100;
+                    $rate_fiducia = number_format($persen_fiducia, 2, '.', '');
+
+                    $persen_apht = ($data->proses_apht / $data->plafon) * 100;
+                    $rate_apht = number_format($persen_apht, 2, '.', '');
+
+                    $biaya_kredit = $data->b_provisi + $rate_admin + $rate_fiducia + $rate_apht;
+                @endphp
+                <td style="text-align: justify;">{{ $biaya_kredit }} % dari plafon kredit</td>
+
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
@@ -267,7 +280,6 @@
                 <td style="text-align: justify;">
                     @php
                         $persentase = ($data->administrasi / $data->plafon) * 100;
-
                         $rate_admin = number_format($persentase, 2, '.', '');
                     @endphp
 
@@ -275,8 +287,7 @@
                 </td>
             </tr>
 
-            @if (is_null($data->by_fiducia))
-            @else
+            @if ($data->by_fiducia != 0 && $data->proses_apht == 0)
                 <tr>
                     <td class="text-center" width="2%"></td>
                     <td width="27%">c. Fiducia</td>
@@ -292,28 +303,39 @@
                 </tr>
             @endif
 
-            @if ($data->persen_apht != 0.0)
+            @if ($data->proses_apht != 0 && $data->by_fiducia == 0)
                 <tr>
                     <td class="text-center" width="2%"></td>
-                    <td width="27%">c. APHT</td>
+                    <td width="27%">d. APHT</td>
                     <td class="text-center" width="3%"> : </td>
                     <td style="text-align: justify;">{{ $data->persen_apht }} %
                         {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
                 </tr>
-            @elseif ($data->persen_apht != 0.0 && $data->persen_fiducia != 0.0)
-                <tr>
-                    <td class="text-center" width="2%"></td>
-                    <td width="27%">c. APHT</td>
-                    <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">{{ $data->persen_apht }} %
-                        {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
-                </tr>
+            @elseif ($data->proses_apht != 0 && $data->by_fiducia != 0)
                 <tr>
                     <td class="text-center" width="2%"></td>
                     <td width="27%">c. FIDUCIA</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">{{ $data->persen_fiducia }} %
-                        {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }}</td>
+                    <td style="text-align: justify;">
+                        @php
+                            $persentase = ($data->by_fiducia / $data->plafon) * 100;
+                            $rate_fiducia = number_format($persentase, 2, '.', '');
+                        @endphp
+
+                        {{ 'Rp. ' . '' . number_format($data->by_fiducia, 0, ',', '.') ?? 0 }} ({{ $rate_fiducia }}%)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center" width="2%"></td>
+                    <td width="27%">d. APHT</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">
+                        @php
+                            $persentase = ($data->proses_apht / $data->plafon) * 100;
+                            $rate_apht = number_format($persentase, 2, '.', '');
+                        @endphp
+                        {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }} ({{ $rate_apht }}%)
+                    </td>
                 </tr>
             @endif
             <tr>

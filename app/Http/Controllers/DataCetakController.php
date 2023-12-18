@@ -172,7 +172,7 @@ class DataCetakController extends Controller
                     'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
                 )->first();
             //
-            // dd($cek);
+
             if ($cek->produk_kode == 'KTA') {
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
@@ -186,13 +186,15 @@ class DataCetakController extends Controller
                 ]);
             } else {
                 $notifikasi_general = Midle::notifikasi_general($enc);
-
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
                     $cek->persen_apht = ($cek->proses_apht / $cek->plafon) * 100;
                     $cek->persen_fiducia = 0.00;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia > 0) {
                     $cek->persen_apht = 0.00;
                     $cek->persen_fiducia = ($cek->by_fiducia / $cek->plafon) * 100;
+                } elseif ($cek->proses_apht > 0 && $cek->by_fiducia > 0) {
+                    $cek->persen_fiducia = 0.00;
+                    $cek->persen_apht = 0.00;
                 } elseif ($cek->proses_apht == 0 && $cek->by_fiducia == 0) {
                     $cek->persen_fiducia = 0.00;
                     $cek->persen_apht = 0.00;
@@ -202,6 +204,7 @@ class DataCetakController extends Controller
                 $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
+
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->persen_fiducia;
 
                 //QRCode 
