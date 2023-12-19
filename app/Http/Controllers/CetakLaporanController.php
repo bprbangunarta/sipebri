@@ -582,7 +582,7 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-    
+
 
 
 
@@ -679,7 +679,7 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-    
+
     public function post_laporan_realisasi()
     {
         $tgl1 = request('tgl1');
@@ -715,7 +715,7 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-    
+
 
     public function post_siap_realisasi()
     {
@@ -758,7 +758,7 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-    
+
 
     public function laporan_survey_analisa(Request $request)
     {
@@ -896,6 +896,4 @@ class CetakLaporanController extends Controller
             'data' => $data,
         ]);
     }
-
-    
 }

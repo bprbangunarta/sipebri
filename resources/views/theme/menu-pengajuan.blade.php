@@ -16,13 +16,14 @@
             <li>
                 <a href="#">
                     <i class="fa fa-bitcoin"></i>
-                    {{ $data->plafon = 'Rp. ' . number_format($data->plafon, 0, ',', '.') }} ({{ $data->jangka_waktu }} BULAN)
+                    {{ $data->plafon = 'Rp. ' . number_format($data->plafon, 0, ',', '.') }} ({{ $data->jangka_waktu }}
+                    BULAN)
                 </a>
             </li>
         </ul>
     </div>
 </div>
-
+{{-- {{ dd($data) }} --}}
 <div class="box box-solid">
     <div class="box-header with-border">
         <h3 class="box-title">Menu Pengajuan</h3>
@@ -67,19 +68,19 @@
             </li>
 
             @can('edit pengajuan kredit')
-            <li class="{{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">
-                <a href="{{ route('pengajuan.konfirmasi', ['nasabah' => $nasabah]) }}">
-                    <i class="fa fa-folder-o"></i> Konfirmasi Data
-                </a>
-            </li>
+                <li class="{{ request()->is('konfirmasi/pengajuan') ? 'active' : '' }}">
+                    <a href="{{ route('pengajuan.konfirmasi', ['nasabah' => $nasabah]) }}">
+                        <i class="fa fa-folder-o"></i> Konfirmasi Data
+                    </a>
+                </li>
             @endcan
 
             @can('otorisasi pengajuan kredit')
-            <li class="{{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">
-                <a href="{{ route('pengajuan.otorisasi', ['nasabah' => $nasabah]) }}">
-                    <i class="fa fa-folder-o"></i> Otorisasi Data
-                </a>
-            </li>
+                <li class="{{ request()->is('otorisasi/pengajuan') ? 'active' : '' }}">
+                    <a href="{{ route('pengajuan.otorisasi', ['nasabah' => $nasabah]) }}">
+                        <i class="fa fa-folder-o"></i> Otorisasi Data
+                    </a>
+                </li>
             @endcan
         </ul>
     </div>

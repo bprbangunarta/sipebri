@@ -18,7 +18,8 @@ class NotifikasiController extends Controller
     {
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
-
+        $keyword = request('keyword');
+        // dd($keyword);
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
@@ -26,9 +27,7 @@ class NotifikasiController extends Controller
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-
-            ->where('data_pengajuan.status', '=', 'Ditolak')
-            ->orWhere('data_pengajuan.status', '=', 'Dibatalkan')
+            ->join('v_users', 'v_users.code_user', '=', 'data_pengajuan.input_user')
 
             ->select(
                 'data_pengajuan.kode_pengajuan',
@@ -56,6 +55,22 @@ class NotifikasiController extends Controller
                 'data_penolakan.nomor as no_st',
                 'data_penolakan.keterangan as ket_tolak',
             )
+
+            ->where(function ($query) {
+                $query->where('data_pengajuan.status', '=', 'Dibatalkan')
+                    ->orWhere('data_pengajuan.status', '=', 'Ditolak');
+            })
+
+
+            ->where(function ($query) use ($keyword) {
+                $query->Where('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.plafon', 'like', '%' . $keyword . '%')
+                    ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%');
+            })
             ->orderBy('data_tracking.keputusan_komite', 'desc');
 
         $alasan = DB::table('data_alasan_penolakan')->get();
