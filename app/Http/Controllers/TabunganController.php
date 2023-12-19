@@ -13,8 +13,8 @@ class TabunganController extends Controller
 {
     public function index()
     {
-        // $tabungan = Tabungan::orderBy('inptgljam', 'desc')->paginate(10);
-        $tabungan = Tabungan::paginate(10);
+        $tabungan = Tabungan::orderBy('inptgljam', 'desc')->paginate(10);
+        // $tabungan = Tabungan::paginate(10);
         foreach ($tabungan as $item) {
             $tgl_lahir = Carbon::createFromFormat('Ymd', $item->jttempoid)->format('d-m-Y');
             $item->tanggal_lahir = $tgl_lahir;
@@ -31,7 +31,9 @@ class TabunganController extends Controller
                 ->orWhere('sname', 'like', '%' . $keyword . '%')
                 ->orWhere('noid', 'like', '%' . $keyword . '%')
                 ->orWhere('fname', 'like', '%' . $keyword . '%');
-        })->paginate(10);
+        })
+            // ->orderBy('inptgljam', 'desc')
+            ->paginate(10);
         foreach ($tabungan as $item) {
             $tgl_lahir = Carbon::createFromFormat('Ymd', $item->jttempoid)->format('d-m-Y');
             $item->tanggal_lahir = $tgl_lahir;

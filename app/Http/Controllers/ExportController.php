@@ -228,11 +228,11 @@ class ExportController extends Controller
 
             ->where('data_pengajuan.on_current', 0)
             ->where('data_pengajuan.status', 'Disetujui')
-            ->whereNotNull('data_notifikasi.keterangan')
+            // ->whereNotNull('data_notifikasi.keterangan')
             ->whereNull('data_spk.no_spk')
 
             ->select(
-                'data_pengajuan.created_at as tanggal',
+                'data_notifikasi.created_at as tanggal',
                 'data_pengajuan.kode_pengajuan',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -265,6 +265,7 @@ class ExportController extends Controller
                 'RENCANA'       => $item->rencana_realisasi,
             );
         }
+
         $this->export_laporan_siap_realisasi($data_array);
     }
     public function export_laporan_siap_realisasi($data)
