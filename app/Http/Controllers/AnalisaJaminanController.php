@@ -363,13 +363,15 @@ class AnalisaJaminanController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
+
             $data = [
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
+                'no_dokumen' => strtoupper($request->no_dok),
                 'updated_at' => now(),
                 'catatan' => $request->catatan,
             ];
-            // dd($request);
+
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {

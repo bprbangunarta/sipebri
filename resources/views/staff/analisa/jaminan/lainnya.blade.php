@@ -81,24 +81,23 @@
                                         <span class="fw-bold">JENIS AGUNAN</span>
                                         <input type="text" name="id" id="id" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Kendaraan Bermotor Roda 2" name="jenis_agunan" id="jenis_agunan"
-                                            readonly>
+                                            value="" name="jenis_agunan" id="jenis_agunan" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="BPKB Motor Non Fiducia" name="dokumen" id="dokumen" readonly>
+                                            value="" name="dokumen" id="dokumen" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR DOKUMEN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="P007772168" name="no_dok" id="" readonly>
+                                            value="" name="no_dok" id="no_dok">
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NAMA PEMILIK</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="ZULFADLI RIZAL" name="nama" id="nama" readonly>
+                                            value="" name="nama" id="nama" readonly>
                                     </div>
                                 </div>
 
@@ -106,7 +105,7 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Motor Metik" name="lokasi" id="lokasi" readonly>
+                                            value="" name="lokasi" id="lokasi" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -282,7 +281,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
+                                            {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
                                     </div>
                                 </div>
                             </div>
