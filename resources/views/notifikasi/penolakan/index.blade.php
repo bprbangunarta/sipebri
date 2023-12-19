@@ -213,7 +213,7 @@
                 <div class="modal-header bg-yellow">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">SURAT PENOLAKAN</h4>
+                    <h4 class="modal-title">EDIT SURAT PENOLAKAN</h4>
                 </div>
 
                 <form action="{{ route('penolakan.update') }}" method="POST">

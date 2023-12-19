@@ -2,7 +2,8 @@ $("#edit-penolakan").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget); // Tombol yang membuka modal
     var kode = button.data("kd"); // Ambil data-id dari tombol
     var token = $('meta[name="csrf-token"]').attr("content");
-
+    $('#alasan_id').empty()
+    
     var data = {
             kd: kode,
             _token: token,
