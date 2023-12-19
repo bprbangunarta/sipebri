@@ -35,6 +35,7 @@ class NotifikasiController extends Controller
                 'data_pengajuan.plafon',
                 'data_pengajuan.updated_at',
                 'data_pengajuan.kategori',
+                'data_pengajuan.status',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',

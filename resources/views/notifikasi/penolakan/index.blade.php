@@ -43,6 +43,7 @@
                                         <th class="text-center" width="35%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="8%">STATUS</th>
                                         <th class="text-center" width="5%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -77,39 +78,36 @@
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
                                             @endphp
                                             <td class="text-right" style="vertical-align: middle;">{{ $item->plafon }}</td>
+                                            <td class="text-right" style="text-align: center; text-transform: none;">
+                                                @if ($item->status == 'Dibatalkan')
+                                                    <span>Dibatalkan</span>
+                                                @else
+                                                    <span>Ditolak</span>
+                                                @endif
+                                            </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if (is_null($item->no_penolakan))
-                                                    <a data-toggle="modal" data-target="#tolak-permohonan"
-                                                        data-kode="{{ $item->kode_pengajuan }}"
-                                                        class="btn-circle btn-sm bg-yellow" title="Tambah Penolakan">
+                                                    <a data-toggle="modal" data-target="#"
+                                                        data-kode="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm"
+                                                        title="">
                                                         <i class="fa fa-file-text"></i>
                                                     </a>
                                                 @else
                                                     <a data-toggle="modal" data-target="#edit-penolakan"
                                                         class="btn-circle btn-sm bg-yellow"
-                                                        data-kd="{{ $item->kode_pengajuan }}" title="Edit Penolakan">
+                                                        data-kd="{{ $item->kode_pengajuan }}" title="Edit Penolakan"
+                                                        style="cursor: pointer;">
                                                         <i class="fa fa-file-text"></i>
                                                     </a>
                                                 @endif
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
+                                                    class="btn-circle btn-sm bg-blue" title="NONE">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>
-
-                                            {{-- <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('penolakan.edit', ['pengajuan' => $item->kd_pengajuan]) }}">
-                                                    <span class="btn bg-red" style="width: 120px;hight:100%;">Input Penolakan</span>
-                                                </a>
-
-                                                <p style="margin-top:-5px;"></p>
-                                                <a data-toggle="modal" data-target="#jadwal-ulang" data-pengajuan="{{ $item->kode_pengajuan }}" title="Jadwal Ulang">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Lihat Analisa</span>
-                                                </a>
-                                            </td> --}}
                                         </tr>
                                     @empty
                                         <tr>
