@@ -87,20 +87,30 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                @if (is_null($item->no_penolakan))
+                                                @if ($item->status == 'Ditolak')
+                                                    @if (is_null($item->no_penolakan))
+                                                        <a data-toggle="modal" data-target="#tolak-permohonan"
+                                                            data-kode="{{ $item->kode_pengajuan }}"
+                                                            class="btn-circle btn-sm bg-yellow" title="Tolak Permohonan"
+                                                            style="cursor: pointer;">
+                                                            <i class="fa fa-file-text"></i>
+                                                        </a>
+                                                    @else
+                                                        <a data-toggle="modal" data-target="#edit-penolakan"
+                                                            class="btn-circle btn-sm bg-green"
+                                                            data-kd="{{ $item->kode_pengajuan }}" title="Edit Penolakan"
+                                                            style="cursor: pointer;">
+                                                            <i class="fa fa-file-text"></i>
+                                                        </a>
+                                                    @endif
+                                                @else
                                                     <a data-toggle="modal" data-target="#"
                                                         data-kode="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm"
                                                         title="">
                                                         <i class="fa fa-file-text"></i>
                                                     </a>
-                                                @else
-                                                    <a data-toggle="modal" data-target="#edit-penolakan"
-                                                        class="btn-circle btn-sm bg-yellow"
-                                                        data-kd="{{ $item->kode_pengajuan }}" title="Edit Penolakan"
-                                                        style="cursor: pointer;">
-                                                        <i class="fa fa-file-text"></i>
-                                                    </a>
                                                 @endif
+
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}"

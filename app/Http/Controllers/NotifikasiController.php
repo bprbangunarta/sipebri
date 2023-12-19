@@ -144,6 +144,11 @@ class NotifikasiController extends Controller
 
     public function update_penolakan(Request $request)
     {
+        $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
+        if ($user->role_name != 'Kabag Analis' && $user->role_name != 'Kasi Analis') {
+            return redirect()->back()->with('error', 'User Anda Tidak Diizinkan');
+        }
+
         try {
             // Validasi input
             $validatedData = $request->validate([
