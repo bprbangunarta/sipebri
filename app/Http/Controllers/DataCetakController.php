@@ -833,7 +833,12 @@ class DataCetakController extends Controller
 
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
-            // dd($bahan . $total_bahan_baku);
+            $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
+            // if (is_null($adm)) {
+            //     $adm->asuransi_jiwa_menurun2 = 0;
+            //     $adm->asuransi_kendaraan_motor = 0;
+            // }
+            // dd($adm);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -858,6 +863,7 @@ class DataCetakController extends Controller
                 'memorandum' => $memorandum,
                 'swot' => $swot,
                 'qr' => $qr,
+                'adm' => $adm,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

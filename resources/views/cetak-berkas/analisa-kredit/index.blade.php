@@ -2058,21 +2058,31 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kendaraan (TLO)
                 </td>
                 <td> : </td>
-                <td>&nbsp; Tidak</td>
+                <td>&nbsp; @if ($adm->asuransi_kendaraan_motor > 0)
+                        Ya
+                        @else
+                        Tidak
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Jiwa (Wkawaktu)
                 </td>
                 <td> : </td>
-                <td>&nbsp; Ya</td>
+                <td>&nbsp; @if ($adm->asuransi_jiwa_menurun2 > 0)
+                        Ya
+                        @else
+                        Tidak
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kecelakaan Plus
                 </td>
                 <td> : </td>
-                <td>&nbsp; Tidak</td>
+                <td>&nbsp; -</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; o. Syarat-Syarat Kredit</td>
