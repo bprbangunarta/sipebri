@@ -117,7 +117,7 @@ class NotifikasiController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
-            // dd($data);
+
             // Memasukkan data dengan nomor baru ke dalam tabel data_penolakan
             DB::table('data_penolakan')->insert($data);
 
