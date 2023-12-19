@@ -132,11 +132,13 @@
                                         </tbody>
                                     </table>
 
-                                    @can('edit pengajuan kredit')
+                                    @if($pengajuan->produk_kode == "KTA")
+                                    @else
+                                        @can('edit pengajuan kredit')
                                         <a data-toggle="modal" data-target="#tambah-kendaraan" class="btn btn-sm btn-primary"
                                             style="margin-top:10px;">TAMBAH</a>
-                                    @endcan
-
+                                        @endcan
+                                    @endif
                                 </div>
                             </div>
 
@@ -246,10 +248,14 @@
 
                                         </tbody>
                                     </table>
-                                    @can('edit pengajuan kredit')
+
+                                    @if($pengajuan->produk_kode == "KTA")
+                                    @else
+                                        @can('edit pengajuan kredit')
                                         <a data-toggle="modal" data-target="#tambah-tanah" class="btn btn-sm btn-primary"
                                             style="margin-top:10px;">TAMBAH</a>
-                                    @endcan
+                                        @endcan
+                                    @endif
                                 </div>
                             </div>
 
@@ -357,10 +363,13 @@
 
                                         </tbody>
                                     </table>
-                                    @can('edit pengajuan kredit')
-                                        <a data-toggle="modal" data-target="#tambah-lainnya" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;">TAMBAH</a>
-                                    @endcan
+                                    @if($pengajuan->produk_kode == "KTA")
+                                    @else
+                                        @can('edit pengajuan kredit')
+                                            <a data-toggle="modal" data-target="#tambah-lainnya" class="btn btn-sm btn-primary"
+                                                style="margin-top:10px;">TAMBAH</a>
+                                        @endcan
+                                    @endif
                                 </div>
                             </div>
                         </div>

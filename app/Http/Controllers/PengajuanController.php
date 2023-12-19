@@ -162,11 +162,11 @@ class PengajuanController extends Controller
             ->whereNotIn('data_pengajuan.status', ['Batal', 'Dibatalkan', 'Ditolak'])
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', "%$keyword%")
-                ->orWhere('data_pengajuan.kode_pengajuan', 'like',  "%$keyword%")
-                ->orWhere('data_survei.kantor_kode', 'like', "%$keyword%")
-                ->orWhere('data_kantor.nama_kantor', 'like', "%$keyword%")
-                ->orWhere('data_produk.kode_produk', 'like', "%$keyword%")
-                ->orWhere('data_produk.nama_produk', 'like', "%$keyword%");
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like',  "%$keyword%")
+                    ->orWhere('data_survei.kantor_kode', 'like', "%$keyword%")
+                    ->orWhere('data_kantor.nama_kantor', 'like', "%$keyword%")
+                    ->orWhere('data_produk.kode_produk', 'like', "%$keyword%")
+                    ->orWhere('data_produk.nama_produk', 'like', "%$keyword%");
             });
 
         if ($tgl1 !== null) {
@@ -175,12 +175,12 @@ class PengajuanController extends Controller
 
         $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor, $resort) {
             $query->where('data_produk.kode_produk', 'like', "%$produk%")
-            ->where('data_survei.surveyor_kode', 'like', "%$surveyor%")
-            ->where('data_pengajuan.metode_rps', 'like', "%$metode%")
-            ->where('data_kantor.kode_kantor', 'like', "%$kantor%")
-            ->where('data_pengajuan.resort_kode', 'like', "%$resort%");
+                ->where('data_survei.surveyor_kode', 'like', "%$surveyor%")
+                ->where('data_pengajuan.metode_rps', 'like', "%$metode%")
+                ->where('data_kantor.kode_kantor', 'like', "%$kantor%")
+                ->where('data_pengajuan.resort_kode', 'like', "%$resort%");
         })
-        ->orderBy('data_pengajuan.created_at', 'DESC');
+            ->orderBy('data_pengajuan.created_at', 'DESC');
 
         $pengajuan = $query->paginate(10);
 
@@ -402,7 +402,7 @@ class PengajuanController extends Controller
                 ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
                 ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
                 ->join('data_jenis_dokumen', 'data_jaminan.jenis_dokumen_kode', '=', 'data_jenis_dokumen.kode')
-                ->select('data_pengajuan.kode_pengajuan', 'data_jaminan.*', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
+                ->select('data_pengajuan.kode_pengajuan', 'data_pengajuan.produk_kode', 'data_jaminan.*', 'data_jenis_agunan.jenis_agunan', 'data_jenis_dokumen.jenis_dokumen')
                 ->where('data_pengajuan.kode_pengajuan', '=', $pengajuan[0]->kode_pengajuan)
                 ->get();
 
