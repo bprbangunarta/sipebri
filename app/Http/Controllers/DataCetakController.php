@@ -833,12 +833,16 @@ class DataCetakController extends Controller
 
             //QR
             $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
+
+            //Asuransi Kendaraan dan Jiwa
             $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
-            // if (is_null($adm)) {
-            //     $adm->asuransi_jiwa_menurun2 = 0;
-            //     $adm->asuransi_kendaraan_motor = 0;
-            // }
-            // dd($adm);
+            if (is_null($adm)) {
+                $adm = (object) [
+                    'asuransi_jiwa_menurun2' => 0,
+                    'asuransi_kendaraan_motor' => 0,
+                ];
+            }
+
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
