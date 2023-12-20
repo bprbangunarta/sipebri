@@ -85,99 +85,19 @@
                                                 </a> --}}
 
                                                 <a href="/laporan/tracking/pengajuan?keyword={{ $item->kode }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Tracking Pengajuan" target="_blank">
+                                                    class="btn-circle btn-sm bg-yellow" title="Tracking Pengajuan"
+                                                    target="_blank">
                                                     <i class="fa fa-hourglass-start"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#info-{{ $item->kode }}"
-                                                    class="btn-circle btn-sm bg-blue" title="Informasi">
+                                                <a data-toggle="modal" data-target="#info-pengajuan"
+                                                    data-id={{ $item->kode }} class="btn-circle btn-sm bg-blue"
+                                                    title="Informasi">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>
 
-                                            {{-- MODAL INFO --}}
-                                            <div class="modal fade" id="info-{{ $item->kode }}">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-blue">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span></button>
-                                                            <h4 class="modal-title">INFORMASI PENGAJUAN</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label>NAMA NASABAH</label>
-                                                                        <input type="text" class="form-control"
-                                                                            value="{{ $item->nama }} - {{ $item->kategori }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>PRODUK KREDIT</label>
-                                                                        <input type="text" class="form-control"
-                                                                            value="{{ $item->produk_kode }} - {{ $item->nama_produk }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>PLAFON KREDIT</label>
-                                                                        <input type="text" class="form-control"
-                                                                            value="{{ $item->plafon }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>JANGKA WAKTU</label>
-                                                                        <input type="text" class="form-control"
-                                                                            value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label>DESA KECAMATAN</label>
-                                                                        <input type="text" class="form-control"
-                                                                            value="{{ $item->kelurahan }} - {{ $item->kecamatan }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>SURVEYOR</label>
-                                                                        <input type="text" class="form-control"
-                                                                            value="{{ $item->surveyor }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>TRACKING</label>
-                                                                        <input type="text"
-                                                                            class="form-control text-uppercase"
-                                                                            value="{{ $item->tracking }}">
-                                                                    </div>
-
-                                                                    <div class="form-group" style="margin-top:-10px;">
-                                                                        <label>PERSETUJUAN</label>
-                                                                        @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
-                                                                            <input type="text"
-                                                                                class="form-control text-uppercase"
-                                                                                value="{{ $item->status }}">
-                                                                        @else
-                                                                            <input type="text"
-                                                                                class="form-control text-uppercase"
-                                                                                value="BELUM ADA PERSETUJUAN">
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="modal-footer" style="margin-top: -10px;">
-                                                            <button type="submit" class="btn bg-blue"
-                                                                data-dismiss="modal" style="width: 100%;">TUTUP</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- END MODAL INFO --}}
                                         </tr>
                                         @php
                                             $no++;
@@ -208,6 +128,78 @@
         </section>
     </div>
 
+    {{-- MODAL INFO --}}
+    <div class="modal fade" id="info-pengajuan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">INFORMASI PENGAJUAN</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>NAMA NASABAH</label>
+                                <input type="text" class="form-control" value="" id="nama_nasabah">
+                            </div>
+
+                            <div class="form-group" style="margin-top:-10px;">
+                                <label>PRODUK KREDIT</label>
+                                <input type="text" class="form-control" value="" id="produk">
+                            </div>
+
+                            <div class="form-group" style="margin-top:-10px;">
+                                <label>PLAFON KREDIT</label>
+                                <input type="text" class="form-control" value="" id="plafon">
+                            </div>
+
+                            <div class="form-group" style="margin-top:-10px;">
+                                <label>JANGKA WAKTU</label>
+                                <input type="text" class="form-control" value="" id="jw">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>DESA KECAMATAN</label>
+                                <input type="text" class="form-control" value="" id="desa">
+                            </div>
+
+                            <div class="form-group" style="margin-top:-10px;">
+                                <label>SURVEYOR</label>
+                                <input type="text" class="form-control" value="" id="surveyor">
+                            </div>
+
+                            <div class="form-group" style="margin-top:-10px;">
+                                <label>TRACKING</label>
+                                <input type="text" class="form-control text-uppercase" value="" id="tracking">
+                            </div>
+
+                            <div class="form-group" style="margin-top:-10px;">
+                                <label>PERSETUJUAN</label>
+                                <input type="text" class="form-control text-uppercase" value=""
+                                    id="persetujuan">
+                                {{-- @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
+                                    <input type="text" class="form-control text-uppercase"
+                                        value="{{ $item->status }}">
+                                @else
+                                    <input type="text" class="form-control text-uppercase"
+                                        value="BELUM ADA PERSETUJUAN">
+                                @endif --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="margin-top: -10px;">
+                    <button type="submit" class="btn bg-blue" data-dismiss="modal" style="width: 100%;">TUTUP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END MODAL INFO --}}
 
     <div class="modal fade" id="modal-filter">
         <div class="modal-dialog">
@@ -234,7 +226,8 @@
                                         style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($produk as $item)
-                                            <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} - {{ $item->nama_produk }}</option>
+                                            <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} -
+                                                {{ $item->nama_produk }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -252,7 +245,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>RESORT</label>
-                                    <select class="form-control resort" name="resort" id="" style="width: 100%;margin-top:-5px;">
+                                    <select class="form-control resort" name="resort" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($resort as $item)
                                             <option value="{{ $item->kode_resort }}">{{ $item->nama_resort }}</option>
@@ -262,7 +256,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KECAMATAN</label>
-                                    <select class="form-control kecamatan" name="kecamatan" id="" style="width: 100%;margin-top:-5px;">
+                                    <select class="form-control kecamatan" name="kecamatan" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($kecamatan as $item)
                                             <option value="{{ $item->kecamatan }}">{{ $item->kecamatan }}</option>
@@ -280,7 +275,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>METODE RPS</label>
-                                    <select class="form-control metode" name="metode" id="" style="width: 100%;margin-top:-5px;">
+                                    <select class="form-control metode" name="metode" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($metode as $item)
                                             <option value="{{ $item->nama_metode }}">{{ $item->nama_metode }}</option>
@@ -302,7 +298,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KABUPATEN</label>
-                                    <select class="form-control kabupaten" name="kebupaten" id="" style="width: 100%;margin-top:-5px;">
+                                    <select class="form-control kabupaten" name="kebupaten" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($kabupaten as $item)
                                             <option value="{{ $item->kode_dati }}">{{ $item->kabupaten }}</option>
@@ -312,7 +309,8 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KELURAHAN</label>
-                                    <select class="form-control kelurahan" name="kelurahan" id="" style="width: 100%;margin-top:-5px;">
+                                    <select class="form-control kelurahan" name="kelurahan" id=""
+                                        style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($kelurahan as $item)
                                             <option value="{{ $item->kelurahan }}">{{ $item->kelurahan }}</option>
@@ -333,6 +331,7 @@
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/info_pengajuan.js') }}"></script>
     <script>
         // Select2
         $('.produk').select2()

@@ -220,6 +220,38 @@ class PengajuanController extends Controller
         ]);
     }
 
+    public function get_info_pengajuan($kode)
+    {
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('users', 'users.code_user', '=', 'data_survei.surveyor_kode')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->select(
+                'data_pengajuan.kode_pengajuan as kode',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.plafon as plafon',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.nama_nasabah as nama',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.status',
+                'data_pengajuan.tracking',
+                'data_pengajuan.kategori',
+                'data_nasabah.is_entry as entry',
+                'data_kantor.nama_kantor',
+                'data_survei.kantor_kode as kantor',
+                'data_produk.kode_produk',
+                'data_produk.nama_produk',
+                'users.name as surveyor',
+            )
+            ->where('data_pengajuan.kode_pengajuan', $kode)->get();
+
+        return response()->json($query);
+    }
+
     public function otorisasi(Request $request)
     {
         $keyword = request('keyword');

@@ -171,6 +171,7 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::get('/data/pengajuan', 'all')->name('pengajuan.data');
+            Route::get('/data/info/{kode}', 'get_info_pengajuan')->name('pengajuan.info');
             Route::get('/pengajuan/edit', 'edit')->name('pengajuan.edit');
             Route::put('/pengajuan/simpan', 'storepengajuan')->name('pengajuan.storepengajuan');
             Route::get('/pengajuan/agunan', 'agunan')->name('pengajuan.agunan');
