@@ -383,7 +383,7 @@
                                     }
                                 });
 
-                            } else if (response.message == 'Permintaan anda ditolak') {
+                            } else if (response.message == 'Permintaan  anda ditolak') {
                                 Swal.fire({
                                     title: 'Ditolak!',
                                     text: 'PErmintaan anda ditolak.',
