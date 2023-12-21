@@ -180,6 +180,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/pengajuan/editagunan/update', 'updateagunan')->name('pengajuan.updateagunan');
             Route::put('/pengajuan/editagunan/validasi', 'validasiagunan')->name('pengajuan.validasiagunan');
             Route::delete('/pengajuan/{pengajuan}/delete', 'destroy')->name('pengajuan.destroy');
+            Route::delete('/pengajuan/{pengajuan}/delete', 'destroy_batal')->name('batal.destroy');
             Route::post('/pengajuan/store', 'store')->name('pengajuan.store');
         });
 
@@ -596,6 +597,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/profile/password', 'password_index')->name('password.index');
         Route::POST('/profile/password/ubah', 'ubah_password')->name('ubah.password');
+        Route::get('/perubahan/data', 'perubahan_data')->name('ubah.data');
     });
 });
 

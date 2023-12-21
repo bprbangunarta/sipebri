@@ -648,10 +648,31 @@ class PengajuanController extends Controller
             $data = [
                 'status' => 'Batal',
             ];
+            dd($pengajuan);
             Pengajuan::where('id', $pengajuan)->update($data);
             return redirect()->back()->with('success', 'Data berhasil dibatalkan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal dibatalkan');
+        }
+    }
+
+    public function destroy_batal($pengajuan)
+    {
+        try {
+            $enc = Crypt::decrypt($pengajuan);
+            $data = [
+                'status' => 'Batal',
+            ];
+
+            $cek = Pengajuan::where('kode_pengajuan', $enc)->first();
+            if ($cek) {
+                Pengajuan::where('id', $cek->id)->update($data);
+                return response()->json(['message' => 'Data berhasil dihapus']);
+            } else {
+                return response()->json(['message' => 'Tidak ada data yang ditemukan'], 404);
+            }
+        } catch (DecryptException $e) {
+            return response()->json(['message' => 'Permintaan anda ditolak.'], 403);
         }
     }
 }

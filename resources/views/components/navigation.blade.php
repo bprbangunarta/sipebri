@@ -378,6 +378,12 @@
                                 Permission
                             </a>
                         </li>
+                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
+                            <a href="{{ route('permission.index') }}" title="Permission">
+                                <i class="fa fa-circle-o"></i>
+                                Menu Sakti
+                            </a>
+                        </li>
                     </ul>
                 </li>
             @endcan

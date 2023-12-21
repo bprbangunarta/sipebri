@@ -99,8 +99,10 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#hapus" class="btn-circle btn-sm bg-red"
-                                                    title="Hapus">
+                                                <a href="{{ route('batal.destroy', ['pengajuan' => $item->kd]) }}"
+                                                    data-toggle="modal" data-target="#hapus"
+                                                    class="btn-circle btn-sm bg-red confirmdelete" title="Hapus"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
                                             </td>
@@ -306,6 +308,7 @@
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/cek_nasabah.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/myscript/delete.js') }}"></script> --}}
     <script>
         //Datemask yyyy/mm/dd
         $('#datemask').inputmask('yyyy-mm-dd', {
@@ -340,6 +343,70 @@
             var submitButton = $('#submit-pengajuan');
             submitButton.prop('disabled', true);
 
+        });
+
+        $(".confirmdelete").click(function(event) {
+            event.preventDefault();
+
+            var kd = $(this).data('kd');
+            var deleteUrl = $(this).attr('href'); // Mendapatkan URL dari href
+
+            Swal.fire({
+                title: "Apakah anda yakin?",
+                text: "Yakin, Ingin menghapus data",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, Hapus!",
+                cancelButtonText: "Batal",
+            }).then((willDelete) => {
+                if (willDelete.isConfirmed) {
+                    $.ajax({
+                        url: deleteUrl,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.message == 'Data berhasil dihapus') {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: 'Data berhasil dihapus.',
+                                    icon: 'success',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then((result) => {
+                                    if (result.isConfirmed || result.dismiss ===
+                                        'timer') {
+                                        location.reload();
+                                    }
+                                });
+
+                            } else if (response.message == 'Permintaan anda ditolak') {
+                                Swal.fire({
+                                    title: 'Ditolak!',
+                                    text: 'PErmintaan anda ditolak.',
+                                    icon: 'warning',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal!!!',
+                                    text: 'Data gagal dihapus.',
+                                    icon: 'danger',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error:", xhr.responseText);
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endpush
