@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use PhpParser\Node\Expr\Cast\String_;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -119,7 +120,7 @@ class NasabahController extends Controller
             'input_user' => 'required',
             'kategori' => 'required',
         ]);
-
+        dd($request);
         //Hapus format tanggal Y-M-D menjadi YMD
         $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
 
@@ -398,5 +399,12 @@ class NasabahController extends Controller
     public function validasi(Request $request)
     {
         return view('nasabah.validasi');
+    }
+
+    public function cekdata_nasabah($no_id)
+    {
+        $cek = DB::table('data_nasabah')->where('no_identitas', $no_id)->first();
+
+        return response()->json($cek);
     }
 }

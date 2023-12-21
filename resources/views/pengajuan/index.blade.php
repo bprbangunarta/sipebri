@@ -57,9 +57,9 @@
                                             <td class="text-center">{{ $item->kode }}</td>
                                             <td>{{ strtoupper($item->nama) }}</td>
                                             @if (is_null($item->alamat))
-                                                <td class="text-center" >-</td>
+                                                <td class="text-center">-</td>
                                             @else
-                                                <td class="text-uppercase" >
+                                                <td class="text-uppercase">
                                                     {{ $item->alamat }}
                                                 </td>
                                             @endif
@@ -99,8 +99,8 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#hapus"
-                                                    class="btn-circle btn-sm bg-red" title="Hapus">
+                                                <a data-toggle="modal" data-target="#hapus" class="btn-circle btn-sm bg-red"
+                                                    title="Hapus">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
                                             </td>
@@ -305,6 +305,7 @@
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/cek_nasabah.js') }}"></script>
     <script>
         //Datemask yyyy/mm/dd
         $('#datemask').inputmask('yyyy-mm-dd', {

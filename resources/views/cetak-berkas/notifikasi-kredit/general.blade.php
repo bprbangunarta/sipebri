@@ -368,7 +368,7 @@
             @if ($item->jenis_jaminan == 'Kendaraan')
                 <table>
                     <tr>
-                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }} </td>
+                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }}. </td>
                         <td width="27%">Untuk Jaminan Kendaraan</td>
                         <td class="text-center" width="3%" colspan="2"> : </td>
                         <td></td>
@@ -419,10 +419,39 @@
                         </td>
                     </tr>
                 </table>
+                <table style="margin-top:-15px;">
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;">
+                            {{ $loop->iteration + 12 }}. </td>
+                        <td style="text-align: justify;">
+                            Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan
+                            atau
+                            karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa
+                            survey
+                            yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa
+                            survey.
+                            Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada
+                            Debitur dan
+                            Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;">
+                            {{ $loop->iteration + 13 }}. </td>
+                        <td style="text-align: justify;">
+                            Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit
+                            berikut
+                            syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
             @elseif ($item->jenis_jaminan == 'Tanah')
                 <table>
                     <tr>
-                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }} </td>
+                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }}. </td>
                         <td width="27%">Untuk Jaminan Tanah</td>
                         <td class="text-center" width="3%" colspan="2"> : </td>
                         <td></td>
@@ -460,10 +489,39 @@
                         </td>
                     </tr>
                 </table>
+                <table style="margin-top:-15px;">
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;">
+                            {{ $loop->iteration + 12 }}. </td>
+                        <td style="text-align: justify;">
+                            Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan
+                            atau
+                            karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa
+                            survey
+                            yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa
+                            survey.
+                            Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada
+                            Debitur dan
+                            Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;">
+                            {{ $loop->iteration + 13 }}. </td>
+                        <td style="text-align: justify;">
+                            Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit
+                            berikut
+                            syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
             @elseif ($item->jenis_jaminan == 'Lainnya')
                 <table>
                     <tr>
-                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }} </td>
+                        <td class="text-center" width="2%"> {{ $loop->iteration + 11 }}. </td>
                         <td width="27%">Untuk Jaminan Lainnya</td>
                         <td class="text-center" width="3%" colspan="2"> : </td>
                         <td></td>
@@ -514,35 +572,71 @@
                         </td>
                     </tr>
                 </table>
+                <table style="margin-top:-15px;">
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;">
+                            {{ $loop->iteration + 12 }}. </td>
+                        <td style="text-align: justify;">
+                            Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan
+                            atau
+                            karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa
+                            survey
+                            yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa
+                            survey.
+                            Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada
+                            Debitur dan
+                            Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;">
+                            {{ $loop->iteration + 13 }}. </td>
+                        <td style="text-align: justify;">
+                            Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit
+                            berikut
+                            syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
             @endif
+
         @empty
         @endforelse
 
-        <table style="margin-top:-15px;">
-            <tr>
-                <td class="text-center" width="2%" style="vertical-align: text-top;"> 14. </td>
-                <td style="text-align: justify;">
-                    Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau
-                    karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey
-                    yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa survey.
-                    Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur dan
-                    Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
-                </td>
-            </tr>
-        </table>
+        @if ($jaminan[0]->jenis_jaminan == null && $jaminan[1]->jenis_jaminan == null && $jaminan[2]->jenis_jaminan == null)
+            <br>
+            <table style="margin-top:-15px;">
+                <tr>
+                    <td class="text-center" width="2%" style="vertical-align: text-top;"> 12. </td>
+                    <td style="text-align: justify;">
+                        Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau
+                        karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey
+                        yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa survey.
+                        Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur
+                        dan
+                        Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                    </td>
+                </tr>
+            </table>
 
-        <table>
-            <tr>
-                <td class="text-center" width="2%" style="vertical-align: text-top;"> 15. </td>
-                <td style="text-align: justify;">
-                    Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit berikut
-                    syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
-                </td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <td class="text-center" width="2%" style="vertical-align: text-top;"> 13. </td>
+                    <td style="text-align: justify;">
+                        Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit
+                        berikut
+                        syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                    </td>
+                </tr>
+            </table>
 
-        Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas. Demikian
-        agar Bapak / Ibu maklum.
+            Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas.
+            Demikian
+            agar Bapak / Ibu maklum.
+        @endif
 
         <p></p>
 

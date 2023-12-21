@@ -201,6 +201,7 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::post('/nasabah', [NasabahController::class, 'store'])->name('nasabah.store');
+        Route::GET('/nasabah/cekdata/{kode}', [NasabahController::class, 'cekdata_nasabah'])->name('cekdata.nasabah');
         Route::get('/nasabah/edit', [NasabahController::class, 'edit'])->name('nasabah.edit');
         Route::put('/nasabah/update', [NasabahController::class, 'update'])->name('nasabah.update');
         Route::get('/pendamping/edit', [PendampingController::class, 'edit'])->name('pendamping.edit');
