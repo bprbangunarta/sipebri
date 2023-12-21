@@ -120,7 +120,6 @@ class NasabahController extends Controller
             'input_user' => 'required',
             'kategori' => 'required',
         ]);
-        dd($request);
         //Hapus format tanggal Y-M-D menjadi YMD
         $tanggal = Carbon::createFromFormat('Y-m-d', $request->tanggal_lahir)->format('Ymd');
 

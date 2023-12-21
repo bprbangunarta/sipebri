@@ -1378,10 +1378,9 @@ class Midle extends Model
         $imgpath = $strpath . '/' . $imgname;
 
         $data_url = $text . '_' . $data . '_' . $user;
-        // dd($user);
+
         // URL dan QR Code dari Google Chart API
         $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
-        // $url = 'http://http://127.0.0.1:8000/verifikasi?qrcode=' . $data_url;
         $uri = urlencode($url);
         $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
 
