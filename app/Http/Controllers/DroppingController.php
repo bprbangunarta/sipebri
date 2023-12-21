@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use Carbon\Carbon;
 
 class DroppingController extends Controller
 {
@@ -74,8 +75,47 @@ class DroppingController extends Controller
             })
             ->orderBy('tgl_daftar', 'desc')
             ->paginate(10);
+        //
+        // dd($data);
         return view('dropping.kredit', [
             'data' => $data,
         ]);
+    }
+
+    public function hapus_spk($pengajuan)
+    {
+        try {
+            $data_spk = DB::table('data_spk')->where('pengajuan_kode', $pengajuan)->first();
+
+            if (!is_null($data_spk)) {
+                $data = [
+                    'pengajuan_kode' => $pengajuan . 'XX',
+                ];
+                $data2 = [
+                    'on_current' => 0,
+                    'status' => "Dibatalkan",
+                ];
+                $data3 = [
+                    'on_current' => 0,
+                ];
+
+                $agunan = DB::table('data_jaminan')->where('pengajuan_kode', $pengajuan)->get();
+                if (count($agunan) != 0) {
+                    foreach ($agunan as $item) {
+                        DB::table('data_jaminan')->where('id', $item->id)->update($data3);
+                    }
+                }
+
+                DB::transaction(function () use ($data, $data2, $pengajuan, $data_spk) {
+                    Pengajuan::where('kode_pengajuan', $pengajuan)->update($data2);
+                    DB::table('data_spk')->where('id', $data_spk->id)->update($data);
+                });
+                return redirect()->back()->with('success', 'Berhasil Hapus Perjanjian Kredit');
+            } else {
+                return redirect()->back()->with('error', 'Data Tidak Ada');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal Hapus Perjanjian Kredit');
+        }
     }
 }

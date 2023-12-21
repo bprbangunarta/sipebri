@@ -47,7 +47,7 @@
                                         <th class="text-center">JTH. TEMPO</th>
 
                                         @can('dropping kredit')
-                                        <th class="text-center">AKSI</th>
+                                            <th class="text-center">AKSI</th>
                                         @endcan
                                     </tr>
                                 </thead>
@@ -68,7 +68,7 @@
                                             <td>{{ $item->alamat }}</td>
                                             <td class="text-center">{{ $item->wilayah }}</td>
                                             <td class="text-center">{{ $item->kode_produk }}</td>
-                                            <td class="text-right" >
+                                            <td class="text-right">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
                                             <td class="text-center">{{ $item->no_spk }}</td>
@@ -80,12 +80,25 @@
                                             </td>
 
                                             @can('dropping kredit')
-                                            <td class="text-center">
-                                                <a data-toggle="modal" data-target="#hapus"
-                                                    class="btn-circle btn-sm bg-red" title="Hapus">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                            </td>
+                                                <td class="text-center">
+                                                    <form method="POST"
+                                                        action="{{ route('hapus.spk', ['pengajuan' => $item->kode_pengajuan]) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit"
+                                                            class="btn btn-circle btn-sm bg-red confirmdelete" title="Hapus"
+                                                            style='height: 23px; width: 23px; display: flex; justify-content: center; align-items: center;'>
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    {{-- <a href="{{ route('hapus.spk', ['pengajuan' => $item->kode_pengajuan]) }}"
+                                                        data-toggle="modal" data-target="#"
+                                                        class="btn-circle btn-sm bg-red confirmdelete" title="Hapus"
+                                                        style="cursor: pointer;">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a> --}}
+                                                </td>
                                             @endcan
                                         </tr>
                                         @php
@@ -116,7 +129,7 @@
         </section>
     </div>
 
-    <div class="modal fade" id="hapus">
+    {{-- <div class="modal fade" id="hapus">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-red">
@@ -126,13 +139,16 @@
                 </div>
 
                 <div class="modal-body">
-                    <p>Fitur reverse pengajuan kredit yang sudah siap untuk dropping sedang dalam pengembangan, mohon tunggu sebentar. Terimakasih</p>
+                    <p>Fitur reverse pengajuan kredit yang sudah siap untuk dropping sedang dalam pengembangan, mohon tunggu
+                        sebentar. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn bg-red" style="width: 100%;"
-                        data-dismiss="modal">TUTUP</button>
+                    <button type="button" class="btn bg-red" style="width: 100%;" data-dismiss="modal">TUTUP</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
+@push('myscript')
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+@endpush

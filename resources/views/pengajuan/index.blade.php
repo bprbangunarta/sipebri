@@ -308,7 +308,7 @@
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/batal.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/cek_nasabah.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/myscript/delete.js') }}"></script> --}}
+
     <script>
         //Datemask yyyy/mm/dd
         $('#datemask').inputmask('yyyy-mm-dd', {

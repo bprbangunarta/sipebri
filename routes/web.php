@@ -591,6 +591,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/droping/cif', 'data_cif')->name('dropping.cif');
         Route::get('/droping/agunan', 'data_agunan')->name('dropping.agunan');
         Route::get('/droping/kredit', 'data_kredit')->name('dropping.kredit');
+        Route::delete('/hapus/kredit/{pengajuan}', 'hapus_spk')->name('hapus.spk');
     });
 
     // Update Password

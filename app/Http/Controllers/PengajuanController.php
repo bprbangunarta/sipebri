@@ -648,7 +648,7 @@ class PengajuanController extends Controller
             $data = [
                 'status' => 'Batal',
             ];
-            dd($pengajuan);
+
             Pengajuan::where('id', $pengajuan)->update($data);
             return redirect()->back()->with('success', 'Data berhasil dibatalkan');
         } catch (\Throwable $th) {
