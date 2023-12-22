@@ -610,6 +610,8 @@ Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
 Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
 //====FRONT END====//
 
+Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');
+
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/rekap/analisa', 'rekap.analisa');
 
