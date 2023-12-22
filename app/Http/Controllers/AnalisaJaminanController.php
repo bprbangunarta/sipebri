@@ -333,6 +333,7 @@ class AnalisaJaminanController extends Controller
             //Agunan Lain
             $jenis_lain = DB::table('ja_lainnya')->get();
             $data_lain = DB::table('da_lainnya')->get();
+            $usr = Auth::user()->code_user;
 
             //Data dati
             $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
@@ -378,5 +379,18 @@ class AnalisaJaminanController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
         return redirect()->back()->with('error', 'Gagal menambahkan data');
+    }
+
+    public function delete_lain($id)
+    {
+        try {
+            $data = DB::table('data_jaminan')->where('id', $id)->first();
+            if (!is_null($data)) {
+                DB::table('data_jaminan')->where('id', $data->id)->delete();
+                return response()->json(['message' => 'Data Berhasil Dihapus.']);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Data Gagal Dihapus.']);
+        }
     }
 }

@@ -399,6 +399,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analisa/jaminan/lainnya', 'lain')->name('taksasi.lain');
             Route::get('/analisa/jaminan/lainnya/{id}/edit', 'editlain')->name('taksasi.editlain');
             Route::post('/analisa/jaminan/lainnya', 'simpanlain')->name('taksasi.simpanlain');
+            Route::delete('/analisa/jaminan/lainnya/{id}', 'delete_lain')->name('taksasi.delete_lain');
         });
 
         Route::controller(DataAnalisa5CController::class)->group(function () {

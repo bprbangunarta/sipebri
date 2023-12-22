@@ -64,15 +64,24 @@ class AdministrasiController extends Controller
             }
             // dd($cek);
             // //Perubahan Realtime APHT
-            // if ($cek[0]->apht != $administrasi->proses_apht) {
-            //     $apht_real = ['proses_apht' => $cek[0]->apht];
+            // if ($cek[0]->pengikatan != '3') {
+            //     $apht_real = ['proses_apht' => 0];
             //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
             // }
 
             // //Perubahan Realtime FIDUCIA
-            // if ($cek[0]->fiducia != $administrasi->fiducia) {
-            //     $fiducia_real = ['by_fiducia' => $cek[0]->fiducia];
+            // if ($cek[0]->pengikatan == '2') {
+            //     $fiducia_real = ['by_fiducia' => 0];
             //     DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($fiducia_real);
+            // }
+
+            // if ($cek[0]->pengikatan != '1') {
+            //     $apht_real = ['proses_apht' => 0];
+            //     $fiducia_real = ['by_fiducia' => 0];
+            //     DB::transaction(function () use ($enc, $apht_real, $fiducia_real) {
+            //         DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($apht_real);
+            //         DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($fiducia_real);
+            //     });
             // }
 
             $administrasi = DB::table('a_administrasi')
