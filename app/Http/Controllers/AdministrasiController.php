@@ -51,17 +51,17 @@ class AdministrasiController extends Controller
                 ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
                 ->where('a_administrasi.pengajuan_kode', $enc)->first();
 
-            //Perubahan Realtime Nominal administrasi
-            if ($cek[0]->administrasi != $administrasi->administrasi) {
-                $adm_real = ['administrasi' => $cek[0]->administrasi];
-                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($adm_real);
-            }
+            // //Perubahan Realtime Nominal administrasi
+            // if ($cek[0]->administrasi != $administrasi->administrasi) {
+            //     $adm_real = ['administrasi' => $cek[0]->administrasi];
+            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($adm_real);
+            // }
 
-            //Perubahan Realtime Nominal Provisi
-            if ($cek[0]->provisi != $administrasi->provisi) {
-                $provisi_real = ['provisi' => $cek[0]->provisi];
-                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
-            }
+            // //Perubahan Realtime Nominal Provisi
+            // if ($cek[0]->provisi != $administrasi->provisi) {
+            //     $provisi_real = ['provisi' => $cek[0]->provisi];
+            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
+            // }
             // dd($cek);
             // //Perubahan Realtime APHT
             // if ($cek[0]->pengikatan != '3') {
