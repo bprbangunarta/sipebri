@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class UserController extends Controller
@@ -157,6 +158,67 @@ class UserController extends Controller
             return redirect()->back()->with('success', 'Anda Berhasil Merubah Password!!');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function perubahan_data_index(Request $request)
+    {
+        return view('menu.index');
+    }
+
+    public function ubah_data_tabel(Request $request)
+    {
+        try {
+            //Nama Tabel
+            $nama_table = $request->table;
+            //Nama Field Didalam Tabel
+            $field_table = $request->field_table;
+            //Data yang akan dimasukan
+            $value = $request->value_field_table;
+            //Parameter data untuk melakukan perubahan
+            $parameter = $request->parameter;
+            //Fungsional perintah CRUD
+            $fungsional = $request->fungsional;
+            //Nama Filed Tabel Yang Akan Diubah
+            $change_value = $request->change_value_field_table;
+
+            if ($request->fungsional == 'get') {
+                $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional();
+                $columns = Schema::getColumnListing($nama_table);
+                return view('menu.data', [
+                    'data' => $cek,
+                    'field' => $columns,
+                ]);
+            } elseif ($request->fungsional == 'first') {
+                $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional();
+                $columns = Schema::getColumnListing($nama_table);
+                $cek = [(object)[$cek]];
+                return view('menu.data', [
+                    'data' => $cek,
+                    'field' => $columns,
+                ]);
+            } elseif ($request->fungsional == 'latest') {
+                $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional()->get();
+                $columns = Schema::getColumnListing($nama_table);
+                return view('menu.data', [
+                    'data' => $cek,
+                    'field' => $columns,
+                ]);
+            }
+
+            if ($request->fungsional == 'update') {
+                $data = [
+                    $change_value => $value,
+                ];
+                $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional($data);
+                $columns = Schema::getColumnListing($nama_table);
+                return view('menu.data', [
+                    'data' => $cek,
+                    'field' => $columns,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal diubah');
         }
     }
 }

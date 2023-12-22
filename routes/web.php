@@ -598,7 +598,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/profile/password', 'password_index')->name('password.index');
         Route::POST('/profile/password/ubah', 'ubah_password')->name('ubah.password');
-        Route::get('/perubahan/data', 'perubahan_data')->name('ubah.data');
+        Route::get('/perubahan/data', 'perubahan_data_index')->name('ubah.data');
+        Route::post('/perubahan/data/tabel', 'ubah_data_tabel')->name('ubah.data_tabel');
     });
 });
 

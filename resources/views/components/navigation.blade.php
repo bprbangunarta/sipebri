@@ -351,7 +351,8 @@
 
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
-                <li class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission') ? 'active' : '' }}">
+                <li
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', '/perubahan/data') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -378,8 +379,8 @@
                                 Permission
                             </a>
                         </li>
-                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
-                            <a href="{{ route('permission.index') }}" title="Permission">
+                        <li class="{{ request()->is('/perubahan/data') ? 'active' : '' }}">
+                            <a href="{{ route('ubah.data') }}" title="Menu Sakti">
                                 <i class="fa fa-circle-o"></i>
                                 Menu Sakti
                             </a>

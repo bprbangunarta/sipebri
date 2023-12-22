@@ -1130,6 +1130,7 @@ class DataCetakController extends Controller
                 ]);
                 //Done
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
+                // dd($jaminan);
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
                     'jaminan' => $jaminan,

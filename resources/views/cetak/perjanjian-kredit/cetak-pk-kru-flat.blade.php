@@ -272,27 +272,30 @@
                     @forelse ($jaminan as $item)
                         @if ($item->jenis_jaminan == 'Kendaraan')
                             <li class="text-hg">
-                                BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }},
+                                - BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }},
                                 {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }},
                                 {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }},
                                 {{ $item->atas_nama }}, {{ $item->lokasi }}
                             </li>
+                            <br>
                         @elseif ($item->jenis_jaminan == 'Tanah')
                             <li class="text-hg">
-                                SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
+                                - SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
                                 {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }},
                                 ALAMAT {{ $item->lokasi }}
                             </li>
+                            <br>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
                             <li class="text-hg">
                                 @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
-                                    KARTU DAN SALDO JAMSOSTEK
+                                    - KARTU DAN SALDO JAMSOSTEK
                                 @else
                                     {{ $item->nama_jenis_dokumen }}
                                 @endif
-                                ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }} ALAMAT
+                                - ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }} ALAMAT
                                 {{ $item->lokasi }}
                             </li>
+                            <br>
                         @endif
                     @empty
                     @endforelse
