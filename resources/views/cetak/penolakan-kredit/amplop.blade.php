@@ -20,7 +20,7 @@
             height: 180mm;
             margin: 0;
             font-family: "Times New Roman", Times, serif;
-            border: 1px solid brown;
+            /* border: 1px solid brown; */
         }
 
         table {
@@ -90,9 +90,9 @@
 
         <table>
             <tr>
-                <td width="14%">Nomor</td>
-                <td class="text-center" width="1%"> : </td>
-                <td>0973/03/KABAG.ANALIS/PBA/XII/2023	</td>
+                <td width="8%">Nomor</td>
+                <td class="text-center" width="3%"> : </td>
+                <td>{{ $data->no_penolakan }}</td>
             </tr>
             <tr>
                 <td>Lampiran</td>
@@ -112,10 +112,10 @@
                 <td width="65%"></td>
                 <td width="35%">
                     Kepata Yth. <br>
-                    WARMAH RIO <br>
+                    {{ $data->nama_nasabah }} <br>
                     di <br>
-                    DUSUN CIPACAR RT/RW 07/02 PADAMULYA CIPUNAGARA SUBANG <br>
-                    082320099971
+                    {{ $data->alamat_ktp }} <br>
+                    {{ $data->no_telp }}
                 </td>
             </tr>
         </table>
@@ -123,39 +123,39 @@
         <p style="margin-top: 40px;"></p>
         <table>
             <tr>
-                <td width="14%">Kantor Pusat</td>
-                <td class="text-center" width="1%"> : </td>
+                <td width="8%">Kantor Pusat</td>
+                <td class="text-center" width="3%"> : </td>
                 <td> Jl. H. Iksan No. 89 Pamanukan 41254 Telp. (0260) 550500 – 550888</td>
             </tr>
 
             <tr>
-                <td width="14%">Kantor Kas</td>
-                <td class="text-center" width="1%"> : </td>
+                <td>Kantor Kas</td>
+                <td class="text-center"> : </td>
                 <td>Jl. Otto Iskandardinata No. 73 Telp. (0260) 412449</td>
             </tr>
             <tr>
-                <td width="14%"></td>
-                <td class="text-center" width="1%"></td>
+                <td></td>
+                <td class="text-center"></td>
                 <td>Jl. Raya Jalancagak No. 58 Telp. (0260) 472660</td>
             </tr>
             <tr>
-                <td width="14%"></td>
-                <td class="text-center" width="1%"></td>
+                <td></td>
+                <td class="text-center"></td>
                 <td>Jl. Raya Kamarung, Pagaden Telp. (0260) 450400</td>
             </tr>
             <tr>
-                <td width="14%"></td>
-                <td class="text-center" width="1%"></td>
+                <td></td>
+                <td class="text-center"></td>
                 <td>Jl. Kalijati-Purwadadi No. 9 Telp. (0260) 4641126</td>
             </tr>
             <tr>
-                <td width="14%"></td>
-                <td class="text-center" width="1%"></td>
+                <td></td>
+                <td class="text-center"></td>
                 <td>Jl. Ahmad Yani No. 7, Ciasem Telp. (0260) 523170</td>
             </tr>
             <tr>
-                <td width="14%"></td>
-                <td class="text-center" width="1%"></td>
+                <td></td>
+                <td class="text-center"></td>
                 <td>Jl. Raya Pantura Pusakanagara No. 13 Telp. (0260) 550500</td>
             </tr>
         </table>

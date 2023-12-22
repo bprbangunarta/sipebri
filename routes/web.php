@@ -525,6 +525,7 @@ Route::middleware('auth')->group(function () {
             Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit|Admin Kredit']], function () {
                 Route::get('/cetak/penolakan/kredit', 'data_penolakan_kredit')->name('data_penolakan.kredit');
                 Route::get('/cetak-berkas/penolakan/kredit', 'cetak_penolakan_kredit')->name('cetak.penolakan.kredit');
+                Route::get('/cetak-berkas/penolakan/amplop', 'cetak_cover_amplop')->name('cetak.penolakan.amplop');
             });
         });
 
