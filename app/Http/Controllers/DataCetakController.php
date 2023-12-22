@@ -951,6 +951,34 @@ class DataCetakController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+    public function cetak_cover_amplop(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $data = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+                ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->join('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->join('data_alasan_penolakan', 'data_alasan_penolakan.id', '=', 'data_penolakan.alasan_id')
+                ->select(
+                    'data_penolakan.no_penolakan',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp',
+                    'data_nasabah.no_telp',
+                )
+                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                ->get();
+            //
+            $kabag = DB::table('v_users')->where('role_name', 'Kabag Analis')->get();
+            $data[0]->kabag_analis = $kabag[0]->nama_user;
+
+            return view('cetak.penolakan-kredit.amplop', [
+                'data' => $data[0],
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 
     public function persetujuan_kredit()
     {

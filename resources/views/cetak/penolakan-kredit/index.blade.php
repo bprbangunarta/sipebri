@@ -82,6 +82,12 @@
                                                         target="_blank" class="btn-circle btn-sm bg-blue">
                                                         <i class="fa fa-print"></i>
                                                     </a>
+
+                                                    &nbsp;
+                                                    <a href="{{ route('cetak.penolakan.amplop', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
                                                 @endif
                                             </td>
                                         </tr>

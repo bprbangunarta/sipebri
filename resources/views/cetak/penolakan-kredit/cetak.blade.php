@@ -196,12 +196,20 @@
             <font style="font-size: 12.8px;">{{ $data->no_penolakan }}</font>
         </h4>
 
-        <p style="text-align: justify;line-height: 1.5;">
+        <p style="text-align: justify;line-height: 2;">
             Berdasarkan analisa terhadap komponen 5C (Character, Capacity, Capital, Collateral, Condition) dan Credit Risk Rating (CRR), maka komite kredit memutuskan untuk menolak permohonan kredit atas nama <b>{{ $data->nama_nasabah }}</b> yang beralamat di {{ $data->alamat_ktp }} dengan pertimbangan sebagai berikut :
         </p>
 
         <p style="text-align: justify;text-transform:uppercase">
-            1. {{ $data->alasan_internal }}
+            - <b>{{ $data->alasan_internal }}</b>
+        </p>
+
+        <p style="text-align: justify;">
+            Adapun alasan penolakan yang diinformasikan kepada pemohon adalah sebagai berikut:
+        </p>
+
+        <p style="text-align: justify;text-transform:uppercase;">
+            <b>- {{ $data->alasan }}</b>
         </p>
 
         <p style="margin-top:100px;"></p>
