@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4;
-            margin-top: 1.0cm;
+            margin-top: 0cm;
             margin-bottom: 1.0cm;
             margin-left: 0cm;
             margin-right: 0cm;
@@ -74,7 +74,7 @@
             }
 
             .content {
-                padding-top: 1.5cm;
+                padding-top: 0cm;
                 padding-bottom: 1.5cm;
                 padding-left: 1cm;
                 padding-right: 1cm;
@@ -84,7 +84,7 @@
 </head>
 
 <body>
-    <div class="content" style="margin-top: -27px;">
+    <div class="content" style="margin-top: 30px;">
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
 
