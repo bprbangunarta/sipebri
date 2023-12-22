@@ -130,129 +130,131 @@ class KomiteController extends Controller
     {
 
         try {
-            $usr = Auth::user()->code_user;
-            $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
-            $kom = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+            if ($request) {
+                $usr = Auth::user()->code_user;
+                $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
+                $kom = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();
 
-            // //Data Tracking
-            $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
-            if (!is_null($trc)) {
-                $tracking = [
-                    'keputusan_komite' => now(),
-                ];
+                // //Data Tracking
+                $trc = DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+                if (!is_null($trc)) {
+                    $tracking = [
+                        'keputusan_komite' => now(),
+                    ];
 
-                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
-            }
+                    DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
+                }
 
-            if ($user->role_name == 'Staff Analis' || $user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
-                $komite = 'komite1';
-                $catatan = 'catatan1';
-                $waktu = 'waktu1';
-            } elseif ($user->role_name == 'Kasi Analis') {
-                $komite = 'komite2';
-                $catatan = 'catatan2';
-                $waktu = 'waktu2';
-            } elseif ($user->role_name == 'Kabag Analis') {
-                $komite = 'komite3';
-                $catatan = 'catatan3';
-                $waktu = 'waktu3';
-            } elseif ($user->role_name == 'Direksi') {
-                $komite = 'komite4';
-                $catatan = 'catatan4';
-                $waktu = 'waktu4';
-            }
+                if ($user->role_name == 'Staff Analis' || $user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
+                    $komite = 'komite1';
+                    $catatan = 'catatan1';
+                    $waktu = 'waktu1';
+                } elseif ($user->role_name == 'Kasi Analis') {
+                    $komite = 'komite2';
+                    $catatan = 'catatan2';
+                    $waktu = 'waktu2';
+                } elseif ($user->role_name == 'Kabag Analis') {
+                    $komite = 'komite3';
+                    $catatan = 'catatan3';
+                    $waktu = 'waktu3';
+                } elseif ($user->role_name == 'Direksi') {
+                    $komite = 'komite4';
+                    $catatan = 'catatan4';
+                    $waktu = 'waktu4';
+                }
 
 
-            if (is_null($kom)) {
-                $name = 'KMT';
-                $length = 5;
-                $kode = Midle::kode_komite($name, $length);
-                $data = [
-                    'kode_analisa' => $kode,
+                if (is_null($kom)) {
+                    $name = 'KMT';
+                    $length = 5;
+                    $kode = Midle::kode_komite($name, $length);
+                    $data = [
+                        'kode_analisa' => $kode,
+                        'pengajuan_kode' => $request->kode_pengajuan,
+                        $komite => $usr,
+                        $catatan => $request->catatan,
+                        $waktu => now(),
+                    ];
+                    DB::table('a_komite')->insert($data);
+                } else {
+                    $data = [
+                        $komite => $usr,
+                        $catatan => $request->catatan,
+                        $waktu => now(),
+                    ];
+                    DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
+                }
+
+                if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
+                    $data2 = [
+                        'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
+                        'tracking' => ucwords($request->putusan_komite),
+                        'b_provisi' => number_format($request->b_provisi, 2),
+                        'suku_bunga' => $request->suku_bunga,
+                        'metode_rps' => $request->metode_rps,
+                        'b_admin' => number_format($request->b_admin, 2),
+                        'b_provisi' => number_format($request->b_provisi, 2),
+                        'updated_at' => now(),
+                    ];
+                } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
+                    $data2 = [
+                        'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
+                        'tracking' => "Selesai",
+                        'b_provisi' => number_format($request->b_provisi, 2),
+                        'suku_bunga' => $request->suku_bunga,
+                        'metode_rps' => $request->metode_rps,
+                        'b_admin' => number_format($request->b_admin, 2),
+                        'b_provisi' => number_format($request->b_provisi, 2),
+                        'status' => ucwords($request->putusan_komite),
+                        'updated_at' => now(),
+                    ];
+                } else {
+                    $data2 = [
+                        'b_provisi' => number_format($request->b_provisi, 2),
+                        'suku_bunga' => $request->suku_bunga,
+                        'metode_rps' => $request->metode_rps,
+                        'b_admin' => number_format($request->b_admin, 2),
+                        'b_provisi' => number_format($request->b_provisi, 2),
+                        'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
+                        'tracking' => ucwords($request->putusan_komite),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                //Cek Data Usulan
+                $du = DB::table('data_usulan')
+                    ->where('pengajuan_kode', $request->kode_pengajuan)
+                    ->where('input_user', $usr)
+                    ->get();
+
+                $usulan = [
                     'pengajuan_kode' => $request->kode_pengajuan,
-                    $komite => $usr,
-                    $catatan => $request->catatan,
-                    $waktu => now(),
-                ];
-                DB::table('a_komite')->insert($data);
-            } else {
-                $data = [
-                    $komite => $usr,
-                    $catatan => $request->catatan,
-                    $waktu => now(),
-                ];
-                DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
-            }
-
-            if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
-                $data2 = [
-                    'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
-                    'tracking' => ucwords($request->putusan_komite),
-                    'b_provisi' => number_format($request->b_provisi, 2),
-                    'suku_bunga' => $request->suku_bunga,
+                    'role_name' => $user->role_name,
+                    'input_user' => Auth::user()->code_user,
                     'metode_rps' => $request->metode_rps,
-                    'b_admin' => number_format($request->b_admin, 2),
-                    'b_provisi' => number_format($request->b_provisi, 2),
-                    'updated_at' => now(),
-                ];
-            } elseif ($request->putusan_komite == 'Ditolak' || $request->putusan_komite == 'Disetujui' || $request->putusan_komite == 'Dibatalkan') {
-                $data2 = [
-                    'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
-                    'tracking' => "Selesai",
-                    'b_provisi' => number_format($request->b_provisi, 2),
                     'suku_bunga' => $request->suku_bunga,
-                    'metode_rps' => $request->metode_rps,
+                    'b_provisi' => number_format($request->b_provisi, 2),
                     'b_admin' => number_format($request->b_admin, 2),
-                    'b_provisi' => number_format($request->b_provisi, 2),
-                    'status' => ucwords($request->putusan_komite),
-                    'updated_at' => now(),
+                    'rc' => (float) str_replace('%', '', $request->rc),
+                    'usulan_plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
+                    'catatan' => $request->catatan,
+                    'created_at' => now(),
                 ];
-            } else {
-                $data2 = [
-                    'b_provisi' => number_format($request->b_provisi, 2),
-                    'suku_bunga' => $request->suku_bunga,
-                    'metode_rps' => $request->metode_rps,
-                    'b_admin' => number_format($request->b_admin, 2),
-                    'b_provisi' => number_format($request->b_provisi, 2),
-                    'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
-                    'tracking' => ucwords($request->putusan_komite),
-                    'updated_at' => now(),
-                ];
+
+                if (count($du) == 0) {
+                    DB::table('data_usulan')->insert($usulan);
+                } else {
+                    DB::table('data_usulan')->where('id', $du[0]->id)->update($usulan);
+                }
+
+                $capacity = ['rc' => (float) str_replace('%', '', $request->rc)];
+                DB::transaction(function () use ($request, $data2, $usulan, $capacity) {
+                    DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+                    DB::table('a5c_capacity')->where('pengajuan_kode', $request->kode_pengajuan)->update($capacity);
+                });
+
+                return redirect()->back()->with('success', 'Berhasil menambahkan data');
             }
-
-            //Cek Data Usulan
-            $du = DB::table('data_usulan')
-                ->where('pengajuan_kode', $request->kode_pengajuan)
-                ->where('input_user', $usr)
-                ->get();
-
-            $usulan = [
-                'pengajuan_kode' => $request->kode_pengajuan,
-                'role_name' => $user->role_name,
-                'input_user' => Auth::user()->code_user,
-                'metode_rps' => $request->metode_rps,
-                'suku_bunga' => $request->suku_bunga,
-                'b_provisi' => number_format($request->b_provisi, 2),
-                'b_admin' => number_format($request->b_admin, 2),
-                'rc' => (float) str_replace('%', '', $request->rc),
-                'usulan_plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
-                'catatan' => $request->catatan,
-                'created_at' => now(),
-            ];
-
-            if (count($du) == 0) {
-                DB::table('data_usulan')->insert($usulan);
-            } else {
-                DB::table('data_usulan')->where('id', $du[0]->id)->update($usulan);
-            }
-
-            $capacity = ['rc' => (float) str_replace('%', '', $request->rc)];
-            DB::transaction(function () use ($request, $data2, $usulan, $capacity) {
-                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-                DB::table('a5c_capacity')->where('pengajuan_kode', $request->kode_pengajuan)->update($capacity);
-            });
-
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }

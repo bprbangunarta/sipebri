@@ -196,11 +196,19 @@ class KonfirmasiController extends Controller
                 }
             }
 
-            $data = [
-                'auth_user' => Auth::user()->code_user,
-                'status' => 'Sudah Otorisasi',
-                'tracking' => 'Penjadwalan',
-            ];
+            $data_pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();
+            if ($data_pengajuan->tracking == 'Verifikasi Data') {
+                $data = [
+                    'auth_user' => Auth::user()->code_user,
+                    'status' => 'Sudah Otorisasi',
+                    'tracking' => 'Penjadwalan',
+                ];
+            } else {
+                $data = [
+                    'auth_user' => Auth::user()->code_user,
+                    'status' => 'Sudah Otorisasi',
+                ];
+            }
 
             //Cek data apakah sudah ceklis semua apa belum
             foreach ($cek as $value) {

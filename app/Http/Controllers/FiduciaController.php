@@ -44,6 +44,7 @@ class FiduciaController extends Controller
                 'data_spk.*',
                 'data_nasabah.*',
                 'data_survei.*',
+                'data_jaminan.id as id_jaminan',
                 'data_jaminan.*',
                 'data_jenis_agunan.jenis_agunan as jenis_kendaraan'
             )
@@ -54,8 +55,9 @@ class FiduciaController extends Controller
         $data = $cek->paginate(10);
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+            $item->id_jaminan = Crypt::encrypt($item->id_jaminan) ?? null;
         }
-
+        // dd($data);
         return view('cetak.fiducia.index', [
             'data' => $data
         ]);
@@ -64,7 +66,7 @@ class FiduciaController extends Controller
     public function cetak_fiducia(Request $request)
     {
         try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $enc = Crypt::decrypt($request->query('jaminan'));
             $data = DB::table('data_pengajuan')
                 ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -80,7 +82,7 @@ class FiduciaController extends Controller
                     'data_jaminan.atas_nama as nama_pemilik_bpkb',
                     'data_jenis_agunan.jenis_agunan as nama_jenis_jaminan',
                 )
-                ->where('data_pengajuan.kode_pengajuan', '=', $enc)
+                ->where('data_jaminan.id', '=', $enc)
                 ->get();
             //
             $hari = Carbon::now();

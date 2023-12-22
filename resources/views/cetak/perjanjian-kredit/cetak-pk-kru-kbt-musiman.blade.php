@@ -286,13 +286,14 @@
                             </li>
                         @elseif ($item->jenis_jaminan == 'Lainnya')
                             <li class="text-hg">
-                                @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
+                                {{ $loop->iteration . '.' . ' ' . $item->catatan }} <br>
+                                {{-- @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
                                     KARTU DAN SALDO JAMSOSTEK
                                 @else
                                     {{ $item->nama_jenis_dokumen }}
                                 @endif
                                 ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }} ALAMAT
-                                {{ $item->lokasi }}
+                                {{ $item->lokasi }} --}}
                             </li>
                         @endif
                     @empty

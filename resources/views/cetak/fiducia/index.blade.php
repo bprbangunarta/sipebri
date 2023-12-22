@@ -88,11 +88,12 @@
                                                 &nbsp; --}}
 
                                                 @if (is_null($item->no_spk))
-                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
+                                                    <a data-toggle="modal" data-target="#modal-danger"
+                                                        class="btn-circle btn-sm bg-red">
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('cetak.fiducia', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    <a href="{{ route('cetak.fiducia', ['jaminan' => $item->id_jaminan]) }}"
                                                         target="_blank" class="btn-circle btn-sm bg-blue">
                                                         <i class="fa fa-print"></i>
                                                     </a>
@@ -248,12 +249,14 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">PENJAMINAN FIDUCIA</h4>
                 </div>
-                
+
                 <div class="modal-body">
-                    <p>Mohon maaf cetak penjaminan fiducia tidak bisa dilakukan karena perjanjian kredit belum diturunkan. Silahkan hubungi bagian realisasi. Terimakasih</p>
+                    <p>Mohon maaf cetak penjaminan fiducia tidak bisa dilakukan karena perjanjian kredit belum diturunkan.
+                        Silahkan hubungi bagian realisasi. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                    <button type="button" class="btn btn-danger" style="width: 100%;"
+                        data-dismiss="modal">TUTUP</button>
                 </div>
             </div>
         </div>

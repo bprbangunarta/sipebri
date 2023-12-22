@@ -189,17 +189,32 @@ class Data extends Model
 
     public static function cetak_a5c_character($cek)
     {
-        $data = [
-            'gaya_hidup' => self::analisa5c_number($cek->gaya_hidup),
-            'pengendalian_emosi' => self::analisa5c_number($cek->pengendalian_emosi),
-            'perbuatan_tercela' => self::analisa5c_number($cek->perbuatan_tercela),
-            'harmonis' => self::analisa5c_number($cek->harmonis),
-            'konsisten' => self::analisa5c_number($cek->konsisten),
-            'gaya_hidup' => self::analisa5c_number($cek->gaya_hidup),
-            'kepatuhan' => self::analisa5c_number($cek->kepatuhan),
-            'hubungan_sosial' => self::analisa5c_number($cek->hubungan_sosial),
-            'nilai_karakter' => self::analisa5c_number($cek->nilai_karakter),
-        ];
+
+        if (is_null($cek)) {
+            $data = [
+                'gaya_hidup' => null,
+                'pengendalian_emosi' => null,
+                'perbuatan_tercela' => null,
+                'harmonis' => null,
+                'konsisten' => null,
+                'gaya_hidup' => null,
+                'kepatuhan' => null,
+                'hubungan_sosial' => null,
+                'nilai_karakter' => null,
+            ];
+        } else {
+            $data = [
+                'gaya_hidup' => self::analisa5c_number($cek->gaya_hidup),
+                'pengendalian_emosi' => self::analisa5c_number($cek->pengendalian_emosi),
+                'perbuatan_tercela' => self::analisa5c_number($cek->perbuatan_tercela),
+                'harmonis' => self::analisa5c_number($cek->harmonis),
+                'konsisten' => self::analisa5c_number($cek->konsisten),
+                'gaya_hidup' => self::analisa5c_number($cek->gaya_hidup),
+                'kepatuhan' => self::analisa5c_number($cek->kepatuhan),
+                'hubungan_sosial' => self::analisa5c_number($cek->hubungan_sosial),
+                'nilai_karakter' => self::analisa5c_number($cek->nilai_karakter),
+            ];
+        }
 
         return $data;
     }

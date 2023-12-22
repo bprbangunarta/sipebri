@@ -51,18 +51,18 @@ class AdministrasiController extends Controller
                 ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
                 ->where('a_administrasi.pengajuan_kode', $enc)->first();
 
-            // //Perubahan Realtime Nominal administrasi
-            // if ($cek[0]->administrasi != $administrasi->administrasi) {
-            //     $adm_real = ['administrasi' => $cek[0]->administrasi];
-            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($adm_real);
-            // }
+            //Perubahan Realtime Nominal administrasi
+            if ($cek[0]->administrasi != $administrasi->administrasi) {
+                $adm_real = ['administrasi' => $cek[0]->administrasi];
+                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($adm_real);
+            }
 
-            // //Perubahan Realtime Nominal Provisi
-            // if ($cek[0]->provisi != $administrasi->provisi) {
-            //     $provisi_real = ['provisi' => $cek[0]->provisi];
-            //     DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
-            // }
-
+            //Perubahan Realtime Nominal Provisi
+            if ($cek[0]->provisi != $administrasi->provisi) {
+                $provisi_real = ['provisi' => $cek[0]->provisi];
+                DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($provisi_real);
+            }
+            // dd($cek);
             // //Perubahan Realtime APHT
             // if ($cek[0]->apht != $administrasi->proses_apht) {
             //     $apht_real = ['proses_apht' => $cek[0]->apht];
@@ -75,11 +75,11 @@ class AdministrasiController extends Controller
             //     DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($fiducia_real);
             // }
 
-            // $administrasi = DB::table('a_administrasi')
-            //     ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
-            //     ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
-            //     ->where('a_administrasi.pengajuan_kode', $enc)->first();
-            //
+            $administrasi = DB::table('a_administrasi')
+                ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'a_administrasi.pengajuan_kode')
+                ->select('a_administrasi.*', 'a_memorandum.by_fiducia as fiducia')
+                ->where('a_administrasi.pengajuan_kode', $enc)->first();
+
             // dd($cek[0], $administrasi);
             return view('staff.analisa.administrasi-edit', [
                 'data' => $cek[0],
@@ -123,6 +123,7 @@ class AdministrasiController extends Controller
                 'by_fiducia' =>  (int)str_replace(["Rp", " ", "."], "", $request->by_fiducia),
             ];
 
+
             DB::transaction(function () use ($data, $data2, $enc) {
                 DB::table('a_administrasi')->insert($data);
                 DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data2);
@@ -163,7 +164,17 @@ class AdministrasiController extends Controller
                 'by_fiducia' =>  (int)str_replace(["Rp", " ", "."], "", $request->by_fiducia),
             ];
 
-            DB::transaction(function () use ($enc, $data, $data2) {
+            $pengajuan = Pengajuan::where('kode_pengajuan', $enc)->first();
+            $persen_administrasi = ($data['administrasi'] / (float)$pengajuan->plafon) * 100;
+            $persen_provisi = ($data['provisi'] / (float)$pengajuan->plafon) * 100;
+
+            $data3 = [
+                'b_admin' =>  number_format($persen_administrasi, 2, '.', ''),
+                'b_provisi' =>  number_format($persen_provisi, 2, '.', ''),
+            ];
+
+            DB::transaction(function () use ($enc, $data, $data2, $data3) {
+                Pengajuan::where('kode_pengajuan', $enc)->update($data3);
                 DB::table('a_administrasi')->where('pengajuan_kode', $enc)->update($data);
                 DB::table('a_memorandum')->where('pengajuan_kode', $enc)->update($data2);
             });
