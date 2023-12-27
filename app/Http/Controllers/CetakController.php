@@ -287,28 +287,31 @@ class CetakController extends Controller
                         ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Roda 2');
                 })->get();
 
-            for ($i = 0; $i < count($data); $i++) {
+            foreach ($data as $item) {
                 $surveyor = DB::table('v_users')
-                    ->where('code_user', $data[$i]->surveyor_kode)
-                    ->select('nama_user', 'role_name')->get();
+                    ->where('code_user', $item->surveyor_kode)
+                    ->select('nama_user', 'role_name')
+                    ->get();
 
                 $thn = Carbon::now()->year;
-                $data[$i]->thn = $thn;
-                $data[$i]->nama_user = $surveyor[$i]->nama_user;
-                $data[$i]->role_name = $surveyor[$i]->role_name;
+                $item->thn = $thn;
+
+                if ($surveyor->isNotEmpty()) {
+                    $item->nama_user = $surveyor[0]->nama_user;
+                    $item->role_name = $surveyor[0]->role_name;
+                }
             }
+            // for ($i = 0; $i < count($data); $i++) {
+            //     $surveyor = DB::table('v_users')
+            //         ->where('code_user', $data[$i]->surveyor_kode)
+            //         ->select('nama_user', 'role_name')->get();
 
-            // $surveyor = DB::table('v_users')
-            //     ->where('code_user', $data[0]->surveyor_kode)
-            //     ->select('nama_user', 'role_name')->get();
+            //     $thn = Carbon::now()->year;
+            //     $data[$i]->thn = $thn;
+            //     $data[$i]->nama_user = $surveyor[$i]->nama_user;
+            //     $data[$i]->role_name = $surveyor[$i]->role_name;
+            // }
 
-            // //Tahun
-            // $thn = Carbon::now()->year;
-            // $data[0]->thn = $thn;
-
-            // $data[0]->nama_user = $surveyor[0]->nama_user;
-            // $data[0]->role_name = $surveyor[0]->role_name;
-            // dd($data);
             return view('cetak.layouts.motor', [
                 'data' => $data
             ]);
