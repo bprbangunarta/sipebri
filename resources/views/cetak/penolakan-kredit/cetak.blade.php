@@ -166,8 +166,8 @@
                         Komite Kredit
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
-                    <br>
-                    <font style="text-transform: uppercase;">{{ $data->kabag_analis }}</font>
+                    {{-- <br> --}}
+                    {{-- <font style="text-transform: uppercase;">{{ $data->kabag_analis }}</font> --}}
                 </td>
                 <td></td>
                 <td width="40%"></td>
