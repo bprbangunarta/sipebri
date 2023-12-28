@@ -106,7 +106,7 @@ class CetakLaporanController extends Controller
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('v_users', 'v_users.code_user', '=', 'data_survei.kasi_kode')
 
-            ->whereIn('data_pengajuan.tracking', ['Verifikasi Data', 'Penjadwalan', 'Proses Survey'])
+            ->whereIn('data_pengajuan.tracking', ['Verifikasi Data', 'Penjadwalan', 'Proses Survei'])
 
             ->select(
                 'data_pengajuan.created_at as tanggal',

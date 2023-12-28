@@ -56,25 +56,25 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center" >
+                                            <td class="text-center">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center" >
+                                            <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
-                                            <td class="text-center" >
+                                            <td class="text-center">
                                                 {{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" >{{ $item->kantor_kode }}</td>
-                                            <td class="text-center" >{{ $item->produk_kode }}</td>
-                                            <td class="text-right" >
+                                            <td class="text-center">{{ $item->kantor_kode }}</td>
+                                            <td class="text-center">{{ $item->produk_kode }}</td>
+                                            <td class="text-right">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-center">{{$item->no_telp}}</td>
+                                            <td class="text-center">{{ $item->no_telp }}</td>
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tgl_survei)->format('d-m-Y') }}
                                             </td>
-                                            <td>{{$item->nama_user}}</td>
-                                            <td>{{$item->tracking}}</td>
+                                            <td>{{ $item->nama_user }}</td>
+                                            <td>{{ $item->tracking }}</td>
                                         </tr>
                                         @php
                                             $no++;
@@ -90,9 +90,9 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
-                                {{-- <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Data
-                                </button> --}}
+                                </button>
 
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
@@ -128,8 +128,7 @@
                                 </div>
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>PRODUK</label>
-                                    <select class="form-control" name="kode_produk" id=""
-                                        style="margin-top:-5px;">
+                                    <select class="form-control" name="kode_produk" id="" style="margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($produk as $item)
                                             <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>
@@ -139,8 +138,7 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>KANTOR</label>
-                                    <select class="form-control" name="nama_kantor" id=""
-                                        style="margin-top:-5px;">
+                                    <select class="form-control" name="nama_kantor" id="" style="margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($kantor as $item)
                                             <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
@@ -196,7 +194,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">EXPORT DATA</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('export.sesudah_survei') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
