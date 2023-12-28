@@ -340,4 +340,165 @@ class ExportController extends Controller
         //
         dd($query);
     }
+
+    public function export_sesudah_survei($data)
+    {
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '4000M');
+        try {
+            $spreadSheet = new Spreadsheet();
+            $spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
+            $spreadSheet->getActiveSheet()->fromArray($data);
+            $Excel_writer = new Xls($spreadSheet);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="laporan_sesudah_survei.xls"');
+            header('Cache-Control: max-age=0');
+            ob_end_clean();
+            $Excel_writer->save('php://output');
+            exit();
+        } catch (Exception $e) {
+            return;
+        }
+    }
+
+    function data_export_sesudah_survei()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        $no = 1;
+
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+
+            ->whereIn('data_pengajuan.tracking', ['Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II'])
+
+            ->select(
+                'data_pengajuan.created_at as tanggal',
+                'data_pengajuan.kode_pengajuan',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.produk_kode',
+                'data_nasabah.no_telp',
+                'data_survei.tgl_survei',
+                'v_users.nama_user',
+                'data_pengajuan.tracking',
+            )
+
+            ->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
+                return $data->whereBetween('data_survei.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            })
+
+            ->orderBy('data_pengajuan.created_at', 'asc')
+            ->get();
+
+        $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WILAYAH", "PRODUK", "NO TELP", "TGL SURVEI", "SURVEYOR", "STATUS");
+        foreach ($data as $item) {
+            $data_array[] = array(
+                'NO'            => $no++,
+                'TANGGAL'       => \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d'),
+                'KODE'          => $item->kode_pengajuan,
+                'NAMA_NASABAH'  => $item->nama_nasabah,
+                'ALAMAT'        => $item->alamat_ktp,
+                'WILAYAH'        => $item->kantor_kode,
+                'PRODUK'        => $item->produk_kode,
+                'NO TELP'        => $item->no_telp,
+                'TGL SURVEI'           => $item->tgl_survei,
+                'SURVEYOR'    => $item->nama_user,
+                'STATUS'       => $item->tracking,
+            );
+        }
+
+        $this->export_sesudah_survei($data_array);
+    }
+
+    public function export_sebelum_survei($data)
+    {
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '4000M');
+        try {
+            $spreadSheet = new Spreadsheet();
+            $spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
+            $spreadSheet->getActiveSheet()->fromArray($data);
+            $Excel_writer = new Xls($spreadSheet);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="Laporan_sebelum_survei.xls"');
+            header('Cache-Control: max-age=0');
+            ob_end_clean();
+            $Excel_writer->save('php://output');
+            exit();
+        } catch (Exception $e) {
+            return;
+        }
+    }
+
+    function data_export_sebelum_survei()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        $no = 1;
+
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('v_users', 'v_users.code_user', '=', 'data_survei.kasi_kode')
+
+            ->whereIn('data_pengajuan.tracking', ['Verifikasi Data', 'Penjadwalan', 'Proses Survei'])
+
+            ->select(
+                'data_pengajuan.created_at as tanggal',
+                'data_pengajuan.kode_pengajuan',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.plafon',
+                'data_nasabah.no_telp',
+                'data_survei.tgl_survei',
+                'v_users.nama_user',
+                'data_pengajuan.tracking',
+                'data_survei.catatan_survei',
+            )
+
+            ->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
+                return $data->whereBetween('data_survei.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            })
+
+            ->orderBy('data_pengajuan.created_at', 'asc')
+            ->get();
+        // dd($data);
+        $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WILAYAH", "PRODUK", "PLAFON", "TGL SURVEI", "SURVEYOR", "STATUS", "CATATAN");
+        foreach ($data as $item) {
+            $data_array[] = array(
+                'NO'            => $no++,
+                'TANGGAL'       => \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d'),
+                'KODE'          => $item->kode_pengajuan,
+                'NAMA_NASABAH'  => $item->nama_nasabah,
+                'ALAMAT'        => $item->alamat_ktp,
+                'WILAYAH'        => $item->kantor_kode,
+                'PRODUK'        => $item->produk_kode,
+                'PLAFON'        => $item->no_telp,
+                'TGL SURVEI'    => $item->tgl_survei,
+                'SURVEYOR'    => $item->nama_user,
+                'STATUS'       => $item->tracking,
+                'STATUS'       => $item->catatan_survei,
+            );
+        }
+
+        $this->export_sebelum_survei($data_array);
+    }
 }

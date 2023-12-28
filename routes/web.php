@@ -586,6 +586,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
         Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');
         Route::post('/export/laporan/export-filter', 'export_filter_realisasi')->name('export.export_filter');
+        Route::post('/export/laporan/sesudah-survei', 'data_export_sesudah_survei')->name('export.sesudah_survei');
+        Route::post('/export/laporan/sebelum-survei', 'data_export_sebelum_survei')->name('export.sebelum_survei');
     });
 
     // Export Data
