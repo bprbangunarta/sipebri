@@ -156,7 +156,7 @@
                     <h4 class="modal-title">SURAT PENOLAKAN</h4>
                 </div>
 
-                <form action="{{ route('penolakan.tambah') }}">
+                <form action="{{ route('penolakan.tambah') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
