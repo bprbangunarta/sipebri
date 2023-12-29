@@ -95,6 +95,7 @@ class SurveiController extends Controller
                 ->where('kantor_kode', '=', $kantor_user)
                 ->get();
 
+            // dd($cs);
             //validasi
             if (count($cs) === 0) {
                 $cs = collect([
@@ -126,7 +127,7 @@ class SurveiController extends Controller
                 'staff' => $staff,
                 'survey' => $survey,
                 'kkpk' => $kkpk[0],
-                'cs' => $cs[0],
+                'cs' => $cs,
                 'kantor' => $kantor,
             ]);
         } catch (DecryptException $e) {
