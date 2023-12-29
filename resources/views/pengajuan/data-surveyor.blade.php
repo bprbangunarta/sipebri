@@ -88,10 +88,13 @@
                                                     <select type="text" class="form-control surveyor"
                                                         name="surveyor_kode" required>
                                                         @if ($data->produk == 'KTA')
-                                                            <option value="{{ $cs->code_user }}">{{ $cs->nama }}
-                                                            </option>
-                                                            <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}
-                                                            </option>
+                                                            @foreach ($cs as $item)
+                                                                <option value="{{ $item->code_user }}">{{ $item->nama }}</option>
+                                                            @endforeach
+                                                            <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}</option>
+
+                                                        {{-- @elseif ($data->produk == 'KTA' && ) --}}
+
                                                         @else
                                                             @if (is_null($survey->surveyor_kode))
                                                                 <option value="">--PILIH--</option>
