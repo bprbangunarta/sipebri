@@ -1148,53 +1148,60 @@
                 <th class="text-center" style="border:1px solid black;">Agunan</th>
                 <th class="text-center" width="17%" style="border:1px solid black;">Nilai Taksasi</th>
             </tr>
-            @forelse ($jaminan as $item)
+            @forelse ($jaminan as $itemj)
                 <tr style="border:1px solid black;text-transform:uppercase;">
                     <td class="text-center" width="4%" style="border:1px solid black;">
                         {{ $loop->iteration }}</td>
-                    @if ($item->jenis_jaminan == 'Kendaraan')
+                    @if ($itemj->jenis_jaminan == 'Kendaraan')
                         <td style="border:1px solid black;">
-                            BPKB {{ $item->jenis_agunan }}, {{ $item->merek }} {{ $item->tipe_kendaraan }},
-                            {{ $item->tahun }}, {{ $item->no_rangka }}, {{ $item->no_mesin }},
-                            {{ $item->no_polisi }}, {{ $item->no_dokumen }}, {{ $item->warna }},
-                            {{ $item->atas_nama }}.
+                            BPKB {{ $itemj->jenis_agunan }}, {{ $itemj->merek }} {{ $itemj->tipe_kendaraan }},
+                            {{ $itemj->tahun }}, {{ $itemj->no_rangka }}, {{ $itemj->no_mesin }},
+                            {{ $itemj->no_polisi }}, {{ $itemj->no_dokumen }}, {{ $itemj->warna }},
+                            {{ $itemj->atas_nama }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
-                    @elseif ($item->jenis_jaminan == 'Tanah')
+                            {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
+                    @elseif ($itemj->jenis_jaminan == 'Tanah')
                         <td style="border:1px solid black;">
-                            SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
-                            {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }}.
+                            SERTIFIKAT {{ $itemj->jenis_jaminan }} NO {{ $itemj->no_dokumen }}, LUAS
+                            {{ number_format($itemj->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $itemj->atas_nama }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
-                    @elseif ($item->jenis_jaminan == 'Lainnya')
+                            {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
+                    @elseif ($itemj->jenis_jaminan == 'Lainnya')
                         <td style="border:1px solid black;">
-                            @if ($item->nama_jenis_dokumen == 'Kartu Jamsostek')
+                            @if ($itemj->nama_jenis_dokumen == 'Kartu Jamsostek')
                                 KARTU DAN SALDO JAMSOSTEK
                             @else
-                                {{ $item->nama_jenis_dokumen }}
+                                {{ $itemj->nama_jenis_dokumen }}
                             @endif
-                            ATAS NAMA {{ $item->atas_nama }} NO {{ $item->no_dokumen }}.
+                            ATAS NAMA {{ $itemj->atas_nama }} NO {{ $itemj->no_dokumen }}.
                         </td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
+                            {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
                     @endif
                 </tr>
-
-                {{-- <tr style="border:1px solid black;">
-                    <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai
-                        Taksasi
-                        Agunan</td>
-                    <td style="border:1px solid black;text-align:right;">
-                        {{ 'Rp. ' . ' ' . number_format($item->total_taksasi, 0, ',', '.') }}</td>
-                </tr> --}}
             @empty
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;" colspan="3">
                         TIDAK ADA AGUNAN
                 </tr>
             @endforelse
+
+            @if (count($jaminan) != 0)
+                @php
+                    $totalTaksasi = $jaminan->sum('nilai_taksasi');
+                @endphp
+
+                <!-- Tampilkan baris dengan total taksasi -->
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;" colspan="2">Jumlah Nilai Taksasi
+                        Agunan</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
+                    </td>
+                </tr>
+            @endif
 
         </table>
     </div>
@@ -2060,7 +2067,7 @@
                 <td> : </td>
                 <td>&nbsp; @if ($adm->asuransi_kendaraan_motor > 0)
                         Ya
-                        @else
+                    @else
                         Tidak
                     @endif
                 </td>
@@ -2072,7 +2079,7 @@
                 <td> : </td>
                 <td>&nbsp; @if ($adm->asuransi_jiwa_menurun2 > 0)
                         Ya
-                        @else
+                    @else
                         Tidak
                     @endif
                 </td>

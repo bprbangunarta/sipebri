@@ -49,86 +49,98 @@
                                             </div>
 
                                             @can('edit pengajuan kredit')
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    @if ($data->produk == 'KTA')
-                                                        <label>KEPALA KANTOR KAS</label>
-                                                    @else
-                                                        <label>KASI ANALIS</label>
-                                                    @endif
-                                                    <select type="text" class="form-control kasi" name="kasi_kode"
-                                                        required>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
                                                         @if ($data->produk == 'KTA')
-                                                            <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}
-                                                            </option>
+                                                            <label>KEPALA KANTOR KAS</label>
                                                         @else
-                                                            @if (is_null($survey->kasi_kode))
-                                                                <option value="">--PILIH--</option>
-                                                            @else
-                                                                <option value="{{ $survey->kasi_kode }}">
-                                                                    {{ $survey->nama_kasi }}</option>
-                                                            @endif
-
-                                                            @foreach ($kasi as $item)
-                                                                <option value="{{ $item->code_user }}">{{ $item->nama }}
-                                                                </option>
-                                                            @endforeach
+                                                            <label>KASI ANALIS</label>
                                                         @endif
-                                                    </select>
-                                                </div>
-                                            </div>
+                                                        <select type="text" class="form-control kasi" name="kasi_kode"
+                                                            required>
+                                                            @if ($data->produk == 'KTA')
+                                                                <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}
+                                                                </option>
+                                                            @else
+                                                                @if (is_null($survey->kasi_kode))
+                                                                    <option value="">--PILIH--</option>
+                                                                @else
+                                                                    <option value="{{ $survey->kasi_kode }}">
+                                                                        {{ $survey->nama_kasi }}</option>
+                                                                @endif
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    @if ($data->produk == 'KTA')
-                                                        <label>ANALIS</label>
-                                                    @else
-                                                        <label>SURVEYOR</label>
-                                                    @endif
-                                                    <select type="text" class="form-control surveyor"
-                                                        name="surveyor_kode" required>
+                                                                @foreach ($kasi as $item)
+                                                                    <option value="{{ $item->code_user }}">{{ $item->nama }}
+                                                                    </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
                                                         @if ($data->produk == 'KTA')
-                                                            @foreach ($cs as $item)
-                                                                <option value="{{ $item->code_user }}">{{ $item->nama }}</option>
-                                                            @endforeach
-                                                            <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}</option>
-
-                                                        {{-- @elseif ($data->produk == 'KTA' && ) --}}
-
+                                                            <label>ANALIS</label>
                                                         @else
-                                                            @if (is_null($survey->surveyor_kode))
-                                                                <option value="">--PILIH--</option>
-                                                            @else
-                                                                <option value="{{ $survey->surveyor_kode }}">
-                                                                    {{ strtoupper($survey->nama_surveyor) }}</option>
-                                                            @endif
-
-                                                            @foreach ($staff as $item)
-                                                                <option value="{{ $item->code_user }}">
-                                                                    {{ strtoupper($item->nama) }}
-                                                                </option>
-                                                            @endforeach
+                                                            <label>SURVEYOR</label>
                                                         @endif
-                                                    </select>
+                                                        <select type="text" class="form-control surveyor"
+                                                            name="surveyor_kode" required>
+                                                            @if ($data->produk == 'KTA')
+                                                                @foreach ($cs as $item)
+                                                                    @if ($survey->surveyor_kode == $item->code_user)
+                                                                        <option value="{{ $item->code_user }}" selected>
+                                                                            {{ $item->nama }}
+                                                                        </option>
+                                                                    @else
+                                                                        <option value="{{ $item->code_user }}">
+                                                                            {{ $item->nama }}
+                                                                        </option>
+                                                                    @endif
+                                                                @endforeach
+                                                                @if ($kkpk->code_user == $survey->surveyor_kode)
+                                                                    <option value="{{ $kkpk->code_user }}" selected>
+                                                                        {{ $kkpk->nama }}
+                                                                    @else
+                                                                    <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}
+                                                                    </option>
+                                                                @endif
+                                                            @else
+                                                                @if (is_null($survey->surveyor_kode))
+                                                                    <option value="">--PILIH--</option>
+                                                                @else
+                                                                    <option value="{{ $survey->surveyor_kode }}">
+                                                                        {{ strtoupper($survey->nama_surveyor) }}</option>
+                                                                @endif
+
+                                                                @foreach ($staff as $item)
+                                                                    <option value="{{ $item->code_user }}">
+                                                                        {{ strtoupper($item->nama) }}
+                                                                    </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @endcan
 
                                             @can('otorisasi pengajuan kredit')
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    @if ($data->produk == 'KTA')
-                                                        <label>KEPALA KANTOR KAS</label>
-                                                    @else
-                                                        <label>KASI ANALIS</label>
-                                                    @endif
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        @if ($data->produk == 'KTA')
+                                                            <label>KEPALA KANTOR KAS</label>
+                                                        @else
+                                                            <label>KASI ANALIS</label>
+                                                        @endif
 
-                                                    <select type="text" class="form-control kasi" name="kasi_kode"
-                                                        required>
+                                                        <select type="text" class="form-control kasi" name="kasi_kode"
+                                                            required>
 
-                                                        <option value="{{ $survey->kasi_kode }}">{{ $survey->nama_kasi }}</option>
+                                                            <option value="{{ $survey->kasi_kode }}">{{ $survey->nama_kasi }}
+                                                            </option>
 
-                                                        {{-- @if ($data->produk == 'KTA')
+                                                            {{-- @if ($data->produk == 'KTA')
                                                             <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}
                                                             </option>
                                                         @else
@@ -144,23 +156,24 @@
                                                                 </option>
                                                             @endforeach
                                                         @endif --}}
-                                                    </select>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    @if ($data->produk == 'KTA')
-                                                        <label>ANALIS</label>
-                                                    @else
-                                                        <label>SURVEYOR</label>
-                                                    @endif
-                                                    <select type="text" class="form-control surveyor"
-                                                        name="surveyor_kode" required>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        @if ($data->produk == 'KTA')
+                                                            <label>ANALIS</label>
+                                                        @else
+                                                            <label>SURVEYOR</label>
+                                                        @endif
+                                                        <select type="text" class="form-control surveyor"
+                                                            name="surveyor_kode" required>
 
-                                                        <option value="{{ $survey->surveyor_kode }}">{{ $survey->nama_surveyor }}</option>
+                                                            <option value="{{ $survey->surveyor_kode }}">
+                                                                {{ $survey->nama_surveyor }}</option>
 
-                                                        {{-- @if ($data->produk == 'KTA')
+                                                            {{-- @if ($data->produk == 'KTA')
                                                             <option value="{{ $cs->code_user }}">{{ $cs->nama }}
                                                             </option>
                                                             <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}
@@ -179,9 +192,9 @@
                                                                 </option>
                                                             @endforeach
                                                         @endif --}}
-                                                    </select>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             @endcan
                                         </div>
                                     </div>
