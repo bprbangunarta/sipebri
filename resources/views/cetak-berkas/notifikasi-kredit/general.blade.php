@@ -260,8 +260,11 @@
                     $persen_apht = ($data->proses_apht / $data->plafon) * 100;
                     $rate_apht = number_format($persen_apht, 2, '.', '');
 
-                    $biaya_kredit = $data->b_provisi + $rate_admin + $rate_fiducia + $rate_apht;
+                    $biaya_kredit = $data->b_provisi + $persen_administrasi + $persen_fiducia + $persen_apht;
+                    // $biaya_kredit = $data->b_provisi + $rate_admin + $rate_fiducia + $rate_apht;
+                    // dd($rate_admin, $rate_fiducia, $data->b_provisi, $rate_apht);
                 @endphp
+
                 <td style="text-align: justify;">{{ $biaya_kredit }} % dari plafon kredit</td>
 
             </tr>

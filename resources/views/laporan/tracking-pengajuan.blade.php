@@ -105,14 +105,14 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if($item->status == "Disetujui" || $item->status == "Ditolak" || $item->status == "Dibatalkan")
+                                                @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
                                                     {{ $item->status }}
                                                 @else
                                                     -
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if(!is_null($item->tgl_realisasi))
+                                                @if (!is_null($item->tgl_realisasi))
                                                     @php
                                                         $hari = strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
                                                         $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
@@ -140,9 +140,9 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
-                                {{-- <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Data
-                                </button> --}}
+                                </button>
 
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
@@ -155,11 +155,116 @@
                         </div>
                     </div>
 
-                    <p class="text-red" style="margin-top:-10px;">Jika tanggal realisasi tidak ada, estimasi dihitung sejak tanggal pendaftaran sampai dengan hari ini</p>
+                    <p class="text-red" style="margin-top:-10px;">Jika tanggal realisasi tidak ada, estimasi dihitung sejak
+                        tanggal pendaftaran sampai dengan hari ini</p>
 
                 </div>
             </div>
         </section>
+    </div>
+    <div class="modal fade" id="modal-export">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT DATA</h4>
+                </div>
+                <form action="{{ route('pengajuan.data') }}" method="GET">
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1"
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control produk" name="kode_produk" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} -
+                                                {{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control kantor" name="nama_kantor" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>RESORT</label>
+                                    <select class="form-control resort" name="resort" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($resort as $item)
+                                            <option value="{{ $item->kode_resort }}">{{ $item->nama_resort }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2"
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>METODE RPS</label>
+                                    <select class="form-control metode" name="metode" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($metode as $item)
+                                            <option value="{{ $item->nama_metode }}">{{ $item->nama_metode }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>SURVEYOR</label>
+                                    <select class="form-control surveyor" name="surveyor" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($surveyor as $item)
+                                            <option value="{{ $item->code_user }}">{{ $item->nama_user }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>STATUS</label>
+                                    <select class="form-control surveyor" name="surveyor" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        <option value="Disetujui">Disetujui</option>
+                                        <option value="Ditolak">Ditolak</option>
+                                        <option value="Dibatalkan">Dibatalkan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">FILTER</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 @push('myscript')

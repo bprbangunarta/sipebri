@@ -577,8 +577,24 @@ class CetakLaporanController extends Controller
             ->orderBy('data_pengajuan.created_at', 'desc');
 
         $data = $query->paginate(10);
+        //Data Kantor
+        $kantor = DB::table('data_kantor')->get();
+        //Data Produk
+        $produk = DB::table('data_produk')->get();
+        //Data Resort
+        $resort = DB::table('v_resort')->get();
+        //Data Metode RPS
+        $metode = DB::table('data_metode_rps')->get();
+        //Data Surveyor
+        $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
+
         return view('laporan.tracking-pengajuan', [
             'data' => $data,
+            'kantor' => $kantor,
+            'produk' => $produk,
+            'metode' => $metode,
+            'resort' => $resort,
+            'surveyor' => $surveyor,
         ]);
     }
 
