@@ -11,12 +11,12 @@ $("#edit-penolakan").on("show.bs.modal", function (event) {
     // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
     $.ajax({
         url: "/themes/penolakan/edit/",
-        type: "GET",
+        type: "POST",
         data: data,
         dataType: "json",
         cache: false,
         success: function (response) {
-
+            
             $("#id_tolak").val(response[0].no_penolakan);
             $("#name_nasabah").val(response[0].nama_nasabah);
             $("#nmr").val(response[0].nomor);
