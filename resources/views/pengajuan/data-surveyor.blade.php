@@ -92,9 +92,6 @@
                                                                 <option value="{{ $item->code_user }}">{{ $item->nama }}</option>
                                                             @endforeach
                                                             <option value="{{ $kkpk->code_user }}">{{ $kkpk->nama }}</option>
-
-                                                        {{-- @elseif ($data->produk == 'KTA' && ) --}}
-
                                                         @else
                                                             @if (is_null($survey->surveyor_kode))
                                                                 <option value="">--PILIH--</option>
