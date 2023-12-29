@@ -288,7 +288,7 @@
                                             </div>
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">WILAYAH</span>
-                                                <input class="form-control" type="hidden" name="kode_pos"
+                                                <input class="form-control" type="text" name="kode_pos"
                                                     id="kode_pos" placeholder="" value="">
                                                 @if (is_null($nasabah->kota))
                                                     <input class="form-control dati2" type="text" name="kota"
