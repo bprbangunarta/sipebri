@@ -1168,7 +1168,7 @@ class DataCetakController extends Controller
                 $cek->administrasi = 0.00;
             }
 
-            dd($cek->jwt);
+
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
