@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
-use PhpOffice\PhpSpreadsheet\Writer\Xls;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ExportController extends Controller
 {
@@ -480,7 +481,7 @@ class ExportController extends Controller
 
             ->orderBy('data_pengajuan.created_at', 'asc')
             ->get();
-        // dd($data);
+
         $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WILAYAH", "PRODUK", "PLAFON", "TGL SURVEI", "SURVEYOR", "STATUS", "CATATAN");
         foreach ($data as $item) {
             $data_array[] = array(
@@ -500,5 +501,138 @@ class ExportController extends Controller
         }
 
         $this->export_sebelum_survei($data_array);
+    }
+
+    public function data_export_tracking()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        $no = 1;
+        $produk = request('kode_produk');
+        $kantor = request('nama_kantor');
+        $resort = request('resort');
+        $metode = request('metode');
+        $surveyor = request('surveyor');
+        $status = request('status');
+
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $query = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
+            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->leftJoin('v_resort', 'v_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
+
+            ->select(
+                'data_pengajuan.created_at as tanggal',
+                'data_pengajuan.kode_pengajuan',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.plafon',
+                'data_pengajuan.jangka_waktu',
+                'data_pengajuan.suku_bunga',
+                'v_users.nama_user',
+                'data_survei.tgl_survei as tgl_survey',
+                'data_survei.surveyor_kode as surveyor',
+                'data_tracking.analisa_kredit as tgl_analisa',
+                'data_tracking.keputusan_komite as tgl_persetujuan',
+                'data_tracking.akad_kredit as tgl_realisasi',
+                'v_resort.nama_resort',
+                'data_pengajuan.status',
+            )
+            ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
+                return $query->whereBetween('data_survei.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+            });
+
+        $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor, $status, $resort) {
+            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
+                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
+                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%')
+                ->where('data_pengajuan.resort_kode', 'like', '%' . $resort . '%')
+                ->where('data_pengajuan.status', 'like', '%' . $status . '%');
+        })
+
+            ->orderBy('data_pengajuan.created_at', 'desc');
+        $data = $query->get();
+
+        $data_array[] = array(
+            "NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WIL",
+            "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "PUTUSAN", "REALISASI", "STATUS"
+        );
+        foreach ($data as $item) {
+
+            if (is_null($item->tgl_analisa)) {
+                $item->tgl_analisa;
+            } else {
+                $item->tgl_analisa = Carbon::parse($item->tgl_analisa ?? null)->format('d-m-Y');
+            }
+
+            if (is_null($item->tgl_persetujuan)) {
+                $item->tgl_persetujuan;
+            } else {
+                $item->tgl_persetujuan = Carbon::parse($item->tgl_persetujuan ?? null)->format('d-m-Y');
+            }
+
+            if (is_null($item->tgl_realisasi)) {
+                $item->tgl_realisasi;
+            } else {
+                $item->tgl_realisasi = Carbon::parse($item->tgl_realisasi ?? null)->format('d-m-Y');
+            }
+
+            if ($item->status == "Disetujui" || $item->status == "Ditolak" || $item->status == "Dibatalkan") {
+                $item->status = $item->status;
+            } else {
+                $item->status = null;
+            }
+
+            $data_array[] = array(
+                'NO'            => $no++,
+                'TANGGAL'       => \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d'),
+                'KODE'          => $item->kode_pengajuan,
+                'NAMA_NASABAH'  => $item->nama_nasabah,
+                'ALAMAT'        => $item->alamat_ktp,
+                'WIL'           => $item->kantor_kode,
+                'PDK'           => $item->produk_kode,
+                'PLAFON'        => number_format($item->plafon, 0, ',', '.'),
+                'RATE'          => $item->suku_bunga,
+                'RESORT'        => $item->nama_resort,
+                'SURVEYOR'      => $item->nama_user,
+                'SURVEY'        => $item->tgl_survey,
+                'ANALISA'       => $item->tgl_analisa,
+                'PUTUSAN'       => $item->tgl_persetujuan,
+                'REALISASI'     => $item->tgl_realisasi,
+                'STATUS'        => $item->status,
+            );
+        }
+
+        $this->export_data_tracking($data_array);
+    }
+
+    public function export_data_tracking($data)
+    {
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '4000M');
+        try {
+            $spreadSheet = new Spreadsheet();
+            $spreadSheet->getActiveSheet()->getDefaultColumnDimension()->setWidth(20);
+            $spreadSheet->getActiveSheet()->fromArray($data);
+            $Excel_writer = new Xls($spreadSheet);
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="Laporan_data_tracking.xls"');
+            header('Cache-Control: max-age=0');
+            ob_end_clean();
+            $Excel_writer->save('php://output');
+            exit();
+        } catch (Exception $e) {
+            return;
+        }
     }
 }

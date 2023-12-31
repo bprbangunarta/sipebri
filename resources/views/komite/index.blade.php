@@ -83,8 +83,8 @@
                                                 </a>
 
                                                 &nbsp;
-                                                <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}" target="_blank"
-                                                    class="btn-circle btn-sm btn-info" title="Analisa">
+                                                <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm btn-info" title="Analisa">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
                                             </td>
@@ -278,7 +278,8 @@
                             </div>
                         </div>
 
-                        <p style="font-size: 12px;">*Untuk pengajuan tolak/ batal isi <b>usulan plafon</b> sesuai dengan
+                        <p style="font-size: 14px; color:red;">*Untuk pengajuan tolak/ batal isi <b>usulan plafon</b>
+                            sesuai dengan
                             nominal permohonan</p>
                     </div>
 

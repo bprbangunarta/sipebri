@@ -170,13 +170,14 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">EXPORT DATA</h4>
                 </div>
-                <form action="{{ route('pengajuan.data') }}" method="GET">
+                <form action="{{ route('export.tracking') }}" method="POST">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>MULAI DARI</label>
+                                    <label>TANGGAL SURVEI MULAI DARI</label>
                                     <input type="date" class="form-control" name="tgl1" id="tgl1"
                                         style="margin-top:-5px;">
                                 </div>
@@ -206,7 +207,7 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>RESORT</label>
-                                    <select class="form-control resort" name="resort" id=""
+                                    <select class="form-control resort" name="resort" id="resort"
                                         style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($resort as $item)
@@ -247,7 +248,7 @@
                                 </div>
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>STATUS</label>
-                                    <select class="form-control surveyor" name="surveyor" id=""
+                                    <select class="form-control surveyor" name="status" id=""
                                         style="width: 100%;margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         <option value="Disetujui">Disetujui</option>
@@ -260,7 +261,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-primary">FILTER</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
                     </div>
                 </form>
             </div>
@@ -269,6 +270,7 @@
 @endsection
 @push('myscript')
     <script>
+        $('.resort').select2()
         $('.cgc').select2()
         $('.res').select2()
     </script>

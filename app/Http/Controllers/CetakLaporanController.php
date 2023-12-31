@@ -598,18 +598,6 @@ class CetakLaporanController extends Controller
         ]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public function laporan_fasilitas()
     {
         $keyword = request('keyword');
@@ -730,7 +718,6 @@ class CetakLaporanController extends Controller
             'data' => $data,
         ]);
     }
-
 
 
     public function post_siap_realisasi()
