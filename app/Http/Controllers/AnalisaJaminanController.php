@@ -106,12 +106,20 @@ class AnalisaJaminanController extends Controller
     public function updatekendaraan(Request $request)
     {
         try {
+            if ((int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) > 0) {
+                $tgl_taksasi = now()->format('dmY');
+            } else {
+                $tgl_taksasi = null;
+            }
+
             $nilai = [
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_pasar')) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_taksasi')) ?? 0,
+                'tgl_taksasi' => $tgl_taksasi,
+                'surveyor' => Auth::user()->code_user,
                 'updated_at' => now(),
             ];
-            // dd($request);
+
             // $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
             DB::table('data_jaminan')->where('id', $request->id)->update($nilai);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -301,9 +309,16 @@ class AnalisaJaminanController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
+            if ((int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) > 0) {
+                $tgl_taksasi = now()->format('dmY');
+            } else {
+                $tgl_taksasi = null;
+            }
             $data = [
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
+                'tgl_taksasi' => $tgl_taksasi,
+                'surveyor' => Auth::user()->code_user,
                 'updated_at' => now(),
             ];
 
@@ -364,11 +379,17 @@ class AnalisaJaminanController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-
+            if ($request->nilai_taksasi > 0) {
+                $tgl_taksasi = now()->format('dmY');
+            } else {
+                $tgl_taksasi = null;
+            }
             $data = [
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
                 'no_dokumen' => strtoupper($request->no_dok),
+                'tgl_taksasi' => $tgl_taksasi,
+                'surveyor' => Auth::user()->code_user,
                 'updated_at' => now(),
                 'catatan' => $request->catatan,
             ];
