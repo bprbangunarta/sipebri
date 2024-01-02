@@ -525,7 +525,7 @@ class ExportController extends Controller
             ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
-            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            // ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('v_resort', 'v_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
 
             ->select(
@@ -552,8 +552,8 @@ class ExportController extends Controller
             });
 
         $query->where(function ($query) use ($produk, $kantor, $metode, $surveyor, $status, $resort) {
-            $query->where('data_produk.kode_produk', 'like', '%' . $produk . '%')
-                ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+            $query->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
+                ->where('data_pengajuan.produk_kode', 'like', '%' . $produk . '%')
                 ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
                 ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%')
                 ->where('data_pengajuan.resort_kode', 'like', '%' . $resort . '%')
@@ -567,6 +567,7 @@ class ExportController extends Controller
             "NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WIL",
             "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "PUTUSAN", "REALISASI", "STATUS"
         );
+
         foreach ($data as $item) {
 
             if (is_null($item->tgl_analisa)) {

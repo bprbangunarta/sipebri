@@ -387,7 +387,7 @@ class NasabahController extends Controller
             $cek['photo'] = $request->no_identitas . '_' . $request->nama_nasabah . '.jpg';
             Storage::put('public/image/photo/' . $cek['photo'], base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $request->fhotoformal)));
         }
-
+        // dd($cek);
         if ($cek) {
             $nas = Nasabah::where('kode_nasabah', $request->query('nasabah'))->get();
             Nasabah::where('id', $nas[0]->id)->update($cek);
