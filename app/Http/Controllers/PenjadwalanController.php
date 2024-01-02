@@ -26,27 +26,29 @@ class PenjadwalanController extends Controller
 
             ->select(
                 'data_pengajuan.kode_pengajuan',
-                'data_pengajuan.tracking', 'data_pengajuan.status', 
-                'data_nasabah.kode_nasabah', 'data_nasabah.nama_nasabah', 
-                'data_nasabah.alamat_ktp', 
-                'data_pengajuan.plafon', 
-                'data_pengajuan.jangka_waktu as jk', 
-                'data_pengajuan.metode_rps', 
-                'data_kantor.nama_kantor', 
-                'data_kantor.kode_kantor', 
-                'data_survei.surveyor_kode', 
-                'data_survei.tgl_survei', 
-                'data_survei.tgl_jadul_1', 
-                'data_survei.tgl_jadul_2', 
-                'users.name', 
-                'users.code_user', 
-                'data_nasabah.kecamatan', 
-                'data_nasabah.kelurahan', 
-                'data_pengajuan.created_at as tanggal', 
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_pengajuan.plafon',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_pengajuan.metode_rps',
+                'data_kantor.nama_kantor',
+                'data_kantor.kode_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name',
+                'users.code_user',
+                'data_nasabah.kecamatan',
+                'data_nasabah.kelurahan',
+                'data_pengajuan.created_at as tanggal',
                 'data_pengajuan.kategori',
                 'data_produk.*',
             )
-            
+
             ->where('data_survei.kasi_kode', '=', $user)
             ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
             ->where('data_pengajuan.tracking', '=', 'Penjadwalan')
@@ -61,8 +63,7 @@ class PenjadwalanController extends Controller
                     ->orWhere('data_kantor.kode_kantor', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
-            ->orderBy('data_pengajuan.created_at', 'desc');
-            ;
+            ->orderBy('data_pengajuan.created_at', 'desc');;
 
         $datas = $cek->paginate(10);
 
@@ -84,6 +85,7 @@ class PenjadwalanController extends Controller
         //Surveyor
         $surveyor = DB::table('v_users')
             ->where('role_name', '=', 'Staff Analis')
+            ->orWhere('role_name', '=', 'Customer Service')
             ->select('nama_user', 'code_user')->get();
 
         return response()->json([$cek, $surveyor]);
