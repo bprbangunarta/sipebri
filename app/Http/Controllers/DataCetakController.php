@@ -558,11 +558,12 @@ class DataCetakController extends Controller
     public function simpan_spk(Request $request)
     {
         try {
+
             $cek = DB::table('data_spk')
                 ->where('pengajuan_kode', $request->kode_pengajuan)
-                ->orWhere('nomor', $request->nomor)->first();
-            // dd($cek);
-            if ($cek) {
+                ->where('nomor', $request->nomor)->first();
+
+            if (!is_null($cek)) {
                 return back()->with('error', "Anda Sudah Memiliki Nomor PK");
             }
 

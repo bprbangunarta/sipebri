@@ -55,8 +55,13 @@ class Midle extends Model
 
         //Pekerjaan dari CIF
         $j = Pekerjaan::where('kode_pekerjaan', $query->pekerjaan)->first();
-        $query->jo = $j->nama_pekerjaan;
-        $query->pekerjaan_kode = $query->pekerjaan;
+        if (is_null($j)) {
+            $query->jo = null;
+            $query->pekerjaan_kode = null;
+        } else {
+            $query->jo = $j->nama_pekerjaan;
+            $query->pekerjaan_kode = $query->pekerjaan;
+        }
 
         //Pendidikan dari CIF
         $p = Pendidikan::where('kode_pendidikan', $query->pendidikan)->first();
