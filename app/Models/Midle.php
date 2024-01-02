@@ -950,7 +950,8 @@ class Midle extends Model
                 'data_nasabah.created_at as tgl_nasabah',
                 'data_nasabah.photo as photo_nasabah',
                 'data_nasabah.input_user as input_user_nasabah',
-                'data_pendamping.*',
+                'data_pendamping.no_identitas as no_identitas_pendamping',
+                'data_pendamping.nama_pendamping',
                 'v_users.nama_user as nama_surveyor',
                 'data_survei.*',
                 'data_survei.created_at as tgl_survei',
@@ -961,7 +962,7 @@ class Midle extends Model
             ->where('data_pengajuan.kode_pengajuan', $kode)
             ->get();
         //
-        // dd($data[0]);
+
         //Kasi
         $kasi = DB::table('v_users')->where('code_user', $data[0]->kasi_kode)->first();
         $data[0]->nama_kasi = $kasi->nama_user;

@@ -375,11 +375,11 @@
                         </td>
                         <td style="border:1px solid black;">&nbsp; {{ $items->nama_barang }}</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ number_format($items->harga_beli, 0, ',', '.') }} &nbsp;</td>
+                            Rp. {{ number_format($items->harga_beli, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ number_format($items->harga_jual, 0, ',', '.') }} &nbsp;</td>
+                            Rp. {{ number_format($items->harga_jual, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ number_format($items->laba, 0, ',', '.') }} &nbsp;</td>
+                            Rp. {{ number_format($items->laba, 0, ',', '.') }} &nbsp;</td>
                         <td class="text-center" style="border:1px solid black;">{{ $items->stok }}</td>
                         <td class="text-center" style="border:1px solid black;">{{ $items->presentase_laba }}%</td>
                     </tr>
@@ -388,6 +388,24 @@
                     @endphp
                 @empty
                 @endforelse
+                <tr style="border:1px solid black; colspan:2;">
+                    <td class="text-center" colspan="2" style="border:1px solid black;">TOTAL</td>
+                    <td class="text-center" style="border:1px solid black;">
+                        Rp. {{ number_format($item->total_beli, 0, ',', '.') }}
+                    </td>
+                    <td class="text-center" style="border:1px solid black;">
+                        Rp. {{ number_format($item->total_jual, 0, ',', '.') }}
+                    </td>
+                    <td class="text-center" style="border:1px solid black;">
+                        Rp. {{ number_format($item->total_laba, 0, ',', '.') }}
+                    </td>
+                    <td class="text-center" style="border:1px solid black;">
+                        {{ number_format($item->total_stok, 0, ',', '.') }}
+                    </td>
+                    <td class="text-center" style="border:1px solid black;">
+                        {{ number_format($item->total_pl, 2) }} %
+                    </td>
+                </tr>
             </table>
 
             <p></p>

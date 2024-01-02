@@ -737,10 +737,33 @@ class DataCetakController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $data = Midle::cetak_dokumen_analisa($enc);
             $perdagangan = Midle::cetak_dokumen_analisa_usaha_perdagangan($enc);
+
             if (count($perdagangan) != 0) {
+                // $total_beli = 0;
+                // $total_laba = 0;
+                // $total_jual = 0;
                 for ($i = 0; $i < count($perdagangan); $i++) {
                     $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan[$i]->kode_usaha)->get();
                 }
+
+                // foreach ($biaya_perdagangan as $datas) {
+                //     $total_beli += $datas->harga_beli;
+                // }
+
+                // foreach ($biaya_perdagangan as $da) {
+                //     $total_laba += $da->laba;
+                // }
+
+                // foreach ($biaya_perdagangan as $jual) {
+                //     $total_jual += $jual->harga_jual;
+                // }
+                // $total_persentase = ($total_laba / $total_beli) * 100;
+                // foreach ($perdagangan as $key => $jual) {
+                //     $perdagangan[$key]->total_beli = $total_beli;
+                //     $perdagangan[$key]->total_jual = $total_jual;
+                //     $perdagangan[$key]->total_laba = $total_laba;
+                //     $perdagangan[$key]->total_persentase = number_format($total_persentase, 2);
+                // }
             } else {
                 $biaya_perdagangan = null;
             }
@@ -825,6 +848,7 @@ class DataCetakController extends Controller
             if (is_null($memorandum)) {
                 return redirect()->back()->with('error', 'Memorandum belum diisi');
             }
+
             $memorandum->biaya_denda = $data[0]->b_denda ?? 0;
             $swot = Midle::cetak_data_swot($enc);
             $kebutuhan_dana = DB::table('a_kebutuhan_dana')->where('pengajuan_kode', $enc)->first();
@@ -843,7 +867,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-
+            // dd($perdagangan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
