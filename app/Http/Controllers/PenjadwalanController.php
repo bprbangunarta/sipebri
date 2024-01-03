@@ -21,8 +21,9 @@ class PenjadwalanController extends Controller
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('users as cs', 'cs.code_user', '=', 'data_pengajuan.input_user')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
 
             ->select(
                 'data_pengajuan.kode_pengajuan',
@@ -42,11 +43,14 @@ class PenjadwalanController extends Controller
                 'data_survei.tgl_jadul_2',
                 'users.name',
                 'users.code_user',
+                'users.kantor_kode as daftar_di',
                 'data_nasabah.kecamatan',
                 'data_nasabah.kelurahan',
                 'data_pengajuan.created_at as tanggal',
                 'data_pengajuan.kategori',
                 'data_produk.*',
+                'cs.username as nama_cs',
+                'cs.kantor_kode as kantor_cs',
             )
 
             ->where('data_survei.kasi_kode', '=', $user)
