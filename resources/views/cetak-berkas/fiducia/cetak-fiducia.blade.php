@@ -187,7 +187,7 @@
             <tr>
                 <td></td>
                 <td colspan="3" style="text-align: justify;">
-                    Jaminan tersebut diberikan oleh Pemberi Kuasa kepada PT. BPR PAMANUKAN BANGUNARTA
+                    Jaminan tersebut diberikan oleh Pemberi Kuasa kepada PT. BPR Bangunarta
                 </td>
             </tr>
             <tr>
