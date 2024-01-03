@@ -60,10 +60,17 @@
                             </a>
                         </li>
 
-                        <li class="{{ request()->is('data/pendamping') ? 'active' : '' }}">
-                            <a href="#" title="Data Nasabah">
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Data Pendamping">
                                 <i class="fa fa-circle-o"></i>
                                 Data Pendamping
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Data Pengajuan">
+                                <i class="fa fa-circle-o"></i>
+                                Data Pengajuan
                             </a>
                         </li>
                     </ul>
