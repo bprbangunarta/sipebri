@@ -53,7 +53,7 @@ class Keuangan extends Model
         $cek = DB::table('au_keuangan')
             ->leftJoin('bu_keuangan', 'au_keuangan.kode_keuangan', '=', 'bu_keuangan.keuangan_kode')
             ->select('au_keuangan.*', 'bu_keuangan.*')
-            ->where('au_keuangan.kode_keuangan', '=', $db[0]->kode_keuangan)->orderBy('bu_keuangan.id', 'asc')->get();
+            ->where('au_keuangan.kode_keuangan', '=', $db[0]->kode_keuangan)->get();
 
         for ($i = 0; $i < 10; $i++) {
             $cek[$i]->kode_keuangan = Crypt::encrypt($cek[$i]->kode_keuangan);

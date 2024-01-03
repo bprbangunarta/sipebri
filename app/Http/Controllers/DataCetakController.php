@@ -808,7 +808,7 @@ class DataCetakController extends Controller
             if (count($keuangan) != 0) {
                 $nominal = [];
 
-                $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[0]->kode_keuangan)->get();
+                $bu_keuangan = DB::table('bu_keuangan')->where('keuangan_kode', $keuangan[0]->kode_keuangan)->orderBy('id', 'desc')->get();
                 for ($i = 0; $i < count($bu_keuangan); $i++) {
                     $nominal[$i] = $bu_keuangan[$i]->nominal;
                 }
@@ -867,7 +867,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-            // dd($perdagangan);
+            // dd($bu_keuangan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

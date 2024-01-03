@@ -79,7 +79,7 @@ class AnalisaKeuanganController extends Controller
                 ];
                 Keuangan::where('pengajuan_kode', $enc)->update($au);
             }
-            // dd($kemampuan);
+            // dd($data);
             return view('staff.analisa.keuangan-edit', [
                 'data' => $cek[0],
                 'kemampuan' => $kemampuan,
