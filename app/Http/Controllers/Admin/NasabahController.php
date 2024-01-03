@@ -19,13 +19,11 @@ class NasabahController extends Controller
                 'users.name',
             )
             ->where(function ($query) use ($keyword) {
-                $query->where('no_cif', 'like', '%' . $keyword . '%')
-                    ->orWhere('no_identitas', 'like', '%' . $keyword . '%')
+                $query->where('kode_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('nama_nasabah', 'like', '%' . $keyword . '%')
-                    ->orWhere('kecamatan', 'like', '%' . $keyword . '%')
-                    ->orWhere('kelurahan', 'like', '%' . $keyword . '%')
-                    ->orWhere('kota', 'like', '%' . $keyword . '%')
                     ->orWhere('alamat_ktp', 'like', '%' . $keyword . '%')
+                    ->orWhere('no_identitas', 'like', '%' . $keyword . '%')
+                    ->orWhere('no_cif', 'like', '%' . $keyword . '%')
                     ->orWhere('name', 'like', '%' . $keyword . '%');
             })
             ->orderBy('data_nasabah.nama_nasabah', 'ASC')
@@ -87,9 +85,7 @@ class NasabahController extends Controller
 
     public function destroy($id)
     {
-        // Delete logic
         DB::table('data_nasabah')->where('id', $id)->delete();
-
-        return redirect()->route('nasabah.index')->with('success', 'Nasabah deleted successfully.');
+        return back()->with('success', 'Nasabah deleted successfully.');
     }
 }

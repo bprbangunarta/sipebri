@@ -33,13 +33,11 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center">NO. CIF</th>
-                                        <th class="text-center">NO. KTP</th>
+                                        <th class="text-center">KODE</th>
                                         <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center">KECAMATAN</th>
-                                        <th class="text-center">KELURAHAN</th>
-                                        <th class="text-center">KOTA</th>
                                         <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">NO. KTP</th>
+                                        <th class="text-center">NO. CIF</th>
                                         <th class="text-center">INPUT</th>
                                         <th class="text-center">AKSI</th>
                                     </tr>
@@ -53,13 +51,11 @@
                                             <td class="text-center">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
-                                            <td class="text-center">{{ $item->no_cif }}</td>
-                                            <td class="text-center">{{ $item->no_identitas }}</td>
+                                            <td class="text-center">{{ $item->kode_nasabah }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
-                                            <td>{{ $item->kecamatan }}</td>
-                                            <td>{{ $item->kelurahan }}</td>
-                                            <td>{{ $item->kota }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center">{{ $item->no_identitas }}</td>
+                                            <td class="text-center">{{ $item->no_cif }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('admin.nasabah.edit', $item->id) }}"
@@ -67,11 +63,16 @@
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
-
                                                 &nbsp;
-                                                <a href="#" class="btn-circle btn-sm bg-red">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
+                                                <form id="deleteForm" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <a href="#" class="btn-circle btn-sm bg-red deleteButton"
+                                                        data-id="{{ $item->id }}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </form>
                                             </td>
                                         </tr>
                                         @php
@@ -102,3 +103,31 @@
         </section>
     </div>
 @endsection
+
+@push('myscript')
+    <script>
+        $(".deleteButton").click(function(e) {
+            e.preventDefault();
+
+            var id = $(this).data("id");
+
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, hapus!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("Deleting ID:", id);
+
+                    $("#deleteForm").attr("action", "{{ url('admin/data/nasabah') }}/" + id);
+
+                    $("#deleteForm").submit();
+                }
+            });
+        });
+    </script>
+@endpush
