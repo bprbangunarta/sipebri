@@ -146,7 +146,7 @@ class AnalisaKeuanganController extends Controller
 
     public function update(Request $request)
     {
-
+        // dd($request);
         try {
             DB::transaction(function () use ($request) {
                 $enc = $request->query('keuangan');
