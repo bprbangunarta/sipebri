@@ -49,6 +49,7 @@ use App\Http\Controllers\CetakLaporanController;
 use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\Admin\HakAksesController;
+use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\TaksasiJaminanController;
@@ -156,6 +157,11 @@ Route::middleware('auth')->group(function () {
                 Route::resource('/pekerjaan', PekerjaanController::class);
                 // Data Pendidikan
                 Route::resource('/pendidikan', PendidikanController::class);
+
+                // Data Nasabah
+                Route::controller(AdminNasabahController::class)->group(function () {
+                    Route::get('/data/nasabah', 'index')->name('admin.nasabah.index');
+                });
             });
         });
 

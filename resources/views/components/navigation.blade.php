@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -45,18 +45,7 @@
                                 Data User
                             </a>
                         </li>
-                        {{-- <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
-                            <a href="{{ route('role.index') }}" title="Data Role">
-                                <i class="fa fa-circle-o"></i>
-                                Data Role
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
-                            <a href="{{ route('permission.index') }}" title="Permission">
-                                <i class="fa fa-circle-o"></i>
-                                Permission
-                            </a>
-                        </li> --}}
+
                         <li class="{{ request()->is('perubahan/data') ? 'active' : '' }}">
                             <a href="{{ route('ubah.data') }}" title="Menu Sakti">
                                 <i class="fa fa-circle-o"></i>
@@ -64,8 +53,8 @@
                             </a>
                         </li>
 
-                        <li class="{{ request()->is('data/nasabah') ? 'active' : '' }}">
-                            <a href="#" title="Data Nasabah">
+                        <li class="{{ request()->is('admin/data/nasabah') ? 'active' : '' }}">
+                            <a href="{{ route('admin.nasabah.index') }}" title="Data Nasabah">
                                 <i class="fa fa-circle-o"></i>
                                 Data Nasabah
                             </a>
