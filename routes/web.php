@@ -161,6 +161,9 @@ Route::middleware('auth')->group(function () {
                 // Data Nasabah
                 Route::controller(AdminNasabahController::class)->group(function () {
                     Route::get('/data/nasabah', 'index')->name('admin.nasabah.index');
+                    Route::get('/data/nasabah/{id}/edit', 'edit')->name('admin.nasabah.edit');
+                    Route::put('/data/nasabah/{id}', 'update')->name('admin.nasabah.update');
+                    Route::delete('/data/nasabah/{id}', 'destroy')->name('admin.nasabah.destroy');
                 });
             });
         });

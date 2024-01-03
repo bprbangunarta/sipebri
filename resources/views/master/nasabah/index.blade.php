@@ -62,9 +62,11 @@
                                             <td>{{ $item->alamat_ktp }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td class="text-center">
-                                                <a href="#" class="btn-circle btn-sm bg-yellow">
+                                                <a href="{{ route('admin.nasabah.edit', $item->id) }}"
+                                                    class="btn-circle btn-sm bg-yellow">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
+
 
                                                 &nbsp;
                                                 <a href="#" class="btn-circle btn-sm bg-red">

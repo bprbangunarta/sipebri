@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -53,7 +53,7 @@
                             </a>
                         </li>
 
-                        <li class="{{ request()->is('admin/data/nasabah') ? 'active' : '' }}">
+                        <li class="{{ request()->is('admin/data/nasabah', 'admin/data/nasabah/*/edit') ? 'active' : '' }}">
                             <a href="{{ route('admin.nasabah.index') }}" title="Data Nasabah">
                                 <i class="fa fa-circle-o"></i>
                                 Data Nasabah
