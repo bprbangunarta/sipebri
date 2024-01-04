@@ -26,6 +26,88 @@
         </form>
 
         <ul class="sidebar-menu" data-widget="tree">
+
+            @can('master data')
+                <li class="header">ADMINISTRATOR</li>
+                <li
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-cube"></i>
+                        <span>Data Master</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                            <a href="{{ route('user.index') }}" title=" Data User">
+                                <i class="fa fa-circle-o"></i>
+                                Data User
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('perubahan/data') ? 'active' : '' }}">
+                            <a href="{{ route('ubah.data') }}" title="Menu Sakti">
+                                <i class="fa fa-circle-o"></i>
+                                Menu Sakti
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('admin/data/nasabah', 'admin/data/nasabah/*/edit') ? 'active' : '' }}">
+                            <a href="{{ route('admin.nasabah.index') }}" title="Data Nasabah">
+                                <i class="fa fa-circle-o"></i>
+                                Data Nasabah
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Data Pendamping">
+                                <i class="fa fa-circle-o"></i>
+                                Data Pendamping
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Data Pengajuan">
+                                <i class="fa fa-circle-o"></i>
+                                Data Pengajuan
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="treeview {{ request()->is('') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-lock"></i>
+                        <span>Role & Permission</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Data Role">
+                                <i class="fa fa-circle-o"></i>
+                                Data Role
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Permission">
+                                <i class="fa fa-circle-o"></i>
+                                Permission
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                            <a href="#" title="Permission">
+                                <i class="fa fa-circle-o"></i>
+                                Give Permission
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
+
             <li class="header">MAIN MENU</li>
 
             @hasanyrole($roles)
@@ -348,46 +430,6 @@
                     </li>
                 </ul>
             </li>
-
-            @can('master data')
-                <li class="header">ADMINISTRATOR</li>
-                <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', '/perubahan/data') ? 'active' : '' }}">
-                    <a href="#">
-                        <i class="fa fa-cube"></i>
-                        <span>Data Master</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
-                            <a href="{{ route('user.index') }}" title=" Data User">
-                                <i class="fa fa-circle-o"></i>
-                                Data User
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/role') ? 'active' : '' }}">
-                            <a href="{{ route('role.index') }}" title="Data Role">
-                                <i class="fa fa-circle-o"></i>
-                                Data Role
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('admin/permission') ? 'active' : '' }}">
-                            <a href="{{ route('permission.index') }}" title="Permission">
-                                <i class="fa fa-circle-o"></i>
-                                Permission
-                            </a>
-                        </li>
-                        <li class="{{ request()->is('/perubahan/data') ? 'active' : '' }}">
-                            <a href="{{ route('ubah.data') }}" title="Menu Sakti">
-                                <i class="fa fa-circle-o"></i>
-                                Menu Sakti
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            @endcan
 
             <li class="header">TOOLS</li>
             <li class="{{ request()->is('cif') ? 'active' : '' }}">
