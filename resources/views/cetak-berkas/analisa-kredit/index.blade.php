@@ -895,7 +895,7 @@
                     <th class="text-center" style="border:1px solid black;" width="25%">Harga</th>
                     <th class="text-center" style="border:1px solid black;" width="25%">Total</th>
                 </tr>
-                @forelse ($bahan as $item)
+                {{-- @forelse ($bahan as $item)
                     @if ($item->bahan_baku != null)
                         <tr style="border:1px solid black;">
                             <td class="text-center" width="4%" style="border:1px solid black;">
@@ -910,7 +910,25 @@
                         </tr>
                     @endif
                 @empty
-                @endforelse
+                @endforelse --}}
+                @foreach ($bahan as $item)
+                    @foreach ($item as $item_bahan)
+                        @if ($item_bahan->bahan_baku != null && $items->kode_usaha == $item_bahan->usaha_kode)
+                            <tr style="border:1px solid black;">
+                                <td class="text-center" width="4%" style="border:1px solid black;">
+                                    {{ $loop->iteration }}
+                                </td>
+                                <td style="border:1px solid black;">&nbsp; {{ $item_bahan->bahan_baku }}</td>
+                                <td class="text-center" style="border:1px solid black;">{{ $item_bahan->jumlah }}
+                                </td>
+                                <td style="border:1px solid black;text-align:right;">
+                                    {{ 'Rp. ' . ' ' . number_format($item_bahan->harga, 0, ',', '.') }} &nbsp;</td>
+                                <td style="border:1px solid black;text-align:right;">
+                                    {{ 'Rp. ' . ' ' . number_format($item_bahan->total, 0, ',', '.') }} &nbsp;</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endforeach
                 <tr style="border:1px solid black;">
                     <th class="text-center" colspan="4" style="border:1px solid black;">Total</th>
                     <th style="border:1px solid black;text-align:right;">
@@ -930,27 +948,53 @@
                     <th class="text-center" width="25%" style="border:1px solid black;">Pendapatan</th>
                     <th class="text-center" width="25%" style="border:1px solid black;">Pengeluaran</th>
                 </tr>
-                @forelse ($du as $item)
+                @foreach ($du as $itemd)
+                    @foreach ($itemd as $item_du)
+                        @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)
+                            <tr style="border:1px solid black;">
+                                <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
+                                <td style="border:1px solid black;">&nbsp; {{ $item_du->penjualan }}</td>
+                                <td style="border:1px solid black;text-align:right;">
+                                    {{ 'Rp. ' . ' ' . number_format($item_du->nominal, 0, ',', '.') }} &nbsp;</td>
+                                <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endforeach
+                {{-- @forelse ($du as $itemd)
                     <tr style="border:1px solid black;">
                         <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
-                        <td style="border:1px solid black;">&nbsp; {{ $item->penjualan }}</td>
+                        <td style="border:1px solid black;">&nbsp; {{ $itemd->penjualan }}</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($item->nominal, 0, ',', '.') }} &nbsp;</td>
+                            {{ 'Rp. ' . ' ' . number_format($itemd->nominal, 0, ',', '.') }} &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
                     </tr>
                 @empty
-                @endforelse
+                @endforelse --}}
 
-                @forelse ($bu as $item)
+                {{-- @forelse ($bu as $itemb)
                     <tr style="border:1px solid black;">
                         <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
-                        <td style="border:1px solid black;">&nbsp; {{ $item->pengeluaran }}</td>
+                        <td style="border:1px solid black;">&nbsp; {{ $itemb->pengeluaran }}</td>
                         <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                         <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($item->nominal, 0, ',', '.') }} &nbsp;</td>
+                            {{ 'Rp. ' . ' ' . number_format($itemb->nominal, 0, ',', '.') }} &nbsp;</td>
                     </tr>
                 @empty
-                @endforelse
+                @endforelse --}}
+                @foreach ($bu as $itemb)
+                    @foreach ($itemb as $item_bu)
+                        @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)
+                            <tr style="border:1px solid black;">
+                                <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
+                                <td style="border:1px solid black;">&nbsp; {{ $item_bu->pengeluaran }}</td>
+                                <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                <td style="border:1px solid black;text-align:right;">
+                                    {{ 'Rp. ' . ' ' . number_format($item_bu->nominal, 0, ',', '.') }} &nbsp;</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                @endforeach
 
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">9.</td>

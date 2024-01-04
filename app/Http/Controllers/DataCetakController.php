@@ -739,31 +739,10 @@ class DataCetakController extends Controller
             $perdagangan = Midle::cetak_dokumen_analisa_usaha_perdagangan($enc);
 
             if (count($perdagangan) != 0) {
-                // $total_beli = 0;
-                // $total_laba = 0;
-                // $total_jual = 0;
+
                 for ($i = 0; $i < count($perdagangan); $i++) {
                     $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan[$i]->kode_usaha)->get();
                 }
-
-                // foreach ($biaya_perdagangan as $datas) {
-                //     $total_beli += $datas->harga_beli;
-                // }
-
-                // foreach ($biaya_perdagangan as $da) {
-                //     $total_laba += $da->laba;
-                // }
-
-                // foreach ($biaya_perdagangan as $jual) {
-                //     $total_jual += $jual->harga_jual;
-                // }
-                // $total_persentase = ($total_laba / $total_beli) * 100;
-                // foreach ($perdagangan as $key => $jual) {
-                //     $perdagangan[$key]->total_beli = $total_beli;
-                //     $perdagangan[$key]->total_jual = $total_jual;
-                //     $perdagangan[$key]->total_laba = $total_laba;
-                //     $perdagangan[$key]->total_persentase = number_format($total_persentase, 2);
-                // }
             } else {
                 $biaya_perdagangan = null;
             }
@@ -780,16 +759,19 @@ class DataCetakController extends Controller
             $lain = Midle::cetak_dokumen_analisa_usaha_lain($enc);
             if (count($lain) != 0) {
                 for ($i = 0; $i < count($lain); $i++) {
-                    $bahan = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
-                    $bu = DB::table('bu_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
-                    $du = DB::table('du_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
+                    $bahan[] = DB::table('bu_bahan_baku_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
+                    $bu[] = DB::table('bu_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
+                    $du[] = DB::table('du_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
                 }
 
                 // Total Bahan Baku
-                if ($bahan->isNotEmpty()) {
+                if (!empty($bahan)) {
                     $total_bahan_baku = [];
-                    foreach ($bahan as $item) {
-                        $total_bahan_baku[] = $item->total;
+                    foreach ($bahan as $items) {
+                        // $total_bahan_baku[] = $item->total;
+                        foreach ($items as $item) {
+                            $total_bahan_baku[] = $item->total; // Ubah 'total' menjadi kolom yang sesuai
+                        }
                     }
                     $total_bahan = array_sum($total_bahan_baku);
                 } else {
@@ -867,7 +849,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-            // dd($bu_keuangan);
+            // dd($lain, $bahan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
