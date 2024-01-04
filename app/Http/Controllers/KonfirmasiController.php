@@ -203,6 +203,24 @@ class KonfirmasiController extends Controller
                     'status' => 'Sudah Otorisasi',
                     'tracking' => 'Penjadwalan',
                 ];
+            } elseif (
+                $data_pengajuan->tracking == 'Penjadwalan' ||
+                $data_pengajuan->tracking == 'Proses Survei' ||
+                $data_pengajuan->tracking == 'Proses Analisa' ||
+                $data_pengajuan->tracking == 'Persetujuan Komite' ||
+                $data_pengajuan->tracking == 'Naik Kasi' ||
+                $data_pengajuan->tracking == 'Naik Komite I' ||
+                $data_pengajuan->tracking == 'Naik Komite II'
+            ) {
+                $data = [
+                    'auth_user' => Auth::user()->code_user,
+                    'status' => 'Sudah Otorisasi',
+                ];
+            } elseif ($data_pengajuan->tracking == 'Realisasi') {
+                $data = [
+                    'auth_user' => Auth::user()->code_user,
+                    'status' => 'Disetujui',
+                ];
             } else {
                 $data = [
                     'auth_user' => Auth::user()->code_user,
