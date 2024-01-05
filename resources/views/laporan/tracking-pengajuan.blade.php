@@ -51,6 +51,7 @@
                                         <th class="text-center">ANALISA</th>
                                         <th class="text-center">PUTUSAN</th>
                                         <th class="text-center">REALISASI</th>
+                                        <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
                                         <th class="text-center">ESTIMASI</th>
                                     </tr>
@@ -102,6 +103,17 @@
                                                     -
                                                 @else
                                                     {{ \Carbon\Carbon::parse($item->tgl_realisasi)->format('d-m-Y') }}
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if (
+                                                    $item->tracking == 'Proses Analisa' ||
+                                                        $item->tracking == 'Naik Kasi' ||
+                                                        $item->tracking == 'Naik Komite I' ||
+                                                        $item->tracking == 'Naik Komite II')
+                                                    {{ $item->tracking }}
+                                                @else
+                                                    -
                                                 @endif
                                             </td>
                                             <td class="text-center">

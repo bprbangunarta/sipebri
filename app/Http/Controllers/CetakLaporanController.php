@@ -547,6 +547,7 @@ class CetakLaporanController extends Controller
                 'data_pengajuan.plafon',
                 'data_pengajuan.jangka_waktu',
                 'data_pengajuan.suku_bunga',
+                'data_pengajuan.tracking',
                 'v_users.nama_user',
                 'data_survei.tgl_survei as tgl_survey',
                 'data_tracking.analisa_kredit as tgl_analisa',
@@ -587,7 +588,7 @@ class CetakLaporanController extends Controller
         $metode = DB::table('data_metode_rps')->get();
         //Data Surveyor
         $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
-
+        // dd($data);
         return view('laporan.tracking-pengajuan', [
             'data' => $data,
             'kantor' => $kantor,
