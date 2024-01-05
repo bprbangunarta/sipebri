@@ -92,7 +92,7 @@
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">SUKU BUNGA</span>
-                                                <input type="number" class="form-control" name="suku_bunga" id="suku_bunga"
+                                                <input type="text" class="form-control" name="suku_bunga" id="suku_bunga"
                                                     placeholder="ENTRI"
                                                     value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}" required>
                                             </div>
@@ -263,6 +263,17 @@
                 // Jika jangkaPoko lebih besar dari jangkaKredit
                 $("#jangka_bunga").val(jangkaKredit);
             }
+        });
+
+        $('#suku_bunga').on('input', function() {
+            // Mengambil nilai dari input field
+            var inputValue = $(this).val();
+
+            // Mengganti koma (,) menjadi titik (.)
+            var convertedValue = inputValue.replace(/,/g, '.');
+
+            // Memasukkan nilai yang sudah diubah ke dalam input field
+            $(this).val(convertedValue);
         });
     </script>
 @endpush
