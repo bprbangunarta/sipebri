@@ -741,7 +741,7 @@ class DataCetakController extends Controller
             if (count($perdagangan) != 0) {
 
                 for ($i = 0; $i < count($perdagangan); $i++) {
-                    $biaya_perdagangan = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan[$i]->kode_usaha)->get();
+                    $biaya_perdagangan[] = DB::table('du_perdagangan')->where('usaha_kode', $perdagangan[$i]->kode_usaha)->get();
                 }
             } else {
                 $biaya_perdagangan = null;
@@ -867,7 +867,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-            // dd($keuangan);
+            // dd($perdagangan, $biaya_perdagangan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
