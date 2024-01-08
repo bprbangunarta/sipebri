@@ -997,18 +997,25 @@
                 @endforeach
 
                 <tr style="border:1px solid black;">
-                    <td class="text-center" style="border:1px solid black;">9.</td>
+                    <td class="text-center" style="border:1px solid black;">6</td>
                     <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
                     <td style="border:1px solid black;text-align:right;">
                         {{ 'Rp. ' . ' ' . number_format($items->proyeksi, 0, ',', '.') }} &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
-                    <td class="text-center" style="border:1px solid black;">9.</td>
+                    <td class="text-center" style="border:1px solid black;">7</td>
                     <td style="border:1px solid black;">&nbsp; Biaya Bahan Baku</td>
                     <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                     <td style="border:1px solid black;text-align:right;">
                         {{ 'Rp. ' . ' ' . number_format($items->total_bahan, 0, ',', '.') }} &nbsp;</td>
+                </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">7</td>
+                    <td style="border:1px solid black;">&nbsp; Biaya Operasional</td>
+                    <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($items->pengeluaran, 0, ',', '.') }} &nbsp;</td>
                 </tr>
                 <tr style="border:1px solid black;">
                     <td class="text-center" style="border:1px solid black;">#</td>
@@ -1109,26 +1116,26 @@
                     @endif
                 @empty
                 @endforelse
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">#</td>
+                    <th style="border:1px solid black;">&nbsp; Total</th>
+                    <th style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($total_usaha->total_laba_usaha, 0, ',', '.') }} &nbsp;</th>
+                    <th style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($items->bu_total, 0, ',', '.') }} &nbsp;
+                    </th>
+                </tr>
+
+                <tr style="border:1px solid black;">
+                    <th class="text-center" colspan="2" style="border:1px solid black;">Kemampuan Keuangan
+                        Perbulan
+                    </th>
+                    <th class="text-center" colspan="2" style="border:1px solid black;">
+                        {{ 'Rp. ' . ' ' . number_format($items->keuangan_perbulan, 0, ',', '.') }}</th>
+                </tr>
             @empty
             @endforelse
 
-            <tr style="border:1px solid black;">
-                <td class="text-center" style="border:1px solid black;">#</td>
-                <th style="border:1px solid black;">&nbsp; Total</th>
-                <th style="border:1px solid black;text-align:right;">
-                    {{ 'Rp. ' . ' ' . number_format($total_usaha->total_laba_usaha, 0, ',', '.') }} &nbsp;</th>
-                <th style="border:1px solid black;text-align:right;">
-                    {{ 'Rp. ' . ' ' . number_format($items->bu_total, 0, ',', '.') }} &nbsp;
-                </th>
-            </tr>
-
-            <tr style="border:1px solid black;">
-                <th class="text-center" colspan="2" style="border:1px solid black;">Kemampuan Keuangan
-                    Perbulan
-                </th>
-                <th class="text-center" colspan="2" style="border:1px solid black;">
-                    {{ 'Rp. ' . ' ' . number_format($items->keuangan_perbulan, 0, ',', '.') }}</th>
-            </tr>
         </table>
 
         @if ($cetak->produk_kode != 'KTA')
