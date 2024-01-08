@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -50,6 +50,14 @@
                             <a href="{{ route('ubah.data') }}" title="Menu Sakti">
                                 <i class="fa fa-circle-o"></i>
                                 Menu Sakti
+                            </a>
+                        </li>
+
+                        <li
+                            class="{{ request()->is('admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit') ? 'active' : '' }}">
+                            <a href="{{ route('admin.jaminan.index') }}" title="Data Jaminan">
+                                <i class="fa fa-circle-o"></i>
+                                Data Jaminan
                             </a>
                         </li>
 

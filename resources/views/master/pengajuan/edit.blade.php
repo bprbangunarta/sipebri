@@ -12,7 +12,8 @@
                             <h3 class="box-title">DATA PENGAJUAN</h3>
                         </div>
 
-                        <form action="#" method="POST">
+                        <form action="{{ route('admin.pengajuan.update', ['data' => $data->kode_pengajuan]) }}"
+                            method="POST">
                             @csrf
                             @method('PUT')
                             <div class="box-body" data-select2-id="13">
@@ -71,7 +72,7 @@
 
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>ON CURRENT</label>
-                                            <input type="text" class="form-control" name="" id=""
+                                            <input type="text" class="form-control" name="on_current" id=""
                                                 value="{{ $data->on_current }}">
                                         </div>
 
@@ -124,7 +125,7 @@
                                     <i class="fa fa-save"></i> SIMPAN
                                 </button>
 
-                                <a href="{{ route('admin.pendamping.index') }}" class="btn btn-default pull-right">
+                                <a href="{{ route('admin.pengajuan.index') }}" class="btn btn-default pull-right">
                                     <i class="fa fa-arrow-left"></i> KEMBALI
                                 </a>
                             </div>

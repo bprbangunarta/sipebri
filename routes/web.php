@@ -64,6 +64,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
+use App\Http\Controllers\Admin\AdminJaminanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
@@ -179,7 +180,14 @@ Route::middleware('auth')->group(function () {
                 Route::controller(AdminPengajuanController::class)->group(function () {
                     Route::get('/data/pengajuan', 'index')->name('admin.pengajuan.index');
                     Route::get('/data/pengajuan/{kode}/edit', 'edit')->name('admin.pengajuan.edit');
-                    // Route::PUT('/data/pendamping/update', 'update')->name('admin.pendamping.update');
+                    Route::PUT('/data/pengajuan/update', 'update')->name('admin.pengajuan.update');
+                });
+
+                // Data Jaminan
+                Route::controller(AdminJaminanController::class)->group(function () {
+                    Route::get('/data/jaminan', 'index')->name('admin.jaminan.index');
+                    Route::get('/data/jaminan/{id}/edit', 'edit')->name('admin.jaminan.edit');
+                    Route::PUT('/data/jaminan/update', 'update')->name('admin.jaminan.update');
                 });
             });
         });

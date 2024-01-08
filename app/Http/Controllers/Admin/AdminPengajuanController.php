@@ -39,4 +39,22 @@ class AdminPengajuanController extends Controller
         // dd($pengajuan);
         return view('master.pengajuan.edit', ['data' => $pengajuan]);
     }
+
+    public function update(Request $request)
+    {
+        try {
+
+            $data = [
+                'kategori' => strtoupper($request->kategori),
+                'tracking' => $request->tracking,
+                'status' => $request->status,
+                'on_current' => $request->on_current,
+            ];
+
+            Pengajuan::where('kode_pengajuan', $request->input('data'))->update($data);
+            return redirect()->back()->with('success', 'Data berhasil diubah');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal diubah.');
+        }
+    }
 }
