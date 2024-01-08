@@ -44,7 +44,7 @@ class AnalisaJaminanController extends Controller
             //Data dati
             $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
 
-            // dd($au);
+
             return view('staff.analisa.jaminan.kendaraan', [
                 'jenis_kendaraan' => $jenis_kendaraan,
                 'data_kendaraan' => $data_kendaraan,

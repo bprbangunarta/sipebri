@@ -12,6 +12,7 @@ class AgunanController extends Controller
     public function tambah_kendaraan(Request $request)
     {
         try {
+
             $cek = $request->validate([
                 'pengajuan_kode' => 'required',
                 'jenis_agunan_kode' => 'required',
@@ -32,6 +33,7 @@ class AgunanController extends Controller
                 'input_user' => 'required',
             ]);
             $cek['atas_nama'] = strtoupper($request->atas_nama);
+            $cek['nasabah_kode'] = $request->nasabah_kode;
             $cek['merek'] = strtoupper($request->merek);
             $cek['is_entry'] = 1;
             $cek['created_at'] = now();
@@ -137,6 +139,7 @@ class AgunanController extends Controller
             ]);
 
             $cek['is_entry'] = 1;
+            $cek['nasabah_kode'] = $request->nasabah_kode;
             $cek['luas'] = str_replace('.', '', $request->luas);
             $cek['created_at'] = now();
             if ($request) {
@@ -147,7 +150,7 @@ class AgunanController extends Controller
                     $jenis_agunan = $data_catatan->jenis_agunan;
                 }
             }
-
+            // dd($cek);
             $cek['catatan'] = 'SERTIFIKAT ' . strtoupper($jenis_agunan) . ' NO ' . strtoupper($cek['no_dokumen']) . ', LUAS ' . strtoupper($cek['luas']) . ' M2, ' . 'ATAS NAMA ' . strtoupper($cek['atas_nama']) . ', ALAMAT ' . strtoupper($cek['lokasi']);
 
             // dd($cek);
@@ -228,6 +231,7 @@ class AgunanController extends Controller
                 'input_user' => 'required',
             ]);
 
+            $cek['nasabah_kode'] = $request->nasabah_kode;
             $cek['is_entry'] = 1;
             $data['otorisasi'] = 'N';
             $cek['created_at'] = now();
@@ -326,12 +330,13 @@ class AgunanController extends Controller
             ]);
 
             $cek['atas_nama'] = strtoupper($request->atas_nama);
+            $cek['nasabah_kode'] = $request->nasabah_kode;
             $cek['merek'] = strtoupper($request->merek);
             $cek['is_entry'] = 1;
             $cek['otorisasi'] = 'A';
             $cek['input_user'] = Auth::user()->code_user;
             $cek['created_at'] = now();
-            // dd($request);
+
             //Cek data kendaraan
             if ($request->jenis_agunan_kode == '02') {
                 $jenis_agunan = 'KENDARAAN RODA 2';
@@ -365,6 +370,7 @@ class AgunanController extends Controller
                 'lokasi' => 'required',
             ]);
 
+            $cek['nasabah_kode'] = $request->nasabah_kode;
             $cek['is_entry'] = 1;
             $cek['luas'] = str_replace('.', '', $request->luas);
             $cek['created_at'] = now();
@@ -403,6 +409,7 @@ class AgunanController extends Controller
                 'catatan' => '',
             ]);
 
+            $cek['nasabah_kode'] = $request->nasabah_kode;
             $cek['is_entry'] = 1;
             $cek['otorisasi'] = 'A';
             $cek['input_user'] = Auth::user()->code_user;

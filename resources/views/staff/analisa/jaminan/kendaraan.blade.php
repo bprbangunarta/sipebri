@@ -81,6 +81,7 @@
 
                                 <input type="text" value="" name="input_user" hidden>
                                 <input type="text" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode" hidden>
+                                <input type="text" value="{{ $data->nasabah_kode }}" name="nasabah_kode" hidden>
                                 <input type="text" name="jenis_jaminan" value="Kendaraan" hidden>
 
                                 <div class="div-left">
@@ -184,7 +185,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
+                                            {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +250,7 @@
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
                                             value="BDAS594168" id="no_rangka" readonly>
                                     </div>
-                                    
+
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR MESIN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"

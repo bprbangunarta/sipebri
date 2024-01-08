@@ -232,6 +232,8 @@
                                         <span class="fw-bold">JENIS AGUNAN</span>
                                         <input type="text" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode"
                                             hidden>
+                                        <input type="text" value="{{ $data->nasabah_kode }}" name="nasabah_kode"
+                                            hidden>
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
@@ -298,7 +300,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
+                                            {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
                                     </div>
                                 </div>
                             </div>
