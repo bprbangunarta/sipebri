@@ -12,6 +12,7 @@ use App\Http\Controllers\LainController;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\KomiteController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\FiduciaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AsuransiController;
+use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TrackingController;
@@ -49,9 +51,7 @@ use App\Http\Controllers\CetakLaporanController;
 use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\Admin\HakAksesController;
-use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Admin\PasswordController;
-use App\Http\Controllers\Admin\AdminPendampingController;
 use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
@@ -65,8 +65,9 @@ use App\Http\Controllers\UsahaPerdaganganController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\AnalisaKepemilikanController;
-use App\Http\Controllers\DroppingController;
-use App\Http\Controllers\FrontController;
+use App\Http\Controllers\Admin\AdminPengajuanController;
+use App\Http\Controllers\Admin\AdminPendampingController;
+use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,10 +168,18 @@ Route::middleware('auth')->group(function () {
                     Route::delete('/data/nasabah/{id}', 'destroy')->name('admin.nasabah.destroy');
                 });
 
+                // Data Pendamping
                 Route::controller(AdminPendampingController::class)->group(function () {
                     Route::get('/data/pendamping', 'index')->name('admin.pendamping.index');
                     Route::get('/data/pendamping/{kode}/edit', 'edit')->name('admin.pendamping.edit');
                     Route::PUT('/data/pendamping/update', 'update')->name('admin.pendamping.update');
+                });
+
+                // Data Pengajuan
+                Route::controller(AdminPengajuanController::class)->group(function () {
+                    Route::get('/data/pengajuan', 'index')->name('admin.pengajuan.index');
+                    Route::get('/data/pengajuan/{kode}/edit', 'edit')->name('admin.pengajuan.edit');
+                    // Route::PUT('/data/pendamping/update', 'update')->name('admin.pendamping.update');
                 });
             });
         });

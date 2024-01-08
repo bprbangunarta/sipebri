@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -60,15 +60,16 @@
                             </a>
                         </li>
 
-                        <li class="{{ request()->is('') ? 'active' : '' }}">
+                        <li
+                            class="{{ request()->is('admin/data/pendamping', 'admin/data/pendamping/*/edit', 'admin/data/pendamping/*') ? 'active' : '' }}">
                             <a href="{{ route('admin.pendamping.index') }}" title="Data Pendamping">
                                 <i class="fa fa-circle-o"></i>
                                 Data Pendamping
                             </a>
                         </li>
 
-                        <li class="{{ request()->is('') ? 'active' : '' }}">
-                            <a href="#" title="Data Pengajuan">
+                        <li class="{{ request()->is('admin/data/pengajuan', 'admin/data/pengajuan/*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.pengajuan.index') }}" title="Data Pengajuan">
                                 <i class="fa fa-circle-o"></i>
                                 Data Pengajuan
                             </a>

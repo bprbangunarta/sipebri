@@ -9,10 +9,10 @@
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
                             <i class="fa fa-user"></i>
-                            <h3 class="box-title">DATA PENDAMPING</h3>
+                            <h3 class="box-title">DATA PENGAJUAN</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('admin.pendamping.index') }}" method="GET">
+                                <form action="{{ route('admin.pengajuan.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 170px;" name="keyword" id="keyword"
@@ -35,17 +35,18 @@
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center">KODE</th>
                                         <th class="text-center">NAMA NASABAH</th>
-                                        <th class="text-center">NAMA PENDAMPING</th>
+                                        <th class="text-center">NO NIK</th>
+                                        <th class="text-center">PLAFON</th>
+                                        <th class="text-center">PRODUK</th>
+                                        <th class="text-center">METODE</th>
+                                        <th class="text-center">JW</th>
+                                        <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
-                                        <th class="text-center">NO. KTP</th>
-                                        <th class="text-center">INPUT</th>
+                                        <th class="text-center">ON CURRENT</th>
                                         <th class="text-center">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
                                             <td class="text-center">
@@ -53,26 +54,21 @@
                                             </td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
-                                            <td>{{ $item->nama_pendamping }}</td>
-                                            <td>{{ $item->status }}</td>
-                                            <td class="text-center">{{ $item->no_identitas }}</td>
-                                            <td>{{ $item->input_user }}</td>
+                                            <td>{{ $item->no_identitas }}</td>
+                                            <td>Rp. {{ number_format($item->plafon, '0', '.', '') }}</td>
+                                            <td class="text-center">{{ $item->produk_kode }}</td>
+                                            <td>{{ $item->metode_rps }}</td>
+                                            <td class="text-center">{{ $item->jangka_waktu }}</td>
+                                            <td class="text-center">{{ $item->tracking }}</td>
+                                            <td class="text-center">{{ $item->status }}</td>
+                                            <td class="text-center">{{ $item->on_current }}</td>
                                             <td class="text-center">
-                                                @if (is_null($item->nama_pendamping))
-                                                    <a href="#" class="btn-circle btn-sm bg-red">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('admin.pendamping.edit', ['kode' => $item->kode_pengajuan]) }}"
-                                                        class="btn-circle btn-sm bg-yellow">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endif
+                                                <a href="{{ route('admin.pengajuan.edit', ['kode' => $item->kode_pengajuan]) }}"
+                                                    class="btn-circle btn-sm bg-yellow">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
                                             </td>
                                         </tr>
-                                        @php
-                                            $no++;
-                                        @endphp
                                     @empty
                                         <tr>
                                             <td class="text-center" colspan="10">TIDAK ADA DATA</td>

@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Edit Nasabah')
+@section('title', 'Edit Pendamping')
 
 @section('content')
     <div class="content-wrapper">
@@ -9,7 +9,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
                             <i class="fa fa-user"></i>
-                            <h3 class="box-title">DATA NASABAH</h3>
+                            <h3 class="box-title">DATA PENDAMPING</h3>
                         </div>
 
                         <form action="{{ route('admin.pendamping.update', ['id' => $data->id]) }}" method="POST">
