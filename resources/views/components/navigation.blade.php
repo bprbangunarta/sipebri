@@ -61,7 +61,7 @@
                         </li>
 
                         <li class="{{ request()->is('') ? 'active' : '' }}">
-                            <a href="#" title="Data Pendamping">
+                            <a href="{{ route('admin.pendamping.index') }}" title="Data Pendamping">
                                 <i class="fa fa-circle-o"></i>
                                 Data Pendamping
                             </a>

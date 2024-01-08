@@ -51,6 +51,7 @@ use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Admin\PasswordController;
+use App\Http\Controllers\Admin\AdminPendampingController;
 use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
@@ -164,6 +165,11 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/nasabah/{id}/edit', 'edit')->name('admin.nasabah.edit');
                     Route::put('/data/nasabah/{id}', 'update')->name('admin.nasabah.update');
                     Route::delete('/data/nasabah/{id}', 'destroy')->name('admin.nasabah.destroy');
+                });
+
+                Route::controller(AdminPendampingController::class)->group(function () {
+                    Route::get('/data/pendamping', 'index')->name('admin.pendamping.index');
+                    Route::get('/data/pendamping/{kode}/edit', 'edit')->name('admin.pendamping.edit');
                 });
             });
         });
