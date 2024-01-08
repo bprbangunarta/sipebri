@@ -48,7 +48,24 @@ class AdminPendampingController extends Controller
             ->first();
         //
         $pendamping->tanggal_lahir = Carbon::parse($pendamping->tanggal_lahir)->format('d-m-Y');
-
         return view('master.pendamping.edit', ['data' => $pendamping]);
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $data = [
+                'no_identitas' => $request->no_identitas,
+                'tempat_lahir' => strtoupper($request->tempat_lahir),
+                'nama_pendamping' => strtoupper($request->nama_pendamping),
+                'status' => strtoupper($request->status),
+                'tanggal_lahir' => Carbon::parse($request->tanggal_lahir)->format('Ymd'),
+            ];
+
+            DB::table('data_pendamping')->where('id', $request->id)->update($data);
+            return redirect()->back()->with('success', 'Data berhasil diubah.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal diubah.');
+        }
     }
 }

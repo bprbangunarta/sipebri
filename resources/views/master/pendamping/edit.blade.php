@@ -12,7 +12,7 @@
                             <h3 class="box-title">DATA NASABAH</h3>
                         </div>
 
-                        <form action="#" method="POST">
+                        <form action="{{ route('admin.pendamping.update', ['id' => $data->id]) }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="box-body" data-select2-id="13">
@@ -26,7 +26,7 @@
 
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>TEMPAT LAHIR</label>
-                                            <input type="text" class="form-control" name="nama_nasabah" id="tempat_lahir"
+                                            <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
                                                 value="{{ $data->tempat_lahir }}">
                                         </div>
                                     </div>
@@ -34,7 +34,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>NAMA PENDAMPING</label>
-                                            <input type="text" class="form-control" name="masa_identitas"
+                                            <input type="text" class="form-control" name="nama_pendamping"
                                                 id="nama_pendamping" value="{{ $data->nama_pendamping }}">
                                         </div>
 
@@ -63,7 +63,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>TANGGAL LAHIR</label>
-                                            <input type="text" class="form-control" name="masa_identitas"
+                                            <input type="text" class="form-control" name="tanggal_lahir"
                                                 id="tanggal_lahir" value="{{ $data->tanggal_lahir }}">
                                         </div>
 

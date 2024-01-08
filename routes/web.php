@@ -170,6 +170,7 @@ Route::middleware('auth')->group(function () {
                 Route::controller(AdminPendampingController::class)->group(function () {
                     Route::get('/data/pendamping', 'index')->name('admin.pendamping.index');
                     Route::get('/data/pendamping/{kode}/edit', 'edit')->name('admin.pendamping.edit');
+                    Route::PUT('/data/pendamping/update', 'update')->name('admin.pendamping.update');
                 });
             });
         });
