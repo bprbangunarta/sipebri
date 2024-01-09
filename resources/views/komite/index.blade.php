@@ -278,7 +278,7 @@
                             </div>
                         </div>
 
-                        <p style="font-size: 14px; color:red;">*Untuk pengajuan tolak/ batal isi <b>usulan plafon</b>
+                        <p style="font-size: 14px; color:red;">*Untuk pengajuan <b>TOLAK/BATAL</b> isi <b>USULAN PLAFON</b>
                             sesuai dengan
                             nominal permohonan</p>
                     </div>
