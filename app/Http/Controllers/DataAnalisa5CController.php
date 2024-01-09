@@ -282,6 +282,9 @@ class DataAnalisa5CController extends Controller
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $nilai = Data::analisa5c_text($request->evaluasi_collateral);
             $cap = DB::table('a5c_character')->where('pengajuan_kode', $enc)->first();
+            if (is_null($cap)) {
+                return redirect()->back()->with('error', 'Isi terlebih dahulu ANALISA5C CHARACTER');
+            }
 
             $data = [
                 'kode_analisa' => $cap->kode_analisa,
