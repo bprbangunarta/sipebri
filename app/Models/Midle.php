@@ -1399,7 +1399,7 @@ class Midle extends Model
             'user' => $user,
             'created_at' => now(),
         ];
-
+        dd($simpan);
         if ($simpan) {
             $cek = DB::table('log_persetujuan')
                 ->select('log_persetujuan.*')
