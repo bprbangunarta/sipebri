@@ -125,7 +125,8 @@
                                 <option value="2" {{ old('stabilitas_harga') == 2 ? 'selected' : '' }}>
                                     Deposito,Tabungan, Emas</option>
                                 <option value="1" {{ old('stabilitas_harga') == 1 ? 'selected' : '' }}>BPKB</option>
-                                <option value="1" {{ old('stabilitas_harga') == 0 ? 'selected' : '' }}>Lainnya</option>
+                                <option value="0" {{ old('stabilitas_harga') == 0 ? 'selected' : '' }}>Lainnya
+                                </option>
                             </select>
                         </div>
 
