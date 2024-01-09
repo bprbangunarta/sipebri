@@ -203,7 +203,7 @@
             var selectedcollateral7 = parseInt(collateral7.value) || 0;
             var selectedcollateral8 = parseInt(collateral8.value) || 0;
             var selectedcollateral9 = parseInt(collateral9.value) || 0;
-            console.log(selectedcollateral1)
+
             var jml =
                 selectedcollateral1 +
                 selectedcollateral2 +

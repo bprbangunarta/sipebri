@@ -257,6 +257,7 @@ class DataAnalisa5CController extends Controller
 
             if (is_null($cap)) {
                 $data = (object) ['taksasi_agunan' => number_format($hasiltaksasi, 2)];
+
                 return view('staff.analisa.5c.collateral', [
                     'data' => $cek[0],
                     'collateral' => $data,
