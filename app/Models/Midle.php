@@ -1388,15 +1388,27 @@ class Midle extends Model
 
         // URL dan QR Code dari Google Chart API
         $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
-        $uri = urlencode($url);
+        // $uri = urlencode($url);
         // $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
-
-        // $logo = asset('/assets/img/favicon.png');
-        // $chartUrl = QrCode::generate($uri);
-        QrCode::format('png')->size(300)->generate($url, $imgpath);
-
         // Simpan QR Code dari Google Chart API
         // file_put_contents($imgpath, file_get_contents($chartUrl));
+
+        // QrCode::format('png')->size(300)->generate($url, $imgpath);
+        // QrCode::size(300)
+        //     ->format('png')
+        //     ->merge('assets/img/favicon.png')
+        //     ->errorCorrection('H')
+        //     ->generate($url, $imgpath);
+
+        $logo = public_path('assets/img/favicon.png');
+
+        QrCode::size(300)
+            ->style('dot')
+            ->eye('circle')
+            ->format('png')
+            ->errorCorrection('H')
+            ->merge($logo, 0.4, true)
+            ->generate($url, $imgpath);
 
         $simpan = [
             'pengajuan_kode' => $data,
