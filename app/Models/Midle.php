@@ -1393,21 +1393,20 @@ class Midle extends Model
         // Simpan QR Code dari Google Chart API
         // file_put_contents($imgpath, file_get_contents($chartUrl));
 
-        // QrCode::size(300)
-        //     ->format('png')
-        //     ->errorCorrection('H')
-        //     ->merge('assets/img/favicon.png')
-        //     ->generate($url, $imgpath);
-
         $logoPath = public_path('assets/img/favicon.png');
-
-        QrCode::size(150)
-            ->style('dot')
-            ->eye('circle')
+        QrCode::size(300)
             ->format('png')
             ->errorCorrection('H')
             ->merge($logoPath, 0.3, true)
             ->generate($url, $imgpath);
+
+        // QrCode::size(150)
+        //     ->style('dot')
+        //     ->eye('circle')
+        //     ->format('png')
+        //     ->errorCorrection('H')
+        //     ->merge($logoPath, 0.3, true)
+        //     ->generate($url, $imgpath);
 
         $simpan = [
             'pengajuan_kode' => $data,
