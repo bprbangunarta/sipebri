@@ -1401,10 +1401,12 @@ class Midle extends Model
 
         $logoPath = public_path('assets/img/favicon.png');
 
-        QrCode::size(300)
+        QrCode::size(150)
+            ->style('dot')
+            ->eye('circle')
             ->format('png')
             ->errorCorrection('H')
-            // ->merge($logoPath, 0.4, true)
+            ->merge($logoPath, 0.3, true)
             ->generate($url, $imgpath);
 
         $simpan = [
