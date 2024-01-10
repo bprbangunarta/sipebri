@@ -1400,13 +1400,14 @@ class Midle extends Model
         //     ->errorCorrection('H')
         //     ->generate($url, $imgpath);
 
-        // $logoPath = public_path('assets/img/favicon.png');
-        // QrCode::size(300)
-        //     ->format('png')
-        //     ->errorCorrection('H')
-        //     ->merge($logoPath, 0.4, true) // Menggunakan metode merge untuk menambahkan logo
-        //     ->generate($url, $imgpath);
-
+        $logoPath = public_path('assets/img/favicon.png');
+        QrCode::size(300)
+            ->style('dot')
+            ->eye('circle')
+            ->format('png')
+            ->errorCorrection('H')
+            ->merge($logoPath, 0.4, true) // Menggunakan metode merge untuk menambahkan logo
+            ->generate($url, $imgpath);
 
         $simpan = [
             'pengajuan_kode' => $data,
