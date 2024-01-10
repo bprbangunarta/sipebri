@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Midle extends Model
@@ -1388,10 +1389,14 @@ class Midle extends Model
         // URL dan QR Code dari Google Chart API
         $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
         $uri = urlencode($url);
-        $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
+        // $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
+
+        // $logo = asset('/assets/img/favicon.png');
+        // $chartUrl = QrCode::generate($uri);
+        QrCode::format('png')->size(300)->generate($url, $imgpath);
 
         // Simpan QR Code dari Google Chart API
-        file_put_contents($imgpath, file_get_contents($chartUrl));
+        // file_put_contents($imgpath, file_get_contents($chartUrl));
 
         $simpan = [
             'pengajuan_kode' => $data,
@@ -1399,7 +1404,7 @@ class Midle extends Model
             'user' => $user,
             'created_at' => now(),
         ];
-        dd($simpan);
+
         if ($simpan) {
             $cek = DB::table('log_persetujuan')
                 ->select('log_persetujuan.*')
