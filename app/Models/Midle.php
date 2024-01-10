@@ -1405,7 +1405,7 @@ class Midle extends Model
         QrCode::size(300)
             ->format('png')
             ->errorCorrection('H')
-            ->merge($logoPath, 0.4, true) // Menggunakan metode merge untuk menambahkan logo
+            ->merge($logoPath, 0.4, true)
             ->generate($url, $imgpath);
 
         $simpan = [
