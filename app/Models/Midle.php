@@ -1394,19 +1394,19 @@ class Midle extends Model
         // file_put_contents($imgpath, file_get_contents($chartUrl));
 
         $logoPath = public_path('assets/img/favicon.png');
-        QrCode::size(300)
-            ->format('png')
-            ->errorCorrection('H')
-            ->merge($logoPath, 0.3, true)
-            ->generate($url, $imgpath);
-
-        // QrCode::size(400)
-        //     ->style('dot')
-        //     ->eye('circle')
+        // QrCode::size(300)
         //     ->format('png')
         //     ->errorCorrection('H')
         //     ->merge($logoPath, 0.3, true)
         //     ->generate($url, $imgpath);
+
+        QrCode::size(300)
+            // ->style('dot')
+            ->eye('square')
+            ->format('png')
+            ->errorCorrection('M')
+            ->merge($logoPath, 0.3, true)
+            ->generate($url, $imgpath);
 
         $simpan = [
             'pengajuan_kode' => $data,
