@@ -1401,7 +1401,7 @@ class Midle extends Model
         //     ->generate($url, $imgpath);
 
         QrCode::size(300)
-            // ->style('dot')
+            ->style('dot')
             ->eye('circle')
             ->format('png')
             ->errorCorrection('H')
