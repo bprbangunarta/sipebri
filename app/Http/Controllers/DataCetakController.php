@@ -857,7 +857,7 @@ class DataCetakController extends Controller
             }
 
             //QR
-            // $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
+            $qr = Midle::get_qrcode($enc, 'Analisa Kredit', $data[0]->input_user_survei);
 
             //Asuransi Kendaraan dan Jiwa
             $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
@@ -891,7 +891,7 @@ class DataCetakController extends Controller
                 'biayaperdagangan' => $biaya_perdagangan,
                 'memorandum' => $memorandum,
                 'swot' => $swot,
-                // 'qr' => $qr,
+                'qr' => $qr,
                 'adm' => $adm,
             ]);
         } catch (DecryptException $e) {
