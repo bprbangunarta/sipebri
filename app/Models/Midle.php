@@ -1402,7 +1402,7 @@ class Midle extends Model
 
         QrCode::size(300)
             ->style('dot')
-            ->eye('circle')
+            // ->eye('circle')
             ->format('png')
             ->errorCorrection('H')
             ->merge($logoPath, 0.3, true)
