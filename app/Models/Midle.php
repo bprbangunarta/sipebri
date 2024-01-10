@@ -1401,9 +1401,8 @@ class Midle extends Model
         //     ->generate($url, $imgpath);
 
         $logoPath = public_path('assets/img/favicon.png');
+
         QrCode::size(300)
-            ->style('dot')
-            ->eye('circle')
             ->format('png')
             ->errorCorrection('H')
             ->merge($logoPath, 0.4, true) // Menggunakan metode merge untuk menambahkan logo
