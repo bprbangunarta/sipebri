@@ -216,7 +216,7 @@ class KonfirmasiController extends Controller
                     'auth_user' => Auth::user()->code_user,
                     'status' => 'Sudah Otorisasi',
                 ];
-            } elseif ($data_pengajuan->tracking == 'Realisasi') {
+            } elseif ($data_pengajuan->tracking == 'Realisasi' || $data_pengajuan->tracking == 'Selesai') {
                 $data = [
                     'auth_user' => Auth::user()->code_user,
                     'status' => 'Disetujui',
