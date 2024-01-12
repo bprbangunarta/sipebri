@@ -1228,7 +1228,12 @@
                 <tr style="border:1px solid black;text-transform:uppercase;">
                     <td class="text-center" width="4%" style="border:1px solid black;">
                         {{ $loop->iteration }}</td>
-                    @if ($itemj->jenis_jaminan == 'Kendaraan')
+                    <td style="border:1px solid black;">
+                        {{ $itemj->catatan }}.
+                    </td>
+                    <td style="border:1px solid black;text-align:right;">
+                        {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
+                    {{-- @if ($itemj->jenis_jaminan == 'Kendaraan')
                         <td style="border:1px solid black;">
                             BPKB {{ $itemj->jenis_agunan }}, {{ $itemj->merek }} {{ $itemj->tipe_kendaraan }},
                             {{ $itemj->tahun }}, {{ $itemj->no_rangka }}, {{ $itemj->no_mesin }},
@@ -1255,7 +1260,7 @@
                         </td>
                         <td style="border:1px solid black;text-align:right;">
                             {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
-                    @endif
+                    @endif --}}
                 </tr>
             @empty
                 <tr style="border:1px solid black;">
