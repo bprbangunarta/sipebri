@@ -1112,6 +1112,7 @@ class Midle extends Model
             ->leftjoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
             ->select(
                 'data_jaminan.*' ?? null,
+                'data_jaminan.catatan as catatan_jaminan' ?? null,
                 'data_jenis_dokumen.jenis_dokumen as nama_jenis_dokumen' ?? null,
                 'data_jenis_agunan.jenis_agunan' ?? null,
             )

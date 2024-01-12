@@ -867,7 +867,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-            // dd($perdagangan, $biaya_perdagangan);
+            // dd($jaminan);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
