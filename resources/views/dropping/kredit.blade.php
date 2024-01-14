@@ -92,12 +92,6 @@
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                     </form>
-                                                    {{-- <a href="{{ route('hapus.spk', ['pengajuan' => $item->kode_pengajuan]) }}"
-                                                        data-toggle="modal" data-target="#"
-                                                        class="btn-circle btn-sm bg-red confirmdelete" title="Hapus"
-                                                        style="cursor: pointer;">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a> --}}
                                                 </td>
                                             @endcan
                                         </tr>

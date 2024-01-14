@@ -210,7 +210,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -248,6 +248,14 @@
                             title="Otor Perjanjian Kredit">
                             <i class="fa fa-check"></i>
                             Otor Perjanjian Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/data/perjanjian/kredit') ? 'active' : '' }}">
+                        <a @can('cetak perjanjian kredit') href="{{ route('data.perjanjian_kredit') }}" @endcan
+                            title="Data Perjanjian Kredit">
+                            <i class="fa fa-file" aria-hidden="true"></i>
+                            Data Perjanjian Kredit
                         </a>
                     </li>
 
