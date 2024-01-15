@@ -94,9 +94,6 @@
                                     entries
                                 </button>
                             </div>
-
-                            {{-- Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
-                            entries --}}
                             {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
 
