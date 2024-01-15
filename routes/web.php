@@ -68,6 +68,7 @@ use App\Http\Controllers\Admin\AdminJaminanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
+use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 
 /*
@@ -563,6 +564,10 @@ Route::middleware('auth')->group(function () {
             });
         });
 
+        Route::controller(DataPerjanjianKreditController::class)->group(function () {
+            route::get('/data/perjanjian/kredit', 'index')->name('data.perjanjian_kredit');
+            route::post('/data/perjanjian/kredit', 'batal_perjanjian_kredit')->name('data.batal_perjanjian_kredit');
+        });
 
         Route::controller(FiduciaController::class)->group(function () {
             Route::group(['middleware' => ['role:Realisasi|Customer Service|Kepala Kantor Kas|Admin Kredit']], function () {
