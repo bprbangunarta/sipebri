@@ -217,7 +217,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -266,13 +266,13 @@
                         </a>
                     </li>
 
-                    {{-- <li class="{{ request()->is('themes/data/perjanjian/kredit') ? 'active' : '' }}">
-                        <a @can('cetak perjanjian kredit') href="{{ route('data.perjanjian_kredit') }}" @endcan
+                    <li class="{{ request()->is('themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
+                        <a @can('input penolakan') href="{{ route('data.batal_perjanjian_kredit') }}" @endcan
                             title="Data Perjanjian Kredit">
-                            <i class="fa fa-file" aria-hidden="true"></i>
+                            <i class="fa fa-ban" aria-hidden="true"></i>
                             Data Pembatalan Kredit
                         </a>
-                    </li> --}}
+                    </li>
 
                     <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                         <a @can('realisasi kredit') href="{{ route('realisasi.kredit') }}" @endcan

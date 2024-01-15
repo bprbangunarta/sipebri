@@ -40,7 +40,8 @@
                                 </tbody>
                             </table>
 
-                            {{ $tabungan->onEachSide(0)->links('vendor.pagination.bootstrap-5') }}
+                            {{-- {{ $tabungan->onEachSide(0)->links('vendor.pagination.bootstrap-5') }} --}}
+                            {{ $tabungan->withQueryString()->onEachSide(0)->links('vendor.pagination.bootstrap-5') }}
 
                         </div>
                     </div>
