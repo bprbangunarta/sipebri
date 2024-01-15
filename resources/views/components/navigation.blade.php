@@ -259,13 +259,13 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('themes/data/perjanjian/kredit') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('themes/data/perjanjian/kredit') ? 'active' : '' }}">
                         <a @can('cetak perjanjian kredit') href="{{ route('data.perjanjian_kredit') }}" @endcan
                             title="Data Perjanjian Kredit">
                             <i class="fa fa-file" aria-hidden="true"></i>
                             Data Pembatalan Kredit
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                         <a @can('realisasi kredit') href="{{ route('realisasi.kredit') }}" @endcan
