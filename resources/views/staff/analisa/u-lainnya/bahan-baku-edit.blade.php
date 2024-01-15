@@ -5,7 +5,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('update.bahan_baku', ['kode_usaha' => $lain->kd_usaha]) }}" id="bb_lainnya method="POST">
+            <form action="{{ route('update.bahan_baku', ['kode_usaha' => $lain->kd_usaha]) }}" id="bb_lainnya" method="POST">
                 @method('put')
                 @csrf
                 <div class="box-body table-responsive no-padding">
