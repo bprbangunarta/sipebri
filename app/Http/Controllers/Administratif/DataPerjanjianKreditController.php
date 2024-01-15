@@ -15,7 +15,7 @@ class DataPerjanjianKreditController extends Controller
     {
 
         $name = request('keyword');
-        $data = DB::table('data_pengajuan')
+        $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
@@ -52,13 +52,14 @@ class DataPerjanjianKreditController extends Controller
                 'data_spk.otorisasi as otorpk',
                 'users.name'
             )
-            ->orderBy('data_spk.created_at', 'desc')
-            ->paginate(10);
-        // dd($data);
+            ->orderBy('data_spk.created_at', 'desc');
+
+        //Enkripsi kode pengajuan
+        $data = $cek->paginate(10);
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
         }
-
+        // dd($data);
         return view('administratif.data-perjanjian-kredit.index', [
             'data' => $data
         ]);
