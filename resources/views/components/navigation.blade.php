@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit', 'admin/data/survei', 'admin/data/survei/*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -80,6 +80,13 @@
                             <a href="{{ route('admin.pengajuan.index') }}" title="Data Pengajuan">
                                 <i class="fa fa-circle-o"></i>
                                 Data Pengajuan
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('admin/data/survei', 'admin/data/survei/*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.survei.index') }}" title="Data Survei">
+                                <i class="fa fa-circle-o"></i>
+                                Data Survei
                             </a>
                         </li>
                     </ul>

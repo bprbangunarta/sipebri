@@ -62,6 +62,7 @@ use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\UsahaPerdaganganController;
+use App\Http\Controllers\Admin\AdminSurveiController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\Admin\AdminJaminanController;
@@ -189,6 +190,13 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/jaminan', 'index')->name('admin.jaminan.index');
                     Route::get('/data/jaminan/{id}/edit', 'edit')->name('admin.jaminan.edit');
                     Route::PUT('/data/jaminan/update', 'update')->name('admin.jaminan.update');
+                });
+
+                // Data Survei
+                Route::controller(AdminSurveiController::class)->group(function () {
+                    Route::get('/data/survei', 'index')->name('admin.survei.index');
+                    Route::get('/data/survei/{kode}/edit', 'edit')->name('admin.survei.edit');
+                    Route::PUT('/data/survei/update', 'update')->name('admin.survei.update');
                 });
             });
         });
