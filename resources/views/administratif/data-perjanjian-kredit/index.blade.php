@@ -88,13 +88,12 @@
                         </div>
 
                         <div class="box-footer clearfix">
-                            <div class="pull-left hidden xs">
+                            <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                                     entries
                                 </button>
                             </div>
-
                             {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
 
@@ -131,7 +130,15 @@
 @push('myscript')
     <script>
         $(document).ready(function() {
-            $('#notifikasi').modal('show');
+
+            var currentURL = window.location.href;
+            var url = new URL(currentURL);
+            var hasQueryString = url.search !== '';
+
+            if (!hasQueryString) {
+                $('#notifikasi').modal('show');
+            }
+
             $(".konfirmasibatal").click(function(event) {
                 event.preventDefault();
                 var form = $(this).closest("form");

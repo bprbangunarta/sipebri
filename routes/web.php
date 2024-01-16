@@ -62,6 +62,7 @@ use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\UsahaPerdaganganController;
+use App\Http\Controllers\Admin\AdminSurveiController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\Admin\AdminJaminanController;
@@ -70,6 +71,7 @@ use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
 use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
+use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
 
 /*
 |--------------------------------------------------------------------------
@@ -189,6 +191,13 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/jaminan', 'index')->name('admin.jaminan.index');
                     Route::get('/data/jaminan/{id}/edit', 'edit')->name('admin.jaminan.edit');
                     Route::PUT('/data/jaminan/update', 'update')->name('admin.jaminan.update');
+                });
+
+                // Data Survei
+                Route::controller(AdminSurveiController::class)->group(function () {
+                    Route::get('/data/survei', 'index')->name('admin.survei.index');
+                    Route::get('/data/survei/{kode}/edit', 'edit')->name('admin.survei.edit');
+                    Route::PUT('/data/survei/update', 'update')->name('admin.survei.update');
                 });
             });
         });
@@ -567,6 +576,11 @@ Route::middleware('auth')->group(function () {
         Route::controller(DataPerjanjianKreditController::class)->group(function () {
             route::get('/data/perjanjian/kredit', 'index')->name('data.perjanjian_kredit');
             route::post('/data/perjanjian/kredit', 'batal_perjanjian_kredit')->name('data.batal_perjanjian_kredit');
+        });
+
+        Route::controller(DataBatalPerjanjianKreditController::class)->group(function () {
+            route::get('/data/batal/perjanjian/kredit', 'index')->name('data.batal_perjanjian_kredit');
+            // route::post('/data/batal/perjanjian/kredit', 'batal_perjanjian_kredit')->name('data.batal_perjanjian_kredit');
         });
 
         Route::controller(FiduciaController::class)->group(function () {

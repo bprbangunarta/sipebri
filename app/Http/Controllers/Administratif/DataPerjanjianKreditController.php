@@ -55,12 +55,11 @@ class DataPerjanjianKreditController extends Controller
             ->orderBy('data_spk.created_at', 'desc');
 
         //Enkripsi kode pengajuan
-        $c = $cek->get();
         $data = $cek->paginate(10);
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
         }
-
+        // dd($data);
         return view('administratif.data-perjanjian-kredit.index', [
             'data' => $data
         ]);
