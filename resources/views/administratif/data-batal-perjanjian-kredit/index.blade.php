@@ -78,7 +78,7 @@
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="#" class="btn-circle btn-sm bg-yellow" title="Edit Data PK">
+                                                <a href="#" class="btn-circle btn-sm bg-yellow" title="Edit Data">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                             </td>

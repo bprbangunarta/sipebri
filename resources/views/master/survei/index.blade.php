@@ -12,7 +12,7 @@
                             <h3 class="box-title">DATA SURVEI</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('laporan.sesudah.survey') }}" method="GET">
+                                <form action="{{ route('admin.survei.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 170px;" name="keyword" id="keyword"

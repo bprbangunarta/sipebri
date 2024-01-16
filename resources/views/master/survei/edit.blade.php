@@ -103,7 +103,7 @@
                                     <i class="fa fa-save"></i> SIMPAN
                                 </button>
 
-                                <a href="{{ route('admin.pengajuan.index') }}" class="btn btn-default pull-right">
+                                <a href="{{ route('admin.survei.index') }}" class="btn btn-default pull-right">
                                     <i class="fa fa-arrow-left"></i> KEMBALI
                                 </a>
                             </div>
