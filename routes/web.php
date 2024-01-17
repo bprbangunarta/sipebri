@@ -514,6 +514,16 @@ Route::middleware('auth')->group(function () {
             Route::get('/report/kih', 'report_kih')->name('report.kih');
             Route::get('/report/kko', 'report_kko')->name('report.kko');
             Route::get('/report/kpj', 'report_kpj')->name('report.kpj');
+            Route::get('/report/kpn', 'report_kpn')->name('report.kpn');
+            Route::get('/report/kps', 'report_kps')->name('report.kps');
+            Route::get('/report/krs-bpkb', 'report_krs_bpkb')->name('report.krs_bpkb');
+            Route::get('/report/krs-bpkb-shm', 'report_krs_bpkb_shm')->name('report.krs_bpkb_shm');
+            Route::get('/report/krs-shm', 'report_krs_shm')->name('report.krs_shm');
+            Route::get('/report/kru-bpkb', 'report_kru_bpkb')->name('report.kru_bpkb');
+            Route::get('/report/kru-bpkb-shm', 'report_kru_bpkb_shm')->name('report.kru_bpkb_shm');
+            Route::get('/report/kru-shm', 'report_kru_shm')->name('report.kru_shm');
+            Route::get('/report/kta', 'report_kta')->name('report.kta');
+            Route::get('/report/kup', 'report_kup')->name('report.kup');
         });
 
         Route::controller(KomiteController::class)->group(function () {

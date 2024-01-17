@@ -172,7 +172,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit','themes/komite/kredit/survei/analisa','themes/analisa/check/kendaraan')? 'active': '' }}">
+                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit','themes/komite/kredit/survei/analisa')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-suitcase"></i>
                     <span>Analisa Kredit</span>
@@ -199,14 +199,6 @@
                         </a>
                     </li>
 
-                    {{-- <li class="{{ request()->is('themes/analisa/check/kendaraan') ? 'active' : '' }}">
-                        <a @can('survey dan analisa') href="{{ route('index.check_kendaraan') }}" @endcan
-                            title="Check Kendaraan & Lokasi">
-                            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-                            Check List Kendaraan
-                        </a>
-                    </li> --}}
-
                     <li class="{{ request()->is('themes/komite/kredit/survei/analisa') ? 'active' : '' }}">
                         <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
                             title="Survey dan Analisa">
@@ -225,7 +217,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/analisa/check/kendaraan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -287,6 +279,13 @@
                             title="Realisasi Kredit">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
+                        </a>
+                    </li>
+                    <li class="{{ request()->is('themes/analisa/check/kendaraan') ? 'active' : '' }}">
+                        <a @can('survey dan analisa') href="{{ route('index.check_kendaraan') }}" @endcan
+                            title="Check Kendaraan & Lokasi">
+                            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            Check List Kendaraan
                         </a>
                     </li>
                 </ul>

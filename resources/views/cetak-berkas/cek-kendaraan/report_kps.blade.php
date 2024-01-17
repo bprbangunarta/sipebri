@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Report KKO</title>
+    <title>Report KPS</title>
     <style>
         @page {
             size: A4;
@@ -112,19 +112,19 @@
             </thead>
             <tbody>
                 @forelse ($data as $item)
-                    <tr style="border:1px solid black;">
-                        <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
-                        <td style="border:1px solid black;">&nbsp; {{ $item->nama_dokumen }}</td>
-                        <td style="border:1px solid black;text-align:right;">
-                            &nbsp;
-                        </td>
-                        <td style="border:1px solid black;text-align:right;"></td>
-                        <td style="border:1px solid black;text-align:right;"></td>
-                        <td style="border:1px solid black;text-align:right;"></td>
-                        <td style="border:1px solid black;text-align:right;"></td>
-                    </tr>
+                <tr style="border:1px solid black;">
+                    <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
+                    <td style="border:1px solid black;">&nbsp; {{ $item->nama_dokumen }}</td>
+                    <td style="border:1px solid black;text-align:right;">
+                        &nbsp;
+                    </td>
+                    <td style="border:1px solid black;text-align:right;"></td>
+                    <td style="border:1px solid black;text-align:right;"></td>
+                    <td style="border:1px solid black;text-align:right;"></td>
+                    <td style="border:1px solid black;text-align:right;"></td>
+                </tr>
                 @empty
-                    NOT FOUND 404
+                NOT FOUND 404
                 @endforelse
 
             </tbody>
