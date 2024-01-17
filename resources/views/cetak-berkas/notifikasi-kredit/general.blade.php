@@ -185,26 +185,7 @@
                     @forelse ($agunan as $item)
                         <ol
                             style="margin-left: -40px;text-align: justify; list-style-type:none;text-transform:uppercase;">
-                            {{ $item->catatan  }}
-                            <!--@if ($item->jenis_jaminan == 'Tanah')-->
-                            <!--    <li>-->
-                            <!--        {{ $loop->iteration }}.-->
-                            <!--        SERTIFIKAT TANAH DAN BANGUNAN NO {{ $item->no_dokumen }}, LUAS-->
-                            <!--        {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA-->
-                            <!--        {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}-->
-                            <!--        {{ $item->catatan }}-->
-                            <!--    </li>-->
-                            <!--@elseif ($item->jenis_jaminan == 'Kendaraan')-->
-                            <!--    <li>-->
-                            <!--        {{ $loop->iteration }}.-->
-                            <!--        {{ $item->catatan }}-->
-                            <!--    </li>-->
-                            <!--@elseif ($item->jenis_jaminan == 'Lainnya')-->
-                            <!--    <li>-->
-                            <!--        {{ $loop->iteration }}.-->
-                            <!--        {{ $item->catatan }}-->
-                            <!--    </li>-->
-                            <!--@endif-->
+                            {{ $item->catatan }}
                         </ol>
                     @empty
                     @endforelse
