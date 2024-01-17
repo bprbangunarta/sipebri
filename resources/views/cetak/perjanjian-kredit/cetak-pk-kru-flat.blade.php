@@ -280,7 +280,7 @@
                             <br>
                         @elseif ($item->jenis_jaminan == 'Tanah')
                             <li class="text-hg">
-                                - SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
+                                - SERTIFIKAT TANAH DAN BANGUNAN NO {{ $item->no_dokumen }}, LUAS
                                 {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $item->atas_nama }},
                                 ALAMAT {{ $item->lokasi }}
                             </li>
