@@ -21,7 +21,7 @@ class AdminSurveiController extends Controller
             ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
 
             ->whereIn('data_pengajuan.tracking', ['Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II'])
-
+            // ->whereNotNull('data_kantor')
             ->select(
                 'data_pengajuan.created_at as tanggal',
                 'data_pengajuan.kode_pengajuan',

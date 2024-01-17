@@ -48,6 +48,7 @@ class AdminJaminanController extends Controller
                 'lokasi' => strtoupper($request->lokasi),
                 'no_dokumen' => strtoupper($request->no_dokumen),
                 'catatan' => strtoupper($request->catatan),
+                'on_current' => strtoupper($request->on_current),
             ];
 
             DB::table('data_jaminan')->where('id', $request->input('data'))->update($data);

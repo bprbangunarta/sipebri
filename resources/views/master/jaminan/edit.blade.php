@@ -54,6 +54,12 @@
                                                 value="{{ $data->no_dokumen }}">
                                         </div>
 
+                                        <div class="form-group" style="margin-top:-5px;">
+                                            <label>ON CURRENT</label>
+                                            <input type="text" class="form-control" name="on_current" id=""
+                                                value="{{ $data->on_current }}">
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
