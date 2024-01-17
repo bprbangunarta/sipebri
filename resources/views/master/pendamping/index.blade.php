@@ -34,7 +34,6 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center">KODE</th>
-                                        <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center">NAMA PENDAMPING</th>
                                         <th class="text-center">STATUS</th>
                                         <th class="text-center">NO. KTP</th>
@@ -52,22 +51,15 @@
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
                                             </td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
-                                            <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->nama_pendamping }}</td>
                                             <td>{{ $item->status }}</td>
                                             <td class="text-center">{{ $item->no_identitas }}</td>
                                             <td>{{ $item->input_user }}</td>
                                             <td class="text-center">
-                                                @if (is_null($item->nama_pendamping))
-                                                    <a href="#" class="btn-circle btn-sm bg-red">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('admin.pendamping.edit', ['kode' => $item->kode_pengajuan]) }}"
-                                                        class="btn-circle btn-sm bg-yellow">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endif
+                                                <a href="{{ route('admin.pendamping.edit', ['kode' => $item->kode_pengajuan]) }}"
+                                                    class="btn-circle btn-sm bg-yellow">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php
