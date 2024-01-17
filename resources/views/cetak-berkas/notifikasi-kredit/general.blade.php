@@ -187,11 +187,10 @@
                             style="margin-left: -40px;text-align: justify; list-style-type:none;text-transform:uppercase;">
                             @if ($item->jenis_jaminan == 'Tanah')
                                 <li>
-                                    {{-- {{ $loop->iteration }}.
+                                    {{ $loop->iteration }}.
                                     SERTIFIKAT {{ $item->jenis_jaminan }} NO {{ $item->no_dokumen }}, LUAS
                                     {{ number_format($item->luas, 0, ',', '.') }} M2, ATAS NAMA
-                                    {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }} --}}
-                                    - {{ $item->catatan }}
+                                    {{ $item->atas_nama }}, ALAMAT {{ $item->lokasi }}
                                 </li>
                             @elseif ($item->jenis_jaminan == 'Kendaraan')
                                 <li>
