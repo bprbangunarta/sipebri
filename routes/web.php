@@ -73,6 +73,7 @@ use App\Http\Controllers\Admin\AdminPendampingController;
 use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
+use App\Http\Controllers\Administratif\DenahLokasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -524,6 +525,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/report/kru-shm', 'report_kru_shm')->name('report.kru_shm');
             Route::get('/report/kta', 'report_kta')->name('report.kta');
             Route::get('/report/kup', 'report_kup')->name('report.kup');
+        });
+
+        //Denah Lokasi
+        Route::controller(DenahLokasiController::class)->group(function () {
+            Route::get('/denah/lokasi', 'index')->name('denah.lokasi');
+            Route::get('/denah/lokasi/{kode}', 'data_lokasi')->name('denah.data_lokasi');
         });
 
         Route::controller(KomiteController::class)->group(function () {
