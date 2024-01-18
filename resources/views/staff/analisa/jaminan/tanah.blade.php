@@ -93,12 +93,12 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="no_dok" id="no_dok" readonly>
+                                            value="" name="no_dok" id="no_dok">
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PEMILIK SERTIFIKAT</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="atas_nama" id="atas_nama" readonly>
+                                            value="" name="atas_nama" id="atas_nama">
                                     </div>
                                 </div>
 
@@ -106,13 +106,13 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="luas" id="luas" readonly>
+                                            value="" name="luas" id="luas">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI TANAH</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="lokasi" id="lokasi" value="" readonly>
+                                            name="lokasi" id="lokasi" value="">
                                     </div>
 
                                     <div style="margin-top: 5px;">

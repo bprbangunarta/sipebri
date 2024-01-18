@@ -103,7 +103,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NAMA PEMILIK</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="nama" id="nama" readonly>
+                                            value="" name="nama" id="nama">
                                     </div>
                                 </div>
 
@@ -111,7 +111,7 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="" name="lokasi" id="lokasi" readonly>
+                                            value="" name="lokasi" id="lokasi">
                                     </div>
 
                                     <div style="margin-top: 5px;">
