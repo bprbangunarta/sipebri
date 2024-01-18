@@ -91,8 +91,8 @@ Route::get('/', function () {
 });
 
 Route::get('/give-permission', function () {
-    $role = Role::find(15);
-    $permission = Permission::find(48);
+    $role = Role::find(8);
+    $permission = Permission::find(44);
 
     $role->givePermissionTo($permission);
     $permission->assignRole($role);
