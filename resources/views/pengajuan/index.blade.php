@@ -218,12 +218,19 @@
 
                     </div>
 
-                    <div class="alert alert-danger alert-dismissible">
-                        <h1 class="text-center">
-                            Kategori <b>BARU</b> untuk kondisi pengajuan <b>BARU</b> & <b>TOPUP</b> <br>
-                            Kategori <b>RELOAN</b> untuk penyelamatan kredit dan <b>KUP, KKO</b><br>
-                        </h1>
-                    </div>
+                    @if (Auth::user()->code_user == 'CKN')
+                        <div class="alert alert-danger alert-dismissible">
+                            <h1 class="text-center">
+                                Kategori <b>BARU</b> untuk kondisi pengajuan <b>BARU</b> & <b>TOPUP</b> <br>
+                                Kategori <b>RELOAN</b> untuk penyelamatan kredit dan <b>KUP, KKO</b><br>
+                            </h1>
+                        </div>
+                    @else
+                        <p class="text-red" style="margin-top:-10px;margin-left:10px;">
+                            *Penggunaan kategori <b>BARU</b> untuk kondisi pengajuan <b>BARU</b> & <b>TOPUP</b> <br>
+                            *Penggunaan kategori <b>RELOAN</b> untuk kondisi penyelamatan kredit <br>
+                        </p>
+                    @endif
 
                 </div>
             </div>
