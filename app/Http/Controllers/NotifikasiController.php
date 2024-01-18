@@ -58,8 +58,7 @@ class NotifikasiController extends Controller
             )
 
             ->where(function ($query) {
-                $query->where('data_pengajuan.status', '=', 'Dibatalkan')
-                    ->orWhere('data_pengajuan.status', '=', 'Ditolak');
+                $query->where('data_pengajuan.status', '=', 'Ditolak');
             })
 
 

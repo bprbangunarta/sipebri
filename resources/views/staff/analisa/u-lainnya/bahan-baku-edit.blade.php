@@ -5,7 +5,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="{{ route('update.bahan_baku', ['kode_usaha' => $lain->kd_usaha]) }}" method="POST">
+            <form action="{{ route('update.bahan_baku', ['kode_usaha' => $lain->kd_usaha]) }}" id="bb_lainnya" method="POST">
                 @method('put')
                 @csrf
                 <div class="box-body table-responsive no-padding">
@@ -258,7 +258,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%;">SIMPAN</button>
+                <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%;"
+                    id="submit-bb-lainnya">SIMPAN</button>
             </form>
 
         </div>
@@ -266,4 +267,11 @@
 @endsection
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/bahan-baku.js') }}"></script>
+    <script>
+        //Hold Submit Ketika diklik 2X
+        $('#bb_lainnya').submit(function(event) {
+            var submitButton = $('#submit-bb-lainnya');
+            submitButton.prop('disabled', true);
+        });
+    </script>
 @endpush

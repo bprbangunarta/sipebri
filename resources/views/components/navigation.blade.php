@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit', 'admin/data/survei', 'admin/data/survei/*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -53,6 +53,14 @@
                             </a>
                         </li>
 
+                        <li
+                            class="{{ request()->is('admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit') ? 'active' : '' }}">
+                            <a href="{{ route('admin.jaminan.index') }}" title="Data Jaminan">
+                                <i class="fa fa-circle-o"></i>
+                                Data Jaminan
+                            </a>
+                        </li>
+
                         <li class="{{ request()->is('admin/data/nasabah', 'admin/data/nasabah/*/edit') ? 'active' : '' }}">
                             <a href="{{ route('admin.nasabah.index') }}" title="Data Nasabah">
                                 <i class="fa fa-circle-o"></i>
@@ -72,6 +80,13 @@
                             <a href="{{ route('admin.pengajuan.index') }}" title="Data Pengajuan">
                                 <i class="fa fa-circle-o"></i>
                                 Data Pengajuan
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('admin/data/survei', 'admin/data/survei/*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.survei.index') }}" title="Data Survei">
+                                <i class="fa fa-circle-o"></i>
+                                Data Survei
                             </a>
                         </li>
                     </ul>
@@ -202,7 +217,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/analisa/check/kendaraan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -243,11 +258,34 @@
                         </a>
                     </li>
 
+                    <li class="{{ request()->is('themes/data/perjanjian/kredit') ? 'active' : '' }}">
+                        <a @can('cetak perjanjian kredit') href="{{ route('data.perjanjian_kredit') }}" @endcan
+                            title="Data Perjanjian Kredit">
+                            <i class="fa fa-file" aria-hidden="true"></i>
+                            Data Perjanjian Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
+                        <a @can('input penolakan') href="{{ route('data.batal_perjanjian_kredit') }}" @endcan
+                            title="Data Perjanjian Kredit">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                            Data Pembatalan Kredit
+                        </a>
+                    </li>
+
                     <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                         <a @can('realisasi kredit') href="{{ route('realisasi.kredit') }}" @endcan
                             title="Realisasi Kredit">
                             <i class="fa fa-flag"></i>
                             Realisasi Kredit
+                        </a>
+                    </li>
+                    <li class="{{ request()->is('themes/analisa/check/kendaraan') ? 'active' : '' }}">
+                        <a @can('survey dan analisa') href="{{ route('index.check_kendaraan') }}" @endcan
+                            title="Check Kendaraan & Lokasi">
+                            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            Check List Kendaraan
                         </a>
                     </li>
                 </ul>

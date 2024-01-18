@@ -184,14 +184,19 @@ class UserController extends Controller
 
             if ($request->fungsional == 'get') {
                 $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional();
-                $columns = Schema::getColumnListing($nama_table);
+                $columns = collect(DB::select(DB::raw('SHOW COLUMNS FROM ' . $nama_table)))
+                    ->pluck('Field')
+                    ->all();
+
                 return view('menu.data', [
                     'data' => $cek,
                     'field' => $columns,
                 ]);
             } elseif ($request->fungsional == 'first') {
                 $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional();
-                $columns = Schema::getColumnListing($nama_table);
+                $columns = collect(DB::select(DB::raw('SHOW COLUMNS FROM ' . $nama_table)))
+                    ->pluck('Field')
+                    ->all();
                 $cek = [(object)[$cek]];
                 return view('menu.data', [
                     'data' => $cek,
@@ -199,7 +204,10 @@ class UserController extends Controller
                 ]);
             } elseif ($request->fungsional == 'latest') {
                 $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional()->get();
-                $columns = Schema::getColumnListing($nama_table);
+                $columns = collect(DB::select(DB::raw('SHOW COLUMNS FROM ' . $nama_table)))
+                    ->pluck('Field')
+                    ->all();
+
                 return view('menu.data', [
                     'data' => $cek,
                     'field' => $columns,
@@ -212,6 +220,7 @@ class UserController extends Controller
                 ];
                 $cek = DB::table($nama_table)->where($field_table, $parameter)->$fungsional($data);
                 $columns = Schema::getColumnListing($nama_table);
+
                 return view('menu.data', [
                     'data' => $cek,
                     'field' => $columns,

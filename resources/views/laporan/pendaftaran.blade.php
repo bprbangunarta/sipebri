@@ -66,17 +66,17 @@
                                                 {{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" >{{ $item->kantor_kode }}</td>
-                                            <td class="text-center" >{{ $item->produk_kode }}</td>
-                                            <td class="text-right" >
+                                            <td class="text-center">{{ $item->kantor_kode }}</td>
+                                            <td class="text-center">{{ $item->produk_kode }}</td>
+                                            <td class="text-right">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-                                            <td class="text-center">{{$item->jangka_waktu}}</td>
-                                            <td class="text-center">{{$item->suku_bunga}}%</td>
-                                            <td class="text-center">{{$item->metode_rps}}</td>
-                                            <td class="text-center">{{$item->no_telp}}</td>
-                                            <td>{{$item->nama_pendamping}}</td>
-                                            <td>{{$item->nama_user}}</td>
+                                            <td class="text-center">{{ $item->jangka_waktu }}</td>
+                                            <td class="text-center">{{ $item->suku_bunga }}%</td>
+                                            <td class="text-center">{{ $item->metode_rps }}</td>
+                                            <td class="text-center">{{ $item->no_telp }}</td>
+                                            <td>{{ $item->nama_pendamping }}</td>
+                                            <td>{{ $item->nama_user }}</td>
                                         </tr>
                                         @php
                                             $no++;
@@ -92,9 +92,9 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
-                                {{-- <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Data
-                                </button> --}}
+                                </button>
 
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
@@ -130,8 +130,7 @@
                                 </div>
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>PRODUK</label>
-                                    <select class="form-control" name="kode_produk" id=""
-                                        style="margin-top:-5px;">
+                                    <select class="form-control" name="kode_produk" id="" style="margin-top:-5px;">
                                         <option value="">--PILIH--</option>
                                         @foreach ($produk as $item)
                                             <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>

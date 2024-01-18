@@ -16,6 +16,7 @@
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
+
                                         @forelse ($field as $item)
                                             <th class="text-center" width="3%">{{ $item }}</th>
                                         @empty

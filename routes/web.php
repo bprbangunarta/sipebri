@@ -62,12 +62,17 @@ use App\Http\Controllers\DashboardAnalisController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\UsahaPerdaganganController;
+use App\Http\Controllers\Admin\AdminSurveiController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
+use App\Http\Controllers\Admin\AdminJaminanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
+use App\Http\Controllers\CheckListKendaraanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
+use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
+use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
 
 /*
 |--------------------------------------------------------------------------
@@ -179,7 +184,21 @@ Route::middleware('auth')->group(function () {
                 Route::controller(AdminPengajuanController::class)->group(function () {
                     Route::get('/data/pengajuan', 'index')->name('admin.pengajuan.index');
                     Route::get('/data/pengajuan/{kode}/edit', 'edit')->name('admin.pengajuan.edit');
-                    // Route::PUT('/data/pendamping/update', 'update')->name('admin.pendamping.update');
+                    Route::PUT('/data/pengajuan/update', 'update')->name('admin.pengajuan.update');
+                });
+
+                // Data Jaminan
+                Route::controller(AdminJaminanController::class)->group(function () {
+                    Route::get('/data/jaminan', 'index')->name('admin.jaminan.index');
+                    Route::get('/data/jaminan/{id}/edit', 'edit')->name('admin.jaminan.edit');
+                    Route::PUT('/data/jaminan/update', 'update')->name('admin.jaminan.update');
+                });
+
+                // Data Survei
+                Route::controller(AdminSurveiController::class)->group(function () {
+                    Route::get('/data/survei', 'index')->name('admin.survei.index');
+                    Route::get('/data/survei/{kode}/edit', 'edit')->name('admin.survei.edit');
+                    Route::PUT('/data/survei/update', 'update')->name('admin.survei.update');
                 });
             });
         });
@@ -363,6 +382,7 @@ Route::middleware('auth')->group(function () {
             // Route::get('/analisa/usaha/{perdagangan}/edit', 'edit')->name('perdagangan.edit');
         });
 
+        //Analisa Usaha Pertanian
         Route::controller(UsahaPertanianController::class)->group(function () {
             Route::get('/analisa/usaha/pertanian', 'index')->name('pertanian.ind');
             Route::post('/analisa/usaha/pertanian', 'store')->name('pertanian.simpan');
@@ -377,6 +397,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/analisa/keuangan/usaha/pertanian/{id}', 'destroy')->name('pertanian.destroy');
         });
 
+        //Analisa Usaha Jasa
         Route::controller(UsahaJasaController::class)->group(function () {
             Route::get('/analisa/usaha/jasa', 'index')->name('usahajasa.ind');
             Route::post('/analisa/usaha/jasa', 'store')->name('usahajasa.store');
@@ -385,6 +406,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/analisa/usaha/jasa/{id}', 'destroy')->name('usahajasa.destroy');
         });
 
+        //Analisa Usaha Lainnya
         Route::controller(UsahaLainnyaController::class)->group(function () {
             Route::get('/analisa/usaha/lainnya', 'index')->name('lain.index');
             Route::post('/analisa/usaha/lainnya', 'simpanlain')->name('lain.simpanlain');
@@ -399,18 +421,21 @@ Route::middleware('auth')->group(function () {
             Route::delete('/analisa/usaha/lainnya', 'destroy')->name('lain.destroy');
         });
 
+        //Analisa Keuangan
         Route::controller(AnalisaKeuanganController::class)->group(function () {
             Route::get('/analisa/keuangan', 'index')->name('keuangan.index');
             Route::post('/analisa/keuangan', 'store')->name('keuangan.simpan');
             Route::put('/analisa/keuangan', 'update')->name('keuangan.update');
         });
 
+        //Analisa Kepemilikan
         Route::controller(AnalisaKepemilikanController::class)->group(function () {
             Route::get('/analisa/kepemilikan', 'index')->name('kepemilikan.index');
             Route::post('/analisa/kepemilikan', 'store')->name('kepemilikan.store');
             Route::put('/analisa/kepemilikan', 'update')->name('kepemilikan.update');
         });
 
+        //Analisa Jaminan
         Route::controller(AnalisaJaminanController::class)->group(function () {
             Route::get('/analisa/jaminan/kendaraan', 'kendaraan')->name('taksasi.kendaraan');
             Route::post('/analisa/jaminan/kendaraan', 'updatekendaraan')->name('taksasi.updatekendaraan');
@@ -427,6 +452,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/analisa/jaminan/lainnya/{id}', 'delete_lain')->name('taksasi.delete_lain');
         });
 
+        //Analisa 5C
         Route::controller(DataAnalisa5CController::class)->group(function () {
             Route::get('/analisa/5c/character', 'character')->name('analisa5c.character');
             Route::post('/analisa/5c/character', 'simpancharacter')->name('analisa5c.simpancharacter');
@@ -444,6 +470,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/analisa/5c/condition/update', 'updatecondition')->name('analisa5c.updatecondition');
         });
 
+        //Analisa Kualitatif
         Route::controller(AnalisaKualitatifController::class)->group(function () {
             Route::get('/analisa/kualitatif/karakter', 'karakter')->name('kualitatif.karakter');
             Route::post('/analisa/kualitatif/karakter', 'simpankarakter')->name('kualitatif.simpankarakter');
@@ -454,6 +481,7 @@ Route::middleware('auth')->group(function () {
             Route::POST('/analisa/kualitatif/swot', 'simpan_analisa_swot')->name('simpan_.analisa_swot');
         });
 
+        //Analisa Memorandum
         Route::controller(AnalisaMemorandumController::class)->group(function () {
             Route::get('/analisa/memorandum/kebutuhan', 'kebutuhan')->name('memorandum.kebutuhan');
             Route::post('/analisa/memorandum/kebutuhan', 'simpankebutuhan')->name('memorandum.simpankebutuhan');
@@ -465,17 +493,37 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/memorandum/usulan', 'updateusulan')->name('memorandum.updateusulan');
         });
 
+        //Administrasi
         Route::controller(AdministrasiController::class)->group(function () {
             Route::get('/analisa/administrasi', 'index')->name('administrasi.index');
             Route::post('/analisa/administrasi', 'simpan')->name('administrasi.simpan');
             Route::put('/analisa/administrasi', 'update')->name('administrasi.update');
         });
 
+        //Konfirmasi
         Route::controller(KonfirmasiController::class)->group(function () {
             Route::get('/analisa/konfirmasi/analisa', 'konfirmasi_analisa')->name('konfirmasi.analisa');
             Route::post('/analisa/konfirmasi/analisa', 'ubah_analisa')->name('konfirmasi.ubah_analisa');
             // Jangan digunakan dulu
             Route::get('/analisa/konfirmasi/dokumen', 'dokumen_nasabah')->name('konfirmasi.dokumen');
+        });
+
+        //Check List Kendaraan
+        Route::controller(CheckListKendaraanController::class)->group(function () {
+            Route::get('/analisa/check/kendaraan', 'index')->name('index.check_kendaraan');
+            Route::get('/report/kih', 'report_kih')->name('report.kih');
+            Route::get('/report/kko', 'report_kko')->name('report.kko');
+            Route::get('/report/kpj', 'report_kpj')->name('report.kpj');
+            Route::get('/report/kpn', 'report_kpn')->name('report.kpn');
+            Route::get('/report/kps', 'report_kps')->name('report.kps');
+            Route::get('/report/krs-bpkb', 'report_krs_bpkb')->name('report.krs_bpkb');
+            Route::get('/report/krs-bpkb-shm', 'report_krs_bpkb_shm')->name('report.krs_bpkb_shm');
+            Route::get('/report/krs-shm', 'report_krs_shm')->name('report.krs_shm');
+            Route::get('/report/kru-bpkb', 'report_kru_bpkb')->name('report.kru_bpkb');
+            Route::get('/report/kru-bpkb-shm', 'report_kru_bpkb_shm')->name('report.kru_bpkb_shm');
+            Route::get('/report/kru-shm', 'report_kru_shm')->name('report.kru_shm');
+            Route::get('/report/kta', 'report_kta')->name('report.kta');
+            Route::get('/report/kup', 'report_kup')->name('report.kup');
         });
 
         Route::controller(KomiteController::class)->group(function () {
@@ -555,6 +603,15 @@ Route::middleware('auth')->group(function () {
             });
         });
 
+        Route::controller(DataPerjanjianKreditController::class)->group(function () {
+            route::get('/data/perjanjian/kredit', 'index')->name('data.perjanjian_kredit');
+            route::post('/data/perjanjian/kredit', 'batal_perjanjian_kredit')->name('data.batal_perjanjian_kredit');
+        });
+
+        Route::controller(DataBatalPerjanjianKreditController::class)->group(function () {
+            route::get('/data/batal/perjanjian/kredit', 'index')->name('data.batal_perjanjian_kredit');
+            // route::post('/data/batal/perjanjian/kredit', 'batal_perjanjian_kredit')->name('data.batal_perjanjian_kredit');
+        });
 
         Route::controller(FiduciaController::class)->group(function () {
             Route::group(['middleware' => ['role:Realisasi|Customer Service|Kepala Kantor Kas|Admin Kredit']], function () {
@@ -644,5 +701,4 @@ Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');
 
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/rekap/analisa', 'rekap.analisa');
-
 require __DIR__ . '/auth.php';

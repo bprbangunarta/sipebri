@@ -125,7 +125,8 @@
                                 <option value="2" {{ old('stabilitas_harga') == 2 ? 'selected' : '' }}>
                                     Deposito,Tabungan, Emas</option>
                                 <option value="1" {{ old('stabilitas_harga') == 1 ? 'selected' : '' }}>BPKB</option>
-                                <option value="1" {{ old('stabilitas_harga') == 0 ? 'selected' : '' }}>Lainnya</option>
+                                <option value="0" {{ old('stabilitas_harga') == 0 ? 'selected' : '' }}>Lainnya
+                                </option>
                             </select>
                         </div>
 
@@ -202,7 +203,7 @@
             var selectedcollateral7 = parseInt(collateral7.value) || 0;
             var selectedcollateral8 = parseInt(collateral8.value) || 0;
             var selectedcollateral9 = parseInt(collateral9.value) || 0;
-            console.log(selectedcollateral1)
+
             var jml =
                 selectedcollateral1 +
                 selectedcollateral2 +

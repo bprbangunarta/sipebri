@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Midle extends Model
@@ -1111,6 +1112,7 @@ class Midle extends Model
             ->leftjoin('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
             ->select(
                 'data_jaminan.*' ?? null,
+                'data_jaminan.catatan as catatan_jaminan' ?? null,
                 'data_jenis_dokumen.jenis_dokumen as nama_jenis_dokumen' ?? null,
                 'data_jenis_agunan.jenis_agunan' ?? null,
             )
@@ -1387,11 +1389,25 @@ class Midle extends Model
 
         // URL dan QR Code dari Google Chart API
         $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
-        $uri = urlencode($url);
-        $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
-
+        // $uri = urlencode($url);
+        // $chartUrl = 'https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=' . $uri;
         // Simpan QR Code dari Google Chart API
-        file_put_contents($imgpath, file_get_contents($chartUrl));
+        // file_put_contents($imgpath, file_get_contents($chartUrl));
+
+        $logoPath = public_path('assets/img/favicon.png');
+        QrCode::size(300)
+            ->format('png')
+            ->errorCorrection('H')
+            ->merge($logoPath, 0.3, true)
+            ->generate($url, $imgpath);
+
+        // QrCode::size(300)
+        //     ->style('dot')
+        //     ->eye('circle')
+        //     ->format('png')
+        //     ->errorCorrection('H')
+        //     ->merge($logoPath, 0.3, true)
+        //     ->generate($url, $imgpath);
 
         $simpan = [
             'pengajuan_kode' => $data,

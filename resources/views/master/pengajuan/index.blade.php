@@ -55,7 +55,7 @@
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->no_identitas }}</td>
-                                            <td>Rp. {{ number_format($item->plafon, '0', '.', '') }}</td>
+                                            <td>Rp. {{ number_format($item->plafon, '0', ',', '.') }}</td>
                                             <td class="text-center">{{ $item->produk_kode }}</td>
                                             <td>{{ $item->metode_rps }}</td>
                                             <td class="text-center">{{ $item->jangka_waktu }}</td>

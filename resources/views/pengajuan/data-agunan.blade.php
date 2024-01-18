@@ -132,11 +132,11 @@
                                         </tbody>
                                     </table>
 
-                                    @if($pengajuan->produk_kode == "KTA")
+                                    @if ($pengajuan->produk_kode == 'KTA')
                                     @else
                                         @can('edit pengajuan kredit')
-                                        <a data-toggle="modal" data-target="#tambah-kendaraan" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;">TAMBAH</a>
+                                            <a data-toggle="modal" data-target="#tambah-kendaraan"
+                                                class="btn btn-sm btn-primary" style="margin-top:10px;">TAMBAH</a>
                                         @endcan
                                     @endif
                                 </div>
@@ -249,11 +249,11 @@
                                         </tbody>
                                     </table>
 
-                                    @if($pengajuan->produk_kode == "KTA")
+                                    @if ($pengajuan->produk_kode == 'KTA')
                                     @else
                                         @can('edit pengajuan kredit')
-                                        <a data-toggle="modal" data-target="#tambah-tanah" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;">TAMBAH</a>
+                                            <a data-toggle="modal" data-target="#tambah-tanah" class="btn btn-sm btn-primary"
+                                                style="margin-top:10px;">TAMBAH</a>
                                         @endcan
                                     @endif
                                 </div>
@@ -363,11 +363,11 @@
 
                                         </tbody>
                                     </table>
-                                    @if($pengajuan->produk_kode == "KTA")
+                                    @if ($pengajuan->produk_kode == 'KTA')
                                     @else
                                         @can('edit pengajuan kredit')
-                                            <a data-toggle="modal" data-target="#tambah-lainnya" class="btn btn-sm btn-primary"
-                                                style="margin-top:10px;">TAMBAH</a>
+                                            <a data-toggle="modal" data-target="#tambah-lainnya"
+                                                class="btn btn-sm btn-primary" style="margin-top:10px;">TAMBAH</a>
                                         @endcan
                                     @endif
                                 </div>
@@ -406,6 +406,7 @@
                                 <input type="text" value="{{ $data->auth }}" name="input_user" hidden>
                                 <input type="text" value="{{ $pengajuan->kode_pengajuan }}" name="pengajuan_kode"
                                     hidden>
+                                <input type="text" value="{{ $pengajuan->nasabah_kode }}" name="nasabah_kode" hidden>
                                 <input type="text" name="jenis_jaminan" value="Kendaraan" hidden>
 
                                 <div class="div-left">
@@ -509,7 +510,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
+                                            {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -547,6 +548,8 @@
                                         <input type="text" value="{{ $data->auth }}" name="input_user" hidden>
                                         <input type="text" value="{{ $pengajuan->kode_pengajuan }}"
                                             name="pengajuan_kode" hidden>
+                                        <input type="text" value="{{ $pengajuan->nasabah_kode }}" name="nasabah_kode"
+                                            hidden>
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
@@ -613,7 +616,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
+                                            {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -651,6 +654,8 @@
                                         <input type="text" value="{{ $data->auth }}" name="input_user" hidden>
                                         <input type="text" value="{{ $pengajuan->kode_pengajuan }}"
                                             name="pengajuan_kode" hidden>
+                                        <input type="text" value="{{ $pengajuan->nasabah_kode }}" name="nasabah_kode"
+                                            hidden>
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
@@ -699,7 +704,7 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
                                         <input class="form-control text-uppercase" type="text" name="catatan"
-                                        {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
+                                            {{ old('catatan') }} placeholder="DIBUAT SECARA OTOMATIS" readonly>
                                     </div>
                                 </div>
                             </div>

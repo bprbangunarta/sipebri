@@ -131,6 +131,10 @@ class KomiteController extends Controller
 
         try {
             if ($request) {
+                $pl = (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon);
+                if ($pl == 0) {
+                    return redirect()->back()->with('error', 'Plafon Tidak Boleh 0');
+                }
                 $usr = Auth::user()->code_user;
                 $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
                 $kom = DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->first();

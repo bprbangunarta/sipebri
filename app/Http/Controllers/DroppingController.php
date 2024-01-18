@@ -93,7 +93,6 @@ class DroppingController extends Controller
                 ];
                 $data2 = [
                     'on_current' => 0,
-                    'status' => "Dibatalkan",
                 ];
                 $data3 = [
                     'on_current' => 0,

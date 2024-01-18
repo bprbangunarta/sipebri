@@ -473,7 +473,6 @@ class PengajuanController extends Controller
             $jenis_lain = DB::table('ja_lainnya')->get();
             $data_lain = DB::table('da_lainnya')->get();
 
-            // dd($jenis_kendaraan);
             return view('pengajuan.data-agunan', [
                 'jenis_kendaraan' => $jenis_kendaraan,
                 'data_kendaraan' => $data_kendaraan,

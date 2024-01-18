@@ -289,7 +289,7 @@ class UsahaLainnyaController extends Controller
             $enc = Crypt::decrypt($request->query('kode_usaha'));
             // dd($request);
             DB::transaction(function () use ($enc, $request) {
-                for ($i = 1; $i <= 4; $i++) {
+                for ($i = 1; $i <= 5; $i++) {
                     $data = [
                         'usaha_kode' => $enc,
                         'kode_lain' => $request->input('kod' . $i),
@@ -299,7 +299,7 @@ class UsahaLainnyaController extends Controller
                     DB::table('bu_lainnya')->where('kode_lain', $request->input('kod' . $i))->update($data);
                 }
                 //Masuk ke tabel du_lainnya
-                for ($j = 1; $j <= 4; $j++) {
+                for ($j = 1; $j <= 5; $j++) {
                     $data2 = [
                         'usaha_kode' => $enc,
                         'kode_lain' => $request->input('kode' . $j),
