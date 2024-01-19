@@ -65,8 +65,9 @@
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                @if ($item->otorpk == "N")
-                                                    <a data-toggle="modal" data-target="#modal-danger" class="btn-circle btn-sm bg-red">
+                                                @if ($item->otorpk == 'N')
+                                                    <a data-toggle="modal" data-target="#modal-danger"
+                                                        class="btn-circle btn-sm bg-red">
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @else
@@ -112,9 +113,10 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">PERJANJIAN KREDIT</h4>
                 </div>
-                
+
                 <div class="modal-body">
-                    <p>Mohon maaf cetak perjanjian kredit tidak bisa dilakukan karena perjanjian kredit belum di otorisasi. Silahkan hubungi bagian admin kredit. Terimakasih</p>
+                    <p>Mohon maaf cetak perjanjian kredit tidak bisa dilakukan karena perjanjian kredit belum di otorisasi.
+                        Silahkan hubungi bagian admin kredit. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
                     <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
