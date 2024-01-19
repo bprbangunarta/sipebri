@@ -355,18 +355,18 @@ class DataCetakController extends Controller
     {
 
         $name = request('name');
-        $cek = DB::table('data_pengajuan')
+        $cek = DB::table('data_spk')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
-            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->where('data_pengajuan.status', 'Disetujui')
             ->where('data_pengajuan.on_current', '1')
+            ->where('data_survei.kantor_kode', Auth::user()->kantor_kode)
             ->whereNull('data_tracking.selesai')
-            ->whereColumn('data_pengajuan.kode_pengajuan', 'data_spk.pengajuan_kode')
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
@@ -395,13 +395,10 @@ class DataCetakController extends Controller
             );
 
         //Enkripsi kode pengajuan
-        $c = $cek->get();
-        $count = count($c);
         $data = $cek->paginate(10);
-        for ($i = 0; $i < $count; $i++) {
-            if ($data->isNotEmpty()) {
-                // $data[$i]->kd_pengajuan = Crypt::encrypt($data[$i]->kode_pengajuan);
-            }
+
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan);
         }
 
         return view('cetak.realisasi-kredit.index', [

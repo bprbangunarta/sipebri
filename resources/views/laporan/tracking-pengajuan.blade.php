@@ -112,8 +112,8 @@
                                                         $item->tracking == 'Naik Komite I' ||
                                                         $item->tracking == 'Naik Komite II')
                                                     {{ $item->tracking }}
-                                                @else
-                                                    -
+                                                @elseif($item->tracking == 'Selesai' || $item->tracking == 'Realisasi')
+                                                    {{ $item->tracking }}
                                                 @endif
                                             </td>
                                             <td class="text-center">

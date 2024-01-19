@@ -19,7 +19,8 @@
                                             value="{{ request('name') }}" placeholder="Search">
 
                                         <div class="input-group-btn">
-                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            <button type="submit" class="btn btn-default"><i
+                                                    class="fa fa-search"></i></button>
                                         </div>
                                     </div>
                                 </form>
@@ -27,77 +28,65 @@
                         </div>
 
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
                                     <tr class="bg-blue">
-                                        <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center">PERJANJIAN</th>
-                                        <th class="text-center" width="33%">ALAMAT</th>
-                                        <th class="text-center" width="18%">PENGAJUAN</th>
-                                        <th class="text-center" width="13%">BIAYA</th>
-                                        <th class="text-center" style="width: 100px">AKSI</th>
+                                        <th class="text-center" width="3%">#</th>
+                                        <th class="text-center">KODE</th>
+                                        <th class="text-center">NO SPK</th>
+                                        <th class="text-center">NAMA LENGKAP</th>
+                                        <th class="text-center">ALAMAT</th>
+                                        <th class="text-center">WIL</th>
+                                        <th class="text-center">PDK</th>
+                                        <th class="text-center">JW</th>
+                                        <th class="text-center">PLAFON</th>
+                                        <th class="text-center">METODE</th>
+                                        <th class="text-center">PINALTI</th>
+                                        <th class="text-center">SB</th>
+                                        <th class="text-center">PROVISI</th>
+                                        <th class="text-center">BY ADM</th>
+                                        <th class="text-center">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
                                     @forelse ($data as $item)
-                                        <tr>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $no }}</td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KODE :</b> {{ $item->kode_pengajuan }} [ {{ $item->kategori }} ] <br>
-                                                <b>AN. </b>{{ $item->nama_nasabah }} <br>
-                                                <span class="label label-success"
-                                                    style="font-size: 12px;">{{ $item->no_spk }}</span>
+                                        <tr class="text-uppercase">
+                                            <td class="text-center">
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center">
+                                                {{ $item->kode_pengajuan }}</td>
+                                            <td>{{ $item->no_spk }}</td>
+                                            <td>{{ $item->nama_nasabah }}</td>
+                                            <td>{{ $item->alamat_ktp }}</td>
+                                            <td class="text-center">{{ $item->kode_kantor }}</td>
+                                            <td class="text-center">{{ $item->produk_kode }}</td>
+                                            <td class="text-center">{{ $item->jangka_waktu }}</td>
+                                            <td class="text-right">
+                                                {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-
-                                            <td style="text-transform: uppercase;vertical-align: middle;">
-                                                {{ $item->alamat_ktp }} <br>
-                                                <b>Desa: </b>{{ $item->kelurahan }} | <b>Kecamatan:
-                                                </b>{{ $item->kecamatan }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                <b>KANTOR :</b> {{ $item->kode_kantor }} <br>
-                                                <b>{{ $item->produk_kode }} - JK :</b> {{ $item->jangka_waktu }} BULAN <br>
-                                                <b>PLAFON :</b>
-                                                {{ 'Rp.' . ' ' . number_format($item->plafon, 0, ',', '.') }} <br>
-                                                <b>METODE :</b> {{ $item->metode_rps }}
-                                            </td>
-
-                                            <td style="vertical-align: middle;">
-                                                {{-- <b>KREDIT: </b> {{ number_format($item->b_admin + $item->b_provisi, 2) }} --}}
-
-                                                <b>PENALTI &nbsp;&nbsp;&nbsp;: </b> {{ $item->b_penalti }} <br>
-                                                <b>S. BUNGA&nbsp;: </b> {{ $item->suku_bunga }}% <br>
-                                                <b>PROVISI &nbsp;&nbsp;&nbsp;: </b>
-                                                {{ number_format($item->b_provisi, 2) }} <br>
-                                                <b>BY ADMIN&nbsp;: </b> {{ number_format($item->b_admin, 2) }} <br>
-                                            </td>
-
-                                            <td class="text-center" style="vertical-align: middle;">
+                                            <td>{{ $item->metode_rps }}</td>
+                                            <td>{{ $item->b_penalti }}</td>
+                                            <td>{{ $item->suku_bunga }}</td>
+                                            <td>{{ $item->b_provisi }}</td>
+                                            <td>{{ $item->b_admin }}</td>
+                                            <td>
                                                 <a data-toggle="modal" data-target="#bukti-realisasi"
-                                                    data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">Bukti
-                                                        Realisasi</span>
+                                                    data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue"
+                                                    title="Upload Bukti">
+                                                    <i class="fa fa-upload" aria-hidden="true"></i>
                                                 </a>
 
-                                                <p style="margin-top:-5px;"></p>
+                                                &nbsp;
                                                 <a data-toggle="modal" data-target="#konfirmasi"
-                                                    data-id="{{ $item->kode_pengajuan }}">
-                                                    <span class="btn bg-green"
-                                                        style="width: 120px;hight:100%;">Konfirmasi</span>
+                                                    data-id="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-green" title="Konfirmasi">
+                                                    <i class="fa fa-check-circle-o" aria-hidden="true"></i>
                                                 </a>
                                             </td>
                                         </tr>
-                                        @php
-                                            $no++;
-                                        @endphp
                                     @empty
                                         <tr>
-                                            <td class="text-center text-uppercase" colspan="7">Tidak Ada Data.</td>
+                                            <td class="text-center" colspan="15">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -107,7 +96,8 @@
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
@@ -141,15 +131,16 @@
                                     <input type="text" name="kode_pengajuan" id="kd" hidden>
                                     <a href="#" class="pull-right fw-bold" id="pemohon">PREVIEW</a>
                                     <input type="text" name="foto1" hidden>
-                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon" hidden>
+                                    <input type="file" class="form-control" name="foto_pemohon" id="foto_pemohon"
+                                        hidden>
                                 </div>
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">FOTO PENDAMPING</span>
                                     <a href="#" class="pull-right fw-bold" id="pendamping">PREVIEW</a>
                                     <input type="text" name="foto2" hidden>
-                                    <input type="file" class="form-control" name="foto_pendamping" id="foto_pendamping"
-                                        hidden>
+                                    <input type="file" class="form-control" name="foto_pendamping"
+                                        id="foto_pendamping" hidden>
                                 </div>
 
                                 <div style="margin-top: 5px;">
