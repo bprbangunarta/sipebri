@@ -105,47 +105,31 @@
             </tr>
         </table>
         <br>
-        <div id="map" style="height: 200px;"></div>
+        <div style="margin-top: 50px;">
+            <div class="row">
+                <div class="col col-md-2">
+                    <img src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}" width="100" height="100"
+                        style="margin-top:-30px;">
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card">
+                    <img src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}" width="100" height="100"
+                        style="margin-top:-30px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div id="map" style="height: 200px;"></div> --}}
     </div>
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script>
         window.print();
-
-        var lat = document.getElementById('latitude').value;
-        var long = document.getElementById('longitude').value;
-
-        var initialLocation = {
-            lat: lat,
-            lng: long
-        };
-
-        var map = L.map('map').setView([lat, long], 20);
-        var redIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            tooltipAnchor: [16, -28],
-            shadowSize: [41, 41]
-        });
-
-        L.marker(initialLocation, {
-            icon: redIcon
-        }).addTo(map);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: ''
-        }).addTo(map);
-
-        // var qrCode = new QRCode(document.getElementById("qrcode"), {
-        //     width: 128,
-        //     height: 128
-        // });
-        var mapLink = window.location.href.split('?')[0] + `?lat=${initialLocation.lat}&lng=${initialLocation.lng}&zoom=16`;
-        console.log(mapLink)
-        // qrCode.makeCode(mapLink);
     </script>
 </body>
 

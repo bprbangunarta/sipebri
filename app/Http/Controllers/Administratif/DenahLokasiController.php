@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administratif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Midle;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -107,23 +108,31 @@ class DenahLokasiController extends Controller
 
                 ->select(
                     'data_nasabah.nama_nasabah',
+                    'data_nasabah.no_identitas',
                     'data_nasabah.alamat_ktp',
                     'data_survei.*',
                     'v_users.nama_user',
                 )
                 ->where('data_survei.pengajuan_kode', $enc)
                 ->get();
-            //dd($data);
+
             // $usaha_pertanian = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
             // $usaha_perdagangan = DB::table('au_perdagangan')->where('pengajuan_kode', $enc)->get();
             // $usaha_jasa = DB::table('au_jasa')->where('pengajuan_kode', $enc)->get();
             // $usaha_lain = DB::table('au_lainnya')->where('pengajuan_kode', $enc)->get();
 
+            $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah);
+            dd($data[0]);
             return view('administratif.denah-lokasi.lokasi', [
-                'data' => $data[0]
+                'data' => $data[0],
+                'qr_lokasi_rumah' => $qr_lokasi_rumah,
             ]);
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function qrcode(Request $request)
+    {
     }
 }

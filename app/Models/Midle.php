@@ -1436,4 +1436,40 @@ class Midle extends Model
 
         return $imgname;
     }
+
+    public static function get_qrcode_denah($data, $text, $user)
+    {
+
+        $carbon = Carbon::now();
+        $tgl = $carbon->format('d-m-y');
+
+        // Path untuk menyimpan QR Code
+        $strpath = storage_path('app/public/image/qr_code');
+        $imgname = $text . '_' . $data . '_' . $user . '_' . $tgl . '.png';
+        $imgpath = $strpath . '/' . $imgname;
+
+        $data_url = $text . '_' . $data . '_' . $user;
+
+        // URL dan QR Code dari Google Chart API
+        // $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
+        $url = 'http://127.0.0.1:8000/lokasi?qrcode=' . $data_url;
+
+        $logoPath = public_path('assets/img/favicon2.png');
+        // QrCode::size(300)
+        //     ->format('png')
+        //     ->errorCorrection('H')
+        //     ->merge($logoPath, 0.3, true)
+        //     ->generate($url, $imgpath);
+
+        QrCode::size(300)
+            ->style('dot')
+            ->eye('circle')
+            ->format('png')
+            ->errorCorrection('H')
+            ->merge($logoPath, 0.3, true)
+            ->generate($url, $imgpath);
+
+
+        return $imgname;
+    }
 }

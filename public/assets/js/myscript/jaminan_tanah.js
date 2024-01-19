@@ -1,5 +1,11 @@
 var nilaipasar = document.getElementById("nilai_pasar");
 var nilaitaksasi = document.getElementById("nilai_taksasi");
+var luas = document.getElementById("luas");
+if (luas) {
+    luas.addEventListener("keyup", function (e) {
+        luas.value = format(this.value, "Rp. ");
+    });
+}
 if (nilaipasar) {
     nilaipasar.addEventListener("keyup", function (e) {
         nilaipasar.value = formatRupiah(this.value, "Rp. ");
@@ -54,6 +60,7 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
+                console.log(response);
                 $("#id").val(response.jaminan_id);
                 $("#jenis_agunan").val(response.jenis_agunan);
                 $("#jenis_dokumen").val(response.jenis_dokumen);
@@ -68,7 +75,7 @@ $(document).ready(function () {
                 } else {
                     var np = response.nilai_pasar;
                     var ps = formatRupiah(np);
-                    $("#nilai_pasar").val("RP. " + " " + ps);
+                    $("#nilai_pasar").val("Rp. " + " " + ps);
                 }
                 if (response.nilai_taksasi == null) {
                     return 0;

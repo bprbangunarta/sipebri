@@ -52,7 +52,7 @@ $(document).ready(function () {
                 } else {
                     var ps = formatRupiah(np);
                 }
-                $("#nilai_pasar").val("RP. " + " " + ps);
+                $("#nilai_pasar").val("Rp. " + " " + ps);
 
                 var nt = response.nilai_taksasi ?? 0;
                 if (nt == 0) {

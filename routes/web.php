@@ -702,6 +702,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/pengajuan/kredit', [FrontController::class, 'pengajuan']);
 Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
 Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
+Route::get('/lokasi/{qrcode}', [DenahLokasiController::class, 'qrcode']);
 //====FRONT END====//
 
 Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');

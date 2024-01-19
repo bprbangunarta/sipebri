@@ -41,6 +41,7 @@ $(document).ready(function () {
             cache: false,
             success: function (response) {
                 $("#id").val(response.id);
+                $("#kode").val(response.jenis_agunan_kode);
                 $("#jenis").val(response.jenis_agunan);
                 $("#dokumen").val(response.jenis_dokumen);
                 $("#no_dok").val(response.no_dokumen);
@@ -60,7 +61,7 @@ $(document).ready(function () {
                 } else {
                     var ps = 0;
                 }
-                $("#nilai_pasar").val("RP. " + " " + ps);
+                $("#nilai_pasar").val("Rp. " + " " + ps);
 
                 var nt = response.nilai_taksasi;
                 if (nt !== null) {

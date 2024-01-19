@@ -85,6 +85,7 @@ class AnalisaJaminanController extends Controller
         $data_agunan = [
             'id' => $data[0]->id,
             'jenis_agunan' => $data[0]->jenis_agunan,
+            'jenis_agunan_kode' => $data[0]->jenis_agunan_kode,
             'jenis_dokumen' => $data[0]->jenis_dokumen,
             'no_dokumen' => $data[0]->no_dokumen,
             'atas_nama' => $data[0]->atas_nama,
@@ -116,11 +117,30 @@ class AnalisaJaminanController extends Controller
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_pasar')) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('nilai_taksasi')) ?? 0,
                 'tgl_taksasi' => $tgl_taksasi,
+                'merek' => strtoupper($request->merek),
+                'tipe_kendaraan' => strtoupper($request->tipe_kendaraan),
+                'tahun' => $request->tahun,
+                'no_rangka' => strtoupper($request->no_rangka),
+                'no_mesin' => strtoupper($request->no_mesin),
+                'no_polisi' => strtoupper($request->no_polisi),
+                'no_dokumen' => strtoupper($request->no_dokumen),
+                'warna' => strtoupper($request->warna),
+                'atas_nama' => strtoupper($request->atas_nama),
+                'lokasi' => strtoupper($request->lokasi),
                 'surveyor' => Auth::user()->code_user,
                 'updated_at' => now(),
             ];
 
-            // $cek['catatan'] = 'BPKB' . '-' . $jenis_agunan . '-' . strtoupper($request->merek) . '-' . $request->tipe_kendaraan . '-' . $request->no_rangka . '-' . $request->no_mesin . '-' . $request->no_polisi . '-' . $request->no_dokumen . '-' . $request->warna . '-' . strtoupper($request->atas_nama) . '-' . $request->lokasi;
+            if ($request->jenis_agunan_kode == '02') {
+                $jenis_agunan = 'KENDARAAN RODA 2';
+            } elseif ($request->jenis_agunan_kode == '03') {
+                $jenis_agunan = 'KENDARAAN RODA 4';
+            } elseif (is_null($request->jenis_agunan_kode)) {
+                $jenis_agunan = null;
+            }
+
+            $nilai['catatan'] = 'BPKB' . ' ' . $jenis_agunan . ', ' . strtoupper($request->merek) . ', ' . ' ' . strtoupper($request->tipe_kendaraan) . ', ' . strtoupper($request->tahun) . ', ' . strtoupper($request->no_rangka) . ', ' . strtoupper($request->no_mesin) . ', ' . strtoupper($request->no_polisi) . ', ' . strtoupper($request->no_dokumen) . ', ' . strtoupper($request->warna) . ', ' . strtoupper($request->atas_nama) . ', ' . strtoupper($request->lokasi);
+
             DB::table('data_jaminan')->where('id', $request->id)->update($nilai);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
@@ -318,9 +338,15 @@ class AnalisaJaminanController extends Controller
                 'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
                 'tgl_taksasi' => $tgl_taksasi,
+                'no_dokumen' => $request->no_dok,
+                'atas_nama' => $request->atas_nama,
+                'luas' => $request->luas,
+                'lokasi' => $request->lokasi,
                 'surveyor' => Auth::user()->code_user,
                 'updated_at' => now(),
             ];
+
+            $data['catatan'] = 'SERTIFIKAT ' . strtoupper($request->jenis_agunan) . ' NO ' . strtoupper($data['no_dokumen']) . ', LUAS ' . strtoupper($data['luas']) . ' M2, ' . 'ATAS NAMA ' . strtoupper($data['atas_nama']) . ', ALAMAT ' . strtoupper($data['lokasi']);
 
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
             return redirect()->back()->with('success', 'Berhasil melakukan perubahan');
@@ -334,7 +360,7 @@ class AnalisaJaminanController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-            $cek = Midle::analisa_usaha($enc);
+            $data = Midle::analisa_usaha($enc);
             $au = DB::table('data_pengajuan')
                 ->join('data_jaminan', 'data_pengajuan.kode_pengajuan', '=', 'data_jaminan.pengajuan_kode')
                 ->join('data_jenis_agunan', 'data_jaminan.jenis_agunan_kode', '=', 'data_jenis_agunan.kode')
@@ -355,7 +381,7 @@ class AnalisaJaminanController extends Controller
             return view('staff.analisa.jaminan.lainnya', [
                 'jenis_lain' => $jenis_lain,
                 'data_lain' => $data_lain,
-                'data' => $cek[0],
+                'data' => $data[0],
                 'jaminan' => $au,
                 'dati' => $kab,
             ]);
@@ -385,14 +411,17 @@ class AnalisaJaminanController extends Controller
                 $tgl_taksasi = null;
             }
             $data = [
-                'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar) ?? 0,
+                'nilai_pasar' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_pasar),
                 'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_taksasi) ?? 0,
                 'no_dokumen' => strtoupper($request->no_dok),
                 'tgl_taksasi' => $tgl_taksasi,
+                'atas_nama' => strtoupper($request->nama),
+                'lokasi' => strtoupper($request->lokasi),
                 'surveyor' => Auth::user()->code_user,
                 'updated_at' => now(),
                 'catatan' => $request->catatan,
             ];
+            $data['catatan'] = strtoupper($request->jenis_agunan) . ' ATAS NAMA ' . strtoupper($data['atas_nama']) . ' NO ' . strtoupper($data['no_dokumen']) . ' ALAMAT ' . strtoupper($data['lokasi']);
 
             DB::table('data_jaminan')->where('id', $request->id)->update($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');

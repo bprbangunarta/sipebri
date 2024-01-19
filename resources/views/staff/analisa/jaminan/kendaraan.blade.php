@@ -218,8 +218,10 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">JENIS AGUNAN</span>
                                         <input type="text" id="id" name="id" hidden>
+                                        <input type="text" id="kode" name="jenis_agunan_kode" hidden>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Kendaraan Bermotor Roda 2" id="jenis" readonly>
+                                            value="Kendaraan Bermotor Roda 2" id="jenis" name="jenis_agunan"
+                                            readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
@@ -230,31 +232,31 @@
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">MEREK KENDARAAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Honda" id="merk">
+                                            value="Honda" id="merk" name="merek">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">TIPE KENDARAAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Motor Metik" id="tipe">
+                                            value="Motor Metik" id="tipe" name="tipe_kendaraan">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">TAHUN KENDARAAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="2020" id="tahun_kendaraan">
+                                            value="2020" id="tahun_kendaraan" name="tahun">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR RANGKA</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="BDAS594168" id="no_rangka">
+                                            value="BDAS594168" id="no_rangka" name="no_rangka">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR MESIN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="458131564616" id="no_mesin">
+                                            value="458131564616" id="no_mesin" name="no_mesin">
                                     </div>
                                 </div>
 
@@ -262,31 +264,31 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">NOMOR POLISI</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="T 4414 YB" id="no_polisi">
+                                            value="T 4414 YB" id="no_polisi" name="no_polisi">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">NOMOR BPKB</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="P007772168" id="no_dok">
+                                            value="P007772168" id="no_dok" name="no_dokumen">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">WARNA KENDARAAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Hitam" id="warna">
+                                            value="Hitam" id="warna" name="warna">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PEMILIK KENDARAAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="ZULFADLI RIZAL" id="nama">
+                                            value="ZULFADLI RIZAL" id="nama" name="atas_nama">
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">LOKASI KENDARAAN</span>
                                         <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            id="lok">
+                                            id="lok" name="lokasi">
                                     </div>
 
                                     <div style="margin-top: 5px;">
