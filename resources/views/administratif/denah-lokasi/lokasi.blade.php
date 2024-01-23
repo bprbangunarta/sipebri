@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Cetak Denah Lokasi</title>
     <style>
         @page {
@@ -105,29 +107,47 @@
             </tr>
         </table>
         <br>
-        <div style="margin-top: 50px;">
-            <div class="row">
-                <div class="col col-md-2">
-                    <img src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}" width="100" height="100"
-                        style="margin-top:-30px;">
-                </div>
-            </div>
-        </div>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <div class="col">
+        <br>
+        <div class="row">
+            <div class="col-sm-5 mt-3">
                 <div class="card">
-                    <img src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}" width="100" height="100"
-                        style="margin-top:-30px;">
+                    @if (!is_null($data->latitude) || !is_null($data->longitude))
+                        <img class="card-img-top" src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}">
+                    @else
+                        <img class="card-img-top" src="{{ asset('assets/img/lokasi.png') }}">
+                    @endif
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.</p>
+                        <h5 class="card-title"><b>LOKASI RUMAH</b></h5>
+                        {{ $data->alamat_ktp }}
                     </div>
                 </div>
             </div>
+            @forelse ($lokasi_usaha as $item)
+                <div class="col-sm-5 mt-3">
+                    <div class="card">
+                        @if ($data->alamat_ktp === $item->lokasi_usaha)
+                            @if (!is_null($data->latitude) || !is_null($data->longitude))
+                                <img class="card-img-top"
+                                    src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}">
+                            @else
+                                <img class="card-img-top" src="{{ asset('assets/img/lokasi.png') }}">
+                            @endif
+                        @else
+                            <img class="card-img-top" src="{{ asset('assets/img/lokasi.png') }}">
+                        @endif
+                        <div class="card-body">
+                            <h6 class="card-title"><b>{{ $item->nama_usaha }}</b></h6>
+                            {{ $data->alamat_ktp }}
+                        </div>
+                    </div>
+                </div>
+            @empty
+            @endforelse
         </div>
-        {{-- <div id="map" style="height: 200px;"></div> --}}
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
     <script>
         window.print();
     </script>

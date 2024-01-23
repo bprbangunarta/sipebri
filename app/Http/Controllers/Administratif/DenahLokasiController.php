@@ -24,24 +24,25 @@ class DenahLokasiController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
 
             ->where('data_pengajuan.on_current', '0')
+            ->whereNotNull('data_survei.foto')
 
             ->where(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', $user)
                     ->orWhere('data_survei.kasi_kode', $user)
                     ->where(function ($subquery) {
-                        $subquery->where('data_pengajuan.tracking', 'Proses Survei')
-                            ->orWhere('data_pengajuan.tracking', 'Proses Analisa')
+                        $subquery->where('data_pengajuan.tracking', 'Proses Analisa')
                             ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
                             ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
                             ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
                             ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
+                            ->orWhere('data_pengajuan.tracking', 'Realisasi')
                             ->orWhere('data_pengajuan.status', 'Disetujui');
                     });
             })
 
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
                     ->orWhere('users.name', 'like', '%' . $keyword . '%')
@@ -89,20 +90,20 @@ class DenahLokasiController extends Controller
             $enc = Crypt::decrypt($kode);
             $user = Auth::user()->code_user;
             $data = DB::table('data_survei')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', 'data_survei.pengajuan_kode')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', 'data_pengajuan.nasabah_kode')
-                ->join('v_users', 'v_users.code_user', 'data_survei.surveyor_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', 'data_survei.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', 'data_pengajuan.nasabah_kode')
+                ->leftJoin('v_users', 'v_users.code_user', 'data_survei.surveyor_kode')
 
                 ->where(function ($query) use ($user) {
                     $query->where('data_survei.surveyor_kode', $user)
                         ->where(function ($subquery) {
-                            $subquery->where('data_pengajuan.tracking', 'Proses Survei')
-                                ->orWhere('data_pengajuan.tracking', 'Proses Analisa')
+                            $subquery->orWhere('data_pengajuan.status', 'Disetujui')
                                 ->orWhere('data_pengajuan.tracking', 'Persetujuan Komite')
+                                ->orWhere('data_pengajuan.tracking', 'Proses Analisa')
                                 ->orWhere('data_pengajuan.tracking', 'Naik Kasi')
                                 ->orWhere('data_pengajuan.tracking', 'Naik Komite I')
                                 ->orWhere('data_pengajuan.tracking', 'Naik Komite II')
-                                ->orWhere('data_pengajuan.status', 'Disetujui');
+                                ->orWhere('data_pengajuan.tracking', 'Realisasi');
                         });
                 })
 
@@ -116,16 +117,46 @@ class DenahLokasiController extends Controller
                 ->where('data_survei.pengajuan_kode', $enc)
                 ->get();
 
-            // $usaha_pertanian = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
-            // $usaha_perdagangan = DB::table('au_perdagangan')->where('pengajuan_kode', $enc)->get();
-            // $usaha_jasa = DB::table('au_jasa')->where('pengajuan_kode', $enc)->get();
-            // $usaha_lain = DB::table('au_lainnya')->where('pengajuan_kode', $enc)->get();
+            $usaha_pertanian = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
+            $usaha_perdagangan = DB::table('au_perdagangan')->where('pengajuan_kode', $enc)->get();
+            $usaha_jasa = DB::table('au_jasa')->where('pengajuan_kode', $enc)->get();
+            $usaha_lain = DB::table('au_lainnya')->where('pengajuan_kode', $enc)->get();
 
-            $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah);
-            dd($data[0]);
+            if (count($data) != 0) {
+                if (!is_null($data[0]->latitude) || !is_null($data[0]->longitude)) {
+                    $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah, $data[0]->latitude, $data[0]->longitude);
+                } else {
+                    $qr_lokasi_rumah = (object) [
+                        'latitude' => null,
+                        'longitude' => null,
+                    ];
+                }
+
+                $lokasi_usaha = [];
+                //Usaha Pertanian
+                foreach ($usaha_pertanian as $pertanian) {
+                    $lokasi_usaha[] = $pertanian;
+                }
+                //Usaha Perdagangan
+                foreach ($usaha_perdagangan as $perdagangan) {
+                    $lokasi_usaha[] = $perdagangan;
+                }
+                //Usaha Jasa
+                foreach ($usaha_jasa as $jasa) {
+                    $lokasi_usaha[] = $jasa;
+                }
+                //Usaha Lain
+                foreach ($usaha_lain as $lain) {
+                    $lokasi_usaha[] = $lain;
+                }
+            } else {
+                return redirect()->back()->with('error', 'Data Tidak Ditemukan');
+            }
+            // dd($lokasi_usaha);
             return view('administratif.denah-lokasi.lokasi', [
                 'data' => $data[0],
                 'qr_lokasi_rumah' => $qr_lokasi_rumah,
+                'lokasi_usaha' => $lokasi_usaha,
             ]);
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');

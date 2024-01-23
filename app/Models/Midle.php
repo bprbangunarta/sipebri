@@ -1437,7 +1437,7 @@ class Midle extends Model
         return $imgname;
     }
 
-    public static function get_qrcode_denah($data, $text, $user)
+    public static function get_qrcode_denah($data, $text, $user, $lat, $long)
     {
 
         $carbon = Carbon::now();
@@ -1448,26 +1448,26 @@ class Midle extends Model
         $imgname = $text . '_' . $data . '_' . $user . '_' . $tgl . '.png';
         $imgpath = $strpath . '/' . $imgname;
 
-        $data_url = $text . '_' . $data . '_' . $user;
+        $data_url = $lat . '_' . $long;
 
         // URL dan QR Code dari Google Chart API
         // $url = 'http://sipebri.bprbangunarta.co.id/verifikasi?qrcode=' . $data_url;
         $url = 'http://127.0.0.1:8000/lokasi?qrcode=' . $data_url;
 
         $logoPath = public_path('assets/img/favicon2.png');
-        // QrCode::size(300)
-        //     ->format('png')
-        //     ->errorCorrection('H')
-        //     ->merge($logoPath, 0.3, true)
-        //     ->generate($url, $imgpath);
-
         QrCode::size(300)
-            ->style('dot')
-            ->eye('circle')
             ->format('png')
             ->errorCorrection('H')
             ->merge($logoPath, 0.3, true)
             ->generate($url, $imgpath);
+
+        // QrCode::size(300)
+        //     ->style('dot')
+        //     ->eye('circle')
+        //     ->format('png')
+        //     ->errorCorrection('H')
+        //     ->merge($logoPath, 0.3, true)
+        //     ->generate($url, $imgpath);
 
 
         return $imgname;
