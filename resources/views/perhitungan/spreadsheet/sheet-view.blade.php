@@ -50,7 +50,8 @@
                                 <td style="width: 15%;">Plafond Kredit</td>
                                 <td style="text-align:center;">:</td>
                                 <td style="width: 18%;">
-                                    {{ 'Rp ' . number_format($data[8][4], 0, ',', '.') }}</td>
+                                    {{-- {{ 'Rp ' . number_format($data[8][4], 0, ',', '.') }}</td> --}}
+                                    {{ 'Rp ' . $data[8][4] }}</td>
                                 <td style="width: 11%;">Tgl. Lahir</td>
                                 <td style="text-align:left;">:</td>
                                 <td style="width: 18%;">{{ $data[8][8] }}</td>

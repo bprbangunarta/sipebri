@@ -35,7 +35,8 @@ class PerhitunganController extends Controller
         $sheetsService = new Google_Service_Sheets($client);
 
         // ID spreadsheet yang ingin Anda akses
-        $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
+        // $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
+        $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
         // dd($request->tgl_lahir);
         // $req = Carbon::createFromFormat('Y-m-d', $request->tgl_lahir);
         $tgl_lahir = $request->tgl_lahir;
@@ -140,7 +141,8 @@ class PerhitunganController extends Controller
 
         $sheetsService = new Google_Service_Sheets($client);
 
-        $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
+        // $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
+        $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
 
         $range = 'Asuransi Jiwa Kematian'; // Gantilah sesuai dengan nama sheet Anda
 
@@ -150,6 +152,7 @@ class PerhitunganController extends Controller
         $values = $response->getValues();
 
         // Lakukan sesuatu dengan data, seperti menampilkan di view
+        // dd($values);
         return view('perhitungan.spreadsheet.sheet-view', [
             'data' => $values,
         ]);
