@@ -37,7 +37,7 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
-                                        <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">TGL PENGAJUAN</th>
                                         <th class="text-center">KODE</th>
                                         <th class="text-center">NAMA LENGKAP</th>
                                         <th class="text-center">ALAMAT</th>

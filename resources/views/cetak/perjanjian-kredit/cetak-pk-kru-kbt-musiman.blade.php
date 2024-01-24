@@ -176,7 +176,8 @@
             BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
             <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font> ( <font
                 class="text-hg" style="text-transform: capitalize;">
-                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> ) yang akan dipindah bukukan
+                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah) yang akan dipindah
+            bukukan
             kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
         </p>
 
@@ -188,17 +189,19 @@
             Atas pinjaman tersebut diatas, PEMINJAM wajib membayar kepada BANK :
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                <font class="text-hg">Bunga sebesar : {{ $data->suku_bunga }} %</font> per tahun dihitung secara
+                <font class="text-hg">Bunga sebesar : {{ $data->suku_bunga }}%</font> per tahun dihitung secara
                 menurun setiap bulannya.
             </li>
             <li>
                 <font class="text-hg">Provisi sebesar {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},-
                 </font> ( <font class="text-hg" style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> ) <font class="text-hg">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> Rupiah) <font
+                    class="text-hg">
                     dan Biaya Administrasi
                     sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},</font>- ( <font
                     class="text-hg" style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}</font> ) didebetkan dari
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}</font> Rupiah) didebetkan
+                dari
                 Rekening Tabungan PEMINJAM yang ada pada BANK.
             </li>
         </ol>

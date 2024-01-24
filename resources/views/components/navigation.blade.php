@@ -290,13 +290,13 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('themes/denah/lokasi') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('themes/denah/lokasi') ? 'active' : '' }}">
                         <a @can('survey dan analisa') href="{{ route('denah.lokasi') }}" @endcan
                             title="Check Kendaraan & Lokasi">
                             <i class="fa fa-map" aria-hidden="true"></i>
                             Denah Lokasi
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
 
