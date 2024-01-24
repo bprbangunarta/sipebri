@@ -12,7 +12,7 @@ class CheckListKendaraanController extends Controller
 {
     public function index()
     {
-        return view('analisa.check-list-kendaraan.index');
+        return view('cetak-berkas.check-list-kelengkapan.index');
     }
 
     public function report_kih()

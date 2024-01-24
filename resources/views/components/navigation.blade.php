@@ -217,7 +217,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/analisa/check/kendaraan', 'themes/denah/lokasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/denah/lokasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -282,14 +282,6 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('themes/analisa/check/kendaraan') ? 'active' : '' }}">
-                        <a @can('survey dan analisa') href="{{ route('index.check_kendaraan') }}" @endcan
-                            title="Check Kendaraan & Lokasi">
-                            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-                            Check List Kelengkapan
-                        </a>
-                    </li>
-
                     {{-- <li class="{{ request()->is('themes/denah/lokasi') ? 'active' : '' }}">
                         <a @can('survey dan analisa') href="{{ route('denah.lokasi') }}" @endcan
                             title="Check Kendaraan & Lokasi">
@@ -301,7 +293,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', '') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -324,6 +316,14 @@
                             title="Cetak Analisa Kredit">
                             <i class="fa fa-suitcase"></i>
                             Analisa Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/analisa/check/kelengkapan') ? 'active' : '' }}">
+                        <a @can('survey dan analisa') href="{{ route('index.check_kelengkapan') }}" @endcan
+                            title="Check Kelengkapan">
+                            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                            Check List Kelengkapan
                         </a>
                     </li>
 

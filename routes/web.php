@@ -511,7 +511,7 @@ Route::middleware('auth')->group(function () {
 
         //Check List Kendaraan
         Route::controller(CheckListKendaraanController::class)->group(function () {
-            Route::get('/analisa/check/kendaraan', 'index')->name('index.check_kendaraan');
+            Route::get('/analisa/check/kelengkapan', 'index')->name('index.check_kelengkapan');
             Route::get('/report/kih', 'report_kih')->name('report.kih');
             Route::get('/report/kko', 'report_kko')->name('report.kko');
             Route::get('/report/kpj', 'report_kpj')->name('report.kpj');

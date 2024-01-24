@@ -10,7 +10,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-edit"></i>
-                            <h3 class="box-title">DATA CHECK LIST KENDARAAN</h3>
+                            <h3 class="box-title">DATA CHECK LIST KELENGKAPAN</h3>
                         </div>
 
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
