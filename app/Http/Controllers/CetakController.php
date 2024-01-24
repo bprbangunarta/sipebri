@@ -421,16 +421,34 @@ class CetakController extends Controller
                     $query->where('data_pengajuan.kode_pengajuan', '=', $enc)
                         ->where('ja_kendaraan.jenis_agunan', '=', 'Kendaraan Roda 4');
                 })->get();
-            for ($i = 0; $i < count($data); $i++) {
-                $surveyor = DB::table('v_users')
-                    ->where('code_user', $data[$i]->surveyor_kode)
-                    ->select('nama_user', 'role_name')->get();
+            //
+            foreach ($data as $item) {
 
-                $thn = Carbon::now()->year;
-                $data[$i]->thn = $thn;
-                $data[$i]->nama_user = $surveyor[$i]->nama_user;
-                $data[$i]->role_name = $surveyor[$i]->role_name;
+                $surveyors = DB::table('v_users')
+                    ->where('code_user', $item->surveyor_kode)
+                    ->select('nama_user', 'role_name')
+                    ->get();
+
+                if ($surveyors->isNotEmpty()) {
+                    $thn = Carbon::now()->year;
+                    foreach ($surveyors as $index => $surveyor) {
+                        $item->thn = $thn;
+                        $item->nama_user = $surveyor->nama_user;
+                        $item->role_name = $surveyor->role_name;
+                    }
+                }
             }
+
+            // for ($i = 0; $i < count($data); $i++) {
+            //     $surveyor = DB::table('v_users')
+            //         ->where('code_user', $item->surveyor_kode)
+            //         ->select('nama_user', 'role_name')->get();
+
+            //     $thn = Carbon::now()->year;
+            //     $data[$i]->thn = $thn;
+            //     $data[$i]->nama_user = $surveyor[$i]->nama_user;
+            //     $data[$i]->role_name = $surveyor[$i]->role_name;
+            // }
 
             return view('cetak.layouts.mobil', [
                 'data' => $data

@@ -71,14 +71,18 @@
             .content {
                 padding: 1.5cm;
             }
+
+            .page-break {
+                page-break-before: always;
+            }
         }
     </style>
 </head>
 
 <body>
     @forelse ($data as $item)
+        <div class="page-break"></div>
         <div class="content" style="margin-top: -10px;">
-
             <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
             <hr style="border: 1px solid 034871;">
 
