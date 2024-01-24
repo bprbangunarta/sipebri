@@ -58,10 +58,10 @@ $(document).ready(function () {
                 var pal = hasil.plafon;
                 var pl = formatRupiah(pal);
                 $("#plafon").val("Rp. " + " " + pl);
-                $("#provisi").val(hasil.b_provisi);
+                $("#provisi").val(hasil.b_provisi) ?? 0;
                 $("#bunga").val(hasil.suku_bunga);
-                $("#admin").val(hasil.b_admin);
-                console.log(response);
+                $("#admin").val(hasil.b_admin) ?? 0;
+
                 //Persetujuan
                 if (kategori === "RELOAN") {
                     if (role === "Staff Analis") {
@@ -78,6 +78,7 @@ $(document).ready(function () {
                         ];
                     } else if (role == "Direksi") {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
@@ -90,6 +91,7 @@ $(document).ready(function () {
                         pal <= 10000000
                     ) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
@@ -106,6 +108,7 @@ $(document).ready(function () {
                         pal <= 10000000
                     ) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
@@ -122,6 +125,7 @@ $(document).ready(function () {
                         pal <= 10000000
                     ) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
@@ -138,12 +142,14 @@ $(document).ready(function () {
                         pal <= 35000000
                     ) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
                     } else if (role == "Kasi Analis" && pal > 35000000) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Naik Komite I", text: "Naik Komite I" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
@@ -156,6 +162,7 @@ $(document).ready(function () {
                         pal <= 75000000
                     ) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
@@ -170,6 +177,7 @@ $(document).ready(function () {
 
                     if (role === "Direksi" && pal > 75000000) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
