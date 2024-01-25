@@ -285,8 +285,15 @@
                     <td class="text-center" width="2%"></td>
                     <td width="27%">d. APHT</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">{{ $data->persen_apht }} %
-                        {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}</td>
+                    <td style="text-align: justify;">
+                        {{-- {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }}
+                        ({{ number_format($data->persen_apht, 2, '.', '') }}%) --}}
+                        @php
+                            $persentase = ($data->proses_apht / $data->plafon) * 100;
+                            $rate_apht = number_format($persentase, 2, '.', '');
+                        @endphp
+                        {{ 'Rp. ' . '' . number_format($data->proses_apht, 0, ',', '.') ?? 0 }} ({{ $rate_apht }}%)
+                    </td>
                 </tr>
             @elseif ($data->proses_apht != 0 && $data->by_fiducia != 0)
                 <tr>
