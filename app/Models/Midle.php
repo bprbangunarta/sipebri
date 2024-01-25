@@ -1394,7 +1394,7 @@ class Midle extends Model
         // Simpan QR Code dari Google Chart API
         // file_put_contents($imgpath, file_get_contents($chartUrl));
 
-        $logoPath = public_path('assets/img/favicon.png');
+        $logoPath = public_path('assets/img/favicon2.png');
         QrCode::size(300)
             ->format('png')
             ->errorCorrection('H')
