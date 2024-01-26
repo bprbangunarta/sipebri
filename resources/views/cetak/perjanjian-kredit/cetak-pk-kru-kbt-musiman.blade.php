@@ -214,15 +214,32 @@
             </center>
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh PEMINJAM kepada BANK (
-                selanjutnya disebut angsuran ) wajib dilakukan oleh PEMINJAM secara bulanan dalam
-                <font class="text-hg">{{ $data->jwt }}</font> ( <font class="text-hg"
+                Pembayaran angsuran pokok yang terhutang oleh PEMINJAM kepada BANK wajib dilakukan oleh PEMINJAM
+                secara <font class="text-hg">{{ $data->jangka_pokok }}</font> ( <font class="text-hg"
                     style="text-transform: capitalize;">
-                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jwt) }}</font> ) <font class="text-hg">kali
-                    angsuran</font> setiap tanggal {{ $data->tgl_jth }} ( selanjutnya disebut tanggal angsuran ) yang
-                dimulai
-                pada ​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga berakhir pada tanggal
-                {{ $data->tgl_jth_tmp }}.
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_pokok) }}</font> ) bulanan yang
+                dimulai pada tanggal <font class="text-hg">{{ $data->tgl_jth_pokok }}</font> sebanyak
+                <font class="text-hg"> {{ $data->banyak_bulan }}</font> ( <font class="text-hg"
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->banyak_bulan) }}</font> ) kali angsuran,
+                selama jangka waktu kredit ( <font class="text-hg">{{ $data->jwt }}</font> bulan), pembayaran bunga
+                kredit yang terhutang oleh PEMINJAM kepada BANK wajib dilakukan oleh
+                PEMINJAM secara @if ($data->jangka_bunga == '1')
+                @else
+                    <font class="text-hg"> {{ $data->jangka_bunga }}</font> ( <font class="text-hg"
+                        style="text-transform: capitalize;">
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_bunga) }}</font> )
+                @endif bulanan sebanyak <font class="text-hg">{{ $data->jumlah_bulan }}</font> (
+                <font class="text-hg" style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jumlah_bulan) }}</font> )
+                kali setiap tanggal <font class="text-hg"> {{ $data->tgl_jth }}</font> ( <font class="text-hg"
+                    style="text-transform: capitalize;">
+                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tgl_jth) }}</font> )
+                ( selanjutnya disebut tanggal angsuran ) yang dimulai pada tanggal <font class="text-hg">
+                    {{ $data->tgl_bln_thn_tempo }}</font> dan demikian
+                seterusnya hingga berakhir pada tanggal <font class="text-hg">
+                    {{ $data->tgl_jth_tmp }}</font>
+
             </li>
             <li>
                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran sebagaimana
@@ -336,18 +353,28 @@
         <p style="text-align: justify;">
             <center>
                 Pasal 7 <br>
-                PEMANTAUAN PINJAMAN
+                KEWENANGAN BANK
             </center>
-            PEMINJAM dengan ini mengijinkan kepada BANK bahwa selama PEMINJAM karena sebab apapun juga masih berhutang
-            kepada BANK maka PEMINJAM :
+            PEMINJAM karena sebab apapun juga masih berhutang kepada BANK, dengan ini menyetujui dan mengizinkan BANK:
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                Mengizinkan wakil-wakil BANK yang sah untuk memeriksa keadaan usaha PEMINJAM dan keadaan adanya
-                barang-barang yang dijaminkan kepada BANK, apabila hal ini dianggap perlu oleh BANK.
+                Memeriksa keadaan usaha PEMINJAM dan memasuki atau memeriksa keberadaan atau fisik agunan-agunan baik
+                dalam rangka penilaian kembali maupun dalam rangka pemeriksaan dan pengawasan (monitoring), apabila hal
+                ini dianggap perlu oleh BANK.
             </li>
             <li>
-                Menyampaikan kepada BANK informasi sebenar-benarnya dan selengkap-lengkapnya tentang kondisi usaha dan
-                atau barang jaminan kepada BANK.
+                Menelepon dan/atau mengunjungi PEMINJAM atau pasangan PEMINJAM tanpa pembatasan jam/waktu dan hari;
+                pada nomor telepon PEMINJAM atau pasangan PEMINJAM; pada domisili yang telah ditetapkan dalam Perjanjian
+                Kredit ini, atau pada tempat/domisili senyatanya PEMINJAM atau pengganti PEMINJAM atau pada tempat
+                tinggal lain yang diketahui oleh BANK.
+            </li>
+            <li>
+                Apabila PEMINJAM sulit dihubungi atau sulit ditemui pada nomor telepon PEMINJAM/pasangan PEMINJAM
+                atau pada domisili yang telah dipilih dalam Perjanjian Kredit ini atau domisili nyata PEMINJAM yang
+                diketahui oleh BANK, BANK dapat menghubungi dan/atau menemui PEMINJAM/pasangan PEMINJAM pada nomor atau
+                pada tempat kerja/perusahaan PEMINJAM/pasangan PEMINJAM, satu dan lain untuk menjaga kesinambungan
+                komunikasi atau efektivitas pemberitahuan/penyampaian informasi yang berkaitan dengan pinjaman,
+                pengelolaan pinjaman dan/atau jaminan/agunan, atau proses penyelesaian pinjaman/agunan.
             </li>
         </ol>
         </p>
@@ -388,18 +415,25 @@
                 PARA PIHAK sepakat menyatakan PEMINJAM dalam keadaan ingkar janji.
             </li>
             <li>
-                Apabila PEMINJAM telah ingkar janji maka BANK berhak melakukan penagihan melalui telephone dan atau
-                kunjungan ke PEMINJAM dan atau dengan mengirimkan surat pemberitahuan dan atau surat panggilan dan atau
-                surat teguran dan atau surat peringatan dan atau surat somasi kepada PEMINJAM.
+                Apabila PEMINJAM telah ingkar janji maka BANK berhak melakukan kunjungan atau penagihan melalui
+                telepon dan/atau kunjungan dan/atau dengan mengirimkan surat pemberitahuan dan/atau surat panggilan
+                dan/atau surat teguran dan/atau surat peringatan dan/atau surat somasi kepada PEMINJAM.
+            </li>
+
+            <li>
+                Bilamana PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak untuk melakukan
+                tindakan hukum yang diperlukan sesuai ketentuan yang berlaku, baik yang diatur dalam perjanjian ini,
+                maupun yang diatur oleh Undang-Undang terkait dengan jaminan / agunan.
+            </li>
+            <li>
+                Tindakan hukum sebagaimana Pasal 8 ayat 3 dalam perjanjian ini termasuk namun tidak terbatas diantaranya
+                pengalihan piutang atasnama PEMINJAM oleh BANK kepada Kreditur Baru.
             </li>
 
             <!-- JIKA AGUNAN KENDARAAN DAN TANAH GUNAKAN SEMUA -->
 
             @forelse ($agunan as $item)
-                @if (
-                    ($item->jenis_jaminan == 'Kendaraan' && $item->jenis_jaminan == 'Tanah') ||
-                        $item->jenis_jaminan == 'Kendaraan' ||
-                        $item->jenis_jaminan == 'Lainnya')
+                @if ($item->jenis_jaminan == 'Kendaraan')
                     <li>
                         Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak melakukan
                         pengamanan
@@ -408,7 +442,7 @@
                 @endif
 
                 <!-- JIKA AGUNAN TANAH SAJA -->
-                @if (($item->jenis_jaminan == 'Kendaraan' && $item->jenis_jaminan == 'Tanah') || $item->jenis_jaminan == 'Tanah')
+                @if ($item->jenis_jaminan == 'Tanah')
                     <li>
                         Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi ijin kepada BANK
                         untuk
@@ -421,15 +455,6 @@
             @empty
             @endforelse
 
-            <li>
-                Bilamana PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak untuk melakukan
-                tindakan hukum yang diperlukan sesuai ketentuan yang berlaku, baik yang diatur dalam perjanjian ini,
-                maupun yang diatur oleh Undang-Undang terkait dengan jaminan / agunan.
-            </li>
-            <li>
-                Tindakan hukum sebagaimana Pasal 8 ayat 4 dalam perjanjian ini termasuk namun tidak terbatas diantaranya
-                pengalihan piutang atasnama PEMINJAM oleh BANK kepada Kreditur Baru.
-            </li>
             <li>
                 Bahwa PEMINJAM dengan ini menyetujui dan sepakat untuk memberikan hak sepenuhnya kepada BANK untuk
                 menyerahkan piutang (Cessie) dan/atau tagihan BANK terhadap PEMINJAM berikut semua janji-janji

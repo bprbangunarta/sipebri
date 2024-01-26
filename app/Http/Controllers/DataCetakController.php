@@ -1155,9 +1155,9 @@ class DataCetakController extends Controller
                 $targetDate = $carbonUpdatedAt;
             }
 
-            $now = Carbon::today();
             $cek->tgl_bln_thn = $targetDate->isoformat('D MMMM Y');
             $targetDate->addMonths(1);
+
             $cek->tgl_bln_thn_tempo = $targetDate->isoformat('D MMMM Y');
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
@@ -1174,8 +1174,6 @@ class DataCetakController extends Controller
                 $targetDate = $carbonUpdatedAt;
             }
 
-
-            // $targetDate = Carbon::now();
             $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
             $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
             $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
@@ -1189,8 +1187,9 @@ class DataCetakController extends Controller
             if (is_null($cek->administrasi)) {
                 $cek->administrasi = 0.00;
             }
+            $cek->b_denda = number_format((float)$cek->b_denda, 2, ',', '');
 
-
+            // dd($cek_jaminan);
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
@@ -1217,7 +1216,40 @@ class DataCetakController extends Controller
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
                 ]);
-            } elseif ($cek->produk_kode == 'KRU' || $cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
+            } elseif (($cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') || $cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
+
+
+                $tgl_update = $cek->update_spk;
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::now();
+                } else {
+                    $targetDate = $carbonUpdatedAt;
+                }
+
+                $targetDate->addMonths($cek->jangka_pokok);
+                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
+                $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
+                $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
+                $cek->tgl_jth_tmp = $formattedDate;
+
+
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::now();
+                } else {
+                    $targetDate = $carbonUpdatedAt;
+                }
+
+                // $targettgl = Carbon::now();
+                $targetDate->addMonths($cek->jangka_pokok);
+                $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
+
+
+                $cek->banyak_bulan = $cek->jwt / $cek->jangka_pokok;
+                $cek->jumlah_bulan = $cek->jwt / $cek->jangka_bunga;
+                $cek->tgl_pokok = $cek->jwt / $cek->jangka_bunga;
+
 
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-kbt-musiman', [
                     'data' => $cek,

@@ -267,7 +267,7 @@
 
             @if ($data->kode_resort == '091')
                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam kerja dengan
-                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalty pelunasan sebesar <font
+                cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalti pelunasan sebesar <font
                     class="text-center">1(satu) angsuran
                     bunga serta hutang denda</font>.
             @else
@@ -281,40 +281,37 @@
         <p style="text-align: justify;">
             <center>
                 Pasal 6 <br>
-                PEMANTAUAN PINJAMAN
+                KEWENANGAN BANK
             </center>
-            PEMINJAM dengan ini mengijinkan kepada BANK bahwa selama PEMINJAM karena sebab apapun juga masih berhutang
-            kepada BANK maka PEMINJAM :
+            PEMINJAM karena sebab apapun juga masih berhutang kepada BANK, dengan ini menyetujui dan mengizinkan BANK:
         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
             <li>
-                PEMINJAM bersedia untuk melakukan pembayaran angsuran sebagaimana dimaksud pada Pasal 3 Ayat 1 dengan
-                cara pemotongan gaji PEMINJAM.
+                Memotong gaji PEMINJAM, untuk keperluan PEMINJAM menyerahkan kepada BANK Surat Kuasa Pemotongan Gaji
+                dari PEMINJAM kepada Pihak Yang ditunjuk oleh BANK, termasuk tetapi tidak terbatas pada pemotongan gaji
+                bulanan dan tunjangan-tunjangan lainnya.
             </li>
             <li>
-                Untuk keperluan tersebut pada Pasal 6 Ayat 1 di atas, PEMINJAM akan menyerahkan kepada BANK, Surat Kuasa
-                Pemotongan Gaji dari PEMINJAM kepada Pihak Yang ditunjuk oleh BANK, termasuk tetapi tidak terbatas pada
-                pemotongan gaji bulanan dan tunjangan-tunjangan lainnya.
+                Mengambil/memotong gaji bulanan PEMINJAM dengan jumlah yang sesuai dan telah diatur pada Pasal 3
+                perjanjian ini, dan/atau dengan jumlah yang merupakan total kewajiban pembayaran PEMINJAM kepada BANK
+                apabila PEMINJAM melakukan kelalaian atau wanprestasi.
             </li>
             <li>
-                PEMINJAM memberi kuasa/hak kepada BANK untuk :
-                <ol type="a" style="margin-left: -25px;">
-                    <li>
-                        Mengambil/memotong gaji bulanan PEMINJAM dengan jumlah yang sesuai dan telah diatur pada Pasal 3
-                        Ayat perjanjian ini, dan/atau dengan jumlah yang merupakan total kewajiban pembayaran PEMINJAM
-                        kepada BANK apabila PEMINJAM melakukan kelalaian atau wanprestasi.
-                    </li>
-                    <li>
-                        Menghadap kepada pihak yang berkompeten untuk meminta informasi tentang penghasilan PEMINJAM dan
-                        informasi lain yang dinilai perlu dan berhubungan dengan kredit PEMINJAM pada BANK.
-                    </li>
-                </ol>
+                Menghadap kepada pihak yang berkompeten untuk meminta informasi tentang penghasilan PEMINJAM dan
+                informasi lain yang dinilai perlu dan berhubungan dengan kredit PEMINJAM pada BANK.
             </li>
             <li>
-                PEMINJAM mengizinkan wakil-wakil BANK yang sah untuk memeriksa keadaan usaha PEMINJAM
+                Menelepon dan/atau mengunjungi PEMINJAM atau pasangan PEMINJAM tanpa pembatasan jam/waktu dan hari;
+                pada nomor telepon PEMINJAM atau pasangan PEMINJAM; pada domisili yang telah ditetapkan dalam Perjanjian
+                Kredit ini, atau pada tempat/domisili senyatanya PEMINJAM atau pengganti PEMINJAM atau pada tempat
+                tinggal lain yang diketahui oleh BANK.
             </li>
             <li>
-                PEMINJAM akan menyampaikan kepada BANK, informasi yang sebenar-benarnya dan selengkap-lengkapnya tentang
-                kondisi usaha dan atau perubahan-perubahan atas barang jaminan.
+                Apabila PEMINJAM sulit dihubungi atau sulit ditemui pada nomor telepon PEMINJAM/pasangan PEMINJAM
+                atau pada domisili yang telah dipilih dalam Perjanjian Kredit ini atau domisili nyata PEMINJAM yang
+                diketahui oleh BANK, BANK dapat menghubungi dan/atau menemui PEMINJAM/pasangan PEMINJAM pada nomor atau
+                pada tempat kerja/perusahaan PEMINJAM/pasangan PEMINJAM, satu dan lain untuk menjaga kesinambungan
+                komunikasi atau efektivitas pemberitahuan/penyampaian informasi yang berkaitan dengan pinjaman,
+                pengelolaan pinjaman dan/atau jaminan/agunan, atau proses penyelesaian pinjaman/agunan.
             </li>
         </ol>
         </p>
@@ -346,15 +343,20 @@
                 PARA PIHAK sepakat menyatakan PEMINJAM dalam keadaan ingkar janji.
             </li>
             <li>
-                Apabila PEMINJAM telah ingkar janji maka BANK berhak melakukan penagihan melalui telephone dan atau
-                kunjungan ke PEMINJAM dan atau dengan mengirimkan surat pemberitahuan dan atau surat panggilan dan atau
-                surat teguran dan atau surat peringatan dan atau surat somasi kepada PEMINJAM.
+                Apabila PEMINJAM telah ingkar janji maka BANK berhak melakukan kunjungan atau penagihan melalui
+                telepon dan/atau kunjungan dan/atau dengan mengirimkan surat pemberitahuan dan/atau surat panggilan
+                dan/atau surat teguran dan/atau surat peringatan dan/atau surat somasi kepada PEMINJAM.
             </li>
             <li>
                 Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK berhak melakukan pemotongan
                 gaji bulanan dan tunjangan-tunjangan lain milik PEMINJAM, sesuai jumlah kewajiban yang harus di bayar
                 dan atau melakukan tindakan hukum yang diperlukan sesuai ketentuan yang berlaku, baik yang diatur dalam
                 perjanjian ini, maupun dalam peraturan perundang-undangan yang berlaku.
+            </li>
+            <li>
+                Bahwa PEMINJAM dengan ini menyetujui dan sepakat untuk memberikan hak sepenuhnya kepada BANK untuk
+                menyerahkan piutang dan/atau tagihan BANK terhadap PEMINJAM berikut semua janji-janji accesoir-nya
+                kepada pihak lain yang ditetapkan BANK sendiri setiap saat jika diperlukan oleh BANK.
             </li>
         </ol>
         </p>
