@@ -1241,7 +1241,7 @@ class DataCetakController extends Controller
                     $targetDate = $carbonUpdatedAt;
                 }
 
-                // $targettgl = Carbon::now();
+
                 $targetDate->addMonths($cek->jangka_pokok);
                 $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
 
