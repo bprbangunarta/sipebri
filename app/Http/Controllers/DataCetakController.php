@@ -1227,12 +1227,11 @@ class DataCetakController extends Controller
                 }
 
                 $targetDate->addMonths($cek->jangka_pokok);
-                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - 6);
+                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - $cek->jangka_pokok);
                 $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
                 $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
                 $cek->tgl_jth_tmp = $formattedDate;
 
-                // dd($cek->tgl_jth_tmp);
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
                 if ($carbonUpdatedAt->equalTo(Carbon::now())) {
                     $targetDate = Carbon::now();
