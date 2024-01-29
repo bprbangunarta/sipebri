@@ -536,6 +536,7 @@ class CetakLaporanController extends Controller
             ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+            ->leftjoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
 
             ->select(
                 'data_pengajuan.created_at as tanggal',

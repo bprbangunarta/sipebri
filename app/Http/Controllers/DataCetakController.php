@@ -1218,7 +1218,6 @@ class DataCetakController extends Controller
                 ]);
             } elseif (($cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') || $cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
 
-
                 $tgl_update = $cek->update_spk;
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
                 if ($carbonUpdatedAt->equalTo(Carbon::now())) {
@@ -1228,12 +1227,12 @@ class DataCetakController extends Controller
                 }
 
                 $targetDate->addMonths($cek->jangka_pokok);
-                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
+                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - 6);
                 $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
                 $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
                 $cek->tgl_jth_tmp = $formattedDate;
 
-
+                // dd($cek->tgl_jth_tmp);
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
                 if ($carbonUpdatedAt->equalTo(Carbon::now())) {
                     $targetDate = Carbon::now();

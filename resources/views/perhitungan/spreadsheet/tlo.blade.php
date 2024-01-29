@@ -35,6 +35,7 @@
 
         @media print {
             @page {
+                width: 80%;
                 size: A4 landscape;
             }
         }
@@ -56,9 +57,11 @@
                             style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black;">
                             <b>Nama Debitur</b>
                         </td>
-                        <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><b>:</b></td>
+                        <td style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black;">
+                            <b>:</b>
+                        </td>
                         <td
-                            style="border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                            style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
                             <b>WAWA WIBAWA</b>
                         </td>
                         <td style="border-top: 1px solid rgb(255, 255, 255); border-bottom: 1px solid rgb(255, 255, 255);"

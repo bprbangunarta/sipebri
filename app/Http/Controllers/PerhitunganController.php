@@ -24,6 +24,11 @@ class PerhitunganController extends Controller
         return view('perhitungan.spreadsheet.index');
     }
 
+    public function simulasi_tlo()
+    {
+        return view('perhitungan.spreadsheet.tlo');
+    }
+
     public function add(Request $request)
     {
         // Inisialisasi Google Client
@@ -35,10 +40,8 @@ class PerhitunganController extends Controller
         $sheetsService = new Google_Service_Sheets($client);
 
         // ID spreadsheet yang ingin Anda akses
-        // $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
         $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
-        // dd($request->tgl_lahir);
-        // $req = Carbon::createFromFormat('Y-m-d', $request->tgl_lahir);
+
         $tgl_lahir = $request->tgl_lahir;
         $plafon = (int)str_replace(["Rp", " ", "."], "", $request->plafon);
 
@@ -66,7 +69,7 @@ class PerhitunganController extends Controller
         // Range di spreadsheet tempat Anda ingin menambahkan data
         // $range = 'Asuransi Jiwa Kematian' . '!' . $cellToUpdate; // Gantilah dengan nama sheet dan range yang sesuai
         $range = ['Asuransi Jiwa Kematian!E9', 'Asuransi Jiwa Kematian!I9', 'Asuransi Jiwa Kematian!E6:I6', 'Asuransi Jiwa Kematian!E11', 'Asuransi Jiwa Kematian!E12',]; // Gantilah dengan nama sheet dan range yang sesuai
-        // dd($data,$range[1]);
+
 
         // Menyimpan plafon dan jangka waktu
         $requestBody1 = new Google_Service_Sheets_ValueRange([

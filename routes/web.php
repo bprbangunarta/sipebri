@@ -643,6 +643,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/perhitungan/simulasi', 'simulasi')->name('simulasi_ajk');
         Route::get('/perhitungan/premi', 'add')->name('premi');
         Route::get('/perhitungan/simulasi_ajk', 'sheet')->name('sheet');
+        Route::get('/perhitungan/simulasi_tlo', 'simulasi_tlo')->name('simulasi.tlo');
     });
 
     //====Route Cetak Laporan====//
@@ -709,5 +710,4 @@ Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');
 
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/rekap/analisa', 'rekap.analisa');
-// Route::view('/tlo', 'tlo');
 require __DIR__ . '/auth.php';
