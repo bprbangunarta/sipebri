@@ -555,6 +555,7 @@ class CetakLaporanController extends Controller
                 'data_tracking.keputusan_komite as tgl_persetujuan',
                 'data_tracking.akad_kredit as tgl_realisasi',
                 'data_pengajuan.status',
+                'data_notifikasi.created_at as tgl_notif',
             )
 
             ->where(function ($query) use ($keyword) {

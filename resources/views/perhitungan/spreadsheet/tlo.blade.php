@@ -1,91 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('perhitungan.spreadsheet.menu_ajk')
+@section('title', 'Simulasi AJK')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asuransi Jiwa Kredit Simulation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+@section('content')
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="box-body table-responsive" style="overflow: auto; width: 100%; height:425px;">
+                <form action="#" method="get">
+                    @csrf
+                    <div class="card-body">
 
-        .content {
-            width: 100%;
-            border: 2px solid black;
-        }
-
-        .table1 {
-
-            width: 96%;
-            margin-left: 2%;
-            margin-right: 2%;
-            border-collapse: collapse;
-            box-sizing: border-box;
-        }
-
-        th,
-        td {
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        @media print {
-            @page {
-                width: 80%;
-                size: A4 landscape;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="content">
-        <div class="header">
-            <center>
-                <h4>PT BPR BANGUNARTA <br> SIMULASI PERHITUNGAN PREMI ASURANSI TLO <i>(TOTAL LOST ONLY)</i>
-                </h4>
-            </center>
-
-            <table class="table1">
-                <thead>
-                    <tr>
-                        <td
-                            style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black;">
-                            <b>Nama Debitur</b>
-                        </td>
-                        <td style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black;">
-                            <b>:</b>
-                        </td>
-                        <td
-                            style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            <b>WAWA WIBAWA</b>
-                        </td>
-                        <td style="border-top: 1px solid rgb(255, 255, 255); border-bottom: 1px solid rgb(255, 255, 255);"
-                            width="4%"></td>
-                        <td rowspan="2" style="float: right;"><img src="{{ asset('assets/img/pba.png') }}"
-                                alt="" width="250px">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </thead>
-            </table>
+                        <table class="table table-vcenter">
+                            <thead>
+                                <tr>
+                                    <th class="text-center fs-4" colspan="5" style="border: none;">
+                                        <b>SIMULASI PERHITUNGAN PREMI ASURANSI TLO <i>(TOTAL LOST ONLY)</i></b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Masukan Nama</span>
+                                        <input type="text" class="form-control" name="nama" id="name"
+                                            placeholder="Masukan Nama" required>
+                                    </td>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Jenis Kendaraan</span>
+                                        <select class="form-control input-sm form-border text-uppercase"
+                                            style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
+                                            name="jenis_kendaraan" id="">
+                                            <option value="" selected>---Pilih---</option>
+                                            <option value="SEPEDA MOTOR">SEPEDA MOTOR</option>
+                                            <option value="MOBIL BEBAN">MOBIL BEBAN</option>
+                                            <option value="MOBIL PENUMPANG">MOBIL PENUMPANG</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Masukan No Polisi</span>
+                                        <input type="text" class="form-control text-uppercase" name="nopol"
+                                            placeholder="Masukan No Polisi" id="nopol" required>
+                                    </td>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Masukan Jangka Waktu</span>
+                                        <input type="text" class="form-control text-uppercase" name="jw"
+                                            placeholder="Masukan Jangka Waktu" id="jk" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Nilai Pertanggungan</span>
+                                        <input type="text" class="form-control" name="pertanggungan"
+                                            placeholder="Masukan Nilai Pertanggungan" id="pertanggungan" required>
+                                    </td>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Tanggal Lahir
+                                            (12-27-1994)</span>
+                                        <input type="text" class="form-control" name="tgl_lahir"
+                                            placeholder="Masukan Tanggal Lahir" id="tgllahir" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="no-border">
+                                        <span class="fw-bold fs-4">Tanggal Realisasi</span>
+                                        <input type="text" class="form-control" name="tgl_realisasi"
+                                            placeholder="Tanggal Sekarang" id="hari">
+                                    </td>
+                                    <td class="no-border">
+                                        <button type="submit" class="btn btn-primary" id="submit"
+                                            style="margin-top: 20px; width:100%;">
+                                            Hitung
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-    <p>* Asuransi Jiwa Kredit hanya berlaku dari usia Minimal 20 s/d Maksimal 65 Tahun pada saat jatuh tempo kredit.
-        Harap sesuaikan sisa masa pemberian kredit apabila usia debitur sudah memasuki 62 Tahun</p>
-    <p>* Maksimal pertanggungan masing-masing fasilitas asuransi : ** BUMIDA 1967 Menurun UP 100 : 1 Milyar dengan usia
-        maksimal 65 Tahun pada saat jatuh tempo kredit</p>
-    <p>* Apabila Plafond Kredit > Maks. Pertanggungan, maka klaim dihitung berdasarkan sisa hutang pokok dari nilai
-        Maks. Pertanggungan pada saat meninggal dunia dengan sistem angsuran Menurun, sesuai dengan suku bunga kredit
-        yang berlaku</p>
-</body>
 
-</html>
+    </div>
+    </div>
+@endsection
+
+@push('myscript')
+    <script>
+        var plafon = document.getElementById("pertanggungan");
+        if (plafon) {
+            plafon.addEventListener("keyup", function(e) {
+                plafon.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+        }
+
+        window.onload = function() {
+            var today = new Date();
+            var day = today.getDate();
+            var month = today.getMonth() + 1; // Karena bulan dimulai dari 0 (Januari)
+            var year = today.getFullYear();
+
+            if (day < 10) {
+                day = "0" + day; // Tambahkan "0" di depan jika kurang dari 10
+            }
+            if (month < 10) {
+                month = "0" + month; // Tambahkan "0" di depan jika kurang dari 10
+            }
+
+            var currentDate = day + "-" + month + "-" + year;
+            document.getElementById('hari').value = currentDate;
+        };
+
+
+        $(document).ready(function() {
+            $('#submit').on('click', function() {
+                var nama = $('#name').val();
+                $.ajax({
+
+                })
+            })
+        })
+    </script>
+@endpush

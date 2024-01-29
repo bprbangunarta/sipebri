@@ -209,6 +209,18 @@
                                     <label>MULAI DARI</label>
                                     <input type="date" class="form-control" name="tgl1" id="tgl1">
                                 </div>
+
+                                <div class="form-group">
+                                    <label>KANTOR</label>
+                                    <select class="form-control kantor" name="nama_kantor" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                             </div>
 
                             <div class="col-md-6">

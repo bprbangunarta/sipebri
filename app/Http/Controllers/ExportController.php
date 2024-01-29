@@ -87,6 +87,7 @@ class ExportController extends Controller
     {
         $tgl1 = request('tgl1');
         $tgl2 = request('tgl2');
+        $kantor = request('nama_kantor');
 
         if (is_null($tgl2)) {
             $tgl2 = $tgl1;
@@ -95,6 +96,8 @@ class ExportController extends Controller
         $data = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
             ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
             ->select(
@@ -102,6 +105,8 @@ class ExportController extends Controller
                 'data_nasabah.kode_nasabah',
                 'data_pendamping.nama_pendamping',
                 'data_nasabah.nama_nasabah as nama_nasabah',
+                'data_nasabah.no_identitas as no_identitas',
+                'data_nasabah.no_karyawan as no_karyawan',
                 'data_nasabah.alamat_ktp as alamat_ktp',
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.plafon as plafon',
@@ -114,16 +119,22 @@ class ExportController extends Controller
                 return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
             })
 
+            ->where(function ($query) use ($kantor) {
+                $query->where('data_survei.kantor_kode', $kantor);
+            })
+
             ->orderBy('data_pengajuan.created_at', 'asc')
             ->get();
 
-        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "ALAMAT", "PLAFON", "SUKU BUNGA", "NO TELP", "PENDAMPING", "USER");
+        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NO KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "NO TELP", "PENDAMPING", "USER");
         foreach ($data as $item) {
             $data_array[] = array(
                 'TANGGAL'       => \Carbon\Carbon::parse($item->created_at)->format('Y-m-d'),
                 'KODE PENGAJUAN'  => $item->kode_pengajuan,
                 'KODE NASABAH'    => $item->kode_nasabah,
                 'NAMA NASABAH'    => $item->nama_nasabah,
+                'NO KTP'          => " " . $item->no_identitas,
+                'NO KARYAWAN'     => $item->no_karyawan,
                 'ALAMAT'          => $item->alamat_ktp,
                 'PLAFON'          => number_format($item->plafon, 0, ',', '.'),
                 'SUKU BUNGA'      => $item->suku_bunga . ' ' . '%',
@@ -132,7 +143,7 @@ class ExportController extends Controller
                 'USER'            => $item->name
             );
         }
-
+        // dd($data_array);
         $this->export_laporan_pendaftaran($data_array);
     }
     public function export_laporan_pendaftaran($data)

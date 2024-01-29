@@ -1,3 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asuransi Jiwa Kredit Simulation</title>
+</head>
+
+<body>
+    <div class="content">
+        <div class="header">
+            <center>
+                <h4>PT BPR BANGUNARTA <br> SIMULASI PERHITUNGAN PREMI ASURANSI TLO <i>(TOTAL LOST ONLY)</i>
+                </h4>
+            </center>
+
+            <table class="table1">
+                <thead>
+                    <tr>
+                        <td
+                            style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black; border-left: 1px solid black; border-bottom: 1px solid black;">
+                            <b>Nama Debitur</b>
+                        </td>
+                        <td style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black;">
+                            <b>:</b>
+                        </td>
+                        <td
+                            style="background:#f2efef; border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                            <b>WAWA WIBAWA</b>
+                        </td>
+                        <td style="border-top: 1px solid rgb(255, 255, 255); border-bottom: 1px solid rgb(255, 255, 255);"
+                            width="4%"></td>
+                        <td rowspan="2" style="float: right;"><img src="{{ asset('assets/img/pba.png') }}"
+                                alt="" width="250px">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <p>* Asuransi Jiwa Kredit hanya berlaku dari usia Minimal 20 s/d Maksimal 65 Tahun pada saat jatuh tempo kredit.
+        Harap sesuaikan sisa masa pemberian kredit apabila usia debitur sudah memasuki 62 Tahun</p>
+    <p>* Maksimal pertanggungan masing-masing fasilitas asuransi : ** BUMIDA 1967 Menurun UP 100 : 1 Milyar dengan usia
+        maksimal 65 Tahun pada saat jatuh tempo kredit</p>
+    <p>* Apabila Plafond Kredit > Maks. Pertanggungan, maka klaim dihitung berdasarkan sisa hutang pokok dari nilai
+        Maks. Pertanggungan pada saat meninggal dunia dengan sistem angsuran Menurun, sesuai dengan suku bunga kredit
+        yang berlaku</p>
+</body>
+
+</html>
+
 @extends('perhitungan.spreadsheet.menu_ajk')
 @section('title', 'Simulasi AJK')
 
@@ -102,61 +159,3 @@
     </div>
     </div>
 @endsection
-@push('myscript')
-    <script type='text/javascript'>
-        var plafon = document.getElementById("plafons");
-        if (plafon) {
-            plafon.addEventListener("keyup", function(e) {
-                plafon.value = formatRupiah(this.value, "Rp. ");
-            });
-        }
-
-        function formatRupiah(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, "").toString(),
-                split = number_string.split(","),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ? "." : "";
-                rupiah += separator + ribuan.join(".");
-            }
-
-            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
-        }
-
-        window.onload = function() {
-            var today = new Date();
-            var day = today.getDate();
-            var month = today.getMonth() + 1; // Karena bulan dimulai dari 0 (Januari)
-            var year = today.getFullYear();
-
-            if (day < 10) {
-                day = "0" + day; // Tambahkan "0" di depan jika kurang dari 10
-            }
-            if (month < 10) {
-                month = "0" + month; // Tambahkan "0" di depan jika kurang dari 10
-            }
-
-            var currentDate = day + "-" + month + "-" + year;
-            document.getElementById('hari').value = currentDate;
-        };
-
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-            window.Litepicker && (new Litepicker({
-                element: document.getElementById('tgllahir'),
-                format: 'DD-MM-YYYY',
-                buttonText: {
-                    previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
-                    nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
-                },
-            }));
-        });
-    </script>
-@endpush

@@ -50,6 +50,7 @@
                                         <th class="text-center">SURVEY</th>
                                         <th class="text-center">ANALISA</th>
                                         <th class="text-center">PUTUSAN</th>
+                                        <th class="text-center">TGL NOTIF</th>
                                         <th class="text-center">REALISASI</th>
                                         <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
@@ -97,6 +98,14 @@
                                                 @else
                                                     {{ \Carbon\Carbon::parse($item->tgl_persetujuan)->format('d-m-Y') }}
                                                 @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if (is_null($item->tgl_notif))
+                                                    -
+                                                @else
+                                                    {{ \Carbon\Carbon::parse($item->tgl_notif)->format('d-m-Y') }}
+                                                @endif
+
                                             </td>
                                             <td class="text-center">
                                                 @if (is_null($item->tgl_realisasi))

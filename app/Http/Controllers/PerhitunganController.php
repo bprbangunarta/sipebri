@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Google_Client;
+use Google\Service\Sheets;
 use Google_Service_Sheets;
+use Illuminate\Http\Request;
 use Google_Service_Sheets_ValueRange;
 
 class PerhitunganController extends Controller
@@ -132,6 +133,26 @@ class PerhitunganController extends Controller
         );
 
         return redirect()->route('sheet');
+    }
+
+    public function tlo($request)
+    {
+        // Inisialisasi Google Client
+        $client = new Google_Client();
+        $client->setApplicationName('Google Sheets Example');
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $sheetsService = new Google_Service_Sheets($client);
+
+        // ID spreadsheet yang ingin Anda akses
+        $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
+
+        $tgl_lahir = $request->tgl_lahir;
+        $plafon = (int)str_replace(["Rp", " ", "."], "", $request->plafon);
+
+        $nama = $request->query('input');
+        return response()->json($nama);
     }
 
     public function sheet()

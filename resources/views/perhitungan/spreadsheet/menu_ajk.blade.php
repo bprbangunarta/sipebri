@@ -24,18 +24,18 @@
                                         FORM SIMULASI PREMI AJK
                                     </a>
                                 </li>
+                                {{-- <li class="ml-4 {{ request()->is('perhitungan/simulasi_tlo') ? 'active' : '' }}">
+                                    <a href="{{ route('simulasi.tlo') }}"
+                                        class="{{ request()->is('perhitungan/simulasi_tlo') ? 'text-bold' : '' }}">
+                                        FORM ASURANSI PREMI TLO
+                                    </a>
+                                </li> --}}
                                 <li class="ml-4 {{ request()->is('perhitungan/simulasi_ajk') ? 'active' : '' }}">
                                     <a href="#"
                                         class="{{ request()->is('perhitungan/simulasi_ajk') ? 'text-bold' : '' }}">
-                                        HASIL SIMULASI PREMI AJK
+                                        HASIL ASURANSI PREMI AJK
                                     </a>
                                 </li>
-                                {{-- <li class="ml-4 {{ request()->is('perhitungan/simulasi_ajk') ? 'active' : '' }}">
-                                    <a href="{{ route('simulasi.tlo') }}"
-                                        class="{{ request()->is('perhitungan/simulasi_ajk') ? 'text-bold' : '' }}">
-                                        FORM SIMULASI TLO
-                                    </a>
-                                </li> --}}
                             </ul>
 
                             @yield('content')
