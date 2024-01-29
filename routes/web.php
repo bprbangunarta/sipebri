@@ -709,4 +709,5 @@ Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');
 
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/rekap/analisa', 'rekap.analisa');
+// Route::view('/tlo', 'tlo');
 require __DIR__ . '/auth.php';
