@@ -929,7 +929,7 @@
                                 <ol
                                     style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                                     @forelse ($jaminan as $item)
-                                        {{ $item->catatan }} <br>
+                                        <font class="text-hg">{{ $item->catatan }}</font> <br>
                                     @empty
                                     @endforelse
                                 </ol>
@@ -1007,7 +1007,7 @@
                             telah
                             ditentukan dalam Pasal 2 perjanjian kredit ini, oleh sebab itu PEMINJAM dikenakan denda
                             sebesar
-                            {{ $data->b_denda }} %
+                            <font class="text-hg">{{ $data->b_denda }} %</font>
                             perhari keterlambatan dari jumlah angsuran dan setoran bunga yang menjadi kewajibannya.
                         </p>
 
@@ -1021,8 +1021,7 @@
                             baik pokok, bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya
                             perjanjian ini,
                             sesuai jadwal angsuran pinjaman ditambah dengan penalti pelunasan sebesar <font
-                                class="text-center">15 %
-                            </font> dari fasilitas kredit /
+                                class="text-hg">1,5 %</font> dari fasilitas kredit /
                             plafon kredit. Pinalty tidak berlaku untuk pelunasan karena penambahan fasilitas kredit.
                         </p>
 

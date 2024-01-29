@@ -816,7 +816,7 @@
                             telah
                             ditentukan dalam Pasal 3 Ayat 2 perjanjian kredit ini, oleh sebab itu PEMINJAM dikenakan
                             denda sebesar
-                            {{ $data->b_denda }} %
+                            <font class="text-hg">{{ $data->b_denda }} %</font>
                             perhari keterlambatan dari jumlah angsuran dan setoran bunga yang menjadi kewajibannya.
                         </p>
 
@@ -830,7 +830,7 @@
                                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan
                                 jam kerja dengan
                                 cara melunasi seluruh sisa pokok dan bunga ditambah dengan penalti pelunasan sebesar
-                                <font class="text-center">1(satu) angsuran
+                                <font class="text-center text-hg">1(satu) angsuran
                                     bunga serta hutang denda</font>.
                             @else
                                 PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan

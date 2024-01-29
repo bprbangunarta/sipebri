@@ -126,7 +126,7 @@ class ExportController extends Controller
             ->orderBy('data_pengajuan.created_at', 'asc')
             ->get();
 
-        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NO KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "NO TELP", "PENDAMPING", "USER");
+        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NIK KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "NO TELP", "PENDAMPING", "USER");
         foreach ($data as $item) {
             $data_array[] = array(
                 'TANGGAL'       => \Carbon\Carbon::parse($item->created_at)->format('Y-m-d'),
@@ -134,7 +134,7 @@ class ExportController extends Controller
                 'KODE NASABAH'    => $item->kode_nasabah,
                 'NAMA NASABAH'    => $item->nama_nasabah,
                 'NO KTP'          => " " . $item->no_identitas,
-                'NO KARYAWAN'     => $item->no_karyawan,
+                'NIK KARYAWAN'     => $item->no_karyawan,
                 'ALAMAT'          => $item->alamat_ktp,
                 'PLAFON'          => number_format($item->plafon, 0, ',', '.'),
                 'SUKU BUNGA'      => $item->suku_bunga . ' ' . '%',
