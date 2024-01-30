@@ -1021,7 +1021,7 @@
                             baik pokok, bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya
                             perjanjian ini,
                             sesuai jadwal angsuran pinjaman ditambah dengan penalti pelunasan sebesar <font
-                                class="text-hg">1,5 %</font> dari fasilitas kredit /
+                                class="text-hg">{{ $data->b_penalti }} %</font> dari fasilitas kredit /
                             plafon kredit. Pinalty tidak berlaku untuk pelunasan karena penambahan fasilitas kredit.
                         </p>
 

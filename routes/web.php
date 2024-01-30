@@ -644,7 +644,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/perhitungan/premi', 'add')->name('premi');
         Route::get('/perhitungan/simulasi_ajk', 'sheet')->name('sheet');
         Route::get('/perhitungan/simulasi_tlo', 'simulasi_tlo')->name('simulasi.tlo');
-        Route::get('/perhitungan/tlo', 'perhitingan_tlo')->name('perhitingan.tlo');
+        Route::POST('/perhitungan/tlo', 'perhitungan_tlo')->name('perhitungan.tlo');
     });
 
     //====Route Cetak Laporan====//

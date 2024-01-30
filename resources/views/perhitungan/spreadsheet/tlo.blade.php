@@ -131,8 +131,35 @@
         $(document).ready(function() {
             $('#submit').on('click', function() {
                 var nama = $('#name').val();
-                $.ajax({
+                var kendaraan = $('#jenis_kendaraan').val();
+                var nopol = $('#nopol').val();
+                var jk = $('#jk').val();
+                var pertanggungan = $('#pertanggungan').val();
+                var tgllahir = $('#tgllahir').val();
+                var hari = $('#hari').val();
 
+                $.ajax({
+                    url: "{{ route('perhitungan.tlo') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        nama: nama,
+                        kendaraan: kendaraan,
+                        nopol: nopol,
+                        jk: jk,
+                        pertanggungan: pertanggungan,
+                        tgllahir: tgllahir,
+                        hari: hari,
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        // Handle the error here
+                        console.error('Error:', error);
+                    }
                 })
             })
         })
