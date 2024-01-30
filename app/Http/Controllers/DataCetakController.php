@@ -1163,14 +1163,13 @@ class DataCetakController extends Controller
             }
             $cek->b_denda = number_format((float)$cek->b_denda, 2, ',', '');
 
-            $cek->metode_rps = 'EFEKTIF MUSIMAN';
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
                 ]);
                 //Done
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
-                // dd($jaminan);
+
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
