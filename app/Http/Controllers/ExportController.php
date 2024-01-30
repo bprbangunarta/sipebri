@@ -93,7 +93,7 @@ class ExportController extends Controller
             $tgl2 = $tgl1;
         }
 
-        $data = DB::table('data_pengajuan')
+        $dataQuery = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -113,18 +113,19 @@ class ExportController extends Controller
                 'data_pengajuan.suku_bunga',
                 'data_nasabah.no_telp',
                 'users.name'
-            )
+            );
 
-            ->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
-                return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            })
+        $dataQuery->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
+            return $query->whereBetween('data_pengajuan.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+        });
 
-            ->where(function ($query) use ($kantor) {
-                $query->where('data_survei.kantor_kode', $kantor);
-            })
+        // Hanya tambahkan klausa where jika $kantor tidak kosong
+        if ($kantor !== null) {
+            $dataQuery->where('data_survei.kantor_kode', $kantor);
+        }
 
-            ->orderBy('data_pengajuan.created_at', 'asc')
-            ->get();
+        $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
+
 
         $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NIK KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "NO TELP", "PENDAMPING", "USER");
         foreach ($data as $item) {

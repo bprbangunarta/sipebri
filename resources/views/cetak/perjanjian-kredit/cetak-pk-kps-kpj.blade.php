@@ -1035,20 +1035,52 @@
                         </p>
 
                         <p style="text-align: justify;">
+<<<<<<< HEAD
                         <ol style="text-align: justify; margin-left: -25px;">
+=======
+                        <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
+>>>>>>> 6ea5ee0d415b88b3b1e5adca8d84f001c2137525
                             <li>
-                                PEMINJAM menyetujui bahwa pembukuan BANK selalu menjadi dasar untuk menetapkan jumlah
-                                hutang yang wajib
-                                dibayar oleh PEMINJAM kepada BANK berdasarkan Perjanjian Kredit ini, baik jumlah pokok,
-                                bunga, denda,
-                                provisi, biaya teguran/peringatan akibat PEMINJAM ingkar janji, biaya penafsiran,
-                                penyimpanan,
-                                pemeliharaan serta biaya pemeriksaan barang-barang jaminan, dan PEMINJAM akan menerima
-                                baik perhitungan
-                                yang dibuat dan diberikan oleh BANK diatas dengan tanpa mengurangi hak PEMINJAM untuk
-                                membuktikan
-                                sebaliknya, dan apabila ada catatan BANK yang tidak benar, BANK akan melakukan
-                                pembetulan.
+                                Memotong gaji PEMINJAM, untuk kewenangan ini PEMINJAM menyerahkan kepada BANK Surat
+                                Kuasa Pemotongan
+                                Gaji dari PEMINJAM kepada Pihak yang ditunjuk oleh BANK, termasuk tetapi tidak terbatas
+                                pada pemotongan
+                                gaji bulanan, tunjangan-tunjangan lainnya, dan hak-hak PEMINJAM saat terjadi Pemutusan
+                                Hubungan Kerja.
+                            </li>
+                            <li>
+                                Mengambil/memotong gaji bulanan PEMINJAM dengan jumlah yang sesuai dan telah diatur pada
+                                Pasal 3
+                                perjanjian ini, dan/atau dengan jumlah yang merupakan total kewajiban pembayaran
+                                PEMINJAM kepada BANK
+                                apabila PEMINJAM melakukan kelalaian atau wanprestasi.
+                            </li>
+                            <li>
+                                Menghadap kepada pihak yang berkompeten untuk meminta informasi tentang penghasilan
+                                PEMINJAM dan
+                                informasi lain yang dinilai perlu dan berhubungan dengan kredit PEMINJAM kepada BANK.
+                            </li>
+                            <li>
+                                Menelepon dan/atau mengunjungi PEMINJAM atau pasangan PEMINJAM tanpa pembatasan
+                                jam/waktu dan hari;
+                                pada nomor telepon PEMINJAM atau pasangan PEMINJAM; pada domisili yang telah ditetapkan
+                                dalam Perjanjian
+                                Kredit ini, atau pada tempat/domisili senyatanya PEMINJAM atau pengganti PEMINJAM atau
+                                pada tempat
+                                tinggal lain yang diketahui oleh BANK.
+                            </li>
+                            <li>
+                                Apabila PEMINJAM sulit dihubungi atau sulit ditemui pada nomor telepon PEMINJAM/pasangan
+                                PEMINJAM
+                                atau pada domisili yang telah dipilih dalam Perjanjian Kredit ini atau domisili nyata
+                                PEMINJAM yang
+                                diketahui oleh BANK, BANK dapat menghubungi dan/atau menemui PEMINJAM/pasangan PEMINJAM
+                                pada nomor atau
+                                pada tempat kerja/perusahaan PEMINJAM/pasangan PEMINJAM, satu dan lain untuk menjaga
+                                kesinambungan
+                                komunikasi atau efektivitas pemberitahuan/penyampaian informasi yang berkaitan dengan
+                                pinjaman,
+                                pengelolaan pinjaman dan/atau jaminan/agunan, atau proses penyelesaian pinjaman/agunan.
                             </li>
                         </ol>
                         </p>
