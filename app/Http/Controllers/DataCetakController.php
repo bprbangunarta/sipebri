@@ -761,32 +761,6 @@ class DataCetakController extends Controller
                     $du[] = DB::table('du_lainnya')->where('usaha_kode', $lain[$i]->kode_usaha)->get();
                 }
 
-                // Total Bahan Baku
-                // if (!empty($bahan)) {
-                //     $total_bahan_baku = [];
-                //     foreach ($bahan as $items) {
-                //         // $total_bahan_baku[] = $item->total;
-                //         foreach ($items as $item) {
-                //             $total_bahan_baku[] = $item->total; // Ubah 'total' menjadi kolom yang sesuai
-                //         }
-                //     }
-                //     $total_bahan = array_sum($total_bahan_baku);
-                //     foreach ($lain as $item) {
-                //         $item->total_bahan = $total_bahan;
-                //     }
-                // } else {
-                //     $total_bahan = 0;
-                // }
-
-                // foreach ($lain as $key => $item) {
-                //     $bb = DB::table('total_bahan_baku')->where('kode_usaha', $item->kode_usaha)->get();
-                //     // dd($bb[$key]);   
-                //     if ($bb !== null) {
-                //         $item->total_bahan_baku = $bb[$key];
-                //     } else {
-                //         $item->total_bahan_baku = 0;
-                //     }
-                // }
                 for ($i = 0; $i < count($lain); $i++) {
                     $bb = DB::table('total_bahan_baku')->where('kode_usaha', $lain[$i]->kode_usaha)->first();
                     if ($bb !== null && isset($bb->total_bahan_baku)) {
@@ -864,7 +838,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-            // dd($jaminan);
+            // dd($data[0]);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -1189,7 +1163,7 @@ class DataCetakController extends Controller
             }
             $cek->b_denda = number_format((float)$cek->b_denda, 2, ',', '');
 
-            // dd($cek_jaminan);
+            $cek->metode_rps = 'EFEKTIF MUSIMAN';
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
@@ -1222,13 +1196,27 @@ class DataCetakController extends Controller
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
                 if ($carbonUpdatedAt->equalTo(Carbon::now())) {
                     $targetDate = Carbon::now();
+                    $targettgl = Carbon::now();
                 } else {
                     $targetDate = $carbonUpdatedAt;
+                    $targettgl = $carbonUpdatedAt;
                 }
+
+                // $targettgl->addMonths(1);
+                // $targettglupdate = Carbon::parse($targettgl);
+                // $tgl_akhir = $targettglupdate->endOfMonth();
+
+                // if ($targettgl <= $tgl_akhir) {
+                //     $tgl_bln_jth_tmp = $targettgl;
+                // } else {
+                //     $tgl_bln_jth_tmp = $tgl_akhir;
+                // }
+
 
                 $targetDate->addMonths($cek->jangka_pokok);
                 $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - $cek->jangka_pokok);
                 $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
+
                 $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
                 $cek->tgl_jth_tmp = $formattedDate;
 
@@ -1242,6 +1230,7 @@ class DataCetakController extends Controller
 
                 $targetDate->addMonths($cek->jangka_pokok);
                 $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
+                $cek->tgl_jth_pokok2 = $targetDate->isoFormat('D');
 
 
                 $cek->banyak_bulan = $cek->jwt / $cek->jangka_pokok;

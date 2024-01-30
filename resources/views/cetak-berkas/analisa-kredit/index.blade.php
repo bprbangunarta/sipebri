@@ -2114,7 +2114,7 @@
                 </td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k. Biaya Penalti</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k. Biaya Denda</td>
                 <td> : </td>
                 <td>
                     <div style="width:40%;float:left">&nbsp; <b>{{ $memorandum->biaya_denda }}% per hari</b></div>
@@ -2134,10 +2134,13 @@
                     @else
                         AHPT dan Fiducia
                     @endif
+                    <div style="width:59%; float:right; font-weight: normal;">n. Biaya Penalti :
+                        <b>{{ $cetak->b_penalti }}%</b>
+                    </div>
                 </th>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n. Kepesertaan Asuransi</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; o. Kepesertaan Asuransi</td>
                 <td></td>
                 <td></td>
             </tr>
@@ -2173,7 +2176,7 @@
                 <td>&nbsp; -</td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; o. Syarat-Syarat Kredit</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p. Syarat-Syarat Kredit</td>
                 <td></td>
                 <td></td>
             </tr>

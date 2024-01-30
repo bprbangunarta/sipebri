@@ -1035,7 +1035,7 @@
                         </p>
 
                         <p style="text-align: justify;">
-                        <ol start="4" style="text-align: justify; margin-left: -25px;">
+                        <ol style="text-align: justify; margin-left: -25px;">
                             <li>
                                 PEMINJAM menyetujui bahwa pembukuan BANK selalu menjadi dasar untuk menetapkan jumlah
                                 hutang yang wajib
