@@ -1035,11 +1035,9 @@
                         </p>
 
                         <p style="text-align: justify;">
-<<<<<<< HEAD
-                        <ol style="text-align: justify; margin-left: -25px;">
-=======
+
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
->>>>>>> 6ea5ee0d415b88b3b1e5adca8d84f001c2137525
+
                             <li>
                                 Memotong gaji PEMINJAM, untuk kewenangan ini PEMINJAM menyerahkan kepada BANK Surat
                                 Kuasa Pemotongan
