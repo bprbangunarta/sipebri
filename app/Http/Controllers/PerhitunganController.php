@@ -138,20 +138,77 @@ class PerhitunganController extends Controller
     public function perhitungan_tlo(Request $request)
     {
         // Inisialisasi Google Client
-        // $client = new Google_Client();
-        // $client->setApplicationName('Google Sheets Example');
-        // $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
-        // $client->setAuthConfig(base_path('credential.json'));
+        $client = new Google_Client();
+        $client->setApplicationName('Google Sheets Example');
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
 
-        // $sheetsService = new Google_Service_Sheets($client);
+        $sheetsService = new Google_Service_Sheets($client);
 
-        // // ID spreadsheet yang ingin Anda akses
-        // $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
+        // ID spreadsheet yang ingin Anda akses
+        $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
 
         // $tgl_lahir = $request->tgl_lahir;
         // $plafon = (int)str_replace(["Rp", " ", "."], "", $request->plafon);
-        $nama = $request->input('nama');
-        return response()->json($nama);
+        $sheetName = 'Total Lost Only';
+        $range1 = 'C10:G10';
+        $range1i = 'I10';
+        $rangecol1 = 'C';
+        $startnumb = 10;
+        $data1 = [
+            '1',
+            $request->jenis_kendaraan1,
+            $request->nopol1,
+            $request->jw1,
+            $request->tgl_realisasi1,
+        ];
+
+        // $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $sheetName . '!' . $range1Nama);
+        // $values = $response->getValues();
+
+        // $requestNama = new Google_Service_Sheets_ValueRange([
+        //     'values' => [[$request->nama1]],
+        // ]);
+        // $paramrequestBody1Nama = [
+        //     'valueInputOption' => 'RAW',
+        // ];
+        // $resultNama = $sheetsService->spreadsheets_values->update(
+        //     $spreadsheetId,
+        //     $sheetName . '!' . $range1Nama,
+        //     $requestNama,
+        //     $paramrequestBody1Nama
+        // );
+
+        foreach ($data1 as $key => $value) {
+            $column = chr(ord($rangecol1) + $key);
+            $range = $sheetName . '!' . $column . $startnumb;
+
+            $requestBody1 = new Google_Service_Sheets_ValueRange([
+                'values' => [[$value]],
+            ]);
+            $paramrequestBody1 = [
+                'valueInputOption' => 'RAW',
+            ];
+            $resultCtoG = $sheetsService->spreadsheets_values->update(
+                $spreadsheetId,
+                $range,
+                $requestBody1,
+                $paramrequestBody1
+            );
+        }
+
+        $requestBody1i = new Google_Service_Sheets_ValueRange([
+            'values' => [(int)str_replace(["", " ", "."], "", $request->pertanggungan1)],
+        ]);
+        $paramrequestBody11i = [
+            'valueInputOption' => 'RAW',
+        ];
+        $response1i = $sheetsService->spreadsheets_values->update(
+            $spreadsheetId,
+            $sheetName . '!' . $range1i,
+            $requestBody1i,
+            $paramrequestBody11i
+        );
     }
 
     public function sheet()

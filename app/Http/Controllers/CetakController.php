@@ -598,6 +598,7 @@ class CetakController extends Controller
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
             ->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode)
+
             ->whereNotNull('data_spk.no_spk')
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
 

@@ -5,7 +5,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
             <div class="box-body table-responsive" style="overflow: auto; width: 100%; height:425px;">
-                <form action="{{ route('perhitungan.tlo') }}" method="get">
+                <form action="{{ route('perhitungan.tlo') }}" method="POST">
                     @csrf
                     <div class="card-body">
 
@@ -21,14 +21,14 @@
                                 <tr>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
-                                        <input type="text" class="form-control" name="nama1" id="name"
-                                            placeholder="Masukan Nama" required>
+                                        <input type="text" class="form-control text-uppercase" name="nama1"
+                                            id="name" placeholder="Masukan Nama" required>
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jenis Kendaraan</span>
                                         <select class="form-control input-sm form-border text-uppercase"
                                             style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
-                                            name="jenis_kendaraan1" id="">
+                                            name="jenis_kendaraan1" id="" required>
                                             <option value="" selected>---Pilih---</option>
                                             <option value="SEPEDA MOTOR">SEPEDA MOTOR</option>
                                             <option value="MOBIL BEBAN">MOBIL BEBAN</option>
@@ -51,22 +51,16 @@
                                             placeholder="Nilai Pertanggungan" id="pertanggungan1" required>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4" style="font-size: 13px;">Tgl Lahir
-                                            (12-27-1994)</span>
-                                        <input type="text" class="form-control" name="tgl_lahir1"
-                                            placeholder="Masukan Tanggal Lahir" id="tgllahir" required>
-                                    </td>
-                                    <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
                                         <input type="text" class="form-control" name="tgl_realisasi1"
-                                            placeholder="Tanggal Sekarang" id="hari1">
+                                            placeholder="Tanggal Sekarang" id="hari1" required>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
                                         <input type="text" class="form-control" name="nama2" id="name"
-                                            placeholder="Masukan Nama" required>
+                                            placeholder="Masukan Nama">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jenis Kendaraan</span>
@@ -82,23 +76,17 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol2"
-                                            placeholder="No Polisi" id="nopol" required>
+                                            placeholder="No Polisi" id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw2"
-                                            placeholder="Jangka Waktu" id="jk" required>
+                                            placeholder="Jangka Waktu" id="jk">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Nilai Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan2"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan2" required>
-                                    </td>
-                                    <td class="no-border">
-                                        <span class="fw-bold fs-4" style="font-size: 13px;">Tgl Lahir
-                                            (12-27-1994)</span>
-                                        <input type="text" class="form-control" name="tgl_lahir2"
-                                            placeholder="Masukan Tanggal Lahir" id="tgllahir" required>
+                                            placeholder="Nilai Pertanggungan" id="pertanggungan2">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
@@ -110,7 +98,7 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
                                         <input type="text" class="form-control" name="nama3" id="name"
-                                            placeholder="Masukan Nama" required>
+                                            placeholder="Masukan Nama">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jenis Kendaraan</span>
@@ -126,23 +114,17 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol3"
-                                            placeholder="No Polisi" id="nopol" required>
+                                            placeholder="No Polisi" id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw3"
-                                            placeholder="Jangka Waktu" id="jk" required>
+                                            placeholder="Jangka Waktu" id="jk">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Nilai Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan3"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan3" required>
-                                    </td>
-                                    <td class="no-border">
-                                        <span class="fw-bold fs-4" style="font-size: 13px;">Tgl Lahir
-                                            (12-27-1994)</span>
-                                        <input type="text" class="form-control" name="tgl_lahir3"
-                                            placeholder="Masukan Tanggal Lahir" id="tgllahir" required>
+                                            placeholder="Nilai Pertanggungan" id="pertanggungan3">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
@@ -154,7 +136,7 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
                                         <input type="text" class="form-control" name="nama4" id="name"
-                                            placeholder="Masukan Nama" required>
+                                            placeholder="Masukan Nama">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jenis Kendaraan</span>
@@ -170,23 +152,17 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol4"
-                                            placeholder="No Polisi" id="nopol" required>
+                                            placeholder="No Polisi" id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw4"
-                                            placeholder="Jangka Waktu" id="jk" required>
+                                            placeholder="Jangka Waktu" id="jk">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Nilai Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan4"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan4" required>
-                                    </td>
-                                    <td class="no-border">
-                                        <span class="fw-bold fs-4" style="font-size: 13px;">Tgl Lahir
-                                            (12-27-1994)</span>
-                                        <input type="text" class="form-control" name="tgl_lahir4"
-                                            placeholder="Masukan Tanggal Lahir" id="tgllahir" required>
+                                            placeholder="Nilai Pertanggungan" id="pertanggungan4">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
@@ -198,7 +174,7 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
                                         <input type="text" class="form-control" name="nama5" id="name"
-                                            placeholder="Masukan Nama" required>
+                                            placeholder="Masukan Nama">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jenis Kendaraan</span>
@@ -214,23 +190,17 @@
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol5"
-                                            placeholder="No Polisi" id="nopol" required>
+                                            placeholder="No Polisi" id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw5"
-                                            placeholder="Jangka Waktu" id="jk" required>
+                                            placeholder="Jangka Waktu" id="jk">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Nilai Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan5"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan5" required>
-                                    </td>
-                                    <td class="no-border">
-                                        <span class="fw-bold fs-4" style="font-size: 13px;">Tgl Lahir
-                                            (12-27-1994)</span>
-                                        <input type="text" class="form-control" name="tgl_lahir5"
-                                            placeholder="Masukan Tanggal Lahir" id="tgllahir" required>
+                                            placeholder="Nilai Pertanggungan" id="pertanggungan5">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Tanggal Realisasi</span>
@@ -260,10 +230,35 @@
 
 @push('myscript')
     <script>
-        var plafon = document.getElementById("pertanggungan");
-        if (plafon) {
-            plafon.addEventListener("keyup", function(e) {
-                plafon.value = formatRupiah(this.value, "Rp. ");
+        var pertanggungan1 = document.getElementById("pertanggungan1");
+        var pertanggungan2 = document.getElementById("pertanggungan2");
+        var pertanggungan3 = document.getElementById("pertanggungan3");
+        var pertanggungan4 = document.getElementById("pertanggungan4");
+        var pertanggungan5 = document.getElementById("pertanggungan5");
+
+        if (pertanggungan1) {
+            pertanggungan1.addEventListener("keyup", function(e) {
+                pertanggungan1.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+        if (pertanggungan2) {
+            pertanggungan2.addEventListener("keyup", function(e) {
+                pertanggungan2.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+        if (pertanggungan3) {
+            pertanggungan3.addEventListener("keyup", function(e) {
+                pertanggungan3.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+        if (pertanggungan4) {
+            pertanggungan4.addEventListener("keyup", function(e) {
+                pertanggungan4.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+        if (pertanggungan5) {
+            pertanggungan5.addEventListener("keyup", function(e) {
+                pertanggungan5.value = formatRupiah(this.value, "Rp. ");
             });
         }
 
@@ -280,7 +275,7 @@
             }
 
             rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
-            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+            return prefix == undefined ? rupiah : rupiah ? rupiah : "";
         }
 
         window.onload = function() {
@@ -297,44 +292,48 @@
             }
 
             var currentDate = day + "-" + month + "-" + year;
-            document.getElementById('hari').value = currentDate;
+            document.getElementById('hari1').value = currentDate;
+            document.getElementById('hari2').value = currentDate;
+            document.getElementById('hari3').value = currentDate;
+            document.getElementById('hari4').value = currentDate;
+            document.getElementById('hari5').value = currentDate;
         };
 
 
-        $(document).ready(function() {
-            $('#submit').on('click', function() {
-                var nama = $('#name').val();
-                var kendaraan = $('#jenis_kendaraan').val();
-                var nopol = $('#nopol').val();
-                var jk = $('#jk').val();
-                var pertanggungan = $('#pertanggungan').val();
-                var tgllahir = $('#tgllahir').val();
-                var hari = $('#hari').val();
+        // $(document).ready(function() {
+        //     $('#submit').on('click', function() {
+        //         var nama = $('#name').val();
+        //         var kendaraan = $('#jenis_kendaraan').val();
+        //         var nopol = $('#nopol').val();
+        //         var jk = $('#jk').val();
+        //         var pertanggungan = $('#pertanggungan').val();
+        //         var tgllahir = $('#tgllahir').val();
+        //         var hari = $('#hari').val();
 
-                $.ajax({
-                    url: "{{ route('perhitungan.tlo') }}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        nama: nama,
-                        kendaraan: kendaraan,
-                        nopol: nopol,
-                        jk: jk,
-                        pertanggungan: pertanggungan,
-                        tgllahir: tgllahir,
-                        hari: hari,
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(response) {
+        //         $.ajax({
+        //             url: "{{ route('perhitungan.tlo') }}",
+        //             type: 'POST',
+        //             dataType: 'json',
+        //             data: {
+        //                 nama: nama,
+        //                 kendaraan: kendaraan,
+        //                 nopol: nopol,
+        //                 jk: jk,
+        //                 pertanggungan: pertanggungan,
+        //                 tgllahir: tgllahir,
+        //                 hari: hari,
+        //                 _token: "{{ csrf_token() }}",
+        //             },
+        //             success: function(response) {
 
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        // Handle the error here
-                        console.error('Error:', error);
-                    }
-                })
-            })
-        })
+        //                 console.log(response);
+        //             },
+        //             error: function(error) {
+        //                 // Handle the error here
+        //                 console.error('Error:', error);
+        //             }
+        //         })
+        //     })
+        // })
     </script>
 @endpush

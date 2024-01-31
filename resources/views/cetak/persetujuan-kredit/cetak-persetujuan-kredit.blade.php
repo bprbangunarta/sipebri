@@ -98,19 +98,25 @@
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Kode Pengajuan</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ $data->kode_pengajuan }}</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Nama Nasabah</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ Str::upper($data->nama_nasabah) }}</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;vertical-align: text-top;">Alamat Lengkap</td>
-                <td style="width: 2%;vertical-align: text-top;"><center> : </center></td>
+                <td style="width: 2%;vertical-align: text-top;">
+                    <center> : </center>
+                </td>
                 <td>{{ Str::upper($data->alamat_ktp) }}</td>
             </tr>
 
@@ -123,31 +129,41 @@
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Plafon</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Jangka Waktu</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ $data->jangka_waktu }} Bulan</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Penggunaan</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ $data->penggunaan }}</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Nilai Taksasi Agunan</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ 'Rp. ' . ' ' . number_format($data->total_taksasi, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Repayment Capacity</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ $data->rc_akhir }} %</td>
             </tr>
 
@@ -160,19 +176,25 @@
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Plafon</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ 'Rp. ' . ' ' . number_format($data->plafon_usulan, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Jangka Waktu</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ $data->jangka_waktu }} Bulan</td>
             </tr>
             <tr>
                 <td style="width: 3%;"></td>
                 <td style="width: 22%;">Suku Bunga</td>
-                <td style="width: 2%;"><center> : </center></td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
                 <td>{{ $data->sb_usulan }} %</td>
             </tr>
 
@@ -184,32 +206,43 @@
             </tr>
 
             @forelse ($usulan as $item)
-            <tr>
-                <td></td>
-                <td class="text-center" style="width: 22%;" style="vertical-align: text-top;">
-                    <img src="{{ asset('storage/image/qr_code/' . $item->qr) }}" width="100" height="100">
-                </td>
-                <td style="width: 2%;"></td>
-                <td>
-                    <b>{{ $item->role_name }}</b> <br>
-                    {{ $item->nama_user }}
-                    <p></p>
+                <tr>
+                    <td></td>
+                    <td class="text-center" style="width: 22%;" style="vertical-align: text-top;">
+                        <img src="{{ asset('storage/image/qr_code/' . $item->qr) }}" width="100" height="100">
+                    </td>
+                    <td style="width: 2%;"></td>
+                    <td>
+                        <b>{{ $item->role_name }}</b> <br>
+                        {{ $item->nama_user }}
+                        <p></p>
 
-                    <b>Komentar</b> <br>
-                    {{ ucwords($item->catatan) }} <br>
-                    Layak untuk diberikan pinjaman sebesar {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}
-                    <p></p>
+                        <b>Komentar</b> <br>
+                        {{ ucwords($item->catatan) }} <br>
+                        Layak untuk diberikan pinjaman sebesar
+                        {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}
+                        <p></p>
 
-                    Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu {{ $data->jangka_waktu }} bulan
-                    <br>
-                    Biaya ADM {{ 'Rp. ' . ' ' . number_format($data->biaya_admin, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }}
-                    <p></p>
-                    <p></p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4"><hr></td>
-            </tr>
+                        Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu
+                        {{ $data->jangka_waktu }} bulan
+                        <br>
+                        Biaya ADM
+                        {{ 'Rp. ' . ' ' . number_format($data->biaya_admin, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                        Biaya Provisi
+                        {{ 'Rp. ' . ' ' . number_format($data->biaya_provisi, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                        Biaya APHT
+                        {{ 'Rp. ' . ' ' . number_format($data->biaya_apht, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                        dan Biaya Fiducia
+                        {{ 'Rp. ' . ' ' . number_format($data->biaya_fiducia, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                        <p></p>
+                        <p></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <hr>
+                    </td>
+                </tr>
             @empty
             @endforelse
 

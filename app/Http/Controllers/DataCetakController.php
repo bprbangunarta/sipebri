@@ -1028,11 +1028,15 @@ class DataCetakController extends Controller
             $cek = DB::table('data_pengajuan')
                 ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
                 ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
+                ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
                     'data_pengajuan.*',
                     'data_nasabah.*',
                     'a_administrasi.administrasi as biaya_admin',
+                    'a_administrasi.provisi as biaya_provisi',
+                    'a_administrasi.proses_apht as biaya_apht',
+                    'a_memorandum.by_fiducia as biaya_fiducia',
                 )->first();
 
             //Taksasi
@@ -1075,7 +1079,7 @@ class DataCetakController extends Controller
             $cek->plafon_usulan = $data_akhir->usulan_plafon ?? 0;
             $cek->sb_usulan = $data_akhir->suku_bunga ?? null;
 
-            // dd($usulan);
+            // dd($cek);
             return view('cetak.persetujuan-kredit.cetak-persetujuan-kredit', [
                 'data' => $cek,
                 'usulan' => $usulan,
