@@ -1022,7 +1022,7 @@
                             perjanjian ini,
                             sesuai jadwal angsuran pinjaman ditambah dengan penalti pelunasan sebesar <font
                                 class="text-hg">{{ $data->b_penalti }} %</font> dari fasilitas kredit /
-                            plafon kredit. Pinalty tidak berlaku untuk pelunasan karena penambahan fasilitas kredit.
+                            plafon kredit. Penalti tidak berlaku untuk pelunasan karena penambahan fasilitas kredit.
                         </p>
 
                         <p style="text-align: justify;">
