@@ -868,6 +868,20 @@
                                 JANGKA WAKTU DAN ANGSURAN PINJAMAN
                             </center>
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
+                            @if ($data->tgl_jth == '30')
+                                @php
+                                    $isi = ', untuk bulan Februari maka setoran dilakukan pada tanggal akhir bulan.';
+                                @endphp
+                            @elseif ($data->tgl_jth == '31')
+                                @php
+                                    $isi = ", untuk bulan yang berakhir bukan tanggal 31 maka setoran dilakukan pada tanggal
+                                akhir bulan.";
+                                @endphp
+                            @else
+                                @php
+                                    $isi = '.';
+                                @endphp
+                            @endif
                             <li>
                                 Pembayaran angsuran pokok berikut bunga atas jumlah kredit yang terhutang oleh
                                 PEMINJAM kepada BANK (
@@ -881,7 +895,8 @@
                                 dimulai
                                 pada ​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga
                                 berakhir pada tanggal
-                                {{ $data->tgl_jth_tmp }}.
+                                {{ $data->tgl_jth_tmp }}{{ $isi }}
+
                             </li>
                             <li>
                                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran
@@ -1282,7 +1297,7 @@
                             dibuat salinan perjanjian ini bagi kedua belah pihak.
                         </p>
 
-                        <table>
+                        <table style="margin-top: -25px;">
                             <tr>
                                 <td class="text-center" width="40%">
                                     B&nbsp;A&nbsp;N&nbsp;K
@@ -1293,11 +1308,15 @@
                                 </td>
                                 <td></td>
                                 <td class="text-center" width="40%">
+                                    <br>
+                                    <br>
                                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
                                     <p style="margin-top:95px;"></p>
                                     <u style="text-transform: uppercase;">
                                         <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                                     </u>
+                                    <br>
+                                    <br>
                                     <br>
                                     M&nbsp;E&nbsp;N&nbsp;Y&nbsp;E&nbsp;T&nbsp;U&nbsp;J&nbsp;U&nbsp;I
                                 </td>

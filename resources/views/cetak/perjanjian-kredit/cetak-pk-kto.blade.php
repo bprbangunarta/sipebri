@@ -1304,7 +1304,7 @@
                             dibuat salinan perjanjian ini bagi kedua belah pihak.
                         </p>
 
-                        <table>
+                        <table style="margin-top: -25px;">
                             <tr>
                                 <td class="text-center" width="40%">
                                     B&nbsp;A&nbsp;N&nbsp;K
@@ -1315,11 +1315,15 @@
                                 </td>
                                 <td></td>
                                 <td class="text-center" width="40%">
+                                    <br>
+                                    <br>
                                     P&nbsp;E&nbsp;M&nbsp;I&nbsp;N&nbsp;J&nbsp;A&nbsp;M
                                     <p style="margin-top:95px;"></p>
                                     <u style="text-transform: uppercase;">
                                         <font style="text-transform: uppercase;">{{ $data->nama_nasabah }}</font>
                                     </u>
+                                    <br>
+                                    <br>
                                     <br>
                                     M&nbsp;E&nbsp;N&nbsp;Y&nbsp;E&nbsp;T&nbsp;U&nbsp;J&nbsp;U&nbsp;I
                                 </td>
