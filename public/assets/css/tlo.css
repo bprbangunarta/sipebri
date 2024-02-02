@@ -2,31 +2,73 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.content {
-    width: 100%;
-    border: 2px solid black;
-}
-
 .table1 {
     width: 96%;
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
     margin-left: 2%;
     margin-right: 2%;
     border-collapse: collapse;
     box-sizing: border-box;
 }
 
-th,
+.table1 th,
 td {
     padding: 8px;
+    padding-left: -100px;
 }
 
-th {
-    background-color: #f2f2f2;
+.bd {
+    border: 1px solid black;
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    margin-top: 20px;
+    padding: 15px;
+}
+
+.bd tr,
+.bd th,
+.bd td {
+    border: 1px solid black;
+}
+
+.bd th {
+    background-color: rgb(241, 241, 241);
+    text-align: center;
+    padding: 5px;
+}
+
+.bd td {
+    border-bottom: 1px dashed black;
+    padding: 5px;
+}
+
+.ftr {
+    border: 1px solid black;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1px;
+    font-family: sans-serif;
+    font-size: 12px;
+    border-collapse: collapse;
+    box-sizing: border-box;
+}
+
+.ftr td {
+    padding: 5px;
 }
 
 @media print {
     @page {
         width: 80%;
         size: A4 landscape;
+    }
+
+    .content {
+        border: 2px solid black;
     }
 }

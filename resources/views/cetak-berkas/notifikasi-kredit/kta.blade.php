@@ -170,14 +170,14 @@
                 <td class="text-center" width="2%"> 5. </td>
                 <td width="27%">Jangka Waktu Kredit</td>
                 <td class="text-center" width="1%"> : </td>
-                <td style="text-align: justify;">{{ $data->jangka_waktu }} bulan terhitung sejak akad kredit.</td>
+                <td style="text-align: justify;">{{ $data->jwt }} bulan terhitung sejak akad kredit.</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 6. </td>
                 <td width="27%" style="vertical-align: text-top;">Pembayaran Kembali</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    Wajib dilakukan dalam {{ $data->jangka_waktu }} kali angsuran, yang dibayarkan setiap bulan
+                    Wajib dilakukan dalam {{ $data->jwt }} kali angsuran, yang dibayarkan setiap bulan
                     selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
                     dibayarkan satu bulan setelah tanggal akad kredit.
                 </td>

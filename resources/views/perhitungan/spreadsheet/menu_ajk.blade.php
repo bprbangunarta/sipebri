@@ -33,7 +33,12 @@
                                 <li class="ml-4 {{ request()->is('perhitungan/simulasi_ajk') ? 'active' : '' }}">
                                     <a href="#"
                                         class="{{ request()->is('perhitungan/simulasi_ajk') ? 'text-bold' : '' }}">
-                                        HASIL ASURANSI PREMI AJK
+                                        ASURANSI PREMI AJK
+                                    </a>
+                                </li>
+                                <li class="ml-4 {{ request()->is('perhitungan/tlo') ? 'active' : '' }}">
+                                    <a href="#" class="{{ request()->is('perhitungan/tlo') ? 'text-bold' : '' }}">
+                                        PREMI ASURANSI TLO
                                     </a>
                                 </li>
                             </ul>
