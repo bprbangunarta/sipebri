@@ -26,7 +26,7 @@ class AnalisaController extends Controller
 
             ->where('data_pengajuan.on_current', '0')
 
-            ->where(function ($query) use ($user) {
+            ->where(function ($query) use ($iser) {
                 $query->where('data_survei.surveyor_kode', $user)
                     ->where(function ($subquery) {
                         $subquery->where('data_pengajuan.tracking', 'Proses Survei')

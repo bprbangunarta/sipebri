@@ -444,7 +444,7 @@
                 <tr>
                     <td>Laba Penjualan Bulanan</td>
                     <td class="text-center" width="3%">:</td>
-                    <td>{{ 'Rp.' . ' ' . number_format($itemp->laba_bersih, 0, ',', '.') }} | Laba Penjualan Harian *
+                    <td>{{ 'Rp.' . ' ' . number_format($itemp->pendapatan, 0, ',', '.') }} | Laba Penjualan Harian *
                         30
                         Hari</td>
                 </tr>
