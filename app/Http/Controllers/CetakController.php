@@ -586,7 +586,8 @@ class CetakController extends Controller
 
     public function index_perjanjian_kredit(Request $request)
     {
-        // $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
+        $usr = Auth::user()->code_user;
+        $isAdminKredit = DB::table('v_users')->where('code_user', $usr)->first();
 
         $name = request('keyword');
         $cek = DB::table('data_pengajuan')
@@ -597,7 +598,15 @@ class CetakController extends Controller
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
-            ->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode)
+
+            ->where(function ($query) use ($isAdminKredit) {
+
+                if ($isAdminKredit->role_name == 'Admin Kredit') {
+                } else {
+                    $query->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode);
+                }
+            })
+
 
             ->whereNotNull('data_spk.no_spk')
             ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
