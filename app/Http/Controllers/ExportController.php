@@ -548,7 +548,7 @@ class ExportController extends Controller
             ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
-            // ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('v_resort', 'v_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
 
             ->select(
@@ -578,13 +578,21 @@ class ExportController extends Controller
             $query->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
                 ->where('data_pengajuan.produk_kode', 'like', '%' . $produk . '%')
                 ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
-                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%')
-                ->where('data_pengajuan.resort_kode', 'like', '%' . $resort . '%')
-                ->where('data_pengajuan.status', 'like', '%' . $status . '%');
+                ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
+
+            if (!is_null($resort)) {
+                $query->where('data_pengajuan.resort_kode', 'like', '%' . $resort . '%');
+            }
+            $query->where('data_pengajuan.status', 'like', '%' . $status . '%');
         })
+
 
             ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->get();
+
+        if (count($data) == 0) {
+            return redirect()->back()->with('error', 'Data tidak ada');
+        }
 
         $data_array[] = array(
             "NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WIL",
@@ -618,19 +626,6 @@ class ExportController extends Controller
             }
 
             $data_usulan = DB::table('data_usulan')->where('pengajuan_kode', $item->kode_pengajuan)->get();
-            // if (count($data_usulan) != 0) {
-            //     foreach ($data_usulan as $key => $usulan) {
-            //         if ($key == 0) {
-            //             $staf_analis = $usulan->created_at ?? '-';
-            //         } elseif ($key == 1) {
-            //             $kasi_analis = $usulan->created_at ?? '-';
-            //         } elseif ($key == 2) {
-            //             $komiteI = $usulan->created_at ?? '-';
-            //         } elseif ($key == 3) {
-            //             $komiteII = $usulan->created_at ?? '-';
-            //         }
-            //     }
-            // }
 
             $staf_analis = '-';
             $kasi_analis = '-';
