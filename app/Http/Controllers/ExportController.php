@@ -588,7 +588,7 @@ class ExportController extends Controller
 
         $data_array[] = array(
             "NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WIL",
-            "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "STAFF ANALIS", "KASI ANALIS", "KOMITEI", "KOMITEii", "REALISASI", "STATUS"
+            "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "STAFF ANALIS", "KASI ANALIS", "KOMITE I", "KOMITE II", "REALISASI", "STATUS"
         );
 
         foreach ($data as $item) {
