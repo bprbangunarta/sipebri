@@ -588,7 +588,7 @@ class ExportController extends Controller
 
         $data_array[] = array(
             "NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WIL",
-            "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "PUTUSAN", "REALISASI", "STATUS"
+            "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "STAFF ANALIS", "KASI ANALIS", "KOMITEI", "KOMITEii", "REALISASI", "STATUS"
         );
 
         foreach ($data as $item) {
@@ -617,6 +617,37 @@ class ExportController extends Controller
                 $item->status = null;
             }
 
+            $data_usulan = DB::table('data_usulan')->where('pengajuan_kode', $item->kode_pengajuan)->get();
+            // if (count($data_usulan) != 0) {
+            //     foreach ($data_usulan as $key => $usulan) {
+            //         if ($key == 0) {
+            //             $staf_analis = $usulan->created_at ?? '-';
+            //         } elseif ($key == 1) {
+            //             $kasi_analis = $usulan->created_at ?? '-';
+            //         } elseif ($key == 2) {
+            //             $komiteI = $usulan->created_at ?? '-';
+            //         } elseif ($key == 3) {
+            //             $komiteII = $usulan->created_at ?? '-';
+            //         }
+            //     }
+            // }
+
+            $staf_analis = '-';
+            $kasi_analis = '-';
+            $komiteI = '-';
+            $komiteII = '-';
+
+            if (count($data_usulan) > 0) {
+                $statusLabels = ['Staf Analis', 'Kasi Analis', 'Komite I', 'Komite II'];
+
+                foreach ($data_usulan as $key => $usulan) {
+                    if ($key < count($statusLabels)) {
+                        ${strtolower(str_replace(' ', '_', $statusLabels[$key]))} = $usulan->created_at ?? '-';
+                    }
+                }
+            }
+
+
             $data_array[] = array(
                 'NO'            => $no++,
                 'TANGGAL'       => \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d'),
@@ -631,7 +662,11 @@ class ExportController extends Controller
                 'SURVEYOR'      => $item->nama_user,
                 'SURVEY'        => $item->tgl_survey,
                 'ANALISA'       => $item->tgl_analisa,
-                'PUTUSAN'       => $item->tgl_persetujuan,
+                // 'PUTUSAN'       => $item->tgl_persetujuan,
+                'STAFF ANALISA'       => $staf_analis,
+                'KASI ANALISA'       => $kasi_analis,
+                'KOMITEI'       => $komiteI,
+                'KOMITEII'       => $komiteII,
                 'REALISASI'     => $item->tgl_realisasi,
                 'STATUS'        => $item->status,
             );
