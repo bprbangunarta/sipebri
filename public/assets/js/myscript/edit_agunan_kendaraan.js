@@ -61,8 +61,8 @@ $(document).ready(function () {
                     $("#lokasi").val(response[0].lokasi);
                     $("#no_mesin").val(response[0].no_mesin);
                     $("#no_rangka").val(response[0].no_rangka);
-                    $("#no_polisi").val(response[0].merek);
-                    $("#merek").val(response[0].no_polisi);
+                    $("#no_polisi").val(response[0].no_polisi);
+                    $("#merek").val(response[0].merek);
                     $("#tahun").val(response[0].tahun);
                     $("#warna").val(response[0].warna);
                     $("#tipe_kendaraan").val(response[0].tipe_kendaraan);
