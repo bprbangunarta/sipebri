@@ -1055,8 +1055,8 @@
                             </li>
                             <li>
                                 Menelepon dan/atau mengunjungi PEMINJAM atau pasangan PEMINJAM tanpa pembatasan
-                                jam/waktu dan hari;
-                                pada nomor telepon PEMINJAM atau pasangan PEMINJAM; pada domisili yang telah ditetapkan
+                                jam/waktu dan hari
+                                pada nomor telepon PEMINJAM atau pasangan PEMINJAM pada domisili yang telah ditetapkan
                                 dalam Perjanjian
                                 Kredit ini, atau pada tempat/domisili senyatanya PEMINJAM atau pengganti PEMINJAM atau
                                 pada tempat
