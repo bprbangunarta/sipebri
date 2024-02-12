@@ -7,59 +7,169 @@ $(document).ready(function () {
 
         var button = $(event.relatedTarget);
         var pengajuan = button.data("pengajuan");
-        
-        $('#kd_pengajuan').val(pengajuan)
+
+        $("#kd_pengajuan").val(pengajuan);
         $.ajax({
             url: "/themes/komite/kredit/catatan/" + pengajuan,
             type: "get",
             dataType: "json",
             cache: false,
             success: function (response) {
-                
                 if (response[0]) {
-                    var usulan1 = response[0].usulan_plafon ?? null
-                    var text = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan1)+" "+"-"+" "+"METODE : "+" "+ response[0].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[0].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[0].b_admin+" "+"-"+" "+
-                                "RC : "+" "+response[0].rc+"%"+"\n"+
-                                "CATATAN : "+" "+ response[0].catatan
+                    var usulan1 = response[0].usulan_plafon ?? null;
+                    var text =
+                        "USULAN : " +
+                        " " +
+                        "Rp. " +
+                        formatRupiah(usulan1) +
+                        " " +
+                        "-" +
+                        " " +
+                        "METODE : " +
+                        " " +
+                        response[0].metode_rps +
+                        "\n" +
+                        "B. PROVISI : " +
+                        " " +
+                        response[0].b_provisi +
+                        " " +
+                        "-" +
+                        " " +
+                        "B. ADMIN : " +
+                        " " +
+                        response[0].b_admin +
+                        " " +
+                        "-" +
+                        " " +
+                        "RC : " +
+                        " " +
+                        response[0].rc +
+                        "%" +
+                        "\n" +
+                        "CATATAN : " +
+                        " " +
+                        response[0].catatan;
                     $("#staff_analis").val(text);
-                }else{
-                    $("#staff_analis").val('Tidak Ada Catatan');
+                } else {
+                    $("#staff_analis").val("Tidak Ada Catatan");
                 }
 
-                if(response[1]) {
-                    var usulan2 = response[1].usulan_plafon ?? null
-                    var text2 = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan2)+" "+"-"+" "+"METODE : "+" "+ response[1].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[1].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[1].b_admin+" "+"-"+" "+
-                                "RC : "+" "+response[1].rc+"%"+"\n"+
-                                "CATATAN : "+" "+ response[1].catatan
+                if (response[1]) {
+                    var usulan2 = response[1].usulan_plafon ?? null;
+                    var text2 =
+                        "USULAN : " +
+                        " " +
+                        "Rp. " +
+                        formatRupiah(usulan2) +
+                        " " +
+                        "-" +
+                        " " +
+                        "METODE : " +
+                        " " +
+                        response[1].metode_rps +
+                        "\n" +
+                        "B. PROVISI : " +
+                        " " +
+                        response[1].b_provisi +
+                        " " +
+                        "-" +
+                        " " +
+                        "B. ADMIN : " +
+                        " " +
+                        response[1].b_admin +
+                        " " +
+                        "-" +
+                        " " +
+                        "RC : " +
+                        " " +
+                        response[1].rc +
+                        "%" +
+                        "\n" +
+                        "CATATAN : " +
+                        " " +
+                        response[1].catatan;
                     $("#kasi_analiss").val(text2);
-                }else{
-                    $("#kasi_analiss").val('Tidak Ada Catatan');
+                } else {
+                    $("#kasi_analiss").val("Tidak Ada Catatan");
                 }
 
-                if(response[2]) {
-                    var usulan3 = response[2].usulan_plafon ?? null
-                    var text3 = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan3)+" "+"-"+" "+"METODE : "+" "+ response[2].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[2].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[2].b_admin+" "+"-"+" "+
-                                "RC : "+" "+response[2].rc+"%"+"\n"+
-                                "CATATAN : "+" "+ response[2].catatan
+                if (response[2]) {
+                    var usulan3 = response[2].usulan_plafon ?? null;
+                    var text3 =
+                        "USULAN : " +
+                        " " +
+                        "Rp. " +
+                        formatRupiah(usulan3) +
+                        " " +
+                        "-" +
+                        " " +
+                        "METODE : " +
+                        " " +
+                        response[2].metode_rps +
+                        "\n" +
+                        "B. PROVISI : " +
+                        " " +
+                        response[2].b_provisi +
+                        " " +
+                        "-" +
+                        " " +
+                        "B. ADMIN : " +
+                        " " +
+                        response[2].b_admin +
+                        " " +
+                        "-" +
+                        " " +
+                        "RC : " +
+                        " " +
+                        response[2].rc +
+                        "%" +
+                        "\n" +
+                        "CATATAN : " +
+                        " " +
+                        response[2].catatan;
                     $("#kabag_analis").val(text3);
-                }else{
-                    $("#kabag_analis").val('Tidak Ada Catatan');
+                } else {
+                    $("#kabag_analis").val("Tidak Ada Catatan");
                 }
 
-                if(response[3]) {
-                    var usulan4 = response[3].usulan_plafon ?? null
-                    var text4 = "USULAN : " + " " +"Rp. "+ formatRupiah(usulan4)+" "+"-"+" "+"METODE : "+" "+ response[3].metode_rps+"\n"+
-                                "B. PROVISI : "+" "+ response[3].b_provisi+" "+"-"+" "+"B. ADMIN : "+" "+ response[3].b_admin+" "+"-"+" "+
-                                "RC : "+" "+response[3].rc+"%"+"\n"+
-                                "CATATAN : "+" "+ response[3].catatan
+                if (response[3]) {
+                    var usulan4 = response[3].usulan_plafon ?? null;
+                    var text4 =
+                        "USULAN : " +
+                        " " +
+                        "Rp. " +
+                        formatRupiah(usulan4) +
+                        " " +
+                        "-" +
+                        " " +
+                        "METODE : " +
+                        " " +
+                        response[3].metode_rps +
+                        "\n" +
+                        "B. PROVISI : " +
+                        " " +
+                        response[3].b_provisi +
+                        " " +
+                        "-" +
+                        " " +
+                        "B. ADMIN : " +
+                        " " +
+                        response[3].b_admin +
+                        " " +
+                        "-" +
+                        " " +
+                        "RC : " +
+                        " " +
+                        response[3].rc +
+                        "%" +
+                        "\n" +
+                        "CATATAN : " +
+                        " " +
+                        response[3].catatan;
                     $("#direksi").val(text4);
-                }else{
-                    $("#direksi").val('Tidak Ada Catatan');
+                } else {
+                    $("#direksi").val("Tidak Ada Catatan");
                 }
-
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

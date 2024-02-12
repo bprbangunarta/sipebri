@@ -139,13 +139,21 @@ class Midle extends Model
         //Ubah pendidikan dari nomor id menjadi data string
         if (!is_null($cek->pendidikan_kode)) {
             $sc = Pendidikan::where('kode_pendidikan', $cek->pendidikan_kode)->get();
-            $cek['std'] = $sc[0]->nama_pendidikan;
+            if (count($sc) > 0) {
+                $cek['std'] = $sc[0]->nama_pendidikan;
+            } else {
+                $cek['std'] = null;
+            }
         }
 
         //Ubah pekerjaan dari nomor id menjadi data string
         if (!is_null($cek->pekerjaan_kode)) {
             $pk = Pekerjaan::where('kode_pekerjaan', $cek->pekerjaan_kode)->get();
-            $cek['jo'] = $pk[0]->nama_pekerjaan;
+            if (count($pk) > 0) {
+                $cek['jo'] = $pk[0]->nama_pekerjaan;
+            } else {
+                $cek['jo'] = null;
+            }
         }
 
         //Ubah status dari nomor id menjadi data string
