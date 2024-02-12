@@ -45,7 +45,7 @@ class DataAnalisa5CController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
             $karakter = DB::table('a5c_character')->where('pengajuan_kode', $enc)->get();
-            dd(count($karakter));
+            // dd(count($karakter));
 
             if (count($karakter) == 0) {
                 $nilai = Data::analisa5c_text($request->nilai_karakter);
