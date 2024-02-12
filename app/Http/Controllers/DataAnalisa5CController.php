@@ -44,27 +44,49 @@ class DataAnalisa5CController extends Controller
     {
         try {
             $enc = Crypt::decrypt($request->query('pengajuan'));
-            $nilai = Data::analisa5c_text($request->nilai_karakter);
-            $name = 'A5C';
-            $length = 5;
-            $kode = Midle::a5ckodeacak($name, $length);
-            $data = [
-                'kode_analisa' => $kode,
-                'pengajuan_kode' => $enc,
-                'gaya_hidup' => $request->gaya_hidup,
-                'pengendalian_emosi' => $request->pengendalian_emosi,
-                'perbuatan_tercela' => $request->perbuatan_tercela,
-                'harmonis' => $request->harmonis,
-                'konsisten' => $request->konsisten,
-                'kepatuhan' => $request->kepatuhan,
-                'hubungan_sosial' => $request->hubungan_sosial,
-                'nilai_karakter' => $nilai,
-                'input_user' => Auth::user()->code_user,
-                'created_at' => now(),
-            ];
-            // dd($data);
-            DB::table('a5c_character')->insert($data);
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            $karakter = DB::table('a5c_character')->where('pengajuan_kode', $enc)->get();
+            dd(count($karakter));
+
+            if (count($karakter) == 0) {
+                $nilai = Data::analisa5c_text($request->nilai_karakter);
+                $name = 'A5C';
+                $length = 5;
+                $kode = Midle::a5ckodeacak($name, $length);
+                $data = [
+                    'kode_analisa' => $kode,
+                    'pengajuan_kode' => $enc,
+                    'gaya_hidup' => $request->gaya_hidup,
+                    'pengendalian_emosi' => $request->pengendalian_emosi,
+                    'perbuatan_tercela' => $request->perbuatan_tercela,
+                    'harmonis' => $request->harmonis,
+                    'konsisten' => $request->konsisten,
+                    'kepatuhan' => $request->kepatuhan,
+                    'hubungan_sosial' => $request->hubungan_sosial,
+                    'nilai_karakter' => $nilai,
+                    'input_user' => Auth::user()->code_user,
+                    'created_at' => now(),
+                ];
+                // dd($data);
+                DB::table('a5c_character')->insert($data);
+                return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            } else {
+                $nilai = Data::analisa5c_text($request->nilai_karakter);
+                $data = [
+                    'gaya_hidup' => $request->gaya_hidup,
+                    'pengendalian_emosi' => $request->pengendalian_emosi,
+                    'perbuatan_tercela' => $request->perbuatan_tercela,
+                    'harmonis' => $request->harmonis,
+                    'konsisten' => $request->konsisten,
+                    'kepatuhan' => $request->kepatuhan,
+                    'hubungan_sosial' => $request->hubungan_sosial,
+                    'nilai_karakter' => $nilai,
+                    'input_user' => Auth::user()->code_user,
+                    'updated_at' => now(),
+                ];
+                // dd($data);
+                DB::table('a5c_character')->where('pengajuan_kode', $enc)->update($data);
+                return redirect()->back()->with('success', 'Berhasil merubah data');
+            }
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
