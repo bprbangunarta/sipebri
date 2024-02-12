@@ -38,9 +38,11 @@ class PendampingController extends Controller
             }
 
             //Ubah format tanggal lahir Ymd menjadi m-d-Y
-            if (!is_null($pendamping[0]->masa_identitas)) {
+            if (!is_null($pendamping[0]->tanggal_lahir) && $pendamping[0]->tanggal_lahir !== "") {
                 $carbonDate = Carbon::createFromFormat('Ymd', $pendamping[0]->tanggal_lahir);
                 $pendamping[0]->tanggal_lahir = $carbonDate->format('Y-m-d');
+            } else {
+                $pendamping[0]->tanggal_lahir = null;
             }
 
             //Ubah identitas dari nomor id menjadi data string
