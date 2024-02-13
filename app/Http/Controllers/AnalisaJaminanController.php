@@ -44,7 +44,7 @@ class AnalisaJaminanController extends Controller
             //Data dati
             $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
 
-
+            // dd($au);
             return view('staff.analisa.jaminan.kendaraan', [
                 'jenis_kendaraan' => $jenis_kendaraan,
                 'data_kendaraan' => $data_kendaraan,
@@ -439,6 +439,20 @@ class AnalisaJaminanController extends Controller
                 DB::table('data_jaminan')->where('id', $data->id)->delete();
                 return response()->json(['message' => 'Data Berhasil Dihapus.']);
             }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Data Gagal Dihapus.']);
+        }
+    }
+
+    public function delete_kendaraan($id)
+    {
+        try {
+            $data = DB::table('data_jaminan')->where('id', $id)->first();
+            return response()->json($data);
+            // if (!is_null($data)) {
+            //     DB::table('data_jaminan')->where('id', $data->id)->delete();
+            //     return response()->json(['message' => 'Data Berhasil Dihapus.']);
+            // }
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Data Gagal Dihapus.']);
         }

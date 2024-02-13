@@ -11,7 +11,7 @@
                         <th class="text-center" style="width: 150px">Informasi</th>
                         <th class="text-center">Detail</th>
                         <th class="text-center" style="width: 120px">Taksasi</th>
-                        <th class="text-center" style="width: 100px">Aksi</th>
+                        <th class="text-center" style="width: 150px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +49,12 @@
                                     data-target="#modal-foto-tanah" class="btn btn-sm btn-primary">
                                     <i class="fa fa-image"></i>
                                 </button>
+
+                                <a href="{{ route('taksasi.delete_lain', ['id' => $item->id]) }}" data-toggle="modal"
+                                    data-target="#hapus" class="btn btn-sm bg-red confirmdelete" title="Hapus"
+                                    style="cursor: pointer;">
+                                    <i class="fa fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     @empty
@@ -343,5 +349,58 @@
         $('.jenis_agunan').select2()
         $('.jenis_dokumen').select2()
         $('.dati2').select2()
+    </script>
+    <script>
+        $(function() {
+            $(".confirmdelete").click(function(event) {
+                event.preventDefault();
+
+                var kd = $(this).data('kd');
+                var deleteUrl = $(this).attr('href'); // Mendapatkan URL dari href
+
+                Swal.fire({
+                    title: "Apakah anda yakin?",
+                    text: "Yakin, Ingin menghapus data",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Hapus!",
+                    cancelButtonText: "Batal",
+                }).then((willDelete) => {
+                    if (willDelete.isConfirmed) {
+                        $.ajax({
+                            url: deleteUrl,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+
+                                if (response.message == 'Data Berhasil Dihapus.') {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: 'Data berhasil dihapus.',
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    }).then((result) => {
+                                        if (result.isConfirmed || result
+                                            .dismiss ===
+                                            'timer') {
+                                            location.reload();
+                                        }
+                                    });
+
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error:", xhr.responseText);
+                            }
+                        });
+                    }
+                });
+            });
+        })
     </script>
 @endpush
