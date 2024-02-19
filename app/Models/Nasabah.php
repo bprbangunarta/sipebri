@@ -59,4 +59,30 @@ class Nasabah extends Model
     {
         return 'nasabah';
     }
+
+    public static function kode_nasabah($lasts)
+    {
+        if (is_null($lasts)) {
+            $count = 339931;
+        } else {
+
+            $count = (int) $lasts->kode_pengajuan + 1;
+            $lengths = 8;
+            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+            $isUsed = Pengajuan::where('kode_pengajuan', $kodes)->exists() ||
+                Pendamping::where('pengajuan_kode', $kodes)->exists() ||
+                Survei::where('pengajuan_kode', $kodes)->exists();
+
+            while ($isUsed) {
+                // Tambahkan 1 ke nilai $count untuk membuat kode baru
+                $count += 1;
+                $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+                // Periksa kembali apakah nilai yang baru sudah digunakan dalam tabel
+                $isUsed = Pengajuan::where('kode_pengajuan', $kodes)->exists() ||
+                    Pendamping::where('pengajuan_kode', $kodes)->exists() ||
+                    Survei::where('pengajuan_kode', $kodes)->exists();
+            }
+        }
+        return $kodes;
+    }
 }

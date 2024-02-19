@@ -40,7 +40,7 @@ class NasabahController extends Controller
             $cek = Nasabah::where('kode_nasabah', $kd_pengajuan[0]->nasabah_kode)->first();
 
             //Validasi data pertama kali berdasarkan data alamat yang null
-            if (is_null($cek->alamat_ktp)) {
+            if (is_null($cek->alamat_ktp) || $cek->alamat_ktp == '') {
 
                 $query = Tabungan::where('noid', $cek->no_identitas)
                     // ->where('jttempoid', $cek->tanggal_lahir)
@@ -150,6 +150,7 @@ class NasabahController extends Controller
             } else {
                 $count = (int) $lasts->kode_pengajuan + 1;
             }
+
             $lengths = 8;
             $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
             $cekpengajuan['kode_pengajuan'] = $kodes;
@@ -190,13 +191,16 @@ class NasabahController extends Controller
             ]);
 
             $lasts = Pengajuan::latest('kode_pengajuan')->first();
-            if (is_null($lasts)) {
-                $count = 339931;
-            } else {
-                $count = (int) $lasts->kode_pengajuan + 1;
-            }
-            $lengths = 8;
-            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+            $kodes = Nasabah::kode_nasabah($lasts);
+            // if (is_null($lasts)) {
+            //     $count = 339931;
+            // } else {
+            //     $count = (int) $lasts->kode_pengajuan + 1;
+            // }
+            // $lengths = 8;
+            // $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+
             $cekpengajuan['kode_pengajuan'] = $kodes;
             $cekpengajuan['nasabah_kode'] = $nik->kode_nasabah;
 
