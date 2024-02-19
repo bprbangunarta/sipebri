@@ -218,7 +218,7 @@
 
                     </div>
 
-                    @if (Auth::user()->code_user == 'CKN')
+                    @if (Auth::user()->code_user == '')
                         <div class="alert alert-danger alert-dismissible">
                             <h1 class="text-center">
                                 Kategori <b>BARU</b> untuk kondisi pengajuan <b>BARU</b> & <b>TOPUP</b> <br>
