@@ -1105,10 +1105,9 @@
                                     <li>
                                         PEMINJAM melanggar dan atau tidak melaksanakan kewajiban yang disyaratkan dalam
                                         perjanjian ini.
-                                        Maka
                                     </li>
                                 </ol>
-                                PARA PIHAK sepakat menyatakan PEMINJAM dalam keadaan ingkar janji.
+                                Maka PARA PIHAK sepakat menyatakan PEMINJAM dalam keadaan ingkar janji.
                             </li>
                             <li>
                                 Apabila PEMINJAM telah ingkar janji maka BANK berhak melakukan kunjungan atau penagihan

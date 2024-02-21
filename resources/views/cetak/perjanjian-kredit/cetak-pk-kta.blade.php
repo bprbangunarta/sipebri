@@ -789,16 +789,8 @@
                                 bunga, denda,
                                 provisi, biaya teguran/peringatan akibat PEMINJAM ingkar janji, biaya penafsiran,
                                 penyimpanan,
-                                pemeliharaan serta
-                            </li>
-                        </ol>
-                        </p>
-
-
-                        <p style="text-align: justify;">
-                        <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;list-style-type: none;">
-                            <li>
-                                biaya pemeriksaan barang-barang jaminan, dan PEMINJAM akan menerima baik perhitungan
+                                pemeliharaan serta biaya pemeriksaan barang-barang jaminan, dan PEMINJAM akan menerima
+                                baik perhitungan
                                 yang dibuat dan
                                 diberikan oleh BANK diatas dengan tanpa mengurangi hak PEMINJAM untuk membuktikan
                                 sebaliknya, dan
@@ -919,10 +911,9 @@
                                     <li>
                                         PEMINJAM melanggar dan atau tidak melaksanakan kewajiban yang disyaratkan dalam
                                         perjanjian ini.
-                                        Maka
                                     </li>
                                 </ol>
-                                PARA PIHAK sepakat menyatakan PEMINJAM dalam keadaan ingkar janji.
+                                Maka PARA PIHAK sepakat menyatakan PEMINJAM dalam keadaan ingkar janji.
                             </li>
                             <li>
                                 Apabila PEMINJAM telah ingkar janji maka BANK berhak melakukan kunjungan atau penagihan

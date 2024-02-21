@@ -1148,7 +1148,6 @@ class DataCetakController extends Controller
             $jth_tempo = Carbon::parse($cek->tgl_bayar);
 
             $cek->tgl_bln_thn_tempo = $jth_tempo->isoformat('D MMMM Y');
-            // $cek->tgl_bln_thn_tempo = $targetDate->isoformat('D MMMM Y');
 
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
@@ -1175,12 +1174,15 @@ class DataCetakController extends Controller
 
             $jaminan = Midle::notifikasi_general($enc);
             $cek_jaminan = (object)Midle::cek_jaminan($enc);
+
             if (is_null($cek->provisi)) {
                 $cek->provisi = 0.00;
             }
+
             if (is_null($cek->administrasi)) {
                 $cek->administrasi = 0.00;
             }
+
             $cek->b_denda = number_format((float)$cek->b_denda, 2, ',', '');
 
             if ($cek->produk_kode == 'KTA') {
@@ -1202,8 +1204,7 @@ class DataCetakController extends Controller
                     'agunan' => $cek_jaminan,
                 ]);
                 //Done
-            } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ' || $cek->produk_kode == 'KUP') {
-                // dd($cek);
+            } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ' || $cek->produk_kode == 'KUP' || $cek->produk_kode == 'KKO') {
 
                 return view('cetak.perjanjian-kredit.cetak-pk-kps-kpj', [
                     'data' => $cek,
@@ -1248,6 +1249,31 @@ class DataCetakController extends Controller
                 $cek->tgl_pokok = $cek->jwt / $cek->jangka_bunga;
 
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-kbt-musiman', [
+                    'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
+                ]);
+            } elseif ($cek->produk_kode == 'KPM') {
+
+                $tgl_update = $cek->update_spk;
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::now();
+                } else {
+                    $targetDate = $carbonUpdatedAt;
+                }
+
+                if (is_null($cek->grace_period) || $cek->grace_period == '') {
+                    $cek->grace_period = '2';
+                }
+
+                $cek->jwt = (int)$cek->jwt - (int)$cek->grace_period;
+
+                $jth_tempo = $targetDate->copy()->addMonths($cek->grace_period);
+
+                $cek->tgl_bln_thn_tempo = $jth_tempo->isoformat('D MMMM Y');
+                dd($cek->jwt);
+                return view('cetak.perjanjian-kredit.cetak-pk-pmi', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
