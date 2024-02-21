@@ -7,16 +7,15 @@ $(document).ready(function () {
         var sb = $("#suku_bunga").val();
         var jangka_waktu = $("#jw").val();
         var lb = $("#laba_usaha_pertanian").val();
-        var totaltaksasi = $('#total_taksasi').val()
+        var totaltaksasi = $("#total_taksasi").val();
 
         //Taksasi Agunan
         if (totaltaksasi != 0) {
-            var taksasi = (usulan / totaltaksasi) * 100
-            $('#taksasi_agunan').val(taksasi.toFixed(2) + " " + "%")
-        }else{
-            $('#taksasi_agunan').val(0 + " " + "%")
+            var taksasi = (usulan / totaltaksasi) * 100;
+            $("#taksasi_agunan").val(taksasi.toFixed(2) + " " + "%");
+        } else {
+            $("#taksasi_agunan").val(0 + " " + "%");
         }
-        
 
         if (metode == "FLAT") {
             //
@@ -34,17 +33,15 @@ $(document).ready(function () {
             $("#max").val("Rp. " + " " + mx);
 
             //
-        } else if (metode == "EFEKTIF MUSIMAN") {
-            
+        } else if (metode == "EFEKTIF MUSIMAN" || metode == "EFEKTIF") {
             var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
             var rc = (bg / keuangan) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
-            
+
             //MAX Plafon FLAT
-            var max_plafon = lb * (parseInt(jangka_waktu) / 6)
+            var max_plafon = lb * (parseInt(jangka_waktu) / 6);
             var mx = formatRupiah(max_plafon.toFixed(0));
             $("#max").val("Rp." + " " + mx.toLocaleString("id-ID"));
-            
         } else if (metode == "EFEKTIF ANUITAS") {
             var ssb = sb / 100;
             var bunga = ssb / 12;
@@ -54,10 +51,13 @@ $(document).ready(function () {
             $("#rc").val(rc.toFixed(2) + "%");
 
             //MAX Plafon EFKTIF ANUITAS
-            var plafonPinjaman = keuangan / (bunga * (Math.pow(1 + bunga, parseInt(jangka_waktu)) / (Math.pow(1 + bunga, parseInt(jangka_waktu)) - 1)));
+            var plafonPinjaman =
+                keuangan /
+                (bunga *
+                    (Math.pow(1 + bunga, parseInt(jangka_waktu)) /
+                        (Math.pow(1 + bunga, parseInt(jangka_waktu)) - 1)));
             var mx = formatRupiah(plafonPinjaman.toFixed(0));
             $("#max").val("Rp." + " " + mx.toLocaleString("id-ID"));
-            
         } else {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
