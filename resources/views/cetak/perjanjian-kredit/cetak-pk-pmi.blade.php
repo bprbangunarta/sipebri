@@ -539,7 +539,7 @@
 
                         <p style="text-align: justify;">
                             <center>
-                                Pasal 10 <br>
+                                Pasal 11 <br>
                                 DOMISILI HUKUM YANG BERLAKU
                             </center>
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
@@ -560,7 +560,7 @@
 
                         <p style="text-align: justify;">
                             <center>
-                                Pasal 11 <br>
+                                Pasal 12 <br>
                                 KETENTUAN PASAL PENUTUP
                             </center>
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">

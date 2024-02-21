@@ -1269,10 +1269,10 @@ class DataCetakController extends Controller
 
                 $cek->jwt = (int)$cek->jwt - (int)$cek->grace_period;
 
-                $jth_tempo = $targetDate->copy()->addMonths($cek->grace_period);
+                $jth_tempo = $targetDate->copy()->addMonths($cek->grace_period + 1);
 
                 $cek->tgl_bln_thn_tempo = $jth_tempo->isoformat('D MMMM Y');
-                dd($cek->jwt);
+                // dd($cek->jwt);
                 return view('cetak.perjanjian-kredit.cetak-pk-pmi', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
