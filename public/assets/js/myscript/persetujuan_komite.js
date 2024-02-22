@@ -236,6 +236,7 @@ $(document).ready(function () {
                     ) {
                         var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
                         var rc = (bg / keuangan) * 100;
+
                         $("#rc").val(rc.toFixed(2) + " " + "%");
                     } else if (selectedValue == "EFEKTIF ANUITAS") {
                         var ssb = sb / 100;
@@ -284,6 +285,15 @@ $(document).ready(function () {
                     ) {
                         var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
                         var rc = (bg / keuangan) * 100;
+
+                        $("#rc").val(rc.toFixed(2) + " " + "%");
+                    } else if (
+                        hasil.metode_rps == "EFEKTIF" ||
+                        mtd == "EFEKTIF"
+                    ) {
+                        var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
+                        var rc = (bg / keuangan) * 100;
+
                         $("#rc").val(rc.toFixed(2) + " " + "%");
                     } else if (
                         hasil.metode_rps == "EFEKTIF ANUITAS" ||
