@@ -177,7 +177,7 @@
                 <td class="text-center" width="2%"> 8. </td>
                 <td width="17%">Penggunaan</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $memorandum->penggunaan_debitur }}</td>
+                <td style="text-align: justify;">{{ $cetak->penggunaan }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 9. </td>
@@ -2089,7 +2089,7 @@
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Tujuan Penggunaan</td>
                 <td> : </td>
-                <td>&nbsp; {{ $memorandum->penggunaan_debitur }} - {{ $memorandum->keterangan }}</td>
+                <td>&nbsp; {{ $memorandum->penggunaan }} - {{ $memorandum->keterangan }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f. Sektor Ekonomi</td>
