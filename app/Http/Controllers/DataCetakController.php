@@ -151,6 +151,7 @@ class DataCetakController extends Controller
                 ->leftJoin('a_memorandum', 'data_pengajuan.kode_pengajuan', '=', 'a_memorandum.pengajuan_kode')
                 ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
                 ->leftJoin('a_administrasi', 'data_pengajuan.kode_pengajuan', '=', 'a_administrasi.pengajuan_kode')
+                ->leftJoin('bi_penggunaan_debitur', 'a_memorandum.bi_penggunaan_kode', '=', 'bi_penggunaan_debitur.sandi')
                 ->leftJoin('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
                 ->where('data_pengajuan.kode_pengajuan', $enc)
                 ->select(
@@ -162,6 +163,7 @@ class DataCetakController extends Controller
                     'a_administrasi.*',
                     'a_memorandum.*',
                     'a_memorandum.jangka_waktu as jw',
+                    'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                     'data_produk.kode_produk',
                     'data_produk.nama_produk',
                     'data_notifikasi.created_at as tgl_notifikasi',

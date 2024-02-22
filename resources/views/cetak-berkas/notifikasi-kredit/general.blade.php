@@ -162,7 +162,8 @@
                 <td width="27%" style="vertical-align: text-top;">Tujuan Penggunaan Kredit</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    {{ Str::upper($data->penggunaan) }}. Sepanjang tidak bertentangan dengan ketentuan hukum yang
+                    {{ Str::upper($data->penggunaan_debitur) }}. Sepanjang tidak bertentangan dengan ketentuan hukum
+                    yang
                     berlaku, norma kesusilaan dan
                     ketertiban umum.
                 </td>
