@@ -1264,6 +1264,7 @@ class Midle extends Model
     {
         $memorandum = DB::table('a_memorandum')
             ->leftJoin('data_pengajuan', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', '=', 'a_memorandum.bi_penggunaan_kode')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('v_users', 'data_survei.surveyor_kode', '=', 'v_users.code_user')
@@ -1277,6 +1278,7 @@ class Midle extends Model
             ->select(
                 'a_memorandum.*',
                 'data_pengajuan.*',
+                'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_nasabah.*',
                 'a5c_capacity.*',

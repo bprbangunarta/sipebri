@@ -818,6 +818,7 @@ class DataCetakController extends Controller
             $condition = Midle::cetak_data_analisa5C_condition($enc);
             $kualitatif = Midle::cetak_data_kualitatif($enc);
             $memorandum = Midle::cetak_data_memorandum($enc);
+
             if (is_null($memorandum)) {
                 return redirect()->back()->with('error', 'Memorandum belum diisi');
             }
