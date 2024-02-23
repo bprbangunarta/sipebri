@@ -89,7 +89,8 @@ class DroppingController extends Controller
 
             if (!is_null($data_spk)) {
                 $data = [
-                    'pengajuan_kode' => $pengajuan . 'XX',
+                    'pengajuan_kode' => substr_replace($pengajuan, "XX", 0, 2),
+                    'updated_at' => now(),
                 ];
                 $data2 = [
                     'on_current' => 0,
@@ -105,6 +106,7 @@ class DroppingController extends Controller
                     }
                 }
 
+                // dd($data_spk->id, $data, $agunan, $pengajuan);
                 DB::transaction(function () use ($data, $data2, $pengajuan, $data_spk) {
                     Pengajuan::where('kode_pengajuan', $pengajuan)->update($data2);
                     DB::table('data_spk')->where('id', $data_spk->id)->update($data);
