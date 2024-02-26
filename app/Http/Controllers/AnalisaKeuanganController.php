@@ -92,8 +92,13 @@ class AnalisaKeuanganController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         try {
+
+            $keuangan_perbulan = (int)str_replace(["Rp", " ", "."], "", $request->keuangan_perbulan);
+            if ($keuangan_perbulan <= 0) {
+                return redirect()->back()->with('error', 'Data keuangan harus lebih dari 0');
+            }
+
             DB::transaction(function () use ($request) {
                 $enc = Crypt::decrypt($request->query('pengajuan'));
                 $name = 'AUK';
