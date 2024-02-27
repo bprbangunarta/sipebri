@@ -139,7 +139,7 @@ class AnalisaJaminanController extends Controller
                 $jenis_agunan = null;
             }
 
-            $nilai['catatan'] = 'BPKB' . ' ' . $jenis_agunan . ', ' . strtoupper($request->merek) . ', ' . ' ' . strtoupper($request->tipe_kendaraan) . ', ' . strtoupper($request->tahun) . ', ' . strtoupper($request->no_rangka) . ', ' . strtoupper($request->no_mesin) . ', ' . strtoupper($request->no_polisi) . ', ' . strtoupper($request->no_dokumen) . ', ' . strtoupper($request->warna) . ', ' . strtoupper($request->atas_nama) . ', ' . strtoupper($request->lokasi);
+            $nilai['catatan'] = 'BPKB' . ' ' . $jenis_agunan . ', ' . strtoupper($request->merek) . ' ' . strtoupper($request->tipe_kendaraan) . ', ' . strtoupper($request->tahun) . ', ' . strtoupper($request->no_rangka) . ', ' . strtoupper($request->no_mesin) . ', ' . strtoupper($request->no_polisi) . ', ' . strtoupper($request->no_dokumen) . ', ' . strtoupper($request->warna) . ', ' . strtoupper($request->atas_nama) . ', ' . strtoupper($request->lokasi);
 
             DB::table('data_jaminan')->where('id', $request->id)->update($nilai);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
