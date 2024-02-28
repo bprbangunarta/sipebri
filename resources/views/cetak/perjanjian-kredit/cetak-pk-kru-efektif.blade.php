@@ -284,7 +284,7 @@
                                     class="text-hg">kali setoran bunga</font> setiap tanggal {{ $data->tgl_jth }} (
                                 selanjutnya disebut tanggal setoran bunga ) yang dimulai
                                 pada ​tanggal {{ $data->tgl_bln_thn_tempo }} dan demikian seterusnya hingga
-                                berakhir pada tanggal {{ $data->tgl_jth_tmp }}
+                                berakhir pada tanggal {{ $data->tgl_jth_tmp }}{{ $isi }}
 
                             </li>
                             <li>
