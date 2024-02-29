@@ -1200,7 +1200,7 @@ class DataCetakController extends Controller
                     $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
                 }
 
-                $targetDate->addMonths($cek->grace_period - 1);
+                $targetDate->addMonths($cek->grace_period);
                 $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
                 $cek->tgl_jth_pokok2 = $targetDate->isoFormat('D');
 
