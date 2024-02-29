@@ -125,8 +125,8 @@
                             No. <font class="text-hg">{{ $data->no_spk }}</font>
                         </h4>
 
-                        Pada hari ini {{ $data->hari }}, tanggal {{ $data->tgl_bln_thn }} telah disepakati Perjanjian
-                        Kredit oleh dan
+                        Pada hari ini {{ $data->hari }}, tanggal {{ $data->tgl_bln_thn }} telah disepakati
+                        Perjanjian Kredit oleh dan
                         antara :
 
                         <table>
@@ -158,8 +158,8 @@
                             <tr>
                                 <td></td>
                                 <td colspan="3" style="text-align: justify;">
-                                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan dari
-                                    <font class="text-hg">{{ $data->status_pendamping }}</font> bernama
+                                    Dalam melakukan tindakan hukum tersebut dibawah ini telah mendapat persetujuan
+                                    dari <font class="text-hg">{{ $data->status_pendamping }}</font> bernama
                                     <font class="text-hg">{{ $data->nama_pendamping }}</font> yang ikut serta
                                     menandatangani perjanjian
                                     ini. Untuk selanjutnya
@@ -178,10 +178,10 @@
                                     Perseroan Terbatas “PT.
                                     Bank Perekonomian Rakyat Bangunarta” tanggal 30-10-2023 ( tiga puluh oktober dua
                                     ribu dua puluh tiga
-                                    ) nomor 58, yang dibuat dihadapan NANA SAPTUNAH ZUHRI, S.H., M.Kn, Notaris Kabupaten
-                                    Subang, yang
-                                    telah mendapat persetujuan Menteri Hukum dan Hak Asasi Manusia Republik Indonesia
-                                    tanggal 31-10-2023
+                                    ) nomor 58, yang dibuat dihadapan NANA SAPTUNAH ZUHRI, S.H., M.Kn, Notaris
+                                    Kabupaten Subang, yang
+                                    telah mendapat persetujuan Menteri Hukum dan Hak Asasi Manusia Republik
+                                    Indonesia tanggal 31-10-2023
                                     ( tiga puluh satu oktober dua ribu dua puluh tiga ) nomor: AHU-AH.01.09.0179704
                                     Tahun 2023,
                                     karenanya untuk dan atas nama serta sah mewakili Perseroan Terbatas Bank
@@ -198,16 +198,15 @@
                         </p>
 
                         <p style="text-align: justify;">
-                            Bahwa guna keperluan {{ $data->penggunaan_debitur }} PEMINJAM telah mengajukan permohonan
-                            pinjam uang
-                            secara tertulis
-                            kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi persetujuan secara
-                            tertulis pada
-                            tanggal {{ $data->keputusan_komite }} dengan ketentuan pokok yang telah disetujui PEMINJAM.
-                            Ketentuan pokok
-                            tersebut akan diuraikan
-                            lebih lanjut dalam ketentuan dan syarat-syarat perjanjian kredit dalam pasal-pasal sebagai
-                            berikut :
+                            Bahwa guna keperluan {{ $data->penggunaan_debitur }} PEMINJAM telah mengajukan
+                            permohonan pinjam uang
+                            secara tertulis kepada BANK tanggal {{ $data->tgl_pengajuan }} dan BANK telah memberi
+                            persetujuan secara
+                            tertulis pada tanggal {{ $data->keputusan_komite }} dengan ketentuan pokok yang telah
+                            disetujui PEMINJAM.
+                            Ketentuan pokok tersebut akan diuraikan lebih lanjut dalam ketentuan dan syarat-syarat
+                            perjanjian kredit
+                            dalam pasal-pasal sebagai berikut :
                         </p>
 
                         <p style="text-align: justify;">
@@ -215,13 +214,13 @@
                                 Pasal 1 <br>
                                 FASILITAS PINJAMAN
                             </center>
-                            BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
-                            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font>
-                            ( <font class="text-hg" style="text-transform: capitalize;">
-                                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah) yang
-                            akan dipindah
-                            bukukan
-                            kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
+                            BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang
+                            sebesar
+                            <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}
+                            </font> ( <font class="text-hg" style="text-transform: capitalize;">
+                                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah)
+                            yang akan dipindah
+                            bukukan kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
                         </p>
 
                         <p style="text-align: justify;">
@@ -233,15 +232,15 @@
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
                             <li>
                                 <font class="text-hg">Bunga sebesar : {{ $data->suku_bunga }}%</font> per tahun
-                                dihitung secara
-                                menurun setiap bulannya.
+                                dihitung secara merata
+                                setiap bulannya.
                             </li>
                             <li>
                                 <font class="text-hg">Provisi sebesar
                                     {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},-
                                 </font> ( <font class="text-hg" style="text-transform: capitalize;">
-                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> Rupiah)
-                                <font class="text-hg">
+                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font>
+                                Rupiah) <font class="text-hg">
                                     dan Biaya Administrasi
                                     sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},
                                 </font>- ( <font class="text-hg" style="text-transform: capitalize;">
@@ -259,7 +258,7 @@
                                 JANGKA WAKTU DAN ANGSURAN PINJAMAN
                             </center>
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
-                            @if ($data->tgl_jth == '30' && $data->bln_jth_tmp == 'Februari')
+                            @if ($data->tgl_jth == '30')
                                 @php
                                     $isi = ', untuk bulan Februari maka setoran dilakukan pada tanggal akhir bulan.';
                                 @endphp
@@ -311,24 +310,25 @@
                             <li>
                                 Jumlah kewajiban angsuran dan setoran bunga diuraikan dalam Rincian Jadwal Angsuran
                                 sebagaimana
-                                terlampir, yang merupakan suatu kesatuan yang tidak terpisahkan dengan Perjanjian Kredit
-                                ini.
+                                terlampir, yang merupakan suatu kesatuan yang tidak terpisahkan dengan Perjanjian
+                                Kredit ini.
                             </li>
                             <li>
                                 Semua pembayaran dapat dilakukan PEMINJAM dikantor BANK dengan menunjukkan kartu
                                 angsuran dan PEMINJAM
-                                akan memperoleh bukti pembayaran dari BANK atau pembayaran dilakukan melalui transfer ke
-                                Rekening milik
-                                BANK yang tercantum dalam kartu angsuran pinjaman. Apabila PEMINJAM melakukan pembayaran
-                                angsuran
-                                pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran pinjaman
-                                maka setelah
-                                dana diterima direkening Bank baru dapat diakui sebagai pembayaran angsuran pinjaman dan
-                                bukti transfer
+                                akan memperoleh bukti pembayaran dari BANK atau pembayaran dilakukan melalui
+                                transfer ke Rekening milik
+                                BANK yang tercantum dalam kartu angsuran pinjaman. Apabila PEMINJAM melakukan
+                                pembayaran angsuran
+                                pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran
+                                pinjaman maka setelah
+                                dana diterima direkening Bank baru dapat diakui sebagai pembayaran angsuran pinjaman
+                                dan bukti transfer
                                 yang sah dapat diakui sebagai bukti pembayaran angsuran pinjaman.
                             </li>
                         </ol>
                         </p>
+
 
                         <p style="text-align: justify;">
                         <ol start="4" style="text-align: justify;margin-top:-1px;margin-left: -25px;">
@@ -366,7 +366,6 @@
                                     style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                                     @forelse ($jaminan as $item)
                                         <font class="text-hg">{{ $item->catatan }}</font> <br>
-
                                     @empty
                                     @endforelse
                                 </ol>
@@ -442,7 +441,10 @@
                             kerja, melunasi
                             baik pokok, bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya
                             perjanjian ini,
-                            sesuai jadwal angsuran pinjaman yang dihitung sampai dengan tanggal pelunasan kredit.
+                            sesuai jadwal angsuran pinjaman ditambah dengan penalti pelunasan sebesar <font
+                                class="text-hg">3,00%</font>
+                            dari fasilitas kredit /
+                            plafon kredit.
                         </p>
 
                         <p style="text-align: justify;">
@@ -485,6 +487,7 @@
                         </ol>
                         </p>
 
+
                         <p style="text-align: justify;">
                             <center>
                                 Pasal 8 <br>
@@ -501,6 +504,7 @@
                                 namun apabila
                                 ternyata :
                                 <ol type="a" style="margin-left: -25px;">
+
                                     <li>
                                         PEMINJAM tidak membayar baik pokok dan atau bunga sesuai jadwal angsuran, atau
                                     </li>
@@ -534,9 +538,9 @@
                                 terbatas diantaranya
                                 pengalihan piutang atasnama PEMINJAM oleh BANK kepada Kreditur Baru.
                             </li>
-
                             <!-- JIKA AGUNAN KENDARAAN DAN TANAH GUNAKAN SEMUA -->
 
+                            <!-- JIKA AGUNAN KENDARAAN SAJA -->
                             @forelse ($agunan as $item)
                                 @if ($item->jenis_jaminan == 'Kendaraan')
                                     <li>
@@ -556,7 +560,7 @@
                                         melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah
                                         agunan dengan
                                         tulisan
-                                        “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
+                                        "RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA".
                                     </li>
                                 @endif
 
@@ -612,7 +616,7 @@
                                 Pasal 11 <br>
                                 DOMISILI DAN PEMBERITAHUAN
                             </center>
-                            Para PIHAK dengan ini menyatakan bahwa :
+                            PARA PIHAK dengan ini menyatakan bahwa :
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
                             <li>
                                 Alamat BANK dan PEMINJAM sebagaimana tercantum pada awal Perjanjian Kredit ini merupakan
@@ -622,7 +626,7 @@
                                 diantara PARA PIHAK.
                             </li>
                             <li>
-                                Apabila ada perubahan alamat maka para PIHAK wajib memberitahukan secara tertulis alamat
+                                Apabila ada perubahan alamat maka PARA PIHAK wajib memberitahukan secara tertulis alamat
                                 barunya kepada
                                 pihak lainnya paling lambat 7 ( Tujuh ) hari sejak terjadinya perubahan alamat.
                             </li>
@@ -645,13 +649,13 @@
                             <li>
                                 Dalam hal terjadi perbedaan pendapat dalam memahami atau menafsirkan bagian-bagian dari
                                 isi perjanjian
-                                atau terjadi perselisihan dalam melaksanakan perjanjian ini, maka para PIHAK sepakat
+                                atau terjadi perselisihan dalam melaksanakan perjanjian ini, maka PARA PIHAK sepakat
                                 untuk menyelesaikan
                                 secara musyawarah dan mufakat.
                             </li>
                             <li>
                                 Apabila penyelesaian secara musyawarah dan mufakat tidak dapat menyelesaikan
-                                permasalahan maka para
+                                permasalahan maka PARA
                                 PIHAK sepakat untuk memilih domisili hukum di kantor Panitera Pengadilan Negeri Subang.
                             </li>
                         </ol>
