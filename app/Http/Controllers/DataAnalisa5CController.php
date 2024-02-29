@@ -131,7 +131,7 @@ class DataAnalisa5CController extends Controller
             }
 
             //Menghitung RC
-            $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu);
+            $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
 
             //cek data capacity sudah ada apa belum
             $cap = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
