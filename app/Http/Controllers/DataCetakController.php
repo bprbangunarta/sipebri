@@ -1137,6 +1137,7 @@ class DataCetakController extends Controller
                     DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir")
                 )->first();
             //
+
             $tgl_update = $cek->update_spk;
             $carbonUpdatedAt = Carbon::parse($tgl_update);
             if ($carbonUpdatedAt->equalTo(Carbon::now())) {
@@ -1245,18 +1246,17 @@ class DataCetakController extends Controller
                 $tgl_update = $cek->update_spk;
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
                 if ($carbonUpdatedAt->equalTo(Carbon::now())) {
-                    $targetDate = Carbon::now();
+                    $targetDate = Carbon::parse($cek->tgl_akhir);
                 } else {
-                    $targetDate = $carbonUpdatedAt;
+                    $targetDate = Carbon::parse($cek->tgl_akhir);
                 }
+                $cek->tgl_jth_tmp = $targetDate->isoFormat('D MMMM Y');
 
                 $targetDate->addMonths($cek->jangka_pokok);
                 $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - $cek->jangka_pokok);
                 $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
 
-                $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
-                $cek->tgl_jth_tmp = $formattedDate;
-
+                // $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
                 $bln_jth_tmp = $tenMonthsLater->isoFormat('MMMM');
                 $cek->bln_jth_tmp = $bln_jth_tmp;
 
