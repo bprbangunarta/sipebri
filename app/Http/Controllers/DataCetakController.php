@@ -1191,7 +1191,7 @@ class DataCetakController extends Controller
             //Khusus Reloan 
             if ($cek->kategori == 'RELOAN' && $cek->metode_rps == 'FLAT' && !is_null($cek->grace_period)) {
 
-                $cek->jangka_pokok = $cek->jangka_waktu - $cek->grace_period;
+                $cek->jangka_pokok = $cek->jwt - $cek->grace_period;
 
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
                 if ($carbonUpdatedAt->equalTo(Carbon::now())) {
