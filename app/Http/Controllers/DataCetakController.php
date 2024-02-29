@@ -1188,6 +1188,33 @@ class DataCetakController extends Controller
 
             $cek->b_denda = number_format((float)$cek->b_denda, 2, ',', '');
 
+            //Khusus Reloan 
+            if ($cek->kategori == 'RELOAN' && $cek->metode_rps == 'FLAT' && !is_null($cek->grace_period)) {
+
+                $cek->jangka_pokok = $cek->jangka_waktu - $cek->grace_period;
+
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
+                } else {
+                    $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
+                }
+
+                $targetDate->addMonths($cek->grace_period - 1);
+                $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
+                $cek->tgl_jth_pokok2 = $targetDate->isoFormat('D');
+
+                $cek->jumlah_bulan = $cek->jwt / $cek->jangka_bunga;
+                $cek->tgl_pokok = $cek->jwt / $cek->jangka_bunga;
+
+                return view('cetak.perjanjian-kredit.cetak-pk-reloan', [
+                    'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
+                ]);
+            }
+
+
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
                     'data' => $cek,
@@ -1240,8 +1267,6 @@ class DataCetakController extends Controller
                     $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
                 }
 
-
-                // $targetDate->addMonths($cek->jangka_pokok);
                 $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
                 $cek->tgl_jth_pokok2 = $targetDate->isoFormat('D');
 

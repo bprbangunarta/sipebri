@@ -859,22 +859,30 @@ class Midle extends Model
         return $hasiltaksasi;
     }
 
-    public static function perhitungan_rc($kode, $metode, $plafon, $suku_bunga, $jangka_waktu)
+    public static function perhitungan_rc($kode, $metode, $plafon, $suku_bunga, $jangka_waktu, $grace_periode)
     {
         $keuangan = Keuangan::where('pengajuan_kode', $kode)->pluck('keuangan_perbulan')->first();
 
         if ($metode == 'EFEKTIF MUSIMAN' || $metode == 'EFEKTIF') {
+
             $sb = $suku_bunga / 100;
             $plafon_permusim = ($plafon * 70) / 100;
-
             $bg = ((($plafon * $suku_bunga) / 100) * 30) / 365;
             $rc = ($bg / $keuangan) * 100;
         } else if ($metode == 'EFEKTIF ANUITAS') {
+
             $ssb = $suku_bunga / 100;
             $sb = $ssb / 12;
             $anuitas = ($plafon * $sb) / (1 - 1 / pow(1 + $sb, $jangka_waktu));
             $rc = ($anuitas / $keuangan) * 100;
+        } elseif ($metode == 'FLAT' && !is_null($grace_periode)) {
+
+            $bunga_10_bulan = (($plafon * $suku_bunga) / 100) / 12;
+            $pokok_bulanan = $plafon / ($jangka_waktu - $grace_periode);
+            $angsuran = $bunga_10_bulan + $pokok_bulanan;
+            $rc = ($angsuran / $keuangan) * 100;
         } else {
+
             $bunga = (($plafon * $suku_bunga) / 100) / 12;
             $pokok = $plafon / $jangka_waktu;
             $angsuran = $bunga + $pokok;
