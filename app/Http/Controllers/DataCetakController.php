@@ -1138,20 +1138,28 @@ class DataCetakController extends Controller
                 )->first();
             //
 
+            //Tanggal Terbit PK
             $tgl_update = $cek->update_spk;
             $carbonUpdatedAt = Carbon::parse($tgl_update);
             if ($carbonUpdatedAt->equalTo(Carbon::now())) {
-                $targetDate = Carbon::now();
+                $tgtDate = Carbon::now();
             } else {
-                $targetDate = $carbonUpdatedAt;
+                $tgtDate = $carbonUpdatedAt;
+            }
+            $cek->tgl_bln_thn = $tgtDate->isoformat('D MMMM Y');
+
+            //Tanggal Bayar
+            $tgl_update = $cek->update_spk;
+            $carbonUpdatedAt = Carbon::parse($tgl_update);
+            if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                $targetDate = Carbon::parse($cek->tgl_bayar);
+            } else {
+                $targetDate = Carbon::parse($cek->tgl_bayar);
             }
 
-            $cek->tgl_bln_thn = $targetDate->isoformat('D MMMM Y');
-            $targetDate->addMonths(1);
-
             $jth_tempo = Carbon::parse($cek->tgl_bayar);
-
             $cek->tgl_bln_thn_tempo = $jth_tempo->isoformat('D MMMM Y');
+            $cek->tgl_jth = $jth_tempo->isoFormat('D');
 
             $tgl_pengajuan = Carbon::parse($cek->tgl_pengajuan);
             $cek->tgl_pengajuan = $tgl_pengajuan->isoformat('D MMMM Y');
@@ -1159,22 +1167,19 @@ class DataCetakController extends Controller
             $keputusan_komite = Carbon::parse($cek->keputusan_komite);
             $cek->keputusan_komite = $keputusan_komite->isoformat('D MMMM Y');
 
-
+            //Tanggal Jatuh Tempo
             $tgl_update = $cek->update_spk;
             $carbonUpdatedAt = Carbon::parse($tgl_update);
             if ($carbonUpdatedAt->equalTo(Carbon::now())) {
-                $targetDate = Carbon::now();
+                $targetDt = Carbon::parse($cek->tgl_akhir);
             } else {
-                $targetDate = $carbonUpdatedAt;
+                $targetDt = Carbon::parse($cek->tgl_akhir);
             }
 
-            $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
-            $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
-            $formattedDate = $tenMonthsLater->isoFormat('D MMMM Y');
-            $cek->tgl_jth_tmp = $formattedDate;
+            $cek->tgl_jth_tmp = $targetDt->isoFormat('D MMMM Y');
 
-            $bln_jth_tmp = $tenMonthsLater->isoFormat('MMMM');
-            $cek->bln_jth_tmp = $bln_jth_tmp;
+            // $bln_jth_tmp = $tenMonthsLater->isoFormat('MMMM');
+            // $cek->bln_jth_tmp = $bln_jth_tmp;
 
             $jaminan = Midle::notifikasi_general($enc);
             $cek_jaminan = (object)Midle::cek_jaminan($enc);
@@ -1222,7 +1227,6 @@ class DataCetakController extends Controller
                 ]);
                 //Done
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
-
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
