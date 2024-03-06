@@ -203,7 +203,7 @@ class DataCetakController extends Controller
                 }
 
                 $hari = Carbon::now();
-                $cek->tgl_notifikasi_hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
+                $cek->tgl_notifikasi_hari_ini = Carbon::parse($cek->tgl_notifikasi)->translatedFormat('d F Y');
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
 
