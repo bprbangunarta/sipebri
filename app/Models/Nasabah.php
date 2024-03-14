@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Nasabah extends Model
 {
@@ -84,5 +85,20 @@ class Nasabah extends Model
             }
         }
         return $kodes;
+    }
+
+    public static function nasabahkode()
+    {
+        do {
+            $koderand = random_int(100000, 999999);
+            $date = Carbon::now();
+            $haskode = $date->format('my') . $koderand;
+
+            // Cek apakah kode sudah ada di tabel
+            $existingCode = self::where('kode_nasabah', $haskode)->exists();
+        } while ($existingCode);
+
+        // Di sini $haskode akan menjadi kode unik baru yang belum ada di tabel
+        return $haskode;
     }
 }

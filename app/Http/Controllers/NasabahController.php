@@ -130,9 +130,11 @@ class NasabahController extends Controller
         if (is_null($nik)) {
             //===Jika NIK tidak ada di data si pebri===//
             //Membuat kode Nasabah otomatis
-            $date = Carbon::now();
-            $koderand = random_int(100000, 999999);
-            $haskode = $date->format('m') . $date->format('y') . $koderand;
+            // $date = Carbon::now();
+            // $koderand = random_int(100000, 999999);
+            // $haskode = $date->format('m') . $date->format('y') . $koderand;
+            $haskode = Nasabah::nasabahkode();
+
             $ceknasabah['kode_nasabah'] = $haskode;
 
             $cekpengajuan = $request->validate([
