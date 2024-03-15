@@ -88,6 +88,7 @@ class ExportController extends Controller
         $tgl1 = request('tgl1');
         $tgl2 = request('tgl2');
         $kantor = request('nama_kantor');
+        $produk = request('kode_produk');
 
         if (is_null($tgl2)) {
             $tgl2 = $tgl1;
@@ -109,6 +110,7 @@ class ExportController extends Controller
                 'data_nasabah.no_karyawan as no_karyawan',
                 'data_nasabah.alamat_ktp as alamat_ktp',
                 'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.produk_kode as produk',
                 'data_pengajuan.plafon as plafon',
                 'data_pengajuan.suku_bunga',
                 'data_nasabah.no_telp',
@@ -120,14 +122,21 @@ class ExportController extends Controller
         });
 
         // Hanya tambahkan klausa where jika $kantor tidak kosong
-        if ($kantor !== null) {
+        if ($kantor !== null && $produk !== null) {
+
+            $dataQuery->where('data_survei.kantor_kode', $kantor)
+                ->where('data_pengajuan.produk_kode', $produk);
+        } elseif ($kantor !== null && $produk === null) {
+
             $dataQuery->where('data_survei.kantor_kode', $kantor);
+        } elseif ($kantor === null && $produk !== null) {
+
+            $dataQuery->where('data_pengajuan.produk_kode', $produk);
         }
 
         $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
 
-
-        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NIK KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "NO TELP", "PENDAMPING", "USER");
+        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NIK KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "PRODUK", "NO TELP", "PENDAMPING", "USER");
         foreach ($data as $item) {
             $data_array[] = array(
                 'TANGGAL'       => \Carbon\Carbon::parse($item->created_at)->format('Y-m-d'),
@@ -139,12 +148,13 @@ class ExportController extends Controller
                 'ALAMAT'          => $item->alamat_ktp,
                 'PLAFON'          => number_format($item->plafon, 0, ',', '.'),
                 'SUKU BUNGA'      => $item->suku_bunga . ' ' . '%',
+                'PRODUK'          => $item->produk,
                 'NO TELP'         => $item->no_telp,
                 'PENDAMPING'      => $item->nama_pendamping,
                 'USER'            => $item->name
             );
         }
-        // dd($data_array);
+
         $this->export_laporan_pendaftaran($data_array);
     }
     public function export_laporan_pendaftaran($data)

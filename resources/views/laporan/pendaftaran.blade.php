@@ -228,6 +228,15 @@
                                     <label>SAMPAI DENGAN</label>
                                     <input type="date" class="form-control" name="tgl2" id="tgl2">
                                 </div>
+
+                                <label>PRODUK</label>
+                                <select class="form-control produk" name="kode_produk" id=""
+                                    style="width: 100%;margin-top:-5px;">
+                                    <option value="">--PILIH--</option>
+                                    @foreach ($produk as $item)
+                                        <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
