@@ -241,6 +241,11 @@
                 // Jika dipilih "Sistem Flat Terelect"
                 $("#jangka_pokok").val("1").prop("readonly", true);
                 $("#jangka_bunga").val("1").prop("readonly", true);
+            } else if (selectedValue === "EFEKTIF ANUITAS") {
+
+                // Jika dipilih "Sistem Flat Terelect"
+                $("#jangka_pokok").val("1").prop("readonly", true);
+                $("#jangka_bunga").val("1").prop("readonly", true);
             } else {
                 // Jika dipilih "Sistem Lainnya"
                 $("#jangka_pokok").val("").prop("readonly", false);

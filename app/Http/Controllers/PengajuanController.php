@@ -407,7 +407,7 @@ class PengajuanController extends Controller
             $cgc = CGC::select('*')->get();
             $namacgc = CGC::where('noacc', $peng->tabungan_cgc)->first();
             $peng->namacgc = $namacgc->fnama ?? null;
-            // dd($)
+            // dd($dt);
             return view('pengajuan.data-pengajuan', [
                 'data' => $dt[0],
                 'cgc' => $cgc,
