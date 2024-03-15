@@ -182,7 +182,9 @@
                 <td class="text-center">
                     Petugas Pengecek NIK,<br><br><br><br><br>
 
-                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">Unun Nurainun
+                    <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
+                        <span
+                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;"></span>
                     </font>
                 </td>
             </tr>
