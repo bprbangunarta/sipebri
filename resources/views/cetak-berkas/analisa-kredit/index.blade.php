@@ -1384,7 +1384,7 @@
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Aset / Kekayaan</td>
-                <td style="border-right:1px solid black;">{{ $capacity->kontinuitas }}</td>
+                <td style="border-right:1px solid black;">&nbsp; {{ $capacity->kontinuitas }}</td>
                 <td></td>
             </tr>
             <tr>
@@ -1516,7 +1516,11 @@
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Aspek Hukum</td>
-                <td style="border-right:1px solid black;">&nbsp; {{ $collateral->aspek_hukum }}</td>
+                <td style="border-right:1px solid black;">
+                    <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
+                        {{ $collateral->aspek_hukum }}
+                    </div>
+                </td>
                 <td>&nbsp; {{ $collateral->evaluasi_collateral }}</td>
             </tr>
 
@@ -1660,7 +1664,7 @@
                     <td style="border-right:1px solid black;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Kewajiban Kepada Pihal Lain
                     </td>
-                    <td style="border-right:1px solid black;">{{ $kualitatif->bi_checking }}</td>
+                    <td style="border-right:1px solid black;">&nbsp; {{ $kualitatif->bi_checking }}</td>
                 </tr>
                 <tr>
                     <td style="border-right:1px solid black;">
@@ -1760,7 +1764,9 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. Proses Pengolahan
                     </td>
                     <td style="border-right:1px solid black;">
-                        &nbsp; {{ $kualitatif->proses_olah }}
+                        <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
+                            {{ $kualitatif->proses_olah }}
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -1784,7 +1790,9 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Faktor Pendukung Usaha
                     </td>
                     <td style="border-right:1px solid black;">
-                        &nbsp; {{ $kualitatif->pendukung_usaha }}
+                        <div width="94%;" style="text-align: justify;padding-left:7px;padding-right:7px;">
+                            {{ $kualitatif->pendukung_usaha }}
+                        </div>
                     </td>
                 </tr>
                 <tr>
