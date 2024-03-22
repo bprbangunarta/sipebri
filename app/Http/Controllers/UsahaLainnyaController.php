@@ -124,7 +124,6 @@ class UsahaLainnyaController extends Controller
                 ]);
             }
 
-            // dd($bahan);
             return view('staff.analisa.u-lainnya.bahan-baku-edit', [
                 'data' => $cek[0],
                 'lain' => $lain,
@@ -178,7 +177,6 @@ class UsahaLainnyaController extends Controller
                 ];
                 DB::table('bu_bahan_baku_lainnya')->where('kode_barang', $request->input('kode_barang' . $i))->update($data);
             }
-
             return redirect()->back()->with('success', 'Berhasil merubah data');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
