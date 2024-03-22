@@ -206,7 +206,7 @@ class UsahaLainnyaController extends Controller
             }
             $total_sum = array_sum($total);
             $lain->biaya_bahan = $total_sum ?? 0;
-            // dd($lain);
+
             //cek data biaya sudah ada atau tidak
             if (count($cek_bu) == 0) {
                 return view('staff.analisa.u-lainnya.keuangan', [
@@ -218,7 +218,6 @@ class UsahaLainnyaController extends Controller
             $bu = DB::table('bu_lainnya')->where('usaha_kode', $enc)->get();
             $du = DB::table('du_lainnya')->where('usaha_kode', $enc)->get();
 
-            // dd($total_sum, $total, $lain);
             return view('staff.analisa.u-lainnya.keuangan-edit', [
                 'data' => $cek[0],
                 'lain' => $lain,
