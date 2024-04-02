@@ -53,8 +53,6 @@ $(document).ready(function () {
                     rp = hasil.plafon;
                 }
 
-                console.log(hasil.max_plafond);
-
                 $("#max").val("Rp. " + " " + formatRupiah(rp.toString()));
                 $("#pengajuan").val(pengajuan);
                 var komite = $("#komite");
