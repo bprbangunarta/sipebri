@@ -49,9 +49,11 @@ $(document).ready(function () {
                 var rp = parseInt(hasil.max_plafond);
                 var c = hasil.max_plafond;
 
-                if (hasil.max_plafond == null) {
+                if (hasil.max_plafond == null || hasil.max_plafond == 0) {
                     rp = hasil.plafon;
                 }
+
+                console.log(hasil.max_plafond);
 
                 $("#max").val("Rp. " + " " + formatRupiah(rp.toString()));
                 $("#pengajuan").val(pengajuan);
