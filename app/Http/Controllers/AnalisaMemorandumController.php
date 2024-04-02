@@ -259,22 +259,30 @@ class AnalisaMemorandumController extends Controller
 
             //Menghitung RC
             if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN' || $cek[0]->metode_rps == 'EFEKTIF') {
+
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
+                //total semua nilai tani
                 $tn = [];
+
                 for ($i = 0; $i < count($tani); $i++) {
                     $tn[] = $tani[$i]->laba_bersih ?? 0;
                 }
+
                 $totaltn = array_sum($tn);
 
                 $saving = ($totaltn * 70) / 100;
 
                 //Max Plafond Musiman
                 $cek[0]->maxplafon = $saving * ((int)$cek[0]->jangka_waktu / 6);
+
                 $cek[0]->laba_usaha_pertanian = $saving;
             } else if ($cek[0]->metode_rps == 'EFEKTIF ANUITAS') {
                 $ssb = $cek[0]->suku_bunga / 100;
+
                 $sb = $ssb / 12;
+
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
 
                 //Max Plafon
@@ -285,16 +293,19 @@ class AnalisaMemorandumController extends Controller
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
+
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             } elseif ($cek[0]->metode_rps == 'FLAT') {
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
+
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             } else {
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
+
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             }
 
