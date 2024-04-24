@@ -168,6 +168,7 @@ class DataCetakController extends Controller
                     'data_produk.nama_produk',
                     'data_notifikasi.created_at as tgl_notifikasi',
                     'data_notifikasi.created_at as tgl_asli',
+                    'data_notifikasi.updated_at as tgl_update',
                     'v_users.nama_user as nama_user_notif',
                     'v_users.code_user as code_user_notif',
                     'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',
@@ -203,7 +204,13 @@ class DataCetakController extends Controller
                 }
 
                 $hari = Carbon::now();
-                $cek->tgl_notifikasi_hari_ini = Carbon::parse($cek->tgl_notifikasi)->translatedFormat('d F Y');
+
+                if (is_null($cek->tgl_update)) {
+                    $cek->tgl_notifikasi_hari_ini = Carbon::parse($cek->tgl_notifikasi)->translatedFormat('d F Y');
+                } else {
+                    $cek->tgl_notifikasi_hari_ini = Carbon::parse($cek->tgl_update)->translatedFormat('d F Y');
+                }
+
                 $cek_jaminan = (object)Midle::cek_jaminan($enc);
                 $cek->count_jaminan = count($notifikasi_general);
 
@@ -211,7 +218,7 @@ class DataCetakController extends Controller
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
-
+                // dd($cek);
                 return view('cetak-berkas.notifikasi-kredit.general', [
                     'data' => $cek,
                     'agunan' => $notifikasi_general,
@@ -262,6 +269,75 @@ class DataCetakController extends Controller
         $data[0]->nomor = $kodes;
 
         return response()->json($data[0]);
+    }
+
+    public function index_update_notifikasi()
+    {
+        return view('cetak.notifikasi-kredit.index-update-notifikasi', [
+            'data' => "data"
+        ]);
+    }
+
+    public function get_update_notifikasi(Request $request)
+    {
+        $data_ajax = $request->input('data');
+
+        // $cb = DB::table('data_notifikasi')->where('pengajuan_kode', '00342084')->first();
+
+        $data = DB::table('data_notifikasi')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->select(
+                'data_notifikasi.created_at as input',
+                'data_notifikasi.updated_at as update',
+                'data_notifikasi.no_notifikasi',
+                'data_pengajuan.plafon',
+                'data_pengajuan.kode_pengajuan',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode'
+            )
+            ->where('data_notifikasi.pengajuan_kode', '=', $data_ajax)
+            ->get();
+
+        return response()->json($data);
+    }
+
+    public function update_update_notifikasi(Request $request)
+    {
+        $data_ajax = $request->input('data');
+
+        $data = DB::table('data_notifikasi')->where('pengajuan_kode', $data_ajax)->first();
+
+        if (!is_null($data)) {
+            DB::table('data_notifikasi')
+                ->where('pengajuan_kode', $data_ajax)
+                ->update([
+                    'updated_at' => now()
+                ]);
+            //
+            $data = DB::table('data_notifikasi')
+                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->select(
+                    'data_notifikasi.created_at as input',
+                    'data_notifikasi.updated_at as update',
+                    'data_notifikasi.no_notifikasi',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.kode_pengajuan',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp',
+                    'data_survei.kantor_kode'
+                )
+                ->where('data_notifikasi.pengajuan_kode', '=', $data_ajax)
+                ->get();
+
+            return response()->json(['berhasil', $data]);
+        } else {
+            return response()->json('gagal');
+        }
     }
 
     public function simpan_notifikasi(Request $request)

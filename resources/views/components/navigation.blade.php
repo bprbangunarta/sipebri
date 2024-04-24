@@ -217,7 +217,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/denah/lokasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/kredit/update', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/denah/lokasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -231,6 +231,14 @@
                             title="Notifikasi Kredit">
                             <i class="fa fa-bell"></i>
                             Notifikasi Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/notifikasi/kredit/update') ? 'active' : '' }}">
+                        <a @can('generate notifikasi') href="{{ route('index.update_notifikasi') }}" @endcan
+                            title="Notifikasi Kredit">
+                            <i class="fa fa-bell"></i>
+                            Update Notifikasi Kredit
                         </a>
                     </li>
 
