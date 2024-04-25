@@ -85,7 +85,16 @@
                     data: keyword
                 },
                 success: function(response) {
-                    updateTable(response)
+
+                    if (response.length === 0) {
+                        Swal.fire({
+                            title: "(-_-)",
+                            text: "Data tidak ditemukan",
+                            icon: ''
+                        })
+                    } else {
+                        updateTable(response);
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
