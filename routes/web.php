@@ -565,11 +565,14 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(DataCetakController::class)->group(function () {
 
-            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
-                Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
+            Route::group(['middleware' => ['role:Kabag Analis']], function () {
                 Route::get('/notifikasi/kredit/update', 'index_update_notifikasi')->name('index.update_notifikasi');
                 Route::get('/notifikasi/kredit/get', 'get_update_notifikasi')->name('get.update_notifikasi');
                 Route::post('/notifikasi/kredit/update', 'update_update_notifikasi')->name('update.update_notifikasi');
+            });
+
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+                Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
                 Route::get('/notifikasi/kredit/catatan/{kode}', 'get_catatan_notifikasi_kredit')->name('get.catatan_notifikasi_kredit');
                 Route::POST('/notifikasi/kredit/simpan/catatan', 'simpan_catatan_notifikasi_kredit')->name('simpan.catatan_notifikasi_kredit');
             });
