@@ -417,14 +417,20 @@
                                 Pasal 6 <br>
                                 PELUNASAN SEBELUM JATUH TEMPO
                             </center>
-                            PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam
+                            {{-- PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam
                             kerja, melunasi
                             baik pokok, bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya
                             perjanjian ini,
                             sesuai jadwal angsuran pinjaman ditambah dengan penalti pelunasan sebesar <font
                                 class="text-hg">{{ $data->b_penalti }} %</font>
                             dari fasilitas kredit /
-                            plafon kredit.
+                            plafon kredit. --}}
+
+                            PEMINJAM berhak untuk melunasi pinjaman sewaktu-waktu sebelum jatuh tempo pada hari dan jam
+                            kerja, melunasi
+                            baik pokok, bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya
+                            perjanjian ini,
+                            sesuai jadwal angsuran pinjaman yang dihitung sampai dengan tanggal pelunasan kredit.
                         </p>
 
                         <p style="text-align: justify;">
