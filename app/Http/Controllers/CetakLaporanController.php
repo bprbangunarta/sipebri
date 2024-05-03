@@ -576,6 +576,9 @@ class CetakLaporanController extends Controller
                     ->orWhere('data_tracking.akad_kredit', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.status', 'like', '%' . $keyword . '%');
             })
+            ->whereNot(function ($query) {
+                $query->where('data_pengajuan.status', '=', 'Batal');
+            })
 
             ->orderBy('data_pengajuan.created_at', 'desc');
 
