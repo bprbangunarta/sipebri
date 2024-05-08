@@ -183,7 +183,8 @@
                 <td class="text-center" width="2%"> 9. </td>
                 <td width="17%">Tgl. Pendaftaran</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ \Carbon\Carbon::parse($cetak->created_at)->format('Y-m-d') }}</td>
+                <td style="text-align: justify;">{{ \Carbon\Carbon::parse($cetak->tgl_pengajuan)->format('Y-m-d') }}
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 10. </td>
