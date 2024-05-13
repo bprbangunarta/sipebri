@@ -6,6 +6,7 @@ use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QRController;
+use App\Http\Controllers\RSCController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
 use App\Http\Controllers\LainController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\FiduciaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RSCJasaController;
+use App\Http\Controllers\RSCLainController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\KeuanganController;
@@ -48,11 +51,13 @@ use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\CetakAnalisaController;
 use App\Http\Controllers\CetakLaporanController;
+use App\Http\Controllers\RSCPertanianController;
 use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\DataAnalisa5CController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\AnalisaJaminanController;
+use App\Http\Controllers\RSCPerdaganganController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
@@ -70,10 +75,10 @@ use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\CheckListKendaraanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
+use App\Http\Controllers\Administratif\DenahLokasiController;
 use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
-use App\Http\Controllers\Administratif\DenahLokasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -634,6 +639,37 @@ Route::middleware('auth')->group(function () {
                 Route::get('/cetak/fiducia', 'cetak_fiducia')->name('cetak.fiducia');
             });
         });
+
+        //====Route Analisa RSC====//
+        Route::group(['middleware' => ['role:Staff Analis']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                Route::get('/rsc/index', 'index')->name('rsc.index');
+                Route::post('/rsc/tambah', 'tambah_rsc')->name('rsc.tambah.rsc');
+                Route::get('/rsc/data/kredit', 'data_kredit')->name('rsc.data.kredit');
+                Route::put('/rsc/data/kredit', 'update_data_kredit')->name('rsc.update.data.kredit');
+                Route::put('/rsc/penentuan/plafon', 'update_penentuan_plafon')->name('rsc.update.penentuan.plafon');
+                Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
+            });
+
+            Route::controller(RSCPerdaganganController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/perdagangan', 'index')->name('rsc.usaha.perdagangan');
+                Route::post('/rsc/analisa/usaha/perdagangan/simpan', 'simpan_rsc_perdagangan')->name('rsc.simpan.usaha.perdagangan');
+                Route::get('/rsc/analisa/usaha/perdagangan/identitas', 'index_rsc_perdagangan_identitas')->name('rsc.index.usaha.perdagangan.identitas');
+            });
+
+            Route::controller(RSCPertanianController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/pertanian', 'index')->name('rsc.usaha.pertanian');
+            });
+
+            Route::controller(RSCJasaController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/jasa', 'index')->name('rsc.usaha.jasa');
+            });
+
+            Route::controller(RSCLainController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/lain', 'index')->name('rsc.usaha.lain');
+            });
+        });
+        //====Route Analisa RSC====//
     });
     //====Route Analisa====//
 

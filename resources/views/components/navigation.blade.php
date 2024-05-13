@@ -454,6 +454,25 @@
                 </ul>
             </li>
 
+            <li class="treeview {{ request()->is('themes/rsc/index') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-medkit" aria-hidden="true"></i>
+                    <span>Reschedulling</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+
+                    <li class="{{ request()->is('themes/rsc/index') ? 'active' : '' }}">
+                        <a href="{{ route('rsc.index') }}" title="Add RSC">
+                            <i class="fa fa-circle-o"></i>
+                            Add RSC
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li
                 class="treeview {{ request()->is('droping/cif', 'droping/agunan', 'droping/kredit') ? 'active' : '' }}">
                 <a href="#">
