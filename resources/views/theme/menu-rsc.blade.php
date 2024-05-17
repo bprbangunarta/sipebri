@@ -49,16 +49,28 @@
                 </a>
             </li>
 
+            <li class="{{ request()->is('themes/rsc/penilaian/debitur') ? 'active' : '' }}">
+                <a href="{{ route('rsc.penilaian.debitur', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}">
+                    <i class="fa fa-folder-o"></i> Penilaian Debitur
+                </a>
+            </li>
+
             <li
-                class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan', 'themes/rsc/analisa/usaha/pertanian', 'themes/rsc/analisa/usaha/jasa', 'themes/rsc/analisa/usaha/lain') ? 'active' : '' }}">
+                class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan*', 'themes/rsc/analisa/usaha/pertanian*', 'themes/rsc/analisa/usaha/jasa*', 'themes/rsc/analisa/usaha/lain*') ? 'active' : '' }}">
                 <a href="{{ route('rsc.usaha.perdagangan', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}">
                     <i class="fa fa-folder-o"></i> Usaha
                 </a>
             </li>
 
-            <li class="{{ request()->is('themes/analisa/keuangan') ? 'active' : '' }}">
-                <a href="#">
+            <li class="{{ request()->is('themes/rsc/keuangan') ? 'active' : '' }}">
+                <a href="{{ route('rsc.keuangan', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}">
                     <i class="fa fa-folder-o"></i> Keuangan
+                </a>
+            </li>
+
+            <li class="{{ request()->is('themes/rsc/data/pengusulan') ? 'active' : '' }}">
+                <a href="{{ route('rsc.data.pengusulan', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}">
+                    <i class="fa fa-folder-o"></i> Usulan Plafon
                 </a>
             </li>
 

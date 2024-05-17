@@ -95,19 +95,19 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">TUNGGAKAN DENDA</span>
-                                                <input class="form-control" placeholder="ENTRI" name="tunggakan_denda"
-                                                    id="tunggakan_denda"
-                                                    value="{{ old('tunggakan_denda', number_format($data_rsc->tunggakan_denda, '0', ',', '.')) }}"
+                                                <span class="fw-bold">TUNGGAKAN BUNGA</span>
+                                                <input class="form-control" placeholder="ENTRI" name="tunggakan_bunga"
+                                                    id="tunggakan_bunga"
+                                                    value="{{ old('tunggakan_bunga', number_format($data_rsc->tunggakan_bunga, '0', ',', '.')) }}"
                                                     required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">TOTAL TUNGGAKAN</span>
-                                                <input class="form-control" placeholder="ENTRI" name="total_tunggakan"
-                                                    id="total_tunggakan"
-                                                    value="{{ old('total_tunggakan', number_format($data_rsc->total_tunggakan, '0', ',', '.')) }}"
-                                                    required readonly>
+                                                <span class="fw-bold">JML TUNGGAKAN BUNGA (/BULAN)</span>
+                                                <input type="number" class="form-control" placeholder="ENTRI"
+                                                    name="jml_tunggakan_bunga" id="jml_tunggakan_bunga"
+                                                    value="{{ old('jml_tunggakan_bunga', $data_rsc->jml_tgk_bunga) }}"
+                                                    required>
                                             </div>
 
                                         </div>
@@ -149,11 +149,27 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">TUNGGAKAN BUNGA</span>
-                                                <input class="form-control" placeholder="ENTRI" name="tunggakan_bunga"
-                                                    id="tunggakan_bunga"
-                                                    value="{{ old('tunggakan_bunga', number_format($data_rsc->tunggakan_bunga, '0', ',', '.')) }}"
+                                                <span class="fw-bold">JML TUNGGAKAN POKOK (/BULAN)</span>
+                                                <input type="number" class="form-control" placeholder="ENTRI"
+                                                    name="jml_tunggakan_pokok" id="jml_tunggakan_pokok"
+                                                    value="{{ old('jml_tunggakan_pokok', $data_rsc->jml_tgk_pokok) }}"
                                                     required>
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">TUNGGAKAN DENDA</span>
+                                                <input class="form-control" placeholder="ENTRI" name="tunggakan_denda"
+                                                    id="tunggakan_denda"
+                                                    value="{{ old('tunggakan_denda', number_format($data_rsc->tunggakan_denda, '0', ',', '.')) }}"
+                                                    required>
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">TOTAL TUNGGAKAN</span>
+                                                <input class="form-control" placeholder="ENTRI" name="total_tunggakan"
+                                                    id="total_tunggakan"
+                                                    value="{{ old('total_tunggakan', number_format($data_rsc->total_tunggakan, '0', ',', '.')) }}"
+                                                    required readonly>
                                             </div>
 
                                         </div>
@@ -198,7 +214,7 @@
                                                     <label>PLAFON</label>
                                                     <input type="hidden" class="form-control" name=""
                                                         id="pn_plafons" placeholder="ENTRI"
-                                                        value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon, '0', ',', '.')) }}"
+                                                        value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon_temp, '0', ',', '.')) }}"
                                                         readonly>
                                                     <input type="text" class="form-control" name="penentuan_plafon"
                                                         id="pn_plafon" placeholder="ENTRI"
@@ -216,83 +232,96 @@
                             </div>
 
                             <div id="biaya_rsc" class="tab-pane fade">
-                                <form
-                                    action="{{ route('rsc.update.biaya.rsc', ['kode' => $data_rsc->pengajuan_kode, 'rsc' => $data_rsc->kode_rsc]) }}"
-                                    method="POST" enctype="multipart/form-data">
-                                    @method('put')
-                                    @csrf
+                                @if (!is_null($biaya_rsc))
+                                    <form
+                                        action="{{ route('rsc.update.biaya.rsc', ['kode' => $data_rsc->pengajuan_kode, 'rsc' => $data_rsc->kode_rsc]) }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @method('put')
+                                        @csrf
+                                        <div class="box-body" style="margin-top: -10px;font-size:12px;">
+
+                                            <div class="div-left">
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <label>ADMINISTRASI (%)</label>
+                                                    <input type="text" class="form-control" name="adm"
+                                                        id="adm" placeholder="ENTRI"
+                                                        value="{{ old('adm', $biaya_rsc->administrasi) }}">
+                                                </div>
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <label>PERSENTASE ADMINISTRASI</label>
+                                                    <input type="hidden" class="form-control" name="persentase"
+                                                        id="persentases" placeholder="ENTRI"
+                                                        value="{{ number_format($data_rsc->penentuan_plafon, '0', ',', '.') }}"
+                                                        readonly>
+                                                    <input type="text" class="form-control" name="persentase"
+                                                        id="persentase" placeholder="ENTRI"
+                                                        value="{{ number_format($biaya_rsc->administrasi_nominal, '0', ',', '.') }}"
+                                                        readonly>
+                                                </div>
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <label>POKOK DIBAYAR</label>
+                                                    <input type="text" class="form-control" name="pokok_dibayar"
+                                                        id="pok_dibayar" placeholder="ENTRI"
+                                                        value="{{ old('pokok_dibayar', number_format($biaya_rsc->poko_dibayar, '0', ',', '.')) }}">
+                                                </div>
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <label>BUNGA DIBAYAR</label>
+                                                    <input type="text" class="form-control" name="bunga_dibayar"
+                                                        id="bung_dibayar" placeholder="ENTRI"
+                                                        value="{{ old('bunga_dibayar', number_format($biaya_rsc->bunga_dibayar, '0', ',', '.')) }}">
+                                                </div>
+
+                                            </div>
+
+                                            <div class="div-right">
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <label>ASURANSI JIWA</label>
+                                                    <input type="text" class="form-control" name="asuransi_jiwa"
+                                                        id="a_jiwa" placeholder="ENTRI"
+                                                        value="{{ old('asuransi_jiwa', number_format($biaya_rsc->asuransi_jiwa, '0', ',', '.')) }}">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <label>ASURANSI TLO</label>
+                                                    <input type="text" class="form-control" name="asuransi_tlo"
+                                                        id="a_tlo" placeholder="ENTRI"
+                                                        value="{{ old('asuransi_tlo', number_format($biaya_rsc->asuransi_tlo, '0', ',', '.')) }}">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <label>DENDA DIBAYAR</label>
+                                                    <input type="text" class="form-control" name="denda_dibayar"
+                                                        id="den_dibayar" placeholder="ENTRI"
+                                                        value="{{ number_format($data_rsc->tunggakan_denda, '0', ',', '.') }}"
+                                                        readonly>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <label>TOTAL BIAYA</label>
+                                                    <input type="text" class="form-control" name="total_biaya"
+                                                        id="tot_biaya" placeholder="ENTRI"
+                                                        value="{{ old('total_biaya', number_format($biaya_rsc->total, '0', ',', '.')) }}"
+                                                        readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-body" style="margin-top:-20px;">
+                                            <button type="submit" class="btn btn-sm btn-primary"
+                                                style="margin-top:10px;width:100%">SIMPAN</button>
+                                        </div>
+                                    </form>
+                                @else
                                     <div class="box-body" style="margin-top: -10px;font-size:12px;">
-
-                                        <div class="div-left">
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <label>ADMINISTRASI (%)</label>
-                                                <input type="text" class="form-control" name="adm" id="adm"
-                                                    placeholder="ENTRI"
-                                                    value="{{ old('adm', $biaya_rsc->administrasi) }}">
+                                        <center>
+                                            <div>
+                                                <span class="text-center" style="font-size: 14px;">Data tidak ditemukan,
+                                                    harap
+                                                    simpan penentuan
+                                                    plafon.</span>
                                             </div>
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <label>PERSENTASE ADMINISTRASI</label>
-                                                <input type="hidden" class="form-control" name="persentase"
-                                                    id="persentases" placeholder="ENTRI"
-                                                    value="{{ number_format($data_rsc->penentuan_plafon, '0', ',', '.') }}"
-                                                    readonly>
-                                                <input type="text" class="form-control" name="persentase"
-                                                    id="persentase" placeholder="ENTRI"
-                                                    value="{{ number_format($biaya_rsc->administrasi_nominal, '0', ',', '.') }}"
-                                                    readonly>
-                                            </div>
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <label>POKOK DIBAYAR</label>
-                                                <input type="text" class="form-control" name="pokok_dibayar"
-                                                    id="pok_dibayar" placeholder="ENTRI"
-                                                    value="{{ old('pokok_dibayar', number_format($biaya_rsc->poko_dibayar, '0', ',', '.')) }}">
-                                            </div>
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <label>BUNGA DIBAYAR</label>
-                                                <input type="text" class="form-control" name="bunga_dibayar"
-                                                    id="bung_dibayar" placeholder="ENTRI"
-                                                    value="{{ old('bunga_dibayar', number_format($biaya_rsc->bunga_dibayar, '0', ',', '.')) }}">
-                                            </div>
-
-                                        </div>
-
-                                        <div class="div-right">
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <label>ASURANSI JIWA</label>
-                                                <input type="text" class="form-control" name="asuransi_jiwa"
-                                                    id="a_jiwa" placeholder="ENTRI"
-                                                    value="{{ old('asuransi_jiwa', number_format($biaya_rsc->asuransi_jiwa, '0', ',', '.')) }}">
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <label>ASURANSI TLO</label>
-                                                <input type="text" class="form-control" name="asuransi_tlo"
-                                                    id="a_tlo" placeholder="ENTRI"
-                                                    value="{{ old('asuransi_tlo', number_format($biaya_rsc->asuransi_tlo, '0', ',', '.')) }}">
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <label>DENDA DIBAYAR</label>
-                                                <input type="text" class="form-control" name="denda_dibayar"
-                                                    id="den_dibayar" placeholder="ENTRI"
-                                                    value="{{ number_format($data_rsc->tunggakan_denda, '0', ',', '.') }}"
-                                                    readonly>
-                                            </div>
-
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <label>TOTAL BIAYA</label>
-                                                <input type="text" class="form-control" name="total_biaya"
-                                                    id="tot_biaya" placeholder="ENTRI"
-                                                    value="{{ old('total_biaya', number_format($biaya_rsc->total, '0', ',', '.')) }}"
-                                                    readonly>
-                                            </div>
-                                        </div>
+                                        </center>
                                     </div>
-                                    <div class="box-body" style="margin-top:-20px;">
-                                        <button type="submit" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;width:100%">SIMPAN</button>
-                                    </div>
-                                </form>
+                                @endif
                             </div>
 
                         </div>
@@ -482,11 +511,13 @@
 
             const dec = (parseFloat(persentase) * parseFloat(inputValue)) / 100;
 
-            const bs = dec.toLocaleString("id-ID");
+            const hasil = Math.floor(dec);
+
+            const bs = hasil.toLocaleString("id-ID");
 
             $("#persentase").val(bs);
 
-            const jml = jiwa + tlo + den_dibayar + pok_dibayar + bung_dibayar + dec;
+            const jml = jiwa + tlo + den_dibayar + pok_dibayar + bung_dibayar + hasil;
 
             var jl = jml.toLocaleString("id-ID");
             $("#tot_biaya").val(jl);

@@ -23,32 +23,26 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li
-                                    class="{{ request()->is('themes/analisa/identitas/usaha/perdagangan*') ? 'active' : '' }}">
-                                    <a href="#"
-                                        class="{{ request()->is('themes/analisa/identitas/usaha/perdagangan*') ? 'text-bold' : '' }}">
+                                    class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan/identitas*') ? 'active' : '' }}">
+                                    <a href="{{ route('rsc.index.usaha.perdagangan.identitas', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                        class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan/identitas*') ? 'text-bold' : '' }}">
                                         IDENTITAS
                                     </a>
                                 </li>
 
                                 <li
-                                    class="{{ request()->is('themes/analisa/barang/usaha/perdagangan*') ? 'active' : '' }}">
-                                    <a href="#"
-                                        class="{{ request()->is('themes/analisa/barang/usaha/perdagangan*') ? 'text-bold' : '' }}">
+                                    class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan/barang*') ? 'active' : '' }}">
+                                    <a href="{{ route('rsc.usaha.perdagangan.barang', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                        class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan/barang*') ? 'text-bold' : '' }}">
                                         BARANG DAGANG
                                     </a>
                                 </li>
 
                                 <li
-                                    class="{{ request()->is('themes/analisa/keuangan/usaha/perdagangan*') ? 'active' : '' }}">
-                                    <a href="#"
-                                        class="{{ request()->is('themes/analisa/keuangan/usaha/perdagangan*') ? 'text-bold' : '' }}">
+                                    class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan/keuangan*') ? 'active' : '' }}">
+                                    <a href="{{ route('rsc.usaha.perdagangan.keuangan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                        class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan/keuangan*') ? 'text-bold' : '' }}">
                                         ANALISA KEUANGAN
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <i class="fa fa-arrow-left"></i> KEMBALI
                                     </a>
                                 </li>
                             </ul>

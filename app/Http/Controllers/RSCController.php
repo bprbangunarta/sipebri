@@ -166,7 +166,7 @@ class RSCController extends Controller
 
             $data_rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $enc)->where('kode_rsc', $enc_rsc)->first();
             $biaya_rsc = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
-
+            // dd($biaya_rsc);
             return view('rsc.data-kredit', [
                 'data' => $data[0],
                 'usaha' => $jenis_usaha,
@@ -196,11 +196,13 @@ class RSCController extends Controller
                 'klasifikasi_kredit' => Str::upper($request->klasifikasi_kredit),
                 'baki_debet' => (int)str_replace(["Rp.", " ", "."], "", $request->baki_debet ?? 0),
                 'plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->plafon ?? 0),
-                'penentuan_plafon' => $total,
+                'penentuan_plafon_temp' => $total,
                 'tunggakan_poko' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_pokok ?? 0),
                 'tunggakan_bunga' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_bunga ?? 0),
                 'tunggakan_denda' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_denda ?? 0),
                 'total_tunggakan' => (int)str_replace(["Rp.", " ", "."], "", $request->total_tunggakan ?? 0),
+                'jml_tgk_pokok' => (int)str_replace(["Rp.", " ", "."], "", $request->jml_tunggakan_pokok ?? 0),
+                'jml_tgk_bunga' => (int)str_replace(["Rp.", " ", "."], "", $request->jml_tunggakan_bunga ?? 0),
                 'updated_at' => now(),
             ];
 
@@ -231,17 +233,33 @@ class RSCController extends Controller
                 return redirect()->back()->with('error', 'Data tidak ditemukan.');
             }
 
-            $total = (int)str_replace(["Rp.", " ", "."], "", $rsc->baki_debet ?? 0) + (int)str_replace(["Rp.", " ", "."], "", $rsc->tunggakan_bunga ?? 0);
-
             $data = [
                 'pokok_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
                 'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
-                'penentuan_plafon' => $total,
+                'penentuan_plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->penentuan_plafon ?? 0),
                 'updated_at' => now(),
             ];
 
+            //==Data table rsc_biaya==//
+            $total = (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0) + (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0);
+            $data2 = [
+                'kode_rsc' => $request->rsc,
+                'poko_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
+                'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
+                'total' => $total
+            ];
+
+            $cek_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->first();
+
+            if (is_null($cek_biaya)) {
+                $insert_biaya = DB::table('rsc_biaya')->insert($data2);
+            } else {
+                $update_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->update($data2);
+            }
+            //==Data table rsc_biaya==//
+
             $update = DB::table('rsc_data_pengajuan')
-                ->where('kode_rsc', $request->query('rsc'))
+                ->where('pengajuan_kode', $request->query('kode'))
                 ->where('kode_rsc', $request->rsc)
                 ->update($data);
 
