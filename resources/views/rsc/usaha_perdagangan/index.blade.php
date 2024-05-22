@@ -29,7 +29,10 @@
                                     class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
                                     <i class="fa fa-file-text-o"></i></a>
 
-                                <form action="#" method="POST">
+                                <form
+                                    action="{{ route('rsc.usaha.perdagangan.delete', ['kode_usaha' => $item->kd_usaha]) }}"
+                                    method="POST">
+                                    @method('delete')
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn btn-sm btn-danger confirmdelete" style="float: right"

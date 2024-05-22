@@ -16,9 +16,9 @@
                                 <a href="#data_kredit" data-toggle="tab">DATA KREDIT & NASABAH</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="#penentuan_plafon" data-toggle="tab">PENENTUAN PLAFON</a>
-                            </li>
+                            </li> --}}
 
                             <li>
                                 <a href="#biaya_rsc" data-toggle="tab">BIAYA RSC</a>
@@ -110,6 +110,20 @@
                                                     required>
                                             </div>
 
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <label>POKOK DIBAYAR</label>
+                                                <input type="text" class="form-control" name="pk_dibayar" id="pk_dibayar"
+                                                    placeholder="ENTRI"
+                                                    value="{{ old('pk_dibayar', number_format($data_rsc->pokok_dibayar, '0', ',', '.')) }}">
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <label>BUNGA DIBAYAR</label>
+                                                <input type="text" class="form-control" name="bg_dibayar" id="bg_dibayar"
+                                                    placeholder="ENTRI"
+                                                    value="{{ old('bg_dibayar', number_format($data_rsc->bunga_dibayar, '0', ',', '.')) }}">
+                                            </div>
+
                                         </div>
 
 
@@ -118,8 +132,8 @@
                                                 <span class="fw-bold">ALAMAT KTP</span>
                                                 <input type="text" class="form-control" style="font-size: 12px;"
                                                     name="alamat_ktp" id="alamat_ktp"
-                                                    value="{{ old('alamat_ktp', $data->alamat_ktp) }}" placeholder="ENTRI"
-                                                    required readonly>
+                                                    value="{{ old('alamat_ktp', $data->alamat_ktp) }}"
+                                                    placeholder="ENTRI" required readonly>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -172,6 +186,18 @@
                                                     required readonly>
                                             </div>
 
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <label>PLAFON</label>
+                                                <input type="hidden" class="form-control" name=""
+                                                    id="pn_plafons" placeholder="ENTRI"
+                                                    value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon_temp, '0', ',', '.')) }}"
+                                                    readonly>
+                                                <input type="text" class="form-control" name="penentuan_plafon"
+                                                    id="pn_plafon" placeholder="ENTRI"
+                                                    value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon, '0', ',', '.')) }}"
+                                                    readonly>
+                                            </div>
+
                                         </div>
 
                                     </div>
@@ -182,7 +208,7 @@
                                 </form>
                             </div>
 
-                            <div id="penentuan_plafon" class="tab-pane fade">
+                            {{-- <div id="penentuan_plafon" class="tab-pane fade">
                                 <form
                                     action="{{ route('rsc.update.penentuan.plafon', ['kode' => $data_rsc->pengajuan_kode, 'rsc' => $data_rsc->kode_rsc]) }}"
                                     method="POST" enctype="multipart/form-data">
@@ -229,7 +255,7 @@
                                             style="margin-top:10px;width:100%">SIMPAN</button>
                                     </div>
                                 </form>
-                            </div>
+                            </div> --}}
 
                             <div id="biaya_rsc" class="tab-pane fade">
                                 @if (!is_null($biaya_rsc))
@@ -467,6 +493,20 @@
 
             var bs = jml.toLocaleString("id-ID");
             $("#total_tunggakan").val(bs);
+        })
+
+        $('#tunggakan_bunga').keyup(function() {
+            const tgk_bunga = $('#tunggakan_bunga').val()
+            const baki_debet = $('#baki_debet').val()
+
+            var rbunga = parseFloat(tgk_bunga.replace(/[^\d]/g, "")) || 0;
+            var baki = parseFloat(baki_debet.replace(/[^\d]/g, "")) || 0;
+
+            const jmlh = rbunga + baki
+
+            var has = jmlh.toLocaleString("id-ID");
+            $("#pn_plafons").val(has);
+            $("#pn_plafon").val(has);
         })
         //--> KALKULASI TUNGGAKAN <--//
 

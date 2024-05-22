@@ -203,6 +203,9 @@ class RSCController extends Controller
                 'total_tunggakan' => (int)str_replace(["Rp.", " ", "."], "", $request->total_tunggakan ?? 0),
                 'jml_tgk_pokok' => (int)str_replace(["Rp.", " ", "."], "", $request->jml_tunggakan_pokok ?? 0),
                 'jml_tgk_bunga' => (int)str_replace(["Rp.", " ", "."], "", $request->jml_tunggakan_bunga ?? 0),
+                'pokok_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
+                'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
+                'penentuan_plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->penentuan_plafon ?? 0),
                 'updated_at' => now(),
             ];
 
@@ -211,58 +214,25 @@ class RSCController extends Controller
                 ->where('kode_rsc', $request->query('rsc'))
                 ->update($data);
 
-            if ($update) {
-                return redirect()->back()->with('success', 'Berhasil menambahkan data.');
-            } else {
-                return redirect()->back()->with('error', 'Data gagal ditambahkan.');
-            }
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
-        }
-    }
-
-    public function update_penentuan_plafon(Request $request)
-    {
-        try {
-
-            $rsc = DB::table('rsc_data_pengajuan')
-                ->where('pengajuan_kode', $request->kode)
-                ->where('kode_rsc', $request->rsc)->first();
-
-            if (is_null($rsc)) {
-                return redirect()->back()->with('error', 'Data tidak ditemukan.');
-            }
-
-            $data = [
-                'pokok_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
-                'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
-                'penentuan_plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->penentuan_plafon ?? 0),
-                'updated_at' => now(),
-            ];
-
             //==Data table rsc_biaya==//
             $total = (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0) + (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0);
             $data2 = [
                 'kode_rsc' => $request->rsc,
                 'poko_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
                 'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
-                'total' => $total
+                'total' => $total,
             ];
 
             $cek_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->first();
 
             if (is_null($cek_biaya)) {
+                $data2['created_at'] = now();
                 $insert_biaya = DB::table('rsc_biaya')->insert($data2);
             } else {
+                $data2['updated_at'] = now();
                 $update_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->update($data2);
             }
             //==Data table rsc_biaya==//
-
-            $update = DB::table('rsc_data_pengajuan')
-                ->where('pengajuan_kode', $request->query('kode'))
-                ->where('kode_rsc', $request->rsc)
-                ->update($data);
-
 
             if ($update) {
                 return redirect()->back()->with('success', 'Berhasil menambahkan data.');
@@ -273,6 +243,59 @@ class RSCController extends Controller
             return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
         }
     }
+
+    // public function update_penentuan_plafon(Request $request)
+    // {
+    //     try {
+
+    //         $rsc = DB::table('rsc_data_pengajuan')
+    //             ->where('pengajuan_kode', $request->kode)
+    //             ->where('kode_rsc', $request->rsc)->first();
+
+    //         if (is_null($rsc)) {
+    //             return redirect()->back()->with('error', 'Data tidak ditemukan.');
+    //         }
+
+    //         $data = [
+    //             'pokok_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
+    //             'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
+    //             'penentuan_plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->penentuan_plafon ?? 0),
+    //             'updated_at' => now(),
+    //         ];
+
+    //         //==Data table rsc_biaya==//
+    //         $total = (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0) + (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0);
+    //         $data2 = [
+    //             'kode_rsc' => $request->rsc,
+    //             'poko_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
+    //             'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
+    //             'total' => $total
+    //         ];
+
+    //         $cek_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->first();
+
+    //         if (is_null($cek_biaya)) {
+    //             $insert_biaya = DB::table('rsc_biaya')->insert($data2);
+    //         } else {
+    //             $update_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->update($data2);
+    //         }
+    //         //==Data table rsc_biaya==//
+
+    //         $update = DB::table('rsc_data_pengajuan')
+    //             ->where('pengajuan_kode', $request->query('kode'))
+    //             ->where('kode_rsc', $request->rsc)
+    //             ->update($data);
+
+
+    //         if ($update) {
+    //             return redirect()->back()->with('success', 'Berhasil menambahkan data.');
+    //         } else {
+    //             return redirect()->back()->with('error', 'Data gagal ditambahkan.');
+    //         }
+    //     } catch (\Throwable $th) {
+    //         return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
+    //     }
+    // }
 
     public function update_biaya_rsc(Request $request)
     {

@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @forelse ($pertanian as $item)
+                    @forelse ($pertanian as $item)
                         <tr>
                             <td style="vertical-align: middle;text-transform:uppercase;">{{ $item->nama_usaha ?? null }}</td>
                             <td style="vertical-align: middle;">
@@ -26,16 +26,13 @@
                             <td style="vertical-align: middle;">
                                 {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') ?? null }}</td>
                             <td class="text-center">
-                                <a href="{{ route('pertanian.informasi', ['analisa' => $item->kode_id, 'pengajuan' => $item->kd_pengajuan, 'kode_usaha' => $item->kd_usaha]) }}"
+                                <a href="{{ route('rsc.usaha.pertanian.informasi', ['kode_usaha' => $item->kd_usaha, 'kode' => $data->kode, 'rsc' => $data->rsc]) }}"
                                     class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
                                     <i class="fa fa-file-text-o"></i></a>
 
-                                <form
-                                    action="{{ route('pertanian.destroy', ['id' => $item->id, 'kode_id' => $item->kode_id, 'kode_usaha' => $item->kd_usaha]) }}"
-                                    method="POST">
+                                <form action="" method="POST">
                                     @method('delete')
                                     @csrf
-                                    @method('delete')
                                     <button type="button" class="btn btn-sm btn-danger confirmdelete" style="float: right"
                                         title="Hapus Usaha">
                                         <i class="fa fa-trash"></i>
@@ -47,7 +44,7 @@
                         <tr>
                             <td class="text-center" colspan="7">Tidak ada analisa usaha pertanian.</td>
                         </tr>
-                    @endforelse --}}
+                    @endforelse
                 </tbody>
             </table>
 
@@ -64,7 +61,8 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAMBAH USAHA</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('rsc.usaha.pertanian.simpan', ['rsc' => $data->rsc]) }}" method="POST">
+                    @method('post')
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

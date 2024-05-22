@@ -60,7 +60,7 @@ class RSCPerdaganganController extends Controller
     {
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
-            $kode_usaha = $this->kodeacak('RSC', 6);
+            $kode_usaha = $this->kodeacak('AUP', 6);
 
             $data = [
                 'kode_rsc' => $enc_rsc,
@@ -412,6 +412,33 @@ class RSCPerdaganganController extends Controller
             } else {
                 return redirect()->back()->with('error', 'Data gagal diupdate');
             }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
+            $au_perdagangan = DB::table('rsc_au_perdagangan')->where('kode_usaha', $kode_usaha)->first();
+            $bu_perdagangan = DB::table('rsc_bu_perdagangan')->where('usaha_kode', $kode_usaha)->first();
+            $du_perdagangan = DB::table('rsc_du_perdagangan')->where('usaha_kode', $kode_usaha)->get();
+
+            if (!is_null($au_perdagangan)) {
+                DB::table('rsc_au_perdagangan')->where('kode_usaha', $kode_usaha)->delete();
+            }
+
+            if (!is_null($bu_perdagangan)) {
+                DB::table('rsc_bu_perdagangan')->where('usaha_kode', $kode_usaha)->delete();
+            }
+
+            if (count($du_perdagangan) > 0) {
+                foreach ($du_perdagangan as $value) {
+                    DB::table('rsc_du_perdagangan')->where('id', $value->id)->delete();
+                }
+            }
+            return redirect()->back()->with('success', 'Usaha perdagangan berhasil dihapus');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
