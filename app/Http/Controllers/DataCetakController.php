@@ -1385,7 +1385,7 @@ class DataCetakController extends Controller
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
                 ]);
-            } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF') {
+            } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF' || $cek->produk_kode == 'KRS' && $cek->metode_rps == 'EFEKTIF') {
                 // dd($cek);
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-efektif', [
 
