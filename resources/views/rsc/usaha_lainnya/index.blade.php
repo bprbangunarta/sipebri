@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @forelse ($perdagangan as $item)
+                    @forelse ($lain as $item)
                         <tr>
                             <td style="vertical-align: middle;text-transform:uppercase;">{{ $item->nama_usaha }}</td>
                             <td style="vertical-align: middle;">
@@ -25,12 +25,11 @@
                             <td style="vertical-align: middle;">
                                 {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</td>
                             <td class="text-center">
-                                <a href="{{ route('perdagangan.identitas', ['analisa' => $item->kode_id, 'pengajuan' => $item->kd_pengajuan, 'kode_usaha' => $item->kd_usaha]) }}"
+                                <a href="{{ route('rsc.usaha.lain.identitas', ['kode_usaha' => $item->kd_usaha, 'kode' => $data->kode, 'rsc' => $data->rsc]) }}"
                                     class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
                                     <i class="fa fa-file-text-o"></i></a>
 
-                                <form
-                                    action="{{ route('perdagangan.hapus', ['id' => $item->id, 'kode_id' => $item->kode_id, 'kode_usaha' => $item->kd_usaha]) }}"
+                                <form action="{{ route('rsc.usaha.lain.delete', ['kode_usaha' => $item->kd_usaha]) }}"
                                     method="POST">
                                     @csrf
                                     @method('delete')
@@ -45,7 +44,7 @@
                         <tr>
                             <td class="text-center" colspan="7">Tidak ada analisa usaha perdagangan.</td>
                         </tr>
-                    @endforelse --}}
+                    @endforelse
                 </tbody>
             </table>
 
@@ -62,7 +61,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAMBAH USAHA</h4>
                 </div>
-                <form action="#" method="POST">
+                <form action="{{ route('rsc.usaha.lain.simpan', ['rsc' => $data->rsc]) }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

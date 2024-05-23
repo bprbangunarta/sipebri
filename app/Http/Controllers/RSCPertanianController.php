@@ -362,6 +362,26 @@ class RSCPertanianController extends Controller
         }
     }
 
+    public function delete_rsc_pertanian(Request $request)
+    {
+        try {
+            $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
+            $au_pertanian = DB::table('rsc_au_pertanian')->where('kode_usaha', $kode_usaha)->get();
+            $bu_pertanian = DB::table('rsc_bu_pertanian')->where('usaha_kode', $kode_usaha)->get();
+
+            if (count($au_pertanian) > 0) {
+                DB::table('rsc_au_pertanian')->where('kode_usaha', $kode_usaha)->delete();
+            }
+
+            if (count($bu_pertanian) > 0) {
+                DB::table('rsc_bu_pertanian')->where('usaha_kode', $kode_usaha)->delete();
+            }
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
 
 
     //==Privat Function==
