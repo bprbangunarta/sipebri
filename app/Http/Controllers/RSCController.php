@@ -101,6 +101,7 @@ class RSCController extends Controller
                 'jenis_persetujuan' => $request->jenis_persetujuan,
                 'kasi_kode' => $request->kasi_kode,
                 'surveyor_kode' => $request->surveyor_kode,
+                'status' => 'Proses Analisa',
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
