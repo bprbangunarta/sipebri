@@ -81,7 +81,7 @@ class KonfirmasiController extends Controller
                     return redirect()->back()->with('error', 'Data harus diisi sesuai dengan ketentuan');
                 }
             }
-
+            dd($request);
             //Data auth
             $data = [
                 'auth_user' => Auth::user()->code_user,
@@ -382,6 +382,11 @@ class KonfirmasiController extends Controller
             $collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
             if (is_null($collateral)) {
                 return redirect()->back()->with('error', 'Data Collateral tidak boleh kosong');
+            }
+
+            $memo = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
+            if (is_null($memo->bi_sifat_kode) || is_null($memo->bi_jenis_usaha_kode)) {
+                return redirect()->back()->with('error', 'Data Sandi Lapbul tidak boleh kosong');
             }
 
             //By pas jika produk KTA
