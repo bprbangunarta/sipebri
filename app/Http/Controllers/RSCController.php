@@ -35,6 +35,7 @@ class RSCController extends Controller
                 'data_survei.kantor_kode',
                 'data_pengajuan.plafon',
             )
+            ->whereNotIn('rsc_data_pengajuan.status', ['Batal RSC'])
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
 
@@ -245,59 +246,6 @@ class RSCController extends Controller
         }
     }
 
-    // public function update_penentuan_plafon(Request $request)
-    // {
-    //     try {
-
-    //         $rsc = DB::table('rsc_data_pengajuan')
-    //             ->where('pengajuan_kode', $request->kode)
-    //             ->where('kode_rsc', $request->rsc)->first();
-
-    //         if (is_null($rsc)) {
-    //             return redirect()->back()->with('error', 'Data tidak ditemukan.');
-    //         }
-
-    //         $data = [
-    //             'pokok_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
-    //             'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
-    //             'penentuan_plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->penentuan_plafon ?? 0),
-    //             'updated_at' => now(),
-    //         ];
-
-    //         //==Data table rsc_biaya==//
-    //         $total = (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0) + (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0);
-    //         $data2 = [
-    //             'kode_rsc' => $request->rsc,
-    //             'poko_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->pk_dibayar ?? 0),
-    //             'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bg_dibayar ?? 0),
-    //             'total' => $total
-    //         ];
-
-    //         $cek_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->first();
-
-    //         if (is_null($cek_biaya)) {
-    //             $insert_biaya = DB::table('rsc_biaya')->insert($data2);
-    //         } else {
-    //             $update_biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->rsc)->update($data2);
-    //         }
-    //         //==Data table rsc_biaya==//
-
-    //         $update = DB::table('rsc_data_pengajuan')
-    //             ->where('pengajuan_kode', $request->query('kode'))
-    //             ->where('kode_rsc', $request->rsc)
-    //             ->update($data);
-
-
-    //         if ($update) {
-    //             return redirect()->back()->with('success', 'Berhasil menambahkan data.');
-    //         } else {
-    //             return redirect()->back()->with('error', 'Data gagal ditambahkan.');
-    //         }
-    //     } catch (\Throwable $th) {
-    //         return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
-    //     }
-    // }
-
     public function update_biaya_rsc(Request $request)
     {
         try {
@@ -348,6 +296,24 @@ class RSCController extends Controller
             }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
+        }
+    }
+
+    public function delete_rsc(Request $request)
+    {
+        try {
+            $rsc = Crypt::decrypt($request->query('rsc'));
+            $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->first();
+
+            if (!is_null($data_rsc)) {
+                $data = ['status' => 'Batal RSC'];
+                DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->update($data);
+                return redirect()->back()->with('success', 'Data berhasil dihapus.');
+            } else {
+                return redirect()->back()->with('error', 'Data tidak ditemukan.');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
         }
     }
 

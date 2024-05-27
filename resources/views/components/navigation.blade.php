@@ -466,8 +466,26 @@
 
                     <li class="{{ request()->is('themes/rsc/index') ? 'active' : '' }}">
                         <a href="{{ route('rsc.index') }}" title="Add RSC">
-                            <i class="fa fa-circle-o"></i>
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             Add RSC
+                        </a>
+                    </li>
+                    <li class="#">
+                        <a href="{{ route('rsc.index') }}" title="Add RSC">
+                            <i class="fa fa-file-text-o"></i>
+                            Input Persetujuan RSC
+                        </a>
+                    </li>
+                    <li class="#">
+                        <a href="{{ route('rsc.index') }}" title="Add RSC">
+                            <i class="fa fa-suitcase"></i>
+                            Cetak Berkas Analisa
+                        </a>
+                    </li>
+                    <li class="#">
+                        <a href="{{ route('rsc.index') }}" title="Add RSC">
+                            <i class="fa fa-exclamation-circle"></i>
+                            Cetak Perjanjian Kredit
                         </a>
                     </li>
                 </ul>

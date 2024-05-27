@@ -650,8 +650,8 @@ Route::middleware('auth')->group(function () {
                 Route::post('/rsc/tambah', 'tambah_rsc')->name('rsc.tambah.rsc');
                 Route::get('/rsc/data/kredit', 'data_kredit')->name('rsc.data.kredit');
                 Route::put('/rsc/data/kredit', 'update_data_kredit')->name('rsc.update.data.kredit');
-                // Route::put('/rsc/penentuan/plafon', 'update_penentuan_plafon')->name('rsc.update.penentuan.plafon');
                 Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
+                Route::delete('/rsc/delete', 'delete_rsc')->name('rsc.delete.rsc');
             });
 
             Route::controller(RSCPerdaganganController::class)->group(function () {

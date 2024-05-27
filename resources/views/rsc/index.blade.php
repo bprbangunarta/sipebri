@@ -40,7 +40,7 @@
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center">WIL</th>
                                         <th class="text-center">PLAFON</th>
-                                        <th class="text-center" width="10%">AKSI</th>
+                                        <th class="text-center" width="7%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,19 +73,24 @@
                                             <td class="text-right">
                                                 {{ $item->plafon }}
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center" style="text-align: right;">
 
                                                 <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc]) }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Lengkapi Data">
+                                                    class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a href="#" data-toggle="modal" data-target="#hapus"
-                                                    class="btn-circle btn-sm bg-red confirmdelete" title="Hapus"
-                                                    style="cursor: pointer;">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
+
+                                                <form action="{{ route('rsc.delete.rsc', ['rsc' => $item->rsc]) }}"
+                                                    method="POST" style="display:inline;">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <a href="#" class="btn-circle btn-sm bg-red confirmdelete"
+                                                        title="Hapus" style="cursor: pointer;">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -197,4 +202,5 @@
 @endsection
 
 @push('myscript')
+    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endpush
