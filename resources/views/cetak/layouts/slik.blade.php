@@ -186,7 +186,7 @@
                 <td>Tempat. Tanggal Lahir</td>
                 <td class="text-center"> : </td>
                 <!-- <td>{{ $data->tempat_lahir_p . ',' . ' ' . $data->tanggal_lahir_p }}</td> -->
-                <td>{{ $data->tempat_lahir_p }}, {{ \Carbon\Carbon::createFromFormat('Ymd', $data->tanggal_lahir_p)->locale('id')->translatedFormat('d F Y') }}</td>
+                <td>{{ ucwords(strtolower($data->tempat_lahir_p)) }}, {{ \Carbon\Carbon::createFromFormat('Ymd', $data->tanggal_lahir_p)->locale('id')->translatedFormat('d F Y') }}</td>
             </tr>
             <tr>
                 <td>Nomor Telepon</td>
