@@ -5,7 +5,8 @@
     <div class="tab-content">
         <div class="tab-pane active">
 
-            <form action="" method="post">
+            <form action="{{ route('rsc.konfirmasi.update', ['rsc' => $data->rsc]) }}" method="post">
+                @method('post')
                 @csrf
                 <div class="box-body" style="margin-top: -10px;">
 

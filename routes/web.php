@@ -653,6 +653,7 @@ Route::middleware('auth')->group(function () {
                 Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
                 Route::delete('/rsc/delete', 'delete_rsc')->name('rsc.delete.rsc');
                 Route::get('/rsc/konfirmasi', 'konfirmasi_index')->name('rsc.konfirmasi');
+                Route::post('/rsc/update/konfirmasi', 'konfirmasi_update')->name('rsc.konfirmasi.update');
             });
 
             Route::controller(RSCPerdaganganController::class)->group(function () {

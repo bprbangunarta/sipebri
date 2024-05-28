@@ -40,7 +40,7 @@ class RSCPengusulanController extends Controller
             $rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $enc)->where('kode_rsc', $enc_rsc)->first();
             $keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
 
-            // dd($data, $rsc, $keuangan);
+            // dd($keuangan);
             return view('rsc.pengusulan.index', [
                 'data' => $data[0],
                 'pengusulan' => $rsc,

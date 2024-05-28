@@ -338,6 +338,57 @@ class RSCController extends Controller
         }
     }
 
+    public function konfirmasi_update(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $cek_pengajuan_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->first();
+            $cek_biaya_rsc = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
+            $cek_kondisi_usaha = DB::table('rsc_kondisi_usaha')->where('kode_rsc', $enc_rsc)->first();
+            $cek_agunan = DB::table('rsc_agunan')->where('kode_rsc', $enc_rsc)->first();
+
+            $cek_perdagangan = DB::table('rsc_au_perdagangan')->where('kode_rsc', $enc_rsc)->get();
+            $cek_pertanian = DB::table('rsc_au_pertanian')->where('kode_rsc', $enc_rsc)->get();
+            $cek_jasa = DB::table('rsc_au_jasa')->where('kode_rsc', $enc_rsc)->get();
+            $cek_lain = DB::table('rsc_au_lain')->where('kode_rsc', $enc_rsc)->get();
+
+            $cek_all = count($cek_perdagangan) + count($cek_pertanian) + count($cek_jasa) + count($cek_lain);
+
+            $cek_keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
+
+
+            if (is_null($cek_pengajuan_rsc->baki_debet)) {
+                return redirect()->back()->with('error', 'Data kredit belum diisi.');
+            } else if (is_null($cek_biaya_rsc)) {
+                return redirect()->back()->with('error', 'Biaya RSC belum diisi.');
+            } else if (is_null($cek_kondisi_usaha)) {
+                return redirect()->back()->with('error', 'Faktor dipenilaian debitur belum diisi.');
+            } else if (is_null($cek_agunan)) {
+                return redirect()->back()->with('error', 'kondisi agunan belum diisi.');
+            } else if ($cek_all <= 0) {
+                return redirect()->back()->with('error', 'Data usaha harus diisi.');
+            } else if (is_null($cek_keuangan)) {
+                return redirect()->back()->with('error', 'Keuangan harus diisi.');
+            } else if (is_null($cek_pengajuan_rsc->total_angsuran)) {
+                return redirect()->back()->with('error', 'Usulan plafon harus diisi.');
+            }
+
+            $data = [
+                'status' => 'Proses Persetujuan',
+                'updated_at' => now(),
+            ];
+
+            $update = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data);
+            if ($update) {
+                return redirect()->back()->with('success', 'Konfirmasi analisa RSC berhasil.');
+            } else {
+                return redirect()->back()->with('error', 'Konfirmasi analisa RSC gagal.');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
 
 
 
