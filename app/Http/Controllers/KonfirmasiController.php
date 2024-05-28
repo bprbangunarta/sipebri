@@ -81,7 +81,7 @@ class KonfirmasiController extends Controller
                     return redirect()->back()->with('error', 'Data harus diisi sesuai dengan ketentuan');
                 }
             }
-            dd($request);
+            
             //Data auth
             $data = [
                 'auth_user' => Auth::user()->code_user,
