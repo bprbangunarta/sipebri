@@ -144,21 +144,22 @@
                     Pelaksana IDEB,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
-                        <span
-                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;"></span>
+                        <span style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;"></span>
                     </font>
                 </td>
                 <td class="text-center">
                     Menyetujui,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
-                        {{ $data->kasi_kode }}</font>
+                        {{ $data->kasi_kode }}
+                    </font>
                 </td>
                 <td class="text-center">
                     Pemohon,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
-                        {{ $data->surveyor_kode }}</font>
+                        {{ $data->surveyor_kode }}
+                    </font>
                 </td>
             </tr>
         </table>
@@ -184,7 +185,8 @@
             <tr>
                 <td>Tempat. Tanggal Lahir</td>
                 <td class="text-center"> : </td>
-                <td>{{ $data->tempat_lahir_p . ',' . ' ' . $data->tanggal_lahir_p }}</td>
+                <!-- <td>{{ $data->tempat_lahir_p . ',' . ' ' . $data->tanggal_lahir_p }}</td> -->
+                <td>{{ $data->tempat_lahir_p }}, {{ \Carbon\Carbon::createFromFormat('Ymd', $data->tanggal_lahir_p)->format('d F Y') }}</td>
             </tr>
             <tr>
                 <td>Nomor Telepon</td>
@@ -223,8 +225,7 @@
                     Pelaksana IDEB,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform: uppercase;">
-                        <span
-                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -3px;"></span>
+                        <span style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -3px;"></span>
                     </font>
 
                 </td>
@@ -232,13 +233,15 @@
                     Menyetujui,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
-                        {{ $data->kasi_kode }}</font>
+                        {{ $data->kasi_kode }}
+                    </font>
                 </td>
                 <td class="text-center">
                     Pemohon,<br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
-                        {{ $data->surveyor_kode }}</font>
+                        {{ $data->surveyor_kode }}
+                    </font>
                 </td>
             </tr>
         </table>
