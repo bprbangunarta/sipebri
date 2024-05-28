@@ -74,6 +74,12 @@
                 </a>
             </li>
 
+            <li class="{{ request()->is('themes/rsc/konfirmasi') ? 'active' : '' }}">
+                <a href="{{ route('rsc.konfirmasi', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}">
+                    <i class="fa fa-folder-o"></i> Konfirmasi
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>

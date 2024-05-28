@@ -652,6 +652,7 @@ Route::middleware('auth')->group(function () {
                 Route::put('/rsc/data/kredit', 'update_data_kredit')->name('rsc.update.data.kredit');
                 Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
                 Route::delete('/rsc/delete', 'delete_rsc')->name('rsc.delete.rsc');
+                Route::get('/rsc/konfirmasi', 'konfirmasi_index')->name('rsc.konfirmasi');
             });
 
             Route::controller(RSCPerdaganganController::class)->group(function () {
@@ -712,10 +713,12 @@ Route::middleware('auth')->group(function () {
 
             Route::controller(RSCPengusulanController::class)->group(function () {
                 Route::get('/rsc/data/pengusulan', 'index')->name('rsc.data.pengusulan');
+                Route::post('/rsc/data/simpan/pengusulan', 'simpan_pengusulan')->name('rsc.data.pengusulan.simpan');
             });
 
             Route::controller(RSCKeuanganController::class)->group(function () {
                 Route::get('/rsc/keuangan', 'index')->name('rsc.keuangan');
+                Route::post('/rsc/simpan/keuangan', 'simpan_keuangan')->name('rsc.keuangan.simpan');
             });
         });
         //====Route Analisa RSC====//

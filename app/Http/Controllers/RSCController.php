@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\RSC;
 use App\Models\Jasa;
 use App\Models\Lain;
 use App\Models\Nasabah;
@@ -316,6 +317,28 @@ class RSCController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+    public function konfirmasi_index(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('kode'));
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $data = RSC::get_data_rsc();
+
+            foreach ($data as $item) {
+                $item->kode = $request->query('kode');
+                $item->rsc = $request->query('rsc');
+            }
+
+            return view('rsc.konfirmasi.analisa', [
+                'data' => $data[0]
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+
 
 
     private function kodeacak($name)

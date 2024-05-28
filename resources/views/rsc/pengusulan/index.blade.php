@@ -17,8 +17,8 @@
                             </li>
                         </ul>
 
-                        <form action="#" method="POST">
-                            @method('PUT')
+                        <form action="{{ route('rsc.data.pengusulan.simpan', ['rsc' => $data->rsc]) }}" method="POST">
+                            @method('post')
                             @csrf
                             <div class="tab-content">
 
@@ -28,6 +28,8 @@
                                         <div class="div-left">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">PLAFON</span>
+                                                <input type="hidden" id='keuangan'
+                                                    value="{{ $keuangan->keuangan_perbulan }}">
                                                 <input type="text" class="form-control" name="plafon" id="plafon"
                                                     placeholder="10.000.000"
                                                     value="{{ number_format($pengusulan->penentuan_plafon, '0', ',', '.') ?? 0 }}"
@@ -48,7 +50,7 @@
                                                     <option value="">-- PILIH -- </option>
                                                     <option value="FLAT"
                                                         {{ old('metode_rps') == 'FLAT' || $pengusulan->metode_rps == 'FLAT' ? 'selected' : '' }}>
-                                                        Flat
+                                                        FLAT
                                                     </option>
                                                     <option value="PRK"
                                                         {{ old('metode_rps') == 'PRK' || $pengusulan->metode_rps == 'PRK' ? 'selected' : '' }}>
@@ -72,51 +74,56 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">SUKU BUNGA</span>
                                                 <input type="text" class="form-control" name="suku_bunga" id="suku_bunga"
-                                                    placeholder="ENTRI" value="{{ old('suku_bunga') }}" required>
+                                                    placeholder="ENTRI"
+                                                    value="{{ old('suku_bunga', $pengusulan->suku_bunga) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">ANGSURAN BUNGA</span>
                                                 <input type="text" class="form-control" name="angsuran_bunga"
                                                     id="angsuran_bunga" placeholder="ENTRI"
-                                                    value="{{ old('angsuran_bunga') }}" required readonly>
+                                                    value="{{ old('angsuran_bunga', number_format($pengusulan->angsuran_bunga, '0', ',', '.')) }}"
+                                                    required readonly>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TOTAL ANGSURAN</span>
                                                 <input type="text" class="form-control" name="total_angsuran"
                                                     id="total_angsuran" placeholder="ENTRI"
-                                                    value="{{ old('total_angsuran') }}" required readonly>
+                                                    value="{{ old('total_angsuran', number_format($pengusulan->total_angsuran, '0', ',', '.')) }}"
+                                                    required readonly>
                                             </div>
                                         </div>
 
 
                                         <div class="div-right">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">JW BUNGA (BULAN)</span>
+                                                <span class="fw-bold">JK BUNGA (BULAN)</span>
                                                 <input type="number" class="form-control" name="jangka_bunga"
-                                                    id="jangka_bunga" placeholder="ENTRI" value="{{ old('jangka_bunga') }}"
-                                                    required>
+                                                    id="jangka_bunga" placeholder="ENTRI"
+                                                    value="{{ old('jangka_bunga', $pengusulan->jangka_bunga) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">JK POKOK (BULAN)</span>
                                                 <input type="number" class="form-control" name="jangka_pokok"
-                                                    id="jangka_pokok" placeholder="ENTRI" value="{{ old('jangka_pokok') }}"
-                                                    required>
+                                                    id="jangka_pokok" placeholder="ENTRI"
+                                                    value="{{ old('jangka_pokok', $pengusulan->jangka_pokok) }}" required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">RC (%)</span>
-                                                <input type="number" class="form-control" name="rc" id="rc"
-                                                    placeholder="ENTRI" value="{{ old('rc') }}" required readonly>
+                                                <input type="text" class="form-control" name="rc" id="rc"
+                                                    placeholder="ENTRI" value="{{ old('rc', $pengusulan->rc) }}" required
+                                                    readonly>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">ANGSURAN POKOK</span>
                                                 <input type="text" class="form-control" name="angsuran_pokok"
                                                     id="angsuran_pokok" placeholder="ENTRI"
-                                                    value="{{ old('angsuran_pokok') }}" required readonly>
+                                                    value="{{ old('angsuran_pokok', number_format($pengusulan->angsuran_pokok, '0', ',', '.')) }}"
+                                                    required readonly>
                                             </div>
 
                                         </div>
@@ -139,4 +146,5 @@
     <script>
         $('.metode').select2()
     </script>
+    <script src="{{ asset('assets/js/myscript/rsc_usulan_plafon.js') }}"></script>
 @endpush

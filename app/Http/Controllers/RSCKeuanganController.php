@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -42,19 +43,104 @@ class RSCKeuanganController extends Controller
                 return $value !== null;
             });
             $total = array_sum($filter);
+            $kemampuan['total'] = $total;
 
-            $rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $enc)->where('kode_rsc', $enc_rsc)->first();
+            $analisa_keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
+            // dd($analisa_keuangan);
+            if (is_null($analisa_keuangan)) {
+                $keuangan = $this->data_static();
+            } else {
+                $keuangan = $analisa_keuangan;
+            }
 
-            dd($data, $rsc);
             return view('rsc.keuangan.index', [
-                'data' => $data[0]
+                'data' => $data[0],
+                'kemampuan' => $kemampuan,
+                'keuangan' => $keuangan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
 
+    public function simpan_keuangan(Request $request)
+    {
+        try {
+            $rsc = Crypt::decrypt($request->query('rsc'));
+            $kode = $this->kodeacak('AUK', 6);
+            $data_keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $rsc)->first();
+            $data = [
+                'kode_rsc' => $rsc,
+                'kode_keuangan' => $kode,
+                'konsumsi' => (int)str_replace(["Rp", " ", "."], "", $request->biaya1),
+                'kesehatan' => (int)str_replace(["Rp", " ", "."], "", $request->biaya2),
+                'pendidikan' => (int)str_replace(["Rp", " ", "."], "", $request->biaya3),
+                'gatel' => (int)str_replace(["Rp", " ", "."], "", $request->biaya4),
+                'jajan_anak' => (int)str_replace(["Rp", " ", "."], "", $request->biaya5),
+                'sumbangan' => (int)str_replace(["Rp", " ", "."], "", $request->biaya6),
+                'roko' => (int)str_replace(["Rp", " ", "."], "", $request->biaya7),
+                'kewajiban1' => $request->data1,
+                'kewajiban2' => $request->data2,
+                'kewajiban3' => $request->data3,
+                'nominal_kewajiban1' => (int)str_replace(["Rp", " ", "."], "", $request->kewajiban1),
+                'nominal_kewajiban2' => (int)str_replace(["Rp", " ", "."], "", $request->kewajiban2),
+                'nominal_kewajiban3' => (int)str_replace(["Rp", " ", "."], "", $request->kewajiban3),
+                'p_usaha' => (int)str_replace(["Rp", " ", "."], "", $request->p_usaha),
+                'b_rumah_tangga' => (int)str_replace(["Rp", " ", "."], "", $request->b_rumah_tangga),
+                'b_kewajiban_lainnya' => (int)str_replace(["Rp", " ", "."], "", $request->b_kewajiban_lainya),
+                'keuangan_perbulan' => (int)str_replace(["Rp", " ", "."], "", $request->keuangan_perbulan),
+                'input_user' => Auth::user()->code_user,
+            ];
 
+            if (is_null($data_keuangan)) {
+                $data['created_at'] = now();
+                $insert = DB::table('rsc_analisa_keuangan')->insert($data);
+                if ($insert) {
+                    return redirect()->back()->with('success', 'Data keuangan berhasil ditambahkan.');
+                } else {
+                    return redirect()->back()->with('error', 'Data keuangan gagal ditambahkan.');
+                }
+            } else {
+                $data['updated_at'] = now();
+                $update = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $rsc)->update($data);
+                if ($update) {
+                    return redirect()->back()->with('success', 'Data keuangan berhasil diubah.');
+                } else {
+                    return redirect()->back()->with('error', 'Data keuangan gagal diubah.');
+                }
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+
+
+
+    private function data_static()
+    {
+        $data = (object) [
+            'konsumsi' => 0,
+            'kesehatan' => 0,
+            'pendidikan' => 0,
+            'gatel' => 0,
+            'jajan_anak' => 0,
+            'sumbangan' => 0,
+            'roko' => 0,
+            'pajak' => 0,
+            'kewajiban1' => null,
+            'kewajiban2' => null,
+            'kewajiban3' => null,
+            'nominal_kewajiban1' => 0,
+            'nominal_kewajiban2' => 0,
+            'nominal_kewajiban3' => 0,
+            'b_rumah_tangga' => 0,
+            'b_kewajiban_lainnya' => 0,
+            'keuangan_perbulan' => 0,
+        ];
+
+        return $data;
+    }
 
     private function kemampuan_keuangan($data)
     {
@@ -100,5 +186,18 @@ class RSCKeuanganController extends Controller
         ];
 
         return $hasil;
+    }
+
+    private function kodeacak($name, $length)
+    {
+        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+
+            // Cek apakah kode sudah ada dalam database
+            if (!DB::table('rsc_au_lain')->where('kode_usaha', $acak)->exists()) {
+                return $acak;
+            }
+        }
+        return null;
     }
 }
