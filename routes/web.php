@@ -82,6 +82,7 @@ use App\Http\Controllers\Administratif\DenahLokasiController;
 use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
+use App\Http\Controllers\RSCPersetujuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -720,6 +721,11 @@ Route::middleware('auth')->group(function () {
             Route::controller(RSCKeuanganController::class)->group(function () {
                 Route::get('/rsc/keuangan', 'index')->name('rsc.keuangan');
                 Route::post('/rsc/simpan/keuangan', 'simpan_keuangan')->name('rsc.keuangan.simpan');
+            });
+
+            Route::controller(RSCPersetujuanController::class)->group(function () {
+                Route::get('/rsc/persetujuan', 'index')->name('rsc.persetujuan.index');
+                Route::get('/rsc/persetujuan/informasi', 'informasi')->name('rsc.persetujuan.informasi');
             });
         });
         //====Route Analisa RSC====//
