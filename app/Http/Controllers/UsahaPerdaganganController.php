@@ -291,6 +291,10 @@ class UsahaPerdaganganController extends Controller
             $enc = Crypt::decrypt($request->query('kode_usaha'));
             $user = Auth::user()->code_user;
 
+            if ((int)str_replace(["Rp.", " ", "."], "", $request->input('belanja_harian')) == 0) {
+                return redirect()->back()->with('error', 'Belanja harian tidak boleh 0.');
+            }
+
             $data = [
                 'usaha_kode' => $enc,
                 'transportasi' => (int)str_replace(["Rp.", " ", "."], "", $request->input('transportasi')) ?? 0,
