@@ -128,6 +128,7 @@
                                                     <option value="ISTRI">ISTRI</option>
                                                     <option value="SUAMI">SUAMI</option>
                                                     <option value="ORANG TUA">ORANG TUA</option>
+                                                    <option value="ANAK">ANAK</option>
                                                     <option value="SAUDARA">SAUDARA</option>
                                                     <option value="LAINNYA">LAINNYA</option>
                                                 </select>
