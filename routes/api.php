@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/upload/survey', [UploadController::class, 'survey']);
+Route::post('/survey/upload', [UploadController::class, 'survey_upload']);
