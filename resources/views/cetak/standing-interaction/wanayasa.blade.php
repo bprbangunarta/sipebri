@@ -141,7 +141,7 @@
             <tr>
                 <td>Jangka Waktu</td>
                 <td>:</td>
-                <td>{{ $data->jangka_waktu }}</td>
+                <td>{{ $data->jangka_waktu }} Bulan</td>
             </tr>
             <tr>
                 <td>Jumlah</td>

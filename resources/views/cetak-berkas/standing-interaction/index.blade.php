@@ -65,18 +65,33 @@
                                             </td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.data.standing.interaction', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    target="_blank" class="btn-circle btn-sm bg-blue">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
-                                            </td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    target="_blank" class="btn-circle btn-sm bg-blue">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
-                                            </td>
+                                            @if (Auth::user()->kantor_kode == 'KJT')
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <a href="{{ route('cetak.data.standing.interaction', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                </td>
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                </td>
+                                            @elseif(Auth::user()->kantor_kode == 'PGD')
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <a href="{{ route('cetak.data.standing.interaction', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                </td>
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                        target="_blank" class="btn-circle btn-sm bg-blue">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                </td>
+                                            @endif
                                         </tr>
 
                                     @empty
@@ -124,7 +139,8 @@
                         Silahkan hubungi bagian admin kredit. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
+                    <button type="button" class="btn btn-danger" style="width: 100%;"
+                        data-dismiss="modal">TUTUP</button>
                 </div>
             </div>
         </div>

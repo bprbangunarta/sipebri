@@ -665,8 +665,17 @@ class CetakController extends Controller
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
-            ->whereIn('data_pengajuan.produk_kode', ['KTA', 'KPS'])
-            ->whereIn('data_pengajuan.resort_kode', ['127', '004'])
+
+            ->where(function ($query) {
+                if (Auth::user()->kantor_kode == 'KJT') {
+                    $query->whereIn('data_pengajuan.produk_kode', ['KTA', 'KPS'])
+                        ->whereIn('data_pengajuan.resort_kode', ['127', '004']);
+                } else if (Auth::user()->kantor_kode == 'PGD') {
+                    $query->whereIn('data_pengajuan.produk_kode', ['KTA', 'KPS'])
+                        ->whereIn('data_pengajuan.resort_kode', ['119']);
+                }
+            })
+
 
             ->where(function ($query) use ($isAdminKredit) {
 
@@ -795,12 +804,6 @@ class CetakController extends Controller
             //
 
             if (!is_null($data)) {
-                // $bunga = (($data->plafon * $data->suku_bunga) / 100) / 12;
-                // $pokok = $data->plafon / $data->jangka_waktu;
-                // $angsuran = $bunga + $pokok;
-
-                // $angsur = $angsuran;
-
                 $get = DB::connection('sqlsrv')->table('m_loan')
                     ->where('nocif', $data->no_cif)
                     ->where('plafond', '!=', '.00')
