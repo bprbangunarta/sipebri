@@ -133,7 +133,7 @@
 
         <table class="info-table">
             <tr>
-                <td style="width: 31%;">Waktu Pelaksanaan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td style="width: 145px;">Waktu Pelaksanaan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td style="width: 2%;">:</td>
                 <td>Setiap tanggal 7 (Tujuh)</td>
             </tr>

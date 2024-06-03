@@ -751,7 +751,8 @@ class CetakController extends Controller
             } else {
                 $angsur = 0;
             }
-            $data->angsuran = $angsur;
+
+            $data->angsuran = (int) round($angsur);
             $data->tanggal_lahir = Carbon::createFromFormat('Ymd', $data->tanggal_lahir)->format('d-m-Y');
             $data->tanggal_spk = Carbon::parse($data->updated_at)->translatedFormat('d F Y');
             $alamat = ucwords(strtolower($data->alamat_ktp));
