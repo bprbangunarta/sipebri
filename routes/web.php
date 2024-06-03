@@ -311,6 +311,7 @@ Route::middleware('auth')->group(function () {
         // Cetak Standing Intraction
         Route::get('/cetak/standing-interaction', [CetakController::class, 'standing_interaction'])->name('cetak.standing.interaction');
         Route::get('/standing-interaction/cetak', [CetakController::class, 'cetak_standing_interaction'])->name('cetak.data.standing.interaction');
+        Route::get('/standing-interaction/cetak/wanayasa', [CetakController::class, 'cetak_standing_interaction_wanayasa'])->name('cetak.data.standing.interaction.wanayasa');
 
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {

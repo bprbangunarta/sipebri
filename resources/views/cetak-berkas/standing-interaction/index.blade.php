@@ -41,7 +41,8 @@
                                         <th class="text-center" width="35%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
-                                        <th class="text-center" width="5%">AKSI</th>
+                                        <th class="text-center" width="5%">PMK</th>
+                                        <th class="text-center" width="5%">WNY</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,6 +71,12 @@
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                             </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
                                         </tr>
 
                                     @empty
@@ -93,6 +100,11 @@
                         </div>
 
                     </div>
+                    <p>
+                        <b>*</b> Periksa kembali kelengkapan data sesuai kebutuhan. <br>
+                        <b>*</b> Periksa kembali <b>PLAFON</b> apakah sudah sesuai.
+                    </p>
+                    <p style="color: red;">Jika ada kendala hubungi IT, agar ditindak lanjut. (o_o)</p>
                 </div>
             </div>
         </section>

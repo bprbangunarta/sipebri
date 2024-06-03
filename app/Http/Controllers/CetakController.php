@@ -665,6 +665,8 @@ class CetakController extends Controller
             ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
             ->where('data_pengajuan.status', 'Disetujui')
+            ->whereIn('data_pengajuan.produk_kode', ['KTA', 'KPS'])
+            ->whereIn('data_pengajuan.resort_kode', ['127', '004'])
 
             ->where(function ($query) use ($isAdminKredit) {
 
@@ -765,5 +767,87 @@ class CetakController extends Controller
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
+    }
+
+    public function cetak_standing_interaction_wanayasa(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $data = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->select(
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir',
+                    'data_nasabah.tanggal_lahir',
+                    'data_nasabah.alamat_ktp',
+                    'data_nasabah.no_rekening',
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.no_cif',
+                    'data_pengajuan.jangka_waktu',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.suku_bunga',
+                    'data_spk.updated_at',
+                )
+                ->where('data_pengajuan.kode_pengajuan', $enc)
+                ->first();
+            //
+
+            if (!is_null($data)) {
+                // $bunga = (($data->plafon * $data->suku_bunga) / 100) / 12;
+                // $pokok = $data->plafon / $data->jangka_waktu;
+                // $angsuran = $bunga + $pokok;
+
+                // $angsur = $angsuran;
+
+                $get = DB::connection('sqlsrv')->table('m_loan')
+                    ->where('nocif', $data->no_cif)
+                    ->where('plafond', '!=', '.00')
+                    // ->orderBy('tglbuka', 'DESC')
+                    ->first();
+
+                $dt = DB::connection('sqlsrv')->table('m_loan_tagihan')
+                    ->where('noacc', $get->noacc)
+                    ->orderBy('thn', 'ASC')
+                    ->orderBy('bln', 'ASC')
+                    ->first();
+                //
+                $ans = (int) $dt->tag_pokok + (int) $dt->tag_bunga;
+
+                $roundedNumber = (int) $this->roundUp($ans);
+                $angsur = $roundedNumber;
+            } else {
+                $angsur = 0;
+            }
+
+            $data->angsuran = (int) round($angsur);
+            $data->tanggal_lahir = Carbon::createFromFormat('Ymd', $data->tanggal_lahir)->format('d-m-Y');
+            $data->tanggal_spk = Carbon::parse($data->updated_at)->translatedFormat('d F Y');
+            $alamat = ucwords(strtolower($data->alamat_ktp));
+            $formattedAlamat = str_replace(['Rt/rw'], ['RT/RW'], $alamat);
+            $data->alamat_ktp = $formattedAlamat;
+
+            return view('cetak.standing-interaction.wanayasa', [
+                'data' => $data
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+
+    private function roundUp($number)
+    {
+        $length = strlen((string) $number);
+
+        if ($length <= 3) {
+            return ceil($number / 1000) * 1000;
+        }
+
+        $factor = pow(10, 3); // Faktor untuk tiga digit terakhir
+        $roundedNumber = ceil($number / $factor) * $factor;
+
+        return $roundedNumber;
     }
 }
