@@ -109,6 +109,7 @@ class KomiteController extends Controller
                 'data_pengajuan.metode_rps',
                 'data_pengajuan.b_provisi',
                 'data_pengajuan.b_admin',
+                'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
                 'data_pengajuan.kategori',
                 'data_nasabah.nama_nasabah',

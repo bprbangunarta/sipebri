@@ -67,7 +67,11 @@ $(document).ready(function () {
                 $("#admin").val(hasil.b_admin) ?? 0;
 
                 //Persetujuan
-                if (kategori === "RELOAN") {
+                if (
+                    kategori === "RELOAN" ||
+                    hasil.produk_kode === "KUP" ||
+                    hasil.produk_kode === "KKO"
+                ) {
                     if (role === "Staff Analis") {
                         var options = [
                             { value: "Naik Kasi", text: "Naik Kasi" },
