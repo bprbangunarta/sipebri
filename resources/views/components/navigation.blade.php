@@ -375,13 +375,15 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('cetak/standing-interaction') ? 'active' : '' }}">
-                        <a @can('cetak perjanjian kredit') href="{{ route('cetak.standing.interaction') }}" @endcan
-                            title="Cetak Perjanjian Kredit">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            Standing Intraction
-                        </a>
-                    </li>
+                    @if (Auth::user()->kantor_kode == 'KJT')
+                        <li class="{{ request()->is('cetak/standing-interaction') ? 'active' : '' }}">
+                            <a @can('cetak perjanjian kredit') href="{{ route('cetak.standing.interaction') }}" @endcan
+                                title="Cetak Perjanjian Kredit">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                Standing Intraction
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
 
