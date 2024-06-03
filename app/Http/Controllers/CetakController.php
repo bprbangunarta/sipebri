@@ -650,4 +650,119 @@ class CetakController extends Controller
             'data' => $data
         ]);
     }
+
+    public function standing_interaction()
+    {
+        $usr = Auth::user()->code_user;
+        $isAdminKredit = DB::table('v_users')->where('code_user', $usr)->first();
+
+        $name = request('keyword');
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->where('data_pengajuan.status', 'Disetujui')
+
+            ->where(function ($query) use ($isAdminKredit) {
+
+                if ($isAdminKredit->role_name == 'Admin Kredit') {
+                } else {
+                    $query->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode);
+                }
+            })
+
+
+            ->whereNotNull('data_spk.no_spk')
+            ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
+            ->select(
+                'data_spk.*',
+                'data_pengajuan.*',
+                'data_notifikasi.*',
+                'data_pengajuan.*',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_survei.surveyor_kode',
+                'data_spk.created_at as tanggal',
+                'data_spk.otorisasi as otorpk',
+                'users.name'
+            )
+            ->orderBy('data_spk.created_at', 'desc');
+
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+        }
+
+        return view('cetak-berkas.standing-interaction.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function cetak_standing_interaction(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $data = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->select(
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.tempat_lahir',
+                    'data_nasabah.tanggal_lahir',
+                    'data_nasabah.alamat_ktp',
+                    'data_nasabah.no_rekening',
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.no_telp',
+                    'data_pengajuan.jangka_waktu',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.suku_bunga',
+                    'data_spk.updated_at',
+                )
+                ->where('data_pengajuan.kode_pengajuan', $enc)
+                ->first();
+            //
+
+            if (!is_null($data)) {
+                $bunga = (($data->plafon * $data->suku_bunga) / 100) / 12;
+                $pokok = $data->plafon / $data->jangka_waktu;
+                $angsuran = $bunga + $pokok;
+
+                $angsur = $angsuran;
+            } else {
+                $angsur = 0;
+            }
+            $data->angsuran = $angsur;
+            $data->tanggal_lahir = Carbon::createFromFormat('Ymd', $data->tanggal_lahir)->format('d-m-Y');
+            $data->tanggal_spk = Carbon::parse($data->updated_at)->translatedFormat('d F Y');
+            $alamat = ucwords(strtolower($data->alamat_ktp));
+            $formattedAlamat = str_replace(['Rt/rw'], ['RT/RW'], $alamat);
+            $data->alamat_ktp = $formattedAlamat;
+
+            return view('cetak.standing-interaction.index', [
+                'data' => $data
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 }

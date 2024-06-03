@@ -301,7 +301,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -372,6 +372,14 @@
                             title="Cetak Perjanjian Kredit">
                             <i class="fa fa-exclamation-circle"></i>
                             Perjanjian Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('cetak/standing-interaction') ? 'active' : '' }}">
+                        <a @can('cetak perjanjian kredit') href="{{ route('cetak.standing.interaction') }}" @endcan
+                            title="Cetak Perjanjian Kredit">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            Standing Intraction
                         </a>
                     </li>
                 </ul>

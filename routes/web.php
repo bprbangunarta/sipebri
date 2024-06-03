@@ -308,6 +308,10 @@ Route::middleware('auth')->group(function () {
         // Cetak Perjanjian Kredit
         Route::get('/cetak/perjanjian-kredit', [CetakController::class, 'index_perjanjian_kredit'])->name('cetak.perjanjian.index');
 
+        // Cetak Standing Intraction
+        Route::get('/cetak/standing-interaction', [CetakController::class, 'standing_interaction'])->name('cetak.standing.interaction');
+        Route::get('/standing-interaction/cetak', [CetakController::class, 'cetak_standing_interaction'])->name('cetak.data.standing.interaction');
+
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 
