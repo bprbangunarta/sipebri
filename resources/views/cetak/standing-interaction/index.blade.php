@@ -135,7 +135,13 @@
             <tr>
                 <td style="width: 145px;">Waktu Pelaksanaan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td style="width: 2%;">:</td>
-                <td>Setiap tanggal 7 (Tujuh)</td>
+                <td>
+                    @if (Auth::user()->kantor_kode == 'PGD')
+                        Setiap tanggal 10 (Sepuluh)
+                    @else
+                        Setiap tanggal 7 (Tujuh)
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>Jangka Waktu</td>
