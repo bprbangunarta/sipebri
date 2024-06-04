@@ -249,7 +249,7 @@
             <p style="text-align: justify;">
                 Dengan ini memberi kuasa kepada PT. Bank Mandiri (Persero) untuk melakukan pemblokiran dan autodebet
                 rekening saya dengan nomor rek <b>{{ $data->no_rekening }}</b> atas nama {{ $data->nama_nasabah }} ke
-                no rekening <b>1730008080898</b> atas nama PT. BPR Bangunarta.
+                no rekening <b>1730062262226</b> atas nama PT. BPR Bangunarta.
             </p>
 
             <p>Adapun rinciannya sebagai berikut:</p>
