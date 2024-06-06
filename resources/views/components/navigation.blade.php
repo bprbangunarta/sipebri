@@ -455,7 +455,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/rsc/index', 'themes/rsc/analisa', 'themes/rsc/data/kredit', 'themes/rsc/penilaian/debitur', 'themes/rsc/analisa/usaha/perdagangan', 'themes/rsc/analisa/usaha/perdagangan/identitas', 'themes/rsc/analisa/usaha/perdagangan/barang', 'themes/rsc/analisa/usaha/perdagangan/keuangan', 'themes/rsc/analisa/usaha/pertanian', 'themes/rsc/analisa/usaha/pertanian/informasi', 'themes/rsc/analisa/usaha/pertanian/biaya', 'themes/rsc/analisa/usaha/pertanian/keuangan', 'themes/rsc/analisa/usaha/jasa', 'themes/rsc/analisa/usaha/jasa/keuangan', 'themes/rsc/analisa/usaha/lain', 'themes/rsc/analisa/usaha/lain/identitas', 'themes/rsc/analisa/usaha/lain/bahan', 'themes/rsc/analisa/usaha/lain/keuangan', 'themes/rsc/keuangan', 'themes/rsc/data/pengusulan', 'themes/rsc/konfirmasi', 'themes/rsc/persetujuan', 'themes/rsc/persetujuan/informasi', 'themes/rsc/persetujuan/catatan', 'themes/rsc/persetujuan/index', 'themes/rsc/penjadwalan', 'themes/rsc/penjadwalan/tambah')? 'active': '' }}">
+                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi.index')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-medkit" aria-hidden="true"></i>
                     <span>Reschedulling</span>
@@ -499,8 +499,8 @@
                             Input Persetujuan RSC
                         </a>
                     </li>
-                    <li class="#">
-                        <a href="" title="Add RSC">
+                    <li class="{{ request()->is('themes/rsc/notifikasi.index') ? 'active' : '' }}">
+                        <a href="{{ route('rsc.notifikasi.index') }}" title="Add RSC">
                             <i class="fa fa-suitcase"></i>
                             Add Notifikasi
                         </a>

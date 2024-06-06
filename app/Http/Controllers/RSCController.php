@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\RSC;
+use App\Models\Data;
 use App\Models\Jasa;
 use App\Models\Lain;
 use App\Models\Nasabah;
@@ -563,6 +564,109 @@ class RSCController extends Controller
         }
     }
 
+    public function index_notifikasi()
+    {
+        $data = DB::table('rsc_data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.plafon',
+            )
+            ->where('rsc_data_pengajuan.status', 'Notifikasi')
+            ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user)
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc');
+
+        $data = $data->paginate(10);
+
+        foreach ($data as $item) {
+            $item->kode = Crypt::encrypt($item->kode_pengajuan);
+            $item->rsc = Crypt::encrypt($item->kode_rsc);
+        }
+
+        return view('rsc.notifikasi.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function get_notifikasi(Request $request)
+    {
+        try {
+            $rsc = Crypt::decrypt($request->input('kode'));
+            $data = DB::table('rsc_data_pengajuan')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->select(
+                    'rsc_data_pengajuan.kode_rsc',
+                    'data_nasabah.nama_nasabah',
+                    'data_pengajuan.produk_kode',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.jangka_waktu',
+                )
+                ->where('rsc_data_pengajuan.kode_rsc', $rsc)->first();
+
+            $lasts = DB::table('rsc_notifikasi')->latest('nomor')->first();
+            if (is_null($lasts)) {
+                $count = 0001;
+            } else {
+                $count = (int) $lasts->nomor + 1;
+            }
+            $lengths = 4;
+            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+
+            $now = Carbon::now();
+            $bulan = $now->month;
+            $romawi = Data::romawi($bulan);
+
+            $notif = $kodes . '/' . 'NK' . '/' . 'PBA' . '/' . $romawi . '/' . $now->year;
+
+            $data->kode_notif = $notif;
+            $data->nomor = $kodes;
+            return response()->json($data);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpan_notifikasi(Request $request)
+    {
+        try {
+            $cek = $request->validate([
+                'nomor' => 'required',
+                'kode_rsc' => 'required',
+                'nomor' => 'required',
+                'kode_notifikasi' => 'required',
+            ]);
+
+            $data = [
+                'nomor' => $request->nomor,
+                'kode_rsc' => $request->kode_rsc,
+                'nomor' => $request->nomor,
+                'no_notifikasi' => $request->kode_notifikasi,
+                'created_at' => now(),
+            ];
+
+            $data2 = ['status' => 'Perjanjian Kredit'];
+
+            DB::transaction(function () use ($data, $data2, $request) {
+                $insert = DB::table('rsc_notifikasi')->insert($data);
+                $update = DB::table('rsc_data_pengajuan')->where('kode_rsc', $request->kode_rsc)->update($data2);
+            });
+
+            return redirect()->back()->with('success', 'Data berhasil disimpan.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal disimpan.');
+        }
+    }
 
 
     private function kodeacak($name)

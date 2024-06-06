@@ -732,6 +732,14 @@ Route::middleware('auth')->group(function () {
             });
         });
 
+        Route::group(['middleware' => ['role:Kabag Analis|Direksi']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
+                Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
+                Route::post('rsc/notifikasi/simpan', 'simpan_notifikasi')->name('rsc.notifikasi.simpan');
+            });
+        });
+
         Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi']], function () {
             Route::controller(RSCPersetujuanController::class)->group(function () {
                 Route::get('/rsc/persetujuan', 'index')->name('rsc.persetujuan.index');

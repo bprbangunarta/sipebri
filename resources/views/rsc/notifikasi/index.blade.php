@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Index Persetujuan RSC')
+@section('title', 'Index Notifikasi RSC')
 
 @section('content')
     <div class="content-wrapper">
@@ -9,7 +9,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-plus"></i>
-                            <h3 class="box-title">PERSETUJUAN RSC</h3>
+                            <h3 class="box-title">NOTIFIKASI RSC</h3>
 
                             <div class="box-tools">
                                 <form action="#" method="GET">
@@ -75,23 +75,12 @@
                                             </td>
                                             <td class="text-center" style="text-align: center;">
 
-                                                <a href="{{ route('rsc.persetujuan.informasi', ['rsc' => $item->rsc]) }}"
-                                                    class="btn-circle btn-sm btn-success" title="Persetujuan RSC">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-
-                                                {{-- &nbsp;
-
-                                                <a href="" class="btn-circle btn-sm bg-yellow" title="Catatan RSC">
+                                                <a data-toggle="modal" data-target="#generate-code"
+                                                    data-id="{{ $item->rsc }}" class="btn-circle btn-sm bg-green"
+                                                    title="Generate">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
 
-                                                &nbsp;
-
-                                                <a href="" class="btn-circle btn-sm bg-primary"
-                                                    title="Informasi RSC">
-                                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                                </a> --}}
                                             </td>
                                         </tr>
                                     @empty
@@ -120,8 +109,107 @@
         </section>
     </div>
 
+    <div class="modal fade" id="generate-code">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">GENERATE NOMOR NOTIFIKASI RSC</h4>
+                </div>
+                <form action="{{ route('rsc.notifikasi.simpan') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div style="margin-top: -15px;">
+                                        <span class="fw-bold">KODE RSC</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="kode_rsc"
+                                            id="kode_rsc" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">NAMA NASABAH</span>
+                                        <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                            type="text" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">PRODUK KREDIT</span>
+                                        <input type="text" class="form-control" name="produk" id="produk" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div style="margin-top: -15px;">
+                                        <span class="fw-bold">PLAFON USULAN / BAKI DEBET</span>
+                                        <input type="text" class="form-control" name="plafon" id="plafon"
+                                            readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">JANGKA WAKTU</span>
+                                        <input type="text" class="form-control" name="jw" id="jw"
+                                            readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">KODE NOTIFIKASI</span>
+                                        <input class="form-control text-uppercase" name="kode_notifikasi" id="generate"
+                                            type="text" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn bg-green">GENERATE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    <script>
+        $("#generate-code").on("show.bs.modal", function(event) {
+            var button = $(event.relatedTarget); // Tombol yang membuka modal
+            var kode = button.data("id"); // Ambil data-id dari tombol
+
+            // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+            $.ajax({
+                url: "/themes/rsc/notifikasi/get/",
+                type: "GET",
+                data: {
+                    kode: kode
+                },
+                dataType: "json",
+                cache: false,
+                success: function(response) {
+
+                    $('#kode_rsc').val(response.kode_rsc)
+                    $('#nm_nasabah').val(response.nama_nasabah)
+                    $('#produk').val(response.produk_kode)
+                    $('#plafon').val('Rp. ' + response.penentuan_plafon.toLocaleString("id-ID"))
+                    $('#jw').val(response.jangka_waktu)
+                    $('#generate').val(response.kode_notif)
+                    $('#nomor').val(response.nomor)
+
+                },
+                error: function(xhr, status, error) {
+                    // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                    console.error("Error:", xhr.responseText);
+                },
+            });
+        });
+    </script>
 @endpush
