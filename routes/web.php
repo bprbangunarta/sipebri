@@ -60,7 +60,9 @@ use App\Http\Controllers\RSCPengusulanController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\AnalisaJaminanController;
+use App\Http\Controllers\RSCPenjadwalanController;
 use App\Http\Controllers\RSCPerdaganganController;
+use App\Http\Controllers\RSCPersetujuanController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
@@ -82,7 +84,6 @@ use App\Http\Controllers\Administratif\DenahLokasiController;
 use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
-use App\Http\Controllers\RSCPersetujuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -645,16 +646,23 @@ Route::middleware('auth')->group(function () {
         });
 
         //====Route Analisa RSC====//
+        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {
+            Route::get('/rsc/index', [RSCController::class, 'index'])->name('rsc.index');
+            Route::post('/rsc/tambah', [RSCController::class, 'tambah_rsc'])->name('rsc.tambah.rsc');
+        });
+
         Route::group(['middleware' => ['role:Staff Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
-                Route::get('/rsc/index', 'index')->name('rsc.index');
-                Route::post('/rsc/tambah', 'tambah_rsc')->name('rsc.tambah.rsc');
+                // Route::get('/rsc/index', 'index')->name('rsc.index');
+                Route::get('/rsc/analisa', 'index_analisa')->name('rsc.index.analisa');
+                // Route::post('/rsc/tambah', 'tambah_rsc')->name('rsc.tambah.rsc');
                 Route::get('/rsc/data/kredit', 'data_kredit')->name('rsc.data.kredit');
                 Route::put('/rsc/data/kredit', 'update_data_kredit')->name('rsc.update.data.kredit');
                 Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
                 Route::delete('/rsc/delete', 'delete_rsc')->name('rsc.delete.rsc');
                 Route::get('/rsc/konfirmasi', 'konfirmasi_index')->name('rsc.konfirmasi');
                 Route::post('/rsc/update/konfirmasi', 'konfirmasi_update')->name('rsc.konfirmasi.update');
+                Route::post('/rsc/jadul', 'simpan_jadul')->name('rsc.simpan.jadul');
             });
 
             Route::controller(RSCPerdaganganController::class)->group(function () {
@@ -722,10 +730,24 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/keuangan', 'index')->name('rsc.keuangan');
                 Route::post('/rsc/simpan/keuangan', 'simpan_keuangan')->name('rsc.keuangan.simpan');
             });
+        });
 
+        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi']], function () {
             Route::controller(RSCPersetujuanController::class)->group(function () {
                 Route::get('/rsc/persetujuan', 'index')->name('rsc.persetujuan.index');
                 Route::get('/rsc/persetujuan/informasi', 'informasi')->name('rsc.persetujuan.informasi');
+                Route::get('/rsc/persetujuan/catatan', 'catatan')->name('rsc.persetujuan.catatan');
+                Route::get('/rsc/persetujuan/index', 'persetujuan_index')->name('rsc.persetujuan.persetujuan_index');
+                Route::post('/rsc/persetujuan/simpan', 'persetujuan_simpan')->name('rsc.persetujuan.simpan');
+            });
+        });
+
+        Route::group(['middleware' => ['role:Kasi Analis']], function () {
+            Route::controller(RSCPenjadwalanController::class)->group(function () {
+                Route::get('/rsc/penjadwalan', 'index')->name('rsc.penjadwalan');
+                Route::get('/rsc/penjadwalan/tambah', 'index_penjadwalan')->name('rsc.penjadwalan.index');
+                Route::post('/rsc/penjadwalan/simpan', 'simpan_penjadwalan')->name('rsc.penjadwalan.simpan');
+                Route::post('/rsc/penjadwalan/update', 'update_penjadwalan')->name('rsc.penjadwalan.update');
             });
         });
         //====Route Analisa RSC====//

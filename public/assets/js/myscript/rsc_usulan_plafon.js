@@ -80,7 +80,7 @@ $(document).ready(function () {
         var angsuran = Math.ceil(bg) + poko;
         var rc = (bg / keuangan) * 100;
 
-        push(poko, bg, angsuran);
+        push(poko, bg, bg);
 
         return rc;
     }

@@ -159,6 +159,12 @@
 @push('myscript')
     <script>
         $('.metode').select2()
+
+        $(document).ready(function() {
+            $('#suku_bunga').on('input', function() {
+                this.value = this.value.replace(/,/g, '.');
+            });
+        });
     </script>
     <script src="{{ asset('assets/js/myscript/rsc_usulan_plafon.js') }}"></script>
 @endpush

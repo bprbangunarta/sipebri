@@ -58,6 +58,113 @@ class RSCController extends Controller
         ]);
     }
 
+    public function index_analisa()
+    {
+        $data = DB::table('rsc_data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc') // Perbaikan di sini
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.plafon'
+            )
+            ->where(function ($query) {
+                $query->where('rsc_data_pengajuan.status', 'Proses Analisa')
+                    ->orWhere('rsc_data_pengajuan.status', 'Proses Survei');
+            })
+            ->where('rsc_data_survei.surveyor_kode', Auth::user()->code_user)
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc')
+            ->paginate(10);
+
+
+        $kasi = DB::table('v_users')->where('role_name', 'Kasi Analis')->get();
+        $surveyor = DB::table('v_users')
+            ->where('role_name', 'Staff Analis')
+            ->where('is_active', 1)
+            ->get();
+
+        foreach ($data as $item) {
+            $item->kode = Crypt::encrypt($item->kode_pengajuan);
+            $item->rsc = Crypt::encrypt($item->kode_rsc);
+        }
+        // dd($data);
+        return view('rsc.analisa.index', [
+            'kasi' => $kasi,
+            'surveyor' => $surveyor,
+            'data' => $data,
+        ]);
+    }
+
+    // public function tambah_rsc(Request $request)
+    // {
+    //     try {
+    //         $cek_kode_pengajuan = Pengajuan::where('kode_pengajuan', $request->pengajuan_kode)->first();
+
+    //         if (is_null($cek_kode_pengajuan)) {
+    //             return redirect()->back()->with('error', 'Data tidak ditemukan');
+    //         } elseif ($cek_kode_pengajuan->on_current == "0") {
+    //             return redirect()->back()->with('error', 'Data belum REALISASI');
+    //         }
+
+    //         $data = $request->validate([
+    //             'pengajuan_kode' => 'required',
+    //             'pengajuan_kode' => 'required',
+    //             'jenis_persetujuan' => 'required',
+    //             'surveyor_kode' => 'required',
+    //             'kasi_kode' => 'required',
+    //         ]);
+
+    //         if (
+    //             $request->pengajuan_kode == "" ||
+    //             $request->pengajuan_kode == "" ||
+    //             $request->jenis_persetujuan == "" ||
+    //             $request->surveyor_kode == "" ||
+    //             $request->kasi_kode == ""
+    //         ) {
+    //             return redirect()->back()->with('error', 'Data tidak boleh kosong!!!');
+    //         }
+
+    //         $kode_nasabah = DB::table('data_pengajuan')
+    //             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+    //             ->where('data_pengajuan.kode_pengajuan', '=', $request->pengajuan_kode)->first();
+    //         //
+    //         if (is_null($kode_nasabah)) {
+    //             return redirect()->back()->with('error', 'Nasabah tidak ada.');
+    //         }
+
+    //         $kode_rsc = $this->kodeacak('RSC');
+    //         $data = [
+    //             'pengajuan_kode' => $request->pengajuan_kode,
+    //             'kode_rsc' => $kode_rsc,
+    //             'nasabah_kode' => $kode_nasabah->nasabah_kode,
+    //             'jenis_persetujuan' => $request->jenis_persetujuan,
+    //             'kasi_kode' => $request->kasi_kode,
+    //             'surveyor_kode' => $request->surveyor_kode,
+    //             'status' => 'Proses Analisa',
+    //             'input_user' => Auth::user()->code_user,
+    //             'created_at' => now(),
+    //         ];
+
+    //         $insert = DB::table('rsc_data_pengajuan')->insert($data);
+
+    //         if ($insert) {
+    //             return redirect()->back()->with('success', 'Berhasil menambahkan data.');
+    //         } else {
+    //             return redirect()->back()->with('error', 'Data gagal ditambahkan.');
+    //         }
+    //     } catch (\Throwable $th) {
+    //         return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
+    //     }
+    // }
+
     public function tambah_rsc(Request $request)
     {
         try {
@@ -103,7 +210,7 @@ class RSCController extends Controller
                 'jenis_persetujuan' => $request->jenis_persetujuan,
                 'kasi_kode' => $request->kasi_kode,
                 'surveyor_kode' => $request->surveyor_kode,
-                'status' => 'Proses Analisa',
+                'status' => 'Penjadwalan',
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
@@ -389,6 +496,72 @@ class RSCController extends Controller
         }
     }
 
+
+    public function simpan_jadul(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->input('rsc'));
+            $cek_survei = DB::table('rsc_data_survei')->where('kode_rsc', $enc_rsc)
+                ->select('catatan_survei', 'catatan_jadul_1', 'catatan_jadul_2')
+                ->first();
+            //
+            if (is_null($request->keterangan)) {
+                return redirect()->back()->with('error', 'Masukan catatan minimal 1 kata.');
+            }
+
+            if (is_null($cek_survei->catatan_survei)) {
+                $data = [
+                    'catatan_survei' => strtoupper($request->keterangan),
+                    'updated_at' => now(),
+                ];
+
+                $data2 = [
+                    'status' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                DB::transaction(function () use ($data2, $data, $enc_rsc) {
+                    DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+                    DB::table('rsc_data_survei')->where('kode_rsc', $enc_rsc)->update($data);
+                });
+            } else if (is_null($cek_survei->catatan_jadul_1)) {
+                $data = [
+                    'catatan_jadul_1' => strtoupper($request->keterangan),
+                    'updated_at' => now(),
+                ];
+
+                $data2 = [
+                    'status' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                DB::transaction(function () use ($data2, $data, $enc_rsc) {
+                    DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+                    DB::table('rsc_data_survei')->where('kode_rsc', $enc_rsc)->update($data);
+                });
+            } else if (is_null($cek_survei->catatan_jadul_2)) {
+                $data = [
+                    'catatan_jadul_2' => strtoupper($request->keterangan),
+                    'updated_at' => now(),
+                ];
+
+                $data2 = [
+                    'status' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                DB::transaction(function () use ($data2, $data, $enc_rsc) {
+                    DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+                    DB::table('rsc_data_survei')->where('kode_rsc', $enc_rsc)->update($data);
+                });
+            } else {
+                return redirect()->back()->with('error', 'Catatan sudah penuh.');
+            }
+            return redirect()->back()->with('success', 'Anda berhasil melakukan pembatalan survei');
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 
 
 

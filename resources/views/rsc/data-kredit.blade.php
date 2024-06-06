@@ -16,10 +16,6 @@
                                 <a href="#data_kredit" data-toggle="tab">DATA KREDIT & NASABAH</a>
                             </li>
 
-                            {{-- <li>
-                                <a href="#penentuan_plafon" data-toggle="tab">PENENTUAN PLAFON</a>
-                            </li> --}}
-
                             <li>
                                 <a href="#biaya_rsc" data-toggle="tab">BIAYA RSC</a>
                             </li>
@@ -207,55 +203,6 @@
                                     </div>
                                 </form>
                             </div>
-
-                            {{-- <div id="penentuan_plafon" class="tab-pane fade">
-                                <form
-                                    action="{{ route('rsc.update.penentuan.plafon', ['kode' => $data_rsc->pengajuan_kode, 'rsc' => $data_rsc->kode_rsc]) }}"
-                                    method="POST" enctype="multipart/form-data">
-                                    @method('put')
-                                    @csrf
-                                    <div class="box-body" style="margin-top: -10px;font-size:12px;">
-
-                                        <div class="row" style="margin-top:5px;">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>POKOK DIBAYAR</label>
-                                                    <input type="text" class="form-control" name="pk_dibayar"
-                                                        id="pk_dibayar" placeholder="ENTRI"
-                                                        value="{{ old('pk_dibayar', number_format($data_rsc->pokok_dibayar, '0', ',', '.')) }}">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>BUNGA DIBAYAR</label>
-                                                    <input type="text" class="form-control" name="bg_dibayar"
-                                                        id="bg_dibayar" placeholder="ENTRI"
-                                                        value="{{ old('bg_dibayar', number_format($data_rsc->bunga_dibayar, '0', ',', '.')) }}">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>PLAFON</label>
-                                                    <input type="hidden" class="form-control" name=""
-                                                        id="pn_plafons" placeholder="ENTRI"
-                                                        value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon_temp, '0', ',', '.')) }}"
-                                                        readonly>
-                                                    <input type="text" class="form-control" name="penentuan_plafon"
-                                                        id="pn_plafon" placeholder="ENTRI"
-                                                        value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon, '0', ',', '.')) }}"
-                                                        readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="box-body" style="margin-top:-20px;">
-                                        <button type="submit" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;width:100%">SIMPAN</button>
-                                    </div>
-                                </form>
-                            </div> --}}
 
                             <div id="biaya_rsc" class="tab-pane fade">
                                 @if (!is_null($biaya_rsc))

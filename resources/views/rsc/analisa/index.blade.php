@@ -74,11 +74,19 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="text-align: right;">
-
-                                                <a href="" class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC"
-                                                    disabled>
-                                                    <i class="fa fa-info"></i>
-                                                </a>
+                                                @if ($item->status == 'Proses Analisa')
+                                                    <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc]) }}"
+                                                        class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @else
+                                                    <a data-toggle="modal" data-target="#jadwal-ulang"
+                                                        data-pengajuan="{{ $item->kode_pengajuan }}"
+                                                        data-rsc='{{ $item->rsc }}' class="btn-circle btn-sm bg-blue"
+                                                        title="Jadwal Ulang" style="cursor: pointer;">
+                                                        <i class="fa fa-history"></i>
+                                                    </a>
+                                                @endif
 
                                                 &nbsp;
 
@@ -104,9 +112,6 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
-                                <button data-toggle="modal" data-target="#modal-tambah" class="btn bg-blue btn-sm">
-                                    <i class="fa fa-plus"></i>&nbsp; TAMBAH
-                                </button>
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                                     entries
@@ -122,85 +127,83 @@
         </section>
     </div>
 
-    <div class="modal fade" id="modal-tambah">
+    <div class="modal fade" id="jadwal-ulang">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">TAMBAH RESCHEDULLING</h4>
+                    <h4 class="modal-title">JADWAL ULANG</h4>
                 </div>
-                <form action="{{ route('rsc.tambah.rsc') }}" method="POST">
+                <form action="{{ route('rsc.simpan.jadul') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6">
 
-                                <div class="form-group">
-                                    <label>KODE PPENGAJUAN</label>
-                                    <input class="form-control" type="text" name="pengajuan_kode" id="pengajuan_kode"
-                                        required>
+                        <div class="box-body">
+                            <div class="row">
+
+                                <div style="margin-top: -15px;">
+                                    <span class="fw-bold">KODE PENGAJUAN</span>
+                                    <input type="text" id="id" name="id" hidden>
+                                    <input type="text" id="rsc" name="rsc" hidden>
+                                    <input class="form-control text-uppercase" type="text" value="123456789S"
+                                        name="kode_pengajuan" id="kd_pengajuan" readonly>
+                                    <input type="text" value="" name="tgl_survei" id="tgl_survei" hidden>
                                 </div>
 
-                                <div class="form-group">
-                                    <label>NAMA KASI</label>
-                                    <select class="form-control" name="kasi_kode" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @foreach ($kasi as $item)
-                                            <option value="{{ $item->code_user }}">{{ $item->nama_user }} -
-                                                {{ $item->kantor_kode }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">NAMA NASABAH</span>
+                                    <input class="form-control text-uppercase" name="nama_nasabah" id="nm_nasabah"
+                                        type="text" value="ZULFADLI RIZAL" readonly>
                                 </div>
 
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>JENIS PERSETUJUAN</label>
-                                    <select class="form-control" name="jenis_persetujuan" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        <option value="RESCHEDULLING"
-                                            {{ old('RESCHEDULLING') == 'RESCHEDULLING' ? 'selected' : '' }}>
-                                            RESCHEDULLING
-                                        </option>
-                                        <option value="RECONDITIONING"
-                                            {{ old('RECONDITIONING') == 'RECONDITIONING' ? 'selected' : '' }}>
-                                            RECONDITIONING
-                                        </option>
-                                        <option value="RESTRUKTURING"
-                                            {{ old('RESTRUKTURING') == 'RESTRUKTURING' ? 'selected' : '' }}>
-                                            RESTRUKTURING
-                                        </option>
-                                    </select>
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">KETERANGAN</span>
+                                    <textarea class="form-control text-uppercase" name="keterangan" id=""></textarea>
                                 </div>
-
-                                <div class="form-group">
-                                    <label>NAMA SURVEYOR</label>
-                                    <select class="form-control" name="surveyor_kode" required>
-                                        <option value="" disabled selected>-- Pilih --</option>
-                                        @foreach ($surveyor as $item)
-                                            <option value="{{ $item->code_user }}">{{ $item->kantor_kode }} -
-                                                {{ $item->nama_user }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-primary">SIMPAN</button>
+                        <button type="submit" class="btn bg-blue">SIMPAN</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $("#jadwal-ulang").on("show.bs.modal", function(event) {
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var pengajuan = button.data("pengajuan"); // Ambil data-id dari tombol
+                const rsc = button.data("rsc");
+
+                $('#rsc').val(rsc)
+                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+                $.ajax({
+                    url: "/themes/permohonan/data_jadul/" + pengajuan,
+                    type: "GET",
+                    dataType: "json",
+                    cache: false,
+                    success: function(response) {
+
+                        $("#id").val(response.id);
+                        $("#kd_pengajuan").val(response.kode_pengajuan);
+                        $("#tgl_survei").val(response.tgl_survei);
+                        $("#nm_nasabah").val(response.nama_nasabah);
+                    },
+                    error: function(xhr, status, error) {
+                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
+            });
+        });
+    </script>
 @endpush

@@ -12,99 +12,101 @@
                 <div class="col-xs-9">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li class="active">
+                            <li class="active text-bold">
                                 <a href="#informasi" data-toggle="tab">INFORMASI</a>
                             </li>
 
-                            <li>
-                                <a href="#data_lanjutan" data-toggle="tab">DATA LANJUTAN</a>
-                            </li>
                         </ul>
 
                         <div class="tab-content">
 
                             <div id="informasi" class="tab-pane fade in active">
-                                <form action="" method="POST">
-                                    @method('post')
-                                    @csrf
-                                    <div class="box-body" style="margin-top: -10px;font-size:12px;">
+                                <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
-                                        <div class="row" style="margin-top:5px;">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>POSISI AGUNAN</label>
-                                                    <input type="text" class="form-control text-uppercase"
-                                                        name="posisi_agunan" id="posisi_agunan" placeholder="ENTRI"
-                                                        value="{{ old('posisi_agunan') }}" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>KONDISI AGUNAN</label>
-                                                    <input type="text" class="form-control text-uppercase"
-                                                        name="kondisi_agunan" id="kondisi_agunan" placeholder="ENTRI"
-                                                        value="{{ old('kondisi_agunan') }}" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>NILAI TAKSASI AGUNAN</label>
-                                                    <input type="text" class="form-control text-uppercase"
-                                                        name="nilai_agunan" id="nilai_agunan" placeholder="ENTRI"
-                                                        value="{{ old('nilai_agunan') }}" required>
-                                                </div>
-                                            </div>
+                                    <div class="div-left">
+                                        <div style="margin-top:5px;width: 100%;float:left;">
+                                            <label>ALAMAT</label>
+                                            <input type="text" class="form-control text-uppercase"
+                                                style="font-size: 12px;" name="posisi_agunan" id="posisi_agunan"
+                                                placeholder="ENTRI" value="{{ old('posisi_agunan', $data->alamat_ktp) }}"
+                                                readonly>
                                         </div>
-                                    </div>
-                                    <div class="box-body" style="margin-top:-20px;">
-                                        <button type="submit" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;width:100%">SIMPAN</button>
-                                    </div>
-                                </form>
-                            </div>
 
-                            <div id="data_lanjutan" class="tab-pane fade">
-                                <form action="" method="POST">
-                                    @method('post')
-                                    @csrf
-                                    <div class="box-body" style="margin-top: -10px;font-size:12px;">
-
-                                        <div class="row" style="margin-top:5px;">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>POSISI AGUNAN</label>
-                                                    <input type="text" class="form-control text-uppercase"
-                                                        name="posisi_agunan" id="posisi_agunan" placeholder="ENTRI"
-                                                        value="{{ old('posisi_agunan') }}" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>KONDISI AGUNAN</label>
-                                                    <input type="text" class="form-control text-uppercase"
-                                                        name="kondisi_agunan" id="kondisi_agunan" placeholder="ENTRI"
-                                                        value="{{ old('kondisi_agunan') }}" required>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>NILAI TAKSASI AGUNAN</label>
-                                                    <input type="text" class="form-control text-uppercase"
-                                                        name="nilai_agunan" id="nilai_agunan" placeholder="ENTRI"
-                                                        value="{{ old('nilai_agunan') }}" required>
-                                                </div>
-                                            </div>
+                                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <label>TUNGGAKAN POKOK</label>
+                                            <input type="text" class="form-control text-uppercase" name="kondisi_agunan"
+                                                id="kondisi_agunan" placeholder="ENTRI"
+                                                value="{{ old('kondisi_agunan', number_format($data->tunggakan_poko, '0', ',', '.')) }}"
+                                                readonly>
                                         </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                                            <label>TUNGGAKAN BUNGA</label>
+                                            <input type="text" class="form-control text-uppercase" name="nilai_agunan"
+                                                id="nilai_agunan" placeholder="ENTRI"
+                                                value="{{ old('nilai_agunan', number_format($data->tunggakan_bunga, '0', ',', '.')) }}"
+                                                readonly>
+                                        </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <label>POSISI AGUNAN</label>
+                                            <input type="text" class="form-control text-uppercase" name="nilai_agunan"
+                                                id="nilai_agunan" placeholder="ENTRI"
+                                                value="{{ old('nilai_agunan', $data->posisi_agunan) }}" readonly>
+                                        </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                                            <label>KONDISI AGUNAN</label>
+                                            <input type="text" class="form-control text-uppercase" name="nilai_agunan"
+                                                id="nilai_agunan" placeholder="ENTRI"
+                                                value="{{ old('nilai_agunan', $data->kondisi_agunan) }}" readonly>
+                                        </div>
+
                                     </div>
-                                    <div class="box-body" style="margin-top:-20px;">
-                                        <button type="submit" class="btn btn-sm btn-primary"
-                                            style="margin-top:10px;width:100%">SIMPAN</button>
+
+                                    <div class="div-right">
+                                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <label>KASI</label>
+                                            <input type="text" class="form-control text-uppercase" name="kondisi_agunan"
+                                                id="kondisi_agunan" placeholder="ENTRI"
+                                                value="{{ old('kondisi_agunan', $data->kasi) }}" readonly>
+                                        </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                                            <label>SURVEYOR</label>
+                                            <input type="text" class="form-control text-uppercase" name="nilai_agunan"
+                                                id="nilai_agunan" placeholder="ENTRI"
+                                                value="{{ old('nilai_agunan', $data->surveyor) }}" readonly>
+                                        </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <label>TUNGGAKAN DENDA</label>
+                                            <input type="text" class="form-control text-uppercase" name="nilai_agunan"
+                                                id="nilai_agunan" placeholder="ENTRI"
+                                                value="{{ old('nilai_agunan', number_format($data->tunggakan_denda, '0', ',', '.')) }}"
+                                                readonly>
+                                        </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                                            <label>TOTAL TUNGGAKAN</label>
+                                            <input type="text" class="form-control text-uppercase" name="kondisi_agunan"
+                                                id="kondisi_agunan" placeholder="ENTRI"
+                                                value="{{ old('kondisi_agunan', number_format($data->total_tunggakan, '0', ',', '.')) }}"
+                                                readonly>
+                                        </div>
+
+                                        <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <label>NILAI TAKSASI</label>
+                                            <input type="text" class="form-control text-uppercase" name="kondisi_agunan"
+                                                id="kondisi_agunan" placeholder="ENTRI"
+                                                value="{{ old('kondisi_agunan', number_format($data->nilai_taksasi, '0', ',', '.')) }}"
+                                                readonly>
+                                        </div>
+
                                     </div>
-                                </form>
+
+                                </div>
+
                             </div>
 
                         </div>
