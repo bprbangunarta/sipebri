@@ -158,7 +158,7 @@
                 <td>:</td>
                 <td>
                     <font class="text-hg" style="text-transform: capitalize;">
-                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran) }}</font>
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran) . ' ' . 'Rupiah' }} </font>
                 </td>
             </tr>
         </table>
