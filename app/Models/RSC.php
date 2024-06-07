@@ -176,7 +176,7 @@ class RSC extends Model
         if (isset($data[0])) {
             $catatan1 = [
                 'catatan_staff_analisa' => "\n" . 'METODE : ' . $data[0]->metode_rps . ' - ' . ' SUKU BUNGA : ' .
-                    $data[0]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[0]->jangka_waktu
+                    $data[0]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[0]->jangka_waktu . ' - '
                     . 'JANGKA POKOK : ' . $data[0]->jangka_pokok . ' - ' . 'JANGKA BUNGA : ' . $data[0]->jangka_bunga .
                     "\n" . 'RC : ' . $data[0]->rc . '%' . ' - ' . 'ANGSURAN POKOK : ' . 'Rp. ' . number_format($data[0]->angsuran_pokok, '0', ',', '.')  .
                     ' - ' . 'ANGSURAN BUNGA : ' . 'Rp. ' . number_format($data[0]->angsuran_bunga, '0', ',', '.') . ' - ' . 'TOTAL ANGSURAN : ' . 'Rp. ' . number_format($data[0]->total_angsuran, '0', ',', '.') .
@@ -189,7 +189,7 @@ class RSC extends Model
         if (isset($data[1])) {
             $catatan2 = [
                 'catatan_kasi_analisa' => "\n" . 'METODE : ' . $data[1]->metode_rps . ' - ' . ' SUKU BUNGA : ' .
-                    $data[1]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[1]->jangka_waktu
+                    $data[1]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[1]->jangka_waktu . ' - '
                     . 'JANGKA POKOK : ' . $data[1]->jangka_pokok . ' - ' . 'JANGKA BUNGA : ' . $data[1]->jangka_bunga .
                     "\n" . 'RC : ' . $data[1]->rc . '%' . ' - ' . 'ANGSURAN POKOK : ' . 'Rp. ' . number_format($data[1]->angsuran_pokok, '0', ',', '.')  .
                     ' - ' . 'ANGSURAN BUNGA : ' . 'Rp. ' . number_format($data[1]->angsuran_bunga, '0', ',', '.') . ' - ' . 'TOTAL ANGSURAN : ' . 'Rp. ' . number_format($data[1]->total_angsuran, '0', ',', '.') .
@@ -202,7 +202,7 @@ class RSC extends Model
         if (isset($data[2])) {
             $catatan3 = [
                 'catatan_kabag_analisa' => "\n" . 'METODE : ' . $data[2]->metode_rps . ' - ' . ' SUKU BUNGA : ' .
-                    $data[2]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[2]->jangka_waktu
+                    $data[2]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[2]->jangka_waktu . ' - '
                     . 'JANGKA POKOK : ' . $data[2]->jangka_pokok . ' - ' . 'JANGKA BUNGA : ' . $data[2]->jangka_bunga .
                     "\n" . 'RC : ' . $data[2]->rc . '%' . ' - ' . 'ANGSURAN POKOK : ' . 'Rp. ' . number_format($data[2]->angsuran_pokok, '0', ',', '.')  .
                     ' - ' . 'ANGSURAN BUNGA : ' . 'Rp. ' . number_format($data[2]->angsuran_bunga, '0', ',', '.') . ' - ' . 'TOTAL ANGSURAN : ' . 'Rp. ' . number_format($data[2]->total_angsuran, '0', ',', '.') .
@@ -215,7 +215,7 @@ class RSC extends Model
         if (isset($data[3])) {
             $catatan4 = [
                 'catatan_direksi' => "\n" . 'METODE : ' . $data[3]->metode_rps . ' - ' . ' SUKU BUNGA : ' .
-                    $data[3]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[3]->jangka_waktu
+                    $data[3]->suku_bunga . '%' . ' - ' . 'JANGKA WAKTU : ' . $data[3]->jangka_waktu . ' - '
                     . 'JANGKA POKOK : ' . $data[3]->jangka_pokok . ' - ' . 'JANGKA BUNGA : ' . $data[3]->jangka_bunga .
                     "\n" . 'RC : ' . $data[3]->rc . '%' . ' - ' . 'ANGSURAN POKOK : ' . 'Rp. ' . number_format($data[3]->angsuran_pokok, '0', ',', '.')  .
                     ' - ' . 'ANGSURAN BUNGA : ' . 'Rp. ' . number_format($data[3]->angsuran_bunga, '0', ',', '.') . ' - ' . 'TOTAL ANGSURAN : ' . 'Rp. ' . number_format($data[3]->total_angsuran, '0', ',', '.') .

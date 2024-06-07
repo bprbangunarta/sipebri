@@ -70,20 +70,13 @@ class RSCPersetujuanController extends Controller
 
             $catatan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->get();
 
-            if (count($catatan) > 0) {
+            if ($catatan) {
                 $note = [];
                 foreach ($catatan as $item) {
                     $note[] = $item;
                 }
 
                 $catatan = RSC::catatan($note);
-            } else {
-                $catatan = [
-                    'catatan_staff_analisa' => 'TIDAK ADA CATATAN',
-                    'catatan_kasi_analisa' => 'TIDAK ADA CATATAN',
-                    'catatan_kabag_analisa' => 'TIDAK ADA CATATAN',
-                    'catatan_direksi' => 'TIDAK ADA CATATAN',
-                ];
             }
 
             return view('rsc.persetujuan.catatan', [
@@ -108,7 +101,7 @@ class RSCPersetujuanController extends Controller
 
             $rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $data[0]->kode_pengajuan)->where('kode_rsc', $enc_rsc)->first();
             $keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
-            // dd($data);
+
             return view('rsc.persetujuan.persetujuan', [
                 'data' => $data[0],
                 'pengusulan' => $rsc,
@@ -154,6 +147,15 @@ class RSCPersetujuanController extends Controller
             }
 
             $data2 = [
+                'metode_rps' => $request->metode_rps,
+                'suku_bunga' => $request->suku_bunga,
+                'jangka_waktu' => $request->jangka_waktu,
+                'jangka_bunga' => $request->jangka_bunga,
+                'jangka_pokok' => $request->jangka_pokok,
+                'angsuran_pokok' => (int)str_replace(["Rp.", " ", "."], "", $request->angsuran_pokok) ?? 0,
+                'angsuran_bunga' => (int)str_replace(["Rp.", " ", "."], "", $request->angsuran_bunga) ?? 0,
+                'total_angsuran' => (int)str_replace(["Rp.", " ", "."], "", $request->total_angsuran) ?? 0,
+                'penentuan_plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->plafon) ?? 0,
                 'status' => $rl
             ];
 
