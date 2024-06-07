@@ -749,6 +749,7 @@ class CetakController extends Controller
                     'data_pengajuan.jangka_waktu',
                     'data_pengajuan.plafon',
                     'data_pengajuan.suku_bunga',
+                    'data_pengajuan.metode_rps',
                     'data_spk.updated_at',
                 )
                 ->where('data_pengajuan.kode_pengajuan', $enc)
@@ -756,14 +757,22 @@ class CetakController extends Controller
             //
 
             if (!is_null($data)) {
-                $bunga = (($data->plafon * $data->suku_bunga) / 100) / 12;
-                $pokok = $data->plafon / $data->jangka_waktu;
-                $angsuran = $bunga + $pokok;
+                if ($data->metode_rps == 'FLAT') {
+                    $bunga = (($data->plafon * $data->suku_bunga) / 100) / 12;
+                    $pokok = $data->plafon / $data->jangka_waktu;
+                    $angsuran = $bunga + $pokok;
 
-                $angsur = $angsuran;
+                    $angsur = $angsuran;
+                } elseif ($data->metode_rps == 'EFEKTIF ANUITAS') {
+                    $ssb = $data->suku_bunga / 100;
+                    $sb = $ssb / 12;
+                    $anuitas = ($data->plafon * $sb) / (1 - 1 / pow(1 + $sb, $data->jangka_waktu));
+                    $angsur = round($anuitas);
+                }
             } else {
                 $angsur = 0;
             }
+
 
             $data->angsuran = (int) round($angsur);
             $data->tanggal_lahir = Carbon::createFromFormat('Ymd', $data->tanggal_lahir)->format('d-m-Y');
