@@ -672,7 +672,9 @@ class CetakController extends Controller
                         ->whereIn('data_pengajuan.resort_kode', ['127', '004']);
                 } else if (Auth::user()->kantor_kode == 'PGD') {
                     $query->whereIn('data_pengajuan.produk_kode', ['KTA', 'KPS'])
-                        ->whereIn('data_pengajuan.resort_kode', ['119']);
+                        ->orWhere(function ($query) {
+                            $query->whereIn('data_pengajuan.resort_kode', ['119']);
+                        });
                 }
             })
 
