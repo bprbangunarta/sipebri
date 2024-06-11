@@ -3,6 +3,7 @@ $(document).ready(function () {
         var usulan =
             parseFloat($("#usulan_plafon").val().replace(/[^\d]/g, "")) || 0;
         var metode = $("#metode").val();
+        var produk = $("#produk").val();
         var keuangan = $("#keuangan").val();
         var sb = $("#suku_bunga").val();
         var jangka_waktu = $("#jw").val();
@@ -17,7 +18,13 @@ $(document).ready(function () {
             $("#taksasi_agunan").val(0 + " " + "%");
         }
 
-        if (metode == "FLAT") {
+        if (produk == "KBT" && metode == "FLAT") {
+            var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+            var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
+            var angsuran = Math.ceil(bunga) + poko;
+            var rc = (angsuran / parseFloat(keuangan)) * 100;
+            $("#rc").val(rc.toFixed(2) + " " + "%");
+        } else if (metode == "FLAT") {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
             var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
@@ -38,7 +45,7 @@ $(document).ready(function () {
             var rc = (bg / keuangan) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
 
-            //MAX Plafon FLAT
+            //MAX Plafon EFEKTIF MUSIMAN
             var max_plafon = lb * (parseInt(jangka_waktu) / 6);
             var mx = formatRupiah(max_plafon.toFixed(0));
             $("#max").val("Rp." + " " + mx.toLocaleString("id-ID"));

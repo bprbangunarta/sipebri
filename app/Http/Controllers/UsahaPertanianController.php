@@ -285,11 +285,21 @@ class UsahaPertanianController extends Controller
             $pertanian->luas_sewa = $du->luas_sewa;
             $hasil_panen = $du->hasil_panen * $du->harga;
             $hasil_bersih = $hasil_panen - $bu;
-            $ambil = ($hasil_bersih * 70) / 100;
-            $jW = $cek[0]->jangka_waktu / 6;
-            $saving = $cek[0]->plafon / $jW;
-            $sisa_pendapatan = $ambil - $saving;
-            $pendapatan_perbulan = $sisa_pendapatan / 6;
+
+            if ($cek[0]->produk_kode == 'KBT' && $cek[0]->metode_rps == 'FLAT') {
+                $ambil = 0;
+                $jW = $cek[0]->jangka_waktu / 6;
+                $saving = $cek[0]->plafon / $jW;
+                $sisa_pendapatan = $saving;
+                $pendapatan_perbulan = ($hasil_bersih - $sisa_pendapatan) / 6;
+            } else {
+                $ambil = ($hasil_bersih * 70) / 100;
+                $jW = $cek[0]->jangka_waktu / 6;
+                $saving = $cek[0]->plafon / $jW;
+                $sisa_pendapatan = $saving - $ambil;
+                $pendapatan_perbulan = $sisa_pendapatan / 6;
+            }
+
 
             $kalkulasi = [
                 'pendapatan' => $hasil_panen,
@@ -301,6 +311,8 @@ class UsahaPertanianController extends Controller
                 'saving' => $saving,
                 'laba_perbulan' => number_format($pendapatan_perbulan, 0, '', ''),
             ];
+
+            // dd($kalkulasi);
 
             //cek pendapatan ada atau tidak
             if (is_null($pertanian->pendapatan)) {

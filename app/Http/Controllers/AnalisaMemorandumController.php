@@ -257,8 +257,36 @@ class AnalisaMemorandumController extends Controller
                 $usulan->kebutuhan_dana = $kdana;
             }
 
+
+
             //Menghitung RC
-            if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN' || $cek[0]->metode_rps == 'EFEKTIF') {
+            if ($cek[0]->produk_kode == "KBT" && $cek[0]->metode_rps == 'FLAT') {
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+
+                $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
+                //total semua nilai tani
+                $tn = [];
+
+                for ($i = 0; $i < count($tani); $i++) {
+                    $tn[] = $tani[$i]->laba_bersih ?? 0;
+                }
+                $totaltn = array_sum($tn);
+                $saving = $totaltn;
+
+
+                $detail_pertanian = DB::table('du_pertanian')->where('usaha_kode', $tani[0]->kode_usaha)->get();
+                $tdu = [];
+                foreach ($detail_pertanian as $item) {
+                    $tdu[] = $item->luas_sendiri + $item->luas_sewa + $item->luas_gadai;
+                }
+
+                $total_luas = array_sum($tdu);
+
+                //Max Plafond Musiman
+                $cek[0]->maxplafon = ($total_luas / 10000) * 15000000;
+
+                $cek[0]->laba_usaha_pertanian = $saving;
+            } else if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN' || $cek[0]->metode_rps == 'EFEKTIF') {
 
                 $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
 
@@ -341,7 +369,7 @@ class AnalisaMemorandumController extends Controller
             }
 
             $cek[0]->taksasiagunan = number_format($hasiltaksasi, 2) ?? 0;
-
+            // dd($cek[0]);
             return view('staff.analisa.memorandum.usulan', [
                 'data' => $cek[0],
                 'usulan' => $usulan,

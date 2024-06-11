@@ -15,6 +15,7 @@
                             <span class="fw-bold">KEBUTUHAN DANA</span>
                             <input type="text" id="metode" value="{{ $data->metode_rps }}" hidden>
                             <input type="text" id="keuangan" value="{{ $data->keuangan }}" hidden>
+                            <input type="text" id="produk" value="{{ $data->produk_kode }}" hidden>
                             <input type="text" id="laba_usaha_pertanian" value="{{ $data->laba_usaha_pertanian }}"
                                 hidden>
                             <input type="text" class="form-control text-uppercase"
