@@ -1321,7 +1321,46 @@ class DataCetakController extends Controller
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
                 ]);
-            } elseif (($cek->produk_kode == 'KBT' && $cek->metode_rps == 'EFEKTIF MUSIMAN') || $cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
+            } elseif ($cek->produk_kode == 'KBT') {
+
+                $tgl_update = $cek->update_spk;
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::parse($cek->tgl_akhir);
+                } else {
+                    $targetDate = Carbon::parse($cek->tgl_akhir);
+                }
+                $cek->tgl_jth_tmp = $targetDate->isoFormat('D MMMM Y');
+
+                $targetDate->addMonths($cek->jangka_pokok);
+                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - $cek->jangka_pokok);
+                $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
+
+                // $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
+                $bln_jth_tmp = $tenMonthsLater->isoFormat('MMMM');
+                $cek->bln_jth_tmp = $bln_jth_tmp;
+
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
+                } else {
+                    $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
+                }
+
+                $cek->tgl_jth_pokok = $targetDate->isoFormat('D MMMM Y');
+                $cek->tgl_jth_pokok2 = $targetDate->isoFormat('D');
+
+
+                $cek->banyak_bulan = $cek->jwt / $cek->jangka_pokok;
+                $cek->jumlah_bulan = $cek->jwt / $cek->jangka_bunga;
+                $cek->tgl_pokok = $cek->jwt / $cek->jangka_bunga;
+
+                return view('cetak.perjanjian-kredit.cetak-pk-kbt-flat', [
+                    'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
+                ]);
+            } elseif (($cek->metode_rps == 'EFEKTIF MUSIMAN') || $cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF MUSIMAN') {
 
                 $tgl_update = $cek->update_spk;
                 $carbonUpdatedAt = Carbon::parse($tgl_update);
