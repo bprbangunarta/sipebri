@@ -96,7 +96,8 @@ $(document).ready(function () {
                     if (
                         role === "Staff Analis" &&
                         pal >= 1000 &&
-                        pal <= 10000000
+                        pal <= 10000000 &&
+                        hasil.produk_kode != "KBT"
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
