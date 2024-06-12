@@ -21,7 +21,7 @@ $(document).ready(function () {
         if (produk == "KBT" && metode == "FLAT") {
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
             var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
-            var angsuran = Math.ceil(bunga) + poko;
+            var angsuran = Math.ceil(bunga);
             var rc = (angsuran / parseFloat(keuangan)) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
         } else if (metode == "FLAT") {
