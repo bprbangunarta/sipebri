@@ -131,7 +131,12 @@ class DataAnalisa5CController extends Controller
             }
 
             //Menghitung RC
-            $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+            if ($cek[0]->produk_kode == 'KBT' && $cek[0]->metode_rps == 'FLAT') {
+                $bunga = (((int)$cek[0]->plafon * $cek[0]->suku_bunga) / 100) / 12;
+                $rc = ($bunga / $keuangan) * 100;
+            } else {
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+            }
 
             //cek data capacity sudah ada apa belum
             $cap = DB::table('a5c_capacity')->where('pengajuan_kode', $enc)->first();
