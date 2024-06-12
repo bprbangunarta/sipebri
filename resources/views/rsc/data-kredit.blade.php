@@ -455,7 +455,7 @@
             $("#total_tunggakan").val(bs);
         })
 
-        $('#tunggakan_bunga').keyup(function() {
+        $('#tunggakan_bunga,#baki_debet').keyup(function() {
             const tgk_bunga = $('#tunggakan_bunga').val()
             const baki_debet = $('#baki_debet').val()
 
