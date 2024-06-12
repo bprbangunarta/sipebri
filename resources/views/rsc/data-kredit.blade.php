@@ -221,15 +221,14 @@
                                                         value="{{ old('adm', $biaya_rsc->administrasi) }}">
                                                 </div>
                                                 <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                    <label>PERSENTASE ADMINISTRASI</label>
+                                                    <label>NOMINAL ADMINISTRASI</label>
                                                     <input type="hidden" class="form-control" name="persentase"
                                                         id="persentases" placeholder="ENTRI"
                                                         value="{{ number_format($data_rsc->penentuan_plafon, '0', ',', '.') }}"
                                                         readonly>
                                                     <input type="text" class="form-control" name="persentase"
                                                         id="persentase" placeholder="ENTRI"
-                                                        value="{{ number_format($biaya_rsc->administrasi_nominal, '0', ',', '.') }}"
-                                                        readonly>
+                                                        value="{{ number_format($biaya_rsc->administrasi_nominal, '0', ',', '.') }}">
                                                 </div>
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <label>POKOK DIBAYAR</label>
@@ -242,6 +241,14 @@
                                                     <input type="text" class="form-control" name="bunga_dibayar"
                                                         id="bung_dibayar" placeholder="ENTRI"
                                                         value="{{ old('bunga_dibayar', number_format($biaya_rsc->bunga_dibayar, '0', ',', '.')) }}">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <label>TOTAL BIAYA</label>
+                                                    <input type="text" class="form-control" name="total_biaya"
+                                                        id="tot_biaya" placeholder="ENTRI"
+                                                        value="{{ old('total_biaya', number_format($biaya_rsc->total, '0', ',', '.')) }}"
+                                                        readonly>
                                                 </div>
 
                                             </div>
@@ -270,11 +277,11 @@
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                    <label>TOTAL BIAYA</label>
-                                                    <input type="text" class="form-control" name="total_biaya"
-                                                        id="tot_biaya" placeholder="ENTRI"
-                                                        value="{{ old('total_biaya', number_format($biaya_rsc->total, '0', ',', '.')) }}"
-                                                        readonly>
+                                                    <label>UJROH KIH</label>
+                                                    <input type="text" class="form-control" name="ujroh"
+                                                        id="ujroh" placeholder="ENTRI"
+                                                        value="{{ old('ujroh', number_format($biaya_rsc->ujroh, '0', ',', '.')) }}"
+                                                        @if ($data->produk_kode != 'KIH') readonly @endif>
                                                 </div>
                                             </div>
                                         </div>
@@ -327,6 +334,7 @@
         var a_tlo = document.getElementById('a_tlo')
         var pok_dibayar = document.getElementById('pok_dibayar')
         var bung_dibayar = document.getElementById('bung_dibayar')
+        var persentase = document.getElementById('persentase')
 
 
         if (a_jiwa) {
@@ -407,6 +415,11 @@
         if (tdenda_dibayar) {
             tdenda_dibayar.addEventListener("keyup", function(e) {
                 tdenda_dibayar.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+        if (persentase) {
+            persentase.addEventListener("keyup", function(e) {
+                persentase.value = formatRupiah(this.value, "Rp. ");
             });
         }
 
@@ -511,18 +524,35 @@
         });
 
 
-        $('#a_jiwa, #a_tlo, #den_dibayar, #tot_biaya, #pok_dibayar, #bung_dibayar').keyup(function() {
+        $('#a_jiwa, #a_tlo, #den_dibayar, #tot_biaya, #pok_dibayar, #bung_dibayar, #ujroh').keyup(function() {
             const jiwa = parseFloat($('#a_jiwa').val().replace(/[^\d]/g, "")) || 0
             const tlo = parseFloat($('#a_tlo').val().replace(/[^\d]/g, "")) || 0
             const den_dibayar = parseFloat($('#den_dibayar').val().replace(/[^\d]/g, "")) || 0
             const pok_dibayar = parseFloat($('#pok_dibayar').val().replace(/[^\d]/g, "")) || 0
             const bung_dibayar = parseFloat($('#bung_dibayar').val().replace(/[^\d]/g, "")) || 0
             const persentase = parseFloat($("#persentase").val().replace(/[^\d]/g, "")) || 0
+            const ujroh = parseFloat($("#ujroh").val().replace(/[^\d]/g, "")) || 0
 
-            const jml = jiwa + tlo + den_dibayar + pok_dibayar + bung_dibayar + persentase;
-
+            const jml = jiwa + tlo + den_dibayar + pok_dibayar + bung_dibayar + persentase + ujroh;
+            console.log(ujroh)
             var bs = jml.toLocaleString("id-ID");
             $("#tot_biaya").val(bs);
+        })
+
+        $('#persentase').keyup(function() {
+            var inputValue = $(this).val().replace(/[^\d]/g, "");
+            const nominal = parseFloat($("#persentases").val().replace(/[^\d]/g, ""))
+
+            const jml = inputValue / nominal * 100
+
+            const formattedPercentage = jml.toFixed(2);
+
+            const bs = parseFloat(formattedPercentage).toLocaleString("id-ID", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            $('#adm').val(formattedPercentage)
         })
         //--> KALKULASI BIAYA RSC <--//
     </script>

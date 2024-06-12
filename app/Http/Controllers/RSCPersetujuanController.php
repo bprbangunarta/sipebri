@@ -122,6 +122,9 @@ class RSCPersetujuanController extends Controller
                 'kode_rsc' => $enc_rsc,
                 'role_name' => $role->role_name,
                 'input_user' => Auth::user()->code_user,
+                'administrasi' => $request->persen_adm,
+                'administrasi_nominal' => $request->nominal_adm,
+                'ujroh' => (int)str_replace(["Rp.", " ", "."], "", $request->ujroh) ?? 0,
                 'metode_rps' => $request->metode_rps,
                 'suku_bunga' => $request->suku_bunga,
                 'jangka_waktu' => $request->jangka_waktu,
@@ -159,9 +162,20 @@ class RSCPersetujuanController extends Controller
                 'status' => $rl
             ];
 
-            DB::transaction(function () use ($enc_rsc, $data, $data2) {
-                $insert = DB::table('rsc_data_usulan')->insert($data);
-                $update = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+            $cek_biaya_rsc = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
+            $jml = $cek_biaya_rsc->administrasi_nominal + $cek_biaya_rsc->asuransi_jiwa + $cek_biaya_rsc->asuransi_tlo + $cek_biaya_rsc->poko_dibayar + $cek_biaya_rsc->bunga_dibayar + $cek_biaya_rsc->denda_dibayar + $request->ujroh;
+
+            $data3 = [
+                'administrasi' => $request->persen_adm,
+                'administrasi_nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->nominal_adm) ?? 0,
+                'ujroh' => (int)str_replace(["Rp.", " ", "."], "", $request->ujroh) ?? 0,
+                'total' => (int)str_replace(["Rp.", " ", "."], "", $jml) ?? 0,
+            ];
+
+            DB::transaction(function () use ($enc_rsc, $data, $data2, $data3) {
+                DB::table('rsc_data_usulan')->insert($data);
+                DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+                DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->update($data3);
             });
 
             return redirect()->route('rsc.persetujuan.index')->with('success', 'Berhasil menambahkan data.');

@@ -277,7 +277,7 @@ class RSCController extends Controller
 
             $data_rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $enc)->where('kode_rsc', $enc_rsc)->first();
             $biaya_rsc = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
-            // dd($biaya_rsc);
+            // dd($data[0], $biaya_rsc);
             return view('rsc.data-kredit', [
                 'data' => $data[0],
                 'usaha' => $jenis_usaha,
@@ -373,6 +373,7 @@ class RSCController extends Controller
                     'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bunga_dibayar ?? 0),
                     'denda_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->denda_dibayar ?? 0),
                     'total' => (int)str_replace(["Rp.", " ", "."], "", $request->total_biaya ?? 0),
+                    'ujroh' => (int)str_replace(["Rp.", " ", "."], "", $request->ujroh ?? 0),
                     'created_at' => now(),
                 ];
 
@@ -393,6 +394,7 @@ class RSCController extends Controller
                     'bunga_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->bunga_dibayar ?? 0),
                     'denda_dibayar' => (int)str_replace(["Rp.", " ", "."], "", $request->denda_dibayar ?? 0),
                     'total' => (int)str_replace(["Rp.", " ", "."], "", $request->total_biaya ?? 0),
+                    'ujroh' => (int)str_replace(["Rp.", " ", "."], "", $request->ujroh ?? 0),
                     'updated_at' => now(),
                 ];
 
@@ -582,7 +584,7 @@ class RSCController extends Controller
                 'data_pengajuan.plafon',
             )
             ->where('rsc_data_pengajuan.status', 'Notifikasi')
-            ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user)
+            ->where('rsc_data_survei.direksi_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
 
         $data = $data->paginate(10);
@@ -666,6 +668,38 @@ class RSCController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal disimpan.');
         }
+    }
+
+    public function pk_index()
+    {
+        $data = DB::table('rsc_data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.plafon',
+            )
+            ->where('rsc_data_pengajuan.status', 'Perjanjian Kredit')
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc');
+
+        $data = $data->paginate(10);
+
+        foreach ($data as $item) {
+            $item->kode = Crypt::encrypt($item->kode_pengajuan);
+            $item->rsc = Crypt::encrypt($item->kode_rsc);
+        }
+
+        return view('rsc.notifikasi.index', [
+            'data' => $data
+        ]);
     }
 
 

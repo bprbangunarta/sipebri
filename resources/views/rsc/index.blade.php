@@ -75,7 +75,7 @@
                                             </td>
                                             <td class="text-center" style="text-align: right;">
 
-                                                <a href="" class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC"
+                                                <a href="" class="btn-circle btn-sm bg-yellow" title="Info RSC"
                                                     disabled>
                                                     <i class="fa fa-info"></i>
                                                 </a>

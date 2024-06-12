@@ -250,7 +250,7 @@
                                         </div>
                                     </form>
                                 @else
-                                    {{-- <form
+                                    <form
                                         action="{{ route('rsc.simpan.kondisi.usaha', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
                                         method="POST">
                                         @method('post')
@@ -318,8 +318,7 @@
                                                     <input type="text" class="form-control"
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_ekonomi" id="catatan_faktor_ekonomi"
-                                                        value="{{ old('catatan_faktor_ekonomi', ) }}" placeholder="ENTRI"
-                                                        required>
+                                                        value="{{ old('catatan_faktor_ekonomi') }}" placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 100%;float:right;">
@@ -356,8 +355,8 @@
                                                     <input type="text" class="form-control"
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_marketing" id="catatan_faktor_marketing"
-                                                        value="{{ old('catatan_faktor_marketing') }}" placeholder="ENTRI"
-                                                        required>
+                                                        value="{{ old('catatan_faktor_marketing') }}"
+                                                        placeholder="ENTRI">
                                                 </div>
 
 
@@ -368,7 +367,7 @@
                                                         name="catatan_faktor_rumah_tangga"
                                                         id="catatan_faktor_rumah_tangga"
                                                         value="{{ old('catatan_faktor_rumah_tangga') }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                             </div>
@@ -380,8 +379,7 @@
                                                     <input type="text" class="form-control"
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_teknis" id="catatan_faktor_teknis"
-                                                        value="{{ old('catatan_faktor_teknis') }}" placeholder="ENTRI"
-                                                        required>
+                                                        value="{{ old('catatan_faktor_teknis') }}" placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
@@ -431,7 +429,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_marketing2" id="catatan_faktor_marketing2"
                                                         value="{{ old('catatan_faktor_marketing2') }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 100%;float:left;">
@@ -440,7 +438,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_marketing3" id="catatan_faktor_marketing3"
                                                         value="{{ old('catatan_faktor_marketing3') }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
 
@@ -467,7 +465,7 @@
                                                     <input type="text" class="form-control"
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="faktor_lain" id="faktor_lain"
-                                                        value="{{ old('faktor_lain') }}" placeholder="ENTRI" required>
+                                                        value="{{ old('faktor_lain') }}" placeholder="ENTRI">
                                                 </div>
                                             </div>
 
@@ -476,7 +474,7 @@
                                             <button type="submit" class="btn btn-sm btn-primary"
                                                 style="margin-top:10px;width:100%">SIMPAN</button>
                                         </div>
-                                    </form> --}}
+                                    </form>
                                 @endif
 
                             </div>
