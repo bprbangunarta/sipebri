@@ -97,7 +97,7 @@ $(document).ready(function () {
                         role === "Staff Analis" &&
                         pal >= 1000 &&
                         pal <= 10000000 &&
-                        hasil.produk_kode != "KBT"
+                        hasil.produk_kode !== "KBT"
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
@@ -105,7 +105,10 @@ $(document).ready(function () {
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
-                    } else if (role == "Staff Analis" && pal > 10000000) {
+                    } else if (
+                        (role == "Staff Analis" && pal > 10000000) ||
+                        hasil.produk_kode === "KBT"
+                    ) {
                         var options = [
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
