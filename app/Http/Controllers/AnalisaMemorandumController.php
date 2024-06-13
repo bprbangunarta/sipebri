@@ -257,16 +257,23 @@ class AnalisaMemorandumController extends Controller
                 $usulan->kebutuhan_dana = $kdana;
             }
 
-
-
             //Menghitung RC
-            if ($cek[0]->produk_kode == "KBT" && $cek[0]->metode_rps == 'FLAT') {
-                // $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+            if ($cek[0]->produk_kode == "KBT" && $cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
+                $bunga = (((int)$cek[0]->plafon * $cek[0]->suku_bunga) / 100) / 12;
+                $pokok_bulanan = (int)$cek[0]->plafon / $cek[0]->jangka_waktu;
+                $angsuran = $bunga + $pokok_bulanan;
+                $rc = ($angsuran / $keuangan) * 100;
+
+                //Max Plafon
+                $mp_sb = (int)$cek[0]->suku_bunga / 100;
+                $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
+            } else if ($cek[0]->produk_kode == "KBT" && $cek[0]->metode_rps == 'FLAT') {
+
                 $bunga = (((int)$cek[0]->plafon * $cek[0]->suku_bunga) / 100) / 12;
                 $pokok_bulanan = (int)$cek[0]->plafon / $cek[0]->jangka_waktu;
                 $angsuran = $bunga + $pokok_bulanan;
                 $rc = ($bunga / $keuangan) * 100;
-                // dd($rc);
+
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
                 //total semua nilai tani
                 $tn = [];

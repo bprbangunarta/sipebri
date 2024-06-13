@@ -233,7 +233,22 @@ $(document).ready(function () {
                     var jangka_waktu = hasil.jangka_waktu;
                     var selectedValue = $(this).val();
 
-                    if (selectedValue == "FLAT" && hasil.produk_kode == "KBT") {
+                    if (
+                        selectedValue == "EFEKTIF MUSIMAN" &&
+                        hasil.produk_kode == "KBT"
+                    ) {
+                        var bunga =
+                            (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                        var poko =
+                            parseFloat(usulan) / parseFloat(jangka_waktu);
+                        var angsuran = Math.ceil(bunga) + poko;
+                        var rc = (angsuran / parseFloat(keuangan)) * 100;
+
+                        $("#rc").val(rc.toFixed(2) + " " + "%");
+                    } else if (
+                        selectedValue == "FLAT" &&
+                        hasil.produk_kode == "KBT"
+                    ) {
                         var bunga =
                             (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
                         var poko =
@@ -292,6 +307,20 @@ $(document).ready(function () {
                     hasil.produk_kode = "KBT";
 
                     if (
+                        hasil.produk_kode == "KBT" &&
+                        (hasil.metode_rps == "EFEKTIF MUSIMAN" ||
+                            mtd == "EFEKTIF MUSIMAN")
+                    ) {
+                        //
+                        var bunga =
+                            (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                        var poko =
+                            parseFloat(usulan) / parseFloat(jangka_waktu);
+                        var angsuran = Math.ceil(bunga) + poko;
+                        var rc = (angsuran / parseFloat(keuangan)) * 100;
+
+                        $("#rc").val(rc.toFixed(2) + " " + "%");
+                    } else if (
                         hasil.produk_kode == "KBT" &&
                         (hasil.metode_rps == "FLAT" || mtd == "FLAT")
                     ) {

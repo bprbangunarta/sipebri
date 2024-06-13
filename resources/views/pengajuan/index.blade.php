@@ -227,6 +227,7 @@
                         </div>
                     @else
                         <p class="text-red" style="margin-top:-10px;margin-left:10px;">
+                            *<b>Untuk ternak lele gunakan produk KBT dan EFEKTIF MUSIMAN sebagai metodenya</b> <br>
                             *Penggunaan kategori <b>BARU</b> untuk pengajuan <b>BARU</b> & <b>TOPUP</b> <br>
                             *Penggunaan kategori <b>RELOAN</b> untuk penyelamatan kredit dan produk <b>KUP, KKO</b><br>
                         </p>
