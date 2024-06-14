@@ -1,6 +1,7 @@
 @extends('theme.app')
 @section('title', 'Data Pengajuan')
 
+</style>
 @section('content')
     <div class="content-wrapper">
         <section class="content">
@@ -237,6 +238,8 @@
                         *<b>Untuk ternak lele gunakan produk KBT dan FLAT sebagai metodenya.</b> <br>
                         *<b>Pilih Field select "KHUSUS KBT" dan sesuaikan kebutuhan, jika tidak diperlukan boleh.
                             dikosongkan</b> <br>
+                        *<b>Jika ragu, bisa hubungi IT. (0_0)</b>
+                        <br>
                     </p>
                 </div>
         </section>
