@@ -337,7 +337,7 @@ class PengajuanController extends Controller
             'jangka_waktu' => 'required', 'metode_rps' => 'required', 'jangka_pokok' => 'required', 'jangka_bunga' => 'required',
             'resort_kode' => '', 'penggunaan' => 'required', 'tabungan_cgc' => '', 'keterangan' => '', 'input_user' => 'required',
         ]);
-        // dd($request);
+
         $cek['is_entry'] = 1;
         $cek['kode_pengajuan'] = Crypt::decrypt($cek['kode_pengajuan']);
 
@@ -345,6 +345,7 @@ class PengajuanController extends Controller
         $remove = array("Rp", ".", " ");
         $cek['plafon'] = str_replace($remove, "", $cek['plafon']);
         $cek['otorisasi'] = 'N';
+        $cek['kondisi_khusus'] = $request->khsus_kbt;
 
         try {
             Pengajuan::where('kode_pengajuan', $cek['kode_pengajuan'])->update($cek);
@@ -407,7 +408,7 @@ class PengajuanController extends Controller
             $cgc = CGC::select('*')->get();
             $namacgc = CGC::where('noacc', $peng->tabungan_cgc)->first();
             $peng->namacgc = $namacgc->fnama ?? null;
-            // dd($dt);
+
             return view('pengajuan.data-pengajuan', [
                 'data' => $dt[0],
                 'cgc' => $cgc,

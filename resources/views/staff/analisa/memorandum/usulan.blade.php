@@ -16,6 +16,7 @@
                             <input type="text" id="metode" value="{{ $data->metode_rps }}" hidden>
                             <input type="text" id="keuangan" value="{{ $data->keuangan }}" hidden>
                             <input type="text" id="produk" value="{{ $data->produk_kode }}" hidden>
+                            <input type="text" id="kondisi_khusus" value="{{ $data->kondisi_khusus }}" hidden>
                             <input type="text" id="laba_usaha_pertanian" value="{{ $data->laba_usaha_pertanian }}"
                                 hidden>
                             <input type="text" class="form-control text-uppercase"
@@ -88,8 +89,8 @@
 
                             <div style="width: 49.5%;float:right;">
                                 <span class="fw-bold">B.PENALTI (%)</span>
-                                <input type="text" class="form-control text-uppercase" name="b_penalti" id="b_penalti"
-                                    placeholder="ENTRI" value="{{ $data->b_penalti }}" required>
+                                <input type="text" class="form-control text-uppercase" name="b_penalti"
+                                    id="b_penalti" placeholder="ENTRI" value="{{ $data->b_penalti }}" required>
                             </div>
                         </div>
 

@@ -97,7 +97,7 @@
                                                     value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}" required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 100%;float:right;">
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA CGC</span>
                                                 <select class="form-control cgc" name="tabungan_cgc">
                                                     @if (is_null($pengajuan->tabungan_cgc))
@@ -113,6 +113,18 @@
                                                             {{ $item->fnama }}
                                                         </option>
                                                     @endforeach
+                                                </select>
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">KHUSUS KBT</span>
+                                                <select class="form-control khsus_kbt" name="khsus_kbt" id="khsus_kbt">
+                                                    <option value="">-- PILIH --</option>
+                                                    <option value="PERLELEAN"
+                                                        {{ old('khsus_kbt') == 'PERLELEAN' || $data->kondisi_khusus == 'PERLELEAN' ? 'selected' : '' }}>
+                                                        PERLELEAN</option>
+                                                    <option value="PERPADIAN"
+                                                        {{ old('khsus_kbt') == 'PERPADIAN' || $data->kondisi_khusus == 'PERPADIAN' ? 'selected' : '' }}>
+                                                        PERPADIAN</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -230,6 +242,7 @@
         $('.produk').select2()
         $('.cgc').select2()
         $('.resort').select2()
+        $('.khsus_kbt').select2()
     </script>
     <script>
         // Ketika pilihan sistem berubah
@@ -279,6 +292,16 @@
 
             // Memasukkan nilai yang sudah diubah ke dalam input field
             $(this).val(convertedValue);
+        });
+
+        $("#select-produk").change(function() {
+            var selectedValue = $(this).val();
+
+            if (selectedValue !== "KBT") {
+                $('.khsus_kbt').prop('disabled', true)
+            } else {
+                $('.khsus_kbt').prop('disabled', false)
+            }
         });
     </script>
 @endpush

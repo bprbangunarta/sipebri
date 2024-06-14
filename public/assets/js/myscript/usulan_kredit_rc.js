@@ -9,6 +9,7 @@ $(document).ready(function () {
         var jangka_waktu = $("#jw").val();
         var lb = $("#laba_usaha_pertanian").val();
         var totaltaksasi = $("#total_taksasi").val();
+        var kondisi_khusus = $("#kondisi_khusus").val();
 
         //Taksasi Agunan
         if (totaltaksasi != 0) {
@@ -18,7 +19,7 @@ $(document).ready(function () {
             $("#taksasi_agunan").val(0 + " " + "%");
         }
 
-        if (produk == "KBT" && metode == "EFEKTIF MUSIMAN") {
+        if (produk == "KBT" && kondisi_khusus == "PERLELEAN") {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
             var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
@@ -26,10 +27,15 @@ $(document).ready(function () {
             var rc = (angsuran / parseFloat(keuangan)) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
             //
-        } else if (produk == "KBT" && metode == "FLAT") {
+            var mx_sb = sb / 100;
+            var max_plafon =
+                (keuangan * jangka_waktu) / (1 + (jangka_waktu * mx_sb) / 12);
+            var mx = formatRupiah(max_plafon.toFixed(0));
+            $("#max").val("Rp. " + " " + mx);
+            //
+        } else if (produk == "KBT" && kondisi_khusus == "PERPADIAN") {
             //
             var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
-            var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
             var angsuran = Math.ceil(bunga);
             var rc = (angsuran / parseFloat(keuangan)) * 100;
             $("#rc").val(rc.toFixed(2) + " " + "%");
