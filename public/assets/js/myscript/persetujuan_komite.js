@@ -70,7 +70,9 @@ $(document).ready(function () {
                 if (
                     kategori === "RELOAN" ||
                     hasil.produk_kode === "KUP" ||
-                    hasil.produk_kode === "KKO"
+                    hasil.produk_kode === "KKO" ||
+                    (hasil.produk_kode === "KBT" &&
+                        hasil.metode_rps == "EFEKTIF MUSIMAN")
                 ) {
                     if (role === "Staff Analis") {
                         var options = [
