@@ -1321,7 +1321,7 @@ class DataCetakController extends Controller
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
                 ]);
-            } elseif ($cek->produk_kode == 'KBT') {
+            } elseif ($cek->produk_kode == 'KBT' && $cek->metode_rps == 'FLAT') {
 
                 $tgl_update = $cek->update_spk;
                 $carbonUpdatedAt = Carbon::parse($tgl_update);

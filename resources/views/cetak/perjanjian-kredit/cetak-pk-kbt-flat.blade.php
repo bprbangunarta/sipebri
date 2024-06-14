@@ -273,9 +273,9 @@
                                 @endphp
                             @endif
                             <li>
-                                Pembayaran angsuran pokok yang terhutang oleh PEMINJAM kepada BANK wajib dilakukan oleh
-                                PEMINJAM secara <font class="text-hg">{{ $data->jangka_pokok }}</font> ( <font
-                                    class="text-hg" style="text-transform: capitalize;">
+                                Pembayaran angsuran pokok dan bunga yang terhutang oleh PEMINJAM kepada BANK wajib
+                                dilakukan oleh PEMINJAM secara <font class="text-hg">{{ $data->jangka_pokok }}</font> (
+                                <font class="text-hg" style="text-transform: capitalize;">
                                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_pokok) }}</font> )
                                 bulanan yang dimulai pada tanggal <font class="text-hg">{{ $data->tgl_jth_pokok }}
                                 </font> sebanyak
@@ -284,8 +284,8 @@
                                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->banyak_bulan) }}</font> )
                                 kali angsuran,
                                 selama jangka waktu kredit ( <font class="text-hg">{{ $data->jwt }}</font> bulan),
-                                yang dimulai pada tanggal <font class="text-hg">
-                                    {{ $data->tgl_bln_thn_tempo }}</font> dan demikian
+                                {{-- yang dimulai pada tanggal <font class="text-hg">
+                                    {{ $data->tgl_bln_thn_tempo }}</font> --}} dan demikian
                                 seterusnya hingga berakhir pada tanggal <font class="text-hg">
                                     {{ $data->tgl_jth_tmp }}</font>{{ $isi }}
 
