@@ -94,12 +94,22 @@ $(document).ready(function () {
                             { value: "Ditolak", text: "Ditolak" },
                         ];
                     }
-                } else {
+                } else if (
+                    hasil.produk_kode === "KBT" &&
+                    hasil.metode_rps == "FLAT"
+                ) {
+                    //
+                    //Persetujuan Lele
+                    if (role === "Staff Analis") {
+                        var options = [
+                            { value: "Naik Kasi", text: "Naik Kasi" },
+                        ];
+                    }
+
                     if (
-                        role === "Staff Analis" &&
-                        pal >= 1000 &&
-                        pal <= 10000000 &&
-                        hasil.produk_kode !== "KBT"
+                        role === "Kasi Analis" &&
+                        pal > 1000 &&
+                        pal <= 35000000
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
@@ -107,10 +117,58 @@ $(document).ready(function () {
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
-                    } else if (
-                        (role == "Staff Analis" && pal > 10000000) ||
-                        hasil.produk_kode === "KBT"
+                    } else if (role == "Kasi Analis" && pal > 35000000) {
+                        var options = [
+                            { value: "", text: "--Pilih--" },
+                            { value: "Naik Komite I", text: "Naik Komite I" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    if (
+                        role === "Kabag Analis" &&
+                        pal >= 35000001 &&
+                        pal <= 75000000
                     ) {
+                        var options = [
+                            { value: "", text: "--Pilih--" },
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Kabag Analis" && pal > 75000001) {
+                        var options = [
+                            { value: "Naik Komite II", text: "Naik Komite II" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    if (role === "Direksi" && pal > 75000000) {
+                        var options = [
+                            { value: "", text: "--Pilih--" },
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    //
+                    //Persetujuan Lele
+                } else {
+                    if (
+                        role === "Staff Analis" &&
+                        pal >= 1000 &&
+                        pal <= 10000000
+                    ) {
+                        var options = [
+                            { value: "", text: "--Pilih--" },
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Staff Analis" && pal > 10000000) {
                         var options = [
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
