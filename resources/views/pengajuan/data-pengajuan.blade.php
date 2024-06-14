@@ -210,6 +210,7 @@
                                     </div>
                                 </div>
 
+
                                 @can('edit pengajuan kredit')
                                     <div class="box-body" style="margin-top:-20px;">
                                         <button type="submit" class="btn btn-sm btn-primary"
@@ -232,6 +233,11 @@
                         @endcan
 
                     </div>
+                    <p class="text-red" style="margin-top:-10px;margin-left:10px;">
+                        *<b>Untuk ternak lele gunakan produk KBT dan FLAT sebagai metodenya.</b> <br>
+                        *<b>Pilih Field select "KHUSUS KBT" dan sesuaikan kebutuhan, jika tidak diperlukan boleh.
+                            dikosongkan</b> <br>
+                    </p>
                 </div>
         </section>
     </div>
