@@ -238,6 +238,7 @@
                         *<b>Untuk ternak lele gunakan produk KBT dan FLAT sebagai metodenya.</b> <br>
                         *<b>Pilih Field select "KHUSUS KBT" dan sesuaikan kebutuhan, jika tidak diperlukan boleh.
                             dikosongkan</b> <br>
+                        *<b>Sesuaikan jangka bunga dan jangka pokok untuk produk KBT.</b> <br>
                         *<b>Jika ragu, bisa hubungi IT. (0_0)</b>
                         <br>
                     </p>
@@ -257,8 +258,9 @@
         // Ketika pilihan sistem berubah
         $("#select-metodes").change(function() {
             var selectedValue = $(this).val();
+            var produk = $('#select-produk').val();
 
-            if (selectedValue === "FLAT") {
+            if (selectedValue === "FLAT" && produk != 'KBT') {
 
                 // Jika dipilih "Sistem Flat Terelect"
                 $("#jangka_pokok").val("1").prop("readonly", true);
@@ -305,11 +307,18 @@
 
         $("#select-produk").change(function() {
             var selectedValue = $(this).val();
+            var metode = $("#select-metodes").val()
 
             if (selectedValue !== "KBT") {
                 $('.khsus_kbt').prop('disabled', true)
             } else {
                 $('.khsus_kbt').prop('disabled', false)
+            }
+
+            if (metode == 'FLAT') {
+                // Jika dipilih "Sistem Flat Terelect"
+                $("#jangka_pokok").val("").prop("readonly", false);
+                $("#jangka_bunga").val("").prop("readonly", false);
             }
         });
     </script>
