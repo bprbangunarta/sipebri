@@ -70,13 +70,13 @@ class DroppingController extends Controller
                     ->orWhere('no_spk', 'like', '%' . $keyword . '%')
                     ->orWhere('jangka_waktu', 'like', '%' . $keyword . '%')
                     ->orWhere('rate_bunga', 'like', '%' . $keyword . '%')
-                    ->orWhere('metode', 'like', '%' . $keyword . '%')
+                    ->orWhere('nama_metode', 'like', '%' . $keyword . '%')
                     ->orWhere('tgl_akhir', 'like', '%' . $keyword . '%');
             })
             ->orderBy('tgl_daftar', 'desc')
             ->paginate(10);
         //
-        // dd($data);
+
         return view('dropping.kredit', [
             'data' => $data,
         ]);

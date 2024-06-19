@@ -74,7 +74,7 @@
                                             <td class="text-center">{{ $item->no_spk }}</td>
                                             <td class="text-center">{{ $item->jangka_waktu }}</td>
                                             <td class="text-center">{{ number_format($item->rate_bunga, 0) }}%</td>
-                                            <td class="text-center">{{ $item->metode }}</td>
+                                            <td class="text-center">{{ $item->nama_metode }}</td>
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tgl_akhir)->format('d-m-Y') }}
                                             </td>
