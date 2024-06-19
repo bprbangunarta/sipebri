@@ -72,7 +72,7 @@ $(document).ready(function () {
                     hasil.produk_kode === "KUP" ||
                     hasil.produk_kode === "KKO" ||
                     (hasil.produk_kode === "KBT" &&
-                        hasil.metode_rps == "EFEKTIF MUSIMAN")
+                        hasil.kondisi_khusus == "PERLELEAN")
                 ) {
                     if (role === "Staff Analis") {
                         var options = [
@@ -96,7 +96,7 @@ $(document).ready(function () {
                     }
                 } else if (
                     hasil.produk_kode === "KBT" &&
-                    hasil.metode_rps == "FLAT"
+                    hasil.kondisi_khusus == "PERPADIAN"
                 ) {
                     //
                     //Persetujuan Lele
@@ -157,6 +157,8 @@ $(document).ready(function () {
                     //
                     //Persetujuan Lele
                 } else {
+                    //
+                    //
                     if (
                         role === "Staff Analis" &&
                         pal >= 1000 &&
@@ -294,64 +296,151 @@ $(document).ready(function () {
                     var selectedValue = $(this).val();
 
                     if (
-                        selectedValue == "EFEKTIF MUSIMAN" &&
-                        hasil.produk_kode == "KBT"
+                        hasil.produk_kode == "KBT" &&
+                        (hasil.kondisi_khusus == "PERLELEAN" ||
+                            hasil.kondisi_khusus == "PERPADIAN")
                     ) {
-                        var bunga =
-                            (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
-                        var poko =
-                            parseFloat(usulan) / parseFloat(jangka_waktu);
-                        var angsuran = Math.ceil(bunga) + poko;
-                        var rc = (angsuran / parseFloat(keuangan)) * 100;
+                        //
+                        //Perpadian
+                        if (
+                            hasil.produk_kode == "KBT" &&
+                            hasil.kondisi_khusus == "PERPADIAN"
+                        ) {
+                            var bunga =
+                                (parseFloat(usulan) * parseFloat(sb)) /
+                                100 /
+                                12;
+                            var angsuran = Math.ceil(bunga);
+                            var rc = (angsuran / parseFloat(keuangan)) * 100;
 
-                        $("#rc").val(rc.toFixed(2) + " " + "%");
-                    } else if (
-                        selectedValue == "FLAT" &&
-                        hasil.produk_kode == "KBT"
-                    ) {
-                        var bunga =
-                            (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
-                        var poko =
-                            parseFloat(usulan) / parseFloat(jangka_waktu);
-                        var angsuran = Math.ceil(bunga);
-                        var rc = (angsuran / parseFloat(keuangan)) * 100;
+                            $("#rc").val(rc.toFixed(2) + " " + "%");
+                            //Perpadian
+                            //
+                        } else if (
+                            hasil.produk_kode == "KBT" &&
+                            hasil.kondisi_khusus == "PERLELEAN"
+                        ) {
+                            //
+                            //Perlelean
+                            var bunga =
+                                (parseFloat(usulan) * parseFloat(sb)) /
+                                100 /
+                                12;
+                            var poko =
+                                parseFloat(usulan) / parseFloat(jangka_waktu);
+                            var angsuran = Math.ceil(bunga) + poko;
+                            var rc = (angsuran / parseFloat(keuangan)) * 100;
 
-                        $("#rc").val(rc.toFixed(2) + " " + "%");
-                    } else if (selectedValue == "FLAT") {
-                        var bunga =
-                            (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
-                        var poko =
-                            parseFloat(usulan) / parseFloat(jangka_waktu);
-                        var angsuran = Math.ceil(bunga) + poko;
-                        var rc = (angsuran / parseFloat(keuangan)) * 100;
-
-                        $("#rc").val(rc.toFixed(2) + " " + "%");
-                    } else if (
-                        selectedValue == "EFEKTIF MUSIMAN" ||
-                        selectedValue == "EFEKTIF"
-                    ) {
-                        var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
-                        var rc = (bg / keuangan) * 100;
-
-                        $("#rc").val(rc.toFixed(2) + " " + "%");
-                    } else if (selectedValue == "EFEKTIF ANUITAS") {
-                        var ssb = sb / 100;
-                        var bunga = ssb / 12;
-                        var anuitas =
-                            (usulan * bunga) /
-                            (1 - 1 / Math.pow(1 + bunga, jangka_waktu));
-                        var rc = (anuitas / keuangan) * 100;
-                        $("#rc").val(rc.toFixed(2) + "%");
+                            $("#rc").val(rc.toFixed(2) + " " + "%");
+                            //Perlelean
+                            //
+                        }
                     } else {
                         //
-                        var bunga =
-                            (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
-                        var poko =
-                            parseFloat(usulan) / parseFloat(jangka_waktu);
-                        var angsuran = Math.ceil(bunga) + poko;
-                        var rc = (angsuran / parseFloat(keuangan)) * 100;
-                        $("#rc").val(rc.toFixed(2) + " " + "%");
+                        if (selectedValue == "FLAT") {
+                            var bunga =
+                                (parseFloat(usulan) * parseFloat(sb)) /
+                                100 /
+                                12;
+                            var poko =
+                                parseFloat(usulan) / parseFloat(jangka_waktu);
+                            var angsuran = Math.ceil(bunga) + poko;
+                            var rc = (angsuran / parseFloat(keuangan)) * 100;
+
+                            $("#rc").val(rc.toFixed(2) + " " + "%");
+                        } else if (
+                            selectedValue == "EFEKTIF MUSIMAN" ||
+                            selectedValue == "EFEKTIF"
+                        ) {
+                            var bg =
+                                (((parseFloat(usulan) * sb) / 100) * 30) / 365;
+                            var rc = (bg / keuangan) * 100;
+
+                            $("#rc").val(rc.toFixed(2) + " " + "%");
+                        } else if (selectedValue == "EFEKTIF ANUITAS") {
+                            var ssb = sb / 100;
+                            var bunga = ssb / 12;
+                            var anuitas =
+                                (usulan * bunga) /
+                                (1 - 1 / Math.pow(1 + bunga, jangka_waktu));
+                            var rc = (anuitas / keuangan) * 100;
+                            $("#rc").val(rc.toFixed(2) + "%");
+                        } else {
+                            //
+                            var bunga =
+                                (parseFloat(usulan) * parseFloat(sb)) /
+                                100 /
+                                12;
+                            var poko =
+                                parseFloat(usulan) / parseFloat(jangka_waktu);
+                            var angsuran = Math.ceil(bunga) + poko;
+                            var rc = (angsuran / parseFloat(keuangan)) * 100;
+                            $("#rc").val(rc.toFixed(2) + " " + "%");
+                        }
                     }
+
+                    // if (
+                    //     (hasil.produk_kode == "KBT" &&
+                    //         hasil.kondisi_khusus == "PERLELEAN" &&
+                    //         selectedValue == "FLAT") ||
+                    //     selectedValue == "EFEKTIF MUSIMAN" ||
+                    //     selectedValue == "EFEKTIF ANUITAS"
+                    // ) {
+                    //     var bunga =
+                    //         (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                    //     var poko =
+                    //         parseFloat(usulan) / parseFloat(jangka_waktu);
+                    //     var angsuran = Math.ceil(bunga) + poko;
+                    //     var rc = (angsuran / parseFloat(keuangan)) * 100;
+
+                    //     $("#rc").val(rc.toFixed(2) + " " + "%");
+                    // } else if (
+                    //     hasil.produk_kode == "KBT" &&
+                    //     hasil.kondisi_khusus == "PERPADIAN"
+                    // ) {
+                    //     var bunga =
+                    //         (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                    //     var poko =
+                    //         parseFloat(usulan) / parseFloat(jangka_waktu);
+                    //     var angsuran = Math.ceil(bunga);
+                    //     var rc = (angsuran / parseFloat(keuangan)) * 100;
+
+                    //     $("#rc").val(rc.toFixed(2) + " " + "%");
+                    // } else if (selectedValue == "FLAT") {
+                    //     var bunga =
+                    //         (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                    //     var poko =
+                    //         parseFloat(usulan) / parseFloat(jangka_waktu);
+                    //     var angsuran = Math.ceil(bunga) + poko;
+                    //     var rc = (angsuran / parseFloat(keuangan)) * 100;
+
+                    //     $("#rc").val(rc.toFixed(2) + " " + "%");
+                    // } else if (
+                    //     selectedValue == "EFEKTIF MUSIMAN" ||
+                    //     selectedValue == "EFEKTIF"
+                    // ) {
+                    //     var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
+                    //     var rc = (bg / keuangan) * 100;
+
+                    //     $("#rc").val(rc.toFixed(2) + " " + "%");
+                    // } else if (selectedValue == "EFEKTIF ANUITAS") {
+                    //     var ssb = sb / 100;
+                    //     var bunga = ssb / 12;
+                    //     var anuitas =
+                    //         (usulan * bunga) /
+                    //         (1 - 1 / Math.pow(1 + bunga, jangka_waktu));
+                    //     var rc = (anuitas / keuangan) * 100;
+                    //     $("#rc").val(rc.toFixed(2) + "%");
+                    // } else {
+                    //     //
+                    //     var bunga =
+                    //         (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
+                    //     var poko =
+                    //         parseFloat(usulan) / parseFloat(jangka_waktu);
+                    //     var angsuran = Math.ceil(bunga) + poko;
+                    //     var rc = (angsuran / parseFloat(keuangan)) * 100;
+                    //     $("#rc").val(rc.toFixed(2) + " " + "%");
+                    // }
                 });
 
                 //Menghitung RC Persetujuan Komite
@@ -368,8 +457,7 @@ $(document).ready(function () {
 
                     if (
                         hasil.produk_kode == "KBT" &&
-                        (hasil.metode_rps == "EFEKTIF MUSIMAN" ||
-                            mtd == "EFEKTIF MUSIMAN")
+                        hasil.kondisi_khusus == "PERLELEAN"
                     ) {
                         //
                         var bunga =
@@ -382,7 +470,7 @@ $(document).ready(function () {
                         $("#rc").val(rc.toFixed(2) + " " + "%");
                     } else if (
                         hasil.produk_kode == "KBT" &&
-                        (hasil.metode_rps == "FLAT" || mtd == "FLAT")
+                        hasil.kondisi_khusus == "PERPADIAN"
                     ) {
                         //
                         var bunga =

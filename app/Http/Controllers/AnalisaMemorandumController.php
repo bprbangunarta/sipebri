@@ -258,7 +258,7 @@ class AnalisaMemorandumController extends Controller
             }
 
             //Menghitung RC
-            if ($cek[0]->produk_kode == "KBT" && $cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {
+            if ($cek[0]->produk_kode == "KBT" && $cek[0]->kondisi_khusus == 'PERLELEAN') {
                 $bunga = (((int)$cek[0]->plafon * $cek[0]->suku_bunga) / 100) / 12;
                 $pokok_bulanan = (int)$cek[0]->plafon / $cek[0]->jangka_waktu;
                 $angsuran = $bunga + $pokok_bulanan;
@@ -267,11 +267,11 @@ class AnalisaMemorandumController extends Controller
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
-            } else if ($cek[0]->produk_kode == "KBT" && $cek[0]->metode_rps == 'FLAT') {
+            } else if ($cek[0]->produk_kode == "KBT" && $cek[0]->kondisi_khusus == 'PERPADIAN') {
 
                 $bunga = (((int)$cek[0]->plafon * $cek[0]->suku_bunga) / 100) / 12;
                 $pokok_bulanan = (int)$cek[0]->plafon / $cek[0]->jangka_waktu;
-                $angsuran = $bunga + $pokok_bulanan;
+                $angsuran = $bunga;
                 $rc = ($bunga / $keuangan) * 100;
 
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();

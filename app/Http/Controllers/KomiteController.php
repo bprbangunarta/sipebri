@@ -112,6 +112,7 @@ class KomiteController extends Controller
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
                 'data_pengajuan.kategori',
+                'data_pengajuan.kondisi_khusus',
                 'data_nasabah.nama_nasabah',
                 'a_memorandum.max_plafond',
                 'au_keuangan.keuangan_perbulan',

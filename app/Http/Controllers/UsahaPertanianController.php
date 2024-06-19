@@ -286,7 +286,7 @@ class UsahaPertanianController extends Controller
             $hasil_panen = $du->hasil_panen * $du->harga;
             $hasil_bersih = $hasil_panen - $bu;
 
-            if ($cek[0]->produk_kode == 'KBT' && $cek[0]->metode_rps == 'FLAT') {
+            if ($cek[0]->produk_kode == 'KBT' && $cek[0]->kondisi_khusus == 'PERPADIAN') {
                 $ambil = 0;
                 $jW = $cek[0]->jangka_waktu / 6;
                 $saving = $cek[0]->plafon / $jW;

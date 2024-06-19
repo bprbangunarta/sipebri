@@ -131,7 +131,7 @@ class DataAnalisa5CController extends Controller
             }
 
             //Menghitung RC
-            if ($cek[0]->produk_kode == 'KBT' && $cek[0]->metode_rps == 'FLAT') {
+            if ($cek[0]->produk_kode == 'KBT' && $cek[0]->kondisi_khusus == 'PERPADIAN') {
                 $bunga = (((int)$cek[0]->plafon * $cek[0]->suku_bunga) / 100) / 12;
                 $rc = ($bunga / $keuangan) * 100;
             } else if ($cek[0]->produk_kode == 'KBT' && $cek[0]->metode_rps == 'EFEKTIF MUSIMAN') {

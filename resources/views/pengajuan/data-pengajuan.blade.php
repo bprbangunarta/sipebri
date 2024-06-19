@@ -1,6 +1,7 @@
 @extends('theme.app')
 @section('title', 'Data Pengajuan')
 
+</style>
 @section('content')
     <div class="content-wrapper">
         <section class="content">
@@ -97,7 +98,7 @@
                                                     value="{{ old('suku_bunga', $pengajuan->suku_bunga) }}" required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 100%;float:right;">
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA CGC</span>
                                                 <select class="form-control cgc" name="tabungan_cgc">
                                                     @if (is_null($pengajuan->tabungan_cgc))
@@ -113,6 +114,18 @@
                                                             {{ $item->fnama }}
                                                         </option>
                                                     @endforeach
+                                                </select>
+                                            </div>
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <span class="fw-bold">KHUSUS KBT</span>
+                                                <select class="form-control khsus_kbt" name="khsus_kbt" id="khsus_kbt">
+                                                    <option value="">-- PILIH --</option>
+                                                    <option value="PERLELEAN"
+                                                        {{ old('khsus_kbt') == 'PERLELEAN' || $data->kondisi_khusus == 'PERLELEAN' ? 'selected' : '' }}>
+                                                        PERLELEAN</option>
+                                                    <option value="PERPADIAN"
+                                                        {{ old('khsus_kbt') == 'PERPADIAN' || $data->kondisi_khusus == 'PERPADIAN' ? 'selected' : '' }}>
+                                                        PERPADIAN</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -198,6 +211,7 @@
                                     </div>
                                 </div>
 
+
                                 @can('edit pengajuan kredit')
                                     <div class="box-body" style="margin-top:-20px;">
                                         <button type="submit" class="btn btn-sm btn-primary"
@@ -220,6 +234,14 @@
                         @endcan
 
                     </div>
+                    <p class="text-red" style="margin-top:-10px;margin-left:10px;">
+                        *<b>Untuk ternak lele gunakan produk KBT dan FLAT sebagai metodenya.</b> <br>
+                        *<b>Pilih Field select "KHUSUS KBT" dan sesuaikan kebutuhan, jika tidak diperlukan boleh.
+                            dikosongkan</b> <br>
+                        *<b>Sesuaikan jangka bunga dan jangka pokok untuk produk KBT.</b> <br>
+                        *<b>Jika ragu, bisa hubungi IT. (0_0)</b>
+                        <br>
+                    </p>
                 </div>
         </section>
     </div>
@@ -230,13 +252,15 @@
         $('.produk').select2()
         $('.cgc').select2()
         $('.resort').select2()
+        $('.khsus_kbt').select2()
     </script>
     <script>
         // Ketika pilihan sistem berubah
         $("#select-metodes").change(function() {
             var selectedValue = $(this).val();
+            var produk = $('#select-produk').val();
 
-            if (selectedValue === "FLAT") {
+            if (selectedValue === "FLAT" && produk != 'KBT') {
 
                 // Jika dipilih "Sistem Flat Terelect"
                 $("#jangka_pokok").val("1").prop("readonly", true);
@@ -279,6 +303,23 @@
 
             // Memasukkan nilai yang sudah diubah ke dalam input field
             $(this).val(convertedValue);
+        });
+
+        $("#select-produk").change(function() {
+            var selectedValue = $(this).val();
+            var metode = $("#select-metodes").val()
+
+            if (selectedValue !== "KBT") {
+                $('.khsus_kbt').prop('disabled', true)
+            } else {
+                $('.khsus_kbt').prop('disabled', false)
+            }
+
+            if (metode == 'FLAT') {
+                // Jika dipilih "Sistem Flat Terelect"
+                $("#jangka_pokok").val("").prop("readonly", false);
+                $("#jangka_bunga").val("").prop("readonly", false);
+            }
         });
     </script>
 @endpush
