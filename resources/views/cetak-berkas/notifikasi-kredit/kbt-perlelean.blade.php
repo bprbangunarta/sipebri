@@ -210,7 +210,7 @@
                     dibayarkan setiap
                     {{ $data->jangka_pokok }} ( <font style="text-transform: capitalize;">
                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_pokok) }}</font> ) bulan
-                    selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
+                    selambat-lambatnya pada tanggal yang sama dengan akad kredit. Untuk yang pertama kalinya, angsuran
                     dibayarkan {{ $data->awal_angsuran }} ( <font style="text-transform: capitalize;">
                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->awal_angsuran) }}</font> ) bulan setelah
                     tanggal akad kredit.
