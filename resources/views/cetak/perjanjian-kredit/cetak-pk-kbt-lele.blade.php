@@ -170,7 +170,15 @@
                             <tr>
                                 <td style="vertical-align: text-top;">II. </td>
                                 <td colspan="3" style="text-align: justify;">
-                                    MOHAMAD MUKSIN dalam hal ini bertindak dalam jabatannya selaku Direktur Utama
+                                    @if ($data->nama_nasabah == 'MOH MUKSIN')
+                                        DEDI KUSNADI
+                                    @else
+                                        MOHAMAD MUKSIN
+                                    @endif dalam hal ini bertindak dalam jabatannya selaku Direktur
+                                    @if ($data->nama_nasabah == 'MOH MUKSIN')
+                                    @else
+                                        Utama
+                                    @endif
                                     berdasarkan Anggaran
                                     Dasar Perseroan Terbatas Bank Perkreditan Rakyat Pamanukan Bangunarta beserta
                                     perubahan-perubahannya
@@ -686,7 +694,11 @@
                                 <td class="text-center" width="40%">
                                     B&nbsp;A&nbsp;N&nbsp;K
                                     <p style="margin-top:95px;"></p>
-                                    MOHAMAD MUKSIN
+                                    @if ($data->nama_nasabah == 'MOH MUKSIN')
+                                        DEDI KUSNADI
+                                    @else
+                                        MOHAMAD MUKSIN
+                                    @endif
                                     <br>
                                     &nbsp;
                                 </td>
