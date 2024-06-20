@@ -1296,6 +1296,45 @@ class DataCetakController extends Controller
                 ]);
             }
 
+            if ($cek->produk_kode == 'KBT' && $cek->kondisi_khusus == 'PERLELEAN') {
+                $tgl_update = $cek->update_spk;
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::parse($cek->tgl_akhir);
+                } else {
+                    $targetDate = Carbon::parse($cek->tgl_akhir);
+                }
+                $cek->tgl_jth_tmp = $targetDate->isoFormat('D MMMM Y');
+
+                $targetDate->addMonths($cek->jangka_pokok);
+                $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - $cek->jangka_pokok);
+                $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
+
+                // $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
+                $bln_jth_tmp = $tenMonthsLater->isoFormat('MMMM');
+                $cek->bln_jth_tmp = $bln_jth_tmp;
+
+                $carbonUpdatedAt = Carbon::parse($tgl_update);
+                if ($carbonUpdatedAt->equalTo(Carbon::now())) {
+                    $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
+                } else {
+                    $targetDate = Carbon::parse($cek->tgl_bayar_pokok);
+                }
+                $jth_pokok = $targetDate->copy()->addMonths($cek->grace_period);
+                $cek->tgl_jth_pokok = $jth_pokok->isoFormat('D MMMM Y');
+                $cek->tgl_jth_pokok2 = $targetDate->isoFormat('D');
+
+
+                $cek->banyak_bulan = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
+                $cek->jumlah_bulan = ($cek->jwt - $cek->grace_period) / $cek->jangka_bunga;
+                $cek->tgl_pokok = ($cek->jwt - $cek->grace_period) / $cek->jangka_bunga;
+                // dd($cek);
+                return view('cetak.perjanjian-kredit.cetak-pk-kbt-lele', [
+                    'data' => $cek,
+                    'jaminan' => $jaminan,
+                    'agunan' => $cek_jaminan,
+                ]);
+            }
 
             if ($cek->produk_kode == 'KTA') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kta', [
