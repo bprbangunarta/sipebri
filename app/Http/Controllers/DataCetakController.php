@@ -187,6 +187,48 @@ class DataCetakController extends Controller
                     'data' => $cek,
                     'qr' => $qr,
                 ]);
+            } else if ($cek->produk_kode == 'KBT' && $cek->kondisi_khusus == 'PERLELEAN') {
+                $notifikasi_general = Midle::notifikasi_general($enc);
+                if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
+                    $cek->persen_apht = ($cek->proses_apht / $cek->plafon) * 100;
+                    $cek->persen_fiducia = 0.00;
+                } elseif ($cek->proses_apht == 0 && $cek->by_fiducia > 0) {
+                    $cek->persen_apht = 0.00;
+                    $cek->persen_fiducia = ($cek->by_fiducia / $cek->plafon) * 100;
+                } elseif ($cek->proses_apht > 0 && $cek->by_fiducia > 0) {
+                    $cek->persen_fiducia = 0.00;
+                    $cek->persen_apht = 0.00;
+                } elseif ($cek->proses_apht == 0 && $cek->by_fiducia == 0) {
+                    $cek->persen_fiducia = 0.00;
+                    $cek->persen_apht = 0.00;
+                }
+
+                $hari = Carbon::now();
+
+                if (is_null($cek->tgl_update)) {
+                    $cek->tgl_notifikasi_hari_ini = Carbon::parse($cek->tgl_notifikasi)->translatedFormat('d F Y');
+                } else {
+                    $cek->tgl_notifikasi_hari_ini = Carbon::parse($cek->tgl_update)->translatedFormat('d F Y');
+                }
+
+                $cek_jaminan = (object)Midle::cek_jaminan($enc);
+                $cek->count_jaminan = count($notifikasi_general);
+
+                $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->persen_fiducia;
+
+                //Narasi Angsuran Graceperiode
+                $cek->jw = ($cek->jangka_waktu - $cek->grace_period) / $cek->jangka_pokok;
+                $cek->awal_angsuran = $cek->jangka_pokok + $cek->grace_period;
+
+                //QRCode 
+                $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
+                // dd($cek);
+                return view('cetak-berkas.notifikasi-kredit.kbt-perlelean', [
+                    'data' => $cek,
+                    'agunan' => $notifikasi_general,
+                    'jaminan' => $cek_jaminan,
+                    'qr' => $qr,
+                ]);
             } else {
                 $notifikasi_general = Midle::notifikasi_general($enc);
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
