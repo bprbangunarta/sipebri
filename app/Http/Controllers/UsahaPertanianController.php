@@ -296,7 +296,7 @@ class UsahaPertanianController extends Controller
                 $ambil = ($hasil_bersih * 70) / 100;
                 $jW = $cek[0]->jangka_waktu / 6;
                 $saving = $cek[0]->plafon / $jW;
-                $sisa_pendapatan = $saving - $ambil;
+                $sisa_pendapatan = $ambil - $saving;
                 $pendapatan_perbulan = $sisa_pendapatan / 6;
             }
 
@@ -312,7 +312,7 @@ class UsahaPertanianController extends Controller
                 'laba_perbulan' => number_format($pendapatan_perbulan, 0, '', ''),
             ];
 
-            // dd($kalkulasi);
+            dd($kalkulasi, $sisa_pendapatan, $jW, $saving);
 
             //cek pendapatan ada atau tidak
             if (is_null($pertanian->pendapatan)) {
