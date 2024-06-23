@@ -312,8 +312,6 @@ class UsahaPertanianController extends Controller
                 'laba_perbulan' => number_format($pendapatan_perbulan, 0, '', ''),
             ];
 
-            dd($kalkulasi, $sisa_pendapatan, $jW, $saving);
-
             //cek pendapatan ada atau tidak
             if (is_null($pertanian->pendapatan)) {
                 return view('staff.analisa.u-pertanian.keuangan', [
