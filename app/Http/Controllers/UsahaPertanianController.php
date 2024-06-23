@@ -285,6 +285,7 @@ class UsahaPertanianController extends Controller
             $pertanian->luas_sewa = $du->luas_sewa;
             $hasil_panen = $du->hasil_panen * $du->harga;
             $hasil_bersih = $hasil_panen - $bu;
+
             $ambil = ($hasil_bersih * 70) / 100;
             $jW = $cek[0]->jangka_waktu / 6;
             $saving = $cek[0]->plafon / $jW;

@@ -27,6 +27,7 @@ use App\Http\Controllers\RSCLainController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\RSCCetakController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\Analisa5cController;
@@ -749,6 +750,10 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/persetujuan/index', 'persetujuan_index')->name('rsc.persetujuan.persetujuan_index');
                 Route::post('/rsc/persetujuan/simpan', 'persetujuan_simpan')->name('rsc.persetujuan.simpan');
             });
+
+            Route::controller(RSCCetakController::class)->group(function () {
+                Route::get('/rsc/cetakanalisa', 'cetakanalisa_index')->name('rsc.cetakanalisa.index');
+            });
         });
 
         Route::group(['middleware' => ['role:Kasi Analis']], function () {
@@ -760,14 +765,14 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        // Route::group(['middleware' => ['role:Admin Kredit']], function () {
-        //     Route::controller(RSCController::class)->group(function () {
-        //         Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
-        //     });
-        // });
-        Route::controller(RSCController::class)->group(function () {
-            Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
+        Route::group(['middleware' => ['role:Admin Kredit']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
+                Route::get('/rsc/perjanjiankredit/get', 'pk_get')->name('rsc.perjanjian_kredit.get');
+                Route::post('/rsc/perjanjiankredit/simpan', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
+            });
         });
+
         //====Route Analisa RSC====//
     });
     //====Route Analisa====//

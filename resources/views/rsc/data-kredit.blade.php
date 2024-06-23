@@ -31,7 +31,7 @@
                                     @csrf
                                     <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
-
+                                        {{-- Left --}}
                                         <div class="div-left">
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">NAMA NASABAH</span>
@@ -59,6 +59,26 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">JENIS PERSETUJUAN</span>
+                                                <select type="text" class="form-control text-uppercase jenis_persetujuan"
+                                                    style="width: 100%;" name="jenis_persetujuan" required>
+                                                    <option value=""
+                                                        {{ $data_rsc->jenis_persetujuan == '' ? 'selected' : '' }}>
+                                                        --Pilih--</option>
+                                                    <option value="RESCHEDULLING"
+                                                        {{ $data_rsc->jenis_persetujuan == 'RESCHEDULLING' ? 'selected' : '' }}>
+                                                        RESCHEDULLING
+                                                    </option>
+                                                    <option value="RECONDITIONING"
+                                                        {{ $data_rsc->jenis_persetujuan == 'RECONDITIONING' ? 'selected' : '' }}>
+                                                        RECONDITIONING</option>
+                                                    <option value="RESTRUCTURING"
+                                                        {{ $data_rsc->jenis_persetujuan == 'RESTRUCTURING' ? 'selected' : '' }}>
+                                                        RESTRUCTURING</option>
+                                                </select>
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">BAKI DEBET</span>
                                                 <input type="text" placeholder="ENTRI" class="form-control"
                                                     name="baki_debet" id="baki_debet"
@@ -66,43 +86,19 @@
                                                     required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">KLASIFIKASI KREDIT</span>
-                                                <select type="text"
-                                                    class="form-control text-uppercase klasifikasi_kredit"
-                                                    style="width: 100%;" name="klasifikasi_kredit" required>
-                                                    <option value="KURANG LANCAR"
-                                                        {{ $data_rsc->klasifikasi_kredit == '' ? 'selected' : '' }}>
-                                                        --Pilih--</option>
-                                                    <option value="LANCAR"
-                                                        {{ $data_rsc->klasifikasi_kredit == 'LANCAR' ? 'selected' : '' }}>
-                                                        Lancar
-                                                    </option>
-                                                    <option value="KURANG LANCAR"
-                                                        {{ $data_rsc->klasifikasi_kredit == 'KURANG LANCAR' ? 'selected' : '' }}>
-                                                        Kurang Lancar</option>
-                                                    <option value="DIRAGUKAN"
-                                                        {{ $data_rsc->klasifikasi_kredit == 'DIRAGUKAN' ? 'selected' : '' }}>
-                                                        Diragukan</option>
-                                                    <option value="MACET"
-                                                        {{ $data_rsc->klasifikasi_kredit == 'MACET' ? 'selected' : '' }}>
-                                                        Macet</option>
-                                                </select>
-                                            </div>
-
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">TUNGGAKAN BUNGA</span>
-                                                <input class="form-control" placeholder="ENTRI" name="tunggakan_bunga"
-                                                    id="tunggakan_bunga"
-                                                    value="{{ old('tunggakan_bunga', number_format($data_rsc->tunggakan_bunga, '0', ',', '.')) }}"
+                                                <span class="fw-bold">JML TUNGGAKAN POKOK (/BULAN)</span>
+                                                <input type="number" class="form-control" placeholder="ENTRI"
+                                                    name="jml_tunggakan_pokok" id="jml_tunggakan_pokok"
+                                                    value="{{ old('jml_tunggakan_pokok', $data_rsc->jml_tgk_pokok) }}"
                                                     required>
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">JML TUNGGAKAN BUNGA (/BULAN)</span>
-                                                <input type="number" class="form-control" placeholder="ENTRI"
-                                                    name="jml_tunggakan_bunga" id="jml_tunggakan_bunga"
-                                                    value="{{ old('jml_tunggakan_bunga', $data_rsc->jml_tgk_bunga) }}"
+                                                <span class="fw-bold">TUNGGAKAN BUNGA</span>
+                                                <input class="form-control" placeholder="ENTRI" name="tunggakan_bunga"
+                                                    id="tunggakan_bunga"
+                                                    value="{{ old('tunggakan_bunga', number_format($data_rsc->tunggakan_bunga, '0', ',', '.')) }}"
                                                     required>
                                             </div>
 
@@ -121,8 +117,9 @@
                                             </div>
 
                                         </div>
+                                        {{-- Left --}}
 
-
+                                        {{-- Right --}}
                                         <div class="div-right">
                                             <div style="margin-top:5px;width: 100%;float:left;">
                                                 <span class="fw-bold">ALAMAT KTP</span>
@@ -151,6 +148,30 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">KLASIFIKASI KREDIT</span>
+                                                <select type="text"
+                                                    class="form-control text-uppercase klasifikasi_kredit"
+                                                    style="width: 100%;" name="klasifikasi_kredit" required>
+                                                    <option value="KURANG LANCAR"
+                                                        {{ $data_rsc->klasifikasi_kredit == '' ? 'selected' : '' }}>
+                                                        --Pilih--</option>
+                                                    <option value="LANCAR"
+                                                        {{ $data_rsc->klasifikasi_kredit == 'LANCAR' ? 'selected' : '' }}>
+                                                        Lancar
+                                                    </option>
+                                                    <option value="KURANG LANCAR"
+                                                        {{ $data_rsc->klasifikasi_kredit == 'KURANG LANCAR' ? 'selected' : '' }}>
+                                                        Kurang Lancar</option>
+                                                    <option value="DIRAGUKAN"
+                                                        {{ $data_rsc->klasifikasi_kredit == 'DIRAGUKAN' ? 'selected' : '' }}>
+                                                        Diragukan</option>
+                                                    <option value="MACET"
+                                                        {{ $data_rsc->klasifikasi_kredit == 'MACET' ? 'selected' : '' }}>
+                                                        Macet</option>
+                                                </select>
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TUNGGAKAN POKOK</span>
                                                 <input type="text" class="form-control" name=" tunggakan_pokok"
                                                     id="tunggakan_pokok" placeholder="ENTRI"
@@ -158,15 +179,15 @@
                                                     required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">JML TUNGGAKAN POKOK (/BULAN)</span>
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <span class="fw-bold">JML TUNGGAKAN BUNGA (/BULAN)</span>
                                                 <input type="number" class="form-control" placeholder="ENTRI"
-                                                    name="jml_tunggakan_pokok" id="jml_tunggakan_pokok"
-                                                    value="{{ old('jml_tunggakan_pokok', $data_rsc->jml_tgk_pokok) }}"
+                                                    name="jml_tunggakan_bunga" id="jml_tunggakan_bunga"
+                                                    value="{{ old('jml_tunggakan_bunga', $data_rsc->jml_tgk_bunga) }}"
                                                     required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">TUNGGAKAN DENDA</span>
                                                 <input class="form-control" placeholder="ENTRI" name="tunggakan_denda"
                                                     id="tunggakan_denda"
@@ -174,15 +195,15 @@
                                                     required>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                <span class="fw-bold">TOTAL TUNGGAKAN</span>
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <label>TOTAL TUNGGAKAN</label>
                                                 <input class="form-control" placeholder="ENTRI" name="total_tunggakan"
                                                     id="total_tunggakan"
                                                     value="{{ old('total_tunggakan', number_format($data_rsc->total_tunggakan, '0', ',', '.')) }}"
                                                     required readonly>
                                             </div>
 
-                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <label>PLAFON</label>
                                                 <input type="hidden" class="form-control" name=""
                                                     id="pn_plafons" placeholder="ENTRI"
@@ -195,6 +216,7 @@
                                             </div>
 
                                         </div>
+                                        {{-- Right --}}
 
                                     </div>
                                     <div class="box-body" style="margin-top:-20px;">
@@ -315,6 +337,7 @@
     <script>
         $('.jns_usaha').select2()
         $('.klasifikasi_kredit').select2()
+        $('.jenis_persetujuan').select2()
 
         var baki = document.getElementById('baki_debet')
         var tpokok = document.getElementById('tunggakan_pokok')

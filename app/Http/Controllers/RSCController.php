@@ -244,6 +244,7 @@ class RSCController extends Controller
                     'data_pengajuan.produk_kode',
                     'data_pengajuan.metode_rps',
                     'data_pengajuan.jangka_waktu',
+                    // 'data_pengajuan.jenis_persetujuan',
                     'data_spk.no_spk',
                     'data_spk.created_at',
                     'data_spk.updated_at',
@@ -277,7 +278,14 @@ class RSCController extends Controller
 
             $data_rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $enc)->where('kode_rsc', $enc_rsc)->first();
             $biaya_rsc = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
-            // dd($data[0], $biaya_rsc);
+
+            $rsc_data_pengajuan = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->first();
+            if (!is_null($rsc_data_pengajuan)) {
+                $data[0]->jenis_persetujuan = $rsc_data_pengajuan->jenis_persetujuan;
+            } else {
+                $data[0]->jenis_persetujuan = null;
+            }
+
             return view('rsc.data-kredit', [
                 'data' => $data[0],
                 'usaha' => $jenis_usaha,
@@ -308,6 +316,7 @@ class RSCController extends Controller
                 'baki_debet' => (int)str_replace(["Rp.", " ", "."], "", $request->baki_debet ?? 0),
                 'plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->plafon ?? 0),
                 'penentuan_plafon_temp' => $total,
+                'jenis_persetujuan' => Str::upper($request->jenis_persetujuan),
                 'tunggakan_poko' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_pokok ?? 0),
                 'tunggakan_bunga' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_bunga ?? 0),
                 'tunggakan_denda' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_denda ?? 0),
@@ -697,10 +706,98 @@ class RSCController extends Controller
             $item->rsc = Crypt::encrypt($item->kode_rsc);
         }
 
-        return view('rsc.notifikasi.index', [
+        return view('rsc.perjanjian_kredit.index', [
             'data' => $data
         ]);
     }
+
+    public function pk_get(Request $request)
+    {
+        $enc = Crypt::decrypt($request->input('kode'));
+        $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc)->first();
+
+        $cek_spk = DB::table('rsc_spk')->exists();
+        if (!$cek_spk) {
+            $count = 000001;
+        } else {
+            $nomor = DB::table('rsc_spk')->latest()->first();
+            $count = (int) $nomor->nomor + 1;
+        }
+
+        $lengths = 6;
+        $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+        if ($data_rsc->jenis_persetujuan == "RESCHEDULLING") {
+            $jns = 'RSH';
+        } else if ($data_rsc->jenis_persetujuan == "RECONDITIONING") {
+            $jns = 'RCD';
+        } else if ($data_rsc->jenis_persetujuan == "RESTRUCTURING") {
+            $jns = 'RSC';
+        } else {
+            $jns = '';
+        }
+
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $romawi = Data::romawi($bulan);
+
+        $data_rsc->no_spk_rsc = $kodes . '/' . $jns . '/' . 'PBA' . '/' . $romawi . '/' . $now->year;
+        $data_rsc->nomor = $kodes;
+
+        $biaya = DB::table('rsc_biaya')->where('kode_rsc', $enc)->first();
+        $data_rsc->tunggakan_bunga = $biaya->bunga_dibayar;
+        $data_rsc->tunggakan_denda = $biaya->denda_dibayar;
+
+        return response()->json($data_rsc);
+    }
+
+    public function pk_simpan(Request $request)
+    {
+        try {
+            $cek = DB::table('rsc_data_pengajuan')->where('kode_rsc', $request->kode_rsc)->first();
+            $enc = $request->kode_rsc;
+
+            $biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->kode_rsc)->first();
+            $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
+                $biaya->asuransi_tlo + $biaya->poko_dibayar + $biaya->poko_dibayar +
+                (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
+
+
+            $data1 = [
+                'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+                'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
+                'total' =>  $total,
+            ];
+
+            $data2 = [
+                'pengajuan_kode' => $cek->pengajuan_kode,
+                'kode_rsc' => $request->kode_rsc,
+                'nomor' => $request->nomor,
+                'no_spk' => $request->pk_rsc,
+                'created_at' => now(),
+            ];
+
+            $data3 = [
+                'status' => 'Selesai'
+            ];
+
+            $cek_spk = DB::table('rsc_spk')->where('kode_rsc', $request->kode_rsc)->first();
+            if ($cek_spk) {
+                return redirect()->back()->with('error', 'Data telah memiliki kode SPK.');
+            }
+
+            DB::transaction(function () use ($data1, $data2, $data3, $enc) {
+                DB::table('rsc_biaya')->where('kode_rsc', $enc)->update($data1);
+                DB::table('rsc_spk')->insert($data2);
+                DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc)->update($data3);
+            });
+
+            return redirect()->back()->with('success', 'Berhasil Generate PK.');
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
 
 
     private function kodeacak($name)
