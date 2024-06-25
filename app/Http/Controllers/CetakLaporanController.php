@@ -458,8 +458,16 @@ class CetakLaporanController extends Controller
 
             ->orderBy('data_notifikasi.created_at', 'desc');
         $data = $query->paginate(10);
+
+        //Data Kantor
+        $kantor = DB::table('data_kantor')->get();
+        //Data Produk
+        $produk = DB::table('data_produk')->get();
+
         return view('laporan.siap-realisasi', [
             'data' => $data,
+            'kantor' => $kantor,
+            'produk' => $produk,
         ]);
     }
 

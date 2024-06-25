@@ -18,7 +18,9 @@
                                             <i class="fa fa-filter"></i> Short & Filter
                                         </a> --}}
 
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 170px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -29,7 +31,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
@@ -54,33 +56,33 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center" >
+                                            <td class="text-center">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center" >
+                                            <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
-                                            <td class="text-center" >
+                                            <td class="text-center">
                                                 {{ $item->kode_pengajuan }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat_ktp }}</td>
-                                            <td class="text-center" >{{ $item->kantor_kode }}</td>
-                                            <td class="text-center" >{{ $item->produk_kode }}</td>
-                                            <td class="text-right" >
+                                            <td class="text-center">{{ $item->kantor_kode }}</td>
+                                            <td class="text-center">{{ $item->produk_kode }}</td>
+                                            <td class="text-right">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
-                                            <td>{{$item->nama_user}}</td>
-                                            <td class="text-center">{{$item->no_notifikasi}}</td>
+                                            <td>{{ $item->nama_user }}</td>
+                                            <td class="text-center">{{ $item->no_notifikasi }}</td>
                                             <td>
-                                                @if(is_null($item->keterangan))
+                                                @if (is_null($item->keterangan))
                                                     <center>-</center>
                                                 @else
-                                                    {{$item->keterangan}}
+                                                    {{ $item->keterangan }}
                                                 @endif
                                             </td>
                                             <td>
-                                                @if(is_null($item->rencana))
+                                                @if (is_null($item->rencana))
                                                     <center>-</center>
                                                 @else
-                                                    {{$item->rencana}}
+                                                    {{ $item->rencana }}
                                                 @endif
                                             </td>
                                         </tr>
@@ -103,13 +105,14 @@
                                 </button>
 
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
                             {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -131,14 +134,16 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>MULAI DARI</label>
-                                    <input type="date" class="form-control" name="tgl1" id="tgl1" style="margin-top:-5px;"> 
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1"
+                                        style="margin-top:-5px;">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>SAMPAI DENGAN</label>
-                                    <input type="date" class="form-control" name="tgl2" id="tgl2" style="margin-top:-5px;">
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2"
+                                        style="margin-top:-5px;">
                                 </div>
                             </div>
                         </div>
@@ -172,12 +177,32 @@
                                     <label>MULAI DARI</label>
                                     <input type="date" class="form-control" name="tgl1" id="tgl1">
                                 </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control" name="kode_produk" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>SAMPAI DENGAN</label>
                                     <input type="date" class="form-control" name="tgl2" id="tgl2">
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="nama_kantor" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

@@ -32,7 +32,7 @@ class ExportController extends Controller
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('a_administrasi', 'a_administrasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            // ->where('data_pengajuan.on_current', 1)
+            ->where('data_pengajuan.on_current', 1)
             ->select(
                 'data_tracking.akad_kredit',
                 'data_pengajuan.suku_bunga',
@@ -280,7 +280,10 @@ class ExportController extends Controller
             $tgl2 = $tgl1;
         }
 
-        $data = DB::table('data_pengajuan')
+        $kantor = request('nama_kantor');
+        $produk = request('kode_produk');
+
+        $dataQuery = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -307,15 +310,27 @@ class ExportController extends Controller
                 'v_users.nama_user',
                 'data_notifikasi.keterangan',
                 'data_notifikasi.rencana_realisasi',
-            )
+            );
 
-            ->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
-                return $data->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
-            })
+        $dataQuery->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
+            return $data->whereBetween('data_notifikasi.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+        });
 
-            ->orderBy('data_pengajuan.created_at', 'asc')
-            ->get();
+        // Hanya tambahkan klausa where jika $kantor tidak kosong
+        if ($kantor !== null && $produk !== null) {
 
+            $dataQuery->where('data_survei.kantor_kode', $kantor)
+                ->where('data_pengajuan.produk_kode', $produk);
+        } elseif ($kantor !== null && $produk === null) {
+
+            $dataQuery->where('data_survei.kantor_kode', $kantor);
+        } elseif ($kantor === null && $produk !== null) {
+
+            $dataQuery->where('data_pengajuan.produk_kode', $produk);
+        }
+
+        $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
+        dd($data);
         $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "PLAFON", "WIL", "KETERANGAN", "RENCANA");
         foreach ($data as $item) {
             $data_array[] = array(
