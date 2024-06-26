@@ -218,7 +218,8 @@
                             BANK setuju untuk memberikan fasilitas pinjaman kepada PEMINJAM berupa pinjaman uang sebesar
                             <font class="text-hg">{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</font>
                             ( <font class="text-hg" style="text-transform: capitalize;">
-                                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font> Rupiah) yang
+                                {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}
+                            </font> Rupiah) yang
                             akan dipindah
                             bukukan
                             kedalam Rekening Tabungan PEMINJAM yang ada di BANK.
@@ -239,12 +240,14 @@
                                 <font class="text-hg">Provisi sebesar
                                     {{ 'Rp. ' . ' ' . number_format($data->provisi, 0, ',', '.') }},-
                                 </font> ( <font class="text-hg" style="text-transform: capitalize;">
-                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}</font> Rupiah)
+                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->provisi) }}
+                                </font> Rupiah)
                                 <font class="text-hg">
                                     dan Biaya Administrasi
                                     sebesar {{ 'Rp. ' . ' ' . number_format($data->administrasi, 0, ',', '.') }},
                                 </font>- ( <font class="text-hg" style="text-transform: capitalize;">
-                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}</font>
+                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->administrasi) }}
+                                </font>
                                 Rupiah) didebetkan
                                 dari
                                 Rekening Tabungan PEMINJAM yang ada pada BANK.
@@ -259,35 +262,37 @@
                             </center>
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
                             @if ($data->tgl_jth == '30' && $data->bln_jth_tmp == 'Februari')
-                                @php
-                                    $isi = ', untuk bulan Februari maka setoran dilakukan pada tanggal akhir bulan.';
-                                @endphp
+                            @php
+                            $isi = ', untuk bulan Februari maka setoran dilakukan pada tanggal akhir bulan.';
+                            @endphp
                             @elseif ($data->tgl_jth == '31')
-                                @php
-                                    $isi = ", untuk bulan yang berakhir bukan tanggal 31 maka setoran dilakukan pada tanggal
-                                akhir bulan.";
-                                @endphp
+                            @php
+                            $isi = ", untuk bulan yang berakhir bukan tanggal 31 maka setoran dilakukan pada tanggal
+                            akhir bulan.";
+                            @endphp
                             @else
-                                @php
-                                    $isi = '.';
-                                @endphp
+                            @php
+                            $isi = '.';
+                            @endphp
                             @endif
                             <li>
                                 Pembayaran angsuran pokok dan bunga yang terhutang oleh PEMINJAM kepada BANK wajib
                                 dilakukan oleh PEMINJAM secara <font class="text-hg">{{ $data->jangka_pokok }}</font> (
                                 <font class="text-hg" style="text-transform: capitalize;">
-                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_pokok) }}</font> )
+                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_pokok) }}
+                                </font> )
                                 bulanan yang dimulai pada tanggal <font class="text-hg">{{ $data->tgl_jth_pokok }}
                                 </font> sebanyak
-                                <font class="text-hg"> {{ $data->banyak_bulan }}</font> ( <font class="text-hg"
-                                    style="text-transform: capitalize;">
-                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->banyak_bulan) }}</font> )
+                                <font class="text-hg"> {{ $data->banyak_bulan }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
+                                    {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->banyak_bulan) }}
+                                </font> )
                                 kali angsuran,
                                 selama jangka waktu kredit ( <font class="text-hg">{{ $data->jwt }}</font> bulan),
                                 {{-- yang dimulai pada tanggal <font class="text-hg">
                                     {{ $data->tgl_bln_thn_tempo }}</font> --}} dan demikian
                                 seterusnya hingga berakhir pada tanggal <font class="text-hg">
-                                    {{ $data->tgl_jth_tmp }}</font>{{ $isi }}
+                                    {{ $data->tgl_jth_tmp }}
+                                </font>{{ $isi }}
 
                             </li>
                             <li>
@@ -344,10 +349,9 @@
                                 kebendaan yang
                                 cukup
                                 berupa :
-                                <ol
-                                    style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
+                                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                                     @forelse ($jaminan as $item)
-                                        <font class="text-hg">{{ $item->catatan }}</font> <br>
+                                    <font class="text-hg">{{ $item->catatan }}</font> <br>
 
                                     @empty
                                     @endforelse
@@ -520,27 +524,27 @@
                             <!-- JIKA AGUNAN KENDARAAN DAN TANAH GUNAKAN SEMUA -->
 
                             @forelse ($agunan as $item)
-                                @if ($item->jenis_jaminan == 'Kendaraan')
-                                    <li>
-                                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK
-                                        berhak melakukan
-                                        pengamanan
-                                        agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
-                                    </li>
-                                @endif
+                            @if ($item->jenis_jaminan == 'Kendaraan')
+                            <li>
+                                Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK
+                                berhak melakukan
+                                pengamanan
+                                agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
+                            </li>
+                            @endif
 
-                                <!-- JIKA AGUNAN TANAH SAJA -->
-                                @if ($item->jenis_jaminan == 'Tanah')
-                                    <li>
-                                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi
-                                        ijin kepada BANK
-                                        untuk
-                                        melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah
-                                        agunan dengan
-                                        tulisan
-                                        “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
-                                    </li>
-                                @endif
+                            <!-- JIKA AGUNAN TANAH SAJA -->
+                            @if ($item->jenis_jaminan == 'Tanah')
+                            <li>
+                                Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi
+                                ijin kepada BANK
+                                untuk
+                                melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah
+                                agunan dengan
+                                tulisan
+                                “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
+                            </li>
+                            @endif
 
                             @empty
                             @endforelse

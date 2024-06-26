@@ -32,7 +32,7 @@ class TabunganController extends Controller
                 ->orWhere('noid', 'like', '%' . $keyword . '%')
                 ->orWhere('fname', 'like', '%' . $keyword . '%');
         })
-            // ->orderBy('inptgljam', 'desc')
+            ->orderBy('inptgljam', 'desc')
             ->paginate(10);
         foreach ($tabungan as $item) {
             $tgl_lahir = Carbon::createFromFormat('Ymd', $item->jttempoid)->format('d-m-Y');
