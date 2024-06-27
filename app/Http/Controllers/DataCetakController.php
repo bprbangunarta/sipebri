@@ -187,7 +187,7 @@ class DataCetakController extends Controller
                     'data' => $cek,
                     'qr' => $qr,
                 ]);
-            } else if ($cek->produk_kode == 'KBT' && $cek->kondisi_khusus == 'PERLELEAN') {
+            } else if ($cek->produk_kode == 'KBT' && ($cek->kondisi_khusus == 'PERLELEAN' || $cek->kondisi_khusus == 'PERPADIAN')) {
                 $notifikasi_general = Midle::notifikasi_general($enc);
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
                     $cek->persen_apht = ($cek->proses_apht / $cek->plafon) * 100;
