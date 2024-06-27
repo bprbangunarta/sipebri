@@ -202,6 +202,21 @@
                 <td class="text-center" width="2%" style="vertical-align: text-top;"> 7. </td>
                 <td width="27%" style="vertical-align: text-top;">Pembayaran Kembali</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
+                @if ($data->jangka_pokok == $data->jangka_bunga)
+                    <td style="text-align: justify;">
+                        Wajib dilakukan dalam {{ $data->jw }} ( <font style="text-transform: capitalize;">
+                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jw) }}</font> ) kali angsuran, yang
+                        dibayarkan setiap
+                        {{ $data->jangka_pokok }} ( <font style="text-transform: capitalize;">
+                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jangka_pokok) }}</font> ) bulan
+                        selambat-lambatnya pada tanggal yang sama dengan akad kredit. Untuk yang pertama kalinya,
+                        angsuran
+                        dibayarkan {{ $data->awal_angsuran }} ( <font style="text-transform: capitalize;">
+                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->awal_angsuran) }}</font> ) bulan
+                        setelah
+                        tanggal akad kredit.
+                    </td>
+                @endif
                 <td style="text-align: justify;">
                     Wajib dilakukan dalam {{ $data->jwt }} kali angsuran, yang dibayarkan setiap bulan
                     selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
