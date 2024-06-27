@@ -216,12 +216,14 @@
                         setelah
                         tanggal akad kredit.
                     </td>
+                @else
+                    <td style="text-align: justify;">
+                        Wajib dilakukan dalam {{ $data->jwt }} kali angsuran, yang dibayarkan setiap bulan
+                        selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya,
+                        angsuran
+                        dibayarkan satu bulan setelah tanggal akad kredit.
+                    </td>
                 @endif
-                <td style="text-align: justify;">
-                    Wajib dilakukan dalam {{ $data->jwt }} kali angsuran, yang dibayarkan setiap bulan
-                    selambat-lambatnya pada tanggal yang sama dengan akad kredit untuk yang pertama kalinya, angsuran
-                    dibayarkan satu bulan setelah tanggal akad kredit.
-                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 8. </td>
