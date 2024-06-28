@@ -183,13 +183,12 @@
                 <td style="text-align: justify;">
                     {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
-                    @forelse ($agunan as $item)
-                        <ol
-                            style="margin-left: -40px;text-align: justify; list-style-type:none;text-transform:uppercase;">
-                            {{ $item->catatan }}
-                        </ol>
-                    @empty
-                    @endforelse
+                    <ol style="margin-left: -40px;text-align: justify; text-transform:uppercase;">
+                        @forelse ($agunan as $item)
+                            <li>{{ $item->catatan }}.</li>
+                        @empty
+                        @endforelse
+                    </ol>
                 </td>
             </tr>
             <tr>

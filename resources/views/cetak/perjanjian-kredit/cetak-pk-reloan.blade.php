@@ -365,7 +365,10 @@
                                 <ol
                                     style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                                     @forelse ($jaminan as $item)
-                                        <font class="text-hg">{{ $item->catatan }}</font> <br>
+                                        <li>
+                                            <font class="text-hg">{{ $item->catatan }}</font>
+                                        </li>
+
                                     @empty
                                     @endforelse
                                 </ol>

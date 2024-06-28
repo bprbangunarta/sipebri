@@ -262,18 +262,18 @@
                             </center>
                         <ol style="text-align: justify;margin-top:-1px;margin-left: -25px;">
                             @if ($data->tgl_jth == '30' && $data->bln_jth_tmp == 'Februari')
-                            @php
-                            $isi = ', untuk bulan Februari maka setoran dilakukan pada tanggal akhir bulan.';
-                            @endphp
+                                @php
+                                    $isi = ', untuk bulan Februari maka setoran dilakukan pada tanggal akhir bulan.';
+                                @endphp
                             @elseif ($data->tgl_jth == '31')
-                            @php
-                            $isi = ", untuk bulan yang berakhir bukan tanggal 31 maka setoran dilakukan pada tanggal
+                                @php
+                                    $isi = ", untuk bulan yang berakhir bukan tanggal 31 maka setoran dilakukan pada tanggal
                             akhir bulan.";
-                            @endphp
+                                @endphp
                             @else
-                            @php
-                            $isi = '.';
-                            @endphp
+                                @php
+                                    $isi = '.';
+                                @endphp
                             @endif
                             <li>
                                 Pembayaran angsuran pokok dan bunga yang terhutang oleh PEMINJAM kepada BANK wajib
@@ -283,7 +283,8 @@
                                 </font> )
                                 bulanan yang dimulai pada tanggal <font class="text-hg">{{ $data->tgl_jth_pokok }}
                                 </font> sebanyak
-                                <font class="text-hg"> {{ $data->banyak_bulan }}</font> ( <font class="text-hg" style="text-transform: capitalize;">
+                                <font class="text-hg"> {{ $data->banyak_bulan }}</font> ( <font class="text-hg"
+                                    style="text-transform: capitalize;">
                                     {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->banyak_bulan) }}
                                 </font> )
                                 kali angsuran,
@@ -349,9 +350,12 @@
                                 kebendaan yang
                                 cukup
                                 berupa :
-                                <ol style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
+                                <ol
+                                    style="text-transform: uppercase;margin-left: -25px; padding-top:5px;padding-bottom: 5px;text-transform:uppercase;">
                                     @forelse ($jaminan as $item)
-                                    <font class="text-hg">{{ $item->catatan }}</font> <br>
+                                        <li>
+                                            <font class="text-hg">{{ $item->catatan }}</font>
+                                        </li>
 
                                     @empty
                                     @endforelse
@@ -524,27 +528,27 @@
                             <!-- JIKA AGUNAN KENDARAAN DAN TANAH GUNAKAN SEMUA -->
 
                             @forelse ($agunan as $item)
-                            @if ($item->jenis_jaminan == 'Kendaraan')
-                            <li>
-                                Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK
-                                berhak melakukan
-                                pengamanan
-                                agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
-                            </li>
-                            @endif
+                                @if ($item->jenis_jaminan == 'Kendaraan')
+                                    <li>
+                                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju bahwa BANK
+                                        berhak melakukan
+                                        pengamanan
+                                        agunan untuk disimpan di kantor Bank sampai adanya pembayaran Kredit.
+                                    </li>
+                                @endif
 
-                            <!-- JIKA AGUNAN TANAH SAJA -->
-                            @if ($item->jenis_jaminan == 'Tanah')
-                            <li>
-                                Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi
-                                ijin kepada BANK
-                                untuk
-                                melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah
-                                agunan dengan
-                                tulisan
-                                “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
-                            </li>
-                            @endif
+                                <!-- JIKA AGUNAN TANAH SAJA -->
+                                @if ($item->jenis_jaminan == 'Tanah')
+                                    <li>
+                                        Apabila PEMINJAM dalam keadaan ingkar janji, maka PEMINJAM setuju dan memberi
+                                        ijin kepada BANK
+                                        untuk
+                                        melakukan pemasangan papan / pemberitahuan didepan rumah dan atau di atas tanah
+                                        agunan dengan
+                                        tulisan
+                                        “RUMAH DAN / TANAH INI MERUPAKAN JAMINAN PINJAMAN DI PT BPR BANGUNARTA”.
+                                    </li>
+                                @endif
 
                             @empty
                             @endforelse
