@@ -402,7 +402,9 @@
                             kerja, melunasi baik pokok,
                             bunga, hutang denda dan biaya-biaya yang sudah terjadi yang timbul karena adanya perjanjian
                             ini, sesuai jadwal angsuran pinjaman
-                            ditambah dengan penalty pelunasan sebesar satu kali angsuran
+                            ditambah dengan penalti pelunasan sebesar <font class="text-hg">3,00%</font>
+                            dari fasilitas kredit /
+                            plafon kredit.
                         </p>
 
                         <p style="text-align: justify;">
