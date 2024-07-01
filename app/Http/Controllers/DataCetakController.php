@@ -1491,7 +1491,7 @@ class DataCetakController extends Controller
                 }
 
                 if (is_null($cek->grace_period) || $cek->grace_period == '') {
-                    $cek->grace_period = '2';
+                    $cek->grace_period = 0;
                 }
 
                 $cek->jwt = (int)$cek->jwt - (int)$cek->grace_period;
