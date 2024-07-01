@@ -753,6 +753,9 @@ Route::middleware('auth')->group(function () {
 
             Route::controller(RSCCetakController::class)->group(function () {
                 Route::get('/rsc/cetakanalisa', 'cetakanalisa_index')->name('rsc.cetakanalisa.index');
+                Route::get('/rsc/cetakanalisa/kredit', 'cetakanalisa_kredit_detail')->name('rsc.cetakanalisa_kredit.index');
+                Route::get('/rsc/cetaknotifikasi', 'cetaknotifikasi_index')->name('rsc.cetaknotifikasi.index');
+                Route::get('/rsc/cetaknotifikasi/detail', 'cetaknotifikasi_detail')->name('rsc.cetaknotifikasi.detail');
             });
         });
 

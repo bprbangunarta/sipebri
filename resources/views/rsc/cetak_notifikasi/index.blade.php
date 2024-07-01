@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Cetak Analisa RSC')
+@section('title', 'Cetak Notifikasi RSC')
 
 @section('content')
     <div class="content-wrapper">
@@ -9,7 +9,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-plus"></i>
-                            <h3 class="box-title">CETAK ANALISA RSC</h3>
+                            <h3 class="box-title">CETAK NOTIFIKASI RSC</h3>
 
                             <div class="box-tools">
                                 <form action="#" method="GET">
@@ -36,6 +36,7 @@
                                         <th class="text-center">TANGGAL</th>
                                         <th class="text-center">KODE PENGAJUAN</th>
                                         <th class="text-center">KODE RSC</th>
+                                        <th class="text-center">NO NOTIFIKASI</th>
                                         <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center">WIL</th>
@@ -54,6 +55,7 @@
                                             </td>
                                             <td class="text-center">{{ $item->kode_pengajuan }}</td>
                                             <td class="text-center">{{ $item->kode_rsc }}</td>
+                                            <td class="text-center">{{ $item->no_notifikasi }}</td>
                                             <td>{{ strtoupper($item->nama_nasabah) }}</td>
                                             @if (is_null($item->alamat_ktp))
                                                 <td class="text-center">-</td>
@@ -74,7 +76,7 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="text-align: center;">
-                                                <a href="{{ route('rsc.cetakanalisa_kredit.index', ['rsc' => $item->rsc]) }}"
+                                                <a href="{{ route('rsc.cetaknotifikasi.detail', ['rsc' => $item->rsc]) }}"
                                                     class="btn-circle btn-sm bg-primary" title="Cetak Analisa RSC"
                                                     target="__blank">
                                                     <i class="fa fa-print"></i>
