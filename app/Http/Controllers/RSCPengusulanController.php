@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -40,11 +41,20 @@ class RSCPengusulanController extends Controller
             $rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $enc)->where('kode_rsc', $enc_rsc)->first();
             $keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
 
-            // dd($keuangan);
+            $syarat_tambahan = DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->first();
+            if (is_null($syarat_tambahan)) {
+                $syarat_tambahan = (object) [
+                    'sebelum_realisasi' => null,
+                    'syarat_tambahan' => null,
+                    'syarat_lain' => null,
+                ];
+            }
+
             return view('rsc.pengusulan.index', [
                 'data' => $data[0],
                 'pengusulan' => $rsc,
                 'keuangan' => $keuangan,
+                'syarat' => $syarat_tambahan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -81,6 +91,22 @@ class RSCPengusulanController extends Controller
                 'rc' => str_replace('%', '', $request->rc),
                 'updated_at' => now(),
             ];
+
+            $data_syarat = [
+                'kode_rsc' => $enc_rsc,
+                'sebelum_realisasi' => Str::upper($request->sebelum_realisasi),
+                'syarat_tambahan' => Str::upper($request->syarat_tambahan),
+                'syarat_lain' => Str::upper($request->syarat_lain),
+            ];
+
+            $cek_syarat = DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->first();
+            if (is_null($cek_syarat)) {
+                $data_syarat['created_at'] = now();
+                DB::table('rsc_syarat_tambahan')->insert($data_syarat);
+            } else {
+                $data_syarat['updated_at'] = now();
+                DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->update($data_syarat);
+            }
 
             $cek = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->first();
 

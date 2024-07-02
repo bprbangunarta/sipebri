@@ -94,6 +94,13 @@
                                                         value="{{ old('total_angsuran', number_format($pengusulan->total_angsuran, '0', ',', '.')) }}"
                                                         required readonly>
                                                 </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <span class="fw-bold">SYARAT LAINNYA</span>
+                                                    <input type="text" class="form-control text-uppercase"
+                                                        name="syarat_lain" id="syarat_lain" placeholder="ENTRI"
+                                                        value="{{ old('syarat_lain', $syarat->syarat_lain) }}">
+                                                </div>
                                             </div>
 
 
@@ -116,9 +123,9 @@
 
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">RC (%)</span>
-                                                    <input type="text" class="form-control" name="rc" id="rc"
-                                                        placeholder="ENTRI" value="{{ old('rc', $pengusulan->rc) }}"
-                                                        required readonly>
+                                                    <input type="text" class="form-control" name="rc"
+                                                        id="rc" placeholder="ENTRI"
+                                                        value="{{ old('rc', $pengusulan->rc) }}" required readonly>
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -128,6 +135,22 @@
                                                         value="{{ old('angsuran_pokok', number_format($pengusulan->angsuran_pokok, '0', ',', '.')) }}"
                                                         required readonly>
                                                 </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <span class="fw-bold">SEBELUM REALISASI</span>
+                                                    <input type="text" class="form-control text-uppercase"
+                                                        name="sebelum_realisasi" id="sebelum_realisasi"
+                                                        placeholder="ENTRI"
+                                                        value="{{ old('sebelum_realisasi', $syarat->sebelum_realisasi) }}">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <span class="fw-bold">SYARAT TAMBAHAN</span>
+                                                    <input type="text" class="form-control text-uppercase"
+                                                        name="syarat_tambahan" id="syarat_tambahan" placeholder="ENTRI"
+                                                        value="{{ old('syarat_tambahan', $syarat->syarat_tambahan) }}">
+                                                </div>
+
 
                                             </div>
                                         </div>
