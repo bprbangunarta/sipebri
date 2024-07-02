@@ -756,6 +756,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/cetakanalisa/kredit', 'cetakanalisa_kredit_detail')->name('rsc.cetakanalisa_kredit.index');
                 Route::get('/rsc/cetaknotifikasi', 'cetaknotifikasi_index')->name('rsc.cetaknotifikasi.index');
                 Route::get('/rsc/cetaknotifikasi/detail', 'cetaknotifikasi_detail')->name('rsc.cetaknotifikasi.detail');
+                Route::get('/rsc/persetujuan', 'persetujuan_index')->name('rsc.persetujuan.index');
             });
         });
 

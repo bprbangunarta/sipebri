@@ -288,6 +288,38 @@ class RSCCetakController extends Controller
         }
     }
 
+    public function persetujuan_index(Request $request)
+    {
+        $data = DB::table('rsc_notifikasi')
+            ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
+            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_survei.kantor_kode',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_pengajuan.plafon',
+                'rsc_notifikasi.no_notifikasi',
+            )
+            ->where(function ($query) {
+                $query->whereIn('rsc_data_pengajuan.status', ['Proses Persetujuan', 'Notifikasi', 'Perjanjian Kredit', 'Selesai']);
+            })
+            ->orderBy('rsc_notifikasi.created_at', 'desc')
+            ->paginate(10);
+
+        foreach ($data as $item) {
+            $item->kode = Crypt::encrypt($item->kode_pengajuan);
+            $item->rsc = Crypt::encrypt($item->kode_rsc);
+        }
+
+        return view('rsc.cetak_persetujuan.index',);
+    }
+
 
 
     //Function Protected

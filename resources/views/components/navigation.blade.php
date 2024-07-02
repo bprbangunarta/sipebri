@@ -518,6 +518,12 @@
                             Cetak Analisa RSC
                         </a>
                     </li>
+                    <li class="{{ request()->is('themes/rsc/persetujuan') ? 'active' : '' }}">
+                        <a href="{{ route('rsc.persetujuan.index') }}" title="Add RSC">
+                            <i class="fa fa-suitcase"></i>
+                            Cetak Persetujuan RSC
+                        </a>
+                    </li>
                     <li class="{{ request()->is('themes/rsc/cetaknotifikasi') ? 'active' : '' }}">
                         <a href="{{ route('rsc.cetaknotifikasi.index') }}" title="Add RSC">
                             <i class="fa fa-suitcase"></i>
