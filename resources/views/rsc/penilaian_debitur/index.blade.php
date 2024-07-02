@@ -24,7 +24,230 @@
                         <div class="tab-content">
 
                             <div id="faktor" class="tab-pane fade in active">
-                                @if (!is_null($penilaian))
+                                @if (is_null($penilaian))
+                                    <form
+                                        action="{{ route('rsc.simpan.kondisi.usaha', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                        method="POST">
+                                        @method('post')
+                                        @csrf
+                                        <div class="box-body" style="margin-top: -10px;font-size:12px;">
+
+                                            <div class="div-left">
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <span class="fw-bold">FAKTOR TEKNIS I</span>
+                                                    <select type="text" class="form-control text-uppercase faktor_teknis"
+                                                        style="width: 100%;" name="faktor_teknis1" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="MENJADI MASALAH"
+                                                            {{ old('faktor_teknis1') == 'MENJADI MASALAH' ? 'selected' : '' }}>
+                                                            MENJADI MASALAH</option>
+                                                        <option value="LOKASI USAHA TIDAK MENJADI MASALAH"
+                                                            {{ old('faktor_teknis1') == 'LOKASI USAHA TIDAK MENJADI MASALAH' ? 'selected' : '' }}>
+                                                            LOKASI USAHA TIDAK
+                                                            MENJADI MASALAH</option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <span class="fw-bold">FAKTOR TEKNIS II</span>
+                                                    <select type="text" class="form-control faktor_teknis"
+                                                        style="width: 100%;" name="faktor_teknis2" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="MENJADI MASALAH"
+                                                            {{ old('faktor_teknis2') == 'MENJADI MASALAH' ? 'selected' : '' }}>
+                                                            MENJADI MASALAH</option>
+                                                        <option value="TRANSPORTASI USAHA TIDAK MENJADI MASALAH"
+                                                            {{ old('faktor_teknis2') == 'TRANSPORTASI USAHA TIDAK MENJADI MASALAH' ? 'selected' : '' }}>
+                                                            TRANSPORTASI
+                                                            USAHA TIDAK
+                                                            MENJADI MASALAH</option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <span class="fw-bold">FAKTOR EKONOMI I</span>
+                                                    <select type="text" class="form-control faktor_teknis"
+                                                        style="width: 100%;" name="faktor_ekonomi1" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="MENJADI MACET"
+                                                            {{ old('faktor_ekonomi1') == 'MENJADI MACET' ? 'selected' : '' }}>
+                                                            MENJADI MACET</option>
+                                                        <option value="PIUTANG USAHA MASIH LANCAR"
+                                                            {{ old('faktor_ekonomi1') == 'PIUTANG USAHA MASIH LANCAR' ? 'selected' : '' }}>
+                                                            PIUTANG USAHA MASIH
+                                                            LANCAR</option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <span class="fw-bold">NOMINAL FAKTOR EKONOMI I</span>
+                                                    <input type="text" class="form-control" style="font-size: 14px;"
+                                                        name="nominal_faktor_ekonomi1" id="nominal_faktor_ekonomi1"
+                                                        value="{{ old('nominal_faktor_ekonomi1') }}" placeholder="ENTRI"
+                                                        required>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">KETERANGAN FAKTOR EKONOMI</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="catatan_faktor_ekonomi" id="catatan_faktor_ekonomi"
+                                                        value="{{ old('catatan_faktor_ekonomi') }}" placeholder="ENTRI">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:right;">
+                                                    <span class="fw-bold">FAKTOR MARKETING II</span>
+                                                    <select type="text" class="form-control faktor_teknis"
+                                                        style="width: 100%;" name="faktor_marketing2" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="PEMASARAN MUDAH"
+                                                            {{ old('faktor_marketing2') == 'PEMASARAN MUDAH' ? 'selected' : '' }}>
+                                                            PEMASARAN MUDAH</option>
+                                                        <option value="SULIT KARENA"
+                                                            {{ old('faktor_marketing2') == 'SULIT KARENA' ? 'selected' : '' }}>
+                                                            SULIT KARENA</option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:right;">
+                                                    <span class="fw-bold">FAKTOR MARKETING III</span>
+                                                    <select type="text" class="form-control faktor_teknis"
+                                                        style="width: 100%;" name="faktor_marketing3" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="PENJUALAN DIBAYAR KONTAN"
+                                                            {{ old('faktor_marketing3') == 'PENJUALAN DIBAYAR KONTAN' ? 'selected' : '' }}>
+                                                            PENJUALAN DIBAYAR KONTAN
+                                                        </option>
+                                                        <option value="JANGKA WAKTU"
+                                                            {{ old('faktor_marketing3') == 'JANGKA WAKTU' ? 'selected' : '' }}>
+                                                            JANGKA WAKTU</option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">CATATAN FAKTOR MARKETING</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="catatan_faktor_marketing" id="catatan_faktor_marketing"
+                                                        value="{{ old('catatan_faktor_marketing') }}" placeholder="ENTRI">
+                                                </div>
+
+
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">CATATAN FAKTOR RUMAH TANGGA</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="catatan_faktor_rumah_tangga" id="catatan_faktor_rumah_tangga"
+                                                        value="{{ old('catatan_faktor_rumah_tangga') }}"
+                                                        placeholder="ENTRI">
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="div-right">
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">KETERANGAN FAKTOR TEKNIS</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="catatan_faktor_teknis" id="catatan_faktor_teknis"
+                                                        value="{{ old('catatan_faktor_teknis') }}" placeholder="ENTRI">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <span class="fw-bold">FAKTOR EKONOMI II</span>
+                                                    <select type="text" class="form-control faktor_teknis"
+                                                        style="width: 100%;" name="faktor_ekonomi2" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="MENJADI MACET"
+                                                            {{ old('faktor_ekonomi2') == 'MENJADI MACET' ? 'selected' : '' }}>
+                                                            MENJADI MACET</option>
+                                                        <option value="HUTANG USAHA MASIH LANCAR"
+                                                            {{ old('faktor_ekonomi2') == 'HUTANG USAHA MASIH LANCAR' ? 'selected' : '' }}>
+                                                            HUTANG USAHA MASIH LANCAR
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <span class="fw-bold">NOMINAL FAKTOR EKONOMI II</span>
+                                                    <input type="text" class="form-control" style="font-size: 14px;"
+                                                        name="nominal_faktor_ekonomi2" id="nominal_faktor_ekonomi2"
+                                                        value="{{ old('nominal_faktor_ekonomi2') }}" placeholder="ENTRI"
+                                                        required>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">FAKTOR MARKETING I</span>
+                                                    <select type="text" class="form-control faktor_teknis"
+                                                        style="width: 100%;" name="faktor_marketing1" required>
+                                                        <option value="">--Pilih--</option>
+                                                        <option value="PELANGGAN BERTAMBAH"
+                                                            {{ old('faktor_marketing1') == 'PELANGGAN BERTAMBAH' ? 'selected' : '' }}>
+                                                            PELANGGAN BERTAMBAH</option>
+                                                        <option value="BERKURANG"
+                                                            {{ old('faktor_marketing1') == 'BERKURANG' ? 'selected' : '' }}>
+                                                            BERKURANG</option>
+                                                        <option value="TETAP"
+                                                            {{ old('faktor_marketing1') == 'TETAP' ? 'selected' : '' }}>
+                                                            TETAP
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">KET FAKTOR MARKETING II</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="catatan_faktor_marketing2" id="catatan_faktor_marketing2"
+                                                        value="{{ old('catatan_faktor_marketing2') }}"
+                                                        placeholder="ENTRI">
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 100%;float:left;">
+                                                    <span class="fw-bold">KET FAKTOR MARKETING III</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="catatan_faktor_marketing3" id="catatan_faktor_marketing3"
+                                                        value="{{ old('catatan_faktor_marketing3') }}"
+                                                        placeholder="ENTRI">
+                                                </div>
+
+
+                                                <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                    <span class="fw-bold">FAKTOR RUMAH TANGGA</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="faktor_rumah_tangga" id="faktor_rumah_tangga"
+                                                        value="{{ old('faktor_rumah_tangga') }}" placeholder="ENTRI"
+                                                        required>
+                                                </div>
+
+                                                <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                    <span class="fw-bold">BIAYA RUMAH TANGGA</span>
+                                                    <input type="text" class="form-control" style="font-size: 14px;"
+                                                        name="biaya_rumah_tangga" id="biaya_rumah_tangga"
+                                                        value="{{ old('biaya_rumah_tangga') }}" placeholder="ENTRI"
+                                                        required>
+                                                </div>
+
+
+                                                <div style="margin-top:5px;width: 100%;float:right;">
+                                                    <span class="fw-bold">FAKTOR LAIN</span>
+                                                    <input type="text" class="form-control"
+                                                        style="font-size: 12px; text-transform: uppercase;"
+                                                        name="faktor_lain" id="faktor_lain"
+                                                        value="{{ old('faktor_lain') }}" placeholder="ENTRI">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="box-body" style="margin-top:-20px;">
+                                            <button type="submit" class="btn btn-sm btn-primary"
+                                                style="margin-top:10px;width:100%">SIMPAN</button>
+                                        </div>
+                                    </form>
+                                @else
                                     <form
                                         action="{{ route('rsc.update.kondisi.usaha', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
                                         method="POST">
@@ -35,7 +258,8 @@
                                             <div class="div-left">
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">FAKTOR TEKNIS I</span>
-                                                    <select type="text" class="form-control text-uppercase faktor_teknis"
+                                                    <select type="text"
+                                                        class="form-control text-uppercase faktor_teknis"
                                                         style="width: 100%;" name="faktor_teknis1" required>
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MASALAH"
@@ -137,7 +361,8 @@
                                                     <span class="fw-bold">CATATAN FAKTOR RUMAH TANGGA</span>
                                                     <input type="text" class="form-control"
                                                         style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_rumah_tangga" id="catatan_faktor_rumah_tangga"
+                                                        name="catatan_faktor_rumah_tangga"
+                                                        id="catatan_faktor_rumah_tangga"
                                                         value="{{ old('catatan_faktor_rumah_tangga', $penilaian->catatan_frt) }}"
                                                         placeholder="ENTRI" required>
                                                 </div>
@@ -240,232 +465,6 @@
                                                         name="faktor_lain" id="faktor_lain"
                                                         value="{{ old('faktor_lain', $penilaian->faktor_lainnya) }}"
                                                         placeholder="ENTRI" required>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="box-body" style="margin-top:-20px;">
-                                            <button type="submit" class="btn btn-sm btn-primary"
-                                                style="margin-top:10px;width:100%">SIMPAN</button>
-                                        </div>
-                                    </form>
-                                @else
-                                    <form
-                                        action="{{ route('rsc.simpan.kondisi.usaha', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
-                                        method="POST">
-                                        @method('post')
-                                        @csrf
-                                        <div class="box-body" style="margin-top: -10px;font-size:12px;">
-
-                                            <div class="div-left">
-                                                <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                    <span class="fw-bold">FAKTOR TEKNIS I</span>
-                                                    <select type="text"
-                                                        class="form-control text-uppercase faktor_teknis"
-                                                        style="width: 100%;" name="faktor_teknis1" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="MENJADI MASALAH"
-                                                            {{ old('faktor_teknis1') == 'MENJADI MASALAH' ? 'selected' : '' }}>
-                                                            MENJADI MASALAH</option>
-                                                        <option value="LOKASI USAHA TIDAK MENJADI MASALAH"
-                                                            {{ old('faktor_teknis1') == 'LOKASI USAHA TIDAK MENJADI MASALAH' ? 'selected' : '' }}>
-                                                            LOKASI USAHA TIDAK
-                                                            MENJADI MASALAH</option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                    <span class="fw-bold">FAKTOR TEKNIS II</span>
-                                                    <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_teknis2" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="MENJADI MASALAH"
-                                                            {{ old('faktor_teknis2') == 'MENJADI MASALAH' ? 'selected' : '' }}>
-                                                            MENJADI MASALAH</option>
-                                                        <option value="TRANSPORTASI USAHA TIDAK MENJADI MASALAH"
-                                                            {{ old('faktor_teknis2') == 'TRANSPORTASI USAHA TIDAK MENJADI MASALAH' ? 'selected' : '' }}>
-                                                            TRANSPORTASI
-                                                            USAHA TIDAK
-                                                            MENJADI MASALAH</option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                    <span class="fw-bold">FAKTOR EKONOMI I</span>
-                                                    <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_ekonomi1" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="MENJADI MACET"
-                                                            {{ old('faktor_ekonomi1') == 'MENJADI MACET' ? 'selected' : '' }}>
-                                                            MENJADI MACET</option>
-                                                        <option value="PIUTANG USAHA MASIH LANCAR"
-                                                            {{ old('faktor_ekonomi1') == 'PIUTANG USAHA MASIH LANCAR' ? 'selected' : '' }}>
-                                                            PIUTANG USAHA MASIH
-                                                            LANCAR</option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                    <span class="fw-bold">NOMINAL FAKTOR EKONOMI I</span>
-                                                    <input type="text" class="form-control" style="font-size: 14px;"
-                                                        name="nominal_faktor_ekonomi1" id="nominal_faktor_ekonomi1"
-                                                        value="{{ old('nominal_faktor_ekonomi1') }}" placeholder="ENTRI"
-                                                        required>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">KETERANGAN FAKTOR EKONOMI</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_ekonomi" id="catatan_faktor_ekonomi"
-                                                        value="{{ old('catatan_faktor_ekonomi') }}" placeholder="ENTRI">
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:right;">
-                                                    <span class="fw-bold">FAKTOR MARKETING II</span>
-                                                    <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing2" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="PEMASARAN MUDAH"
-                                                            {{ old('faktor_marketing2') == 'PEMASARAN MUDAH' ? 'selected' : '' }}>
-                                                            PEMASARAN MUDAH</option>
-                                                        <option value="SULIT KARENA"
-                                                            {{ old('faktor_marketing2') == 'SULIT KARENA' ? 'selected' : '' }}>
-                                                            SULIT KARENA</option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:right;">
-                                                    <span class="fw-bold">FAKTOR MARKETING III</span>
-                                                    <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing3" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="PENJUALAN DIBAYAR KONTAN"
-                                                            {{ old('faktor_marketing3') == 'PENJUALAN DIBAYAR KONTAN' ? 'selected' : '' }}>
-                                                            PENJUALAN DIBAYAR KONTAN
-                                                        </option>
-                                                        <option value="JANGKA WAKTU"
-                                                            {{ old('faktor_marketing3') == 'JANGKA WAKTU' ? 'selected' : '' }}>
-                                                            JANGKA WAKTU</option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">CATATAN FAKTOR MARKETING</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_marketing" id="catatan_faktor_marketing"
-                                                        value="{{ old('catatan_faktor_marketing') }}"
-                                                        placeholder="ENTRI">
-                                                </div>
-
-
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">CATATAN FAKTOR RUMAH TANGGA</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_rumah_tangga"
-                                                        id="catatan_faktor_rumah_tangga"
-                                                        value="{{ old('catatan_faktor_rumah_tangga') }}"
-                                                        placeholder="ENTRI">
-                                                </div>
-
-                                            </div>
-
-
-                                            <div class="div-right">
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">KETERANGAN FAKTOR TEKNIS</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_teknis" id="catatan_faktor_teknis"
-                                                        value="{{ old('catatan_faktor_teknis') }}" placeholder="ENTRI">
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                    <span class="fw-bold">FAKTOR EKONOMI II</span>
-                                                    <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_ekonomi2" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="MENJADI MACET"
-                                                            {{ old('faktor_ekonomi2') == 'MENJADI MACET' ? 'selected' : '' }}>
-                                                            MENJADI MACET</option>
-                                                        <option value="HUTANG USAHA MASIH LANCAR"
-                                                            {{ old('faktor_ekonomi2') == 'HUTANG USAHA MASIH LANCAR' ? 'selected' : '' }}>
-                                                            HUTANG USAHA MASIH LANCAR
-                                                        </option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                    <span class="fw-bold">NOMINAL FAKTOR EKONOMI II</span>
-                                                    <input type="text" class="form-control" style="font-size: 14px;"
-                                                        name="nominal_faktor_ekonomi2" id="nominal_faktor_ekonomi2"
-                                                        value="{{ old('nominal_faktor_ekonomi2') }}" placeholder="ENTRI"
-                                                        required>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">FAKTOR MARKETING I</span>
-                                                    <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing1" required>
-                                                        <option value="">--Pilih--</option>
-                                                        <option value="PELANGGAN BERTAMBAH"
-                                                            {{ old('faktor_marketing1') == 'PELANGGAN BERTAMBAH' ? 'selected' : '' }}>
-                                                            PELANGGAN BERTAMBAH</option>
-                                                        <option value="BERKURANG"
-                                                            {{ old('faktor_marketing1') == 'BERKURANG' ? 'selected' : '' }}>
-                                                            BERKURANG</option>
-                                                        <option value="TETAP"
-                                                            {{ old('faktor_marketing1') == 'TETAP' ? 'selected' : '' }}>
-                                                            TETAP
-                                                        </option>
-                                                    </select>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">KET FAKTOR MARKETING II</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_marketing2" id="catatan_faktor_marketing2"
-                                                        value="{{ old('catatan_faktor_marketing2') }}"
-                                                        placeholder="ENTRI">
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 100%;float:left;">
-                                                    <span class="fw-bold">KET FAKTOR MARKETING III</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="catatan_faktor_marketing3" id="catatan_faktor_marketing3"
-                                                        value="{{ old('catatan_faktor_marketing3') }}"
-                                                        placeholder="ENTRI">
-                                                </div>
-
-
-                                                <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                    <span class="fw-bold">FAKTOR RUMAH TANGGA</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="faktor_rumah_tangga" id="faktor_rumah_tangga"
-                                                        value="{{ old('faktor_rumah_tangga') }}" placeholder="ENTRI"
-                                                        required>
-                                                </div>
-
-                                                <div style="margin-top:5px;width: 49.5%;float:right;">
-                                                    <span class="fw-bold">BIAYA RUMAH TANGGA</span>
-                                                    <input type="text" class="form-control" style="font-size: 14px;"
-                                                        name="biaya_rumah_tangga" id="biaya_rumah_tangga"
-                                                        value="{{ old('biaya_rumah_tangga') }}" placeholder="ENTRI"
-                                                        required>
-                                                </div>
-
-
-                                                <div style="margin-top:5px;width: 100%;float:right;">
-                                                    <span class="fw-bold">FAKTOR LAIN</span>
-                                                    <input type="text" class="form-control"
-                                                        style="font-size: 12px; text-transform: uppercase;"
-                                                        name="faktor_lain" id="faktor_lain"
-                                                        value="{{ old('faktor_lain') }}" placeholder="ENTRI">
                                                 </div>
                                             </div>
 
