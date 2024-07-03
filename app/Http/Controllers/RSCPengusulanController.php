@@ -99,6 +99,7 @@ class RSCPengusulanController extends Controller
                 'syarat_lain' => Str::upper($request->syarat_lain),
             ];
 
+            // Syarat Tambahan
             $cek_syarat = DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->first();
             if (is_null($cek_syarat)) {
                 $data_syarat['created_at'] = now();
@@ -107,6 +108,7 @@ class RSCPengusulanController extends Controller
                 $data_syarat['updated_at'] = now();
                 DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->update($data_syarat);
             }
+            // Syarat Tambahan
 
             $cek = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->first();
 

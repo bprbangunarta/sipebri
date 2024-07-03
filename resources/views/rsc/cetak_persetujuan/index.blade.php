@@ -74,7 +74,7 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="text-align: center;">
-                                                <a href="{{ route('rsc.cetaknotifikasi.detail', ['rsc' => $item->rsc]) }}"
+                                                <a href="{{ route('rsc.cetakpersetujuan.detail', ['rsc' => $item->rsc]) }}"
                                                     class="btn-circle btn-sm bg-primary" title="Cetak Analisa RSC"
                                                     target="__blank">
                                                     <i class="fa fa-print"></i>

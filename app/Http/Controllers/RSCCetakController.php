@@ -288,7 +288,7 @@ class RSCCetakController extends Controller
         }
     }
 
-    public function persetujuan_index(Request $request)
+    public function cetakpersetujuan_index(Request $request)
     {
         $data = DB::table('rsc_notifikasi')
             ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
@@ -307,7 +307,7 @@ class RSCCetakController extends Controller
                 'rsc_notifikasi.no_notifikasi',
             )
             ->where(function ($query) {
-                $query->whereIn('rsc_data_pengajuan.status', ['Proses Persetujuan', 'Notifikasi', 'Perjanjian Kredit', 'Selesai']);
+                $query->whereIn('rsc_data_pengajuan.status', ['Notifikasi', 'Perjanjian Kredit', 'Selesai']);
             })
             ->orderBy('rsc_notifikasi.created_at', 'desc')
             ->paginate(10);
@@ -317,7 +317,102 @@ class RSCCetakController extends Controller
             $item->rsc = Crypt::encrypt($item->kode_rsc);
         }
 
-        return view('rsc.cetak_persetujuan.index',);
+        return view('rsc.cetak_persetujuan.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function cetakpersetujuan_detail(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+
+            $data = DB::table('rsc_data_pengajuan')
+                ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->join('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->select(
+                    'rsc_data_pengajuan.jenis_persetujuan',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'data_pengajuan.produk_kode',
+                    'data_nasabah.nama_nasabah',
+                    'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.jangka_waktu',
+                    'rsc_data_pengajuan.jangka_pokok',
+                    'rsc_data_pengajuan.jangka_bunga',
+                    'rsc_data_pengajuan.angsuran_pokok',
+                    'rsc_data_pengajuan.angsuran_bunga',
+                    'rsc_data_pengajuan.tunggakan_poko',
+                    'rsc_data_pengajuan.tunggakan_bunga',
+                    'rsc_data_pengajuan.tunggakan_denda',
+                    'rsc_biaya.denda_dibayar',
+                    'rsc_biaya.administrasi',
+                    'rsc_biaya.administrasi_nominal',
+                    'rsc_biaya.asuransi_jiwa',
+                    'rsc_biaya.asuransi_tlo',
+                    'rsc_biaya.poko_dibayar',
+                    'rsc_biaya.bunga_dibayar',
+                    'rsc_biaya.total',
+                )
+                ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
+            //
+            $data_usulan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->get();
+            if (count($data_usulan) > 0) {
+                $data_petugas = [];
+                foreach ($data_usulan as $item) {
+                    $user = DB::table('v_users')->where('code_user', $item->input_user)->pluck('nama_user')->first();
+                    $data_petugas[$item->role_name] = $user;
+                }
+            } else {
+                $data_petugas = [
+                    'Staff Analis' => null,
+                    'Kasi Analis' => null,
+                    'Kabag Analis' => null,
+                    'Direksi' => null,
+                ];
+            }
+
+
+            //Data Usulan
+            $usulan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->latest()->first();
+            $tgl = Carbon::parse($usulan->created_at);
+            $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
+
+            //Angsuran
+            if (($data->produk_kode == 'KRU' && $data->metode_rps == 'EFEKTIF MUSIMAN') || ($data->produk_kode == 'KBT' && $data->metode_rps == 'FLAT')) {
+                $data->jangka_musim = $data->jangka_waktu / $data->jangka_pokok;
+            } else {
+                $data->jangka_musim = null;
+            }
+
+            //QR
+            $data_usulan_qr = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->get();
+            if (count($data_usulan_qr) > 0) {
+                $data_qr_usulan = [];
+                foreach ($data_usulan_qr as $item) {
+                    $user = DB::table('v_users')->where('code_user', $item->input_user)->pluck('code_user')->first();
+
+                    $data_qr_usulan[$item->role_name] = $this->get_qrcode($enc_rsc, 'RSC_PERSETUJUAN', $user);
+                }
+            } else {
+                $data_qr_usulan = [
+                    'Staff Analis' => null,
+                    'Kasi Analis' => null,
+                    'Kabag Analis' => null,
+                    'Direksi' => null,
+                ];
+            }
+
+            return view('rsc.cetak_persetujuan.cetak_persetujuan', [
+                'data' => $data,
+                'petugas' => $data_petugas,
+                'qr' => $data_qr_usulan,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
 

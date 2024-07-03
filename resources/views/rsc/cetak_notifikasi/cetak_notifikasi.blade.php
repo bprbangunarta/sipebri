@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifikasi Kredit</title>
+    <title>Cetak Notifikasi Kredit RSC</title>
     <style>
         @page {
             size: A4;
