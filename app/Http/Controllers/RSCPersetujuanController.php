@@ -13,17 +13,18 @@ class RSCPersetujuanController extends Controller
 {
     public function index()
     {
+        $keyword = request('keyword');
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
 
         if ($user->role_name == 'Staff Analis') {
-            $cek = RSC::persetujuan_rsc_staff();
+            $cek = RSC::persetujuan_rsc_staff($keyword);
         } elseif ($user->role_name == 'Kasi Analis') {
-            $cek = RSC::persetujuan_rsc_kasi();
+            $cek = RSC::persetujuan_rsc_kasi($keyword);
         } elseif ($user->role_name == 'Kabag Analis') {
-            $cek = RSC::persetujuan_rsc_kabag_analis();
+            $cek = RSC::persetujuan_rsc_kabag_analis($keyword);
         } elseif ($user->role_name == 'Direksi') {
-            $cek = RSC::persetujuan_rsc_direksi();
+            $cek = RSC::persetujuan_rsc_direksi($keyword);
         }
 
         $data = $cek->paginate(10);

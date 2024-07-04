@@ -12,7 +12,7 @@
                             <h3 class="box-title">CETAK NOTIFIKASI RSC</h3>
 
                             <div class="box-tools">
-                                <form action="#" method="GET">
+                                <form action="{{ route('rsc.cetaknotifikasi.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"

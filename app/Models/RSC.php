@@ -74,7 +74,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_staff()
+    protected static function persetujuan_rsc_staff($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -88,9 +88,17 @@ class RSC extends Model
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_survei.kantor_kode',
+                'rsc_data_survei.kantor_kode',
                 'data_pengajuan.plafon',
             )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+
             ->where('rsc_data_pengajuan.status', 'Proses Persetujuan')
             ->where('rsc_data_survei.surveyor_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
@@ -98,7 +106,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_kasi()
+    protected static function persetujuan_rsc_kasi($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -112,9 +120,17 @@ class RSC extends Model
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_survei.kantor_kode',
+                'rsc_data_survei.kantor_kode',
                 'data_pengajuan.plafon',
             )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+
             ->where('rsc_data_pengajuan.status', 'Naik Kasi')
             ->where('rsc_data_survei.kasi_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
@@ -122,7 +138,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_kabag_analis()
+    protected static function persetujuan_rsc_kabag_analis($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -136,9 +152,17 @@ class RSC extends Model
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_survei.kantor_kode',
+                'rsc_data_survei.kantor_kode',
                 'data_pengajuan.plafon',
             )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+
             ->where('rsc_data_pengajuan.status', 'Komite I')
             ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
@@ -146,7 +170,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_direksi()
+    protected static function persetujuan_rsc_direksi($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -160,9 +184,17 @@ class RSC extends Model
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_survei.kantor_kode',
+                'rsc_data_survei.kantor_kode',
                 'data_pengajuan.plafon',
             )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+
             ->where('rsc_data_pengajuan.status', 'Komite II')
             ->where('rsc_data_survei.direksi_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');

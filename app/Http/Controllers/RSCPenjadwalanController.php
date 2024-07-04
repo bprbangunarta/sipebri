@@ -13,9 +13,10 @@ class RSCPenjadwalanController extends Controller
 {
     public function index()
     {
+        $keyword = request('keyword');
         $data = DB::table('rsc_data_pengajuan')
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
             ->select(
                 'rsc_data_pengajuan.id',
@@ -24,9 +25,17 @@ class RSCPenjadwalanController extends Controller
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_survei.kantor_kode',
+                'rsc_data_survei.kantor_kode',
                 'data_pengajuan.plafon',
             )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+
             ->where('rsc_data_pengajuan.status', ['Penjadwalan'])
             ->where('rsc_data_pengajuan.kasi_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')

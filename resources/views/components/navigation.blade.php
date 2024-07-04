@@ -501,14 +501,14 @@
                     </li>
                     <li class="{{ request()->is('themes/rsc/notifikasi/index') ? 'active' : '' }}">
                         <a href="{{ route('rsc.notifikasi.index') }}" title="Add RSC">
-                            <i class="fa fa-suitcase"></i>
+                            <i class="fa fa-bell"></i>
                             Add Notifikasi
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/rsc/perjanjian_kredit') ? 'active' : '' }}">
                         <a @if (Auth::user()->code_user == 'YSP') href="{{ route('rsc.perjanjian_kredit') }}" @endif
                             title="Add RSC">
-                            <i class="fa fa-suitcase"></i>
+                            <i class="fa fa-exclamation-circle"></i>
                             Add Perjanjian Kredit
                         </a>
                     </li>
@@ -520,13 +520,13 @@
                     </li>
                     <li class="{{ request()->is('themes/rsc/cetakpersetujuan') ? 'active' : '' }}">
                         <a href="{{ route('rsc.cetakpersetujuan.index') }}" title="Add RSC">
-                            <i class="fa fa-suitcase"></i>
+                            <i class="fa fa-file-text-o"></i>
                             Cetak Persetujuan RSC
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/rsc/cetaknotifikasi') ? 'active' : '' }}">
                         <a href="{{ route('rsc.cetaknotifikasi.index') }}" title="Add RSC">
-                            <i class="fa fa-suitcase"></i>
+                            <i class="fa fa-bell-o"></i>
                             Cetak Notifikasi RSC
                         </a>
                     </li>
