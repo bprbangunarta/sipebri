@@ -758,6 +758,8 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/cetaknotifikasi/detail', 'cetaknotifikasi_detail')->name('rsc.cetaknotifikasi.detail');
                 Route::get('/rsc/cetakpersetujuan', 'cetakpersetujuan_index')->name('rsc.cetakpersetujuan.index');
                 Route::get('/rsc/cetakpersetujuan/detail', 'cetakpersetujuan_detail')->name('rsc.cetakpersetujuan.detail');
+                Route::get('/rsc/cetakpk', 'cetakpk_index')->name('rsc.cetakpk.index');
+                Route::get('/rsc/cetakpk/detail', 'cetakpk_index_detail')->name('rsc.cetakpk.detail');
             });
         });
 

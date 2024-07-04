@@ -415,6 +415,102 @@ class RSCCetakController extends Controller
         }
     }
 
+    public function cetakpk_index()
+    {
+        $data = DB::table('rsc_spk')
+            ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_spk.kode_rsc')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_survei.kantor_kode',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_pengajuan.plafon',
+                'rsc_spk.no_spk',
+            )
+            ->where(function ($query) {
+                $query->whereIn('rsc_data_pengajuan.status', ['Selesai']);
+            })
+            ->orderBy('rsc_spk.created_at', 'desc')
+            ->paginate(10);
+
+        foreach ($data as $item) {
+            $item->kode = Crypt::encrypt($item->kode_pengajuan);
+            $item->rsc = Crypt::encrypt($item->kode_rsc);
+        }
+
+        return view('rsc.cetak_pk.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function cetakpk_index_detail(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $data = DB::table('rsc_spk')
+                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->join('data_pekerjaan', 'data_pekerjaan.kode_pekerjaan', '=', 'data_nasabah.pekerjaan_kode')
+                ->select(
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.tunggakan_poko',
+                    'rsc_data_pengajuan.tunggakan_bunga',
+                    'rsc_data_pengajuan.tunggakan_denda',
+                    'rsc_data_pengajuan.jangka_waktu as jw_rsc',
+                    'rsc_data_pengajuan.suku_bunga as suku_bunga_rsc',
+                    'rsc_data_pengajuan.metode_rps as metode_rps_rsc',
+                    'rsc_data_pengajuan.angsuran_pokok',
+                    'rsc_data_pengajuan.angsuran_bunga',
+                    'rsc_spk.no_spk as spk_rsc',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.no_identitas',
+                    'data_nasabah.alamat_ktp',
+                    'data_pendamping.nama_pendamping',
+                    'data_pekerjaan.nama_pekerjaan',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.jangka_waktu as jw_pk',
+                    'data_spk.no_spk',
+                    'data_spk.updated_at as tgl_create_pk',
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
+                )
+                ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
+            //
+            $targetDt = Carbon::parse($data->tgl_create_pk);
+            $data->tgl_create_pk = $targetDt->isoFormat('D MMMM Y');
+
+            $tgL_end = Carbon::parse($data->tgl_akhir);
+            $data->tgl_akhir_pk = $tgL_end->isoFormat('D MMMM Y');
+
+            $tgl_mulai_rsc = Carbon::parse($data->tgl_mulai_rsc);
+            $data->tgl_mulai_rsc = $tgl_mulai_rsc->isoFormat('D MMMM Y');
+            $data->hari_mulai_rsc = $tgl_mulai_rsc->isoFormat('dddd');
+
+            $tgl_bayar_rsc = Carbon::parse($data->tgl_bayar_rsc);
+            $data->tgl_bayar_rsc = $tgl_bayar_rsc->isoFormat('D MMMM Y');
+
+            $tgl_akhir_rsc = Carbon::parse($data->tgl_akhir_rsc);
+            $data->tgl_akhir_rsc = $tgl_akhir_rsc->isoFormat('D MMMM Y');
+
+            return view('rsc.cetak_pk.first', [
+                'data' => $data
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
 
 
     //Function Protected

@@ -728,21 +728,11 @@ class RSCController extends Controller
         $lengths = 6;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
 
-        if ($data_rsc->jenis_persetujuan == "RESCHEDULLING") {
-            $jns = 'RSH';
-        } else if ($data_rsc->jenis_persetujuan == "RECONDITIONING") {
-            $jns = 'RCD';
-        } else if ($data_rsc->jenis_persetujuan == "RESTRUCTURING") {
-            $jns = 'RSC';
-        } else {
-            $jns = '';
-        }
-
         $now = Carbon::now();
         $bulan = $now->month;
         $romawi = Data::romawi($bulan);
 
-        $data_rsc->no_spk_rsc = $kodes . '/' . $jns . '/' . 'PBA' . '/' . $romawi . '/' . $now->year;
+        $data_rsc->no_spk_rsc = $kodes . '/' . 'RST' . '/' . 'PBA' . '/' . $romawi . '/' . $now->year;
         $data_rsc->nomor = $kodes;
 
         $biaya = DB::table('rsc_biaya')->where('kode_rsc', $enc)->first();
