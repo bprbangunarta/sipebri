@@ -226,9 +226,9 @@
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
                                     </font> Rupiah
                                     ) yang terdiri dari kewajiban pokok sebesar Rp.
-                                    {{ number_format($data->tunggakan_poko, '0', ',', '.') }} ( <font
+                                    {{ number_format($data->baki_debet, '0', ',', '.') }} ( <font
                                         style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_poko) }}
+                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->baki_debet) }}
                                     </font> Rupiah
                                     )
                                     kewajiban Bunga sebesar Rp.
@@ -363,7 +363,11 @@
                                         style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_pokok) }}
                                     </font> Rupiah
-                                    ) setiap 1 bulan selama {{ $data->jw_rsc }} bulan.
+                                    ) setiap {{ $data->jp_rsc }} bulan selama @if (is_null($data->jw_rsc_musiman))
+                                        {{ $data->jw_rsc }} bulan.
+                                    @else
+                                        {{ $data->jw_rsc }} musim.
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -374,8 +378,11 @@
                                     <font style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_bunga) }}
                                     </font> Rupiah
-                                    ) setiap 1 bulan selama
-                                    {{ $data->jw_rsc }} bulan
+                                    ) setiap {{ $data->jp_rsc }} bulan selama @if (is_null($data->jw_rsc_musiman))
+                                        {{ $data->jw_rsc }} bulan.
+                                    @else
+                                        {{ $data->jw_rsc }} musim.
+                                    @endif
                                 </td>
                             </tr>
                             <tr>

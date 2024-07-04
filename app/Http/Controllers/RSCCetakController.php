@@ -455,6 +455,7 @@ class RSCCetakController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $data = DB::table('rsc_spk')
                 ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+                ->join('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_spk.kode_rsc')
                 ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
                 ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -466,17 +467,22 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.tunggakan_bunga',
                     'rsc_data_pengajuan.tunggakan_denda',
                     'rsc_data_pengajuan.jangka_waktu as jw_rsc',
+                    'rsc_data_pengajuan.jangka_pokok as jp_rsc',
+                    'rsc_data_pengajuan.jangka_bunga as jb_rsc',
                     'rsc_data_pengajuan.suku_bunga as suku_bunga_rsc',
                     'rsc_data_pengajuan.metode_rps as metode_rps_rsc',
                     'rsc_data_pengajuan.angsuran_pokok',
                     'rsc_data_pengajuan.angsuran_bunga',
+                    'rsc_data_pengajuan.baki_debet',
                     'rsc_spk.no_spk as spk_rsc',
+                    'rsc_biaya.bunga_dibayar',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.no_identitas',
                     'data_nasabah.alamat_ktp',
                     'data_pendamping.nama_pendamping',
                     'data_pekerjaan.nama_pekerjaan',
                     'data_pengajuan.plafon',
+                    'data_pengajuan.produk_kode',
                     'data_pengajuan.jangka_waktu as jw_pk',
                     'data_spk.no_spk',
                     'data_spk.updated_at as tgl_create_pk',
@@ -502,6 +508,40 @@ class RSCCetakController extends Controller
 
             $tgl_akhir_rsc = Carbon::parse($data->tgl_akhir_rsc);
             $data->tgl_akhir_rsc = $tgl_akhir_rsc->isoFormat('D MMMM Y');
+
+            //Pengkondisian PK RSC jika lebih dari 1
+            $cek_spk = DB::table('rsc_spk')
+                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+                ->select(
+                    'rsc_spk.no_spk',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.metode_rps',
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
+                )
+                ->where('rsc_spk.kode_rsc', $enc_rsc)->orderBy('rsc_spk.created_at', 'desc')->get();
+            if (count($cek_spk) > 1) {
+                $data->no_spk = $cek_spk[1]->no_spk;
+
+                $data->plafon = $cek_spk[1]->penentuan_plafon;
+
+                $tgl_mulai_rsc = Carbon::parse($cek_spk[1]->tgl_mulai_rsc);
+                $data->tgl_mulai_rsc = $tgl_mulai_rsc->isoFormat('D MMMM Y');
+
+                $tgl_akhir_rsc = Carbon::parse($cek_spk[1]->tgl_mulai_rsc);
+                $data->tgl_akhir_rsc = $tgl_akhir_rsc->isoFormat('D MMMM Y');
+            }
+
+            //Bunga dibayar
+            $data->tunggakan_bunga = $data->tunggakan_bunga - $data->bunga_dibayar;
+
+            //Validasi Musiman
+            if ($data->produk_kode == 'KRU' && $data->metode_rps_rsc == 'EFEKTIF MUSIMAN') {
+                $data->jw_rsc_musiman = $data->jw_rsc / $data->jp_rsc;
+            } else {
+
+                $data->jw_rsc_musiman = null;
+            }
 
             return view('rsc.cetak_pk.first', [
                 'data' => $data

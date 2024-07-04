@@ -286,6 +286,23 @@ class RSCController extends Controller
                 $data[0]->jenis_persetujuan = null;
             }
 
+            //Cek SPK RSC
+            $spk_rsc = DB::table('rsc_spk')
+                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.pengajuan_kode', '=', 'rsc_spk.pengajuan_kode')
+                ->select(
+                    'rsc_spk.no_spk',
+                    'rsc_spk.created_at',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%d-%m-%Y') as tgl_akhir")
+                )
+                ->where('rsc_spk.pengajuan_kode', $enc)->latest()->first();
+            if (!is_null($spk_rsc)) {
+                $data[0]->no_spk = $spk_rsc->no_spk;
+                $data[0]->plafon = $spk_rsc->penentuan_plafon;
+                $data[0]->tgl_jth_tempo = $spk_rsc->tgl_akhir;
+            }
+            //Cek SPK RSC
+
             return view('rsc.data-kredit', [
                 'data' => $data[0],
                 'usaha' => $jenis_usaha,
