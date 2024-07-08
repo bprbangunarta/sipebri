@@ -6,6 +6,7 @@ use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QRController;
+use App\Http\Controllers\RSCController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
 use App\Http\Controllers\LainController;
@@ -21,9 +22,12 @@ use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\FiduciaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RSCJasaController;
+use App\Http\Controllers\RSCLainController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\RSCCetakController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\Analisa5cController;
@@ -43,16 +47,23 @@ use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\PerhitunganController;
+use App\Http\Controllers\RSCKeuanganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\CetakAnalisaController;
 use App\Http\Controllers\CetakLaporanController;
+use App\Http\Controllers\RSCPenilaianController;
+use App\Http\Controllers\RSCPertanianController;
 use App\Http\Controllers\UsahaLainnyaController;
 use App\Http\Controllers\DataAnalisa5CController;
+use App\Http\Controllers\RSCPengusulanController;
 use App\Http\Controllers\Admin\HakAksesController;
 use App\Http\Controllers\Admin\PasswordController;
 use App\Http\Controllers\AnalisaJaminanController;
+use App\Http\Controllers\RSCPenjadwalanController;
+use App\Http\Controllers\RSCPerdaganganController;
+use App\Http\Controllers\RSCPersetujuanController;
 use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
@@ -70,10 +81,10 @@ use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\CheckListKendaraanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
+use App\Http\Controllers\Administratif\DenahLokasiController;
 use App\Http\Controllers\Administratif\DataPerjanjianKreditController;
 use App\Http\Controllers\Admin\NasabahController as AdminNasabahController;
 use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
-use App\Http\Controllers\Administratif\DenahLokasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -639,6 +650,145 @@ Route::middleware('auth')->group(function () {
                 Route::get('/cetak/fiducia', 'cetak_fiducia')->name('cetak.fiducia');
             });
         });
+
+
+        //====Route Analisa RSC====//
+        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {
+            Route::get('/rsc/index', [RSCController::class, 'index'])->name('rsc.index');
+            Route::post('/rsc/tambah', [RSCController::class, 'tambah_rsc'])->name('rsc.tambah.rsc');
+            Route::delete('/rsc/delete', [RSCController::class, 'delete_rsc'])->name('rsc.delete.rsc');
+        });
+
+        Route::group(['middleware' => ['role:Staff Analis']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                // Route::get('/rsc/index', 'index')->name('rsc.index');
+                Route::get('/rsc/analisa', 'index_analisa')->name('rsc.index.analisa');
+                // Route::post('/rsc/tambah', 'tambah_rsc')->name('rsc.tambah.rsc');
+                Route::get('/rsc/data/kredit', 'data_kredit')->name('rsc.data.kredit');
+                Route::put('/rsc/data/kredit', 'update_data_kredit')->name('rsc.update.data.kredit');
+                Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
+                // Route::delete('/rsc/delete', 'delete_rsc')->name('rsc.delete.rsc');
+                Route::get('/rsc/konfirmasi', 'konfirmasi_index')->name('rsc.konfirmasi');
+                Route::post('/rsc/update/konfirmasi', 'konfirmasi_update')->name('rsc.konfirmasi.update');
+                Route::post('/rsc/jadul', 'simpan_jadul')->name('rsc.simpan.jadul');
+            });
+
+            Route::controller(RSCPerdaganganController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/perdagangan', 'index')->name('rsc.usaha.perdagangan');
+                Route::post('/rsc/analisa/usaha/perdagangan/simpan', 'simpan_rsc_perdagangan')->name('rsc.simpan.usaha.perdagangan');
+                Route::get('/rsc/analisa/usaha/perdagangan/identitas', 'index_rsc_perdagangan_identitas')->name('rsc.index.usaha.perdagangan.identitas');
+                Route::post('/rsc/analisa/usaha/perdagangan/identitas/simpan', 'simpan_rsc_perdagangan_identitas')->name('rsc.simpan.usaha.perdagangan.identitas');
+                Route::get('/rsc/analisa/usaha/perdagangan/barang', 'barang')->name('rsc.usaha.perdagangan.barang');
+                Route::post('/rsc/analisa/usaha/perdagangan/barang/simpan', 'simpan_barang')->name('rsc.usaha.perdagangan.barang.simpan');
+                Route::put('/rsc/analisa/usaha/perdagangan/barang/update', 'update_barang')->name('rsc.usaha.perdagangan.barang.update');
+                Route::get('/rsc/analisa/usaha/perdagangan/keuangan', 'keuangan')->name('rsc.usaha.perdagangan.keuangan');
+                Route::post('/rsc/analisa/usaha/perdagangan/keuangan/simpan', 'simpan_keuangan')->name('rsc.usaha.perdagangan.keuangan.simpan');
+                Route::post('/rsc/analisa/usaha/perdagangan/keuangan/update', 'update_keuangan')->name('rsc.usaha.perdagangan.keuangan.update');
+                Route::post('/rsc/analisa/usaha/perdagangan/keuangan/update', 'update_keuangan')->name('rsc.usaha.perdagangan.keuangan.update');
+                Route::delete('/rsc/analisa/usaha/perdagangan/delete', 'delete')->name('rsc.usaha.perdagangan.delete');
+            });
+
+            Route::controller(RSCPertanianController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/pertanian', 'index')->name('rsc.usaha.pertanian');
+                Route::post('/rsc/analisa/usaha/pertanian/simpan', 'simpan_rsc_pertanian')->name('rsc.usaha.pertanian.simpan');
+                Route::get('/rsc/analisa/usaha/pertanian/informasi', 'index_rsc_pertanian_informasi')->name('rsc.usaha.pertanian.informasi');
+                Route::post('/rsc/analisa/usaha/pertanian/update/informasi', 'update_rsc_pertanian_informasi')->name('rsc.usaha.pertanian.informasi.update');
+                Route::get('/rsc/analisa/usaha/pertanian/biaya', 'rsc_pertanian_biaya')->name('rsc.usaha.pertanian.biaya');
+                Route::post('/rsc/analisa/usaha/pertanian/update/biaya', 'update_rsc_pertanian_biaya')->name('rsc.usaha.pertanian.biaya.update');
+                Route::get('/rsc/analisa/usaha/pertanian/keuangan', 'rsc_pertanian_keuangan')->name('rsc.usaha.pertanian.keuangan');
+                Route::post('/rsc/analisa/usaha/pertanian/keuangan/update/', 'update_rsc_pertanian_keuangan')->name('rsc.usaha.pertanian.keuangan.update');
+                Route::delete('/rsc/analisa/usaha/pertanian/delete', 'delete_rsc_pertanian')->name('rsc.usaha.pertanian.delete');
+            });
+
+            Route::controller(RSCJasaController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/jasa', 'index')->name('rsc.usaha.jasa');
+                Route::post('/rsc/analisa/usaha/jasa/simpan', 'simpan_rsc_jasa')->name('rsc.usaha.jasa.simpan');
+                Route::get('/rsc/analisa/usaha/jasa/keuangan', 'rsc_jasa_keuangan')->name('rsc.usaha.jasa.keuangan');
+                Route::post('/rsc/analisa/usaha/jasa/simpan/keuangan', 'simpan_rsc_jasa_keuangan')->name('rsc.usaha.jasa.keuangan.simpan');
+                Route::delete('/rsc/analisa/usaha/jasa/delete/keuangan', 'delete_rsc_jasa_keuangan')->name('rsc.usaha.jasa.keuangan.delete');
+            });
+
+            Route::controller(RSCLainController::class)->group(function () {
+                Route::get('/rsc/analisa/usaha/lain', 'index')->name('rsc.usaha.lain');
+                Route::post('/rsc/analisa/usaha/lain/simpan', 'simpan_rsc_lain')->name('rsc.usaha.lain.simpan');
+                Route::get('/rsc/analisa/usaha/lain/identitas', 'rsc_lain_identitas')->name('rsc.usaha.lain.identitas');
+                Route::put('/rsc/analisa/usaha/lain/update/identitas', 'update_rsc_lain_identitas')->name('rsc.usaha.lain.identitas.update');
+                Route::get('/rsc/analisa/usaha/lain/bahan', 'rsc_lain_bahan')->name('rsc.usaha.lain.bahan');
+                Route::post('/rsc/analisa/usaha/lain/bahan/simpan', 'simpan_rsc_lain_bahan')->name('rsc.usaha.lain.bahan.simpan');
+                Route::put('/rsc/analisa/usaha/lain/bahan/update', 'update_rsc_lain_bahan')->name('rsc.usaha.lain.bahan.update');
+                Route::get('/rsc/analisa/usaha/lain/keuangan', 'rsc_lain_keuangan')->name('rsc.usaha.lain.keuangan');
+                Route::post('/rsc/analisa/usaha/lain/simpan/keuangan', 'simpan_rsc_lain_keuangan')->name('rsc.usaha.lain.keuangan.simpan');
+                Route::put('/rsc/analisa/usaha/lain/update/keuangan', 'update_rsc_lain_keuangan')->name('rsc.usaha.lain.keuangan.update');
+                Route::delete('/rsc/analisa/usaha/lain/delete', 'delete_rsc_lain')->name('rsc.usaha.lain.delete');
+            });
+
+            Route::controller(RSCPenilaianController::class)->group(function () {
+                Route::get('/rsc/penilaian/debitur', 'index')->name('rsc.penilaian.debitur');
+                Route::post('/rsc/penilaian/debitur/simpan', 'simpan_kondisi_usaha')->name('rsc.simpan.kondisi.usaha');
+                Route::put('/rsc/penilaian/debitur/update', 'update_kondisi_usaha')->name('rsc.update.kondisi.usaha');
+                Route::post('/rsc/penilaian/debitur/simpan/agunan', 'simpan_kondisi_agunan')->name('rsc.simpan.kondisi.agunan');
+                Route::post('/rsc/penilaian/debitur/update/agunan', 'update_kondisi_agunan')->name('rsc.update.kondisi.agunan');
+            });
+
+            Route::controller(RSCPengusulanController::class)->group(function () {
+                Route::get('/rsc/data/pengusulan', 'index')->name('rsc.data.pengusulan');
+                Route::post('/rsc/data/simpan/pengusulan', 'simpan_pengusulan')->name('rsc.data.pengusulan.simpan');
+            });
+
+            Route::controller(RSCKeuanganController::class)->group(function () {
+                Route::get('/rsc/keuangan', 'index')->name('rsc.keuangan');
+                Route::post('/rsc/simpan/keuangan', 'simpan_keuangan')->name('rsc.keuangan.simpan');
+            });
+        });
+
+        Route::group(['middleware' => ['role:Kabag Analis|Direksi']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
+                Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
+                Route::post('rsc/notifikasi/simpan', 'simpan_notifikasi')->name('rsc.notifikasi.simpan');
+            });
+        });
+
+        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi']], function () {
+            Route::controller(RSCPersetujuanController::class)->group(function () {
+                Route::get('/rsc/persetujuan', 'index')->name('rsc.persetujuan.index');
+                Route::get('/rsc/persetujuan/informasi', 'informasi')->name('rsc.persetujuan.informasi');
+                Route::get('/rsc/persetujuan/catatan', 'catatan')->name('rsc.persetujuan.catatan');
+                Route::get('/rsc/persetujuan/index', 'persetujuan_index')->name('rsc.persetujuan.persetujuan_index');
+                Route::post('/rsc/persetujuan/simpan', 'persetujuan_simpan')->name('rsc.persetujuan.simpan');
+            });
+
+            Route::controller(RSCCetakController::class)->group(function () {
+                Route::get('/rsc/cetakanalisa', 'cetakanalisa_index')->name('rsc.cetakanalisa.index');
+                Route::get('/rsc/cetakanalisa/kredit', 'cetakanalisa_kredit_detail')->name('rsc.cetakanalisa_kredit.index');
+                Route::get('/rsc/cetaknotifikasi', 'cetaknotifikasi_index')->name('rsc.cetaknotifikasi.index');
+                Route::get('/rsc/cetaknotifikasi/detail', 'cetaknotifikasi_detail')->name('rsc.cetaknotifikasi.detail');
+                Route::get('/rsc/cetakpersetujuan', 'cetakpersetujuan_index')->name('rsc.cetakpersetujuan.index');
+                Route::get('/rsc/cetakpersetujuan/detail', 'cetakpersetujuan_detail')->name('rsc.cetakpersetujuan.detail');
+                Route::get('/rsc/cetakpk', 'cetakpk_index')->name('rsc.cetakpk.index');
+                Route::get('/rsc/cetakpk/detail', 'cetakpk_index_detail')->name('rsc.cetakpk.detail');
+            });
+        });
+
+        Route::group(['middleware' => ['role:Kasi Analis']], function () {
+            Route::controller(RSCPenjadwalanController::class)->group(function () {
+                Route::get('/rsc/penjadwalan', 'index')->name('rsc.penjadwalan');
+                Route::get('/rsc/penjadwalan/tambah', 'index_penjadwalan')->name('rsc.penjadwalan.index');
+                Route::post('/rsc/penjadwalan/simpan', 'simpan_penjadwalan')->name('rsc.penjadwalan.simpan');
+                Route::post('/rsc/penjadwalan/update', 'update_penjadwalan')->name('rsc.penjadwalan.update');
+            });
+        });
+
+        Route::group(['middleware' => ['role:Admin Kredit']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
+                Route::get('/rsc/perjanjiankredit/get', 'pk_get')->name('rsc.perjanjian_kredit.get');
+                Route::post('/rsc/perjanjiankredit/simpan', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
+            });
+        });
+
+        //====Route Analisa RSC====//
+
     });
     //====Route Analisa====//
 
