@@ -103,10 +103,13 @@ class RSCPersetujuanController extends Controller
             $rsc = DB::table('rsc_data_pengajuan')->where('pengajuan_kode', $data[0]->kode_pengajuan)->where('kode_rsc', $enc_rsc)->first();
             $keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
 
+            $biaya = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
+
             return view('rsc.persetujuan.persetujuan', [
                 'data' => $data[0],
                 'pengusulan' => $rsc,
                 'keuangan' => $keuangan,
+                'biaya' => $biaya,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
