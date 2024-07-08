@@ -91,7 +91,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_ekonomi" id="catatan_faktor_ekonomi"
                                                         value="{{ old('catatan_faktor_ekonomi', $penilaian->catatan_faktor_ekonomi) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 100%;float:right;">
@@ -129,7 +129,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_marketing" id="catatan_faktor_marketing"
                                                         value="{{ old('catatan_faktor_marketing', $penilaian->catatan_faktor_marketing_lain) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
 
@@ -139,7 +139,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_rumah_tangga" id="catatan_faktor_rumah_tangga"
                                                         value="{{ old('catatan_faktor_rumah_tangga', $penilaian->catatan_frt) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                             </div>
@@ -202,7 +202,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_marketing2" id="catatan_faktor_marketing2"
                                                         value="{{ old('catatan_faktor_marketing2', $penilaian->catatan_faktor_marketing2) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 100%;float:left;">
@@ -211,7 +211,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_marketing3" id="catatan_faktor_marketing3"
                                                         value="{{ old('catatan_faktor_marketing3', $penilaian->catatan_faktor_marketing3) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
 
@@ -221,7 +221,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="faktor_rumah_tangga" id="faktor_rumah_tangga"
                                                         value="{{ old('faktor_rumah_tangga', $penilaian->faktor_rumah_tangga) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 49.5%;float:right;">
@@ -239,7 +239,7 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="faktor_lain" id="faktor_lain"
                                                         value="{{ old('faktor_lain', $penilaian->faktor_lainnya) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
                                             </div>
 
@@ -523,7 +523,9 @@
                                         </div>
                                     </form>
                                 @else
-                                    <form action="" method="POST">
+                                    <form
+                                        action="{{ route('rsc.update.kondisi.agunan', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                        method="POST">
                                         @method('post')
                                         @csrf
                                         <div class="box-body" style="margin-top: -10px;font-size:12px;">
@@ -567,9 +569,13 @@
                                     </form>
                                 @endif
                             </div>
-
                         </div>
                     </div>
+                    <p>
+                        <b>NOTE </b> <br>
+                        * Untuk Nominal jika kosong beri angka 0. <br>
+                        * Jika ada yang harus diisi selain dari nominal bisa idi dengan <b>"-"</b>
+                    </p>
                 </div>
         </section>
     </div>

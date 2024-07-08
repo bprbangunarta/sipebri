@@ -160,4 +160,31 @@ class RSCPenilaianController extends Controller
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
+
+    public function update_kondisi_agunan(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('kode'));
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+
+            $data = [
+                'kode_rsc' => $enc_rsc,
+                'posisi_agunan' => Str::upper($request->posisi_agunan),
+                'kondisi_agunan' => Str::upper($request->kondisi_agunan),
+                'nilai_taksasi' => (int)str_replace(["Rp.", " ", "."], "", $request->nilai_agunan ?? 0),
+                'updated_at' => now(),
+            ];
+
+            $cek = DB::table('rsc_agunan')->where('kode_rsc', $enc_rsc)->first();
+
+            if (!is_null($cek)) {
+                DB::table('rsc_agunan')->where('kode_rsc', $enc_rsc)->update($data);
+                return redirect()->back()->with('success', 'Data berhasil diperbarui.');
+            } else {
+                return redirect()->back()->with('error', 'Data tidak ditemukan.');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
 }

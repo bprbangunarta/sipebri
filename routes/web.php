@@ -721,6 +721,7 @@ Route::middleware('auth')->group(function () {
                 Route::post('/rsc/penilaian/debitur/simpan', 'simpan_kondisi_usaha')->name('rsc.simpan.kondisi.usaha');
                 Route::put('/rsc/penilaian/debitur/update', 'update_kondisi_usaha')->name('rsc.update.kondisi.usaha');
                 Route::post('/rsc/penilaian/debitur/simpan/agunan', 'simpan_kondisi_agunan')->name('rsc.simpan.kondisi.agunan');
+                Route::post('/rsc/penilaian/debitur/update/agunan', 'update_kondisi_agunan')->name('rsc.update.kondisi.agunan');
             });
 
             Route::controller(RSCPengusulanController::class)->group(function () {
