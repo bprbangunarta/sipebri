@@ -80,18 +80,14 @@
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
-                                                {{-- &nbsp;
+                                                &nbsp;
 
-                                                <a href="" class="btn-circle btn-sm bg-yellow" title="Catatan RSC">
+                                                <a href="{{ route('rsc.cetakanalisa_kredit.index', ['rsc' => $item->rsc]) }}"
+                                                    class="btn-circle btn-sm bg-yellow" title="Catatan RSC"
+                                                    target="__blank">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
 
-                                                &nbsp;
-
-                                                <a href="" class="btn-circle btn-sm bg-primary"
-                                                    title="Informasi RSC">
-                                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                                </a> --}}
                                             </td>
                                         </tr>
                                     @empty

@@ -155,6 +155,16 @@ class RSCCetakController extends Controller
             $surveyor = DB::table('rsc_data_survei')->where('kode_rsc', $enc_rsc)->first();
             $qr = $this->get_qrcode($enc_rsc, 'RSC_ANALISA', $surveyor->surveyor_kode);
 
+            //Syarat Tambahan
+            $syarat = DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->first();
+            if (is_null($syarat)) {
+                $syarat = (object) [
+                    'sebelum_realisasi' => null,
+                    'syarat_tambahan' => null,
+                    'syarat_lain' => null,
+                ];
+            }
+
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
                 'kondisi' => $kondisi_usaha,
@@ -162,6 +172,7 @@ class RSCCetakController extends Controller
                 'usaha' => $usaha,
                 'biaya' => $biaya,
                 'qr' => $qr,
+                'syarat' => $syarat,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

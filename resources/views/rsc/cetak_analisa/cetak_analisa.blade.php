@@ -556,6 +556,8 @@
                                 </div>
                             </div>
 
+                            <br>
+
                             <div class="contents" style="margin-top: 10px;">
                                 <div class="heads">
                                     6. RC = (Jumlah Setoran/bln / Kemampuan Keuangan/bln) x 100 = {{ $data->rc }}
@@ -583,6 +585,35 @@
                                         <td>> 59% </td>
                                         <td>:</td>
                                         <td>Kurang Baik</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="contents" style="margin-top: 10px;">
+                                <div class="heads">
+                                    7. Syarat-syarat :
+                                </div>
+                            </div>
+
+                            <div class="contents" style="margin-top: 10px; margin-left: 13px;">
+                                <table>
+                                    <tr>
+                                        <td width="2%">1. </td>
+                                        <td width="20%">Sebelum Realisasi</td>
+                                        <td width="2%">:</td>
+                                        <td>{{ $syarat->sebelum_realisasi }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2. </td>
+                                        <td>Syarat Tambahan</td>
+                                        <td>:</td>
+                                        <td>{{ $syarat->syarat_tambahan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3. </td>
+                                        <td>Syarat Lainnya</td>
+                                        <td>:</td>
+                                        <td>{{ $syarat->syarat_lain }}</td>
                                     </tr>
                                 </table>
                             </div>
