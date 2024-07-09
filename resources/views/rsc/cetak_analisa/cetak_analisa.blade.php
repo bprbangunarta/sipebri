@@ -541,10 +541,18 @@
                                     4. Kemampuan dan Sumber Pembayaran :
                                 </div>
                                 <div class="items" style="margin-left: 13px;">
+                                    Alat liquid debitur =
+                                    {{ 'Rp. ' . number_format($biaya->likuidasi, '0', ',', '.') }} <br>
+                                    @php
+                                        $liquid = ($biaya->likuidasi * 70) / 100;
+                                    @endphp
                                     Debitur masih memiliki kemampuan pembayaran 70% dari alat liquid debitur sebesar
-                                    {{ 'Rp. ' . number_format($biaya->likuidasi, '0', ',', '.') }}
+                                    {{ 'Rp. ' . number_format($liquid, '0', ',', '.') }}
                                 </div>
                             </div>
+
+                            <br>
+                            <br>
 
                             <div class="contents" style="margin-top: 10px;">
                                 <div class="heads">
@@ -555,8 +563,6 @@
                                     {{ 'Rp. ' . number_format($data->total_angsuran, '0', ',', '.') }}
                                 </div>
                             </div>
-
-                            <br>
 
                             <div class="contents" style="margin-top: 10px;">
                                 <div class="heads">
@@ -621,7 +627,7 @@
                 </td>
             </tr>
 
-            <table style="margin-right:50px; margin-top: -20px;">
+            <table style="margin-right:50px; margin-top: -40px;">
                 <tr>
                     <td width="60%"></td>
                     <td class="text-center">
