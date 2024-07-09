@@ -552,7 +552,6 @@
                             </div>
 
                             <br>
-                            <br>
 
                             <div class="contents" style="margin-top: 10px;">
                                 <div class="heads">
