@@ -649,7 +649,7 @@ class RSCController extends Controller
 
             ->orWhere(function ($query) use ($keyword) {
                 $query->where('rsc_data_pengajuan.status', 'Notifikasi')
-                    ->where('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
+                    ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user);
             })
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
