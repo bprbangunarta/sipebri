@@ -575,11 +575,11 @@
                     </center>
                     <u>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        Surveyor
+                        {{-- Surveyor --}}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </u>
                     <br>
-                    <font style="text-transform: uppercase;">{{ $data->input_user }}</font>
+                    <font style="text-transform: uppercase;">{{ $data->nama_user }}</font>
                 </td>
                 <td></td>
                 <td class="text-center" width="40%">

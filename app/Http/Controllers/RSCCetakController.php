@@ -262,6 +262,7 @@ class RSCCetakController extends Controller
                 ->join('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
                 ->join('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', '=', 'a_memorandum.bi_penggunaan_kode')
                 ->join('bi_sektor_ekonomi', 'bi_sektor_ekonomi.sandi', '=', 'a_memorandum.bi_sek_ekonomi_kode')
+                ->join('v_users', 'v_users.code_user', '=', 'rsc_notifikasi.input_user')
                 ->select(
                     'rsc_data_pengajuan.id',
                     'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
@@ -282,6 +283,7 @@ class RSCCetakController extends Controller
                     'data_produk.nama_produk',
                     'rsc_notifikasi.no_notifikasi',
                     'rsc_notifikasi.input_user',
+                    'v_users.nama_user',
                     'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                     'bi_sektor_ekonomi.sandi as sandi_sektor_ekonomi',
                     'bi_sektor_ekonomi.keterangan as keterangan_sektor_ekonomi',
