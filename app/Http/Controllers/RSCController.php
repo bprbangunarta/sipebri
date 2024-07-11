@@ -639,6 +639,8 @@ class RSCController extends Controller
 
             ->where('rsc_data_pengajuan.status', 'Notifikasi')
             ->where('rsc_data_survei.direksi_kode', Auth::user()->code_user)
+            ->where('rsc_data_survei.kasi_kode', Auth::user()->code_user)
+            ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
 
         $data = $data->paginate(10);
