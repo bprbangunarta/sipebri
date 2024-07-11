@@ -87,7 +87,7 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">TGK POKOK (/BULAN)</span>
+                                                <span class="fw-bold">TGK POKOK (BULAN)</span>
                                                 <input type="number" class="form-control" placeholder="ENTRI"
                                                     name="jml_tunggakan_pokok" id="jml_tunggakan_pokok"
                                                     value="{{ old('jml_tunggakan_pokok', $data_rsc->jml_tgk_pokok) }}"
@@ -180,7 +180,7 @@
                                             </div>
 
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
-                                                <span class="fw-bold">TGK BUNGA (/BULAN)</span>
+                                                <span class="fw-bold">TGK BUNGA (BULAN)</span>
                                                 <input type="number" class="form-control" placeholder="ENTRI"
                                                     name="jml_tunggakan_bunga" id="jml_tunggakan_bunga"
                                                     value="{{ old('jml_tunggakan_bunga', $data_rsc->jml_tgk_bunga) }}"
