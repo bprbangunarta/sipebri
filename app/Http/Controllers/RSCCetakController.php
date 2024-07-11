@@ -73,14 +73,14 @@ class RSCCetakController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
 
             $data = DB::table('rsc_data_pengajuan')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', 'data_pengajuan.nasabah_kode')
-                ->join('data_jaminan', 'data_jaminan.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
-                ->join('a_memorandum', 'a_memorandum.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
-                ->join('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', 'a_memorandum.bi_penggunaan_kode')
-                ->join('data_spk', 'data_spk.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
-                ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', 'rsc_data_pengajuan.kode_rsc')
-                ->join('users', 'users.code_user', 'rsc_data_survei.surveyor_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', 'data_pengajuan.nasabah_kode')
+                ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', 'a_memorandum.bi_penggunaan_kode')
+                ->leftJoin('data_spk', 'data_spk.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('users', 'users.code_user', 'rsc_data_survei.surveyor_kode')
                 ->select(
                     'rsc_data_pengajuan.kode_rsc',
                     'rsc_data_pengajuan.baki_debet',
@@ -112,6 +112,7 @@ class RSCCetakController extends Controller
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
 
             //
+
             $targetDt = Carbon::parse($data->tgl_akhir);
             $data->tgl_jth_tmp = $targetDt->isoFormat('D MMMM Y');
 
