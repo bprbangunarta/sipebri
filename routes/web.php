@@ -757,17 +757,16 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/persetujuan/index', 'persetujuan_index')->name('rsc.persetujuan.persetujuan_index');
                 Route::post('/rsc/persetujuan/simpan', 'persetujuan_simpan')->name('rsc.persetujuan.simpan');
             });
-
-            Route::controller(RSCCetakController::class)->group(function () {
-                Route::get('/rsc/cetakanalisa', 'cetakanalisa_index')->name('rsc.cetakanalisa.index');
-                Route::get('/rsc/cetakanalisa/kredit', 'cetakanalisa_kredit_detail')->name('rsc.cetakanalisa_kredit.index');
-                Route::get('/rsc/cetaknotifikasi', 'cetaknotifikasi_index')->name('rsc.cetaknotifikasi.index');
-                Route::get('/rsc/cetaknotifikasi/detail', 'cetaknotifikasi_detail')->name('rsc.cetaknotifikasi.detail');
-                Route::get('/rsc/cetakpersetujuan', 'cetakpersetujuan_index')->name('rsc.cetakpersetujuan.index');
-                Route::get('/rsc/cetakpersetujuan/detail', 'cetakpersetujuan_detail')->name('rsc.cetakpersetujuan.detail');
-                Route::get('/rsc/cetakpk', 'cetakpk_index')->name('rsc.cetakpk.index');
-                Route::get('/rsc/cetakpk/detail', 'cetakpk_index_detail')->name('rsc.cetakpk.detail');
-            });
+        });
+        Route::controller(RSCCetakController::class)->group(function () {
+            Route::get('/rsc/cetakanalisa', 'cetakanalisa_index')->name('rsc.cetakanalisa.index');
+            Route::get('/rsc/cetakanalisa/kredit', 'cetakanalisa_kredit_detail')->name('rsc.cetakanalisa_kredit.index');
+            Route::get('/rsc/cetaknotifikasi', 'cetaknotifikasi_index')->name('rsc.cetaknotifikasi.index');
+            Route::get('/rsc/cetaknotifikasi/detail', 'cetaknotifikasi_detail')->name('rsc.cetaknotifikasi.detail');
+            Route::get('/rsc/cetakpersetujuan', 'cetakpersetujuan_index')->name('rsc.cetakpersetujuan.index');
+            Route::get('/rsc/cetakpersetujuan/detail', 'cetakpersetujuan_detail')->name('rsc.cetakpersetujuan.detail');
+            Route::get('/rsc/cetakpk', 'cetakpk_index')->name('rsc.cetakpk.index');
+            Route::get('/rsc/cetakpk/detail', 'cetakpk_index_detail')->name('rsc.cetakpk.detail');
         });
 
         Route::group(['middleware' => ['role:Kasi Analis']], function () {
