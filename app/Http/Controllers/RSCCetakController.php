@@ -532,6 +532,7 @@ class RSCCetakController extends Controller
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.no_identitas',
                     'data_nasabah.alamat_ktp',
+                    'data_nasabah.tempat_kerja',
                     'data_pendamping.nama_pendamping',
                     'data_pekerjaan.nama_pekerjaan',
                     'data_pengajuan.plafon',
@@ -573,6 +574,9 @@ class RSCCetakController extends Controller
                     DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
                 )
                 ->where('rsc_spk.kode_rsc', $enc_rsc)->orderBy('rsc_spk.created_at', 'desc')->get();
+            //
+            $data->metode_rps_rsc = "EFEKTIF MUSIMAN";
+
             if (count($cek_spk) > 1) {
                 $data->no_spk = $cek_spk[1]->no_spk;
 
@@ -595,10 +599,38 @@ class RSCCetakController extends Controller
 
                 $data->jw_rsc_musiman = null;
             }
+            // dd($data);
+            if ($data->metode_rps_rsc == "FLAT" && $data->produk_kode == 'KPJ' && $data->tempat_kerja == 'PT HANDSOME') {
+                return view('rsc.cetak_pk.kpj_flat_handsome', [
+                    'data' => $data
+                ]);
+            } elseif ($data->metode_rps_rsc == "EFEKTIF ANUITAS" && $data->produk_kode == 'KPS' && $data->tempat_kerja == 'PT HANDSOME') {
+                return view('rsc.cetak_pk.kps_anuitas_handsome', [
+                    'data' => $data
+                ]);
+            }
 
-            return view('rsc.cetak_pk.first', [
-                'data' => $data
-            ]);
+            if ($data->metode_rps_rsc == "EFEKTIF MUSIMAN") {
+                return view('rsc.cetak_pk.efektif_musiman', [
+                    'data' => $data
+                ]);
+            } elseif ($data->metode_rps_rsc == "EFEKTIF") {
+                return view('rsc.cetak_pk.efektif', [
+                    'data' => $data
+                ]);
+            } elseif ($data->metode_rps_rsc == "FLAT") {
+                return view('rsc.cetak_pk.flat', [
+                    'data' => $data
+                ]);
+            } elseif ($data->metode_rps_rsc == "EFEKTIF ANUITAS") {
+                return view('rsc.cetak_pk.anuitas', [
+                    'data' => $data
+                ]);
+            }
+
+            // return view('rsc.cetak_pk.first', [
+            //     'data' => $data
+            // ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
