@@ -24,6 +24,7 @@ class RSCLainController extends Controller
             }
 
             $lain = DB::table('rsc_au_lain')->where('kode_rsc', $enc_rsc)->get();
+
             foreach ($lain as $item) {
                 $item->kd_usaha = Crypt::encrypt($item->kode_usaha);
             }

@@ -36,7 +36,7 @@
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">FAKTOR TEKNIS I</span>
                                                     <select type="text" class="form-control text-uppercase faktor_teknis"
-                                                        style="width: 100%;" name="faktor_teknis1" required>
+                                                        style="width: 100%;" name="faktor_teknis1">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MASALAH"
                                                             {{ old('faktor_teknis1') == 'MENJADI MASALAH' || $penilaian->faktor_teknis1 == 'MENJADI MASALAH' ? 'selected' : '' }}>
@@ -51,7 +51,7 @@
                                                 <div style="margin-top:5px;width: 49.5%;float:right;">
                                                     <span class="fw-bold">FAKTOR TEKNIS II</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_teknis2" required>
+                                                        style="width: 100%;" name="faktor_teknis2">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MASALAH"
                                                             {{ old('faktor_teknis2') == 'MENJADI MASALAH' || $penilaian->faktor_teknis2 == 'MENJADI MASALAH' ? 'selected' : '' }}>
@@ -65,7 +65,7 @@
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">FAKTOR EKONOMI I</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_ekonomi1" required>
+                                                        style="width: 100%;" name="faktor_ekonomi1">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MACET"
                                                             {{ old('faktor_ekonomi1') == 'MENJADI MACET' || $penilaian->faktor_ekonomi1 == 'MENJADI MACET' ? 'selected' : '' }}>
@@ -82,7 +82,7 @@
                                                     <input type="text" class="form-control" style="font-size: 14px;"
                                                         name="nominal_faktor_ekonomi1" id="nominal_faktor_ekonomi1"
                                                         value="{{ old('nominal_faktor_ekonomi1', number_format($penilaian->nominal_fe1, '0', ',', '.')) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 100%;float:left;">
@@ -97,7 +97,7 @@
                                                 <div style="margin-top:5px;width: 100%;float:right;">
                                                     <span class="fw-bold">FAKTOR MARKETING II</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing2" required>
+                                                        style="width: 100%;" name="faktor_marketing2">
                                                         <option value="">--Pilih--</option>
                                                         <option value="PEMASARAN MUDAH"
                                                             {{ old('faktor_marketing2') == 'PEMASARAN MUDAH' || $penilaian->faktor_marketing2 == 'PEMASARAN MUDAH' ? 'selected' : '' }}>
@@ -111,7 +111,7 @@
                                                 <div style="margin-top:5px;width: 100%;float:right;">
                                                     <span class="fw-bold">FAKTOR MARKETING III</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing3" required>
+                                                        style="width: 100%;" name="faktor_marketing3">
                                                         <option value="">--Pilih--</option>
                                                         <option value="PENJUALAN DIBAYAR KONTAN"
                                                             {{ old('faktor_marketing3') == 'PENJUALAN DIBAYAR KONTAN' || $penilaian->faktor_marketing3 == 'PENJUALAN DIBAYAR KONTAN' ? 'selected' : '' }}>
@@ -152,13 +152,13 @@
                                                         style="font-size: 12px; text-transform: uppercase;"
                                                         name="catatan_faktor_teknis" id="catatan_faktor_teknis"
                                                         value="{{ old('catatan_faktor_teknis', $penilaian->catatan_faktor_teknis) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">FAKTOR EKONOMI II</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_ekonomi2" required>
+                                                        style="width: 100%;" name="faktor_ekonomi2">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MACET"
                                                             {{ old('faktor_ekonomi2') == 'MENJADI MACET' || $penilaian->faktor_ekonomi2 == 'MENJADI MACET' ? 'selected' : '' }}>
@@ -175,13 +175,13 @@
                                                     <input type="text" class="form-control" style="font-size: 14px;"
                                                         name="nominal_faktor_ekonomi2" id="nominal_faktor_ekonomi2"
                                                         value="{{ old('nominal_faktor_ekonomi2', number_format($penilaian->nominal_fe2, '0', ',', '.')) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
                                                 <div style="margin-top:5px;width: 100%;float:left;">
                                                     <span class="fw-bold">FAKTOR MARKETING I</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing1" required>
+                                                        style="width: 100%;" name="faktor_marketing1">
                                                         <option value="">--Pilih--</option>
                                                         <option value="PELANGGAN BERTAMBAH"
                                                             {{ old('faktor_marketing1') == 'PELANGGAN BERTAMBAH' || $penilaian->faktor_marketing1 == 'PELANGGAN BERTAMBAH' ? 'selected' : '' }}>
@@ -229,7 +229,7 @@
                                                     <input type="text" class="form-control" style="font-size: 14px;"
                                                         name="biaya_rumah_tangga" id="biaya_rumah_tangga"
                                                         value="{{ old('biaya_rumah_tangga', number_format($penilaian->biaya_faktor_rumah_tangga, '0', ',', '.')) }}"
-                                                        placeholder="ENTRI" required>
+                                                        placeholder="ENTRI">
                                                 </div>
 
 
@@ -262,7 +262,7 @@
                                                     <span class="fw-bold">FAKTOR TEKNIS I</span>
                                                     <select type="text"
                                                         class="form-control text-uppercase faktor_teknis"
-                                                        style="width: 100%;" name="faktor_teknis1" required>
+                                                        style="width: 100%;" name="faktor_teknis1">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MASALAH"
                                                             {{ old('faktor_teknis1') == 'MENJADI MASALAH' ? 'selected' : '' }}>
@@ -277,7 +277,7 @@
                                                 <div style="margin-top:5px;width: 49.5%;float:right;">
                                                     <span class="fw-bold">FAKTOR TEKNIS II</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_teknis2" required>
+                                                        style="width: 100%;" name="faktor_teknis2">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MASALAH"
                                                             {{ old('faktor_teknis2') == 'MENJADI MASALAH' ? 'selected' : '' }}>
@@ -293,7 +293,7 @@
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">FAKTOR EKONOMI I</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_ekonomi1" required>
+                                                        style="width: 100%;" name="faktor_ekonomi1">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MACET"
                                                             {{ old('faktor_ekonomi1') == 'MENJADI MACET' ? 'selected' : '' }}>
@@ -324,7 +324,7 @@
                                                 <div style="margin-top:5px;width: 100%;float:right;">
                                                     <span class="fw-bold">FAKTOR MARKETING II</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing2" required>
+                                                        style="width: 100%;" name="faktor_marketing2">
                                                         <option value="">--Pilih--</option>
                                                         <option value="PEMASARAN MUDAH"
                                                             {{ old('faktor_marketing2') == 'PEMASARAN MUDAH' ? 'selected' : '' }}>
@@ -338,7 +338,7 @@
                                                 <div style="margin-top:5px;width: 100%;float:right;">
                                                     <span class="fw-bold">FAKTOR MARKETING III</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing3" required>
+                                                        style="width: 100%;" name="faktor_marketing3">
                                                         <option value="">--Pilih--</option>
                                                         <option value="PENJUALAN DIBAYAR KONTAN"
                                                             {{ old('faktor_marketing3') == 'PENJUALAN DIBAYAR KONTAN' ? 'selected' : '' }}>
@@ -385,7 +385,7 @@
                                                 <div style="margin-top:5px;width: 49.5%;float:left;">
                                                     <span class="fw-bold">FAKTOR EKONOMI II</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_ekonomi2" required>
+                                                        style="width: 100%;" name="faktor_ekonomi2">
                                                         <option value="">--Pilih--</option>
                                                         <option value="MENJADI MACET"
                                                             {{ old('faktor_ekonomi2') == 'MENJADI MACET' ? 'selected' : '' }}>
@@ -408,7 +408,7 @@
                                                 <div style="margin-top:5px;width: 100%;float:left;">
                                                     <span class="fw-bold">FAKTOR MARKETING I</span>
                                                     <select type="text" class="form-control faktor_teknis"
-                                                        style="width: 100%;" name="faktor_marketing1" required>
+                                                        style="width: 100%;" name="faktor_marketing1">
                                                         <option value="">--Pilih--</option>
                                                         <option value="PELANGGAN BERTAMBAH"
                                                             {{ old('faktor_marketing1') == 'PELANGGAN BERTAMBAH' ? 'selected' : '' }}>
