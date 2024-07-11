@@ -741,7 +741,7 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::group(['middleware' => ['role:Kabag Analis|Direksi']], function () {
+        Route::group(['middleware' => ['role:Kabag Analis|Direksi|Kasi Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
                 Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
                 Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
