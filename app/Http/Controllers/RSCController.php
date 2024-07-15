@@ -69,6 +69,24 @@ class RSCController extends Controller
         ]);
     }
 
+    public function eksternal_index()
+    {
+        $keyword = request('keyword');
+        $cek = DB::connection('android')->table('data_nasabah')->where('Nama_Debitur', 'WARTIYAH BINTI TABU')->get();
+
+        $kasi = DB::table('v_users')->where('role_name', 'Kasi Analis')->get();
+        $surveyor = DB::table('v_users')
+            ->where('role_name', 'Staff Analis')
+            ->where('is_active', 1)
+            ->get();
+
+        return view('rsc.index_eksternal', [
+            'kasi' => $kasi,
+            'surveyor' => $surveyor,
+            // 'data' => $data,
+        ]);
+    }
+
     public function index_analisa()
     {
         $keyword = request('keyword');
@@ -122,68 +140,6 @@ class RSCController extends Controller
             'data' => $data,
         ]);
     }
-
-    // public function tambah_rsc(Request $request)
-    // {
-    //     try {
-    //         $cek_kode_pengajuan = Pengajuan::where('kode_pengajuan', $request->pengajuan_kode)->first();
-
-    //         if (is_null($cek_kode_pengajuan)) {
-    //             return redirect()->back()->with('error', 'Data tidak ditemukan');
-    //         } elseif ($cek_kode_pengajuan->on_current == "0") {
-    //             return redirect()->back()->with('error', 'Data belum REALISASI');
-    //         }
-
-    //         $data = $request->validate([
-    //             'pengajuan_kode' => 'required',
-    //             'pengajuan_kode' => 'required',
-    //             'jenis_persetujuan' => 'required',
-    //             'surveyor_kode' => 'required',
-    //             'kasi_kode' => 'required',
-    //         ]);
-
-    //         if (
-    //             $request->pengajuan_kode == "" ||
-    //             $request->pengajuan_kode == "" ||
-    //             $request->jenis_persetujuan == "" ||
-    //             $request->surveyor_kode == "" ||
-    //             $request->kasi_kode == ""
-    //         ) {
-    //             return redirect()->back()->with('error', 'Data tidak boleh kosong!!!');
-    //         }
-
-    //         $kode_nasabah = DB::table('data_pengajuan')
-    //             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-    //             ->where('data_pengajuan.kode_pengajuan', '=', $request->pengajuan_kode)->first();
-    //         //
-    //         if (is_null($kode_nasabah)) {
-    //             return redirect()->back()->with('error', 'Nasabah tidak ada.');
-    //         }
-
-    //         $kode_rsc = $this->kodeacak('RSC');
-    //         $data = [
-    //             'pengajuan_kode' => $request->pengajuan_kode,
-    //             'kode_rsc' => $kode_rsc,
-    //             'nasabah_kode' => $kode_nasabah->nasabah_kode,
-    //             'jenis_persetujuan' => $request->jenis_persetujuan,
-    //             'kasi_kode' => $request->kasi_kode,
-    //             'surveyor_kode' => $request->surveyor_kode,
-    //             'status' => 'Proses Analisa',
-    //             'input_user' => Auth::user()->code_user,
-    //             'created_at' => now(),
-    //         ];
-
-    //         $insert = DB::table('rsc_data_pengajuan')->insert($data);
-
-    //         if ($insert) {
-    //             return redirect()->back()->with('success', 'Berhasil menambahkan data.');
-    //         } else {
-    //             return redirect()->back()->with('error', 'Data gagal ditambahkan.');
-    //         }
-    //     } catch (\Throwable $th) {
-    //         return redirect()->back()->with('error', 'Informasikan ke Staff IT.');
-    //     }
-    // }
 
     public function tambah_rsc(Request $request)
     {

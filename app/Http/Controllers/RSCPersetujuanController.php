@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RSC;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -105,11 +106,14 @@ class RSCPersetujuanController extends Controller
 
             $biaya = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
 
+            $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->first();
+
             return view('rsc.persetujuan.persetujuan', [
                 'data' => $data[0],
                 'pengusulan' => $rsc,
                 'keuangan' => $keuangan,
                 'biaya' => $biaya,
+                'user' => $user,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -147,11 +151,20 @@ class RSCPersetujuanController extends Controller
                 $rl = 'Naik Kasi';
             } elseif ($role->role_name == 'Kasi Analis') {
                 $rl = 'Komite I';
-            } elseif ($role->role_name == 'Kabag Analis') {
+            }
+
+            if ($role->role_name == 'Kabag Analis' && $request->status != '') {
+                $rl = $request->status;
+            } elseif ($role->role_name == 'Kabag Analis' && $request->status == '') {
                 $rl = 'Komite II';
-            } elseif ($role->role_name == 'Direksi') {
+            }
+
+            if ($role->role_name == 'Direksi' && $request->status != '') {
+                $rl = $request->status;
+            } elseif ($role->role_name == 'Direksi' && $request->status == '') {
                 $rl = 'Notifikasi';
             }
+
 
             $data2 = [
                 'metode_rps' => $request->metode_rps,
@@ -176,11 +189,21 @@ class RSCPersetujuanController extends Controller
                 'total' => (int)str_replace(["Rp.", " ", "."], "", $jml) ?? 0,
             ];
 
-            DB::transaction(function () use ($enc_rsc, $data, $data2, $data3) {
-                DB::table('rsc_data_usulan')->insert($data);
-                DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
-                DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->update($data3);
-            });
+            $cek_usulan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->where('input_user', Auth::user()->code_user)->first();
+            if (is_null($cek_usulan)) {
+                DB::transaction(function () use ($enc_rsc, $data, $data2, $data3) {
+                    DB::table('rsc_data_usulan')->insert($data);
+                    DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+                    DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->update($data3);
+                });
+            } else {
+                DB::transaction(function () use ($enc_rsc, $data, $data2, $data3) {
+                    DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->where('input_user', Auth::user()->code_user)->update($data);
+                    DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data2);
+                    DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->update($data3);
+                });
+            }
+
 
             return redirect()->route('rsc.persetujuan.index')->with('success', 'Berhasil menambahkan data.');
         } catch (DecryptException $e) {

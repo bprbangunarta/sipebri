@@ -88,6 +88,24 @@
                                                             required readonly>
                                                     </div>
 
+                                                    @if ($user->role_name == 'Kabag Analis' || $user->role_name == 'Direksi')
+                                                        <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                            <span class="fw-bold">STATUS PERSETUJUAN</span>
+                                                            <select class="form-control text-uppercase metode"
+                                                                name="status" id="select-metodes">
+                                                                <option value="">-- PILIH -- </option>
+                                                                <option value="Tolak"
+                                                                    {{ old('status') == 'TOLAK' ? 'selected' : '' }}>
+                                                                    TOLAK
+                                                                </option>
+                                                                <option value="Dibatalkan"
+                                                                    {{ old('status') == 'DIBATALKAN' ? 'selected' : '' }}>
+                                                                    DIBATALKAN
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    @endif
+
                                                 </div>
 
 
@@ -103,7 +121,8 @@
                                                     <div style="margin-top:5px;width: 49.5%;float:right;">
                                                         <span class="fw-bold">UJROH KIH</span>
                                                         <input type="text" class="form-control" name="ujroh"
-                                                            id="ujroh" placeholder="ENTRI" value="{{ old('ujroh') }}"
+                                                            id="ujroh" placeholder="ENTRI"
+                                                            value="{{ old('ujroh') }}"
                                                             @if ($data->produk_kode != 'KIH') readonly @endif>
                                                     </div>
 
@@ -182,6 +201,11 @@
 
                         </div>
                     </div>
+                    <p>
+                        <b>NOTE : </b> <br>
+                        * Pilih <b>STATUS PERSETUJUAN</b> jika akan melakukan penolakan/pembatalan RSC.
+                        * jika tidak akan digunakan, boleh di kosongkan.
+                    </p>
                 </div>
         </section>
     </div>

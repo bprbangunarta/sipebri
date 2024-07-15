@@ -657,6 +657,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/rsc/index', [RSCController::class, 'index'])->name('rsc.index');
             Route::post('/rsc/tambah', [RSCController::class, 'tambah_rsc'])->name('rsc.tambah.rsc');
             Route::delete('/rsc/delete', [RSCController::class, 'delete_rsc'])->name('rsc.delete.rsc');
+            Route::get('/rsc/eksternal/index', [RSCController::class, 'eksternal_index'])->name('rsc.eksternal.index');
         });
 
         Route::group(['middleware' => ['role:Staff Analis']], function () {

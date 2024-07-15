@@ -331,11 +331,9 @@
                                         height="100" style="margin-top:-30px;">
                                     <b>
                                         <p>
-                                            <font style="text-transform: uppercase;">{{ $petugas['Direksi'] }}</font>
+                                            <font style="text-transform: uppercase;"><u>{{ $petugas['Direksi'] }}</u>
+                                            </font>
                                         </p>
-                                        <div style="display: flex; margin-top:-20px;">
-                                            (...................................................)
-                                        </div>
                                     </b>
                                 </center>
                             </div>
@@ -350,7 +348,8 @@
                                     height="100" style="margin-top:-35px; margin-left:20px;">
                                 <b>
                                     <p>
-                                        <font style="text-transform: uppercase;">{{ $petugas['Kabag Analis'] }}</font>
+                                        <font style="text-transform: uppercase;"><u>{{ $petugas['Kabag Analis'] }}</u>
+                                        </font>
                                     </p>
                                 </b>
                             </center>
