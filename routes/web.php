@@ -656,22 +656,21 @@ Route::middleware('auth')->group(function () {
         Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {
             Route::get('/rsc/index', [RSCController::class, 'index'])->name('rsc.index');
             Route::post('/rsc/tambah', [RSCController::class, 'tambah_rsc'])->name('rsc.tambah.rsc');
+            Route::post('/rsc/tambah/eksternal', [RSCController::class, 'tambah_rsc_eksternal'])->name('rsc.tambah.rsc.eksternal');
             Route::delete('/rsc/delete', [RSCController::class, 'delete_rsc'])->name('rsc.delete.rsc');
             Route::get('/rsc/eksternal/index', [RSCController::class, 'eksternal_index'])->name('rsc.eksternal.index');
         });
 
         Route::group(['middleware' => ['role:Staff Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
-                // Route::get('/rsc/index', 'index')->name('rsc.index');
                 Route::get('/rsc/analisa', 'index_analisa')->name('rsc.index.analisa');
-                // Route::post('/rsc/tambah', 'tambah_rsc')->name('rsc.tambah.rsc');
                 Route::get('/rsc/data/kredit', 'data_kredit')->name('rsc.data.kredit');
                 Route::put('/rsc/data/kredit', 'update_data_kredit')->name('rsc.update.data.kredit');
                 Route::put('/rsc/biaya/rsc', 'update_biaya_rsc')->name('rsc.update.biaya.rsc');
-                // Route::delete('/rsc/delete', 'delete_rsc')->name('rsc.delete.rsc');
                 Route::get('/rsc/konfirmasi', 'konfirmasi_index')->name('rsc.konfirmasi');
                 Route::post('/rsc/update/konfirmasi', 'konfirmasi_update')->name('rsc.konfirmasi.update');
                 Route::post('/rsc/jadul', 'simpan_jadul')->name('rsc.simpan.jadul');
+                Route::get('/rsc/permohonan/data_jadul/eks/{pengajuan}', 'data_jadul_eks')->name('rsc.jadul.eks');
             });
 
             Route::controller(RSCPerdaganganController::class)->group(function () {

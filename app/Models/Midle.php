@@ -1490,4 +1490,58 @@ class Midle extends Model
 
         return $imgname;
     }
+
+    public static function data_kantor($data)
+    {
+        if ($data == 'KANTOR PUSAT PAMANUKAN') {
+            return 'PMK';
+        } elseif ($data == 'KANTOR KAS PUSAKAJAYA') {
+            return 'PSK';
+        } elseif ($data == 'KANTOR KAS SUKAMANDI') {
+            return 'SKM';
+        } elseif ($data == 'KANTOR KAS KALIJATI') {
+            return 'KJT';
+        } elseif ($data == 'KANTOR KAS SUBANG') {
+            return 'SBG';
+        } elseif ($data == 'KANTOR KAS JALANCAGAK') {
+            return 'CGK';
+        } elseif ($data == 'KANTOR KAS PAGADEN') {
+            return 'PGD';
+        }
+    }
+
+    public static function data_produk($data)
+    {
+        if ($data == 'KREDIT UMUM') {
+            return 'KRU';
+        } elseif ($data == 'KREDIT PEGAWAI') {
+            return 'KUP';
+        } elseif ($data == 'KREDIT MOTOR') {
+            return 'KRM';
+        } elseif ($data == 'KREDIT REKENING KORAN') {
+            return 'PRK';
+        } elseif ($data == 'KREDIT TAKE OVER') {
+            return 'KTO';
+        } elseif ($data == 'KREDIT BUDIDAYA PERTANIAN') {
+            return 'KBT';
+        } elseif ($data == 'KREDIT PEGAWAI SWASTA') {
+            return 'KPS';
+        } elseif ($data == 'KREDIT KENDARAAN OPERASIONAL') {
+            return 'KKO';
+        } elseif ($data == 'KREDIT IBADAH HAJI') {
+            return 'KIH';
+        } elseif ($data == 'KREDIT PEGAWAI SWASTA NON MOU') {
+            return 'KPJ';
+        } elseif ($data == 'KREDIT RESEPSI') {
+            return 'KRS';
+        } elseif ($data == 'KREDIT PEGAWAI NEGERI') {
+            return 'KPN';
+        } elseif ($data == 'KREDIT IBADAH UMROH') {
+            return 'KIU';
+        } elseif ($data == 'KREDIT TANPA AGUNAN') {
+            return 'KTA';
+        } elseif ($data == 'KREDIT PEKERJA MIGRAN INDONESIA') {
+            return 'KPM';
+        }
+    }
 }

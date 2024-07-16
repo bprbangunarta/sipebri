@@ -34,17 +34,16 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
                                         <th class="text-center">TANGGAL</th>
-                                        <th class="text-center">KODE NASABAH</th>
+                                        <th class="text-center">NO LOAN</th>
                                         <th class="text-center">KODE RSC</th>
                                         <th class="text-center">NAMA NASABAH</th>
                                         <th class="text-center">ALAMAT</th>
-                                        <th class="text-center">WIL</th>
                                         <th class="text-center">PLAFON</th>
                                         <th class="text-center" width="7%">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @forelse ($data as $item)
+                                    @forelse ($data as $item)
                                         <tr>
                                             <td class="text-center">
                                                 {{ $loop->iteration + $data->firstItem() - 1 }}
@@ -62,10 +61,6 @@
                                                     {{ $item->alamat_ktp }}
                                                 </td>
                                             @endif
-
-                                            <td class="text-center">
-                                                {{ $item->kantor_kode }}
-                                            </td>
 
                                             @php
                                                 $item->plafon = number_format($item->plafon, 0, ',', '.');
@@ -97,46 +92,8 @@
                                         <tr>
                                             <td class="text-center" colspan="8">TIDAK ADA DATA</td>
                                         </tr>
-                                    @endforelse --}}
+                                    @endforelse
 
-                                    <tr>
-                                        <td class="text-center">
-
-                                        </td>
-                                        <td class="text-center">
-
-                                        </td>
-                                        <td class="text-center"></td>
-                                        <td class="text-center"></td>
-                                        <td></td>
-                                        <td class="text-uppercase">
-
-                                        </td>
-
-                                        <td class="text-center">
-
-                                        </td>
-                                        <td class="text-right">
-                                        </td>
-                                        <td class="text-center" style="text-align: right;">
-
-                                            <a href="" class="btn-circle btn-sm bg-yellow" title="Info RSC" disabled>
-                                                <i class="fa fa-info"></i>
-                                            </a>
-
-                                            &nbsp;
-
-                                            <form action="{{ route('rsc.delete.rsc') }}" method="POST"
-                                                style="display:inline;">
-                                                @method('delete')
-                                                @csrf
-                                                <a href="#" class="btn-circle btn-sm bg-red confirmdelete"
-                                                    title="Hapus" style="cursor: pointer;">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -146,13 +103,13 @@
                                 <button data-toggle="modal" data-target="#modal-tambah" class="btn bg-blue btn-sm">
                                     <i class="fa fa-plus"></i>&nbsp; TAMBAH
                                 </button>
-                                {{-- <button class="btn btn-default btn-sm">
+                                <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                                     entries
-                                </button> --}}
+                                </button>
                             </div>
 
-                            {{-- {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }} --}}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
 
                     </div>
@@ -169,14 +126,15 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAMBAH RESCHEDULLING</h4>
                 </div>
-                <form action="{{ route('rsc.tambah.rsc') }}" method="POST">
+                <form action="{{ route('rsc.tambah.rsc.eksternal') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <label>KODE NASABAH</label>
+                                    <label>NO LOAN</label>
+                                    <input class="form-control" type="hidden" name="eksternal" value="eksternal">
                                     <input class="form-control" type="text" name="pengajuan_kode" id="pengajuan_kode"
                                         required>
                                 </div>

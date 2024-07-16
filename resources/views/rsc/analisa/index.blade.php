@@ -82,8 +82,10 @@
                                                 @else
                                                     <a data-toggle="modal" data-target="#jadwal-ulang"
                                                         data-pengajuan="{{ $item->kode_pengajuan }}"
-                                                        data-rsc='{{ $item->rsc }}' class="btn-circle btn-sm bg-blue"
-                                                        title="Jadwal Ulang" style="cursor: pointer;">
+                                                        data-rsc='{{ $item->rsc }}'
+                                                        data-status='{{ $item->status_rsc }}'
+                                                        class="btn-circle btn-sm bg-blue" title="Jadwal Ulang"
+                                                        style="cursor: pointer;">
                                                         <i class="fa fa-history"></i>
                                                     </a>
                                                 @endif
@@ -182,27 +184,52 @@
             $("#jadwal-ulang").on("show.bs.modal", function(event) {
                 var button = $(event.relatedTarget); // Tombol yang membuka modal
                 var pengajuan = button.data("pengajuan"); // Ambil data-id dari tombol
-                const rsc = button.data("rsc");
+                var status = button.data("status"); // Ambil data-id dari tombol
 
-                $('#rsc').val(rsc)
-                // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
-                $.ajax({
-                    url: "/themes/permohonan/data_jadul/" + pengajuan,
-                    type: "GET",
-                    dataType: "json",
-                    cache: false,
-                    success: function(response) {
+                if (status == 'EKS') {
+                    $('#rsc').val(rsc)
+                    // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+                    $.ajax({
+                        url: "/themes/rsc/permohonan/data_jadul/eks/" + pengajuan,
+                        type: "GET",
+                        dataType: "json",
+                        cache: false,
+                        success: function(response) {
 
-                        $("#id").val(response.id);
-                        $("#kd_pengajuan").val(response.kode_pengajuan);
-                        $("#tgl_survei").val(response.tgl_survei);
-                        $("#nm_nasabah").val(response.nama_nasabah);
-                    },
-                    error: function(xhr, status, error) {
-                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
-                        console.error("Error:", xhr.responseText);
-                    },
-                });
+                            $("#id").val(response.id);
+                            $("#kd_pengajuan").val(response.pengajuan_kode);
+                            $("#tgl_survei").val(response.tgl_survei);
+                            $("#nm_nasabah").val(response.nama_nasabah);
+                            $('#rsc').val(response.kode_rsc)
+                        },
+                        error: function(xhr, status, error) {
+                            // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                            console.error("Error:", xhr.responseText);
+                        },
+                    });
+                } else {
+                    $('#rsc').val(rsc)
+                    // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
+                    $.ajax({
+                        url: "/themes/permohonan/data_jadul/" + pengajuan,
+                        type: "GET",
+                        dataType: "json",
+                        cache: false,
+                        success: function(response) {
+
+                            $("#id").val(response.id);
+                            $("#kd_pengajuan").val(response.kode_pengajuan);
+                            $("#tgl_survei").val(response.tgl_survei);
+                            $("#nm_nasabah").val(response.nama_nasabah);
+                            $('#rsc').val(response.kode_rsc)
+                        },
+                        error: function(xhr, status, error) {
+                            // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                            console.error("Error:", xhr.responseText);
+                        },
+                    });
+                }
+
             });
         });
     </script>
