@@ -69,6 +69,7 @@
                                                             <b>Tahun: </b> {{ $item->tahun }} <br>
                                                             <b>No. Rangka: </b> {{ $item->no_rangka }} <br>
                                                             <b>No. Mesin: </b> {{ $item->no_mesin }} <br>
+                                                            <b>Tipe. Kendaraan: </b> {{ $item->tipe_kendaraan }} <br>
                                                             <b>No. Polisi: </b> {{ $item->no_polisi }}
                                                         </td>
                                                         <td style="vertical-align: middle;">
