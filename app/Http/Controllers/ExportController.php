@@ -330,7 +330,7 @@ class ExportController extends Controller
         }
 
         $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
-        dd($data);
+
         $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "PLAFON", "WIL", "KETERANGAN", "RENCANA");
         foreach ($data as $item) {
             $data_array[] = array(
@@ -417,8 +417,6 @@ class ExportController extends Controller
             ->orderBy('data_tracking.akad_kredit', 'desc');
         // ->get();
         $query->paginate(10);
-        //
-        dd($query);
     }
 
     public function export_sesudah_survei($data)
