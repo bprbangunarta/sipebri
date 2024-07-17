@@ -23,7 +23,7 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/rsc/analisa/usaha/jasa*') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.jasa.keuangan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                    <a href="{{ route('rsc.usaha.jasa.keuangan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/jasa*') ? 'text-bold' : '' }}">
                                         IDENTITAS DAN KEUANGAN
                                     </a>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RSC;
+use App\Models\Midle;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,9 +31,36 @@ class RSCPersetujuanController extends Controller
 
         $data = $cek->paginate(10);
 
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
+
         foreach ($data as $item) {
             $item->kode = Crypt::encrypt($item->kode_pengajuan);
             $item->rsc = Crypt::encrypt($item->kode_rsc);
+            $item->status_rsc = $item->status_rsc;
         }
 
         return view('rsc.persetujuan.index', [
@@ -44,11 +72,14 @@ class RSCPersetujuanController extends Controller
     {
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_persetujuan($enc_rsc);
 
             foreach ($data as $item) {
                 $item->kode = Crypt::encrypt($item->kode_pengajuan);
                 $item->rsc = Crypt::encrypt($item->kode_rsc);
+                $item->status_rsc = $status_rsc;
             }
 
             return view('rsc.persetujuan.informasi', [

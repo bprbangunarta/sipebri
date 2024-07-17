@@ -16,11 +16,14 @@ class RSCLainController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('kode'));
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $status_rsc;
             }
 
             $lain = DB::table('rsc_au_lain')->where('kode_rsc', $enc_rsc)->get();
@@ -69,12 +72,15 @@ class RSCLainController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
                 $item->kode_usaha = $request->query('kode_usaha');
+                $item->status_rsc = $status_rsc;
             }
 
             $lain = DB::table('rsc_au_lain')->where('kode_usaha', $kode_usaha)->first();
@@ -121,12 +127,15 @@ class RSCLainController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
                 $item->kode_usaha = $request->query('kode_usaha');
+                $item->status_rsc = $status_rsc;
             }
 
             $bahan = DB::table('rsc_bahan_baku_lain')->where('usaha_kode', $kode_usaha)->get();
@@ -195,12 +204,15 @@ class RSCLainController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
                 $item->kode_usaha = $request->query('kode_usaha');
+                $item->status_rsc = $status_rsc;
             }
 
             $lain = DB::table('rsc_au_lain')->where('kode_usaha', $kode_usaha)->first();

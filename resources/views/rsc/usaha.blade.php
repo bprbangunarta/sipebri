@@ -22,28 +22,28 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.perdagangan', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                    <a href="{{ route('rsc.usaha.perdagangan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/perdagangan') ? 'text-bold' : '' }}">
                                         USAHA PERDAGANGAN
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/rsc/analisa/usaha/pertanian') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.pertanian', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                    <a href="{{ route('rsc.usaha.pertanian', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/pertanian') ? 'text-bold' : '' }}">
                                         USAHA PERTANIAN
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/rsc/analisa/usaha/jasa') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.jasa', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                    <a href="{{ route('rsc.usaha.jasa', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/jasa') ? 'text-bold' : '' }}">
                                         USAHA JASA
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/rsc/analisa/usaha/lain') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.lain', ['kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                    <a href="{{ route('rsc.usaha.lain', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/lain') ? 'text-bold' : '' }}">
                                         USAHA LAINNYA
                                     </a>

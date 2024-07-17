@@ -24,14 +24,14 @@
                             <ul class="nav nav-tabs">
                                 <li
                                     class="{{ request()->is('themes/rsc/analisa/usaha/lain/identitas*') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.lain.identitas', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                    <a href="{{ route('rsc.usaha.lain.identitas', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/lain/identitas*') ? 'text-bold' : '' }}">
                                         IDENTITAS
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/rsc/analisa/usaha/lain/bahan*') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.lain.bahan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                    <a href="{{ route('rsc.usaha.lain.bahan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/lain/bahan*') ? 'text-bold' : '' }}">
                                         BAHAN BAKU
                                     </a>
@@ -39,7 +39,7 @@
 
                                 <li
                                     class="{{ request()->is('themes/rsc/analisa/usaha/lain/keuangan*') ? 'active' : '' }}">
-                                    <a href="{{ route('rsc.usaha.lain.keuangan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha]) }}"
+                                    <a href="{{ route('rsc.usaha.lain.keuangan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'kode_usaha' => $data->kode_usaha, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/analisa/usaha/lain/keuangan*') ? 'text-bold' : '' }}">
                                         KEUANGAN
                                     </a>

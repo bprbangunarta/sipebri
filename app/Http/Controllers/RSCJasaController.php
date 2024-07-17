@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RSC;
+use App\Models\Midle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -15,29 +17,14 @@ class RSCJasaController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('kode'));
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
-            $data = DB::table('rsc_data_pengajuan')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->select(
-                    'rsc_data_pengajuan.id',
-                    'rsc_data_pengajuan.created_at as tanggal_rsc',
-                    'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
-                    'rsc_data_pengajuan.kode_rsc',
-                    'data_nasabah.nama_nasabah',
-                    'data_nasabah.alamat_ktp',
-                    'data_survei.kantor_kode',
-                    'data_pengajuan.plafon',
-                    'data_pengajuan.produk_kode',
-                    'data_pengajuan.metode_rps',
-                    'data_pengajuan.jangka_waktu',
-                )
-                ->orderBy('rsc_data_pengajuan.created_at', 'desc')
-                ->paginate(10);
+            $status_rsc = $request->query('status_rsc');
+
+            $data = RSC::get_data_jasa_all_rsc();
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $status_rsc;
             }
 
             $jasa = DB::table('rsc_au_jasa')->where('kode_rsc', $enc_rsc)->get();
@@ -85,10 +72,12 @@ class RSCJasaController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = DB::table('rsc_data_pengajuan')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
                 ->select(
                     'rsc_data_pengajuan.id',
                     'rsc_data_pengajuan.created_at as tanggal_rsc',
@@ -102,13 +91,41 @@ class RSCJasaController extends Controller
                     'data_pengajuan.metode_rps',
                     'data_pengajuan.jangka_waktu',
                 )
+                ->where('rsc_data_pengajuan.pengajuan_kode', $kode)
                 ->orderBy('rsc_data_pengajuan.created_at', 'desc')
-                ->paginate(10);
+                ->get();
+
+            foreach ($data as $value) {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_loan.jkwaktu',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $value->kode_pengajuan)->first();
+                //
+                if ($data_eks) {
+                    $value->nama_nasabah = trim($data_eks->fnama);
+                    $value->alamat_ktp = trim($data_eks->alamat);
+                    $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $value->jangka_waktu = $data_eks->jkwaktu;
+                    $value->metode_rps = null;
+                    $value->plafon = $data_eks->plafond_awal;
+                    $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
                 $item->kode_usaha = $request->query('kode_usaha');
+                $item->status_rsc = $status_rsc;
             }
 
             $jasa = DB::table('rsc_au_jasa')->where('kode_usaha', $kode_usaha)->get();

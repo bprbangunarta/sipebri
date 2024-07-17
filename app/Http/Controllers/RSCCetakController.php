@@ -77,6 +77,7 @@ class RSCCetakController extends Controller
     {
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
 
             $data = DB::table('rsc_data_pengajuan')
                 ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
@@ -88,6 +89,7 @@ class RSCCetakController extends Controller
                 ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', 'rsc_data_pengajuan.kode_rsc')
                 ->leftJoin('users', 'users.code_user', 'rsc_data_survei.surveyor_kode')
                 ->select(
+                    'rsc_data_pengajuan.pengajuan_kode',
                     'rsc_data_pengajuan.kode_rsc',
                     'rsc_data_pengajuan.baki_debet',
                     'rsc_data_pengajuan.klasifikasi_kredit',
@@ -119,6 +121,38 @@ class RSCCetakController extends Controller
 
             //
 
+            if ($status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_cif.noid',
+                        'm_cif.nohp',
+                        'm_loan.jkwaktu',
+                        'm_loan.no_spk',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                    $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $data->jangka_waktu = $data_eks->jkwaktu;
+                    $data->metode_rps = null;
+                    $data->no_identitas = $data_eks->noid;
+                    $data->no_telp = $data_eks->nohp;
+                    $data->no_spk = trim($data_eks->no_spk);
+                    $data->plafon = $data_eks->plafond_awal;
+                    $data->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+            // dd($data);
             $targetDt = Carbon::parse($data->tgl_akhir);
             $data->tgl_jth_tmp = $targetDt->isoFormat('D MMMM Y');
 

@@ -14,9 +14,162 @@ class RSC extends Model
     protected static function get_data_rsc()
     {
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.plafon',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_pengajuan.jangka_waktu',
+            )
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc')
+            ->paginate(10);
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
+
+        return $data;
+    }
+
+    protected static function get_data_pertanian_all_rsc()
+    {
+        $data = DB::table('rsc_data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.plafon',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_pengajuan.jangka_waktu',
+            )
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc')
+            ->paginate(10);
+        //
+
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
+        return $data;
+    }
+
+    protected static function get_data_pertanian_rsc($data)
+    {
+        $data =
+            DB::table('rsc_data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'data_pengajuan.plafon',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_pengajuan.jangka_waktu',
+            )
+            ->where('rsc_data_pengajuan.pengajuan_kode', $data)
+            ->get();
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
+        return $data;
+    }
+
+    protected static function get_data_jasa_all_rsc()
+    {
+        $data = DB::table('rsc_data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
@@ -33,18 +186,43 @@ class RSC extends Model
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
 
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
         return $data;
     }
 
     protected static function get_data_persetujuan($enc_rsc)
     {
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_agunan', 'rsc_agunan.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
-            ->join('v_users as kasi', 'kasi.code_user', '=', 'rsc_data_pengajuan.kasi_kode')
-            ->join('v_users as surveyor', 'surveyor.code_user', '=', 'rsc_data_pengajuan.surveyor_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_agunan', 'rsc_agunan.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('v_users as kasi', 'kasi.code_user', '=', 'rsc_data_pengajuan.kasi_kode')
+            ->leftJoin('v_users as surveyor', 'surveyor.code_user', '=', 'rsc_data_pengajuan.surveyor_kode')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
@@ -70,6 +248,32 @@ class RSC extends Model
             ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->get();
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
 
         return $data;
     }
@@ -77,15 +281,16 @@ class RSC extends Model
     protected static function persetujuan_rsc_staff($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
@@ -102,6 +307,7 @@ class RSC extends Model
             ->where('rsc_data_pengajuan.status', 'Proses Persetujuan')
             ->where('rsc_data_survei.surveyor_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
+        //
 
         return $data;
     }
@@ -109,15 +315,16 @@ class RSC extends Model
     protected static function persetujuan_rsc_kasi($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
@@ -141,15 +348,16 @@ class RSC extends Model
     protected static function persetujuan_rsc_kabag_analis($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
@@ -173,15 +381,16 @@ class RSC extends Model
     protected static function persetujuan_rsc_direksi($keyword)
     {
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',

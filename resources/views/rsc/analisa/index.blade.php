@@ -75,7 +75,7 @@
                                             </td>
                                             <td class="text-center" style="text-align: right;">
                                                 @if ($item->status == 'Proses Analisa')
-                                                    <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc, 'status' => $item->status_rsc]) }}"
+                                                    <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc, 'status_rsc' => $item->status_rsc]) }}"
                                                         class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC">
                                                         <i class="fa fa-edit"></i>
                                                     </a>

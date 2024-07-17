@@ -16,6 +16,8 @@ class RSCPerdaganganController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('kode'));
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
             //
             $perdagangan = DB::table('rsc_au_perdagangan')->where('kode_rsc', $enc_rsc)->get();
@@ -28,6 +30,7 @@ class RSCPerdaganganController extends Controller
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $status_rsc;
             }
 
             return view('rsc.usaha_perdagangan.index', [
@@ -70,27 +73,44 @@ class RSCPerdaganganController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
             //
             foreach ($data as $item) {
                 $item->kode_usaha = $request->query('kode_usaha');
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $status_rsc;
             }
 
             $perdagangan = DB::table('rsc_au_perdagangan')
                 ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_au_perdagangan.kode_rsc')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
                 ->select(
                     'rsc_au_perdagangan.kode_usaha',
                     'rsc_au_perdagangan.nama_usaha',
                     'rsc_au_perdagangan.lokasi_usaha',
                     'rsc_au_perdagangan.lama_usaha',
+                    'rsc_data_pengajuan.pengajuan_kode',
                     'data_nasabah.alamat_ktp'
                 )
                 ->where('kode_usaha', $kode_usaha)->get();
             //
+
+            if ($status_rsc == 'EKS') {
+                foreach ($perdagangan as $value) {
+                    $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                        ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                        ->select(
+                            'm_cif.alamat',
+                        )
+                        ->where('noacc', $value->pengajuan_kode)->first();
+
+                    $value->lokasi_usaha = trim($data_eks->alamat);
+                }
+            }
 
             return view('rsc.usaha_perdagangan.identitas', [
                 'data' => $data[0],
@@ -125,12 +145,15 @@ class RSCPerdaganganController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
             //
             foreach ($data as $item) {
                 $item->kode_usaha = $request->query('kode_usaha');
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $request->query('status_rsc');
             }
 
             $barang = DB::table('rsc_du_perdagangan')->where('usaha_kode', $kode_usaha)->get();
@@ -236,12 +259,15 @@ class RSCPerdaganganController extends Controller
             $kode_usaha = Crypt::decrypt($request->query('kode_usaha'));
             $kode = Crypt::decrypt($request->query('kode'));
             $rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
             //
             foreach ($data as $item) {
                 $item->kode_usaha = $request->query('kode_usaha');
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $request->query('status_rsc');
             }
 
             $perdagangan = DB::table('rsc_au_perdagangan')->where('kode_usaha', $kode_usaha)->get();

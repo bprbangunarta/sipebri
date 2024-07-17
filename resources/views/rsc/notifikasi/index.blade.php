@@ -76,8 +76,8 @@
                                             <td class="text-center" style="text-align: center;">
 
                                                 <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->rsc }}" class="btn-circle btn-sm bg-green"
-                                                    title="Generate">
+                                                    data-id="{{ $item->rsc }}" data-status="{{ $item->status_rsc }}"
+                                                    class="btn-circle btn-sm bg-green" title="Generate">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
 
@@ -140,7 +140,8 @@
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">PRODUK KREDIT</span>
-                                        <input type="text" class="form-control" name="produk" id="produk" readonly>
+                                        <input type="text" class="form-control" name="produk" id="produk"
+                                            readonly>
                                     </div>
                                 </div>
 
@@ -182,15 +183,17 @@
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script>
         $("#generate-code").on("show.bs.modal", function(event) {
-            var button = $(event.relatedTarget); // Tombol yang membuka modal
-            var kode = button.data("id"); // Ambil data-id dari tombol
+            var button = $(event.relatedTarget);
+            var kode = button.data("id");
+            var status = button.data("status");
 
             // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
             $.ajax({
                 url: "/themes/rsc/notifikasi/get/",
                 type: "GET",
                 data: {
-                    kode: kode
+                    kode: kode,
+                    status: status,
                 },
                 dataType: "json",
                 cache: false,

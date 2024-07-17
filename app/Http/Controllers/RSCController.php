@@ -334,8 +334,9 @@ class RSCController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('kode'));
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
 
-            if ($request->query('status') == 'EKS') {
+            if ($status_rsc == 'EKS') {
                 $data = DB::connection('sqlsrv')->table('m_loan')
                     ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
                     ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
@@ -383,11 +384,6 @@ class RSCController extends Controller
                     ->get();
             }
             //
-
-            foreach ($data as $item) {
-                $item->kode = $request->query('kode');
-                $item->rsc = $request->query('rsc');
-            }
             // dd($data);
             if (count($data) > 0) {
                 $tgl_realisasi = Carbon::createFromFormat('Y-m-d H:i:s', $data[0]->created_at);
@@ -434,6 +430,13 @@ class RSCController extends Controller
                 $data[0]->tgl_jth_tempo = $spk_rsc->tgl_akhir;
             }
             //Cek SPK RSC
+
+            foreach ($data as $item) {
+                $item->kode = $request->query('kode');
+                $item->rsc = $request->query('rsc');
+                $item->status_rsc = $data_rsc->status_rsc;
+            }
+
 
             return view('rsc.data-kredit', [
                 'data' => $data[0],
@@ -591,11 +594,14 @@ class RSCController extends Controller
         try {
             $enc = Crypt::decrypt($request->query('kode'));
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = RSC::get_data_rsc();
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
+                $item->status_rsc = $status_rsc;
             }
 
             return view('rsc.konfirmasi.analisa', [
@@ -648,7 +654,7 @@ class RSCController extends Controller
 
             $update = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->update($data);
             if ($update) {
-                return redirect()->back()->with('success', 'Konfirmasi analisa RSC berhasil.');
+                return redirect()->route('rsc.index.analisa')->with('success', 'Konfirmasi analisa RSC berhasil.');
             } else {
                 return redirect()->back()->with('error', 'Konfirmasi analisa RSC gagal.');
             }
@@ -728,15 +734,16 @@ class RSCController extends Controller
     {
         $keyword = request('keyword');
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
@@ -769,6 +776,32 @@ class RSCController extends Controller
 
         $data = $data->paginate(10);
 
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->plafon = $data_eks->plafond_awal;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
+
         foreach ($data as $item) {
             $item->kode = Crypt::encrypt($item->kode_pengajuan);
             $item->rsc = Crypt::encrypt($item->kode_rsc);
@@ -783,17 +816,52 @@ class RSCController extends Controller
     {
         try {
             $rsc = Crypt::decrypt($request->input('kode'));
+            $status_rsc = $request->input('status');
+
             $data = DB::table('rsc_data_pengajuan')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
                 ->select(
                     'rsc_data_pengajuan.kode_rsc',
+                    'rsc_data_pengajuan.pengajuan_kode',
                     'data_nasabah.nama_nasabah',
                     'data_pengajuan.produk_kode',
                     'rsc_data_pengajuan.penentuan_plafon',
                     'rsc_data_pengajuan.jangka_waktu',
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $rsc)->first();
+            //
+            if ($status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_cif.noid',
+                        'm_cif.nohp',
+                        'm_loan.jkwaktu',
+                        'm_loan.no_spk',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                    $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $data->jangka_waktu = $data_eks->jkwaktu;
+                    $data->metode_rps = null;
+                    $data->no_identitas = $data_eks->noid;
+                    $data->no_telp = $data_eks->nohp;
+                    $data->no_spk = trim($data_eks->no_spk);
+                    // $data->plafon = $data_eks->plafond_awal;
+                    $data->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
 
             $lasts = DB::table('rsc_notifikasi')->latest('nomor')->first();
             if (is_null($lasts)) {

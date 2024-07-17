@@ -138,7 +138,7 @@
                                             <div style="margin-top:5px;width: 49.5%;float:right;">
                                                 <span class="fw-bold">INFO JENIS USAHA</span>
                                                 <select type="text" class="form-control text-uppercase jns_usaha"
-                                                    style="width: 100%; font-size: 12px;" name="jns_usaha" required>
+                                                    style="width: 100%; font-size: 12px;" name="jns_usaha">
                                                     @foreach ($usaha as $item)
                                                         <option value="{{ $item->nama_usaha }}">
                                                             {{ $item->nama_usaha }}

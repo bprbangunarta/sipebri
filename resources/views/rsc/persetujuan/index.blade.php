@@ -75,14 +75,14 @@
                                             </td>
                                             <td class="text-center" style="text-align: center;">
 
-                                                <a href="{{ route('rsc.persetujuan.informasi', ['rsc' => $item->rsc]) }}"
+                                                <a href="{{ route('rsc.persetujuan.informasi', ['rsc' => $item->rsc, 'status_rsc' => $item->status_rsc]) }}"
                                                     class="btn-circle btn-sm btn-success" title="Persetujuan RSC">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 &nbsp;
 
-                                                <a href="{{ route('rsc.cetakanalisa_kredit.index', ['rsc' => $item->rsc]) }}"
+                                                <a href="{{ route('rsc.cetakanalisa_kredit.index', ['rsc' => $item->rsc, 'status_rsc' => $item->status_rsc]) }}"
                                                     class="btn-circle btn-sm bg-yellow" title="Catatan RSC"
                                                     target="__blank">
                                                     <i class="fa fa-file-text"></i>

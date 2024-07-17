@@ -25,7 +25,7 @@
                             <td style="vertical-align: middle;">
                                 {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</td>
                             <td class="text-center">
-                                <a href="{{ route('rsc.usaha.jasa.keuangan', ['kode_usaha' => $item->kd_usaha, 'kode' => $data->kode, 'rsc' => $data->rsc]) }}"
+                                <a href="{{ route('rsc.usaha.jasa.keuangan', ['kode_usaha' => $item->kd_usaha, 'kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                     class="btn btn-sm btn-warning" style="float: left" title="Input Analisa">
                                     <i class="fa fa-file-text-o"></i></a>
 
