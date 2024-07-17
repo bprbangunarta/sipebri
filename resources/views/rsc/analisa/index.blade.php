@@ -75,7 +75,7 @@
                                             </td>
                                             <td class="text-center" style="text-align: right;">
                                                 @if ($item->status == 'Proses Analisa')
-                                                    <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc]) }}"
+                                                    <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc, 'status' => $item->status_rsc]) }}"
                                                         class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
@@ -187,7 +187,6 @@
                 var status = button.data("status"); // Ambil data-id dari tombol
 
                 if (status == 'EKS') {
-                    $('#rsc').val(rsc)
                     // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
                     $.ajax({
                         url: "/themes/rsc/permohonan/data_jadul/eks/" + pengajuan,
@@ -208,7 +207,6 @@
                         },
                     });
                 } else {
-                    $('#rsc').val(rsc)
                     // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
                     $.ajax({
                         url: "/themes/permohonan/data_jadul/" + pengajuan,

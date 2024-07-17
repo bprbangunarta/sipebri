@@ -34,10 +34,23 @@ class TabunganController extends Controller
         })
             ->orderBy('inptgljam', 'desc')
             ->paginate(10);
+
         foreach ($tabungan as $item) {
-            $tgl_lahir = Carbon::createFromFormat('Ymd', $item->jttempoid)->format('d-m-Y');
-            $item->tanggal_lahir = $tgl_lahir;
+            if (isset($item->jttempoid) && preg_match('/^\d{8}$/', $item->jttempoid)) {
+
+                $year = substr($item->jttempoid, 0, 4);
+                $month = substr($item->jttempoid, 4, 2);
+                $day = substr($item->jttempoid, 6, 2);
+
+
+                $tgl_lahir = sprintf('%02d-%02d-%04d', $day, $month, $year);
+
+                $item->tanggal_lahir = $tgl_lahir;
+            } else {
+                $item->tanggal_lahir = null;
+            }
         }
+
         return view('tabungan.tabungan', compact('tabungan'));
     }
 }
