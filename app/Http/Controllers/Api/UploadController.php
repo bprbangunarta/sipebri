@@ -63,7 +63,7 @@ class UploadController extends Controller
         ]);
 
         $pengajuan_kode = $request->kode;
-
+        return response()->json(['message' => $pengajuan_kode]);
         $cek = DB::table('rsc_data_survei')
             ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_data_survei.kode_rsc')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -90,7 +90,7 @@ class UploadController extends Controller
                 ->where('m_loan.noacc', $cek->pengajuan_kode)->first();
             $cek->nama_nasabah = trim($data_eks->fnama);
         }
-        return response()->json(['message' => $cek], 404);
+
         //
 
         if (!$cek) {
