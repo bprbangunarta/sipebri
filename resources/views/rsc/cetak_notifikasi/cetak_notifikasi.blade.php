@@ -173,14 +173,25 @@
                 <td width="27%" style="vertical-align: text-top;">Agunan</td>
                 <td class="text-center" width="1%" style="vertical-align: text-top;"> : </td>
                 <td style="text-align: justify;">
-                    {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
-                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
-                    <ol style="margin-left: -40px;text-align: justify; text-transform:uppercase;">
-                        @forelse ($agunan as $item)
-                            <li>{{ $item->catatan }}.</li>
-                        @empty
-                        @endforelse
-                    </ol>
+                    @if ($data->status_rsc == 'EKS')
+                        {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
+                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
+                        <ol style="margin-left: -40px;text-align: justify; text-transform:uppercase;">
+                            @forelse ($agunan as $item)
+                                <li>{{ $item->catatan }}.</li>
+                            @empty
+                            @endforelse
+                        </ol>
+                    @else
+                        {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
+                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
+                        <ol style="margin-left: -40px;text-align: justify; text-transform:uppercase;">
+                            @forelse ($agunan as $item)
+                                <li>{{ $item->catatan }}.</li>
+                            @empty
+                            @endforelse
+                        </ol>
+                    @endif
                 </td>
             </tr>
             <tr>

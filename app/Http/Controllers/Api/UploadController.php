@@ -56,7 +56,6 @@ class UploadController extends Controller
             'kode'    => 'required|string',
             'foto'    => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ], [
-            'pengajuan_kode.required'   => 'No Tugas tidak boleh kosong',
             'foto.required' => 'Foto tidak boleh kosong',
             'foto.image'    => 'Foto harus berupa gambar',
             'foto.mimes'    => 'Foto harus berformat jpeg, png, jpg, gif, atau svg',

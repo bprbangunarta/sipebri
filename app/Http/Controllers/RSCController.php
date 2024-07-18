@@ -743,11 +743,11 @@ class RSCController extends Controller
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon',
             )
 
             ->where(function ($query) use ($keyword) {
@@ -797,7 +797,6 @@ class RSCController extends Controller
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
                 $value->jangka_waktu = $data_eks->jkwaktu;
                 $value->metode_rps = null;
-                $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }
@@ -923,19 +922,19 @@ class RSCController extends Controller
     {
         $keyword = request('keyword');
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon',
             )
 
             ->where(function ($query) use ($keyword) {
@@ -949,6 +948,30 @@ class RSCController extends Controller
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
 
         $data = $data->paginate(10);
+
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
 
         foreach ($data as $item) {
             $item->kode = Crypt::encrypt($item->kode_pengajuan);

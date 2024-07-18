@@ -17,21 +17,22 @@ class RSCCetakController extends Controller
     {
         $keyword = request('keyword');
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_kondisi_usaha', 'rsc_kondisi_usaha.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_kondisi_usaha', 'rsc_kondisi_usaha.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc') // Perbaikan di sini
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'rsc_data_pengajuan.status',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon'
             )
 
             ->where(function ($query) use ($keyword) {
@@ -53,7 +54,31 @@ class RSCCetakController extends Controller
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
-
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
 
         $kasi = DB::table('v_users')->where('role_name', 'Kasi Analis')->get();
         $surveyor = DB::table('v_users')
@@ -120,7 +145,6 @@ class RSCCetakController extends Controller
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
 
             //
-
             if ($status_rsc == 'EKS') {
                 $data_eks = DB::connection('sqlsrv')->table('m_loan')
                     ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
@@ -224,11 +248,11 @@ class RSCCetakController extends Controller
     {
         $keyword = request('keyword');
         $data = DB::table('rsc_data_pengajuan')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('rsc_kondisi_usaha', 'rsc_kondisi_usaha.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
-            ->join('rsc_notifikasi', 'rsc_notifikasi.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('rsc_kondisi_usaha', 'rsc_kondisi_usaha.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('rsc_notifikasi', 'rsc_notifikasi.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc') // Perbaikan di sini
             ->select(
                 'rsc_data_pengajuan.id',
@@ -236,10 +260,11 @@ class RSCCetakController extends Controller
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
                 'rsc_data_pengajuan.status',
+                'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon',
                 'rsc_notifikasi.no_notifikasi',
             )
 
@@ -263,7 +288,31 @@ class RSCCetakController extends Controller
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
+        //
 
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
 
         $kasi = DB::table('v_users')->where('role_name', 'Kasi Analis')->get();
         $surveyor = DB::table('v_users')
@@ -287,16 +336,18 @@ class RSCCetakController extends Controller
     {
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = DB::table('rsc_notifikasi')
-                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
-                ->join('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-                ->join('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-                ->join('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', '=', 'a_memorandum.bi_penggunaan_kode')
-                ->join('bi_sektor_ekonomi', 'bi_sektor_ekonomi.sandi', '=', 'a_memorandum.bi_sek_ekonomi_kode')
-                ->join('v_users', 'v_users.code_user', '=', 'rsc_notifikasi.input_user')
+                ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
+                ->leftJoin('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+                ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', '=', 'a_memorandum.bi_penggunaan_kode')
+                ->leftJoin('bi_sektor_ekonomi', 'bi_sektor_ekonomi.sandi', '=', 'a_memorandum.bi_sek_ekonomi_kode')
+                ->leftJoin('v_users', 'v_users.code_user', '=', 'rsc_notifikasi.input_user')
                 ->select(
                     'rsc_data_pengajuan.id',
                     'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
@@ -308,6 +359,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.jangka_bunga',
                     'rsc_data_pengajuan.jangka_pokok',
                     'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.status_rsc',
                     'rsc_biaya.administrasi_nominal as administrasi',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.no_telp',
@@ -327,6 +379,40 @@ class RSCCetakController extends Controller
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
             //
 
+            if ($status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_cif.noid',
+                        'm_cif.nohp',
+                        'm_cif.nocif',
+                        'm_loan.jkwaktu',
+                        'm_loan.no_spk',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $data->kode_pengajuan)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                    $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $data->jangka_waktu = $data_eks->jkwaktu;
+                    $data->metode_rps = null;
+                    $data->nocif = trim($data_eks->nocif);
+                    $data->no_identitas = $data_eks->noid;
+                    $data->no_telp = $data_eks->nohp;
+                    $data->no_spk = trim($data_eks->no_spk);
+                    $data->plafon = $data_eks->plafond_awal;
+                    $data->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+
             if (!is_null($data->updated_notif)) {
                 $tgl = $data->updated_notif;
             } else {
@@ -339,6 +425,41 @@ class RSCCetakController extends Controller
             $agunan = Midle::notifikasi_general($data->kode_pengajuan);
             $cek_jaminan = (object)Midle::cek_jaminan($data->kode_pengajuan);
             $data->count_jaminan = count($agunan);
+
+            // Jaminan Eksternal
+            if ($status_rsc == 'EKS') {
+                $cek_jaminan = DB::connection('sqlsrv')->table('m_loan_jaminan')
+                    ->where('nocif', $data->nocif)
+                    ->where('noacc', $data->kode_pengajuan)
+                    ->get();
+
+                $ag = [];
+                foreach ($cek_jaminan as $value) {
+                    if ($value->jnsjaminan == '02' || $value->jnsjaminan == '03') {
+                        $jenis = DB::table('ja_kendaraan')->where('kode', $value->jnsjaminan)->first();
+                        $value->jenis_jaminan = ucwords($jenis->agunan);
+                    } elseif (in_array($value->jnsjaminan, ['04', '05', '06', '07', '14'])) {
+                        $jenis = DB::table('ja_tanah')->where('kode', $value->jnsjaminan)->first();
+                        $value->jenis_jaminan = ucwords($jenis->agunan);
+                    } elseif (in_array($value->jnsjaminan, ['10', '12', '09', '18', '99', '08', '13', '15', '17', '11', '01', '16'])) {
+                        $jenis = DB::table('ja_lainnya')->where('kode', $value->jnsjaminan)->first();
+                        $value->jenis_jaminan = ucwords($jenis->agunan);
+                    } else {
+                        $value->jenis_jaminan = null;
+                    }
+
+                    $cek_agunan = DB::connection('sqlsrv')->table('m_detil_jaminan')
+                        ->where('noreg', $value->noreg)->get();
+                    foreach ($cek_agunan as $items) {
+                        $ag[] = $items;
+                    }
+                }
+                $agunan = array_merge($ag);
+
+                $col = collect($cek_jaminan);
+                $cek_jaminan = $col->unique('jenis_jaminan')->values()->all();
+                $data->count_jaminan = count($agunan);
+            }
 
             //Narasi Angsuran Graceperiode
             $data->jw = $data->jwt / $data->jangka_pokok;
@@ -371,19 +492,20 @@ class RSCCetakController extends Controller
     {
         $keyword = request('keyword');
         $data = DB::table('rsc_notifikasi')
-            ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'rsc_data_survei.kantor_kode',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_pengajuan.plafon',
                 'rsc_notifikasi.no_notifikasi',
             )
 
@@ -405,6 +527,31 @@ class RSCCetakController extends Controller
             })
             ->orderBy('rsc_notifikasi.created_at', 'desc')
             ->paginate(10);
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
 
         foreach ($data as $item) {
             $item->kode = Crypt::encrypt($item->kode_pengajuan);
@@ -420,15 +567,17 @@ class RSCCetakController extends Controller
     {
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
 
             $data = DB::table('rsc_data_pengajuan')
-                ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-                ->join('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->leftJoin('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
                 ->select(
                     'rsc_data_pengajuan.jenis_persetujuan',
                     'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.pengajuan_kode',
                     'data_pengajuan.produk_kode',
                     'data_nasabah.nama_nasabah',
                     'rsc_data_pengajuan.suku_bunga',
@@ -452,6 +601,39 @@ class RSCCetakController extends Controller
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
             //
+
+            if ($status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_cif.noid',
+                        'm_cif.nohp',
+                        'm_loan.jkwaktu',
+                        'm_loan.no_spk',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                    $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $data->jangka_waktu = $data_eks->jkwaktu;
+                    $data->metode_rps = null;
+                    $data->no_identitas = $data_eks->noid;
+                    $data->no_telp = $data_eks->nohp;
+                    $data->no_spk = trim($data_eks->no_spk);
+                    $data->plafon = $data_eks->plafond_awal;
+                    $data->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+
             $data_usulan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->get();
             if (count($data_usulan) > 0) {
                 $data_petugas = [];
@@ -513,19 +695,20 @@ class RSCCetakController extends Controller
     {
         $keyword = request('keyword');
         $data = DB::table('rsc_spk')
-            ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
-            ->join('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_spk.kode_rsc')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_spk.kode_rsc')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'rsc_data_survei.kantor_kode',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'data_pengajuan.plafon',
                 'rsc_spk.no_spk',
             )
 
@@ -541,6 +724,31 @@ class RSCCetakController extends Controller
             })
             ->orderBy('rsc_spk.created_at', 'desc')
             ->paginate(10);
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
 
         foreach ($data as $item) {
             $item->kode = Crypt::encrypt($item->kode_pengajuan);
@@ -557,13 +765,13 @@ class RSCCetakController extends Controller
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $data = DB::table('rsc_spk')
-                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
-                ->join('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_spk.kode_rsc')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->join('data_pekerjaan', 'data_pekerjaan.kode_pekerjaan', '=', 'data_nasabah.pekerjaan_kode')
+                ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+                ->leftJoin('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_spk.kode_rsc')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_pekerjaan', 'data_pekerjaan.kode_pekerjaan', '=', 'data_nasabah.pekerjaan_kode')
                 ->select(
                     'rsc_data_pengajuan.penentuan_plafon',
                     'rsc_data_pengajuan.tunggakan_poko',
@@ -597,6 +805,10 @@ class RSCCetakController extends Controller
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
             //
+            // if(){
+
+            // }
+
             $targetDt = Carbon::parse($data->tgl_create_pk);
             $data->tgl_create_pk = $targetDt->isoFormat('D MMMM Y');
 
