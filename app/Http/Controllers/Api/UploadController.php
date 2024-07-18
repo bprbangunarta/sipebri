@@ -66,25 +66,31 @@ class UploadController extends Controller
 
         $cek = DB::table('rsc_data_survei')
             ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_data_survei.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
             ->select(
-                'rsc_data_pengajuan.pengajuan_kode'
+                'rsc_data_pengajuan.pengajuan_kode',
+                'data_nasabah.nama_nasabah',
             )
             ->where('rsc_data_survei.kode_rsc', $pengajuan_kode)->first();
         //
 
-        $data_eks = DB::connection('sqlsrv')->table('m_loan')
-            ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
-            ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
-            ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
-            ->select(
-                'm_loan.fnama',
-                'm_loan.plafond_awal',
-                'm_cif.alamat',
-                'm_loan.jkwaktu',
-                'setup_loan.ket',
-                'wilayah.ket as wil',
-            )
-            ->where('m_loan.noacc', $cek->pengajuan_kode)->first();
+        if (is_null($cek->nama_nasabah)) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('m_loan.noacc', $cek->pengajuan_kode)->first();
+            $cek->nama_nasabah = trim($data_eks->fnama);
+        }
+
         //
 
         if (!$data_eks) {
@@ -93,7 +99,7 @@ class UploadController extends Controller
 
         $file = $request->file('foto');
 
-        $fileName = $pengajuan_kode . '_' . trim($data_eks->fnama) . '.' . $file->getClientOriginalExtension();
+        $fileName = $pengajuan_kode . '_' . trim($cek->nama_nasabah) . '.' . $file->getClientOriginalExtension();
 
         $file->storeAs('public/image/uploads/rsc', $fileName);
 

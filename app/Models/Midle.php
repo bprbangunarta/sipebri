@@ -720,15 +720,10 @@ class Midle extends Model
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
 
-            ->where('data_pengajuan.tracking', '=', $role)
-            ->where('data_pengajuan.tracking', '=', 'Naik Komite I')
-
-            // ->orWhere(function ($query) {
-            //     $query->where('data_pengajuan.tracking', '=', 'Naik Komite I')
-            //         ->whereNull('data_notifikasi.pengajuan_kode');
-            // })
+            // ->where('data_pengajuan.tracking', '=', $role)
+            ->where('data_pengajuan.tracking', 'Naik Komite I')
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
@@ -780,11 +775,6 @@ class Midle extends Model
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
 
             ->where('data_pengajuan.tracking', '=', $role)
-
-            // ->orWhere(function ($query) {
-            //     $query->where('data_pengajuan.tracking', '=', 'Selesai')
-            //         ->where('data_notifikasi.pengajuan_kode', '=', null);
-            // })
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
