@@ -488,13 +488,13 @@
                             Add RSC
                         </a>
                     </li>
-                    <li class="{{ request()->is('themes/rsc/eksternal/index') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('themes/rsc/eksternal/index') ? 'active' : '' }}">
                         <a @can('tambah pengajuan kredit') href="{{ route('rsc.eksternal.index') }}" @endcan
                             title="Add RSC">
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             Add RSC Eksternal
                         </a>
-                    </li>
+                    </li> --}}
                     <li
                         class="{{ request()->is('themes/rsc/penjadwalan', 'themes/rsc/penjadwalan/tambah') ? 'active' : '' }}">
                         <a @can('penjadwalan survey') href="{{ route('rsc.penjadwalan') }}" @endcan title="Add RSC">
