@@ -90,7 +90,7 @@ class UploadController extends Controller
                 ->where('m_loan.noacc', $cek->pengajuan_kode)->first();
             $cek->nama_nasabah = trim($data_eks->fnama);
         }
-
+        return response()->json(['message' => $cek], 404);
         //
 
         if (!$cek) {
