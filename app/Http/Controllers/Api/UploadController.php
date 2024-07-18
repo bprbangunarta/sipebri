@@ -93,7 +93,7 @@ class UploadController extends Controller
 
         //
 
-        if (!$data_eks) {
+        if (!$cek) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
 
