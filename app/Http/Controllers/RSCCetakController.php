@@ -49,12 +49,14 @@ class RSCCetakController extends Controller
             ->where(function ($query) use ($keyword) {
                 $query->orWhere('rsc_data_survei.direksi_kode', Auth::user()->code_user)
                     ->orWhere('rsc_data_survei.kabag_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user);
+                    ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user)
+                    ->orWhere('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
             })
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
         //
+
         foreach ($data as $value) {
             $data_eks = DB::connection('sqlsrv')->table('m_loan')
                 ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
@@ -764,6 +766,8 @@ class RSCCetakController extends Controller
     {
         try {
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
+            $status_rsc = $request->query('status_rsc');
+
             $data = DB::table('rsc_spk')
                 ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
                 ->leftJoin('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_spk.kode_rsc')
@@ -785,6 +789,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.angsuran_pokok',
                     'rsc_data_pengajuan.angsuran_bunga',
                     'rsc_data_pengajuan.baki_debet',
+                    'rsc_data_pengajuan.pengajuan_kode',
                     'rsc_spk.no_spk as spk_rsc',
                     'rsc_biaya.bunga_dibayar',
                     'data_nasabah.nama_nasabah',
@@ -805,10 +810,36 @@ class RSCCetakController extends Controller
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
             //
-            // if(){
-
-            // }
-
+            // dd($data);
+            if ($status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_cif.noid',
+                        'm_cif.tempat_bekerja',
+                        'm_loan.jkwaktu',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                    $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $data->jangka_waktu = $data_eks->jkwaktu;
+                    $data->metode_rps = null;
+                    $data->tempat_kerja = trim($data_eks->tempat_bekerja);
+                    $data->no_identitas = trim($data_eks->noid);
+                    $data->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+            dd($data);
             $targetDt = Carbon::parse($data->tgl_create_pk);
             $data->tgl_create_pk = $targetDt->isoFormat('D MMMM Y');
 
