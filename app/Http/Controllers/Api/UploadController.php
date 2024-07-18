@@ -13,6 +13,7 @@ class UploadController extends Controller
 {
     public function survey(Request $request)
     {
+        return response()->json($request);
         $request->validate([
             'kode'    => 'required|string',
             'foto'    => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
