@@ -76,6 +76,10 @@
                 padding-left: 2cm;
                 padding-right: 2cm;
             }
+
+            .page-break {
+                page-break-before: always;
+            }
         }
     </style>
 </head>
