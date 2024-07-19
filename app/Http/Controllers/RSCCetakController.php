@@ -103,7 +103,6 @@ class RSCCetakController extends Controller
             $data = DB::table('rsc_data_pengajuan')
                 ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
                 ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', 'data_pengajuan.nasabah_kode')
-                ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
                 ->leftJoin('a_memorandum', 'a_memorandum.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
                 ->leftJoin('bi_penggunaan_debitur', 'bi_penggunaan_debitur.sandi', 'a_memorandum.bi_penggunaan_kode')
                 ->leftJoin('data_spk', 'data_spk.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
@@ -124,6 +123,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.angsuran_pokok',
                     'rsc_data_pengajuan.angsuran_bunga',
                     'rsc_data_pengajuan.total_angsuran',
+                    'rsc_data_pengajuan.jenis_persetujuan',
                     'rsc_data_pengajuan.rc',
                     'rsc_data_pengajuan.status_rsc',
                     'rsc_data_pengajuan.updated_at as update_pengajuan',
@@ -132,7 +132,6 @@ class RSCCetakController extends Controller
                     'data_nasabah.no_identitas',
                     'data_nasabah.no_telp',
                     'data_pengajuan.plafon',
-                    'data_jaminan.catatan',
                     'bi_penggunaan_debitur.keterangan',
                     'data_spk.no_spk',
                     'data_spk.updated_at as update_spk',
@@ -275,7 +274,16 @@ class RSCCetakController extends Controller
             if (is_null($keuangan)) {
                 return redirect()->back()->with('error', 'Analisa Keuangan belum diisi.');
             }
-            // dd($pendapatanlain, $pengeluaranlain);
+
+            // Cek Jaminan
+            if ($data->status_rsc == 'IN') {
+                $jaminan = DB::table('rsc_data_pengajuan')
+                    ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                    ->select('data_jaminan.catatan')
+                    ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
+            } else {
+                $jaminan = [];
+            }
 
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
@@ -286,6 +294,7 @@ class RSCCetakController extends Controller
                 'pertanian' => $pertanian,
                 'jasa' => $jasa  ?? null,
                 'lain' => $lain ?? null,
+                'jaminan' => $jaminan,
                 'biayaperdagangan' => $biaya_perdagangan,
                 'pendapatanlain' => $pendapatanlain ?? null,
                 'pengeluaranlain' => $pengeluaranlain  ?? null,

@@ -169,7 +169,9 @@
             <tr>
                 <td>
                     <div class="content" style="margin-top: -57px;">
-
+                        <h2 style="text-align: center;font-size: 12pt;"><u>ANALISA {{ $data->jenis_persetujuan }}
+                                KREDIT</u>
+                        </h2>
                         <label for="" style="font-weight:bold;">DATA-DATA KREDIT : </label>
                         <table>
                             <tr>
@@ -365,7 +367,7 @@
                             </div>
 
                             <div class="contents">
-                                {{-- <div class="heads">
+                                <div class="heads">
                                     2. Kondisi Agunan :
                                 </div>
                                 <div class="title">
@@ -374,9 +376,14 @@
                                 <div class="item" style="text-align: justify;">
                                     <table>
                                         <tr>
-                                            <td style="width: 6px;">-</td>
-                                            <td style="text-align: justify; margin-left:5px;">{{ $data->catatan }}
-                                            </td>
+                                            <ol
+                                                style="margin-left: -28px;text-align: justify; text-transform:uppercase;">
+                                                @forelse ($jaminan as $item)
+                                                    <li>{{ $item->catatan }}.</li>
+                                                @empty
+                                                    -
+                                                @endforelse
+                                            </ol>
                                         </tr>
                                     </table>
                                 </div>
@@ -400,9 +407,9 @@
                                 </div>
                                 <div class="item">
                                     - {{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}
-                                </div> --}}
+                                </div>
 
-                                <table class="agunan">
+                                {{-- <table class="agunan">
                                     <thead>
                                         <th style="text-align: center;">Data Agunan</th>
                                         <th style="text-align: center;">Posisi Agunan</th>
@@ -418,7 +425,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table> --}}
                             </div>
 
                             <div class="contents">
