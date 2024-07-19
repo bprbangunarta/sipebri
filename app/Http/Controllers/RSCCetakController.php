@@ -262,7 +262,7 @@ class RSCCetakController extends Controller
                 }
                 // dd($bahanbaku);
             }
-            dd($pendapatanlain, $pengeluaranlain);
+            // dd($pendapatanlain, $pengeluaranlain);
 
             // dd($lain);
 

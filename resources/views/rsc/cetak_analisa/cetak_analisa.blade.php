@@ -396,7 +396,7 @@
                                 <div class="title">
                                     Analisa kemampuan likuiditas debitur setiap bulan :
                                 </div>
-                                {{-- <div class="title">
+                                <div class="title">
                                     a. Pendapatan
                                 </div>
                                 <div class="item">
@@ -435,10 +435,10 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div> --}}
+                                </div>
 
                                 {{-- Usaha Perdagangan --}}
-                                @forelse ($perdagangan as $itemp)
+                                {{-- @forelse ($perdagangan as $itemp)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
                                     <table style="margin-top: -10px; margin-bottom: 5px;">
                                         <tr>
@@ -678,11 +678,11 @@
                                         </tr>
                                     </table>
                                 @empty
-                                @endforelse
+                                @endforelse --}}
                                 {{-- Usaha Perdagangan --}}
 
                                 {{-- Analisa Usaha Pertanian --}}
-                                @forelse ($pertanian as $item)
+                                {{-- @forelse ($pertanian as $item)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERTANIAN</h4>
 
                                     <table>
@@ -915,11 +915,11 @@
                                         </tr>
                                     </table>
                                 @empty
-                                @endforelse
+                                @endforelse --}}
                                 {{-- Analisa Usaha Pertanian --}}
 
                                 {{-- Analisa Usaha Jasa --}}
-                                @forelse ($jasa as $item)
+                                {{-- @forelse ($jasa as $item)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA JASA</h4>
                                     <table>
                                         <tr>
@@ -1010,11 +1010,11 @@
                                     <p></p>
 
                                 @empty
-                                @endforelse
+                                @endforelse --}}
                                 {{-- Analisa Usaha Jasa --}}
 
                                 {{-- Analisa Usaha Lainnya --}}
-                                @forelse ($lain as $items)
+                                {{-- @forelse ($lain as $items)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA LAINNYA</h4>
                                     <table>
                                         <tr>
@@ -1192,7 +1192,7 @@
                                         </tr>
                                     </table>
                                 @empty
-                                @endforelse
+                                @endforelse --}}
                                 {{-- Analisa Usaha Lainnya --}}
 
                                 <div class="title">
