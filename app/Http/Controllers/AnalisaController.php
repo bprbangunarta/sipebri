@@ -25,6 +25,7 @@ class AnalisaController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
 
             ->where('data_pengajuan.on_current', '0')
+            ->whereNot('data_pengajuan.status', ['Batal', 'Dibatalkan'])
 
             ->where(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', $user)
