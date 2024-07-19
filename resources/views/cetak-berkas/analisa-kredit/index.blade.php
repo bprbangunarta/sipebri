@@ -954,27 +954,7 @@
                         @endif
                     @endforeach
                 @endforeach
-                {{-- @forelse ($du as $itemd)
-                    <tr style="border:1px solid black;">
-                        <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
-                        <td style="border:1px solid black;">&nbsp; {{ $itemd->penjualan }}</td>
-                        <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($itemd->nominal, 0, ',', '.') }} &nbsp;</td>
-                        <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
-                    </tr>
-                @empty
-                @endforelse --}}
 
-                {{-- @forelse ($bu as $itemb)
-                    <tr style="border:1px solid black;">
-                        <td class="text-center" style="border:1px solid black;">{{ $loop->iteration }}</td>
-                        <td style="border:1px solid black;">&nbsp; {{ $itemb->pengeluaran }}</td>
-                        <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
-                        <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($itemb->nominal, 0, ',', '.') }} &nbsp;</td>
-                    </tr>
-                @empty
-                @endforelse --}}
                 @foreach ($bu as $itemb)
                     @foreach ($itemb as $item_bu)
                         @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)

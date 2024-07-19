@@ -107,6 +107,16 @@
 
         /* new style div */
 
+        .agunan th,
+        .agunan tr,
+        .agunan td {
+            border: 1px solid black;
+        }
+
+        .agunan td {
+            padding: 7px;
+        }
+
         @media print {
             body {
                 font-size: 10pt;
@@ -133,6 +143,10 @@
                 padding-bottom: 1.5cm;
                 padding-left: 2cm;
                 padding-right: 2cm;
+            }
+
+            .page-break {
+                page-break-before: always;
             }
         }
     </style>
@@ -351,7 +365,7 @@
                             </div>
 
                             <div class="contents">
-                                <div class="heads">
+                                {{-- <div class="heads">
                                     2. Kondisi Agunan :
                                 </div>
                                 <div class="title">
@@ -386,7 +400,25 @@
                                 </div>
                                 <div class="item">
                                     - {{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}
-                                </div>
+                                </div> --}}
+
+                                <table class="agunan">
+                                    <thead>
+                                        <th style="text-align: center;">Data Agunan</th>
+                                        <th style="text-align: center;">Posisi Agunan</th>
+                                        <th style="text-align: center;">Kondisi Agunan</th>
+                                        <th style="text-align: center;">Nilai Taksasi Agunan</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ $data->catatan ?? '-' }}</td>
+                                            <td>{{ $agunan->posisi_agunan ?? '-' }}</td>
+                                            <td>{{ $agunan->kondisi_agunan ?? '-' }}</td>
+                                            <td>{{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="contents">
@@ -396,49 +428,9 @@
                                 <div class="title">
                                     Analisa kemampuan likuiditas debitur setiap bulan :
                                 </div>
-                                <div class="title">
-                                    a. Pendapatan
-                                </div>
-                                <div class="item">
-                                    <table class="tables">
-                                        <thead>
-                                            <tr>
-                                                <td style="width: 60%; text-align:center;">Nama Usaha</td>
-                                                <td style="text-align:center;">Nominal</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Perdagangan</td>
-                                                <td>{{ 'Rp. ' . number_format($usaha->perdagangan, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pertanian</td>
-                                                <td>{{ 'Rp. ' . number_format($usaha->pertanian, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jasa</td>
-                                                <td>{{ 'Rp. ' . number_format($usaha->jasa, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Lain - lain</td>
-                                                <td>{{ 'Rp. ' . number_format($usaha->lain, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: center;">TOTAL</td>
-                                                <td>{{ 'Rp. ' . number_format($usaha->total_usaha, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
 
                                 {{-- Usaha Perdagangan --}}
-                                {{-- @forelse ($perdagangan as $itemp)
+                                @forelse ($perdagangan as $itemp)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
                                     <table style="margin-top: -10px; margin-bottom: 5px;">
                                         <tr>
@@ -678,11 +670,11 @@
                                         </tr>
                                     </table>
                                 @empty
-                                @endforelse --}}
+                                @endforelse
                                 {{-- Usaha Perdagangan --}}
 
                                 {{-- Analisa Usaha Pertanian --}}
-                                {{-- @forelse ($pertanian as $item)
+                                @forelse ($pertanian as $item)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERTANIAN</h4>
 
                                     <table>
@@ -880,7 +872,8 @@
                                             <th class="text-center" colspan="2" style="border:1px solid black;">
                                                 Hasil Bersih Usaha</th>
                                             <th class="text-center" colspan="2" style="border:1px solid black;">
-                                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</th>
+                                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}
+                                            </th>
                                         </tr>
                                     </table>
 
@@ -915,11 +908,11 @@
                                         </tr>
                                     </table>
                                 @empty
-                                @endforelse --}}
+                                @endforelse
                                 {{-- Analisa Usaha Pertanian --}}
 
                                 {{-- Analisa Usaha Jasa --}}
-                                {{-- @forelse ($jasa as $item)
+                                @forelse ($jasa as $item)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA JASA</h4>
                                     <table>
                                         <tr>
@@ -1010,11 +1003,11 @@
                                     <p></p>
 
                                 @empty
-                                @endforelse --}}
+                                @endforelse
                                 {{-- Analisa Usaha Jasa --}}
 
                                 {{-- Analisa Usaha Lainnya --}}
-                                {{-- @forelse ($lain as $items)
+                                @forelse ($lain as $items)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA LAINNYA</h4>
                                     <table>
                                         <tr>
@@ -1099,6 +1092,8 @@
                                         </tr>
                                     </table>
 
+                                    <p></p>
+
                                     <table style="border:1px solid black;">
                                         <tr style="border:1px solid black;">
                                             <th class="text-center" colspan="4" style="border:1px solid black;">
@@ -1113,40 +1108,36 @@
                                             <th class="text-center" width="25%" style="border:1px solid black;">
                                                 Pengeluaran</th>
                                         </tr>
-                                        @foreach ($du as $itemd)
-                                            @foreach ($itemd as $item_du)
-                                                @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)
-                                                    <tr style="border:1px solid black;">
-                                                        <td class="text-center" style="border:1px solid black;">
-                                                            {{ $loop->iteration }}</td>
-                                                        <td style="border:1px solid black;">&nbsp;
-                                                            {{ $item_du->penjualan }}</td>
-                                                        <td style="border:1px solid black;text-align:right;">
-                                                            {{ 'Rp. ' . ' ' . number_format($item_du->nominal, 0, ',', '.') }}
-                                                            &nbsp;</td>
-                                                        <td style="border:1px solid black;text-align:right;"> &nbsp;
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
+                                        @foreach ($pendapatanlain as $itemd)
+                                            @if ($itemd->usaha_kode != null && $items->kode_usaha == $itemd->usaha_kode)
+                                                <tr style="border:1px solid black;">
+                                                    <td class="text-center" style="border:1px solid black;">
+                                                        {{ $loop->iteration }}</td>
+                                                    <td style="border:1px solid black;">&nbsp;
+                                                        {{ $itemd->penjualan }}</td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        {{ 'Rp. ' . ' ' . number_format($itemd->nominal, 0, ',', '.') }}
+                                                        &nbsp;</td>
+                                                    <td style="border:1px solid black;text-align:right;"> &nbsp;
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
 
-                                        @foreach ($bu as $itemb)
-                                            @foreach ($itemb as $item_bu)
-                                                @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)
-                                                    <tr style="border:1px solid black;">
-                                                        <td class="text-center" style="border:1px solid black;">
-                                                            {{ $loop->iteration }}</td>
-                                                        <td style="border:1px solid black;">&nbsp;
-                                                            {{ $item_bu->pengeluaran }}</td>
-                                                        <td style="border:1px solid black;text-align:right;"> &nbsp;
-                                                        </td>
-                                                        <td style="border:1px solid black;text-align:right;">
-                                                            {{ 'Rp. ' . ' ' . number_format($item_bu->nominal, 0, ',', '.') }}
-                                                            &nbsp;</td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
+                                        @foreach ($pengeluaranlain as $itemb)
+                                            @if ($itemb->usaha_kode != null && $items->kode_usaha == $itemb->usaha_kode)
+                                                <tr style="border:1px solid black;">
+                                                    <td class="text-center" style="border:1px solid black;">
+                                                        {{ $loop->iteration }}</td>
+                                                    <td style="border:1px solid black;">&nbsp;
+                                                        {{ $itemb->pengeluaran }}</td>
+                                                    <td style="border:1px solid black;text-align:right;"> &nbsp;
+                                                    </td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        {{ 'Rp. ' . ' ' . number_format($itemb->nominal, 0, ',', '.') }}
+                                                        &nbsp;</td>
+                                                </tr>
+                                            @endif
                                         @endforeach
 
                                         <tr style="border:1px solid black;">
@@ -1166,7 +1157,7 @@
                                                 &nbsp;</td>
                                         </tr>
                                         <tr style="border:1px solid black;">
-                                            <td class="text-center" style="border:1px solid black;">7</td>
+                                            <td class="text-center" style="border:1px solid black;">8</td>
                                             <td style="border:1px solid black;">&nbsp; Biaya Operasional</td>
                                             <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
                                             <td style="border:1px solid black;text-align:right;">
@@ -1192,10 +1183,10 @@
                                         </tr>
                                     </table>
                                 @empty
-                                @endforelse --}}
+                                @endforelse
                                 {{-- Analisa Usaha Lainnya --}}
 
-                                <div class="title">
+                                {{-- <div class="title">
                                     b. Biaya
                                 </div>
                                 <div class="item">
@@ -1292,6 +1283,151 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                </div> --}}
+
+                                <div class="page-break"></div>
+                                <h4 style="text-align: center;font-size: 12pt;">PERHITUNGAN KEMAMPUAN KEUANGAN</h4>
+                                <p></p>
+                                <table class="tables">
+                                    <thead>
+                                        {{-- <tr>
+                                            <td style="width: 60%; text-align:center;">Nama Usaha</td>
+                                            <td style="text-align:center;">Nominal</td>
+                                        </tr> --}}
+                                        <tr>
+                                            <th colspan="4">Analisa Keuangan</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 3%;">No</th>
+                                            <th>Keterangan</th>
+                                            <th>Pendapatan</th>
+                                            <th>Pengeluaran</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: center;">1</td>
+                                            <td>Perdagangan</td>
+                                            <td>{{ 'Rp. ' . number_format($usaha->perdagangan, '0', ',', '.') }}
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">2</td>
+                                            <td>Pertanian</td>
+                                            <td>{{ 'Rp. ' . number_format($usaha->pertanian, '0', ',', '.') }}
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">3</td>
+                                            <td>Jasa</td>
+                                            <td>{{ 'Rp. ' . number_format($usaha->jasa, '0', ',', '.') }}
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: center;">4</td>
+                                            <td>Lain - lain</td>
+                                            <td>{{ 'Rp. ' . number_format($usaha->lain, '0', ',', '.') }}
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">Biaya Rumah Tangga</td>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>KONSUMSI POKOK</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->konsumsi, '0', ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>KESEHATAN</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->kesehatan, '0', ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>PENDIDIKAN</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->pendidikan, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>GAS TELEPON LISTRIK</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->gatel, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>JAJAN ANAK</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->jajan_anak, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>SUMBANGAN SOSIAL</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->sumbangan, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>ROKOK</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->roko, '0', ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">Kewajiban Lainnya</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>{{ $keuangan->kewajiban1 }}</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->nominal_kewajiban1, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>{{ $keuangan->kewajiban2 }}</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->nominal_kewajiban2, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>{{ $keuangan->kewajiban3 }}</td>
+                                            <td></td>
+                                            <td>{{ 'Rp. ' . number_format($keuangan->nominal_kewajiban3, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#</td>
+                                            <td style="text-align: center;"><b>TOTAL</b></td>
+                                            <td><b>{{ 'Rp. ' . number_format($keuangan->p_usaha, '0', ',', '.') }}</b>
+                                            </td>
+                                            <td><b>{{ 'Rp. ' . number_format($keuangan->total_pengeluaran, '0', ',', '.') }}</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="font-weight: bold; text-align:center;">Kemampuan
+                                                Keuangan Perbulan
+                                            </td>
+                                            <td colspan="2" style="font-weight: bold; text-align:center;">
+                                                {{ 'Rp. ' . number_format($keuangan->keuangan_perbulan, '0', ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p></p>
+                                <div class="items" style="margin-left: 13px;">
+                                    Alat liquid debitur =
+                                    {{ 'Rp. ' . number_format($keuangan->keuangan_perbulan, '0', ',', '.') }} <br>
                                 </div>
                             </div>
 
@@ -1299,18 +1435,15 @@
                                 <div class="heads">
                                     4. Kemampuan dan Sumber Pembayaran :
                                 </div>
-                                <div class="items" style="margin-left: 13px;">
-                                    Alat liquid debitur =
-                                    {{ 'Rp. ' . number_format($biaya->likuidasi, '0', ',', '.') }} <br>
+                                <div class="items" style="margin-left: 13px; margin-top: 10px;">
                                     @php
-                                        $liquid = ($biaya->likuidasi * 70) / 100;
+                                        $liquid = ($keuangan->keuangan_perbulan * 70) / 100;
                                     @endphp
-                                    Debitur masih memiliki kemampuan pembayaran 70% dari alat liquid debitur sebesar
+                                    &nbsp;Debitur masih memiliki kemampuan pembayaran 70% dari alat liquid debitur
+                                    sebesar
                                     {{ 'Rp. ' . number_format($liquid, '0', ',', '.') }}
                                 </div>
                             </div>
-
-                            <br>
 
                             <div class="contents" style="margin-top: 10px;">
                                 <div class="heads">

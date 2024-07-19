@@ -259,27 +259,39 @@ class RSCCetakController extends Controller
                         $total_bahan[] = $items->total;
                     }
                     $item->total_bahan = array_sum($total_bahan);
+
+                    $total_pengeluaran = [];
+                    foreach ($pengeluaranlain as $items) {
+                        $total_pengeluaran[] = $items->nominal;
+                    }
+                    $item->total_pengeluaran = $item->pengeluaran + $item->total_bahan;
                 }
                 // dd($bahanbaku);
             }
-            // dd($pendapatanlain, $pengeluaranlain);
 
-            // dd($lain);
+            // Kemampuan keuangan
+            $keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
+            $keuangan->total_pengeluaran = $keuangan->b_rumah_tangga + $keuangan->b_kewajiban_lainnya;
+            if (is_null($keuangan)) {
+                return redirect()->back()->with('error', 'Analisa Keuangan belum diisi.');
+            }
+            // dd($pendapatanlain, $pengeluaranlain);
 
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
                 'kondisi' => $kondisi_usaha,
                 'agunan' => $kondisi_agunan,
                 'usaha' => $usaha,
-                'perdagangan' => $perdagangan,
+                'perdagangan' => $perdagangan ?? null,
                 'pertanian' => $pertanian,
-                'jasa' => $jasa,
-                'lain' => $lain,
+                'jasa' => $jasa  ?? null,
+                'lain' => $lain ?? null,
                 'biayaperdagangan' => $biaya_perdagangan,
-                'pendapatanlain' => $pendapatanlain,
-                'pengeluaranlain' => $pengeluaranlain,
-                'bahan_baku' => $bahanbaku,
+                'pendapatanlain' => $pendapatanlain ?? null,
+                'pengeluaranlain' => $pengeluaranlain  ?? null,
+                'bahan_baku' => $bahanbaku ?? null,
                 'biaya' => $biaya,
+                'keuangan' => $keuangan,
                 'qr' => $qr,
                 'syarat' => $syarat,
             ]);
