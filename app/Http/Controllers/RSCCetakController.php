@@ -47,12 +47,12 @@ class RSCCetakController extends Controller
                 $query->whereNotIn('rsc_data_pengajuan.status', ['Proses Analisa', 'Proses Survei', 'Penjadwalan', 'Batal RSC']);
             })
 
-            ->where(function ($query) use ($keyword) {
-                $query->orWhere('rsc_data_survei.direksi_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.kabag_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
-            })
+            // ->where(function ($query) use ($keyword) {
+            //     $query->orWhere('rsc_data_survei.direksi_kode', Auth::user()->code_user)
+            //         ->orWhere('rsc_data_survei.kabag_kode', Auth::user()->code_user)
+            //         ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user)
+            //         ->orWhere('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
+            // })
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
