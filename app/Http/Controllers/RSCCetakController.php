@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\RSC;
 use App\Models\Midle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -131,6 +132,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.angsuran_bunga',
                     'rsc_data_pengajuan.total_angsuran',
                     'rsc_data_pengajuan.rc',
+                    'rsc_data_pengajuan.status_rsc',
                     'rsc_data_pengajuan.updated_at as update_pengajuan',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.alamat_ktp',
@@ -232,11 +234,26 @@ class RSCCetakController extends Controller
                 ];
             }
 
+            // Data Analisa Usaha
+            $perdagangan = RSC::perdagangan_rsc($enc_rsc, $data->status_rsc);
+            $biaya_perdagangan = [];
+            if (count($perdagangan) > 0) {
+                foreach ($perdagangan as $item) {
+                    $biaya_perdagangan = DB::table('rsc_du_perdagangan')->where('usaha_kode', $item->kode_usaha)->get();
+                }
+            } else {
+                $biaya_perdagangan = null;
+            }
+
+            // dd($biaya_perdagangan);
+
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
                 'kondisi' => $kondisi_usaha,
                 'agunan' => $kondisi_agunan,
                 'usaha' => $usaha,
+                'perdagangan' => $perdagangan,
+                'biayaperdagangan' => $biaya_perdagangan,
                 'biaya' => $biaya,
                 'qr' => $qr,
                 'syarat' => $syarat,
@@ -816,13 +833,20 @@ class RSCCetakController extends Controller
                     ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
                     ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
                     ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->join('REF_PEKERJAAN', 'REF_PEKERJAAN.DESC1', '=', 'm_cif.pekerjaan')
                     ->select(
                         'm_loan.fnama',
                         'm_loan.plafond_awal',
                         'm_cif.alamat',
                         'm_cif.noid',
                         'm_cif.tempat_bekerja',
+                        'm_cif.slik_pasangan',
                         'm_loan.jkwaktu',
+                        'm_loan.no_spk',
+                        'm_loan.tgleff',
+                        'm_loan.plafond_awal',
+                        'm_loan.tgljtempo',
+                        'REF_PEKERJAAN.DESC2',
                         'setup_loan.ket',
                         'wilayah.ket as wil',
                     )
@@ -835,11 +859,25 @@ class RSCCetakController extends Controller
                     $data->jangka_waktu = $data_eks->jkwaktu;
                     $data->metode_rps = null;
                     $data->tempat_kerja = trim($data_eks->tempat_bekerja);
-                    $data->no_identitas = trim($data_eks->noid);
+                    $data->no_identitas = trim($data_eks->jkwaktu);
+                    $data->no_identitas = trim($data_eks->jkwaktu);
+                    $data->jw_pk = trim($data_eks->noid);
+                    $data->plafon = trim($data_eks->plafond_awal);
+                    $data->no_spk = trim($data_eks->no_spk);
+                    $data->nama_pekerjaan = trim($data_eks->DESC2);
+                    $data->nama_pendamping = trim($data_eks->slik_pasangan);
                     $data->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+
+                    // Tanggal Pembuatan PK
+                    $tgl = Carbon::parse(trim($data_eks->tgleff));
+                    $data->tgl_create_pk = $tgl->isoFormat('D MMMM Y');
+
+                    // Tanggal Jatuh Tempo
+                    $tgl_tempo = Carbon::parse(trim($data_eks->tgljtempo));
+                    $data->tgl_akhir = $tgl_tempo->isoFormat('D MMMM Y');
                 }
             }
-            dd($data);
+
             $targetDt = Carbon::parse($data->tgl_create_pk);
             $data->tgl_create_pk = $targetDt->isoFormat('D MMMM Y');
 
@@ -868,7 +906,6 @@ class RSCCetakController extends Controller
                 )
                 ->where('rsc_spk.kode_rsc', $enc_rsc)->orderBy('rsc_spk.created_at', 'desc')->get();
             //
-            $data->metode_rps_rsc = "EFEKTIF MUSIMAN";
 
             if (count($cek_spk) > 1) {
                 $data->no_spk = $cek_spk[1]->no_spk;
@@ -916,19 +953,19 @@ class RSCCetakController extends Controller
                     'data' => $data
                 ]);
             } elseif ($data->metode_rps_rsc == "EFEKTIF ANUITAS") {
+
                 return view('rsc.cetak_pk.anuitas', [
                     'data' => $data
                 ]);
+            } else {
+                return view('rsc.cetak_pk.first', [
+                    'data' => $data
+                ]);
             }
-
-            // return view('rsc.cetak_pk.first', [
-            //     'data' => $data
-            // ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
-
 
 
     //Function Protected

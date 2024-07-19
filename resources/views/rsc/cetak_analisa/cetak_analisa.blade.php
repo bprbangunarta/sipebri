@@ -437,6 +437,109 @@
                                     </table>
                                 </div>
 
+                                {{-- Usaha Perdagangan --}}
+                                {{-- @forelse ($perdagangan as $itemp)
+                                    <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
+                                    <table style="margin-top: -10px; margin-bottom: 5px;">
+                                        <tr>
+                                            <td width="13%">Nama Nasabah</td>
+                                            <td class="text-center" width="3%"> : </td>
+                                            <td style="text-align: justify;">{{ $itemp->kode_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kode Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $itemp->kode_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $itemp->nama_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $itemp->lama_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: text-top;">Alamat Usaha</td>
+                                            <td class="text-center" style="vertical-align: text-top;"> : </td>
+                                            <td style="text-align: justify;">{{ $itemp->lokasi_usaha }}</td>
+                                        </tr>
+                                    </table>
+
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="7" style="border:1px solid black;">
+                                                Biaya Barang Dagang</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Nama Barang</th>
+                                            <th class="text-center" style="border:1px solid black;">Harga Beli</th>
+                                            <th class="text-center" style="border:1px solid black;">Harga Jual</th>
+                                            <th class="text-center" style="border:1px solid black;">Laba</th>
+                                            <th class="text-center" style="border:1px solid black;">Stok</th>
+                                            <th class="text-center" style="border:1px solid black;">%</th>
+                                        </tr>
+                                        @php
+                                            $no = 1;
+                                        @endphp
+                                        @forelse ($biayaperdagangan as $items)
+                                            @if ($items->usaha_kode == $itemp->kode_usaha)
+                                                <tr style="border:1px solid black;">
+                                                    <td class="text-center" width="4%"
+                                                        style="border:1px solid black;">
+                                                        {{ $no }}
+                                                    </td>
+                                                    <td style="border:1px solid black;">&nbsp;
+                                                        {{ $items->nama_barang }}</td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        Rp. {{ number_format($items->harga_beli, 0, ',', '.') }}
+                                                        &nbsp;</td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        Rp. {{ number_format($items->harga_jual, 0, ',', '.') }}
+                                                        &nbsp;</td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        Rp. {{ number_format($items->laba, 0, ',', '.') }} &nbsp;
+                                                    </td>
+                                                    <td class="text-center" style="border:1px solid black;">
+                                                        {{ $items->stok }}</td>
+                                                    <td class="text-center" style="border:1px solid black;">
+                                                        {{ $items->presentase_laba }}%
+                                                    </td>
+                                                </tr>
+                                                @php
+                                                    $no++;
+                                                @endphp
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                        <tr style="border:1px solid black; colspan:2;">
+                                            <td class="text-center" colspan="2" style="border:1px solid black;">
+                                                TOTAL</td>
+                                            <td class="text-center" style="border:1px solid black;">
+                                                Rp. {{ number_format($itemp->total_beli, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center" style="border:1px solid black;">
+                                                Rp. {{ number_format($itemp->total_jual, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center" style="border:1px solid black;">
+                                                Rp. {{ number_format($itemp->total_laba, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center" style="border:1px solid black;">
+                                                {{ number_format($itemp->total_stok, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-center" style="border:1px solid black;">
+                                                {{ number_format($itemp->total_pl, 2) }} %
+                                            </td>
+                                        </tr>
+                                    </table>
+                                @empty
+                                @endforelse --}}
+                                {{-- Usaha Perdagangan --}}
+
                                 <div class="title">
                                     b. Biaya
                                 </div>
