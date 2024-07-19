@@ -47,13 +47,6 @@ class RSCCetakController extends Controller
                 $query->whereNotIn('rsc_data_pengajuan.status', ['Proses Analisa', 'Proses Survei', 'Penjadwalan', 'Batal RSC']);
             })
 
-            // ->where(function ($query) use ($keyword) {
-            //     $query->orWhere('rsc_data_survei.direksi_kode', Auth::user()->code_user)
-            //         ->orWhere('rsc_data_survei.kabag_kode', Auth::user()->code_user)
-            //         ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user)
-            //         ->orWhere('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
-            // })
-
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
         //
@@ -245,7 +238,33 @@ class RSCCetakController extends Controller
                 $biaya_perdagangan = null;
             }
 
-            // dd($biaya_perdagangan);
+            $pertanian = RSC::pertanian_rsc($enc_rsc, $data->status_rsc);
+            if (count($pertanian) != 0) {
+                for ($i = 0; $i < count($pertanian); $i++) {
+                    $jml = ((int)$pertanian[$i]->laba_bersih * 70) / 100;
+                    $pertanian[$i]->saving = $jml;
+                }
+            }
+
+            $jasa = RSC::jasa_rsc($enc_rsc, $data->status_rsc);
+            $lain = RSC::lain_rsc($enc_rsc, $data->status_rsc);
+            if (count($lain) != 0) {
+                foreach ($lain as $key => $item) {
+                    $pendapatanlain = DB::table('rsc_pendapatan_lain')->where('usaha_kode', $item->kode_usaha)->get();
+                    $pengeluaranlain = DB::table('rsc_pengeluaran_lain')->where('usaha_kode', $item->kode_usaha)->get();
+                    $bahanbaku = DB::table('rsc_bahan_baku_lain')->where('usaha_kode', $item->kode_usaha)->get();
+
+                    $total_bahan = [];
+                    foreach ($bahanbaku as $items) {
+                        $total_bahan[] = $items->total;
+                    }
+                    $item->total_bahan = array_sum($total_bahan);
+                }
+                // dd($bahanbaku);
+            }
+            dd($pendapatanlain, $pengeluaranlain);
+
+            // dd($lain);
 
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
@@ -253,7 +272,13 @@ class RSCCetakController extends Controller
                 'agunan' => $kondisi_agunan,
                 'usaha' => $usaha,
                 'perdagangan' => $perdagangan,
+                'pertanian' => $pertanian,
+                'jasa' => $jasa,
+                'lain' => $lain,
                 'biayaperdagangan' => $biaya_perdagangan,
+                'pendapatanlain' => $pendapatanlain,
+                'pengeluaranlain' => $pengeluaranlain,
+                'bahan_baku' => $bahanbaku,
                 'biaya' => $biaya,
                 'qr' => $qr,
                 'syarat' => $syarat,

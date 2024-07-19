@@ -479,7 +479,7 @@ class RSC extends Model
 
 
 
-    // Anlisa Usaha
+    // Analisa Usaha
     protected static function perdagangan_rsc($data, $status_rsc)
     {
         $data = DB::table('rsc_au_perdagangan')
@@ -493,6 +493,134 @@ class RSC extends Model
                 'rsc_bu_perdagangan.*',
             )
             ->where('rsc_au_perdagangan.kode_rsc', $data)->get();
+        //
+        if ($status_rsc == "EKS") {
+            foreach ($data as $value) {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_loan.jkwaktu',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $value->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $value->nama_nasabah = trim($data_eks->fnama);
+                    $value->alamat_ktp = trim($data_eks->alamat);
+                    $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $value->jangka_waktu = $data_eks->jkwaktu;
+                    $value->metode_rps = null;
+                    $value->plafon = $data_eks->plafond_awal;
+                    $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+        }
+        return $data;
+    }
+
+    protected static function pertanian_rsc($data, $status_rsc)
+    {
+        $data = DB::table('rsc_au_pertanian')
+            ->leftJoin('rsc_bu_pertanian', 'rsc_bu_pertanian.usaha_kode', '=', 'rsc_au_pertanian.kode_usaha')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_au_pertanian.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->select(
+                'rsc_data_pengajuan.pengajuan_kode',
+                'data_nasabah.nama_nasabah',
+                'rsc_au_pertanian.*',
+                'rsc_bu_pertanian.*',
+            )
+            ->where('rsc_au_pertanian.kode_rsc', $data)->get();
+        //
+        if ($status_rsc == "EKS") {
+            foreach ($data as $value) {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_loan.jkwaktu',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $value->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $value->nama_nasabah = trim($data_eks->fnama);
+                    $value->alamat_ktp = trim($data_eks->alamat);
+                    $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $value->jangka_waktu = $data_eks->jkwaktu;
+                    $value->metode_rps = null;
+                    $value->plafon = $data_eks->plafond_awal;
+                    $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+        }
+        return $data;
+    }
+
+    protected static function jasa_rsc($datas, $status_rsc)
+    {
+        $data = DB::table('rsc_au_jasa')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_au_jasa.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->select(
+                'rsc_data_pengajuan.pengajuan_kode',
+                'data_nasabah.nama_nasabah',
+                'rsc_au_jasa.*',
+            )
+            ->where('rsc_au_jasa.kode_rsc', $datas)->get();
+        //
+        if ($status_rsc == "EKS") {
+            foreach ($data as $value) {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_loan.jkwaktu',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $value->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $value->nama_nasabah = trim($data_eks->fnama);
+                    $value->alamat_ktp = trim($data_eks->alamat);
+                    $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    $value->jangka_waktu = $data_eks->jkwaktu;
+                    $value->metode_rps = null;
+                    $value->plafon = $data_eks->plafond_awal;
+                    $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+        }
+        return $data;
+    }
+
+    protected static function lain_rsc($datas, $status_rsc)
+    {
+        $data = DB::table('rsc_au_lain')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_au_lain.kode_rsc')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->select(
+                'rsc_data_pengajuan.pengajuan_kode',
+                'data_nasabah.nama_nasabah',
+                'rsc_au_lain.*',
+            )
+            ->where('rsc_au_lain.kode_rsc', $datas)->get();
         //
         if ($status_rsc == "EKS") {
             foreach ($data as $value) {

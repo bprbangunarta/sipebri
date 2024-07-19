@@ -396,7 +396,7 @@
                                 <div class="title">
                                     Analisa kemampuan likuiditas debitur setiap bulan :
                                 </div>
-                                <div class="title">
+                                {{-- <div class="title">
                                     a. Pendapatan
                                 </div>
                                 <div class="item">
@@ -435,10 +435,10 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> --}}
 
                                 {{-- Usaha Perdagangan --}}
-                                {{-- @forelse ($perdagangan as $itemp)
+                                @forelse ($perdagangan as $itemp)
                                     <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERDAGANGAN</h4>
                                     <table style="margin-top: -10px; margin-bottom: 5px;">
                                         <tr>
@@ -536,9 +536,664 @@
                                             </td>
                                         </tr>
                                     </table>
+
+                                    <table style="margin-top: 5px;">
+                                        <tr>
+                                            <td width="21%">Periode Belanja</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($itemp->belanja_harian, 0, ',', '.') }}
+                                                | Harian</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Omset Harian</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($itemp->omset_harian, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Harga Pokok Penjualan</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($itemp->pokok_penjualan, 0, ',', '.') }}
+                                                | Omset Harian /
+                                                (1
+                                                + rata-rata % laba)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Laba Penjualan Harian</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($itemp->laba_harian, 0, ',', '.') }} |
+                                                Omset Harian -
+                                                Harga Pokok Penjualan</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Laba Penjualan Bulanan</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($itemp->pendapatan, 0, ',', '.') }} |
+                                                Laba Penjualan Harian *
+                                                30
+                                                Hari</td>
+                                        </tr>
+                                    </table>
+
+                                    <p></p>
+
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="4" style="border:1px solid black;">
+                                                Analisa Keuangan</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Keterangan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pendapatan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pengeluaran</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">1.</td>
+                                            <td style="border:1px solid black;">&nbsp; Pendapatan Dagang Perbulan</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($itemp->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">2.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Transportasi</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                @php $transportasi = $itemp->transportasi * 30; @endphp
+                                                {{ 'Rp.' . ' ' . number_format($transportasi, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">3.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Bongkar Muat</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                @php $bongkar_muat = $itemp->bongkar_muat * 30; @endphp
+                                                {{ 'Rp.' . ' ' . number_format($bongkar_muat, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">4.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Pegawai</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                @php $pegawai = $itemp->pegawai * 30; @endphp
+                                                {{ 'Rp.' . ' ' . number_format($pegawai, 0, ',', '.') }} &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">5.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Gas Telepon Listrik</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                @php $gatel = $itemp->gatel * 30; @endphp
+                                                {{ 'Rp.' . ' ' . number_format($gatel, 0, ',', '.') }} &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">6.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Retribusi</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                @php $retribusi = $itemp->retribusi * 30; @endphp
+                                                {{ 'Rp.' . ' ' . number_format($retribusi, 0, ',', '.') }} &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">7.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Sewa Tempat</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                @php $sewa_tempat = $itemp->sewa_tempat * 30; @endphp
+                                                {{ 'Rp.' . ' ' . number_format($sewa_tempat, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">#</td>
+                                            <th style="border:1px solid black;">&nbsp; Total</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($itemp->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($itemp->pengeluaran, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">8.</td>
+                                            <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($itemp->penambahan, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                Hasil Bersih Usaha</th>
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                {{ 'Rp.' . ' ' . number_format($itemp->laba_bersih, 0, ',', '.') }}
+                                            </th>
+                                        </tr>
+                                    </table>
                                 @empty
-                                @endforelse --}}
+                                @endforelse
                                 {{-- Usaha Perdagangan --}}
+
+                                {{-- Analisa Usaha Pertanian --}}
+                                @forelse ($pertanian as $item)
+                                    <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA PERTANIAN</h4>
+
+                                    <table>
+                                        <tr>
+                                            <td width="14%">Nama Nasabah</td>
+                                            <td class="text-center" width="3%"> : </td>
+                                            <td width="53%" style="text-align: justify;">{{ $item->nama_nasabah }}
+                                            </td>
+
+                                            <td width="16%">Luas Milik Sendiri</td>
+                                            <td style="text-align: right;" width="3%"> : </td>
+                                            <td style="text-align: right;">
+                                                {{ number_format($item->luas_sendiri, 0, ',', '.') }} M2 </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kode Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $item->kode_usaha }}</td>
+
+                                            <td>Luas Hasil Gadai</td>
+                                            <td style="text-align: right;" width="3%"> : </td>
+                                            <td style="text-align: right;">
+                                                {{ number_format($item->luas_gadai, 0, ',', '.') }} M2 </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $item->nama_usaha }}</td>
+
+                                            <td>Luas Hasil Sewa</td>
+                                            <td style="text-align: right;" width="3%"> : </td>
+                                            <td style="text-align: right;">
+                                                {{ number_format($item->luas_sewa, 0, ',', '.') }} M2 </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sektor Ekonomi</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">Pertanian</td>
+
+                                            <td>Hasil Panen</td>
+                                            <td style="text-align: right;" width="3%"> : </td>
+                                            <td style="text-align: right;"> {{ $item->hasil_panen }} KW </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jenis Tanaman</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $item->jenis_tanaman }}</td>
+
+                                            <td>Harga Per Kwintal</td>
+                                            <td style="text-align: right;" width="3%"> : </td>
+                                            <td style="text-align: right;">
+                                                {{ 'Rp. ' . ' ' . number_format($item->harga, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: text-top;">Alamat Usaha</td>
+                                            <td class="text-center" style="vertical-align: text-top;"> : </td>
+                                            <td style="text-align: justify;" colspan="4">{{ $item->lokasi_usaha }}
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <p></p>
+
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="4" style="border:1px solid black;">
+                                                Analisa Keuangan</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Keterangan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pendapatan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pengeluaran</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">1.</td>
+                                            <td style="border:1px solid black;">&nbsp; Pendapatan Hasil Panen</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">2.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Pengolahan Tanah</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pengolahan_tanah, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">3.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Bibit</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->bibit, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">4.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Pupuk</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pupuk, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">5.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Pestisida</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pestisida, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">6.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Pengairan</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pengairan, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">7.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Panen</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->panen, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">8.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Penggarap</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->penggarap, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">9.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Tenaga Kerja</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->tenaga_kerja, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">10.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Pajak</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pajak, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">11.</td>
+                                            <td style="border:1px solid black;">&nbsp; Iuran Desa</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->iuran_desa, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">12.</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Amortisasi</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->amortisasi, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">13.</td>
+                                            <td style="border:1px solid black;">&nbsp; Pinjaman Bank Lain</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pinjaman_bank, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">#</td>
+                                            <th style="border:1px solid black;">&nbsp; Total</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pengeluaran, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                Hasil Bersih Usaha</th>
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}</th>
+                                        </tr>
+                                    </table>
+
+                                    <p></p>
+
+                                    <table>
+                                        <tr>
+                                            <td width="23%">Hasil Bersih Usaha (70%)</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($item->saving, 0, ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Angsuran Pokok</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            @php
+                                                $angsuran = $item->plafon / $item->jangka_waktu;
+                                            @endphp
+                                            <td>{{ 'Rp.' . ' ' . number_format($angsuran, 0, ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Proyeksi Penambahan</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($item->penambahan, 0, ',', '.') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pendapatan Perbulan</td>
+                                            <td class="text-center" width="3%">:</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($item->laba_perbulan, 0, ',', '.') }} |
+                                                Hasil Bersih Usaha
+                                                (70%)
+                                                - Saving Pokok / 6 Bulan</td>
+                                        </tr>
+                                    </table>
+                                @empty
+                                @endforelse
+                                {{-- Analisa Usaha Pertanian --}}
+
+                                {{-- Analisa Usaha Jasa --}}
+                                @forelse ($jasa as $item)
+                                    <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA JASA</h4>
+                                    <table>
+                                        <tr>
+                                            <td width="13%">Nama Nasabah</td>
+                                            <td class="text-center" width="3%"> : </td>
+                                            <td style="text-align: justify;">{{ $item->nama_nasabah }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kode Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $item->kode_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $item->nama_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $item->lama_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: text-top;">Alamat Usaha</td>
+                                            <td class="text-center" style="vertical-align: text-top;"> : </td>
+                                            <td style="text-align: justify;">{{ $item->lokasi_usaha }}</td>
+                                        </tr>
+                                    </table>
+
+                                    <p></p>
+
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="4" style="border:1px solid black;">
+                                                Analisa Keuangan</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Keterangan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pendapatan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pengeluaran</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">1.</td>
+                                            <td style="border:1px solid black;">&nbsp; Pendapatan Usaha</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp; </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">2.</td>
+                                            <td style="border:1px solid black;">&nbsp; Pajak Kendaraan (Produktif)</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->b_pajak, 0, ',', '.') }} &nbsp;
+                                            </td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">3.</td>
+                                            <td style="border:1px solid black;">&nbsp; Pengeluaran lain-lain</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->b_lainnya, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">#</td>
+                                            <th style="border:1px solid black;">&nbsp; Total</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp.' . ' ' . number_format($item->pengeluaran, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                Hasil Bersih Usaha</th>
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                {{ 'Rp.' . ' ' . number_format($item->laba_bersih, 0, ',', '.') }}
+                                            </th>
+                                        </tr>
+                                    </table>
+                                    <p></p>
+
+                                @empty
+                                @endforelse
+                                {{-- Analisa Usaha Jasa --}}
+
+                                {{-- Analisa Usaha Lainnya --}}
+                                @forelse ($lain as $items)
+                                    <h4 style="text-align: center;font-size: 12pt;">ANALISA USAHA LAINNYA</h4>
+                                    <table>
+                                        <tr>
+                                            <td width="14%">Nama Nasabah</td>
+                                            <td class="text-center" width="3%"> : </td>
+                                            <td style="text-align: justify;">{{ $items->nama_nasabah }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kode Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $items->kode_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ketegori Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $items->jenis_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $items->nama_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lama Usaha</td>
+                                            <td class="text-center"> : </td>
+                                            <td style="text-align: justify;">{{ $items->lama_usaha }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: text-top;">Alamat Usaha</td>
+                                            <td class="text-center" style="vertical-align: text-top;"> : </td>
+                                            <td style="text-align: justify;">{{ $items->lokasi_usaha }}</td>
+                                        </tr>
+                                    </table>
+
+                                    <p></p>
+
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="7" style="border:1px solid black;">
+                                                Biaya Bahan Baku</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;" width="36%">
+                                                Bahan Baku</th>
+                                            <th class="text-center" style="border:1px solid black;" width="10%">
+                                                Jumlah</th>
+                                            <th class="text-center" style="border:1px solid black;" width="25%">
+                                                Harga</th>
+                                            <th class="text-center" style="border:1px solid black;" width="25%">
+                                                Total</th>
+                                        </tr>
+
+                                        @foreach ($bahan_baku as $item)
+                                            @if ($item->usaha_kode != null && $items->kode_usaha == $item->usaha_kode)
+                                                <tr style="border:1px solid black;">
+                                                    <td class="text-center" width="4%"
+                                                        style="border:1px solid black;">
+                                                        {{ $loop->iteration }}
+                                                    </td>
+                                                    <td style="border:1px solid black;">&nbsp;
+                                                        {{ $item->bahan_baku }}</td>
+                                                    <td class="text-center" style="border:1px solid black;">
+                                                        {{ $item->jumlah }}
+                                                    </td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        {{ 'Rp. ' . ' ' . number_format($item->harga, 0, ',', '.') }}
+                                                        &nbsp;</td>
+                                                    <td style="border:1px solid black;text-align:right;">
+                                                        {{ 'Rp. ' . ' ' . number_format($item->total, 0, ',', '.') }}
+                                                        &nbsp;</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="4" style="border:1px solid black;">
+                                                Total</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->total_bahan, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                        </tr>
+                                    </table>
+
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="4" style="border:1px solid black;">
+                                                Analisa Keuangan</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Keterangan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pendapatan</th>
+                                            <th class="text-center" width="25%" style="border:1px solid black;">
+                                                Pengeluaran</th>
+                                        </tr>
+                                        @foreach ($du as $itemd)
+                                            @foreach ($itemd as $item_du)
+                                                @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)
+                                                    <tr style="border:1px solid black;">
+                                                        <td class="text-center" style="border:1px solid black;">
+                                                            {{ $loop->iteration }}</td>
+                                                        <td style="border:1px solid black;">&nbsp;
+                                                            {{ $item_du->penjualan }}</td>
+                                                        <td style="border:1px solid black;text-align:right;">
+                                                            {{ 'Rp. ' . ' ' . number_format($item_du->nominal, 0, ',', '.') }}
+                                                            &nbsp;</td>
+                                                        <td style="border:1px solid black;text-align:right;"> &nbsp;
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
+
+                                        @foreach ($bu as $itemb)
+                                            @foreach ($itemb as $item_bu)
+                                                @if ($item_du->usaha_kode != null && $items->kode_usaha == $item_du->usaha_kode)
+                                                    <tr style="border:1px solid black;">
+                                                        <td class="text-center" style="border:1px solid black;">
+                                                            {{ $loop->iteration }}</td>
+                                                        <td style="border:1px solid black;">&nbsp;
+                                                            {{ $item_bu->pengeluaran }}</td>
+                                                        <td style="border:1px solid black;text-align:right;"> &nbsp;
+                                                        </td>
+                                                        <td style="border:1px solid black;text-align:right;">
+                                                            {{ 'Rp. ' . ' ' . number_format($item_bu->nominal, 0, ',', '.') }}
+                                                            &nbsp;</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
+
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">6</td>
+                                            <td style="border:1px solid black;">&nbsp; Proyeksi Penambahan</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->proyeksi, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">7</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Bahan Baku</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->total_bahan, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">7</td>
+                                            <td style="border:1px solid black;">&nbsp; Biaya Operasional</td>
+                                            <td style="border:1px solid black;text-align:right;"> &nbsp;</td>
+                                            <td style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->pengeluaran, 0, ',', '.') }}
+                                                &nbsp;</td>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;">#</td>
+                                            <th style="border:1px solid black;">&nbsp; Total</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->pendapatan, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                            <th style="border:1px solid black;text-align:right;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->total_pengeluaran, 0, ',', '.') }}
+                                                &nbsp;</th>
+                                        </tr>
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                Hasil Bersih Usaha</th>
+                                            <th class="text-center" colspan="2" style="border:1px solid black;">
+                                                {{ 'Rp. ' . ' ' . number_format($items->laba_bersih, 0, ',', '.') }}
+                                            </th>
+                                        </tr>
+                                    </table>
+                                @empty
+                                @endforelse
+                                {{-- Analisa Usaha Lainnya --}}
 
                                 <div class="title">
                                     b. Biaya
@@ -559,7 +1214,8 @@
                                             </tr>
                                             <tr>
                                                 <td>Kesehatan</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->kesehatan, '0', ',', '.') }}</td>
+                                                <td>{{ 'Rp. ' . number_format($biaya->kesehatan, '0', ',', '.') }}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Pendidikan</td>

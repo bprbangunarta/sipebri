@@ -903,22 +903,7 @@
                     <th class="text-center" style="border:1px solid black;" width="25%">Harga</th>
                     <th class="text-center" style="border:1px solid black;" width="25%">Total</th>
                 </tr>
-                {{-- @forelse ($bahan as $item)
-                    @if ($item->bahan_baku != null)
-                        <tr style="border:1px solid black;">
-                            <td class="text-center" width="4%" style="border:1px solid black;">
-                                {{ $loop->iteration }}
-                            </td>
-                            <td style="border:1px solid black;">&nbsp; {{ $item->bahan_baku }}</td>
-                            <td class="text-center" style="border:1px solid black;">{{ $item->jumlah }}</td>
-                            <td style="border:1px solid black;text-align:right;">
-                                {{ 'Rp. ' . ' ' . number_format($item->harga, 0, ',', '.') }} &nbsp;</td>
-                            <td style="border:1px solid black;text-align:right;">
-                                {{ 'Rp. ' . ' ' . number_format($item->total, 0, ',', '.') }} &nbsp;</td>
-                        </tr>
-                    @endif
-                @empty
-                @endforelse --}}
+
                 @foreach ($bahan as $item)
                     @foreach ($item as $item_bahan)
                         @if ($item_bahan->bahan_baku != null && $items->kode_usaha == $item_bahan->usaha_kode)
