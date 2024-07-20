@@ -180,7 +180,7 @@
                     @if ($data->status_rsc == 'EKS')
                         {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
                             {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
-                        <ol style="margin-left: -40px;text-align: justify; text-transform:uppercase;">
+                        <ol style="margin-left: -28px;text-align: justify; text-transform:uppercase;">
                             @forelse ($agunan as $item)
                                 <li>{{ $item->catatan }}.</li>
                             @empty
@@ -189,7 +189,7 @@
                     @else
                         {{ $data->count_jaminan }} ( <font style="text-transform: capitalize;">
                             {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->count_jaminan) }}</font> ) <br>
-                        <ol style="margin-left: -40px;text-align: justify; text-transform:uppercase;">
+                        <ol style="margin-left: -28px;text-align: justify; text-transform:uppercase;">
                             @forelse ($agunan as $item)
                                 <li>{{ $item->catatan }}.</li>
                             @empty

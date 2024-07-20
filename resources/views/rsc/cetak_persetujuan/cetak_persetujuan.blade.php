@@ -140,7 +140,10 @@
         <hr style="border: 1px solid 034871;">
 
         <div class="headers">
-            <label for="" style="font-weight:bold;">A. &nbsp;&nbsp;PENGUSULAN</label>
+            <h2 style="text-align: center;font-size: 12pt;"><u>PENGUSULAN {{ $data->jenis_persetujuan }}
+                    KREDIT</u>
+            </h2>
+            {{-- <label for="" style="font-weight:bold;">A. &nbsp;&nbsp;PENGUSULAN</label>
             <div class="item">
                 <p>Atas dasar penilaian kembali kondisi usaha debitur, dengan ini kami mengusulkan agar permohonan
                     {{ $data->jenis_persetujuan }} atas sistem angsuran kredit yang bersangkutan dapat dipertimbangkan
@@ -221,10 +224,10 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </div> --}}
         </div>
 
-        <div class="headers">
+        {{-- <div class="headers">
             <label for="" style="font-weight:bold;">B. &nbsp;&nbsp;PERSETUJUAN</label>
             <div class="item">
                 <p>
@@ -357,7 +360,161 @@
                     </tr>
                 </table>
             </div>
-        </div>
+        </div> --}}
+
+        <table>
+            <tr>
+                <td style="width: 3%;">1. </td>
+                <td style="width: 22%;">Data Debitur</td>
+                <td style="width: 2%;"></td>
+                <td style="width: 73%;"></td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Kode Pengajuan</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ $data->pengajuan_kode }}</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Nama Nasabah</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ Str::upper($data->nama_nasabah) }}</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;vertical-align: text-top;">Alamat Lengkap</td>
+                <td style="width: 2%;vertical-align: text-top;">
+                    <center> : </center>
+                </td>
+                <td>{{ Str::upper($data->alamat_ktp) }}</td>
+            </tr>
+
+            <tr>
+                <td style="width: 3%;">2. </td>
+                <td style="width: 22%;">Data Kredit</td>
+                <td style="width: 2%;"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Plafon</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ 'Rp. ' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Jangka Waktu</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ $data->jangka_waktu }} Bulan</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Penggunaan</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ $data->penggunaan }}</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Nilai Taksasi Agunan</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ 'Rp. ' . ' ' . number_format($data->total_taksasi, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Repayment Capacity</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ $data->rc }} %</td>
+            </tr>
+
+            <tr>
+                <td style="width: 3%;">3. </td>
+                <td style="width: 22%;">Usulan Kredit</td>
+                <td style="width: 2%;"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Plafon</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ 'Rp. ' . ' ' . number_format($data->penentuan_plafon, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Jangka Waktu</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ $data->jangka_waktu }} Bulan</td>
+            </tr>
+            <tr>
+                <td style="width: 3%;"></td>
+                <td style="width: 22%;">Suku Bunga</td>
+                <td style="width: 2%;">
+                    <center> : </center>
+                </td>
+                <td>{{ $data->suku_bunga }} %</td>
+            </tr>
+
+            <tr>
+                <td style="width: 3%;">4. </td>
+                <td style="width: 22%;">Persetujuan Kredit</td>
+                <td style="width: 2%;"></td>
+                <td></td>
+            </tr>
+
+            @forelse ($qr as $item)
+                <tr>
+                    <td></td>
+                    <td class="text-center" style="width: 22%;" style="vertical-align: text-top;">
+                        <img src="{{ asset('storage/image/qr_code/' . $item->data_qr_usulan) }}" width="100"
+                            height="100">
+                    </td>
+                    <td style="width: 2%;"></td>
+                    <td>
+                        <b>{{ $item->role_name }}</b> <br>
+                        {{ $item->nama_user }}
+                        <p></p>
+
+                        <b>Komentar</b> <br>
+                        {{ ucwords($item->catatan) }} <br>
+                        Layak untuk diberikan pinjaman sebesar
+                        {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}
+                        <p></p>
+
+                        Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu
+                        {{ $data->jangka_waktu }} bulan
+                        <br>
+                        Biaya ADM
+                        {{ 'Rp. ' . ' ' . number_format($data->administrasi_nominal, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                        <p></p>
+                        <p></p>
+                    </td>
+                </tr>
+                {{-- <tr>
+                    <td colspan="4">
+                        <hr>
+                    </td>
+                </tr> --}}
+            @empty
+            @endforelse
+        </table>
 
 
         <div class="page-break"></div>
@@ -372,7 +529,7 @@
                     <tr>
                         <td style="width: 55%;">Baki Debet</td>
                         <td style="width: 2%;">:</td>
-                        <td> &nbsp;Rp. {{ number_format($data->penentuan_plafon, '0', ',', '.') }}</td>
+                        <td> &nbsp;Rp. {{ number_format($data->baki_debet, '0', ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td style="width: 55%;">Tunggakan Bunga</td>
@@ -383,8 +540,11 @@
                     <tr>
                         <td style="width: 55%; font-weight:bold; text-align:center;">TOTAL</td>
                         <td style="width: 2%; font-weight:bold;">:</td>
+                        @php
+                            $total_baki = $data->tunggakan_bunga + $data->baki_debet;
+                        @endphp
                         <td style="font-weight:bold;"> &nbsp;Rp.
-                            {{ number_format($data->tunggakan_poko, '0', ',', '.') }}</td>
+                            {{ number_format($total_baki, '0', ',', '.') }}</td>
                     </tr>
                 </table>
 
