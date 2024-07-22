@@ -935,9 +935,8 @@ class RSCCetakController extends Controller
                     $data->jangka_waktu = $data_eks->jkwaktu;
                     $data->metode_rps = null;
                     $data->tempat_kerja = trim($data_eks->tempat_bekerja);
-                    $data->no_identitas = trim($data_eks->jkwaktu);
-                    $data->no_identitas = trim($data_eks->jkwaktu);
-                    $data->jw_pk = trim($data_eks->noid);
+                    $data->no_identitas = trim($data_eks->noid);
+                    $data->jw_pk = trim($data_eks->jkwaktu);
                     $data->plafon = trim($data_eks->plafond_awal);
                     $data->no_spk = trim($data_eks->no_spk);
                     $data->nama_pekerjaan = trim($data_eks->DESC2);
@@ -1005,7 +1004,7 @@ class RSCCetakController extends Controller
 
                 $data->jw_rsc_musiman = null;
             }
-            // dd($data);
+
             if ($data->metode_rps_rsc == "FLAT" && $data->produk_kode == 'KPJ' && $data->tempat_kerja == 'PT HANDSOME') {
                 return view('rsc.cetak_pk.kpj_flat_handsome', [
                     'data' => $data
