@@ -1023,7 +1023,6 @@ class RSCController extends Controller
                 DB::raw("DATE_FORMAT((COALESCE(rsc_spk.updated_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y-%m-%d') as tgl_akhir")
             )
             ->where('rsc_spk.pengajuan_kode', $pengajuan)
-            // ->latest('rsc_spk.created_at')->first();
             ->where('rsc_spk.kode_rsc', '!=', $enc)->latest('rsc_spk.created_at')->first();
 
         if (is_null($cek_spk)) {
