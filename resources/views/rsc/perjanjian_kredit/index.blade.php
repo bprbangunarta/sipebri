@@ -75,9 +75,15 @@
                                             </td>
                                             <td class="text-center" style="text-align: center;">
 
+                                                <a data-toggle="modal" data-target="#add_spk_rsc"
+                                                    data-rsc="{{ $item->rsc }}" data-kode="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-yellow" title="Generate">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                &nbsp;
                                                 <a data-toggle="modal" data-target="#generate-code"
-                                                    data-id="{{ $item->rsc }}" class="btn-circle btn-sm bg-green"
-                                                    title="Generate">
+                                                    data-id="{{ $item->rsc }}" data-kode="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-green" title="Generate">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
 
@@ -122,6 +128,40 @@
                     <div class="modal-body">
 
                         <div class="box-body">
+                            <div class="row" style="margin-bottom: 20px;">
+                                <div class="col-md-12" style="margin-bottom: 20px;">
+                                    <div style="margin-top: -15px; float:left; width: 47.5%;">
+                                        <span class="fw-bold">PLAFON RSC</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name=""
+                                            id="plafond_rsc" readonly>
+                                    </div>
+                                    <div style="margin-top: -15px; float:right; width: 47.5%;">
+                                        <span class="fw-bold">SPK RSC</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="spk_rsc"
+                                            id="spk_rsc" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div style="margin-top: -15px; float:left; width: 47.5%;">
+                                        <span class="fw-bold">TANGGAL REALISASI</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="tg_realisasi"
+                                            id="tg_realisasi" readonly>
+                                    </div>
+                                    <div style="margin-top: -15px; float:right; width: 47.5%;">
+                                        <span class="fw-bold">TANGGAL JATUH TEMPO</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="tgL_jth_tmp"
+                                            id="tgL_jth_tmp" readonly>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div style="margin-top: -15px;">
@@ -143,6 +183,7 @@
                                         <input type="text" class="form-control" name="tunggakan_denda"
                                             id="tunggakan_denda">
                                     </div>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -163,8 +204,26 @@
                                         <input class="form-control text-uppercase" name="pk_rsc" id="generate"
                                             type="text" readonly>
                                     </div>
+
                                 </div>
                             </div>
+                            <br>
+                            <P>
+                            <table>
+                                <tr>
+                                    <td colspan="3">Note : </td>
+                                </tr>
+                                <tr>
+                                    <td width='3%'>*</td>
+                                    <td>PLAFON RSC, SPK RSC, TANGGAL REALISASI, TANGGAL JATUH TEMPO</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>akan terisi jika sebelumnya telah di RSC.</td>
+                                </tr>
+                            </table>
+                            </P>
                         </div>
 
                     </div>
@@ -176,27 +235,104 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="add_spk_rsc">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">ADD SPK RSC</h4>
+                </div>
+                <form action="{{ route('rsc.add_spk.simpan') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row" style="margin-bottom: 40px;">
+                                <div class="col-md-12" style="margin-bottom: 20px;">
+                                    <div style="margin-top: -15px; float:left; width: 47.5%;">
+                                        <span class="fw-bold">PLAFON RSC</span>
+                                        <input type="text" id="kode" name="pengajuan_kode" hidden>
+                                        <input type="text" name="kode_rsc" id="kode_rsc" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="plafon_rsc"
+                                            id="plafon_rsc">
+                                    </div>
+                                    <div style="margin-top: -15px; float:right; width: 47.5%;">
+                                        <span class="fw-bold">SPK RSC</span>
+                                        <input class="form-control text-uppercase" type="text" name="spk_rsc"
+                                            id="spk_rsc">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div style="margin-top: -15px; float:left; width: 47.5%;">
+                                        <span class="fw-bold">TANGGAL REALISASI</span>
+                                        <input class="form-control text-uppercase" type="text" id="tgl_realisasi"
+                                            name="tgl_realisasi" placeholder="YYYY-MM-DD">
+                                    </div>
+                                    <div style="margin-top: -15px; float:right; width: 47.5%;">
+                                        <span class="fw-bold">TANGGAL JATUH TEMPO</span>
+                                        <input class="form-control text-uppercase" id="tgl_jth_temp" type="text"
+                                            name="tgl_jth_temp" placeholder="YYYY-MM-DD">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn bg-green">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
     <script>
+        $('#tgl_realisasi').inputmask('yyyy-mm-dd', {
+            'placeholder': 'yyyy-mm-dd'
+        })
+        $('#tgl_jth_temp').inputmask('yyyy-mm-dd', {
+            'placeholder': 'yyyy-mm-dd'
+        })
+
+        $(document).ready(function() {
+            $("#add_spk_rsc").on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                const kode = button.data("kode");
+                const rsc = button.data("rsc");
+
+                var modal = $(this);
+                modal.find('.modal-body #kode').val(kode);
+                modal.find('.modal-body #kode_rsc').val(rsc);
+            })
+        })
+
         $("#generate-code").on("show.bs.modal", function(event) {
             var button = $(event.relatedTarget); // Tombol yang membuka modal
-            var kode = button.data("id"); // Ambil data-id dari tombol
+            var kode = button.data("id");
+            var pengajuan = button.data("kode");
 
             // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
             $.ajax({
                 url: "/themes/rsc/perjanjiankredit/get/",
                 type: "GET",
                 data: {
-                    kode: kode
+                    kode: kode,
+                    pengajuan: pengajuan,
                 },
                 dataType: "json",
                 cache: false,
                 success: function(response) {
-
+                    console.log(response)
+                    $('#plafond_rsc').val(response.plafon.toLocaleString("id-ID") ?? 0)
+                    $('#spk_rsc').val(response.no_spk)
+                    $('#tg_realisasi').val(response.tgL_realisasi)
+                    $('#tgL_jth_tmp').val(response.tgl_jth_tempo)
                     $('#kode_rsc').val(response.kode_rsc)
                     $('#plafon').val(response.penentuan_plafon.toLocaleString("id-ID"))
                     $('#jenis_persetujuan').val(response.jenis_persetujuan)
@@ -217,6 +353,7 @@
 
         var tunggakan_bunga = document.getElementById('tunggakan_bunga')
         var tunggakan_denda = document.getElementById('tunggakan_denda')
+        var plafon_rsc = document.getElementById('plafon_rsc')
 
         if (tunggakan_bunga) {
             tunggakan_bunga.addEventListener("keyup", function(e) {
@@ -227,6 +364,12 @@
         if (tunggakan_denda) {
             tunggakan_denda.addEventListener("keyup", function(e) {
                 tunggakan_denda.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+
+        if (plafon_rsc) {
+            plafon_rsc.addEventListener("keyup", function(e) {
+                plafon_rsc.value = formatRupiah(this.value, "Rp. ");
             });
         }
 

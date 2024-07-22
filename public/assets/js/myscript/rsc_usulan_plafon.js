@@ -65,7 +65,7 @@ $(document).ready(function () {
     function flat(usulan, sb, jangka_waktu, keuangan) {
         var bunga = (parseFloat(usulan) * parseFloat(sb)) / 100 / 12;
         var poko = parseFloat(usulan) / parseFloat(jangka_waktu);
-        var angsuran = Math.ceil(bunga) + poko;
+        var angsuran = bunga + poko;
         var rc = (angsuran / parseFloat(keuangan)) * 100;
 
         push(poko, bunga, angsuran);
@@ -77,7 +77,7 @@ $(document).ready(function () {
         var bg = (((parseFloat(usulan) * sb) / 100) * 30) / 365;
         const p = jangka_waktu / 6;
         const poko = usulan / p;
-        var angsuran = Math.ceil(bg) + poko;
+        var angsuran = bg + poko;
         var rc = (bg / keuangan) * 100;
 
         push(poko, bg, bg);

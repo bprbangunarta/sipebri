@@ -986,17 +986,19 @@ class RSCController extends Controller
     public function pk_get(Request $request)
     {
         $enc = Crypt::decrypt($request->input('kode'));
+        $pengajuan = $request->input('pengajuan');
+
         $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc)->first();
 
         $cek_spk = DB::table('rsc_spk')->exists();
         if (!$cek_spk) {
-            $count = 000001;
+            $count = 0001;
         } else {
             $nomor = DB::table('rsc_spk')->latest()->first();
             $count = (int) $nomor->nomor + 1;
         }
 
-        $lengths = 6;
+        $lengths = 4;
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
 
         $now = Carbon::now();
@@ -1009,6 +1011,42 @@ class RSCController extends Controller
         $biaya = DB::table('rsc_biaya')->where('kode_rsc', $enc)->first();
         $data_rsc->tunggakan_bunga = $biaya->bunga_dibayar;
         $data_rsc->tunggakan_denda = $biaya->denda_dibayar;
+
+        // Cek SPK RSC sebelumnya
+        $cek_spk = DB::table('rsc_spk')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.pengajuan_kode', '=', 'rsc_spk.pengajuan_kode')
+            ->select(
+                'rsc_spk.no_spk',
+                'rsc_data_pengajuan.penentuan_plafon',
+                'rsc_spk.created_at',
+                DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y-%m-%d') as tgl_mulai_rsc"),
+                DB::raw("DATE_FORMAT((COALESCE(rsc_spk.updated_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y-%m-%d') as tgl_akhir")
+            )
+            ->where('rsc_spk.pengajuan_kode', $pengajuan)
+            // ->latest('rsc_spk.created_at')->first();
+            ->where('rsc_spk.kode_rsc', '!=', $enc)->latest('rsc_spk.created_at')->first();
+
+        if (is_null($cek_spk)) {
+            $eks_spk = DB::table('rsc_data_spk')->where('pengajuan_kode', $pengajuan)->latest('created_at')->first();
+
+            if (is_null($eks_spk)) {
+                $data_rsc->plafon = 0;
+                $data_rsc->no_spk = null;
+                $data_rsc->tgL_realisasi = null;
+                $data_rsc->tgl_jth_tempo = null;
+            } else {
+                $data_rsc->plafon = $eks_spk->plafon;
+                $data_rsc->no_spk = $eks_spk->no_spk;
+                $data_rsc->tgL_realisasi = $eks_spk->tgL_realisasi;
+                $data_rsc->tgl_jth_tempo = $eks_spk->tgl_jth_tempo;
+            }
+        } else {
+            $data_rsc->plafon = $cek_spk->penentuan_plafon;
+            $data_rsc->no_spk = $cek_spk->no_spk;
+            $data_rsc->tgL_realisasi = $cek_spk->tgl_mulai_rsc;
+            $data_rsc->tgl_jth_tempo = $cek_spk->tgl_akhir;
+        }
+
 
         return response()->json($data_rsc);
     }
@@ -1057,6 +1095,58 @@ class RSCController extends Controller
             return redirect()->back()->with('success', 'Berhasil Generate PK.');
         } catch (\Throwable $th) {
             //throw $th;
+        }
+    }
+
+    public function simpan_spk_rsc(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->kode_rsc);
+            $cek = $request->validate([
+                'plafon_rsc' => 'required',
+                'spk_rsc' => 'required',
+                'tgl_realisasi' => 'required',
+                'tgl_jth_temp' => 'required',
+            ], [
+                'plafon_rsc.required' => 'Plafon RSC harus diisi.',
+                'spk_rsc.required' => 'SPK RSC harus diisi.',
+                'tgl_realisasi.required' => 'Tgl Realisasi harus diisi.',
+                'tgl_realisasi.date' => 'Format harus DATE.',
+                'tgl_jth_temp.required' => 'Tgl Jth Temp harus diisi.',
+                'tgl_jth_temp.date' => 'Format harus DATE.',
+            ]);
+
+            $data = [
+                'pengajuan_kode' => $request->pengajuan_kode,
+                'kode_rsc' => $enc_rsc,
+                'plafon' => (int)str_replace(["Rp", " ", "."], "", $request->plafon_rsc),
+                'no_spk' => $request->spk_rsc,
+                'tgL_realisasi' => $request->tgl_realisasi,
+                'tgl_jth_tempo' => $request->tgl_jth_temp,
+            ];
+
+            $cek_data = DB::table('rsc_data_spk')->where('pengajuan_kode', $request->pengajuan_kode)->where('kode_rsc', $enc_rsc)->first();
+
+            if (is_null($cek_data)) {
+                $data['created_at'] = now();
+                $insert = DB::table('rsc_data_spk')->insert($data);
+
+                if ($insert) {
+                    return redirect()->back()->with('success', 'Data berhasil disimpan');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal disimpan');
+                }
+            } else {
+                $data['updated_at'] = now();
+                $update = DB::table('rsc_data_spk')->where('pengajuan_kode', $request->pengajuan_kode)->where('kode_rsc', $enc_rsc)->insert($data);
+                if ($update) {
+                    return redirect()->back()->with('success', 'Data berhasil disimpan');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal disimpan');
+                }
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Hubungi IT.');
         }
     }
 

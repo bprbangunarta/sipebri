@@ -66,24 +66,6 @@ class RSCPengusulanController extends Controller
                     ->get();
             }
 
-            // $data = DB::table('data_pengajuan')
-            //     ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-            //     ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            //     ->select(
-            //         'data_nasabah.nama_nasabah',
-            //         'data_nasabah.alamat_ktp',
-            //         'data_nasabah.no_telp',
-            //         'data_pengajuan.plafon',
-            //         'data_pengajuan.produk_kode',
-            //         'data_pengajuan.metode_rps',
-            //         'data_pengajuan.jangka_waktu',
-            //         'data_spk.no_spk',
-            //         'data_spk.created_at',
-            //         'data_spk.updated_at',
-            //     )
-            //     ->where('data_pengajuan.kode_pengajuan', $enc)
-            //     ->get();
-            //
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');

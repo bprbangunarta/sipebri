@@ -783,6 +783,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
                 Route::get('/rsc/perjanjiankredit/get', 'pk_get')->name('rsc.perjanjian_kredit.get');
                 Route::post('/rsc/perjanjiankredit/simpan', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
+                Route::post('/rsc/perjanjiankredit/addspk/simpan', 'simpan_spk_rsc')->name('rsc.add_spk.simpan');
             });
         });
 
