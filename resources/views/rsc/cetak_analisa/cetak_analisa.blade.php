@@ -896,7 +896,7 @@
                                             <td>Angsuran Pokok</td>
                                             <td class="text-center" width="3%">:</td>
                                             @php
-                                                $angsuran = $item->plafon / $item->jangka_waktu;
+                                                $angsuran = $data->penentuan_plafon / $data->jangka_waktu;
                                             @endphp
                                             <td>{{ 'Rp.' . ' ' . number_format($angsuran, 0, ',', '.') }}</td>
                                         </tr>

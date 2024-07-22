@@ -126,6 +126,8 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.jenis_persetujuan',
                     'rsc_data_pengajuan.rc',
                     'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.jangka_waktu',
                     'rsc_data_pengajuan.updated_at as update_pengajuan',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.alamat_ktp',
