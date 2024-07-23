@@ -479,7 +479,8 @@
                         class="{{ request()->is('themes/rsc/index', 'themes/rsc/data/kredit', 'themes/rsc/penilaian/debitur', 'themes/rsc/analisa/usaha/perdagangan', 'themes/rsc/analisa/usaha/perdagangan/identitas', 'themes/rsc/analisa/usaha/perdagangan/barang', 'themes/rsc/analisa/usaha/perdagangan/keuangan', 'themes/rsc/analisa/usaha/pertanian', 'themes/rsc/analisa/usaha/pertanian/informasi', 'themes/rsc/analisa/usaha/pertanian/biaya', 'themes/rsc/analisa/usaha/pertanian/keuangan', 'themes/rsc/analisa/usaha/jasa', 'themes/rsc/analisa/usaha/jasa/keuangan', 'themes/rsc/analisa/usaha/lain', 'themes/rsc/analisa/usaha/lain/identitas', 'themes/rsc/analisa/usaha/lain/bahan', 'themes/rsc/analisa/usaha/lain/keuangan', 'themes/rsc/keuangan', 'themes/rsc/data/pengusulan', 'themes/rsc/konfirmasi') ? 'active' : '' }}">
                         <a href="{{ route('rsc.index') }}" title="Add RSC">
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                            Add RSC
+                            Add R
+                            C
                         </a>
                     </li> --}}
                     <li class="{{ request()->is('themes/rsc/index') ? 'active' : '' }}">
@@ -488,6 +489,7 @@
                             Add RSC
                         </a>
                     </li>
+
                     <li class="{{ request()->is('themes/rsc/eksternal/index') ? 'active' : '' }}">
                         <a @can('tambah pengajuan kredit') href="{{ route('rsc.eksternal.index') }}" @endcan
                             title="Add RSC">
@@ -530,7 +532,47 @@
                             Add Perjanjian Kredit
                         </a>
                     </li>
-                    <li class="{{ request()->is('themes/rsc/cetakanalisa') ? 'active' : '' }}">
+
+                    {{-- Sub --}}
+                    <li
+                        class="treeview {{ request()->is('themes/rsc/cetakanalisa', 'themes/rsc/cetakpersetujuan', 'themes/rsc/cetaknotifikasi', 'themes/rsc/cetakpk') ? 'active' : '' }}">
+                        <a href="">
+                            <i class="fa fa-medkit" aria-hidden="true"></i>
+                            <span>Cetak Berkas RSC</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{ request()->is('themes/rsc/cetakanalisa') ? 'active' : '' }}">
+                                <a href="{{ route('rsc.cetakanalisa.index') }}" title="Add RSC">
+                                    <i class="fa fa-suitcase"></i>
+                                    Cetak Analisa RSC
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('themes/rsc/cetakpersetujuan') ? 'active' : '' }}">
+                                <a href="{{ route('rsc.cetakpersetujuan.index') }}" title="Add RSC">
+                                    <i class="fa fa-file-text-o"></i>
+                                    Cetak Persetujuan RSC
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('themes/rsc/cetaknotifikasi') ? 'active' : '' }}">
+                                <a href="{{ route('rsc.cetaknotifikasi.index') }}" title="Add RSC">
+                                    <i class="fa fa-bell-o"></i>
+                                    Cetak Notifikasi RSC
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('themes/rsc/cetakpk') ? 'active' : '' }}">
+                                <a href="{{ route('rsc.cetakpk.index') }}" title="Add RSC">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Cetak Perjanjian Kredit RSC
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Sub --}}
+
+                    {{-- <li class="{{ request()->is('themes/rsc/cetakanalisa') ? 'active' : '' }}">
                         <a href="{{ route('rsc.cetakanalisa.index') }}" title="Add RSC">
                             <i class="fa fa-suitcase"></i>
                             Cetak Analisa RSC
@@ -553,7 +595,7 @@
                             <i class="fa fa-exclamation-circle"></i>
                             Cetak Perjanjian Kredit RSC
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
 
