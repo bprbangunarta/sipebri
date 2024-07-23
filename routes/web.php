@@ -43,6 +43,7 @@ use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PendampingController;
+use App\Http\Controllers\RSCLaporanController;
 use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
@@ -785,6 +786,10 @@ Route::middleware('auth')->group(function () {
                 Route::post('/rsc/perjanjiankredit/simpan', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
                 Route::post('/rsc/perjanjiankredit/addspk/simpan', 'simpan_spk_rsc')->name('rsc.add_spk.simpan');
             });
+        });
+
+        Route::controller(RSCLaporanController::class)->group(function () {
+            Route::get('/rsc/tracking', 'tracking_rsc')->name('rsc.tracking');
         });
 
         //====Route Analisa RSC====//
