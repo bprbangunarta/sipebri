@@ -263,8 +263,6 @@
                                         </option>
                                         <option value="RELOAN" {{ old('kategori') == 'RELOAN' ? 'selected' : '' }}>RELOAN
                                         </option>
-                                        <option value="RSC" {{ old('kategori') == 'RSC' ? 'selected' : '' }}>RSC
-                                        </option>
                                     </select>
                                 </div>
 
