@@ -308,7 +308,7 @@ class RSCLainController extends Controller
                         'nominal' => (int)str_replace(["Rp.", " ", "."], "", $request->input('pengeluaran' . $i)),
                         'updated_at' => now(),
                     ];
-                    // DB::table('rsc_pengeluaran_lain')->where('id', $request->input('kod' . $i))->update($data);
+                    DB::table('rsc_pengeluaran_lain')->where('id', $request->input('kod' . $i))->update($data);
                 }
                 //Masuk ke tabel du_lainnya
                 for ($j = 1; $j <= 5; $j++) {
