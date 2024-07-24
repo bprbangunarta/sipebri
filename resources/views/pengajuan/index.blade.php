@@ -301,6 +301,12 @@
                                         value="{{ old('jangka_waktu') }}" placeholder="ENTRI" required>
                                 </div>
                             </div>
+                            <p style="margin-left: 15px;">
+                                <b>Note : </b> <br>
+                                * Untuk pengajuan <b>RSC</b> gunakan menu <b>RESCHEDULLING</b>. <br>
+                                * Data yang dari <b>SIPEBRI</b> gunakan <b>Add RSC</b>. <br>
+                                * Untuk diluar <b>SIPEBRI</b> gunakan <b>Add RSC Eksternal</b> dan gunakan <b>NO LOAN</b>
+                            </p>
                         </div>
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
