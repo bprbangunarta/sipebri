@@ -768,6 +768,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/rsc/cetakpersetujuan/detail', 'cetakpersetujuan_detail')->name('rsc.cetakpersetujuan.detail');
             Route::get('/rsc/cetakpk', 'cetakpk_index')->name('rsc.cetakpk.index');
             Route::get('/rsc/cetakpk/detail', 'cetakpk_index_detail')->name('rsc.cetakpk.detail');
+            Route::get('/rsc/cetakpenolakan/detail', 'cetak_penolakan')->name('rsc.cetak.penolakan');
         });
 
         Route::group(['middleware' => ['role:Kasi Analis']], function () {
@@ -779,12 +780,19 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::group(['middleware' => ['role:Admin Kredit']], function () {
+        Route::group(['middleware' => ['role:Kabag Analis|Direksi|Kasi Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
-                Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
-                Route::get('/rsc/perjanjiankredit/get', 'pk_get')->name('rsc.perjanjian_kredit.get');
-                Route::post('/rsc/perjanjiankredit/simpan', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
-                Route::post('/rsc/perjanjiankredit/addspk/simpan', 'simpan_spk_rsc')->name('rsc.add_spk.simpan');
+                Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
+                Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
+                Route::post('rsc/notifikasi/simpan', 'simpan_notifikasi')->name('rsc.notifikasi.simpan');
+            });
+        });
+
+        Route::group(['middleware' => ['role:Kasi Analis|Kabag Analis']], function () {
+            Route::controller(RSCController::class)->group(function () {
+                Route::get('/rsc/penolakan', 'penolakan_index')->name('rsc.penolakan');
+                Route::get('/rsc/add/penolakan', 'get_penolakan')->name('rsc.get_penolakan');
+                Route::POST('/rsc/simpan/penolakan', 'simpan_penolakan')->name('rsc.simpan_penolakan');
             });
         });
 

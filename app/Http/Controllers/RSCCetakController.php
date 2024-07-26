@@ -1042,6 +1042,15 @@ class RSCCetakController extends Controller
         }
     }
 
+    public function cetak_penolakan(Request $request)
+    {
+        try {
+            dd($request);
+        } catch (\Throwable $er) {
+        }
+    }
+
+
 
     //Function Protected
     protected function rsc_usaha($kode_rsc)

@@ -1187,6 +1187,176 @@ class RSCController extends Controller
         return response()->json($data);
     }
 
+    public function penolakan_index()
+    {
+        $keyword = request('keyword');
+        $data = DB::table('rsc_data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_pengajuan.plafon',
+                'data_survei.kantor_kode',
+            )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%');
+            })
+
+            ->whereIn('rsc_data_pengajuan.status', ['Tolak', 'Dibatalkan'])
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc')
+            ->paginate(10);
+        //
+
+        //===Handle Data Eksternal===//
+        foreach ($data as $value) {
+            if (strpos($value->status_rsc, 'EKS') !== false) {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.plafond_awal',
+                        'm_cif.alamat',
+                        'm_loan.jkwaktu',
+                        'setup_loan.ket',
+                        'wilayah.ket as wil',
+                    )
+                    ->where('noacc', $value->kode_pengajuan)->first();
+                //
+                if ($data_eks) {
+                    $value->nama_nasabah = trim($data_eks->fnama);
+                    $value->alamat_ktp = trim($data_eks->alamat);
+                    $value->plafon = trim($data_eks->plafond_awal);
+                    $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                }
+            }
+        }
+        //===Handle Data Eksternal===//
+
+
+        foreach ($data as $item) {
+            $cek_penolakan = DB::table('rsc_penolakan')->where('kode_rsc', $item->kode_rsc)->first();
+
+            if (!is_null($cek_penolakan)) {
+                $item->no_penolakan = $cek_penolakan->no_penolakan;
+            } else {
+                $item->no_penolakan = null;
+            }
+        }
+
+        return view('rsc.penolakan.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function get_penolakan(Request $request)
+    {
+        $kode_rsc = $request->query('kode');
+
+        // $data = DB::table('rsc_penolakan')->where('kode_rsc', $kode_rsc)->first();
+        $data = DB::table('rsc_data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+            ->select('rsc_data_pengajuan.kode_rsc', 'rsc_data_pengajuan.pengajuan_kode', 'data_nasabah.nama_nasabah')
+            ->where('rsc_data_pengajuan.kode_rsc', $kode_rsc)->first();
+        //
+
+        if (is_null($data->nama_nasabah)) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->select('m_loan.fnama')
+                ->where('m_loan.noacc', $data->pengajuan_kode)->first();
+            //
+            if ($data_eks) {
+                $data->nama_nasabah = trim($data_eks->fnama);
+            }
+        }
+
+
+        if (is_null($data)) {
+            return response()->json(['error' => 'Data Tidak ada.'], 404);
+        }
+
+        $lasts = DB::table('rsc_penolakan')->latest('nomor')->first();
+        if (is_null($lasts)) {
+            $count = 0001;
+        } else {
+            $count = (int) $lasts->nomor + 1;
+        }
+        $lengths = 4;
+        $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+        $now = Carbon::now();
+        $bulan = $now->month;
+        $romawi = Data::romawi($bulan);
+
+        $data->no_penolakan = $kodes . '/' . 'RST' . '/' . 'PBA' . '/' . $romawi . '/' . $now->year;
+        $data->nomor = $kodes;
+        $data->ket = null;
+
+        $cek_penolakan = DB::table('rsc_penolakan')->where('kode_rsc', $kode_rsc)->first();
+
+        if ($cek_penolakan) {
+            $data_penolakan = (object) [
+                'kode_rsc' => $cek_penolakan->kode_rsc,
+                'nomor' => $cek_penolakan->nomor,
+                'nama_nasabah' => $data->nama_nasabah,
+                'no_penolakan' => $cek_penolakan->no_penolakan,
+                'ket' => $cek_penolakan->keterangan,
+            ];
+            return response()->json($data_penolakan);
+        } else {
+            return response()->json($data);
+        }
+    }
+
+    public function simpan_penolakan(Request $request)
+    {
+        try {
+            $cek = $request->validate([
+                'kode_rsc' => 'required',
+                'nomor' => 'required',
+                'no_penolakan' => 'required',
+                'nama_nasabah' => 'required',
+                'keterangan' => 'required',
+            ]);
+
+            $cek_data = DB::table('rsc_penolakan')->where('kode_rsc', $request->kode_rsc)->first();
+
+            if ($cek_data) {
+                return redirect()->back()->with('error', 'Data sudah ada.');
+            } else {
+                $data = [
+                    'kode_rsc' => $cek['kode_rsc'],
+                    'nomor' => $cek['nomor'],
+                    'no_penolakan' => $cek['no_penolakan'],
+                    'keterangan' => str::upper($cek['keterangan']),
+                    'input_user' => Auth::user()->code_user,
+                    'created_at' => now(),
+                ];
+
+
+                $simpan = DB::table('rsc_penolakan')->insert($data);
+                if ($simpan) {
+                    return redirect()->back()->with('success', 'Data berhasil disimpan.');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal disimpan.');
+                }
+            }
+        } catch (\Throwable $er) {
+            return redirect()->back()->with('error', 'Hubungi IT.');
+        }
+    }
+
 
 
     private function kodeacak($name)

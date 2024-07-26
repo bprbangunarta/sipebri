@@ -328,7 +328,7 @@
                 dataType: "json",
                 cache: false,
                 success: function(response) {
-                    console.log(response)
+
                     $('#plafond_rsc').val(response.plafon.toLocaleString("id-ID") ?? 0)
                     $('#spk_rsc').val(response.no_spk)
                     $('#tg_realisasi').val(response.tgL_realisasi)
