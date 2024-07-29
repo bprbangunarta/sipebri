@@ -283,6 +283,22 @@ class RSCCetakController extends Controller
                     ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
                     ->select('data_jaminan.catatan')
                     ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
+            } elseif ($data->status_rsc == 'EKS') {
+                $jaminan = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->join('m_detil_jaminan', 'm_detil_jaminan.nocif', '=', 'm_cif.nocif')
+                    ->select(
+                        'm_detil_jaminan.catatan',
+                        'm_cif.nocif',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->get();
+                //
+
+                if ($jaminan) {
+                    foreach ($jaminan as $item) {
+                        $item->catatan = trim($item->catatan);
+                    }
+                }
             } else {
                 $jaminan = [];
             }
@@ -1045,8 +1061,57 @@ class RSCCetakController extends Controller
     public function cetak_penolakan(Request $request)
     {
         try {
-            dd($request);
-        } catch (\Throwable $er) {
+            $kode_rsc = Crypt::decrypt($request->query('kode_rsc'));
+            $data = DB::table('rsc_penolakan')
+                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_penolakan.kode_rsc')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->select(
+                    'rsc_data_pengajuan.pengajuan_kode',
+                    'rsc_data_pengajuan.kode_rsc',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.no_telp',
+                    'data_nasabah.alamat_ktp',
+                    'rsc_penolakan.no_penolakan',
+                    'rsc_penolakan.keterangan as alasan',
+                    'rsc_penolakan.input_user',
+                )
+                ->where('rsc_penolakan.kode_rsc', $kode_rsc)->first();
+            //
+            if (is_null($data->nama_nasabah)) {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_cif.alamat',
+                        'm_cif.nohp',
+                    )
+                    ->where('m_loan.noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                    $data->no_telp = trim($data_eks->nohp);
+                }
+            }
+
+            $komite = DB::table('rsc_data_usulan')->where('kode_rsc', $kode_rsc)->latest()->first();
+            if (!is_null($komite)) {
+                $conv = Carbon::parse($komite->created_at);
+                $data->tgl_usulan = $conv->isoFormat('D MMMM Y');
+            } else {
+                $conv = now();
+                $data->tgl_usulan = $conv->locale('id')->isoFormat('D MMMM Y');
+            }
+
+            $qr = $this->get_qrcode($kode_rsc, 'PENOLAKAN_RSC', $data->input_user);
+            //
+
+            return view('rsc.penolakan.cetak_penolakan', [
+                'data' => $data,
+                'qr' => $qr,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
         }
     }
 

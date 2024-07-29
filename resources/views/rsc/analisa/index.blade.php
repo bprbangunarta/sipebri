@@ -74,7 +74,13 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="text-align: right;">
-                                                @if ($item->status == 'Proses Analisa')
+                                                @if (
+                                                    $item->status == 'Proses Analisa' ||
+                                                        $item->status == 'Proses Persetujuan' ||
+                                                        $item->status == 'Naik Kasi' ||
+                                                        $item->status == 'Komite I' ||
+                                                        $item->status == 'Komite II' ||
+                                                        $item->status == 'Notifikasi')
                                                     <a href="{{ route('rsc.data.kredit', ['kode' => $item->kode, 'rsc' => $item->rsc, 'status_rsc' => $item->status_rsc]) }}"
                                                         class="btn-circle btn-sm bg-yellow" title="Lengkapi RSC">
                                                         <i class="fa fa-edit"></i>

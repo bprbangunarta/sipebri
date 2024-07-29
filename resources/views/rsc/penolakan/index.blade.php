@@ -12,7 +12,7 @@
                             <h3 class="box-title">PENOLAKAN RSC</h3>
 
                             <div class="box-tools">
-                                <form action="3" method="GET">
+                                <form action="{{ route('rsc.penolakan') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
@@ -74,11 +74,19 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="" class="btn-circle btn-sm btn-success" data-toggle="modal"
-                                                    data-kode="{{ $item->kode_rsc }}" data-target="#modal-penolakan"
-                                                    title="Penolakan RSC">
-                                                    <i class="fa fa-pencil-square" aria-hidden="true"></i>
-                                                </a>
+                                                @if (is_null($item->no_penolakan))
+                                                    <a href="" class="btn-circle btn-sm btn-warning"
+                                                        data-toggle="modal" data-kode="{{ $item->kode_rsc }}"
+                                                        data-target="#modal-penolakan" title="Penolakan RSC">
+                                                        <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="" class="btn-circle btn-sm btn-success"
+                                                        data-toggle="modal" data-kode="{{ $item->kode_rsc }}"
+                                                        data-target="#modal-penolakan" title="Penolakan RSC">
+                                                        <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                                    </a>
+                                                @endif
 
                                                 &nbsp;
                                                 @if (is_null($item->no_penolakan))
@@ -87,7 +95,7 @@
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('rsc.cetak.penolakan', ['kode_rsc' => $item->kode_rsc]) }}"
+                                                    <a href="{{ route('rsc.cetak.penolakan', ['kode_rsc' => $item->rsc_kode]) }}"
                                                         target="__blank" class="btn-circle btn-sm bg-blue"
                                                         title="Informasi">
                                                         <i class="fa fa-print"></i>

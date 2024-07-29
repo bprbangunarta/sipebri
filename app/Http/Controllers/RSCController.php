@@ -146,7 +146,8 @@ class RSCController extends Controller
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon'
+                'data_pengajuan.plafon',
+                'rsc_data_survei.foto'
             )
 
             ->where(function ($query) use ($keyword) {
@@ -157,8 +158,10 @@ class RSCController extends Controller
             })
 
             ->where(function ($query) {
-                $query->where('rsc_data_pengajuan.status', 'Proses Analisa')
-                    ->orWhere('rsc_data_pengajuan.status', 'Proses Survei');
+                $query->whereIn('rsc_data_pengajuan.status', [
+                    'Proses Analisa', 'Proses Survei',
+                    'Proses Persetujuan', 'Naik Kasi', 'Komite I', 'Komite II', 'Notifikasi'
+                ]);
             })
             ->where('rsc_data_survei.surveyor_kode', Auth::user()->code_user)
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
@@ -203,7 +206,7 @@ class RSCController extends Controller
             $item->kode = Crypt::encrypt($item->kode_pengajuan);
             $item->rsc = Crypt::encrypt($item->kode_rsc);
         }
-
+        // dd($data);
         return view('rsc.analisa.index', [
             'kasi' => $kasi,
             'surveyor' => $surveyor,
@@ -1209,14 +1212,13 @@ class RSCController extends Controller
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%');
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%');
             })
 
             ->whereIn('rsc_data_pengajuan.status', ['Tolak', 'Dibatalkan'])
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
         //
-
         //===Handle Data Eksternal===//
         foreach ($data as $value) {
             if (strpos($value->status_rsc, 'EKS') !== false) {
@@ -1247,7 +1249,7 @@ class RSCController extends Controller
 
         foreach ($data as $item) {
             $cek_penolakan = DB::table('rsc_penolakan')->where('kode_rsc', $item->kode_rsc)->first();
-
+            $item->rsc_kode = Crypt::encrypt($item->kode_rsc);
             if (!is_null($cek_penolakan)) {
                 $item->no_penolakan = $cek_penolakan->no_penolakan;
             } else {

@@ -123,14 +123,14 @@
                                     <i class="fa fa-download"></i>&nbsp; Export Data
                                 </button>
 
-                                {{-- <button class="btn btn-default btn-sm">
+                                <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                                     entries
-                                </button> --}}
+                                </button>
 
                             </div>
 
-                            {{-- {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }} --}}
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
                     </div>
 

@@ -409,23 +409,6 @@
                                     - {{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}
                                 </div>
 
-                                {{-- <table class="agunan">
-                                    <thead>
-                                        <th style="text-align: center;">Data Agunan</th>
-                                        <th style="text-align: center;">Posisi Agunan</th>
-                                        <th style="text-align: center;">Kondisi Agunan</th>
-                                        <th style="text-align: center;">Nilai Taksasi Agunan</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ $data->catatan ?? '-' }}</td>
-                                            <td>{{ $agunan->posisi_agunan ?? '-' }}</td>
-                                            <td>{{ $agunan->kondisi_agunan ?? '-' }}</td>
-                                            <td>{{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table> --}}
                             </div>
 
                             <div class="contents">
