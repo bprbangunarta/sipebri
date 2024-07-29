@@ -128,43 +128,23 @@
                     <div class="modal-body">
 
                         <div class="box-body">
-                            <div class="row" style="margin-bottom: 20px;">
-                                <div class="col-md-12" style="margin-bottom: 20px;">
-                                    <div style="margin-top: -15px; float:left; width: 47.5%;">
+                            <div class="row">
+                                <div class="col-md-6" style="margin-bottom: 25px;">
+                                    <div style="margin-top: -15px;">
                                         <span class="fw-bold">PLAFON RSC</span>
                                         <input type="text" id="kode" hidden>
                                         <input type="text" name="nomor" id="nomor" hidden>
                                         <input class="form-control text-uppercase" type="text" name=""
                                             id="plafond_rsc" readonly>
                                     </div>
-                                    <div style="margin-top: -15px; float:right; width: 47.5%;">
+                                    <div style="margin-top: 5px;">
                                         <span class="fw-bold">SPK RSC</span>
                                         <input type="text" id="kode" hidden>
                                         <input type="text" name="nomor" id="nomor" hidden>
                                         <input class="form-control text-uppercase" type="text" name="spk_rsc"
                                             id="spk_rsc" readonly>
                                     </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div style="margin-top: -15px; float:left; width: 47.5%;">
-                                        <span class="fw-bold">TANGGAL REALISASI</span>
-                                        <input type="text" id="kode" hidden>
-                                        <input type="text" name="nomor" id="nomor" hidden>
-                                        <input class="form-control text-uppercase" type="text" name="tg_realisasi"
-                                            id="tg_realisasi" readonly>
-                                    </div>
-                                    <div style="margin-top: -15px; float:right; width: 47.5%;">
-                                        <span class="fw-bold">TANGGAL JATUH TEMPO</span>
-                                        <input type="text" id="kode" hidden>
-                                        <input type="text" name="nomor" id="nomor" hidden>
-                                        <input class="form-control text-uppercase" type="text" name="tgL_jth_tmp"
-                                            id="tgL_jth_tmp" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div style="margin-top: -15px;">
+                                    <div style="margin-top: 5px;">
                                         <span class="fw-bold">KODE RSC</span>
                                         <input type="text" id="kode" hidden>
                                         <input type="text" name="nomor" id="nomor" hidden>
@@ -188,6 +168,22 @@
 
                                 <div class="col-md-6">
                                     <div style="margin-top: -15px;">
+                                        <span class="fw-bold">TANGGAL REALISASI</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="tg_realisasi"
+                                            id="tg_realisasi" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">TANGGAL JATUH TEMPO</span>
+                                        <input type="text" id="kode" hidden>
+                                        <input type="text" name="nomor" id="nomor" hidden>
+                                        <input class="form-control text-uppercase" type="text" name="tgL_jth_tmp"
+                                            id="tgL_jth_tmp" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
                                         <span class="fw-bold">PLAFON USULAN / BAKI DEBET</span>
                                         <input type="text" class="form-control" name="plafon" id="plafon"
                                             readonly>

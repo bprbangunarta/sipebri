@@ -796,6 +796,13 @@ Route::middleware('auth')->group(function () {
             });
         });
 
+        Route::controller(RSCController::class)->group(function () {
+            Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
+            Route::POST('/rsc/simpan/perjanjian_kredit', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
+            Route::POST('/rsc/add/perjanjian_kredit', 'simpan_spk_rsc')->name('rsc.add_spk.simpan');
+            Route::get('/rsc/perjanjiankredit/get', 'pk_get')->name('rsc.perjanjian_kredit.get');
+        });
+
         Route::controller(RSCLaporanController::class)->group(function () {
             Route::get('/rsc/tracking', 'tracking_rsc')->name('rsc.tracking');
         });

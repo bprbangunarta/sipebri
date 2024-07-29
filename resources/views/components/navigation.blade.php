@@ -517,8 +517,8 @@
                         </a>
                     </li>
                     <li class="{{ request()->is('themes/rsc/perjanjian_kredit') ? 'active' : '' }}">
-                        {{-- <a @if (Auth::user()->code_user == 'YSP') href="{{ route('rsc.perjanjian_kredit') }}" @endif --}}
-                        <a @if (Auth::user()->code_user == 'YSP') href="#" @endif title="Add RSC">
+                        <a @if (Auth::user()->code_user == 'YSP') href="{{ route('rsc.perjanjian_kredit') }}" @endif
+                            title="Add RSC">
                             <i class="fa fa-exclamation-circle"></i>
                             Add Perjanjian Kredit
                         </a>
