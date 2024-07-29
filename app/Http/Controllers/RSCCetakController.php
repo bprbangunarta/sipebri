@@ -17,6 +17,7 @@ class RSCCetakController extends Controller
     public function cetakanalisa_index()
     {
         $keyword = request('keyword');
+
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
@@ -64,8 +65,13 @@ class RSCCetakController extends Controller
                     'setup_loan.ket',
                     'wilayah.ket as wil',
                 )
+                ->where(function ($query) use ($keyword) {
+                    $query->where('m_loan.fnama', 'like', '%' . $keyword . '%')
+                        ->orWhere('m_loan.noacc', 'like', '%' . $keyword . '%');
+                })
                 ->where('noacc', $value->kode_pengajuan)->first();
             //
+
             if ($data_eks) {
                 $value->nama_nasabah = trim($data_eks->fnama);
                 $value->alamat_ktp = trim($data_eks->alamat);
@@ -108,6 +114,8 @@ class RSCCetakController extends Controller
                 ->leftJoin('data_spk', 'data_spk.pengajuan_kode', 'data_pengajuan.kode_pengajuan')
                 ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', 'rsc_data_pengajuan.kode_rsc')
                 ->leftJoin('users', 'users.code_user', 'rsc_data_survei.surveyor_kode')
+                ->leftJoin('rsc_biaya', 'rsc_biaya.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('rsc_analisa_keuangan', 'rsc_analisa_keuangan.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
                 ->select(
                     'rsc_data_pengajuan.pengajuan_kode',
                     'rsc_data_pengajuan.kode_rsc',
@@ -125,6 +133,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.total_angsuran',
                     'rsc_data_pengajuan.jenis_persetujuan',
                     'rsc_data_pengajuan.rc',
+                    'rsc_data_pengajuan.suku_bunga',
                     'rsc_data_pengajuan.status_rsc',
                     'rsc_data_pengajuan.penentuan_plafon',
                     'rsc_data_pengajuan.jangka_waktu',
@@ -138,6 +147,16 @@ class RSCCetakController extends Controller
                     'data_spk.no_spk',
                     'data_spk.updated_at as update_spk',
                     'users.name',
+                    'rsc_biaya.denda_dibayar',
+                    'rsc_biaya.administrasi',
+                    'rsc_biaya.administrasi_nominal',
+                    'rsc_biaya.asuransi_jiwa',
+                    'rsc_biaya.asuransi_tlo',
+                    'rsc_biaya.poko_dibayar',
+                    'rsc_biaya.bunga_dibayar',
+                    'rsc_biaya.total',
+                    'rsc_analisa_keuangan.created_at as tgl_add_analisa',
+                    'rsc_analisa_keuangan.updated_at as tgl_update_analisa',
                     DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir")
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
@@ -302,6 +321,15 @@ class RSCCetakController extends Controller
                 }
             } else {
                 $jaminan = [];
+            }
+
+            //Data Usulan
+            if (is_null($data->tgl_update_analisa)) {
+                $tgl = Carbon::parse($data->tgl_add_analisa);
+                $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
+            } else {
+                $tgl = Carbon::parse($data->tgl_update_analisa);
+                $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
             }
 
             return view('rsc.cetak_analisa.cetak_analisa', [
@@ -758,9 +786,9 @@ class RSCCetakController extends Controller
 
 
             //Data Usulan
-            $usulan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->latest()->first();
-            $tgl = Carbon::parse($usulan->created_at);
-            $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
+            // $usulan = DB::table('rsc_data_usulan')->where('kode_rsc', $enc_rsc)->latest()->first();
+            // $tgl = Carbon::parse($usulan->created_at);
+            // $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
 
             //Angsuran
             if (($data->produk_kode == 'KRU' && $data->metode_rps == 'EFEKTIF MUSIMAN') || ($data->produk_kode == 'KBT' && $data->metode_rps == 'FLAT')) {

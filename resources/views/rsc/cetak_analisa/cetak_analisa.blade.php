@@ -72,6 +72,43 @@
         }
 
         /* new style div */
+        .headers {
+            margin-top: 10px;
+        }
+
+        .item {
+            margin-top: -10px;
+        }
+
+        .headers p {
+            margin-left: 23px;
+        }
+
+        .headers table {
+            margin-left: 23px;
+            margin-top: -10px;
+        }
+
+        .headers table tr td {
+            padding-bottom: 5px;
+        }
+
+        .ttd p {
+            margin-left: -3px;
+        }
+
+        .headers .plafon_rsc {
+            box-sizing: border-box;
+            margin-top: 10px;
+            width: 35%;
+            margin-bottom: 20px;
+        }
+
+        .headers .plafon_rsc th {
+            font-weight: bold;
+            text-align: center;
+        }
+
         .section {
             margin-bottom: 20px;
         }
@@ -102,7 +139,16 @@
         }
 
         .tables th {
+            border: 1px solid black;
             text-align: center;
+        }
+
+        .plafon_rsc th,
+        .plafon_rsc tr,
+        .plafon_rsc td {
+            /* padding-left: 7px; */
+            padding-left: 0px;
+            /* border: 1px solid black; */
         }
 
         /* new style div */
@@ -1200,116 +1246,12 @@
                                     </table>
                                 @empty
                                 @endforelse
-                                {{-- Analisa Usaha Lainnya --}}
-
-                                {{-- <div class="title">
-                                    b. Biaya
-                                </div>
-                                <div class="item">
-                                    <table class="tables">
-                                        <thead>
-                                            <tr>
-                                                <td style="width: 60%; text-align:center;">Nama Biaya</td>
-                                                <td style="text-align:center;">Nominal</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Biaya Konsumsi Pokok</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->konsumsi, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Kesehatan</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->kesehatan, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pendidikan</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->pendidikan, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Gas, Air, Telepon & Listrik</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->gatel, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jajan Anak</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->jajan_anak, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Sumbangan Sosial</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->sumbangan, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Rokok</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->roko, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">Kewajiban Lain</td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="text-align: center;">TOTAL</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->total, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div class="title">
-                                    c. Kewajiban
-                                </div>
-                                <div class="item">
-                                    <table class="tables">
-                                        <thead>
-                                            <tr>
-                                                <td style="width: 60%; text-align:center;">Nama Kewajiban</td>
-                                                <td style="width: 60%; text-align:center;">Nominal</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>{{ Str::upper($biaya->kewajiban1) }}</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->nominal_kewajiban1, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>{{ Str::upper($biaya->kewajiban2) }}</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->nominal_kewajiban2, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>{{ Str::upper($biaya->kewajiban3) }}</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->nominal_kewajiban3, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    style="text-align:
-                                                    center;">
-                                                    TOTAL</td>
-                                                <td>{{ 'Rp. ' . number_format($biaya->total_kewajiban, '0', ',', '.') }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div> --}}
 
                                 <div class="page-break"></div>
                                 <h4 style="text-align: center;font-size: 12pt;">PERHITUNGAN KEMAMPUAN KEUANGAN</h4>
                                 <p></p>
                                 <table class="tables">
                                     <thead>
-                                        {{-- <tr>
-                                            <td style="width: 60%; text-align:center;">Nama Usaha</td>
-                                            <td style="text-align:center;">Nominal</td>
-                                        </tr> --}}
                                         <tr>
                                             <th colspan="4">Analisa Keuangan</th>
                                         </tr>
@@ -1551,9 +1493,138 @@
                     </td>
                 </tr>
             </table>
-            </div>
         </tbody>
     </table>
+
+    <div class="page-break"></div>
+
+    <div class="content" style="margin-top: -27px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr style="border: 1px solid 034871;">
+
+        <div class="headers">
+            <label for="" style="font-weight:bold;">1. &nbsp;&nbsp;&nbsp;PLAFON RSC</label>
+            <table class="plafon_rsc">
+                <tr>
+                    <td style="width: 55%;">Baki Debet</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->baki_debet, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Tunggakan Bunga</td>
+                    <td style="width: 2%;">:</td>
+                    <td style="border-bottom: 1px solid black;"> &nbsp;Rp.
+                        {{ number_format($data->tunggakan_bunga, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%; font-weight:bold; text-align:center;">TOTAL</td>
+                    <td style="width: 2%; font-weight:bold;">:</td>
+                    @php
+                        $total_baki = $data->tunggakan_bunga + $data->baki_debet;
+                    @endphp
+                    <td style="font-weight:bold;"> &nbsp;Rp.
+                        {{ number_format($total_baki, '0', ',', '.') }}</td>
+                </tr>
+            </table>
+
+            <table class="plafon_rsc">
+                <tr>
+                    <td style="width: 55%;">Bunga Dibayar</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->bunga_dibayar, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Pokok Dibayar</td>
+                    <td style="width: 2%;">:</td>
+                    <td style="border-bottom: 1px solid black;"> &nbsp;Rp.
+                        {{ number_format($data->poko_dibayar, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%; font-weight:bold; text-align:center;">PLAFON</td>
+                    <td style="width: 2%; font-weight:bold;">:</td>
+                    <td style="font-weight:bold;"> &nbsp;Rp.
+                        {{ number_format($data->penentuan_plafon, '0', ',', '.') }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="headers">
+            <label for="" style="font-weight:bold;">2. &nbsp;&nbsp;&nbsp;BIAYA RSC</label>
+            <table class="plafon_rsc">
+                <tr>
+                    <td style="width: 55%;">Administrasi {{ $data->administrasi }}%</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->administrasi_nominal, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Asuransi Jiwa</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->asuransi_jiwa, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Asuransi TLO</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->asuransi_tlo, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Pokok Dibayar</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->poko_dibayar, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Bunga Dibayar</td>
+                    <td style="width: 2%;">:</td>
+                    <td> &nbsp;Rp. {{ number_format($data->bunga_dibayar, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%;">Denda</td>
+                    <td style="width: 2%;">:</td>
+                    <td style="border-bottom: 1px solid black;"> &nbsp;Rp.
+                        {{ number_format($data->denda_dibayar, '0', ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 55%; font-weight:bold; text-align:center;">TOTAL BIAYA</td>
+                    <td style="width: 2%; font-weight:bold;">:</td>
+                    <td style="font-weight:bold;"> &nbsp;Rp. {{ number_format($data->total, '0', ',', '.') }}
+                    </td>
+                </tr>
+            </table>
+
+            <p>SIMULASI ANGSURAN PLAFON Rp. {{ number_format($data->penentuan_plafon, '0', ',', '.') }},- RATE
+                {{ $data->suku_bunga }} %
+                {{ $data->metode_rps }} JANGKA WAKTU {{ $data->jangka_waktu }} BULAN</p>
+            <p>
+                Total Angsuran = Pokok (Rp. {{ number_format($data->angsuran_pokok, '0', ',', '.') }}) + Bunga
+                (Rp.
+                {{ number_format($data->angsuran_bunga, '0', ',', '.') }}) = Rp.
+                {{ number_format($data->angsuran_pokok + $data->angsuran_bunga, '0', ',', '.') }}
+            </p>
+
+            <table style="width:97%; margin-right:50px; margin-top: 35px;">
+                <tr>
+                    <td class="text-left" style="float: left;">
+
+                    </td>
+                    <td class="text-right" style="float: right;">
+                        <center>
+                            <p style="margin-top: -1.5px;"></p>
+                            <p>Pamanukan, {{ $data->tgl_usulan }}</p>
+                            <p style="margin-top: 40px;"></p>
+                            <br>
+                            <br>
+                            <b>
+                                <p>
+                                    <font style="text-transform: uppercase;"><u>{{ $data->nama_nasabah }}</u>
+                                    </font>
+                                </p>
+                            </b>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 
     <script>
         window.print();
