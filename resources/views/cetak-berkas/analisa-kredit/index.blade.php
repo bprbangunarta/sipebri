@@ -1199,34 +1199,6 @@
                     </td>
                     <td style="border:1px solid black;text-align:right;">
                         {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
-                    {{-- @if ($itemj->jenis_jaminan == 'Kendaraan')
-                        <td style="border:1px solid black;">
-                            BPKB {{ $itemj->jenis_agunan }}, {{ $itemj->merek }} {{ $itemj->tipe_kendaraan }},
-                            {{ $itemj->tahun }}, {{ $itemj->no_rangka }}, {{ $itemj->no_mesin }},
-                            {{ $itemj->no_polisi }}, {{ $itemj->no_dokumen }}, {{ $itemj->warna }},
-                            {{ $itemj->atas_nama }}.
-                        </td>
-                        <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
-                    @elseif ($itemj->jenis_jaminan == 'Tanah')
-                        <td style="border:1px solid black;">
-                            SERTIFIKAT {{ $itemj->jenis_jaminan }} NO {{ $itemj->no_dokumen }}, LUAS
-                            {{ number_format($itemj->luas, 0, ',', '.') }} M2, ATAS NAMA {{ $itemj->atas_nama }}.
-                        </td>
-                        <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
-                    @elseif ($itemj->jenis_jaminan == 'Lainnya')
-                        <td style="border:1px solid black;">
-                            @if ($itemj->nama_jenis_dokumen == 'Kartu Jamsostek')
-                                KARTU DAN SALDO JAMSOSTEK
-                            @else
-                                {{ $itemj->nama_jenis_dokumen }}
-                            @endif
-                            ATAS NAMA {{ $itemj->atas_nama }} NO {{ $itemj->no_dokumen }}.
-                        </td>
-                        <td style="border:1px solid black;text-align:right;">
-                            {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}</td>
-                    @endif --}}
                 </tr>
             @empty
                 <tr style="border:1px solid black;">
