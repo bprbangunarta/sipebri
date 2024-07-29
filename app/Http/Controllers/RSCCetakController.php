@@ -289,7 +289,7 @@ class RSCCetakController extends Controller
                     ->join('m_detil_jaminan', 'm_detil_jaminan.noreg', '=', 'm_loan_jaminan.noreg')
                     ->select(
                         'm_detil_jaminan.catatan',
-                        'm_loan_jaminan.nilai_jaminan',
+                        'm_detil_jaminan.nilai_taksasi',
                     )
                     ->where('m_loan.noacc', $data->pengajuan_kode)->get();
                 //
@@ -297,7 +297,7 @@ class RSCCetakController extends Controller
                 if ($jaminan) {
                     foreach ($jaminan as $item) {
                         $item->catatan = trim($item->catatan);
-                        $item->nilai_taksasi = trim($item->nilai_jaminan);
+                        $item->nilai_taksasi = trim($item->nilai_taksasi);
                     }
                 }
             } else {
