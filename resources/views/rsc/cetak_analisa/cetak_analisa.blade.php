@@ -406,7 +406,15 @@
                                     d. Nilai Taksasi Agunan
                                 </div>
                                 <div class="item">
-                                    - {{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}
+                                    {{-- - {{ 'Rp. ' . number_format($agunan->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }} --}}
+                                    <ol style="margin-left: -28px;text-align: justify; text-transform:uppercase;">
+                                        @forelse ($jaminan as $item)
+                                            <li>{{ 'Rp. ' . number_format($item->nilai_taksasi, '0', ',', '.') ?? 'Rp. 0' }}.
+                                            </li>
+                                        @empty
+                                            -
+                                        @endforelse
+                                    </ol>
                                 </div>
 
                             </div>

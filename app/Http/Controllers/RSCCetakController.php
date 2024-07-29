@@ -281,22 +281,23 @@ class RSCCetakController extends Controller
             if ($data->status_rsc == 'IN') {
                 $jaminan = DB::table('rsc_data_pengajuan')
                     ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                    ->select('data_jaminan.catatan')
+                    ->select('data_jaminan.catatan', 'data_jaminan.nilai_taksasi')
                     ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
             } elseif ($data->status_rsc == 'EKS') {
                 $jaminan = DB::connection('sqlsrv')->table('m_loan')
-                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
-                    ->join('m_detil_jaminan', 'm_detil_jaminan.nocif', '=', 'm_cif.nocif')
+                    ->join('m_loan_jaminan', 'm_loan_jaminan.noacc', '=', 'm_loan.noacc')
+                    ->join('m_detil_jaminan', 'm_detil_jaminan.noreg', '=', 'm_loan_jaminan.noreg')
                     ->select(
                         'm_detil_jaminan.catatan',
-                        'm_cif.nocif',
+                        'm_loan_jaminan.nilai_jaminan',
                     )
-                    ->where('noacc', $data->pengajuan_kode)->get();
+                    ->where('m_loan.noacc', $data->pengajuan_kode)->get();
                 //
 
                 if ($jaminan) {
                     foreach ($jaminan as $item) {
                         $item->catatan = trim($item->catatan);
+                        $item->nilai_taksasi = trim($item->nilai_jaminan);
                     }
                 }
             } else {
