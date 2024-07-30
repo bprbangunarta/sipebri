@@ -201,11 +201,13 @@
 
                         </div>
                     </div>
-                    <p>
-                        <b>NOTE : </b> <br>
-                        * Pilih <b>STATUS PERSETUJUAN</b> jika akan melakukan penolakan/pembatalan RSC.
-                        * jika tidak akan digunakan, boleh di kosongkan.
-                    </p>
+                    @if ($user->role_name == 'Kabag Analis' || $user->role_name == 'Direksi')
+                        <p>
+                            <b>NOTE : </b> <br>
+                            * Pilih <b>STATUS PERSETUJUAN</b> jika akan melakukan penolakan/pembatalan RSC. <br>
+                            * jika tidak akan digunakan, boleh di kosongkan.
+                        </p>
+                    @endif
                 </div>
         </section>
     </div>
