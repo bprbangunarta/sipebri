@@ -52,7 +52,6 @@ class RSCPersetujuanController extends Controller
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
                 $value->jangka_waktu = $data_eks->jkwaktu;
                 $value->metode_rps = null;
-                $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }

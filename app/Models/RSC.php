@@ -291,6 +291,7 @@ class RSC extends Model
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
                 'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
@@ -325,6 +326,7 @@ class RSC extends Model
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
                 'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
@@ -358,10 +360,10 @@ class RSC extends Model
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
                 'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
-                'data_pengajuan.plafon',
             )
 
             ->where(function ($query) use ($keyword) {
@@ -391,6 +393,7 @@ class RSC extends Model
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
                 'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
