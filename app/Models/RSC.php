@@ -330,7 +330,6 @@ class RSC extends Model
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
-                'data_pengajuan.plafon',
             )
 
             ->where(function ($query) use ($keyword) {
@@ -397,7 +396,6 @@ class RSC extends Model
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'rsc_data_survei.kantor_kode',
-                'data_pengajuan.plafon',
             )
 
             ->where(function ($query) use ($keyword) {

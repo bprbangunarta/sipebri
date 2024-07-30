@@ -38,7 +38,6 @@ class RSCPersetujuanController extends Controller
                 ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
                 ->select(
                     'm_loan.fnama',
-                    'm_loan.plafond_awal',
                     'm_cif.alamat',
                     'm_loan.jkwaktu',
                     'setup_loan.ket',
