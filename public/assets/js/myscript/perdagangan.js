@@ -342,7 +342,7 @@ $(
     //     pers += angka || 0;
     // }
     // var has = pers / 10;
-    console.log(laba, beli, lb)
+
     $("#tpersen").val(lb.toFixed(2) + "%");
 });
 

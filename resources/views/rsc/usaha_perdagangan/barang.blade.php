@@ -6,7 +6,8 @@
         <div class="tab-pane active" id="identitas-usaha">
             <div class="box-body" style="margin-top: -10px;">
 
-                <form action="{{ route('rsc.usaha.perdagangan.barang.simpan', ['kode_usaha' => $data->kode_usaha]) }}"
+                <form id="barang"
+                    action="{{ route('rsc.usaha.perdagangan.barang.simpan', ['kode_usaha' => $data->kode_usaha]) }}"
                     method="POST">
                     @csrf
                     <div class="box-body table-responsive no-padding">
@@ -387,7 +388,7 @@
                         </table>
                     </div>
 
-                    <button type="submit" class="btn btn-sm btn-primary"
+                    <button id="submitButton" type="submit" class="btn btn-sm btn-primary"
                         style="margin-top:10px;width:100%;">SIMPAN</button>
                 </form>
 
@@ -399,5 +400,18 @@
         <script src="{{ asset('assets/js/myscript/perdagangan.js') }}"></script>
         <script>
             $('.lama_usaha').select2()
+
+            $(document).ready(function() {
+                $('#barang').on('submit', function(event) {
+                    const $submitButton = $('#submitButton');
+
+                    if ($submitButton.data('submitted') === true) {
+                        e.preventDefault();
+                    } else {
+                        $submitButton.data('submitted', true);
+                        $submitButton.prop('disabled', true);
+                    }
+                })
+            })
         </script>
     @endpush

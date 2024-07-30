@@ -6,7 +6,8 @@
         <div class="tab-pane active" id="identitas-usaha">
             <div class="box-body" style="margin-top: -10px;">
 
-                <form action="{{ route('rsc.usaha.perdagangan.barang.update', ['kode_usaha' => $data->kode_usaha]) }}"
+                <form id="barang"
+                    action="{{ route('rsc.usaha.perdagangan.barang.update', ['kode_usaha' => $data->kode_usaha]) }}"
                     method="POST">
                     @method('put')
                     @csrf
@@ -467,7 +468,7 @@
                         </table>
                     </div>
 
-                    <button type="submit" class="btn btn-sm btn-primary"
+                    <button id="submitButton" type="submit" class="btn btn-sm btn-primary"
                         style="margin-top:10px;width:100%;">SIMPAN</button>
                 </form>
 
