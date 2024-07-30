@@ -78,6 +78,7 @@ use App\Http\Controllers\Admin\AdminSurveiController;
 use App\Http\Controllers\AnalisaKualitatifController;
 use App\Http\Controllers\AnalisaMemorandumController;
 use App\Http\Controllers\Admin\AdminJaminanController;
+use App\Http\Controllers\Admin\RSCPengajuanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\CheckListKendaraanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
@@ -212,6 +213,12 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/survei', 'index')->name('admin.survei.index');
                     Route::get('/data/survei/{kode}/edit', 'edit')->name('admin.survei.edit');
                     Route::PUT('/data/survei/update', 'update')->name('admin.survei.update');
+                });
+
+                // Data Pengajuan RSC
+                Route::controller(RSCPengajuanController::class)->group(function () {
+                    Route::get('/data/rsc/pengajuan/', 'index')->name('admin.rsc.pengajuan.index');
+                    Route::get('/data/rsc/pengajuan/edit', 'edit_pengajuan_rsc')->name('admin.rsc.pengajuan.edit');
                 });
             });
         });

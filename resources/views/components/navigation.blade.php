@@ -92,6 +92,27 @@
                     </ul>
                 </li>
 
+                <li
+                    class="treeview {{ request()->is('admin/data/rsc/pengajuan', 'admin/data/rsc/pengajuan/edit') ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-lock"></i>
+                        <span>Data Master RSC</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+
+                        <li
+                            class="{{ request()->is('admin/data/rsc/pengajuan', 'admin/data/rsc/pengajuan/edit') ? 'active' : '' }}">
+                            <a href="{{ route('admin.rsc.pengajuan.index') }}" title="Data Pengajuan RSC">
+                                <i class="fa fa-circle-o"></i>
+                                Data Pengajuan RSC
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="treeview {{ request()->is('') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-lock"></i>

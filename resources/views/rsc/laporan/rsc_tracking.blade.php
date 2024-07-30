@@ -35,6 +35,7 @@
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">#</th>
                                         <th class="text-center">TANGGAL</th>
+                                        <th class="text-center">NO PENGAJUAN/LOAN</th>
                                         <th class="text-center">KODE RSC</th>
                                         <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center">ALAMAT</th>
@@ -60,6 +61,7 @@
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tgl_rsc)->format('d-m-Y') }}
                                             </td>
+                                            <td class="text-center">{{ $item->pengajuan_kode }}</td>
                                             <td class="text-center">{{ $item->kode_rsc }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat }}</td>
