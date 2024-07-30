@@ -60,13 +60,10 @@
                                             <td class="text-center">{{ $item->produk_kode }}</td>
                                             <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center">
-                                                <a href="#" class="btn-circle btn-sm bg-yellow">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                                {{-- <a href="{{ route('admin.rsc.pengajuan.edit', ['kode_rsc' => $item->kode_rsc]) }}"
+                                                <a href="{{ route('admin.rsc.pengajuan.edit', ['kode_rsc' => $item->kode_rsc]) }}"
                                                     class="btn-circle btn-sm bg-yellow">
                                                     <i class="fa fa-edit"></i>
-                                                </a> --}}
+                                                </a>
                                             </td>
                                         </tr>
                                     @empty
