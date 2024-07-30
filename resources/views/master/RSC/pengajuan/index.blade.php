@@ -12,7 +12,7 @@
                             <h3 class="box-title">LAPORAN TRACKING RSC</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('rsc.tracking') }}" method="GET">
+                                <form action="{{ route('admin.rsc.pengajuan.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
 
                                         <input type="text" class="form-control text-uppercase pull-right"

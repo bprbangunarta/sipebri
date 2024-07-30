@@ -219,6 +219,7 @@ Route::middleware('auth')->group(function () {
                 Route::controller(RSCPengajuanController::class)->group(function () {
                     Route::get('/data/rsc/pengajuan/', 'index')->name('admin.rsc.pengajuan.index');
                     Route::get('/data/rsc/pengajuan/edit', 'edit_pengajuan_rsc')->name('admin.rsc.pengajuan.edit');
+                    Route::post('/data/rsc/pengajuan/update', 'update_pengajuan_rsc')->name('admin.rsc.pengajuan.update');
                 });
             });
         });

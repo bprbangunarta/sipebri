@@ -12,9 +12,9 @@
                             <h3 class="box-title">DATA PENGAJUAN RSC</h3>
                         </div>
 
-                        <form action="#" method="POST">
+                        <form action="{{ route('admin.rsc.pengajuan.update') }}" method="POST">
                             @csrf
-                            @method('PUT')
+                            @method('POST')
                             <div class="box-body" data-select2-id="13">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -28,7 +28,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>KODE RSC</label>
-                                            <input type="text" class="form-control" name="" id=""
+                                            <input type="text" class="form-control" name="kode_rsc" id=""
                                                 value="{{ $data->kode_rsc }}" readonly>
                                         </div>
                                     </div>
@@ -36,13 +36,10 @@
                                     <div class="col-md-4">
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>TRACKING</label>
-                                            <select type="text" class="form-control" name="status" required>
+                                            <select type="text" class="form-control tracking" name="status" required>
                                                 <option value="Batal"
                                                     {{ $data->status == 'Batal' || old('Batal') == 'Batal' ? 'selected' : '' }}>
                                                     Batal</option>
-                                                <option value="Disetujui"
-                                                    {{ $data->status == 'Disetujui' || old('Disetujui') == 'Disetujui' ? 'selected' : '' }}>
-                                                    Disetujui</option>
                                                 <option value="Ditolak"
                                                     {{ $data->status == 'Ditolak' || old('Ditolak') == 'Ditolak' ? 'selected' : '' }}>
                                                     Ditolak</option>
@@ -100,3 +97,8 @@
         </section>
     </div>
 @endsection
+@push('myscript')
+    <script>
+        $('.tracking').select2()
+    </script>
+@endpush

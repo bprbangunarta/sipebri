@@ -138,4 +138,21 @@ class RSCPengajuanController extends Controller
             //
         }
     }
+
+    public function update_pengajuan_rsc(Request $request)
+    {
+        try {
+            $data = ['status' => $request->status];
+
+            $update = DB::table('rsc_data_pengajuan')->where('kode_rsc', $request->kode_rsc)->update($data);
+
+            if ($update) {
+                return redirect()->back()->with('success', 'Data berhasil disimpan.');
+            } else {
+                return redirect()->back()->with('error', 'Data gagal disimpan.');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Ada kesalahan.');
+        }
+    }
 }
