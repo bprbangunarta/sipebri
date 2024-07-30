@@ -233,6 +233,7 @@ class RSC extends Model
                 'rsc_data_pengajuan.tunggakan_poko',
                 'rsc_data_pengajuan.tunggakan_bunga',
                 'rsc_data_pengajuan.tunggakan_denda',
+                'rsc_data_pengajuan.metode_rps',
                 'rsc_data_pengajuan.total_tunggakan',
                 'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_nasabah.nama_nasabah',
@@ -268,9 +269,6 @@ class RSC extends Model
                 $value->nama_nasabah = trim($data_eks->fnama);
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->metode_rps = null;
-                // $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }
