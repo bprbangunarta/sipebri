@@ -20,7 +20,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>KODE PENGAJUAN</label>
-                                            <input type="text" class="form-control" name="" id=""
+                                            <input type="text" class="form-control" name="pengajuan_kode" id=""
                                                 value="{{ $data->pengajuan_kode }}" readonly>
                                         </div>
                                     </div>
