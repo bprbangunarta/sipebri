@@ -131,7 +131,7 @@ class RSCPengajuanController extends Controller
                 }
             }
 
-            return view('master.rsc.pengajuan.edit', [
+            return view('master.RSC.pengajuan.edit', [
                 'data' => $data[0]
             ]);
         } catch (\Throwable $th) {
