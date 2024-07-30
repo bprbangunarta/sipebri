@@ -529,36 +529,42 @@
         @empty
         @endforelse
 
-        @if ($jaminan[0]->jenis_jaminan == null && $jaminan[1]->jenis_jaminan == null && $jaminan[2]->jenis_jaminan == null)
-            <br>
-            <table style="margin-top:-15px;">
-                <tr>
-                    <td class="text-center" width="2%" style="vertical-align: text-top;"> 12. </td>
-                    <td style="text-align: justify;">
-                        Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan atau
-                        karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa survey
-                        yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa survey.
-                        Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada Debitur
-                        dan
-                        Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
-                    </td>
-                </tr>
-            </table>
+        @if (count($jaminan) > 0)
+            @if ($jaminan[0]->jenis_jaminan == null && $jaminan[1]->jenis_jaminan == null && $jaminan[2]->jenis_jaminan == null)
+                <br>
+                <table style="margin-top:-15px;">
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;"> 12. </td>
+                        <td style="text-align: justify;">
+                            Debitur tidak diperbolehkan memberikan suatu imbalan dalam bentuk apapun kapada pejabat dan
+                            atau
+                            karyawan BPR BANGUNARTA berkanaan dengan persetujuan pemberian kredit, kecuali Biaya jasa
+                            survey
+                            yang dibayar oleh debitur pada saat survey yang disertakan bukti penerimaan uang jasa
+                            survey.
+                            Apabila dikemudian hari diketahui bahwa Debitur melanggar larangan tersebut, maka kepada
+                            Debitur
+                            dan
+                            Pejabat atau petugas BPR BANGUNARTA dapat dikenakan sanksi sesuai ketentuan BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
 
-            <table>
-                <tr>
-                    <td class="text-center" width="2%" style="vertical-align: text-top;"> 13. </td>
-                    <td style="text-align: justify;">
-                        Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit
-                        berikut
-                        syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
-                    </td>
-                </tr>
-            </table>
+                <table>
+                    <tr>
+                        <td class="text-center" width="2%" style="vertical-align: text-top;"> 13. </td>
+                        <td style="text-align: justify;">
+                            Notifikasi Kredit ini merupakan bagian yang tidak dapat terpisahkan dari Perjanjian Kredit
+                            berikut
+                            syarat-syarat umum Perjanjian Kredit BPR BANGUNARTA.
+                        </td>
+                    </tr>
+                </table>
 
-            Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas.
-            Demikian
-            agar Bapak / Ibu maklum.
+                Sebagai tanda persetujuan Bapak/Ibu, harap Notifikasi ini ditandatangani disertai dengan nama jelas.
+                Demikian
+                agar Bapak / Ibu maklum.
+            @endif
         @endif
 
         <p></p>
