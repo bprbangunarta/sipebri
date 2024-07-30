@@ -130,12 +130,12 @@ class RSCPengajuanController extends Controller
                     }
                 }
             }
-            // dd($data);
-            return view('master.rsc.edit', [
+
+            return view('master.rsc.pengajuan.edit', [
                 'data' => $data[0]
             ]);
         } catch (\Throwable $th) {
-            //
+            return redirect()->back()->with('error', 'Ada kesalahan.');
         }
     }
 
