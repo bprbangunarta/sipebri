@@ -1,4 +1,4 @@
-@extends('theme.app')
+{{-- @extends('theme.app')
 @section('title', 'Edit Pengajuan RSC')
 
 @section('content')
@@ -101,4 +101,6 @@
     <script>
         $('.tracking').select2()
     </script>
-@endpush
+@endpush --}}
+
+<div>YOYOI</div>
