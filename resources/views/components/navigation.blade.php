@@ -486,7 +486,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi/index','themes/rsc/perjanjian_kredit','themes/rsc/cetakanalisa','themes/rsc/cetaknotifikasi','themes/rsc/cetakpersetujuan','themes/rsc/cetakpk','themes/rsc/eksternal/index','themes/rsc/tracking','themes/rsc/penolakan')? 'active': '' }}">
+                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi/index','themes/rsc/perjanjian_kredit','themes/rsc/cetakanalisa','themes/rsc/cetaknotifikasi','themes/rsc/cetakpersetujuan','themes/rsc/cetakpk','themes/rsc/eksternal/index','themes/rsc/tracking','themes/rsc/penolakan','themes/rsc/cetak/asuransi')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-medkit" aria-hidden="true"></i>
                     <span>Reschedulling</span>
@@ -572,7 +572,7 @@
                     </li>
 
                     <li
-                        class="treeview {{ request()->is('themes/rsc/cetakanalisa', 'themes/rsc/cetakpersetujuan', 'themes/rsc/cetaknotifikasi', 'themes/rsc/cetakpk') ? 'active' : '' }}">
+                        class="treeview {{ request()->is('themes/rsc/cetakanalisa', 'themes/rsc/cetakpersetujuan', 'themes/rsc/cetaknotifikasi', 'themes/rsc/cetakpk', 'themes/rsc/cetak/asuransi') ? 'active' : '' }}">
                         <a href="">
                             <i class="fa fa-print" aria-hidden="true"></i>
                             <span>Cetak Berkas RSC</span>
@@ -603,6 +603,12 @@
                                 <a href="{{ route('rsc.cetakpk.index') }}" title="Add RSC">
                                     <i class="fa fa-exclamation-circle"></i>
                                     Cetak Perjanjian Kredit RSC
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('themes/rsc/cetak/asuransi') ? 'active' : '' }}">
+                                <a href="{{ route('rsc.cetak.asuransi.index') }}" title="Add RSC">
+                                    <i class="fa fa-shield" aria-hidden="true"></i>
+                                    Cetak Asuransi RSC
                                 </a>
                             </li>
                         </ul>

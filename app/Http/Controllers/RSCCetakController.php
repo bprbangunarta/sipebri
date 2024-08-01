@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use Carbon\Carbon;
 use App\Models\RSC;
 use App\Models\Midle;
@@ -1140,6 +1141,228 @@ class RSCCetakController extends Controller
                 'qr' => $qr,
             ]);
         } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function cetak_asuransi_index()
+    {
+        $keyword = request('keyword');
+        $data = DB::table('rsc_spk')
+            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_spk.kode_rsc')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+            ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->select(
+                'rsc_data_pengajuan.id',
+                'rsc_data_pengajuan.created_at as tanggal_rsc',
+                'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
+                'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
+                'rsc_data_survei.kantor_kode',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'rsc_spk.no_spk',
+            )
+
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+
+            ->where(function ($query) {
+                $query->whereIn('rsc_data_pengajuan.status', ['Selesai']);
+            })
+            ->orderBy('rsc_spk.created_at', 'desc')
+            ->paginate(10);
+        //
+        foreach ($data as $value) {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                ->select(
+                    'm_loan.fnama',
+                    'm_loan.plafond_awal',
+                    'm_cif.alamat',
+                    'm_loan.jkwaktu',
+                    'setup_loan.ket',
+                    'wilayah.ket as wil',
+                )
+                ->where('noacc', $value->kode_pengajuan)->first();
+            //
+            if ($data_eks) {
+                $value->nama_nasabah = trim($data_eks->fnama);
+                $value->alamat_ktp = trim($data_eks->alamat);
+                $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                $value->jangka_waktu = $data_eks->jkwaktu;
+                $value->metode_rps = null;
+                $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+            }
+        }
+
+        foreach ($data as $item) {
+            $item->kode = Crypt::encrypt($item->kode_pengajuan);
+            $item->rsc = Crypt::encrypt($item->kode_rsc);
+        }
+
+        return view('rsc.cetak_asuransi.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function tidakikut_asuransi(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+
+            $data = DB::table('rsc_data_pengajuan')
+                ->leftJoin('rsc_spk', 'rsc_spk.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->select(
+                    'rsc_data_pengajuan.pengajuan_kode',
+                    'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.jangka_waktu',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp',
+                    'rsc_spk.no_spk',
+                    'rsc_spk.no_spk',
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
+                )
+                ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
+            //
+            if (is_null($data)) {
+                return redirect()->back()->with('error', 'Data tidak ditemukan');
+            }
+
+            if ($data->status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_cif.alamat',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                }
+            }
+
+            $tgl_rsc = Carbon::parse($data->tgl_mulai_rsc);
+            $data->tgl_rsc = $tgl_rsc->isoFormat('D MMMM Y');
+
+            $tgl_now = now();
+            $data->tgl_now = $tgl_now->translatedFormat('d F Y');
+
+            return view('rsc.cetak_asuransi.cetak_asuransi_tidak_ikut', [
+                'data' => $data
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function nonlanjut_asuransi(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->query('rsc'));
+
+            $data = DB::table('rsc_data_pengajuan')
+                ->leftJoin('rsc_spk', 'rsc_spk.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('rsc_data_asuransi', 'rsc_data_asuransi.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+                ->select(
+                    'rsc_data_pengajuan.pengajuan_kode',
+                    'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.jangka_waktu',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp',
+                    'rsc_data_asuransi.nilai_pertanggungan',
+                    'rsc_data_asuransi.tgl_mulai',
+                    'rsc_data_asuransi.tgl_akhir',
+                    'rsc_spk.no_spk',
+                    'rsc_spk.no_spk',
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
+                )
+                ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
+            //
+            if (is_null($data)) {
+                return redirect()->back()->with('error', 'Data tidak ditemukan');
+            }
+
+            if ($data->status_rsc == 'EKS') {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_cif.alamat',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                if ($data_eks) {
+                    $data->nama_nasabah = trim($data_eks->fnama);
+                    $data->alamat_ktp = trim($data_eks->alamat);
+                }
+            }
+
+            $tgl_rsc = Carbon::parse($data->tgl_mulai_rsc);
+            $data->tgl_rsc = $tgl_rsc->isoFormat('D MMMM Y');
+
+            $tgl_now = now();
+            $data->tgl_now = $tgl_now->translatedFormat('d F Y');
+
+            if (!is_null($data->tgl_mulai)) {
+                $tgl_mulai = Carbon::createFromFormat('Y-m-d', $data->tgl_mulai);
+                $data->tgl_mulai = $tgl_mulai->translatedFormat('d F Y');
+
+                $tgl_akhir = Carbon::createFromFormat('Y-m-d', $data->tgl_akhir);
+                $data->tgl_akhir = $tgl_akhir->translatedFormat('d F Y');
+            }
+
+            return view('rsc.cetak_asuransi.cetak_asuransi_lanjut', [
+                'data' => $data
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpan_asuransi(Request $request)
+    {
+        try {
+            $enc_rsc = Crypt::decrypt($request->kode_rsc);
+            $cek = $request->validate([
+                'pertanggungan' => 'required',
+                'tgl_mulai' => 'required',
+                'tgl_akhir' => 'required',
+            ]);
+
+            $data = [
+                'kode_rsc' => $enc_rsc,
+                'nilai_pertanggungan' => (int)str_replace(["Rp", " ", "."], "", $request->pertanggungan),
+                'tgl_mulai' => $request->tgl_mulai,
+                'tgl_akhir' => $request->tgl_akhir,
+                'created_at' => now(),
+            ];
+
+            $insert = DB::table('rsc_data_asuransi')->insert($data);
+            if ($insert) {
+                return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
+            } else {
+                return redirect()->back()->with('error', 'Data gagal ditambahkan.');
+            }
+        } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }

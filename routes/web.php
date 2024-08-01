@@ -777,6 +777,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/rsc/cetakpk', 'cetakpk_index')->name('rsc.cetakpk.index');
             Route::get('/rsc/cetakpk/detail', 'cetakpk_index_detail')->name('rsc.cetakpk.detail');
             Route::get('/rsc/cetakpenolakan/detail', 'cetak_penolakan')->name('rsc.cetak.penolakan');
+            Route::get('/rsc/cetak/asuransi', 'cetak_asuransi_index')->name('rsc.cetak.asuransi.index');
+            Route::get('/rsc/cetak/asuransi/cover', 'nonlanjut_asuransi')->name('rsc.cetak.asuransi.cover');
+            Route::get('/rsc/cetak/asuransi/tidakikut', 'tidakikut_asuransi')->name('rsc.cetak.tidak.ikut');
+            Route::post('/rsc/simpan/asuransi', 'simpan_asuransi')->name('rsc.simpan.asuransi');
         });
 
         Route::group(['middleware' => ['role:Kasi Analis']], function () {

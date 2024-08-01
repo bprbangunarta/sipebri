@@ -76,7 +76,7 @@
                                             <td class="text-center" style="text-align: center;">
                                                 <a href="{{ route('rsc.cetakpersetujuan.detail', ['rsc' => $item->rsc, 'status_rsc' => $item->status_rsc]) }}"
                                                     class="btn-circle btn-sm bg-primary" title="Cetak Analisa RSC"
-                                                    target="__blank">
+                                                    target="_blank">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                             </td>

@@ -73,6 +73,9 @@
                                                 <option value="Perjanjian Kredit"
                                                     {{ $data->status == 'Perjanjian Kredit' || old('Perjanjian Kredit') == 'Perjanjian Kredit' ? 'selected' : '' }}>
                                                     Perjanjian Kredit</option>
+                                                <option value="Selesai"
+                                                    {{ $data->status == 'Selesai' || old('Selesai') == 'Selesai' ? 'selected' : '' }}>
+                                                    Selesai</option>
                                             </select>
                                         </div>
 
