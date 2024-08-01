@@ -11,7 +11,7 @@ class RSC extends Model
 {
     use HasFactory;
 
-    protected static function get_data_rsc()
+    protected static function get_data_rsc($enc_rsc)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -22,6 +22,7 @@ class RSC extends Model
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.status_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
@@ -30,9 +31,11 @@ class RSC extends Model
                 'data_pengajuan.metode_rps',
                 'data_pengajuan.jangka_waktu',
             )
-            ->orderBy('rsc_data_pengajuan.created_at', 'desc')
-            ->paginate(10);
+            // ->orderBy('rsc_data_pengajuan.created_at', 'desc')
+            // ->paginate(10);
+            ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
         //
+
         foreach ($data as $value) {
             $data_eks = DB::connection('sqlsrv')->table('m_loan')
                 ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')

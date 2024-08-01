@@ -387,7 +387,7 @@ class RSCController extends Controller
                     ->get();
             }
             //
-            // dd($data);
+
             if (count($data) > 0) {
                 $tgl_realisasi = Carbon::createFromFormat('Y-m-d H:i:s', $data[0]->created_at);
                 $tgl_jth_tempo = $tgl_realisasi->addMonths($data[0]->jangka_waktu);
@@ -599,7 +599,7 @@ class RSCController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($enc_rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');

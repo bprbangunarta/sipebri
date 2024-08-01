@@ -18,8 +18,9 @@ class RSCPerdaganganController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($enc_rsc);
             //
+
             $perdagangan = DB::table('rsc_au_perdagangan')->where('kode_rsc', $enc_rsc)->get();
 
             foreach ($perdagangan as $item) {
@@ -75,7 +76,7 @@ class RSCPerdaganganController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($rsc);
             //
             foreach ($data as $item) {
                 $item->kode_usaha = $request->query('kode_usaha');
@@ -147,7 +148,7 @@ class RSCPerdaganganController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($rsc);
             //
             foreach ($data as $item) {
                 $item->kode_usaha = $request->query('kode_usaha');
@@ -261,7 +262,7 @@ class RSCPerdaganganController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($rsc);
             //
             foreach ($data as $item) {
                 $item->kode_usaha = $request->query('kode_usaha');

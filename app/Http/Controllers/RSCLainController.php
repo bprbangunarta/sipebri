@@ -18,7 +18,7 @@ class RSCLainController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($enc_rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
@@ -74,7 +74,7 @@ class RSCLainController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
@@ -129,7 +129,7 @@ class RSCLainController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
@@ -206,7 +206,7 @@ class RSCLainController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_rsc();
+            $data = RSC::get_data_rsc($rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
