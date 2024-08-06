@@ -222,6 +222,7 @@ class RSCPertanianController extends Controller
                     'rsc_data_pengajuan.created_at as tanggal_rsc',
                     'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                     'rsc_data_pengajuan.kode_rsc',
+                    'rsc_data_pengajuan.kondisi_khusus',
                     'rsc_data_pengajuan.penentuan_plafon',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.alamat_ktp',
@@ -268,17 +269,32 @@ class RSCPertanianController extends Controller
                 $item->status_rsc = $status_rsc;
             }
 
+            if (count($data) <= 0) {
+                return redirect()->back()->with('error', 'Data tidak ditemukan.');
+            }
+
             $pertanian = DB::table('rsc_au_pertanian')->where('kode_usaha', $kode_usaha)->first();
             $detail = DB::table('rsc_bu_pertanian')->where('usaha_kode', $kode_usaha)->first();
 
-            $bu = $this->total_biaya($kode_usaha);
-            $hasil_panen = $detail->hasil_panen * $detail->harga;
-            $hasil_bersih = $hasil_panen - $bu;
-            $ambil = ($hasil_bersih * 70) / 100;
-            $jW = $data[0]->jangka_waktu / 6;
-            $saving = $data[0]->penentuan_plafon / $jW;
-            $sisa_pendapatan = $ambil - $saving;
-            $pendapatan_perbulan = $sisa_pendapatan / 6;
+            if ($data[0]->kondisi_khusus == 'PERPADIAN') {
+                $bu = $this->total_biaya($kode_usaha);
+                $hasil_panen = $detail->hasil_panen * $detail->harga;
+                $hasil_bersih = $hasil_panen - $bu;
+                $ambil = ($hasil_bersih * 70) / 100;
+                $jW = $data[0]->jangka_waktu / 6;
+                $saving = $data[0]->penentuan_plafon / $jW;
+                $sisa_pendapatan = $saving;
+                $pendapatan_perbulan = $sisa_pendapatan / 6;
+            } else {
+                $bu = $this->total_biaya($kode_usaha);
+                $hasil_panen = $detail->hasil_panen * $detail->harga;
+                $hasil_bersih = $hasil_panen - $bu;
+                $ambil = ($hasil_bersih * 70) / 100;
+                $jW = $data[0]->jangka_waktu / 6;
+                $saving = $data[0]->penentuan_plafon / $jW;
+                $sisa_pendapatan = $ambil - $saving;
+                $pendapatan_perbulan = $sisa_pendapatan / 6;
+            }
 
             //cek data
             if (is_null($pertanian)) {
