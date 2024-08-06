@@ -19,7 +19,7 @@ class RSCPertanianController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_pertanian_all_rsc();
+            $data = RSC::get_data_pertanian_all_rsc($enc_rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
@@ -192,6 +192,7 @@ class RSCPertanianController extends Controller
                 'iuran_desa' => (int)str_replace(["Rp.", " ", "."], "", $request->iuran_desa) ?? 0,
                 'amortisasi' => (int)str_replace(["Rp.", " ", "."], "", $request->amortisasi) ?? 0,
                 'pinjaman_bank' => (int)str_replace(["Rp.", " ", "."], "", $request->pinjaman_bank) ?? 0,
+                'updated_at' => now(),
             ];
 
             $update = DB::table('rsc_bu_pertanian')->where('usaha_kode', $kode_usaha)->update($data);
@@ -229,8 +230,8 @@ class RSCPertanianController extends Controller
                     'data_survei.kantor_kode',
                     'data_pengajuan.plafon',
                     'data_pengajuan.produk_kode',
-                    'data_pengajuan.metode_rps',
-                    'data_pengajuan.jangka_waktu',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.jangka_waktu',
                 )
                 ->where('rsc_data_pengajuan.pengajuan_kode', $kode)
                 ->get();

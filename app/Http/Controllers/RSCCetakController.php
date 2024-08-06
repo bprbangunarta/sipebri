@@ -66,13 +66,8 @@ class RSCCetakController extends Controller
                     'setup_loan.ket',
                     'wilayah.ket as wil',
                 )
-                ->where(function ($query) use ($keyword) {
-                    $query->where('m_loan.fnama', 'like', '%' . $keyword . '%')
-                        ->orWhere('m_loan.noacc', 'like', '%' . $keyword . '%');
-                })
                 ->where('noacc', $value->kode_pengajuan)->first();
             //
-
             if ($data_eks) {
                 $value->nama_nasabah = trim($data_eks->fnama);
                 $value->alamat_ktp = trim($data_eks->alamat);

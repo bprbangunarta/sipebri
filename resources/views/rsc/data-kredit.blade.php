@@ -48,7 +48,7 @@
                                             <div style="margin-top:5px;width: 49.5%;float:left;">
                                                 <span class="fw-bold">PLAFON</span>
                                                 <input type="text" class="form-control" name="plafon"
-                                                    value="{{ number_format($data->plafon, '0', ',', '.') }}" required
+                                                    value="{{ number_format($data->plafon_awal, '0', ',', '.') }}" required
                                                     readonly>
                                             </div>
 
