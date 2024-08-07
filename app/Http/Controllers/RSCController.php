@@ -1430,6 +1430,7 @@ class RSCController extends Controller
             $data = [
                 'alasan_id' => $request->alasan,
                 'keterangan' => Str::upper($request->keterangan),
+                'updated_at' => now(),
             ];
 
             $update = DB::table('rsc_penolakan')->where('kode_rsc', $request->kode_rsc)->update($data);

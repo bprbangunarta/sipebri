@@ -180,7 +180,7 @@
 
     <div style="page-break-after: always"></div>
 
-    {{-- <div class="content" style="margin-top: -57px;">
+    <div class="content" style="margin-top: -57px;">
 
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
@@ -199,7 +199,7 @@
         </p>
 
         <p style="text-align: justify;text-transform:uppercase">
-            - <b>{{ $data->alasan_internal }}</b>
+            - <b>{{ $data->keterangan }}</b>
         </p>
 
         <p style="text-align: justify;">
@@ -241,7 +241,7 @@
                 <td width="40%"></td>
             </tr>
         </table>
-    </div> --}}
+    </div>
     <script>
         window.print();
     </script>

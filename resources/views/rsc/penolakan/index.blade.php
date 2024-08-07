@@ -96,8 +96,7 @@
                                                     </a>
                                                 @else
                                                     <a href="{{ route('rsc.cetak.penolakan', ['kode_rsc' => $item->rsc_kode]) }}"
-                                                        target="__blank" class="btn-circle btn-sm bg-blue"
-                                                        title="Informasi">
+                                                        target="_blank" class="btn-circle btn-sm bg-blue" title="Informasi">
                                                         <i class="fa fa-print"></i>
                                                     </a>
                                                 @endif

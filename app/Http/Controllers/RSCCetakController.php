@@ -8,6 +8,7 @@ use App\Models\RSC;
 use App\Models\Midle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -1090,6 +1091,7 @@ class RSCCetakController extends Controller
             $data = DB::table('rsc_penolakan')
                 ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_penolakan.kode_rsc')
                 ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_alasan_penolakan', 'data_alasan_penolakan.id', '=', 'rsc_penolakan.alasan_id')
                 ->select(
                     'rsc_data_pengajuan.pengajuan_kode',
                     'rsc_data_pengajuan.kode_rsc',
@@ -1097,8 +1099,10 @@ class RSCCetakController extends Controller
                     'data_nasabah.no_telp',
                     'data_nasabah.alamat_ktp',
                     'rsc_penolakan.no_penolakan',
-                    'rsc_penolakan.keterangan as alasan',
+                    'rsc_penolakan.keterangan',
+                    'rsc_penolakan.created_at as tgl_tolak',
                     'rsc_penolakan.input_user',
+                    'data_alasan_penolakan.alasan',
                 )
                 ->where('rsc_penolakan.kode_rsc', $kode_rsc)->first();
             //
@@ -1130,6 +1134,8 @@ class RSCCetakController extends Controller
 
             $qr = $this->get_qrcode($kode_rsc, 'PENOLAKAN_RSC', $data->input_user);
             //
+
+            $data->kabag_analis = DB::table('v_users')->where('role_name', 'Kabag Analis')->pluck('nama_user')->first();
 
             return view('rsc.penolakan.cetak_penolakan', [
                 'data' => $data,
