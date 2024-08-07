@@ -1315,8 +1315,11 @@ class RSCController extends Controller
             }
         }
 
+        $alasan = DB::table('data_alasan_penolakan')->get();
+
         return view('rsc.penolakan.index', [
-            'data' => $data
+            'data' => $data,
+            'alasan' => $alasan,
         ]);
     }
 
@@ -1366,14 +1369,16 @@ class RSCController extends Controller
         $cek_penolakan = DB::table('rsc_penolakan')->where('kode_rsc', $kode_rsc)->first();
 
         if ($cek_penolakan) {
+            $alasan = DB::table('data_alasan_penolakan')->get();
             $data_penolakan = (object) [
                 'kode_rsc' => $cek_penolakan->kode_rsc,
                 'nomor' => $cek_penolakan->nomor,
                 'nama_nasabah' => $data->nama_nasabah,
                 'no_penolakan' => $cek_penolakan->no_penolakan,
+                'alasan_id' => $cek_penolakan->alasan_id,
                 'ket' => $cek_penolakan->keterangan,
             ];
-            return response()->json($data_penolakan);
+            return response()->json([$data_penolakan, $alasan]);
         } else {
             return response()->json($data);
         }
@@ -1387,6 +1392,7 @@ class RSCController extends Controller
                 'nomor' => 'required',
                 'no_penolakan' => 'required',
                 'nama_nasabah' => 'required',
+                'alasan' => 'required',
                 'keterangan' => 'required',
             ]);
 
@@ -1399,6 +1405,7 @@ class RSCController extends Controller
                     'kode_rsc' => $cek['kode_rsc'],
                     'nomor' => $cek['nomor'],
                     'no_penolakan' => $cek['no_penolakan'],
+                    'alasan_id' => $cek['alasan'],
                     'keterangan' => str::upper($cek['keterangan']),
                     'input_user' => Auth::user()->code_user,
                     'created_at' => now(),
@@ -1414,6 +1421,25 @@ class RSCController extends Controller
             }
         } catch (\Throwable $er) {
             return redirect()->back()->with('error', 'Hubungi IT.');
+        }
+    }
+
+    public function update_penolakan(Request $request)
+    {
+        try {
+            $data = [
+                'alasan_id' => $request->alasan,
+                'keterangan' => Str::upper($request->keterangan),
+            ];
+
+            $update = DB::table('rsc_penolakan')->where('kode_rsc', $request->kode_rsc)->update($data);
+            if ($update) {
+                return redirect()->back()->with('success', 'Data berhasil diubah.');
+            } else {
+                return redirect()->back()->with('error', 'Data gagal diubah.');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data error.');
         }
     }
 

@@ -805,6 +805,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/rsc/penolakan', 'penolakan_index')->name('rsc.penolakan');
                 Route::get('/rsc/add/penolakan', 'get_penolakan')->name('rsc.get_penolakan');
                 Route::POST('/rsc/simpan/penolakan', 'simpan_penolakan')->name('rsc.simpan_penolakan');
+                Route::POST('/rsc/update/penolakan', 'update_penolakan')->name('rsc.update_penolakan');
             });
         });
 
