@@ -25,6 +25,8 @@ class RSCPersetujuanController extends Controller
             $cek = RSC::persetujuan_rsc_kasi($keyword);
         } elseif ($user->role_name == 'Kabag Analis') {
             $cek = RSC::persetujuan_rsc_kabag_analis($keyword);
+        } elseif ($user->role_name == 'Direktur Bisnis') {
+            $cek = RSC::persetujuan_rsc_direktur_bisnis($keyword);
         } elseif ($user->role_name == 'Direksi') {
             $cek = RSC::persetujuan_rsc_direksi($keyword);
         }
@@ -108,7 +110,7 @@ class RSCPersetujuanController extends Controller
 
                 $catatan = RSC::catatan($note);
             }
-
+            // dd($catatan['Staff Analis']);
             return view('rsc.persetujuan.catatan', [
                 'data' => $data[0],
                 'catatan' => $catatan
@@ -185,6 +187,12 @@ class RSCPersetujuanController extends Controller
                 $rl = $request->status;
             } elseif ($role->role_name == 'Kabag Analis' && $request->status == '') {
                 $rl = 'Komite II';
+            }
+
+            if ($role->role_name == 'Direktur Bisnis' && $request->status != '') {
+                $rl = $request->status;
+            } elseif ($role->role_name == 'Direktur Bisnis' && $request->status == '') {
+                $rl = 'Komite III';
             }
 
             if ($role->role_name == 'Direksi' && $request->status != '') {

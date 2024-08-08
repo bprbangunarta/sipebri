@@ -14,7 +14,7 @@
                         <ul class="nav nav-tabs">
 
                             <li class="active text-bold">
-                                <a href="#staff_analisa" data-toggle="tab">STAFF ANALISA</a>
+                                <a href="#staff_analisa" data-toggle="tab">CATATAN</a>
                             </li>
 
                         </ul>
@@ -22,10 +22,11 @@
                         <div class="tab-content">
 
                             <div id="staff_analisa" class="tab-pane fade in active" style="display:flexbox;">
+
                                 <label>CATATAN STAFF ANALIS</label>
                                 <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
                                     name="catatan" id="catatan" required="" readonly>
-                                    {{ $catatan['catatan1']['catatan_staff_analisa'] }}
+                                    {{ $catatan['Staff Analis'] }}
                                 </textarea>
 
                                 &nbsp;
@@ -33,29 +34,38 @@
                                 <label>CATATAN KASI ANALIS</label>
                                 <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
                                     name="catatan" id="catatan" required="" readonly>
-                                {{ $catatan['catatan2']['catatan_kasi_analisa'] }}
-                            </textarea>
-
-                                &nbsp;
-
-                                <label>CATATAN KOMITE I</label>
-                                <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
-                                    name="catatan" id="catatan" required="" readonly>
-                                    {{ $catatan['catatan3']['catatan_kabag_analisa'] }}
+                                {{ $catatan['Kasi Analis'] }}
                                 </textarea>
 
                                 &nbsp;
 
-                                <label>CATATAN KOMITE II</label>
+                                <label>CATATAN KABAG ANALIS</label>
                                 <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
                                     name="catatan" id="catatan" required="" readonly>
-                                    {{ $catatan['catatan4']['catatan_direksi'] }}
+                                    {{ $catatan['Kabag Analis'] }}
+                                </textarea>
+
+                                &nbsp;
+
+                                <label>CATATAN DIREKTUR BISNIS</label>
+                                <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
+                                    name="catatan" id="catatan" required="" readonly>
+                                    {{ $catatan['Direktur Bisnis'] }}
+                                </textarea>
+
+                                &nbsp;
+
+                                <label>CATATAN DIREKSI</label>
+                                <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
+                                    name="catatan" id="catatan" required="" readonly>
+                                    {{ $catatan['Direksi'] }}
                                 </textarea>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
+            </div>
         </section>
     </div>
 @endsection

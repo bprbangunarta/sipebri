@@ -322,9 +322,15 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
+                                    <span class="fw-bold">DIREKTU BISNIS</span>
+                                    <textarea class="form-control text-uppercase" rows="3" name="" id="direktur_bisnis" readonly>Catatan dari direksi</textarea>
+                                </div>
+
+                                <div style="margin-top: 5px;">
                                     <span class="fw-bold">DIREKSI</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
                                 </div>
+
                             </div>
                         </div>
                     </div>

@@ -65,7 +65,7 @@ $(document).ready(function () {
                 $("#provisi").val(hasil.b_provisi) ?? 0;
                 $("#bunga").val(hasil.suku_bunga);
                 $("#admin").val(hasil.b_admin) ?? 0;
-
+                console.log(role);
                 //Persetujuan
                 if (
                     kategori === "RELOAN" ||
@@ -85,6 +85,13 @@ $(document).ready(function () {
                     } else if (role == "Kabag Analis") {
                         var options = [
                             { value: "Naik Komite II", text: "Naik Komite II" },
+                        ];
+                    } else if (role == "Direktur Bisnis") {
+                        var options = [
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
                         ];
                     } else if (role == "Direksi") {
                         var options = [
@@ -129,7 +136,7 @@ $(document).ready(function () {
                     if (
                         role === "Kabag Analis" &&
                         pal >= 35000001 &&
-                        pal <= 75000000
+                        pal <= 100000000
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
@@ -137,7 +144,7 @@ $(document).ready(function () {
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
-                    } else if (role == "Kabag Analis" && pal > 75000001) {
+                    } else if (role == "Kabag Analis" && pal > 100000000) {
                         var options = [
                             { value: "Naik Komite II", text: "Naik Komite II" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
@@ -145,7 +152,29 @@ $(document).ready(function () {
                         ];
                     }
 
-                    if (role === "Direksi" && pal > 75000000) {
+                    if (
+                        role === "Direktur Bisnis" &&
+                        pal >= 100000001 &&
+                        pal <= 300000000
+                    ) {
+                        var options = [
+                            { value: "", text: "--Pilih--" },
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Direktur Bisnis" && pal > 300000000) {
+                        var options = [
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    if (role === "Direksi" && pal > 300000000) {
                         var options = [
                             { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
@@ -233,7 +262,7 @@ $(document).ready(function () {
                     if (
                         role === "Kabag Analis" &&
                         pal >= 35000001 &&
-                        pal <= 75000000
+                        pal <= 100000000
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
@@ -241,15 +270,40 @@ $(document).ready(function () {
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
-                    } else if (role == "Kabag Analis" && pal > 75000001) {
+                    } else if (role == "Kabag Analis" && pal > 100000000) {
                         var options = [
-                            { value: "Naik Komite II", text: "Naik Komite II" },
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
                     }
 
-                    if (role === "Direksi" && pal > 75000000) {
+                    if (
+                        role === "Direktur Bisnis" &&
+                        pal >= 100000001 &&
+                        pal <= 300000000
+                    ) {
+                        var options = [
+                            { value: "", text: "--Pilih--" },
+                            { value: "Disetujui", text: "Disetujui" },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Direktur Bisnis" && pal > 300000000) {
+                        var options = [
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
+                            { value: "Dibatalkan", text: "Dibatalkan" },
+                            { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    }
+
+                    if (role === "Direksi" && pal > 300000000) {
                         var options = [
                             { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },

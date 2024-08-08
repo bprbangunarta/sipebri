@@ -29,14 +29,20 @@ class KomiteController extends Controller
             $role = "Naik Komite I";
             $name = request('keyword');
             $cek = Midle::persetujuan_komite_kabag($role, $name);
-        } elseif ($user->role_name == 'Direksi') {
+        } elseif ($user->role_name == 'Direktur Bisnis') {
             $role = "Naik Komite II";
+            $name = request('keyword');
+            $cek = Midle::persetujuan_komite_direk_bisnis($role, $name);
+        } elseif ($user->role_name == 'Direksi') {
+            $role = "Naik Komite III";
             $name = request('keyword');
             $cek = Midle::persetujuan_komite_direksi($role, $name);
         } elseif ($user->role_name == 'Customer Service' || $user->role_name == 'Kepala Kantor Kas') {
             $name = request('keyword');
             $cek = Midle::persetujuan_komite_cs_kksk($usr, $name);
         }
+
+
 
         //Enkripsi kode pengajuan
         $c = $cek->get();
@@ -164,10 +170,14 @@ class KomiteController extends Controller
                     $komite = 'komite3';
                     $catatan = 'catatan3';
                     $waktu = 'waktu3';
-                } elseif ($user->role_name == 'Direksi') {
+                } elseif ($user->role_name == 'Direktur Bisnis') {
                     $komite = 'komite4';
                     $catatan = 'catatan4';
                     $waktu = 'waktu4';
+                } elseif ($user->role_name == 'Direksi') {
+                    $komite = 'komite5';
+                    $catatan = 'catatan5';
+                    $waktu = 'waktu5';
                 }
 
 
@@ -192,7 +202,7 @@ class KomiteController extends Controller
                     DB::table('a_komite')->where('pengajuan_kode', $request->kode_pengajuan)->update($data);
                 }
 
-                if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II') {
+                if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II' || $request->putusan_komite == 'Naik Komite III') {
                     $data2 = [
                         'plafon'  => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafon),
                         'tracking' => ucwords($request->putusan_komite),
@@ -286,10 +296,14 @@ class KomiteController extends Controller
                 $komite = 'komite3';
                 $catatan = 'catatan3';
                 $waktu = 'waktu3';
-            } elseif ($user->role_name == 'Direksi') {
+            } elseif ($user->role_name == 'Direktur Bisnis') {
                 $komite = 'komite4';
                 $catatan = 'catatan4';
                 $waktu = 'waktu4';
+            } elseif ($user->role_name == 'Direksi') {
+                $komite = 'komite5';
+                $catatan = 'catatan5';
+                $waktu = 'waktu5';
             }
 
             $data = [
@@ -298,7 +312,7 @@ class KomiteController extends Controller
                 $waktu => now(),
             ];
 
-            if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite 1' || $request->putusan_komite == 'Naik Komite 2') {
+            if ($request->putusan_komite == 'Naik Kasi' || $request->putusan_komite == 'Naik Komite I' || $request->putusan_komite == 'Naik Komite II' || $request->putusan_komite == 'Naik Komite III') {
                 $data2 = [
                     'tracking' => ucwords($request->putusan_komite),
                     'updated_at' => now(),

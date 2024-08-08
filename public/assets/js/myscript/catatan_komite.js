@@ -15,6 +15,7 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
+                console.log(response);
                 if (response[0]) {
                     var usulan1 = response[0].usulan_plafon ?? null;
                     var text =
@@ -166,7 +167,46 @@ $(document).ready(function () {
                         "CATATAN : " +
                         " " +
                         response[3].catatan;
-                    $("#direksi").val(text4);
+                    $("#direktur_bisnis").val(text4);
+                } else {
+                    $("#direktur_bisnis").val("Tidak Ada Catatan");
+                }
+
+                if (response[4]) {
+                    var usulan5 = response[4].usulan_plafon ?? null;
+                    var text5 =
+                        "USULAN : " +
+                        " " +
+                        "Rp. " +
+                        formatRupiah(usulan5) +
+                        " " +
+                        "-" +
+                        " " +
+                        "METODE : " +
+                        " " +
+                        response[4].metode_rps +
+                        "\n" +
+                        "B. PROVISI : " +
+                        " " +
+                        response[4].b_provisi +
+                        " " +
+                        "-" +
+                        " " +
+                        "B. ADMIN : " +
+                        " " +
+                        response[4].b_admin +
+                        " " +
+                        "-" +
+                        " " +
+                        "RC : " +
+                        " " +
+                        response[4].rc +
+                        "%" +
+                        "\n" +
+                        "CATATAN : " +
+                        " " +
+                        response[4].catatan;
+                    $("#direksi").val(text5);
                 } else {
                     $("#direksi").val("Tidak Ada Catatan");
                 }

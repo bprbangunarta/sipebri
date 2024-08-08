@@ -48,6 +48,7 @@ use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
 use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\PerhitunganController;
+use App\Http\Controllers\RSCAngsuranController;
 use App\Http\Controllers\RSCKeuanganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
@@ -110,12 +111,18 @@ Route::get('/', function () {
 });
 
 Route::get('/give-permission', function () {
-    $role = Role::find(8);
-    $permission = Permission::find(44);
+    // $role = Role::find(18);
+    // $permission = Permission::find(52);
 
-    $role->givePermissionTo($permission);
-    $permission->assignRole($role);
-    dd($permission);
+    // $role->givePermissionTo($permission);
+    // $permission->assignRole($role);
+    // $role = Role::create(['name' => 'Direktur Bisnis']);
+    // dd($role);
+});
+
+Route::get('/role', function () {
+    // $role = Role::create(['name' => 'Direktur Bisnis']);
+    // dd($role);
 });
 
 Route::get('/login', function () {
@@ -321,7 +328,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/monitoring/kredit', [CetakController::class, 'monitoring'])->name('cetak.monitoring');
 
         // Cetak Notifikasi Kredit
-        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit|Realisasi|Admin Kredit']], function () {
+        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit|Realisasi|Admin Kredit']], function () {
             Route::get('/cetak/notifikasi-kredit', [CetakController::class, 'index_notifikasi_kredit'])->name('cetak.notifikasi.index');
         });
 
@@ -562,7 +569,7 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(KomiteController::class)->group(function () {
 
-            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/komite/kredit', 'index')->name('komite.kredit');
             });
 
@@ -577,7 +584,7 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(NotifikasiController::class)->group(function () {
 
-            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/penolakan/pengajuan', 'data_penolakan')->name('penolakan.pengajuan');
                 Route::post('/penolakan/tambah', 'tambah_penolakan')->name('penolakan.tambah');
                 Route::post('/penolakan/edit', 'edit_penolakan')->name('penolakan.edit');
@@ -596,7 +603,7 @@ Route::middleware('auth')->group(function () {
                 Route::post('/notifikasi/kredit/update', 'update_update_notifikasi')->name('update.update_notifikasi');
             });
 
-            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/notifikasi/kredit', 'notifikasi_kredit')->name('notifikasi_kredit');
                 Route::get('/notifikasi/kredit/catatan/{kode}', 'get_catatan_notifikasi_kredit')->name('get.catatan_notifikasi_kredit');
                 Route::POST('/notifikasi/kredit/simpan/catatan', 'simpan_catatan_notifikasi_kredit')->name('simpan.catatan_notifikasi_kredit');
@@ -628,7 +635,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/persetujuan/kredit', 'persetujuan_kredit')->name('persetujuan.kredit');
             Route::get('/cetak/persetujuan/kredit', 'cetak_persetujuan_kredit')->name('cetak.persetujuan_kredit');
 
-            Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas|Kasi Analis|Kabag Analis|Direksi']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi']], function () {
                 Route::get('/cetak/analisa/kredit', 'analisa_kredit')->name('analisa.kredit');
             });
 
@@ -636,7 +643,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/cetak/notifikasi/kredit/detail', 'cetak_notifikasi_kredit')->name('cetak.notifikasi_kredit');
 
-            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit|Admin Kredit']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi|Customer Service|Kepala Kantor Kas|Staff Admin Kredit|Admin Kredit']], function () {
                 Route::get('/cetak/penolakan/kredit', 'data_penolakan_kredit')->name('data_penolakan.kredit');
                 Route::get('/cetak-berkas/penolakan/kredit', 'cetak_penolakan_kredit')->name('cetak.penolakan.kredit');
                 Route::get('/cetak-berkas/penolakan/amplop', 'cetak_cover_amplop')->name('cetak.penolakan.amplop');
@@ -750,7 +757,7 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::group(['middleware' => ['role:Kabag Analis|Direksi|Kasi Analis']], function () {
+        Route::group(['middleware' => ['role:Kabag Analis|Direktur Bisnis|Direksi|Kasi Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
                 Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
                 Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
@@ -758,7 +765,7 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi']], function () {
+        Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi']], function () {
             Route::controller(RSCPersetujuanController::class)->group(function () {
                 Route::get('/rsc/persetujuan', 'index')->name('rsc.persetujuan.index');
                 Route::get('/rsc/persetujuan/informasi', 'informasi')->name('rsc.persetujuan.informasi');
@@ -792,13 +799,13 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        Route::group(['middleware' => ['role:Kabag Analis|Direksi|Kasi Analis']], function () {
-            Route::controller(RSCController::class)->group(function () {
-                Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
-                Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
-                Route::post('rsc/notifikasi/simpan', 'simpan_notifikasi')->name('rsc.notifikasi.simpan');
-            });
-        });
+        // Route::group(['middleware' => ['role:Kabag Analis|Direksi|Kasi Analis']], function () {
+        //     Route::controller(RSCController::class)->group(function () {
+        //         Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
+        //         Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
+        //         Route::post('rsc/notifikasi/simpan', 'simpan_notifikasi')->name('rsc.notifikasi.simpan');
+        //     });
+        // });
 
         Route::group(['middleware' => ['role:Kasi Analis|Kabag Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
@@ -818,6 +825,10 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(RSCLaporanController::class)->group(function () {
             Route::get('/rsc/tracking', 'tracking_rsc')->name('rsc.tracking');
+        });
+
+        Route::controller(RSCAngsuranController::class)->group(function () {
+            Route::get('/rsc/angsuran', 'index')->name('rsc.angsuran');
         });
 
         //====Route Analisa RSC====//

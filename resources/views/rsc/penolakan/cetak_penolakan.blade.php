@@ -186,7 +186,7 @@
         <hr style="border: 1px solid 034871;">
 
         <h4 style="text-align: center;font-size: 12pt;">
-            <u>SURAT PENOLAKAN KREDIT</u>
+            <u>SURAT PENOLAKAN RESTRUKTURISASI KREDIT</u>
             <br>
             <font style="font-size: 12.8px;">{{ $data->no_penolakan }}</font>
         </h4>

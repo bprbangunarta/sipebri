@@ -384,15 +384,16 @@ class RSCCetakController extends Controller
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
 
-            ->where(function ($query) {
-                $query->whereNotIn('rsc_data_pengajuan.status', ['Proses Analisa', 'Proses Survei', 'Penjadwalan', 'Batal RSC']);
-            })
+            ->whereNotIn('rsc_data_pengajuan.status', ['Proses Analisa', 'Proses Survei', 'Penjadwalan', 'Batal RSC', 'Tolak', 'Dibatalkan'])
 
-            ->where(function ($query) use ($keyword) {
-                $query->orWhere('rsc_data_survei.direksi_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.kabag_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user)
-                    ->orWhere('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
+            ->where(function ($query) {
+                if (Auth::user()->code_user == 'BAW') {
+                } else {
+                    $query->orWhere('rsc_data_survei.direksi_kode', Auth::user()->code_user)
+                        ->orWhere('rsc_data_survei.kabag_kode', Auth::user()->code_user)
+                        ->orWhere('rsc_data_survei.kasi_kode', Auth::user()->code_user)
+                        ->orWhere('rsc_data_survei.surveyor_kode', Auth::user()->code_user);
+                }
             })
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc')

@@ -88,7 +88,7 @@
                                                             required readonly>
                                                     </div>
 
-                                                    @if ($user->role_name == 'Kabag Analis' || $user->role_name == 'Direksi')
+                                                    @if ($user->role_name == 'Kabag Analis' || $user->role_name == 'Direksi' || $user->role_name == 'Direktur Bisnis')
                                                         <div style="margin-top:5px;width: 49.5%;float:right;">
                                                             <span class="fw-bold">STATUS PERSETUJUAN</span>
                                                             <select class="form-control text-uppercase metode"
@@ -201,7 +201,7 @@
 
                         </div>
                     </div>
-                    @if ($user->role_name == 'Kabag Analis' || $user->role_name == 'Direksi')
+                    @if ($user->role_name == 'Kabag Analis' || $user->role_name == 'Direksi' || $user->role_name == 'Direktur Bisnis')
                         <p>
                             <b>NOTE : </b> <br>
                             * Pilih <b>STATUS PERSETUJUAN</b> jika akan melakukan penolakan/pembatalan RSC. <br>

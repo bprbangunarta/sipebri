@@ -833,6 +833,10 @@ class RSCController extends Controller
                     ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user);
             })
 
+            ->orWhere(function ($query) use ($keyword) {
+                $query->where('rsc_data_pengajuan.status', 'Notifikasi');
+            })
+
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
 
         $data = $data->paginate(10);
@@ -967,6 +971,12 @@ class RSCController extends Controller
             ];
 
             $data2 = ['status' => 'Perjanjian Kredit'];
+
+            $cek = DB::table('rsc_notifikasi')->where('kode_rsc', $request->kode_rsc)->first();
+
+            if (!is_null($cek)) {
+                return redirect()->back()->with('error', 'Data sudah ada.');
+            }
 
             DB::transaction(function () use ($data, $data2, $request) {
                 $insert = DB::table('rsc_notifikasi')->insert($data);

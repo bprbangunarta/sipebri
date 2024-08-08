@@ -661,18 +661,6 @@ class Midle extends Model
                 $query->where('data_survei.kasi_kode', '=', $user)
                     ->where('data_pengajuan.tracking', '=', $role);
             })
-            // ->orWhere(function ($query) use ($user) {
-            //     $query->where('data_survei.kasi_kode', '=', $user)
-            //         ->where('data_pengajuan.status', '=', 'Disetujui')
-            //         ->where('data_pengajuan.tracking', '=', 'Selesai')
-            //         ->whereNull('data_notifikasi.pengajuan_kode');
-            // })
-            // ->orWhere(function ($query) use ($user) {
-            //     $query->where('data_survei.kasi_kode', '=', $user)
-            //         ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
-            //         ->where('data_pengajuan.tracking', '=', 'Persetujuan Komite')
-            //         ->whereNull('data_notifikasi.pengajuan_kode');
-            // })
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
@@ -724,6 +712,57 @@ class Midle extends Model
 
             // ->where('data_pengajuan.tracking', '=', $role)
             ->where('data_pengajuan.tracking', 'Naik Komite I')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
+                    ->orWhere('users.code_user', 'like', '%' . $name . '%')
+                    ->orWhere('users.name', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.kode_kantor', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.tracking',
+                'data_pengajuan.status',
+                'data_pengajuan.plafon',
+                'data_tracking.analisa_kredit as tanggal',
+                'data_pengajuan.kategori',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.metode_rps',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_kantor.nama_kantor',
+                'data_survei.surveyor_kode',
+                'data_survei.tgl_survei',
+                'data_survei.tgl_jadul_1',
+                'data_survei.tgl_jadul_2',
+                'users.name as surveyor',
+                'data_pengajuan.jangka_waktu as jk',
+                'data_produk.*'
+            )
+            ->orderBy('data_tracking.analisa_kredit', 'desc');
+
+        return $cek;
+    }
+
+    public static function persetujuan_komite_direk_bisnis($role, $name)
+    {
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+
+            ->where('data_pengajuan.tracking', '=', $role)
 
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
