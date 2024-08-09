@@ -273,8 +273,8 @@ $(document).ready(function () {
                     } else if (role == "Kabag Analis" && pal > 100000000) {
                         var options = [
                             {
-                                value: "Naik Komite III",
-                                text: "Naik Komite III",
+                                value: "Naik Komite II",
+                                text: "Naik Komite II",
                             },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
