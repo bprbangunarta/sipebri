@@ -322,12 +322,12 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">DIREKTU BISNIS</span>
+                                    <span class="fw-bold">DIREKTUR BISNIS</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="direktur_bisnis" readonly>Catatan dari direksi</textarea>
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">DIREKTU UTAMA</span>
+                                    <span class="fw-bold">DIREKTUR UTAMA</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
                                 </div>
 
