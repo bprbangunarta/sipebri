@@ -284,14 +284,14 @@ class ExportController extends Controller
         $produk = request('kode_produk');
 
         $dataQuery = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->join('v_users', 'v_users.code_user', '=', 'data_pengajuan.input_user')
-            ->join('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('v_users', 'v_users.code_user', '=', 'data_pengajuan.input_user')
+            ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
 
             ->where('data_pengajuan.on_current', 0)
@@ -330,7 +330,7 @@ class ExportController extends Controller
         }
 
         $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
-        dd($data);
+
         $data_array[] = array("NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "PLAFON", "WIL", "KETERANGAN", "RENCANA");
         foreach ($data as $item) {
             $data_array[] = array(
@@ -651,8 +651,25 @@ class ExportController extends Controller
         }
 
         $data_array[] = array(
-            "NO", "TANGGAL", "KODE", "NAMA NASABAH", "ALAMAT", "WIL",
-            "PDK", "PLAFON", "RATE", "RESORT", "SURVEYOR", "SURVEY", "ANALISA", "STAFF ANALIS", "KASI ANALIS", "KOMITE I", "KOMITE II", "REALISASI", "STATUS"
+            "NO",
+            "TANGGAL",
+            "KODE",
+            "NAMA NASABAH",
+            "ALAMAT",
+            "WIL",
+            "PDK",
+            "PLAFON",
+            "RATE",
+            "RESORT",
+            "SURVEYOR",
+            "SURVEY",
+            "ANALISA",
+            "STAFF ANALIS",
+            "KASI ANALIS",
+            "KOMITE I",
+            "KOMITE II",
+            "REALISASI",
+            "STATUS"
         );
 
         foreach ($data as $item) {
