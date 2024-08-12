@@ -43,6 +43,7 @@ use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PendampingController;
+use App\Http\Controllers\RSCJaminanController;
 use App\Http\Controllers\RSCLaporanController;
 use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
@@ -111,12 +112,11 @@ Route::get('/', function () {
 });
 
 Route::get('/give-permission', function () {
-    // $role = Role::find(18);
+    // $role = Role::find(17);
     // $permission = Permission::find(52);
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);
-    // $role = Role::create(['name' => 'Direktur Bisnis']);
     // dd($role);
 });
 
@@ -754,6 +754,10 @@ Route::middleware('auth')->group(function () {
             Route::controller(RSCKeuanganController::class)->group(function () {
                 Route::get('/rsc/keuangan', 'index')->name('rsc.keuangan');
                 Route::post('/rsc/simpan/keuangan', 'simpan_keuangan')->name('rsc.keuangan.simpan');
+            });
+
+            Route::controller(RSCJaminanController::class)->group(function () {
+                Route::get('/rsc/jaminan', 'index')->name('rsc.jaminan');
             });
         });
 

@@ -42,8 +42,6 @@ class KomiteController extends Controller
             $cek = Midle::persetujuan_komite_cs_kksk($usr, $name);
         }
 
-
-
         //Enkripsi kode pengajuan
         $c = $cek->get();
         $count = count($c);

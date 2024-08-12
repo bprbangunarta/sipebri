@@ -65,6 +65,13 @@
                 </a>
             </li>
 
+            {{-- <li class="{{ request()->is('themes/rsc/jaminan') ? 'active' : '' }}">
+                <a
+                    href="{{ route('rsc.jaminan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}">
+                    <i class="fa fa-folder-o"></i> Jaminan
+                </a>
+            </li> --}}
+
             <li class="{{ request()->is('themes/rsc/data/pengusulan') ? 'active' : '' }}">
                 <a
                     href="{{ route('rsc.data.pengusulan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}">
