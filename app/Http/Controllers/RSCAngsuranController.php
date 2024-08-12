@@ -198,15 +198,39 @@ class RSCAngsuranController extends Controller
     private function efektif_anuitas($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
     {
         try {
-            $plafon = 52700000;
-            $jangka_waktu = 36;
+            $plafon = 30200000;
+            $jangka_waktu = 24;
             $suku_bunga = 32;
+            $per = 5;
+
 
             $ssb = $suku_bunga / 100;
             $sb = $ssb / 12;
-            $anuitas = ($plafon * $sb) / (1 - 1 / pow(1 + $sb, $jangka_waktu));
-            dd($anuitas);
-            // return $rincian;
+
+            $bulan_array = range(1, $jangka_waktu);
+            $rincian = [];
+
+            foreach ($bulan_array as $bulan_ke) {
+                $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_real)));
+
+                $per = $bulan_ke;
+                $angsuran = ($plafon * $sb) / (1 - 1 / pow(1 + $sb, $jangka_waktu));
+                $pokok = ($plafon * $sb * pow(1 + $sb, $per - 1)) / (pow(1 + $sb, $jangka_waktu) - 1);
+                $bunga = $angsuran - $pokok;
+
+                // $plafon -= $pokok;
+
+                $rincian[] = [
+                    'bulan_ke' => $bulan_ke,
+                    'tanggal_setoran' => $tanggal_setoran,
+                    'setoran_pokok' => round($pokok),
+                    'setoran_bunga' => round($bunga),
+                    'jumlah_setoran' => round($angsuran),
+                    'sisa_plafon' => round($plafon) - round($pokok)
+                ];
+            }
+
+            return $rincian;
         } catch (\Throwable $th) {
             return null;
         }

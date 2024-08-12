@@ -119,7 +119,8 @@
                                                     $item->tracking == 'Proses Analisa' ||
                                                         $item->tracking == 'Naik Kasi' ||
                                                         $item->tracking == 'Naik Komite I' ||
-                                                        $item->tracking == 'Naik Komite II')
+                                                        $item->tracking == 'Naik Komite II' ||
+                                                        $item->tracking == 'Naik Komite III')
                                                     {{ $item->tracking }}
                                                 @elseif($item->tracking == 'Selesai' || $item->tracking == 'Realisasi')
                                                     {{ $item->tracking }}
@@ -135,7 +136,8 @@
                                             <td class="text-center">
                                                 @if (!is_null($item->tgl_realisasi))
                                                     @php
-                                                        $hari = strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
+                                                        $hari =
+                                                            strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
                                                         $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
                                                     @endphp
                                                     <b class="text-green">{{ $hari }} hari</b>
