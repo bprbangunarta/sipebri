@@ -778,6 +778,8 @@ class RSCCetakController extends Controller
                         $jaminan_in[] = $item->nilai_taksasi;
                     }
                     $data->total_taksasi = array_sum($jaminan_in);
+                } else {
+                    $data->total_taksasi = 0;
                 }
             }
 
