@@ -26,13 +26,11 @@ class RSC extends Model
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_pengajuan.produk_kode',
-                'data_pengajuan.metode_rps',
-                'data_pengajuan.jangka_waktu',
+                'rsc_data_pengajuan.metode_rps',
+                'rsc_data_pengajuan.jangka_waktu',
             )
-            // ->orderBy('rsc_data_pengajuan.created_at', 'desc')
-            // ->paginate(10);
             ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
         //
 
@@ -51,13 +49,11 @@ class RSC extends Model
                 )
                 ->where('noacc', $value->kode_pengajuan)->first();
             //
+
             if ($data_eks) {
                 $value->nama_nasabah = trim($data_eks->fnama);
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->metode_rps = null;
-                $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }
@@ -81,7 +77,7 @@ class RSC extends Model
                 'data_survei.kantor_kode',
                 'data_pengajuan.plafon',
                 'data_pengajuan.produk_kode',
-                'data_pengajuan.metode_rps',
+                'rsc_data_pengajuan.metode_rps',
                 'data_pengajuan.jangka_waktu',
             )
             ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
@@ -107,7 +103,6 @@ class RSC extends Model
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
                 $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->metode_rps = null;
                 $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
@@ -182,7 +177,7 @@ class RSC extends Model
                 'data_survei.kantor_kode',
                 'data_pengajuan.plafon',
                 'data_pengajuan.produk_kode',
-                'data_pengajuan.metode_rps',
+                'rsc_data_pengajuan.metode_rps',
                 'data_pengajuan.jangka_waktu',
             )
             ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)
@@ -208,7 +203,6 @@ class RSC extends Model
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
                 $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->metode_rps = null;
                 $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }

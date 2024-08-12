@@ -65,15 +65,15 @@
                 padding-right: 1.2cm; */
             }
 
-            .col .table {
+            /* .col .table {
                 padding-left: 1.0cm;
                 padding-right: 1.0cm;
-            }
+            } */
 
             .col .tabel_setoran {
                 table-layout: auto;
-                padding-left: 1.0cm;
-                padding-right: 1.0cm;
+                /* padding-left: 1.0cm;
+                padding-right: 1.0cm; */
             }
 
         }

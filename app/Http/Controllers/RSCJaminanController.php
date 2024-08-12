@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Midle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -62,6 +63,7 @@ class RSCJaminanController extends Controller
                         $item->alamat_ktp = trim($data_eks->alamat_ktp);
                         $item->no_telp = trim($data_eks->no_telp);
                         $item->no_spk = trim($data_eks->no_spk);
+                        $item->produk_kode = Midle::data_produk(trim($data_eks->ket));
                         $item->created_at = trim($data_eks->tgleff);
                         $item->updated_at = trim($data_eks->chgtgljam);
                         $item->plafon_awal = trim($data_eks->plafond_awal);

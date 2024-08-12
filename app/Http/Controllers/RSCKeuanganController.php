@@ -20,76 +20,42 @@ class RSCKeuanganController extends Controller
 
             $kemampuan = $this->kemampuan_keuangan($enc_rsc);
 
+            $data = DB::table('rsc_data_pengajuan')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->select(
+                    'data_nasabah.nama_nasabah',
+                    'rsc_data_pengajuan.penentuan_plafon as plafon',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.pengajuan_kode',
+                    'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.jangka_waktu',
+                    'data_pengajuan.produk_kode',
+                )
+                ->where('rsc_data_pengajuan.pengajuan_kode', $enc)
+                ->first();
+
+
             if ($status_rsc == 'EKS') {
-                $data = DB::connection('sqlsrv')->table('m_loan')
+
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
                     ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
                     ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
                     ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
                     ->select(
                         'm_loan.fnama as nama_nasabah',
-                        'm_cif.alamat as alamat_ktp',
-                        'm_loan.plafond_awal as plafon',
-                        'm_cif.nohp as no_telp',
-                        'm_loan.jkwaktu as jangka_waktu',
                         'setup_loan.ket',
-                        'm_loan.no_spk',
-                        'm_loan.tgleff',
-                        'm_loan.chgtgljam',
                     )
-                    ->where('m_loan.noacc', $enc)->get();
+                    ->where('m_loan.noacc', $data->pengajuan_kode)->first();
                 //
-                $data[0]->nama_nasabah = trim($data[0]->nama_nasabah);
-                $data[0]->alamat_ktp = trim($data[0]->alamat_ktp);
-                $data[0]->plafon = trim($data[0]->plafon);
-                $data[0]->no_telp = trim($data[0]->no_telp);
-                $data[0]->jangka_waktu = trim($data[0]->jangka_waktu);
-                $data[0]->produk_kode = Midle::data_produk(trim($data[0]->ket));
-                $data[0]->created_at = date('Y-m-d H:i:s', strtotime($data[0]->tgleff));
-                $data[0]->no_spk = trim($data[0]->no_spk);
-                $data[0]->updated_at = date('Y-m-d H:i:s', strtotime($data[0]->chgtgljam));
-                $data[0]->metode_rps = null;
-            } else {
-                $data = DB::table('data_pengajuan')
-                    ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-                    ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-                    ->select(
-                        'data_nasabah.nama_nasabah',
-                        'data_nasabah.alamat_ktp',
-                        'data_nasabah.no_telp',
-                        'data_pengajuan.plafon',
-                        'data_pengajuan.produk_kode',
-                        'data_pengajuan.metode_rps',
-                        'data_pengajuan.jangka_waktu',
-                        'data_spk.no_spk',
-                        'data_spk.created_at',
-                        'data_spk.updated_at',
-                    )
-                    ->where('data_pengajuan.kode_pengajuan', $enc)
-                    ->get();
+
+                $data->nama_nasabah = trim($data_eks->nama_nasabah);
+                $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
             }
-            // $data = DB::table('data_pengajuan')
-            //     ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-            //     ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            //     ->select(
-            //         'data_nasabah.nama_nasabah',
-            //         'data_nasabah.alamat_ktp',
-            //         'data_nasabah.no_telp',
-            //         'data_pengajuan.plafon',
-            //         'data_pengajuan.produk_kode',
-            //         'data_pengajuan.metode_rps',
-            //         'data_pengajuan.jangka_waktu',
-            //         'data_spk.no_spk',
-            //         'data_spk.created_at',
-            //         'data_spk.updated_at',
-            //     )
-            //     ->where('data_pengajuan.kode_pengajuan', $enc)
-            //     ->get();
-            //
-            foreach ($data as $item) {
-                $item->kode = $request->query('kode');
-                $item->rsc = $request->query('rsc');
-                $item->status_rsc = $status_rsc;
-            }
+
+            $data->kode = $request->query('kode');
+            $data->rsc = $request->query('rsc');
+            $data->status_rsc = $status_rsc;
 
             $filter = array_filter($kemampuan, function ($value) {
                 return $value !== null;
@@ -98,7 +64,7 @@ class RSCKeuanganController extends Controller
             $kemampuan['total'] = $total;
 
             $analisa_keuangan = DB::table('rsc_analisa_keuangan')->where('kode_rsc', $enc_rsc)->first();
-            // dd($analisa_keuangan);
+
             if (is_null($analisa_keuangan)) {
                 $keuangan = $this->data_static();
             } else {
@@ -106,7 +72,7 @@ class RSCKeuanganController extends Controller
             }
 
             return view('rsc.keuangan.index', [
-                'data' => $data[0],
+                'data' => $data,
                 'kemampuan' => $kemampuan,
                 'keuangan' => $keuangan,
             ]);

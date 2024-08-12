@@ -198,17 +198,12 @@ class RSCAngsuranController extends Controller
     private function efektif_anuitas($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
     {
         try {
-            $plafon = 30200000;
-            $jangka_waktu = 24;
-            $suku_bunga = 32;
-            $per = 5;
-
-
             $ssb = $suku_bunga / 100;
             $sb = $ssb / 12;
 
             $bulan_array = range(1, $jangka_waktu);
             $rincian = [];
+            $total_pokok_dibayar = 0;
 
             foreach ($bulan_array as $bulan_ke) {
                 $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_real)));
@@ -216,9 +211,10 @@ class RSCAngsuranController extends Controller
                 $per = $bulan_ke;
                 $angsuran = ($plafon * $sb) / (1 - 1 / pow(1 + $sb, $jangka_waktu));
                 $pokok = ($plafon * $sb * pow(1 + $sb, $per - 1)) / (pow(1 + $sb, $jangka_waktu) - 1);
-                $bunga = $angsuran - $pokok;
+                $bunga = round($angsuran) - round($pokok);
 
-                // $plafon -= $pokok;
+                $total_pokok_dibayar += $pokok;
+                $sisa_plafon = round($plafon) - round($total_pokok_dibayar);
 
                 $rincian[] = [
                     'bulan_ke' => $bulan_ke,
@@ -226,7 +222,7 @@ class RSCAngsuranController extends Controller
                     'setoran_pokok' => round($pokok),
                     'setoran_bunga' => round($bunga),
                     'jumlah_setoran' => round($angsuran),
-                    'sisa_plafon' => round($plafon) - round($pokok)
+                    'sisa_plafon' => round($sisa_plafon)
                 ];
             }
 
