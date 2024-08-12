@@ -55,7 +55,7 @@
 
                                 &nbsp;
 
-                                <label>CATATAN DIREKSI</label>
+                                <label>CATATAN DIREKTUR UTAMA</label>
                                 <textarea class="form-control text-uppercase" style="padding-left:10px; background: white; resize:none;" rows="4"
                                     name="catatan" id="catatan" required="" readonly>
                                     {{ $catatan['Direksi'] }}

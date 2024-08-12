@@ -327,7 +327,7 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">DIREKSI</span>
+                                    <span class="fw-bold">DIREKTU UTAMA</span>
                                     <textarea class="form-control text-uppercase" rows="3" name="" id="direksi" readonly>Catatan dari direksi</textarea>
                                 </div>
 
