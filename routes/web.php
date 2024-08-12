@@ -829,6 +829,7 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(RSCAngsuranController::class)->group(function () {
             Route::get('/rsc/angsuran', 'index')->name('rsc.angsuran');
+            Route::get('/rsc/angsuran/detail', 'detail_angsuran')->name('rsc.detail.angsuran');
         });
 
         //====Route Analisa RSC====//

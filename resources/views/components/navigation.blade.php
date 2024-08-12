@@ -622,12 +622,13 @@
                                     Add Penolakan RSC
                                 </a>
                             </li>
-                            {{-- <li class="{{ request()->is('themes/rsc/angsuran') ? 'active' : '' }}">
+
+                            <li class="{{ request()->is('themes/rsc/angsuran') ? 'active' : '' }}">
                                 <a href="{{ route('rsc.angsuran') }}" title="Add RSC">
                                     <i class="fa fa-usd" aria-hidden="true"></i>
                                     Tabel Angsuran RSC
                                 </a>
-                            </li> --}}
+                            </li>
                         </ul>
                     </li>
 

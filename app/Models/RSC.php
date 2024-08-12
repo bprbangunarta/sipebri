@@ -278,7 +278,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_staff($keyword)
+    protected static function persetujuan_rsc_staff($keyword, $keyword_sqlsrv)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -299,9 +299,14 @@ class RSC extends Model
                 'data_pengajuan.plafon',
             )
 
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                        if ($keyword_sqlsrv) {
+                            $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                        }
+                    })
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -314,7 +319,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_kasi($keyword)
+    protected static function persetujuan_rsc_kasi($keyword, $keyword_sqlsrv)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -334,9 +339,14 @@ class RSC extends Model
                 'rsc_data_survei.kantor_kode',
             )
 
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                        if ($keyword_sqlsrv) {
+                            $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                        }
+                    })
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -348,7 +358,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_kabag_analis($keyword)
+    protected static function persetujuan_rsc_kabag_analis($keyword, $keyword_sqlsrv)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -368,9 +378,14 @@ class RSC extends Model
                 'rsc_data_survei.kantor_kode',
             )
 
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                        if ($keyword_sqlsrv) {
+                            $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                        }
+                    })
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -382,7 +397,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_direktur_bisnis($keyword)
+    protected static function persetujuan_rsc_direktur_bisnis($keyword, $keyword_sqlsrv)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -402,9 +417,14 @@ class RSC extends Model
                 'rsc_data_survei.kantor_kode',
             )
 
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                        if ($keyword_sqlsrv) {
+                            $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                        }
+                    })
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -415,7 +435,7 @@ class RSC extends Model
         return $data;
     }
 
-    protected static function persetujuan_rsc_direksi($keyword)
+    protected static function persetujuan_rsc_direksi($keyword, $keyword_sqlsrv)
     {
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
@@ -435,9 +455,14 @@ class RSC extends Model
                 'rsc_data_survei.kantor_kode',
             )
 
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                        if ($keyword_sqlsrv) {
+                            $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                        }
+                    })
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -740,4 +765,21 @@ class RSC extends Model
         return $data;
     }
     // Anlisa Usaha
+
+
+    protected static function get_sqlsrv($keyword)
+    {
+        if (!empty($keyword)) {
+            $keyword_sqlsrv = DB::connection('sqlsrv')
+                ->table('m_Loan')
+                // ->where('fnama', 'like', '%' . $keyword . '%')
+                ->where('fnama', $keyword)
+                ->where('plafond', '>',  0)
+                ->select('fnama', 'noacc')->first();
+        } else {
+            $keyword_sqlsrv = null;
+        }
+
+        return $keyword_sqlsrv;
+    }
 }

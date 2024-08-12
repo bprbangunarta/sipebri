@@ -16,19 +16,21 @@ class RSCPersetujuanController extends Controller
     public function index()
     {
         $keyword = request('keyword');
+        $keyword_sqlsrv = RSC::get_sqlsrv(request('keyword'));
+
         $usr = Auth::user()->code_user;
         $user = DB::table('v_users')->where('code_user', $usr)->select('role_name')->first();
 
         if ($user->role_name == 'Staff Analis') {
-            $cek = RSC::persetujuan_rsc_staff($keyword);
+            $cek = RSC::persetujuan_rsc_staff($keyword, $keyword_sqlsrv);
         } elseif ($user->role_name == 'Kasi Analis') {
-            $cek = RSC::persetujuan_rsc_kasi($keyword);
+            $cek = RSC::persetujuan_rsc_kasi($keyword, $keyword_sqlsrv);
         } elseif ($user->role_name == 'Kabag Analis') {
-            $cek = RSC::persetujuan_rsc_kabag_analis($keyword);
+            $cek = RSC::persetujuan_rsc_kabag_analis($keyword, $keyword_sqlsrv);
         } elseif ($user->role_name == 'Direktur Bisnis') {
-            $cek = RSC::persetujuan_rsc_direktur_bisnis($keyword);
+            $cek = RSC::persetujuan_rsc_direktur_bisnis($keyword, $keyword_sqlsrv);
         } elseif ($user->role_name == 'Direksi') {
-            $cek = RSC::persetujuan_rsc_direksi($keyword);
+            $cek = RSC::persetujuan_rsc_direksi($keyword, $keyword_sqlsrv);
         }
 
         $data = $cek->paginate(10);

@@ -15,6 +15,8 @@ class RSCPenjadwalanController extends Controller
     public function index()
     {
         $keyword = request('keyword');
+        $keyword_sqlsrv = RSC::get_sqlsrv(request('keyword'));
+
         $data = DB::table('rsc_data_pengajuan')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
             ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
@@ -31,9 +33,14 @@ class RSCPenjadwalanController extends Controller
                 'data_survei.kantor_kode',
             )
 
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                        if ($keyword_sqlsrv) {
+                            $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                        }
+                    })
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%');
             })
 
