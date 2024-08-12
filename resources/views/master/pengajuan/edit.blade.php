@@ -106,6 +106,9 @@
                                                 <option value="Naik Komite II"
                                                     {{ $data->tracking == 'Naik Komite II' || old('Naik Komite II') == 'Naik Komite II' ? 'selected' : '' }}>
                                                     Naik Komite II</option>
+                                                <option value="Naik Komite III"
+                                                    {{ $data->tracking == 'Naik Komite III' || old('Naik Komite III') == 'Naik Komite III' ? 'selected' : '' }}>
+                                                    Naik Komite III</option>
                                                 <option value="Realisasi"
                                                     {{ $data->tracking == 'Realisasi' || old('Realisasi') == 'Realisasi' ? 'selected' : '' }}>
                                                     Realisasi</option>
