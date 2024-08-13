@@ -132,15 +132,11 @@
                                 <div class="col-md-6" style="margin-bottom: 25px;">
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">PLAFON RSC</span>
-                                        <input type="text" id="kode" hidden>
-                                        <input type="text" name="nomor" id="nomor" hidden>
                                         <input class="form-control text-uppercase" type="text" name=""
                                             id="plafond_rsc" readonly>
                                     </div>
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">SPK RSC</span>
-                                        <input type="text" id="kode" hidden>
-                                        <input type="text" name="nomor" id="nomor" hidden>
                                         <input class="form-control text-uppercase" type="text" name="spk_rsc"
                                             id="spk_rsc" readonly>
                                     </div>
@@ -169,16 +165,12 @@
                                 <div class="col-md-6">
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">TANGGAL REALISASI</span>
-                                        <input type="text" id="kode" hidden>
-                                        <input type="text" name="nomor" id="nomor" hidden>
                                         <input class="form-control text-uppercase" type="text" name="tg_realisasi"
                                             id="tg_realisasi" readonly>
                                     </div>
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">TANGGAL JATUH TEMPO</span>
-                                        <input type="text" id="kode" hidden>
-                                        <input type="text" name="nomor" id="nomor" hidden>
                                         <input class="form-control text-uppercase" type="text" name="tgL_jth_tmp"
                                             id="tgL_jth_tmp" readonly>
                                     </div>
@@ -258,6 +250,7 @@
                                         <input class="form-control text-uppercase" type="text" name="spk_rsc"
                                             id="spk_rsc">
                                     </div>
+
                                 </div>
                                 <div class="col-md-12">
                                     <div style="margin-top: -15px; float:left; width: 47.5%;">
@@ -266,9 +259,17 @@
                                             name="tgl_realisasi" placeholder="YYYY-MM-DD">
                                     </div>
                                     <div style="margin-top: -15px; float:right; width: 47.5%;">
+                                        <span class="fw-bold">JANGKA WAKTU</span>
+                                        <input class="form-control text-uppercase" id="jw" type="text"
+                                            name="jw">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div style="margin-top: 5px; float:left; width: 47.5%;">
                                         <span class="fw-bold">TANGGAL JATUH TEMPO</span>
                                         <input class="form-control text-uppercase" id="tgl_jth_temp" type="text"
-                                            name="tgl_jth_temp" placeholder="YYYY-MM-DD">
+                                            name="tgl_jth_temp" placeholder="YYYY-MM-DD" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -385,5 +386,24 @@
             rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
             return prefix == undefined ? rupiah : rupiah ? "" + rupiah : "";
         }
+
+
+        // Generate tanggal jatuh tempo
+        $(document).ready(function() {
+            $('#tgl_realisasi, #jw').on('input', function() {
+                const tgl_realisasi = $('#tgl_realisasi').val()
+                const jw = $('#jw').val()
+
+                if (tgl_realisasi && jw) {
+                    // Menambahkan 1 bulan ke tgl_realisasi, lalu menambahkan jw bulan
+                    const tgl_temp = moment(tgl_realisasi, 'YYYY-MM-DD')
+                        .add(jw, 'months')
+                        .format('YYYY-MM-DD');
+
+                    $('#tgl_jth_temp').val(tgl_temp)
+                }
+
+            })
+        })
     </script>
 @endpush

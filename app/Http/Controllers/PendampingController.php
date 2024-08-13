@@ -30,25 +30,25 @@ class PendampingController extends Controller
 
             //Ambil kode pendamping
             $pendamping = Pendamping::where('pengajuan_kode', $pengajuan[0]->kode_pengajuan)->get();
+            // $data_pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->get();
+            // dd($data_pengajuan);
+            // if (count($data_pengajuan) > 1) {
+            //     $data_pendamping = Pendamping::where('pengajuan_kode', $data_pengajuan[0]->kode_pengajuan)->first();
+            //     $data_p = [
+            //         'no_identitas' => $data_pendamping->no_identitas,
+            //         'nama_pendamping' => $data_pendamping->nama_pendamping,
+            //         'tempat_lahir' => $data_pendamping->tempat_lahir,
+            //         'tanggal_lahir' => $data_pendamping->tanggal_lahir,
+            //         'status' => $data_pendamping->status,
+            //         'no_hp' => $data_pendamping->no_hp,
+            //         'tanggungan' => $data_pendamping->tanggungan,
+            //         'pisah_harta' => $data_pendamping->pisah_harta,
+            //     ];
+            //     Pendamping::where('pengajuan_kode', $pengajuan[0]->kode_pengajuan)->update($data_p);
+            // }
 
-            $data_pengajuan = Pengajuan::where('nasabah_kode', $cek->kode_nasabah)->get();
-            if (count($data_pengajuan) > 1) {
-                $data_pendamping = Pendamping::where('pengajuan_kode', $data_pengajuan[0]->kode_pengajuan)->first();
-                $data_p = [
-                    'no_identitas' => $data_pendamping->no_identitas,
-                    'nama_pendamping' => $data_pendamping->nama_pendamping,
-                    'tempat_lahir' => $data_pendamping->tempat_lahir,
-                    'tanggal_lahir' => $data_pendamping->tanggal_lahir,
-                    'status' => $data_pendamping->status,
-                    'no_hp' => $data_pendamping->no_hp,
-                    'tanggungan' => $data_pendamping->tanggungan,
-                    'pisah_harta' => $data_pendamping->pisah_harta,
-                ];
-                Pendamping::where('pengajuan_kode', $pengajuan[0]->kode_pengajuan)->update($data_p);
-            }
-
-            //Ambil ulang kode pendamping
-            $pendamping = Pendamping::where('pengajuan_kode', $pengajuan[0]->kode_pengajuan)->get();
+            // //Ambil ulang kode pendamping
+            // $pendamping = Pendamping::where('pengajuan_kode', $pengajuan[0]->kode_pengajuan)->get();
 
             //Ubah format masa identitas Ymd menjadi m-d-Y
             if (!is_null($pendamping[0]->masa_identitas)) {

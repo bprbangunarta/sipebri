@@ -757,7 +757,7 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::controller(RSCJaminanController::class)->group(function () {
-                Route::get('/rsc/jaminan', 'index')->name('rsc.jaminan');
+                Route::get('/rsc/jaminan/kendaraan', 'index')->name('rsc.jaminan');
             });
         });
 

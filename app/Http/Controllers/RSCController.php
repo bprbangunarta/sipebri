@@ -1191,7 +1191,7 @@ class RSCController extends Controller
 
             return redirect()->back()->with('success', 'Berhasil Generate PK.');
         } catch (\Throwable $th) {
-            //throw $th;
+            return redirect()->back()->with('error', 'Hubungi IT.');
         }
     }
 

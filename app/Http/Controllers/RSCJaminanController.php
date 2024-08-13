@@ -74,10 +74,9 @@ class RSCJaminanController extends Controller
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
-                // $item->status_rsc = $data_rsc->status_rsc;
             }
-
-            return view('rsc.jaminan.index', [
+            // dd($data);
+            return view('rsc.jaminan.kendaraan', [
                 'data' => $data[0]
             ]);
         } catch (DecryptException $e) {
