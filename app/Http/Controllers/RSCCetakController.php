@@ -965,7 +965,7 @@ class RSCCetakController extends Controller
                     'data_spk.updated_at as tgl_create_pk',
                     DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
                     DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar_rsc"),
-                    DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir"),
+                    DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_pk"),
                     DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
@@ -1019,12 +1019,6 @@ class RSCCetakController extends Controller
                     $data->tgl_akhir = $tgl_tempo->isoFormat('D MMMM Y');
                 }
             }
-
-            $targetDt = Carbon::parse($data->tgl_create_pk);
-            $data->tgl_create_pk = $targetDt->isoFormat('D MMMM Y');
-
-            $tgL_end = Carbon::parse($data->tgl_akhir);
-            $data->tgl_akhir_pk = $tgL_end->isoFormat('D MMMM Y');
 
             $tgl_mulai_rsc = Carbon::parse($data->tgl_mulai_rsc);
             $data->tgl_mulai_rsc = $tgl_mulai_rsc->isoFormat('D MMMM Y');

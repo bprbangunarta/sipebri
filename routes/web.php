@@ -836,7 +836,8 @@ Route::middleware('auth')->group(function () {
         // Admin Kredit
 
         Route::controller(RSCLaporanController::class)->group(function () {
-            Route::get('/rsc/tracking', 'tracking_rsc')->name('rsc.tracking');
+            Route::get('/rsc/laporan/tracking', 'tracking_rsc')->name('rsc.tracking');
+            Route::get('/rsc/laporan/pendaftaran', 'pendaftaran_rsc')->name('rsc.pendaftaran');
         });
 
 
