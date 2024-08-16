@@ -1312,6 +1312,21 @@ class DataCetakController extends Controller
 
             $cek->b_denda = number_format((float)$cek->b_denda, 2, ',', '');
 
+
+            // Cek Status Balik Nama Jaminan
+            $data_balik_nama = [];
+            $index = 1;
+            foreach ($jaminan as $item) {
+                if ($item->status_bl_nama == "YES") {
+                    $data_balik_nama[] = (object)[
+                        'nomor' => $index,
+                        'jenis' => $item->jenis_bl_nama,
+                        'atas_nama' => $item->an_bl_nama,
+                    ];
+                    $index++;
+                }
+            }
+
             //Khusus Reloan 
             if ($cek->kategori == 'RELOAN' && $cek->metode_rps == 'FLAT' && !is_null($cek->grace_period)) {
 
@@ -1370,7 +1385,7 @@ class DataCetakController extends Controller
                 $cek->banyak_bulan = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
                 $cek->jumlah_bulan = ($cek->jwt - $cek->grace_period) / $cek->jangka_bunga;
                 $cek->tgl_pokok = ($cek->jwt - $cek->grace_period) / $cek->jangka_bunga;
-                // dd($cek);
+
                 return view('cetak.perjanjian-kredit.cetak-pk-kbt-lele', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
@@ -1388,6 +1403,7 @@ class DataCetakController extends Controller
                     'data' => $cek,
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
+                    'data_balik_nama' => $data_balik_nama,
                 ]);
             } elseif ($cek->produk_kode == 'KTO') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kto', [

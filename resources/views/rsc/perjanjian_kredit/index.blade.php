@@ -77,13 +77,15 @@
 
                                                 <a data-toggle="modal" data-target="#add_spk_rsc"
                                                     data-rsc="{{ $item->rsc }}" data-kode="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Generate">
+                                                    class="btn-circle btn-sm bg-yellow" title="Add SPK RSC"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#generate-code"
                                                     data-id="{{ $item->rsc }}" data-kode="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-green" title="Generate">
+                                                    class="btn-circle btn-sm bg-green" title="Generate"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
 

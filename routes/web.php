@@ -27,6 +27,7 @@ use App\Http\Controllers\RSCLainController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\KeuanganController;
+use App\Http\Controllers\RSCBiayaController;
 use App\Http\Controllers\RSCCetakController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TrackingController;
@@ -803,14 +804,6 @@ Route::middleware('auth')->group(function () {
             });
         });
 
-        // Route::group(['middleware' => ['role:Kabag Analis|Direksi|Kasi Analis']], function () {
-        //     Route::controller(RSCController::class)->group(function () {
-        //         Route::get('rsc/notifikasi/index', 'index_notifikasi')->name('rsc.notifikasi.index');
-        //         Route::get('rsc/notifikasi/get', 'get_notifikasi')->name('rsc.notifikasi.get');
-        //         Route::post('rsc/notifikasi/simpan', 'simpan_notifikasi')->name('rsc.notifikasi.simpan');
-        //     });
-        // });
-
         Route::group(['middleware' => ['role:Kasi Analis|Kabag Analis']], function () {
             Route::controller(RSCController::class)->group(function () {
                 Route::get('/rsc/penolakan', 'penolakan_index')->name('rsc.penolakan');
@@ -820,6 +813,7 @@ Route::middleware('auth')->group(function () {
             });
         });
 
+        // Admin Kredit
         Route::controller(RSCController::class)->group(function () {
             Route::get('/rsc/perjanjian_kredit', 'pk_index')->name('rsc.perjanjian_kredit');
             Route::POST('/rsc/simpan/perjanjian_kredit', 'pk_simpan')->name('rsc.perjanjian_kredit.simpan');
@@ -827,14 +821,24 @@ Route::middleware('auth')->group(function () {
             Route::get('/rsc/perjanjiankredit/get', 'pk_get')->name('rsc.perjanjian_kredit.get');
         });
 
-        Route::controller(RSCLaporanController::class)->group(function () {
-            Route::get('/rsc/tracking', 'tracking_rsc')->name('rsc.tracking');
+        Route::controller(RSCBiayaController::class)->group(function () {
+            Route::get('/rsc/biayarsc', 'index')->name('rsc.biaya.index');
+            Route::get('/rsc/biayarsc/get', 'get_biaya')->name('rsc.biaya.get');
+            Route::POST('/rsc/biayarsc/simpan', 'simpan_biaya')->name('rsc.simpan.biaya');
+            Route::get('/rsc/cetak/biayarsc', 'cetak_biaya')->name('rsc.cetak.biaya');
         });
 
         Route::controller(RSCAngsuranController::class)->group(function () {
             Route::get('/rsc/angsuran', 'index')->name('rsc.angsuran');
             Route::get('/rsc/angsuran/detail', 'detail_angsuran')->name('rsc.detail.angsuran');
         });
+
+        // Admin Kredit
+
+        Route::controller(RSCLaporanController::class)->group(function () {
+            Route::get('/rsc/tracking', 'tracking_rsc')->name('rsc.tracking');
+        });
+
 
         //====Route Analisa RSC====//
 

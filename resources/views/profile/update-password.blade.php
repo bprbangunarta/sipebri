@@ -60,16 +60,9 @@
                                     </div>
 
                                 </div>
-                                @if ($role == 'Kasi Analis' || $role == 'Kabag Analis' || $role == 'Direksi' || $role == 'Administrator')
-                                    <div class="box-footer">
-                                        <button type="submit" class="btn bg-blue" style="width: 100%;">SIMPAN</button>
-                                    </div>
-                                @else
-                                    <div class="box-footer">
-                                        <button type="submit" class="btn bg-blue" style="width: 100%;"
-                                            disabled>SIMPAN</button>
-                                    </div>
-                                @endif
+                                <div class="box-footer">
+                                    <button type="submit" class="btn bg-blue" style="width: 100%;">SIMPAN</button>
+                                </div>
                             </form>
                         </div>
 

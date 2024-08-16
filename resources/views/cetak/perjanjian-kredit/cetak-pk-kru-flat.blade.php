@@ -353,7 +353,39 @@
                                     @empty
                                     @endforelse
                                 </ol>
-                                Mengenai pengaturan dan pelaksanaan perikatan jaminan akan dilakukan dengan perjanjian
+
+                                @if (count($data_balik_nama) > 0)
+                                    JAMINAN tersebut diatas @if (count($data_balik_nama) > 1)
+                                        @foreach ($data_balik_nama as $item)
+                                            pada Pasal 4 Ayat 1 nomor {{ ' ' . $item->nomor . ',' }} akan dilanjutkan
+                                            Proses {{ $item->jenis }} Sertipikat Hak Milik
+                                            ke atas nama {{ ' ' . $item->atas_nama . ',' }}
+                                        @endforeach
+                                    @elseif (count($data_balik_nama) == 1)
+                                        @foreach ($data_balik_nama as $item)
+                                            pada Pasal 4 Ayat 1 nomor {{ ' ' . $item->nomor }} akan dilanjutkan
+                                            Proses {{ $item->jenis }} Sertipikat Hak Milik
+                                            ke atas nama {{ ' ' . $item->atas_nama }}
+                                        @endforeach
+                                    @endif
+                                    {{-- akan dilanjutkan Proses Balik Nama Sertipikat Hak Milik
+                                    ke atas nama
+                                    @if (count($data_balik_nama) > 1)
+                                        @foreach ($data_balik_nama as $item)
+                                            {{ $item->atas_nama . ',' }}
+                                        @endforeach
+                                    @elseif (count($data_balik_nama) == 1)
+                                        @foreach ($data_balik_nama as $item)
+                                            {{ $item->atas_nama }}
+                                        @endforeach
+                                    @endif  --}}
+                                    dan apabila telah selesai akan dilanjutkan proses
+                                    pemasangan Hak Tanggungan di Kantor Badan Pertanahan
+                                    Nasional Kabupaten Subang.
+                                @endif
+
+                                Mengenai pengaturan dan pelaksanaan perikatan jaminan akan dilakukan dengan
+                                perjanjian
                                 tersendiri sesuai
                                 peraturan dan perundang-undangan yang berlaku. Perjanjian perikatan agunan tersebut
                                 merupakan satu
