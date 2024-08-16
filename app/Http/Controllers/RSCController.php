@@ -1171,6 +1171,7 @@ class RSCController extends Controller
                 'kode_rsc' => $request->kode_rsc,
                 'nomor' => $request->nomor,
                 'no_spk' => $request->pk_rsc,
+                'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
 

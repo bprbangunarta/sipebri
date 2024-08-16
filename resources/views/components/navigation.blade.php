@@ -600,13 +600,13 @@
                     </li>
 
                     <li class="treeview {{ request()->is('themes/rsc/laporan/tracking') ? 'active' : '' }}">
-                        <a href="">
+                        {{-- <a href="">
                             <i class="fa fa-folder-open" aria-hidden="true"></i>
                             <span>Laporan RSC</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
-                        </a>
+                        </a> --}}
 
                         <ul class="treeview-menu">
                             <li class="{{ request()->is('themes/rsc/tracking') ? 'active' : '' }}">
