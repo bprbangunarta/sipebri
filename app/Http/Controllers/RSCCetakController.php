@@ -648,7 +648,7 @@ class RSCCetakController extends Controller
             ->where(function ($query) {
                 $query->whereIn('rsc_data_pengajuan.status', ['Notifikasi', 'Perjanjian Kredit', 'Selesai']);
             })
-            ->orderBy('data_pengajuan.created_at', 'desc')
+            ->orderBy('rsc_data_pengajuan.created_at', 'desc')
             ->paginate(10);
         //
         foreach ($data as $value) {
