@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Data Pendamping')
+@section('title', 'Data Pengajuan')
 
 @section('content')
     <div class="content-wrapper">
