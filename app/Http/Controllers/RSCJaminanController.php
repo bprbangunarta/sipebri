@@ -78,15 +78,12 @@ class RSCJaminanController extends Controller
 
             //Agunan Kendaraan
             $jenis_kendaraan = DB::table('ja_kendaraan')->get();
-            $data_kendaraan = DB::table('da_kendaraan')->get();
 
             //Agunan Tanah
             $jenis_tanah = DB::table('ja_tanah')->get();
-            $data_tanah = DB::table('da_tanah')->get();
 
             //Agunan Lain
             $jenis_lain = DB::table('ja_lainnya')->get();
-            $data_lain = DB::table('da_lainnya')->get();
 
             // Jaminan
             if ($data[0]->status_rsc == 'EKS') {
@@ -94,15 +91,39 @@ class RSCJaminanController extends Controller
                     ->leftJoin('m_loan_jaminan', 'm_loan_jaminan.noacc', '=', 'm_loan.noacc')
                     ->leftJoin('m_detil_jaminan', 'm_detil_jaminan.noreg', '=', 'm_loan_jaminan.noreg')
                     ->select(
-                        'm_detil_jaminan.*',
-                        'm_loan_jaminan.nilai_jaminan',
+                        'm_detil_jaminan.jnsjaminan',
+                        'm_detil_jaminan.nilai_taksasi',
+                        'm_detil_jaminan.jnsdokumen',
+                        'm_detil_jaminan.catatan',
                     )
                     ->where('m_loan.noacc', $enc)->get();
-                dd($jaminan);
+            }
+
+            if (count($jaminan) > 0) {
+                foreach ($jaminan as $item) {
+                    foreach ($jenis_kendaraan as $kendaraan) {
+                        if ($item->jnsdokumen == $kendaraan->kode) {
+                            $item->janis_agunan = $kendaraan->agunan;
+                        }
+                    }
+
+                    foreach ($jenis_tanah as $tanah) {
+                        if ($item->jnsdokumen == $tanah->kode) {
+                            $item->janis_agunan = $tanah->agunan;
+                        }
+                    }
+
+                    foreach ($jenis_lain as $lain) {
+                        if ($item->jnsdokumen == $lain->kode) {
+                            $item->janis_agunan = $lain->agunan;
+                        }
+                    }
+                }
             }
 
             return view('rsc.jaminan.kendaraan', [
-                'data' => $data[0]
+                'data' => $data[0],
+                'jaminan' => $jaminan,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

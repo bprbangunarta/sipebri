@@ -109,7 +109,7 @@ class DataCetakController extends Controller
 
             ->where(function ($query) use ($range) {
                 $query->whereNull('data_notifikasi.updated_at')
-                    ->where(function ($subQuery) use ($range) {
+                    ->orWhere(function ($subQuery) use ($range) {
                         $subQuery->whereDate('data_notifikasi.created_at', '>=', $range);
                     });
             })

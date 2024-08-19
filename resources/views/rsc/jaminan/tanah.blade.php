@@ -1,5 +1,5 @@
 @extends('rsc.jaminan.menu', [$data])
-@section('title', 'RSC Analisa Jaminan Kendaraan')
+@section('title', 'RSC Analisa Jaminan Tanah')
 
 @section('content')
     <div class="tab-content">
