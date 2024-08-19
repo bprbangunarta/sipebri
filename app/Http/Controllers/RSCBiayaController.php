@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\RSC;
 use App\Models\Midle;
 use Illuminate\Http\Request;
@@ -89,24 +90,32 @@ class RSCBiayaController extends Controller
             $rsc = Crypt::decrypt($request->kode_rsc);
 
             $biaya = DB::table('rsc_biaya')->where('kode_rsc', $rsc)->first();
-            $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
-                $biaya->asuransi_tlo + $biaya->poko_dibayar + $biaya->poko_dibayar +
-                (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
 
+            $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->first();
+
+            $selisih = abs($data_rsc->tunggakan_bunga - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
+
+            $bunga_dibayar_baru = $biaya->bunga_dibayar + $selisih;
+
+            $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
+                $biaya->asuransi_tlo + $bunga_dibayar_baru + $biaya->poko_dibayar + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
 
             $data = [
-                'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+                'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $bunga_dibayar_baru),
                 'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
                 'total' =>  $total,
             ];
 
-            $update = DB::table('rsc_biaya')->where('kode_rsc', $rsc)->update($data);
+            $data2 = [
+                'tunggakan_bunga' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+            ];
 
-            if ($update) {
-                return response()->back()->with('success', 'Biaya RSC berhasil diubah.');
-            } else {
-                return response()->back()->with('error', 'Biaya RSC gagal diubah.');
-            }
+            DB::transaction(function () use ($data2, $data, $rsc) {
+                DB::table('rsc_biaya')->where('kode_rsc', $rsc)->update($data);
+                DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->update($data2);
+            });
+
+            return response()->back()->with('success', 'Biaya RSC berhasil diubah.');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
@@ -116,8 +125,12 @@ class RSCBiayaController extends Controller
     {
         $kode_rsc = Crypt::decrypt($request->input('data'));
 
+        $rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $kode_rsc)->first();
+
         $data = DB::table('rsc_biaya')
             ->where('kode_rsc', $kode_rsc)->first();
+
+        $data->bunga_dibayar = $rsc->tunggakan_bunga;
 
         return response()->json($data);
     }
@@ -127,11 +140,71 @@ class RSCBiayaController extends Controller
         try {
             $rsc = Crypt::decrypt($request->query('rsc'));
 
-            // $data = DB::table('rsc_biaya_rsc')
-            //     ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_biaya_rsc.kode_rsc')
-            //     ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_biaya_rsc.kode_rsc')
+            $data = DB::table('rsc_biaya')
+                ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_biaya.kode_rsc')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('rsc_spk', 'rsc_spk.kode_rsc', '=', 'rsc_biaya.kode_rsc')
+                ->select(
+                    'data_nasabah.nama_nasabah',
+                    'rsc_data_pengajuan.pengajuan_kode',
+                    'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.baki_debet',
+                    'rsc_data_pengajuan.tunggakan_bunga',
+                    'rsc_data_pengajuan.jangka_waktu',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.jenis_persetujuan',
+                    'rsc_biaya.administrasi_nominal',
+                    'rsc_biaya.poko_dibayar',
+                    'rsc_biaya.bunga_dibayar',
+                    'rsc_biaya.denda_dibayar',
+                    'rsc_biaya.ujroh',
+                    'rsc_biaya.asuransi_tlo',
+                    'rsc_biaya.asuransi_jiwa',
+                    'rsc_biaya.ujroh',
+                    'rsc_biaya.total',
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
+                )
+                ->where('rsc_biaya.kode_rsc', $rsc)->first();
+            //
 
-            return view('rsc.biaya.detail_biaya');
+            if ($data->status_rsc == "IN") {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->select(
+                        'm_loan.noacc',
+                        'm_loan.noacdroping',
+                    )
+                    ->where('fnama', $data->nama_nasabah)
+                    ->where('plafond', $data->baki_debet)->first();
+                //
+                $data->no_loan = $data_eks->noacc;
+                $data->no_acc_dropping = $data_eks->noacdroping;
+            } else {
+                $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                    ->select(
+                        'm_loan.fnama',
+                        'm_loan.noacdroping',
+                    )
+                    ->where('noacc', $data->pengajuan_kode)->first();
+                //
+                $data->no_loan = $data->pengajuan_kode;
+                $data->no_acc_dropping = $data_eks->noacdroping;
+                $data->nama_nasabah = trim($data_eks->fnama);
+            }
+
+            $tgl_mulai_rsc = Carbon::parse($data->tgl_mulai_rsc);
+            $data->tgl_mulai_rsc = $tgl_mulai_rsc->isoFormat('D MMMM Y');
+
+            $tgl_jth_tempo = Carbon::parse($data->tgl_akhir_rsc);
+            $data->tgl_akhir_rsc = $tgl_jth_tempo->isoFormat('D MMMM Y');
+
+            $data->kapitalisasi = $data->tunggakan_bunga - $data->bunga_dibayar;
+
+            return view('rsc.biaya.detail_biaya', [
+                'data' => $data
+            ]);
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda ditolak.');
         }

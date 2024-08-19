@@ -617,9 +617,8 @@ class RSCCetakController extends Controller
         $keyword = request('keyword');
         $keyword_sqlsrv = RSC::get_sqlsrv(request('keyword'));
 
-        $data = DB::table('rsc_notifikasi')
-            ->leftJoin('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
-            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_notifikasi.kode_rsc')
+        $data = DB::table('rsc_data_pengajuan')
+            ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
             ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
             ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->select(
@@ -632,7 +631,6 @@ class RSCCetakController extends Controller
                 'rsc_data_survei.kantor_kode',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
-                'rsc_notifikasi.no_notifikasi',
             )
 
             ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
@@ -650,7 +648,7 @@ class RSCCetakController extends Controller
             ->where(function ($query) {
                 $query->whereIn('rsc_data_pengajuan.status', ['Notifikasi', 'Perjanjian Kredit', 'Selesai']);
             })
-            ->orderBy('rsc_notifikasi.created_at', 'desc')
+            ->orderBy('data_pengajuan.created_at', 'desc')
             ->paginate(10);
         //
         foreach ($data as $value) {
@@ -673,7 +671,6 @@ class RSCCetakController extends Controller
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
                 $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->metode_rps = null;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }
@@ -753,8 +750,6 @@ class RSCCetakController extends Controller
                     $data->nama_nasabah = trim($data_eks->fnama);
                     $data->alamat_ktp = trim($data_eks->alamat);
                     $data->nilai_taksasi = trim($data_eks->nilai_jaminan);
-                    $data->penggunaan = null;
-                    $data->rc = null;
                     $data->plafon = trim($data_eks->plafond_awal);
                 }
 

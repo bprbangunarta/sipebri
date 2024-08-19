@@ -1154,17 +1154,17 @@ class RSCController extends Controller
             $cek = DB::table('rsc_data_pengajuan')->where('kode_rsc', $request->kode_rsc)->first();
             $enc = $request->kode_rsc;
 
-            $biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->kode_rsc)->first();
-            $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
-                $biaya->asuransi_tlo + $biaya->poko_dibayar + $biaya->poko_dibayar +
-                (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
+            // $biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->kode_rsc)->first();
+            // $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
+            //     $biaya->asuransi_tlo + $biaya->poko_dibayar + $biaya->poko_dibayar +
+            //     (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
 
 
-            $data1 = [
-                'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
-                'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
-                'total' =>  $total,
-            ];
+            // $data1 = [
+            //     'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+            //     'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
+            //     'total' =>  $total,
+            // ];
 
             $data2 = [
                 'pengajuan_kode' => $cek->pengajuan_kode,
@@ -1184,8 +1184,8 @@ class RSCController extends Controller
                 return redirect()->back()->with('error', 'Data telah memiliki kode SPK.');
             }
 
-            DB::transaction(function () use ($data1, $data2, $data3, $enc) {
-                DB::table('rsc_biaya')->where('kode_rsc', $enc)->update($data1);
+            DB::transaction(function () use ($data2, $data3, $enc) {
+                // DB::table('rsc_biaya')->where('kode_rsc', $enc)->update($data1);
                 DB::table('rsc_spk')->insert($data2);
                 DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc)->update($data3);
             });

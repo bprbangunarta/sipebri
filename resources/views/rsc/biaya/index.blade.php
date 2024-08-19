@@ -235,7 +235,7 @@
                 },
                 cache: false,
                 success: function(response) {
-                    console.table(response)
+
                     $('#tunggakan_bunga').val(response.bunga_dibayar.toLocaleString("id-ID") ?? 0)
                     $('#tunggakan_denda').val(response.denda_dibayar.toLocaleString("id-ID") ?? 0)
                 }

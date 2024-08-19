@@ -51,6 +51,8 @@
 
 <body>
     <div class="content">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr style="border: 1px solid 034871;">
         <center>
             <h4>RINCIAN PERHITUNGAN BIAYA ADMINISTRASI PENYELAMATAN KREDIT</h4>
             <h4 style="margin-top: -15px;">RESCHEDULING/RECONDITIONING/RESTRUCTURING</h4>
@@ -60,7 +62,7 @@
                 <tr>
                     <td style="width: 35%;"><b><u>Jenis Penyelamatan Kredit</u></b></td>
                     <td style="width: 2%;">:</td>
-                    <td colspan="2"><b>RESTRUCTURING</b></td>
+                    <td colspan="2"><b>{{ $data->jenis_persetujuan }}</b></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -74,49 +76,49 @@
                 <tr>
                     <td>Nama Debitur</td>
                     <td>:</td>
-                    <td colspan="2"><b>SUHERMAN</b></td>
+                    <td colspan="2"><b>{{ $data->nama_nasabah }}</b></td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Nn Loan</td>
                     <td>:</td>
-                    <td colspan="2">401522505</td>
+                    <td colspan="2">{{ $data->no_loan }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>No ACC Dropping</td>
                     <td>:</td>
-                    <td colspan="2">201047836</td>
+                    <td colspan="2">{{ $data->no_acc_dropping }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>JW Baru</td>
                     <td>:</td>
-                    <td colspan="2">120 Bulan</td>
+                    <td colspan="2">{{ $data->jangka_waktu }} Bulan</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Rate & RPS</td>
                     <td>:</td>
-                    <td colspan="2">10% Flate</td>
+                    <td colspan="2">{{ $data->suku_bunga }}% {{ $data->metode_rps }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Tgl Eff Penyelamatan Kredit</td>
                     <td>:</td>
-                    <td colspan="2">01 Juli 2024</td>
+                    <td colspan="2">{{ $data->tgl_mulai_rsc }}</td>
                     <td></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Tgl Jt Tempo Baru</td>
                     <td>:</td>
-                    <td colspan="2">01 Juli 2034</td>
+                    <td colspan="2">{{ $data->tgl_akhir_rsc }}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -126,7 +128,8 @@
                     <td>a. </td>
                     <td style="width: 40%;">- Sisa Outstanding/Baki Debt.</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">43.055.555</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->baki_debet, '0', ',', '.') }}
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -134,7 +137,8 @@
                     <td></td>
                     <td style="width: 40%;">- Tung. Bunga</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">1.461.925</td>
+                    <td style="width: 21%; text-align:right;">
+                        {{ number_format($data->tunggakan_bunga, '0', ',', '.') }}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -142,7 +146,8 @@
                     <td>b. </td>
                     <td style="width: 40%;">Konversi/Kapitalisasi Tung. Bunga</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; border-bottom:1px solid black; text-align:right;">944.445</td>
+                    <td style="width: 21%; border-bottom:1px solid black; text-align:right;">
+                        {{ number_format($data->kapitalisasi, '0', ',', '.') }}</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -150,7 +155,9 @@
                     <td>c. </td>
                     <td style="width: 40%;">Plafond RSC</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;"><b>44.000.000</b></td>
+                    <td style="width: 21%; text-align:right;">
+                        <b>{{ number_format($data->penentuan_plafon, '0', ',', '.') }}</b>
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;"><b><u>Administrasi dibayar</u></b></td>
@@ -158,7 +165,8 @@
                     <td>a. </td>
                     <td style="width: 40%;">By. Administrasi/Provisi RSC</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">440.000</td>
+                    <td style="width: 21%; text-align:right;">
+                        {{ number_format($data->administrasi_nominal, '0', ',', '.') }}</td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;"></td>
@@ -174,7 +182,8 @@
                     <td>b. </td>
                     <td style="width: 40%;">Tag. Pokok</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">440.000</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->poko_dibayar, '0', ',', '.') }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;"></td>
@@ -182,7 +191,8 @@
                     <td>c. </td>
                     <td style="width: 40%;">Tag. Bunga</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">517.480</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->bunga_dibayar, '0', ',', '.') }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height: 2; font-size:10px;">KEW LAIN BNG KRD KEBAITULLAH</td>
@@ -190,7 +200,8 @@
                     <td>d. </td>
                     <td style="width: 40%;">Tag. Denda</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">56.830</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->denda_dibayar, '0', ',', '.') }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;">GL : 222910</td>
@@ -198,7 +209,7 @@
                     <td>e. </td>
                     <td style="width: 40%;">UJROH KIH</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">-</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->ujroh, '0', ',', '.') }}</td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;"></td>
@@ -206,7 +217,8 @@
                     <td>f. </td>
                     <td style="width: 40%;">Asuransi TLO</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">-</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->asuransi_tlo, '0', ',', '.') }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;"></td>
@@ -238,7 +250,8 @@
                     <td>h. </td>
                     <td style="width: 40%;">Asuransi Jiwa Kematian</td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;">438.420</td>
+                    <td style="width: 21%; text-align:right;">{{ number_format($data->asuransi_jiwa, '0', ',', '.') }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="line-height: 2;"></td>
@@ -254,7 +267,9 @@
                     <td></td>
                     <td style="width: 40%;"><b></b></td>
                     <td style="width: 2%;">:</td>
-                    <td style="width: 21%; text-align:right;"><b>1.452.550</b></td>
+                    <td style="width: 21%; text-align:right;">
+                        <b>{{ number_format($data->total, '0', ',', '.') }}</b>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="6" style="border: 1px solid black;">

@@ -150,16 +150,22 @@
                                             id="kode_rsc" readonly>
                                     </div>
 
-                                    <div style="margin-top: 5px;">
+                                    {{-- <div style="margin-top: 5px;">
                                         <span class="fw-bold">TUNGGAKAN BUNGA</span>
                                         <input class="form-control text-uppercase" name="tunggakan_bunga"
                                             id="tunggakan_bunga" type="text">
-                                    </div>
+                                    </div> --}}
 
-                                    <div style="margin-top: 5px;">
+                                    {{-- <div style="margin-top: 5px;">
                                         <span class="fw-bold">TUNGGAKAN DENDA</span>
                                         <input type="text" class="form-control" name="tunggakan_denda"
                                             id="tunggakan_denda">
+                                    </div> --}}
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">KODE PERJANJIAN KREDIT RSC</span>
+                                        <input class="form-control text-uppercase" name="pk_rsc" id="generate"
+                                            type="text" readonly>
                                     </div>
 
                                 </div>
@@ -187,12 +193,6 @@
                                         <span class="fw-bold">JENIS PERSETUJUAN</span>
                                         <input type="text" class="form-control" name="jenis_persetujuan"
                                             id="jenis_persetujuan" readonly>
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">KODE PERJANJIAN KREDIT RSC</span>
-                                        <input class="form-control text-uppercase" name="pk_rsc" id="generate"
-                                            type="text" readonly>
                                     </div>
 
                                 </div>

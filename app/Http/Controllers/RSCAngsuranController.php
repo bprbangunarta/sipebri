@@ -152,6 +152,8 @@ class RSCAngsuranController extends Controller
                 $angsuran = $this->flat($data->suku_bunga, $data->jangka_waktu, $data->penentuan_plafon, $data->tgl_real);
             } elseif ($data->metode_rps == "EFEKTIF ANUITAS") {
                 $angsuran = $this->efektif_anuitas($data->suku_bunga, $data->jangka_waktu, $data->penentuan_plafon, $data->tgl_real);
+            } elseif ($data->metode_rps == "EFEKTIF MUSIMAN") {
+                $angsuran = $this->efektif_musiman($data->suku_bunga, $data->jangka_waktu, $data->penentuan_plafon, $data->tgl_real);
             }
 
             return view('rsc.angsuran.detail', [
@@ -230,5 +232,15 @@ class RSCAngsuranController extends Controller
         } catch (\Throwable $th) {
             return null;
         }
+    }
+
+    private function efektif_musiman($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
+    {
+        $ssb = $suku_bunga / 100;
+        $sb = $ssb / 12;
+
+        $bulan_array = range(1, $jangka_waktu);
+        $rincian = [];
+        $total_pokok_dibayar = 0;
     }
 }
