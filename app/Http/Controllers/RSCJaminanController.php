@@ -75,7 +75,20 @@ class RSCJaminanController extends Controller
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
             }
-            dd($data);
+
+            //Agunan Kendaraan
+            $jenis_kendaraan = DB::table('ja_kendaraan')->get();
+            $data_kendaraan = DB::table('da_kendaraan')->get();
+
+            //Agunan Tanah
+            $jenis_tanah = DB::table('ja_tanah')->get();
+            $data_tanah = DB::table('da_tanah')->get();
+
+            //Agunan Lain
+            $jenis_lain = DB::table('ja_lainnya')->get();
+            $data_lain = DB::table('da_lainnya')->get();
+
+            // dd($jenis_kendaraan);
             return view('rsc.jaminan.kendaraan', [
                 'data' => $data[0]
             ]);

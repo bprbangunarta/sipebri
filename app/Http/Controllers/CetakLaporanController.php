@@ -411,6 +411,8 @@ class CetakLaporanController extends Controller
     public function siap_realisasi()
     {
         $keyword = request('keyword');
+
+        $range = Carbon::now()->subDays(30)->toDateString();
         $query = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
@@ -424,8 +426,14 @@ class CetakLaporanController extends Controller
 
             ->where('data_pengajuan.on_current', 0)
             ->where('data_pengajuan.status', 'Disetujui')
-            // ->whereNotNull('data_notifikasi.keterangan')
             ->whereNull('data_spk.no_spk')
+
+            ->where(function ($query) use ($range) {
+                $query->whereNull('data_notifikasi.updated_at')
+                    ->where(function ($subQuery) use ($range) {
+                        $subQuery->whereDate('data_notifikasi.created_at', '>=', $range);
+                    });
+            })
 
             ->select(
                 'data_notifikasi.created_at as tanggal',
