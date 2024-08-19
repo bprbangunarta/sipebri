@@ -95,16 +95,20 @@
             <tr>
                 <td class="text-center" width="27%">
                     @if ($data->photo_nasabah == null)
-                    <img src="{{ asset('assets/img/default.png') }}" style="width:150px;hight:225px;border: 1px solid black;">
+                        <img src="{{ asset('assets/img/default.png') }}"
+                            style="width:150px;hight:225px;border: 1px solid black;">
                     @else
-                        <img src="{{ asset('storage/image/photo/' . $data->photo_nasabah) }}" style="width:150px;hight:225px;border: 1px solid black;">
+                        <img src="{{ asset('storage/image/photo/' . $data->photo_nasabah) }}"
+                            style="width:150px;hight:225px;border: 1px solid black;">
                     @endif
                 </td>
                 <td class="text-center" width="27%">
                     @if ($data->photo == null)
-                    <img src="{{ asset('assets/img/default.png') }}" style="width:150px;hight:225px;border: 1px solid black;">
+                        <img src="{{ asset('assets/img/default.png') }}"
+                            style="width:150px;hight:225px;border: 1px solid black;">
                     @else
-                        <img src="{{ asset('storage/image/photo/' . $data->photo) }}" style="width:150px;hight:225px;border: 1px solid black;">
+                        <img src="{{ asset('storage/image/photo/' . $data->photo) }}"
+                            style="width:150px;hight:225px;border: 1px solid black;">
                     @endif
                 </td>
                 <td></td>
@@ -179,7 +183,8 @@
                 <td class="text-center" width="2%"> 9. </td>
                 <td width="17%">Tgl. Pendaftaran</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ \Carbon\Carbon::parse($data->created_at)->format('Y-m-d') }}</td>
+                <td style="text-align: justify;">{{ \Carbon\Carbon::parse($data->tgl_pengajuan)->format('Y-m-d') }}
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 10. </td>

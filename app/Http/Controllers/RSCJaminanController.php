@@ -88,7 +88,19 @@ class RSCJaminanController extends Controller
             $jenis_lain = DB::table('ja_lainnya')->get();
             $data_lain = DB::table('da_lainnya')->get();
 
-            // dd($jenis_kendaraan);
+            // Jaminan
+            if ($data[0]->status_rsc == 'EKS') {
+                $jaminan = DB::connection('sqlsrv')->table('m_loan')
+                    ->leftJoin('m_loan_jaminan', 'm_loan_jaminan.noacc', '=', 'm_loan.noacc')
+                    ->leftJoin('m_detil_jaminan', 'm_detil_jaminan.noreg', '=', 'm_loan_jaminan.noreg')
+                    ->select(
+                        'm_detil_jaminan.*',
+                        'm_loan_jaminan.nilai_jaminan',
+                    )
+                    ->where('m_loan.noacc', $enc)->get();
+                dd($jaminan);
+            }
+
             return view('rsc.jaminan.kendaraan', [
                 'data' => $data[0]
             ]);
