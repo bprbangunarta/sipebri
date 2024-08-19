@@ -80,6 +80,8 @@ class DataCetakController extends Controller
     {
         $name = request('keyword');
         $user = Auth::user()->code_user;
+
+        $range = Carbon::now()->subDays(30)->toDateString();
         $cek = DB::table('data_pengajuan')
             ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
@@ -91,7 +93,6 @@ class DataCetakController extends Controller
 
             ->where('data_pengajuan.on_current', 0)
             ->where('data_pengajuan.status', '=', 'Disetujui')
-            // ->whereNull('data_notifikasi.no_notifikasi')
 
             ->where(function ($query) use ($user) {
                 $query->where('data_survei.surveyor_kode', '=', $user)
@@ -104,6 +105,13 @@ class DataCetakController extends Controller
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
+            ->where(function ($query) use ($range) {
+                $query->whereNull('data_notifikasi.updated_at')
+                    ->where(function ($subQuery) use ($range) {
+                        $subQuery->whereDate('data_notifikasi.created_at', '>=', $range);
+                    });
             })
 
             ->select(

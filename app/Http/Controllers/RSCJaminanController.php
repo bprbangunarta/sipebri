@@ -75,7 +75,7 @@ class RSCJaminanController extends Controller
                 $item->kode = $request->query('kode');
                 $item->rsc = $request->query('rsc');
             }
-            // dd($data);
+            dd($data);
             return view('rsc.jaminan.kendaraan', [
                 'data' => $data[0]
             ]);
