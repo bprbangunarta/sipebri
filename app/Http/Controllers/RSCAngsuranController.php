@@ -236,11 +236,46 @@ class RSCAngsuranController extends Controller
 
     private function efektif_musiman($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
     {
-        $ssb = $suku_bunga / 100;
-        $sb = $ssb / 12;
+        $plafon = 20000000;
+        $suku_bunga = 31;
+        $jangka_waktu = 24;
+        $hpokok = $plafon / ($jangka_waktu / 6);
+
+        $hariini = Carbon::now();
+        $bulansekarang = $hariini->month;
+        $tahunsekarang = $hariini->year;
+        $tglskrng = $hariini->day;
 
         $bulan_array = range(1, $jangka_waktu);
         $rincian = [];
-        $total_pokok_dibayar = 0;
+
+        foreach ($bulan_array as $i) {
+            $bulanberikut = ($bulansekarang + $i) % 12 ?: 12;
+            $tahunsekarang += ($bulansekarang + $i) > 12 ? 1 : 0;
+            $jmlhari = Carbon::createFromDate($tahunsekarang, $bulanberikut, 1)->daysInMonth;
+
+            $tanggal_setoran = date('d/m/Y', strtotime("+$i month", strtotime($tgl_real)));
+            $hbunga = (($plafon * $suku_bunga) / 100) * $jmlhari / 365;
+
+            // Angsuran pokok hanya setiap 6 bulan
+            $pokok = (($i) % 6 == 0) ? $hpokok : 0;
+            $angsuran = $hbunga + $pokok;
+
+            $sisa_plafon = max($plafon - $pokok, 0);
+
+            $rincian[] = [
+                'bulan_ke' => $i,
+                'tanggal_setoran' => $tanggal_setoran,
+                'setoran_bunga' => $hbunga,
+                'setoran_pokok' => $pokok,
+                'jumlah_setoran' => $angsuran,
+                'sisa_plafon' => $sisa_plafon,
+            ];
+
+            if ($pokok > 0) {
+                $plafon -= $hpokok;
+            }
+        }
+        return $rincian;
     }
 }
