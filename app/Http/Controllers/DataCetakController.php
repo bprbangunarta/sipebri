@@ -1319,7 +1319,7 @@ class DataCetakController extends Controller
             foreach ($jaminan as $item) {
                 if ($item->status_bl_nama == "YES") {
                     $data_balik_nama[] = (object)[
-                        'nomor' => $index,
+                        'nomor' => $index + 1,
                         'jenis' => $item->jenis_bl_nama,
                         'atas_nama' => $item->an_bl_nama,
                     ];
