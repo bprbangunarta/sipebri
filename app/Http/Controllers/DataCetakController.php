@@ -1244,11 +1244,6 @@ class DataCetakController extends Controller
                     'a_administrasi.administrasi as biaya_admin',
                     'data_resort.kode_resort',
                     'data_resort.nama_resort',
-
-                    // DB::raw("DATE_FORMAT(CURDATE(), '%Y%m%d') as tgl_mulai"),
-                    // DB::raw("DATE_FORMAT(COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar"),
-                    // DB::raw("DATE_FORMAT((CURDATE() + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir")
-
                     DB::raw("DATE_FORMAT(COALESCE(data_spk.updated_at, CURDATE()), '%Y%m%d') as tgl_mulai"),
                     DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar"),
                     DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_pokok MONTH), '%Y%m%d') as tgl_bayar_pokok"),
