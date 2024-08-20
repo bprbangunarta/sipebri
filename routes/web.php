@@ -765,6 +765,8 @@ Route::middleware('auth')->group(function () {
                 Route::POST('/rsc/jaminan/tanah/tambah', 'add_tanah')->name('rsc.jaminan.add.tanah');
                 Route::get('/rsc/jaminan/lain', 'index_lain')->name('rsc.jaminan.lain');
                 Route::POST('/rsc/jaminan/lain/tambah', 'add_lain')->name('rsc.jaminan.add.lain');
+                Route::POST('/rsc/add/jaminan', 'add_jaminan')->name('rsc.jaminan.add.jaminan');
+                Route::POST('/rsc/simpan/taksasi', 'simpan_taksasi')->name('rsc.simpan.taksasi');
             });
         });
 

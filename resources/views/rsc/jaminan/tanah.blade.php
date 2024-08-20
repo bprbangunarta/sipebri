@@ -30,10 +30,28 @@
                                 <td style="vertical-align: middle; font-size:12px;">
                                     {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                                 <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                                    <button data-toggle="modal" data-target="#edit-tanah" data-id="#"
-                                        class="btn btn-sm btn-warning">
-                                        <i class="fa fa-file-text-o"></i>
-                                    </button>
+                                    @if ($item->validasi_data == 'Tersimpan')
+                                        <button data-toggle="modal" data-target="#modal-edit" data-ct="{{ $item->catatan }}"
+                                            data-kode="{{ $data->kode }}" class="btn btn-sm btn-warning">
+                                            <i class="fa fa-file-text-o"></i>
+                                        </button>
+                                    @else
+                                        <form action="{{ route('rsc.jaminan.add.jaminan') }}" method="POST">
+                                            @csrf
+
+                                            <input type="text" value="{{ $data->kode }}" name="pengajuan_kode" hidden>
+                                            <input type="text" value="{{ $data->rsc }}" name="kode_rsc" hidden>
+                                            <input type="text" value="{{ $item->jnsjaminan }}" name="jenis_agunan_kode"
+                                                hidden>
+                                            <input type="text" value="{{ $item->jnsdokumen }}" name="jenis_dokumen_kode"
+                                                hidden>
+                                            <input type="text" value="{{ $item->catatan }}" name="catatan" hidden>
+
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Add Lain">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endif
@@ -114,8 +132,8 @@
                                     <div style="margin-top: -15px;">
                                         <span class="fw-bold">LUAS TANAH (M2)</span>
                                         <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('luas') }}" name="luas" id="luas" placeholder="ENTRI"
-                                            required>
+                                            value="{{ old('luas') }}" name="luas" id="luas"
+                                            placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
@@ -154,24 +172,74 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">TAKSASI AGUNAN</h4>
+                </div>
+                <form action="{{ route('rsc.simpan.taksasi', ['kode' => $data->kode]) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col" style="margin-bottom: 10px;">
+
+                                    <input type="text" value="" name="id" id="id" hidden>
+
+                                    <span class="fw-bold">INFORMASI</span>
+                                    <textarea class="form-control" name="" id="text_catatan" cols="50" rows="3"
+                                        style="resize: none;"></textarea>
+                                </div>
+                                <div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>POSISI AGUNAN</label>
+                                                <input type="text" class="form-control text-uppercase"
+                                                    name="posisi_agunan" id="posisi_agunan" placeholder="ENTRI"
+                                                    value="" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>KONDISI AGUNAN</label>
+                                                <input type="text" class="form-control text-uppercase"
+                                                    name="kondisi_agunan" id="kondisi_agunan" placeholder="ENTRI"
+                                                    value="" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>NILAI TAKSASI AGUNAN</label>
+                                                <input type="text" class="form-control text-uppercase"
+                                                    name="nilai_taksasi" id="nilai_taksasi" placeholder="ENTRI"
+                                                    value="" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-warning">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/jaminan_kendaraan.js') }}"></script>
-    <script>
-        $("button[data-target='#modal-foto']").click(function() {
-            // Mendapatkan nilai 'id' dari tombol yang diklik
-            var dataId = $(this).data('id').split(',');
-
-            var nilaiid = dataId[0];
-            var atasNama = dataId[1];
-
-            // Menyalin nilai 'id' ke elemen di dalam modal
-            $('#nid').val(nilaiid);
-            $('#ats_nama').val(atasNama);
-        });
-    </script>
-
     <script>
         //Initialize Select2 Elements
         $('.jenis_agunan').select2()
@@ -180,56 +248,55 @@
     </script>
 
     <script>
-        // $(function() {
-        //     $(".confirmdelete").click(function(event) {
-        //         event.preventDefault();
+        $(document).ready(function() {
+            $('#modal-edit').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                const kode = button.data('kode')
+                const ct = button.data('ct');
 
-        //         var kd = $(this).data('kd');
-        //         var deleteUrl = $(this).attr('href'); // Mendapatkan URL dari href
+                $.ajax({
+                    url: '{{ route('rsc.jaminan.get.kendaraan') }}',
+                    type: "GET",
+                    dataType: "json",
+                    cache: false,
+                    data: {
+                        kode: kode,
+                        catatan: ct
+                    },
+                    success: function(response) {
 
-        //         Swal.fire({
-        //             title: "Apakah anda yakin?",
-        //             text: "Yakin, Ingin menghapus data",
-        //             icon: "question",
-        //             showCancelButton: true,
-        //             confirmButtonColor: "#3085d6",
-        //             cancelButtonColor: "#d33",
-        //             confirmButtonText: "Ya, Hapus!",
-        //             cancelButtonText: "Batal",
-        //         }).then((willDelete) => {
-        //             if (willDelete.isConfirmed) {
-        //                 $.ajax({
-        //                     url: deleteUrl,
-        //                     type: 'DELETE',
-        //                     headers: {
-        //                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //                     },
-        //                     success: function(response) {
+                        $('#text_catatan').val(response.catatan)
+                        $('#posisi_agunan').val(response.posisi_agunan)
+                        $('#kondisi_agunan').val(response.kondisi_agunan)
+                        $('#nilai_taksasi').val(response.nilai_taksasi ?? 0)
+                        $('#id').val(response.id)
+                    }
+                })
+            })
+        })
 
-        //                         if (response.message == 'Data Berhasil Dihapus.') {
-        //                             Swal.fire({
-        //                                 title: 'Berhasil!',
-        //                                 text: 'Data berhasil dihapus.',
-        //                                 icon: 'success',
-        //                                 showConfirmButton: false,
-        //                                 timer: 2000
-        //                             }).then((result) => {
-        //                                 if (result.isConfirmed || result
-        //                                     .dismiss ===
-        //                                     'timer') {
-        //                                     location.reload();
-        //                                 }
-        //                             });
+        var taksasi = document.getElementById('nilai_taksasi')
 
-        //                         }
-        //                     },
-        //                     error: function(xhr, status, error) {
-        //                         console.error("Error:", xhr.responseText);
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     });
-        // })
+        if (taksasi) {
+            taksasi.addEventListener("keyup", function(e) {
+                taksasi.value = formatRupiah(this.value, "Rp. ");
+            });
+        }
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "" + rupiah : "";
+        }
     </script>
 @endpush

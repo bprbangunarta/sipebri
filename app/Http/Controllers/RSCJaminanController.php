@@ -47,6 +47,12 @@ class RSCJaminanController extends Controller
                         return $item->jnsdokumen == $dokumen_kendaraan->kode;
                     });
                     $item->jenis_dokumen = $jenisDokumen ? $jenisDokumen->jenis_dokumen : null;
+
+                    $cek = DB::table('rsc_data_jaminan')
+                        ->where('pengajuan_kode', $enc)
+                        ->where('catatan', 'like', '%' . $item->catatan . '%')->exists();
+
+                    $item->validasi_data = $cek ? 'Tersimpan' : 'Tidak Tersimpan';
                 }
             }
             //Data dati
@@ -116,6 +122,10 @@ class RSCJaminanController extends Controller
                 ->where('catatan', 'like', '%' . $catatan . '%')
                 ->first();
 
+            if (!is_null($cek->nilai_taksasi) || $cek->nilai_taksasi == '') {
+                $cek->nilai_taksasi = number_format($cek->nilai_taksasi, '0', ',', '.');
+            }
+
             return response()->json($cek);
         } catch (DecryptException $e) {
             return response()->json('permintaan ditolak.');
@@ -155,6 +165,12 @@ class RSCJaminanController extends Controller
                         return $item->jnsdokumen == $dokumen_tanah->kode;
                     });
                     $item->jenis_dokumen = $jenisDokumen ? $jenisDokumen->jenis_dokumen : null;
+
+                    $cek = DB::table('rsc_data_jaminan')
+                        ->where('pengajuan_kode', $enc)
+                        ->where('catatan', 'like', '%' . $item->catatan . '%')->exists();
+
+                    $item->validasi_data = $cek ? 'Tersimpan' : 'Tidak Tersimpan';
                 }
             }
 
@@ -245,11 +261,18 @@ class RSCJaminanController extends Controller
                         return $item->jnsdokumen == $dok->kode;
                     });
                     $item->jenis_dokumen = $jenisDokumen ? $jenisDokumen->jenis_dokumen : null;
+
+                    $cek = DB::table('rsc_data_jaminan')
+                        ->where('pengajuan_kode', $enc)
+                        ->where('catatan', 'like', '%' . $item->catatan . '%')->exists();
+
+                    $item->validasi_data = $cek ? 'Tersimpan' : 'Tidak Tersimpan';
                 }
             }
 
             //Data dati
             $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
+
             return view('rsc.jaminan.lain', [
                 'data' => $data[0],
                 'jenis_lain' => $jenis_lain,
@@ -287,6 +310,61 @@ class RSCJaminanController extends Controller
                 return redirect()->back()->with('success', 'Data berhasil disimpan.');
             } else {
                 return redirect()->back()->with('error', 'Data gagal disimpan.');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function add_jaminan(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->pengajuan_kode);
+            $rsc = Crypt::decrypt($request->kode_rsc);
+
+            $data = [
+                'pengajuan_kode' => $enc,
+                'kode_rsc' => $rsc,
+                'jenis_jaminan' => $request->jenis_agunan_kode,
+                'jenis_dokumen' => $request->jenis_dokumen_kode,
+                'catatan' => $request->catatan,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
+            ];
+
+            $insert = DB::table('rsc_data_jaminan')->insert($data);
+
+            if ($insert) {
+                return redirect()->back()->with('success', 'Data berhasil disimpan.');
+            } else {
+                return redirect()->back()->with('error', 'Data gagal disimpan.');
+            }
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpan_taksasi(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->kode);
+            if (is_null($request->nilai_taksasi) || $request->nilai_taksasi == '') {
+                return redirect()->back()->with('error', 'Taksasi tidak boleh kosong.');
+            }
+
+            $data = [
+                'nilai_taksasi' => (int)str_replace(["Rp", " ", "."], "", $request->nilai_taksasi),
+                'posisi_agunan' => $request->posisi_agunan,
+                'kondisi_agunan' => $request->kondisi_agunan,
+                'updated_at' => now(),
+            ];
+
+            $update = DB::table('rsc_data_jaminan')->where('pengajuan_kode', $enc)->where('id', $request->id)->update($data);
+
+            if ($update) {
+                return redirect()->back()->with('success', 'Data berhasil diubah.');
+            } else {
+                return redirect()->back()->with('error', 'Data gagal diubah.');
             }
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -363,7 +441,7 @@ class RSCJaminanController extends Controller
                     'm_detil_jaminan.jnsjaminan',
                     'm_detil_jaminan.nilai_taksasi',
                     'm_detil_jaminan.jnsdokumen',
-                    'm_detil_jaminan.catatan',
+                    DB::raw('LTRIM(RTRIM(m_detil_jaminan.catatan)) as catatan')
                 )
                 ->where('m_loan.noacc', $enc)->get();
         } else {
@@ -387,8 +465,10 @@ class RSCJaminanController extends Controller
                 'rsc_data_jaminan.catatan',
             )
             ->where('kode_rsc', $enc_rsc)->get();
+        //
 
+        $mergedJaminan = $jaminan->merge($jaminan_sipebri)->sortBy('nilai_taksasi')->unique('catatan');
 
-        return $jaminan = $jaminan->merge($jaminan_sipebri);
+        return $mergedJaminan;
     }
 }
