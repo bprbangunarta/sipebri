@@ -7,63 +7,41 @@
             <table class="table table-striped table-hover table-bordered table-condensed">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 200px">Agunan</th>
-                        <th class="text-center" style="width: 200px">Informasi</th>
-                        <th class="text-center">Detail</th>
-                        <th class="text-center" style="width: 100px">Taksasi</th>
-                        <th class="text-center" style="width: 150px">Aksi</th>
+                        <th class="text-center" style="width: 35%">Agunan</th>
+                        <th class="text-center" style="width: 50%">Informasi</th>
+                        <th class="text-center" style="width: 15%">Taksasi</th>
+                        <th class="text-center" style="width: 10%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @forelse ($jaminan as $item)
-                        <tr>
-                            <td style="vertical-align: middle;">
-                                <b>Jenis: </b><br>
-                                {{ Str::upper($item->jenis_agunan) }}
-                                <p></p>
-                                <b>Dokumen: </b><br>
-                                {{ Str::upper($item->jenis_dokumen) }}
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <b>Atas Nama: </b><br>
-                                {{ Str::upper($item->atas_nama) }} <br>
-                                <p></p>
-                                <b>No Doukumen: </b><br>
-                                {{ Str::upper($item->no_dokumen) }}
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <b>Merek: </b> {{ Str::upper($item->merek) ?? null }} <br>
-                                <b>Tahun: </b> {{ Str::upper($item->tahun) ?? null }} <br>
-                                <b>No. Rangka: </b> {{ Str::upper($item->no_rangka) ?? null }} <br>
-                                <b>No. Mesin: </b> {{ Str::upper($item->no_mesin) ?? null }} <br>
-                                <b>No. Polisi: </b> {{ Str::upper($item->no_polisi) ?? null }}
-                            </td>
-                            <td style="vertical-align: middle;">
-                                {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
-                            <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                                <button data-toggle="modal" data-target="#modal-edit" data-id="{{ $item->id }}"
-                                    class="btn btn-sm btn-warning">
-                                    <i class="fa fa-file-text-o"></i>
-                                </button>
-
-                                <button id="{{ $item->id }}" data-toggle="modal" data-target="#modal-foto"
-                                    class="btn btn-sm btn-primary" data-id="{{ $item->id }}, {{ $item->atas_nama }}">
-                                    <i class="fa fa-image"></i>
-                                </button>
-
-                                <a href="{{ route('taksasi.delete_lain', ['id' => $item->id]) }}" data-toggle="modal"
-                                    data-target="#hapus" class="btn btn-sm bg-red confirmdelete" title="Hapus"
-                                    style="cursor: pointer;">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-
-                            </td>
-                        </tr>
+                    @forelse ($jaminan as $item)
+                        @if ($item->jenis_agunan == 'kendaraan')
+                            <tr>
+                                <td style="vertical-align: middle; font-size:12px;">
+                                    <b>Jenis: </b><br>
+                                    {{ Str::upper($item->jenis_agunan) }}
+                                    <p></p>
+                                    <b>Dokumen: </b><br>
+                                    {{ Str::upper($item->jenis_dokumen) }}
+                                </td>
+                                <td style="vertical-align: middle; font-size:12px;">
+                                    {{ Str::upper(trim($item->catatan)) }}
+                                </td>
+                                <td style="vertical-align: middle; font-size:12px;">
+                                    {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
+                                <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
+                                    <button data-toggle="modal" data-target="#modal-edit" data-ct="{{ $item->catatan }}"
+                                        data-kode="{{ $data->kode }}" class="btn btn-sm btn-warning">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endif
                     @empty
                         <tr>
                             <td class="text-center" colspan="7">Tidak ada jaminan kendaraan.</td>
                         </tr>
-                    @endforelse --}}
+                    @endforelse
                 </tbody>
             </table>
             <a data-toggle="modal" data-target="#tambah-kendaraan" class="btn btn-sm btn-primary"
@@ -71,7 +49,7 @@
         </div>
     </div>
 
-    {{-- <div class="modal fade" id="tambah-kendaraan">
+    <div class="modal fade" id="tambah-kendaraan">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue">
@@ -80,16 +58,15 @@
                     <h4 class="modal-title">AGUNAN KENDARAAN</h4>
                 </div>
 
-                <form action="{{ route('analis.simpan_kendaraan') }}" method="POST">
+                <form action="{{ route('rsc.jaminan.add.kendaraan') }}" method="POST">
+                    @method('POST')
                     @csrf
                     <div class="modal-body">
                         <div class="box-body">
                             <div class="row">
 
-                                <input type="text" value="" name="input_user" hidden>
-                                <input type="text" value="{{ $data->kode_pengajuan }}" name="pengajuan_kode" hidden>
-                                <input type="text" value="{{ $data->nasabah_kode }}" name="nasabah_kode" hidden>
-                                <input type="text" name="jenis_jaminan" value="Kendaraan" hidden>
+                                <input type="text" value="{{ $data->kode }}" name="pengajuan_kode" hidden>
+                                <input type="text" value="{{ $data->rsc }}" name="kode_rsc" hidden>
 
                                 <div class="div-left">
                                     <div style="margin-top: -15px;">
@@ -205,9 +182,9 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 
-    {{-- <div class="modal fade" id="modal-edit">
+    <div class="modal fade" id="modal-edit">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-yellow">
@@ -215,100 +192,21 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAKSASI AGUNAN</h4>
                 </div>
-                <form action="{{ route('taksasi.updatekendaraan') }}" method="POST">
+                <form action="#" method="POST">
                     @csrf
                     <div class="modal-body">
 
                         <div class="box-body">
                             <div class="row">
-                                <div class="div-left">
-                                    <div style="margin-top: -15px;">
-                                        <span class="fw-bold">JENIS AGUNAN</span>
-                                        <input type="text" id="id" name="id" hidden>
-                                        <input type="text" id="kode" name="jenis_agunan_kode" hidden>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Kendaraan Bermotor Roda 2" id="jenis" name="jenis_agunan"
-                                            readonly>
-                                    </div>
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">JENIS DOKUMEN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="BPKB Motor Non Fiducia" id="dokumen" readonly>
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">MEREK KENDARAAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Honda" id="merk" name="merek">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">TIPE KENDARAAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Motor Metik" id="tipe" name="tipe_kendaraan">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">TAHUN KENDARAAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="2020" id="tahun_kendaraan" name="tahun">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR RANGKA</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="BDAS594168" id="no_rangka" name="no_rangka">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR MESIN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="458131564616" id="no_mesin" name="no_mesin">
-                                    </div>
+                                <div class="col" style="margin-bottom: 10px;">
+                                    <span class="fw-bold">INFORMASI</span>
+                                    <textarea class="form-control" name="" id="text_catatan" cols="50" rows="3"
+                                        style="resize: none;"></textarea>
                                 </div>
-
-                                <div class="div-right">
-                                    <div style="margin-top: -15px;">
-                                        <span class="fw-bold">NOMOR POLISI</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="T 4414 YB" id="no_polisi" name="no_polisi">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR BPKB</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="P007772168" id="no_dok" name="no_dokumen">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">WARNA KENDARAAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="Hitam" id="warna" name="warna">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">PEMILIK KENDARAAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            value="ZULFADLI RIZAL" id="nama" name="atas_nama">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">LOKASI KENDARAAN</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            id="lok" name="lokasi">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NILAI PASAR</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_pasar" id="nilai_pasar" placeholder="Rp.">
-                                    </div>
-
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NILAI TAKSASI</span>
-                                        <input class="form-control input-sm form-border text-uppercase" type="text"
-                                            name="nilai_taksasi" id="nilai_taksasi" placeholder="Rp.">
-                                    </div>
+                                <div class="col">
+                                    <span class="fw-bold">NILAI TAKSASI</span>
+                                    <input class="form-control input-sm text-uppercase" type="text" value="T 4414 YB"
+                                        id="no_polisi" name="no_polisi">
                                 </div>
                             </div>
                         </div>
@@ -320,12 +218,11 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 
 @endsection
 
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/jaminan_kendaraan.js') }}"></script>
     <script>
         $("button[data-target='#modal-foto']").click(function() {
             // Mendapatkan nilai 'id' dari tombol yang diklik
@@ -342,62 +239,32 @@
 
     <script>
         //Initialize Select2 Elements
-        // $('.jenis_agunan').select2()
-        // $('.jenis_dokumen').select2()
-        // $('.dati2').select2()
+        $('.jenis_agunan').select2()
+        $('.jenis_dokumen').select2()
+        $('.dati2').select2()
     </script>
 
     <script>
-        // $(function() {
-        //     $(".confirmdelete").click(function(event) {
-        //         event.preventDefault();
+        $(document).ready(function() {
+            $('#modal-edit').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                const kode = button.data('kode')
+                const ct = button.data('ct');
 
-        //         var kd = $(this).data('kd');
-        //         var deleteUrl = $(this).attr('href'); // Mendapatkan URL dari href
-
-        //         Swal.fire({
-        //             title: "Apakah anda yakin?",
-        //             text: "Yakin, Ingin menghapus data",
-        //             icon: "question",
-        //             showCancelButton: true,
-        //             confirmButtonColor: "#3085d6",
-        //             cancelButtonColor: "#d33",
-        //             confirmButtonText: "Ya, Hapus!",
-        //             cancelButtonText: "Batal",
-        //         }).then((willDelete) => {
-        //             if (willDelete.isConfirmed) {
-        //                 $.ajax({
-        //                     url: deleteUrl,
-        //                     type: 'DELETE',
-        //                     headers: {
-        //                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //                     },
-        //                     success: function(response) {
-
-        //                         if (response.message == 'Data Berhasil Dihapus.') {
-        //                             Swal.fire({
-        //                                 title: 'Berhasil!',
-        //                                 text: 'Data berhasil dihapus.',
-        //                                 icon: 'success',
-        //                                 showConfirmButton: false,
-        //                                 timer: 2000
-        //                             }).then((result) => {
-        //                                 if (result.isConfirmed || result
-        //                                     .dismiss ===
-        //                                     'timer') {
-        //                                     location.reload();
-        //                                 }
-        //                             });
-
-        //                         }
-        //                     },
-        //                     error: function(xhr, status, error) {
-        //                         console.error("Error:", xhr.responseText);
-        //                     }
-        //                 });
-        //             }
-        //         });
-        //     });
-        // })
+                $.ajax({
+                    url: '{{ route('rsc.jaminan.get.kendaraan') }}',
+                    type: "GET",
+                    dataType: "json",
+                    cache: false,
+                    data: {
+                        kode: kode,
+                        catatan: ct
+                    },
+                    success: function(response) {
+                        console.log(response)
+                    }
+                })
+            })
+        })
     </script>
 @endpush

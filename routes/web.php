@@ -758,7 +758,13 @@ Route::middleware('auth')->group(function () {
             });
 
             Route::controller(RSCJaminanController::class)->group(function () {
-                Route::get('/rsc/jaminan/kendaraan', 'index')->name('rsc.jaminan');
+                Route::get('/rsc/jaminan/kendaraan', 'index_kendaraan')->name('rsc.jaminan.kendaraan');
+                Route::POST('/rsc/jaminan/kendaraan/tambah', 'add_kendaraan')->name('rsc.jaminan.add.kendaraan');
+                Route::get('/rsc/jaminan/kendaraan/get', 'get_kendaraan')->name('rsc.jaminan.get.kendaraan');
+                Route::get('/rsc/jaminan/tanah', 'index_tanah')->name('rsc.jaminan.tanah');
+                Route::POST('/rsc/jaminan/tanah/tambah', 'add_tanah')->name('rsc.jaminan.add.tanah');
+                Route::get('/rsc/jaminan/lain', 'index_lain')->name('rsc.jaminan.lain');
+                Route::POST('/rsc/jaminan/lain/tambah', 'add_lain')->name('rsc.jaminan.add.lain');
             });
         });
 

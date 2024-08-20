@@ -24,22 +24,22 @@
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
                                 <li class="{{ request()->is('themes/rsc/jaminan/kendaraan*') ? 'active' : '' }}">
-                                    <a href="#"
+                                    <a href="{{ route('rsc.jaminan.kendaraan', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/jaminan/kendaraan') ? 'text-bold' : '' }}">
                                         KENDARAAN
                                     </a>
                                 </li>
 
                                 <li class="{{ request()->is('themes/rsc/jaminan/tanah*') ? 'active' : '' }}">
-                                    <a href="#"
+                                    <a href="{{ route('rsc.jaminan.tanah', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
                                         class="{{ request()->is('themes/rsc/jaminan/tanah*') ? 'text-bold' : '' }}">
                                         TANAH
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('themes/rsc/jaminan/lainnya') ? 'active' : '' }}">
-                                    <a href="#"
-                                        class="{{ request()->is('themes/rsc/jaminan/lainnya') ? 'text-bold' : '' }}">
+                                <li class="{{ request()->is('themes/rsc/jaminan/lain') ? 'active' : '' }}">
+                                    <a href="{{ route('rsc.jaminan.lain', ['kode' => $data->kode, 'rsc' => $data->rsc, 'status_rsc' => $data->status_rsc]) }}"
+                                        class="{{ request()->is('themes/rsc/jaminan/lain') ? 'text-bold' : '' }}">
                                         LAINNYA
                                     </a>
                                 </li>

@@ -1,5 +1,5 @@
 @extends('rsc.jaminan.menu', [$data])
-@section('title', 'RSC Analisa Jaminan Tanah')
+@section('title', 'RSC Analisa Jaminan Lain')
 
 @section('content')
     <div class="tab-content">
@@ -15,7 +15,7 @@
                 </thead>
                 <tbody>
                     @forelse ($jaminan as $item)
-                        @if ($item->jenis_agunan == 'tanah')
+                        @if ($item->jenis_agunan == 'lainnya')
                             <tr>
                                 <td style="vertical-align: middle; font-size:12px;">
                                     <b>Jenis: </b><br>
@@ -30,7 +30,7 @@
                                 <td style="vertical-align: middle; font-size:12px;">
                                     {{ 'Rp. ' . ' ' . number_format($item->nilai_taksasi, 0, ',', '.') }}</td>
                                 <td class="text-center" style="vertical-align: middle;text-transform:uppercase;">
-                                    <button data-toggle="modal" data-target="#edit-tanah" data-id="#"
+                                    <button data-toggle="modal" data-target="#tambah-tanah" data-id="#"
                                         class="btn btn-sm btn-warning">
                                         <i class="fa fa-file-text-o"></i>
                                     </button>
@@ -39,32 +39,32 @@
                         @endif
                     @empty
                         <tr>
-                            <td class="text-center" colspan="7">Tidak ada jaminan Tanah.</td>
+                            <td class="text-center" colspan="7">Tidak ada jaminan Lain.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-            <a data-toggle="modal" data-target="#tambah-tanah" class="btn btn-sm btn-primary"
+            <a data-toggle="modal" data-target="#tambah-lainnya" class="btn btn-sm btn-primary"
                 style="margin-top:10px;">TAMBAH</a>
         </div>
     </div>
 
-    <div class="modal fade" id="tambah-tanah">
+    <div class="modal fade" id="tambah-lainnya">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-blue">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">AGUNAN TANAH</h4>
+                    <h4 class="modal-title">AGUNAN LAINNYA</h4>
                 </div>
 
-                <form action="{{ route('rsc.jaminan.add.tanah') }}" method="POST">
+                <form action="{{ route('rsc.jaminan.add.lain') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="box-body">
                             <div class="row">
 
-                                <input type="text" name="jenis_jaminan" value="Tanah" hidden>
+                                <input type="text" name="jenis_jaminan" value="Lainnya" hidden>
 
                                 <div class="div-left">
                                     <div style="margin-top: -15px;">
@@ -76,65 +76,49 @@
                                         <select type="text" class="form-control jenis_agunan" style="width: 100%;"
                                             name="jenis_agunan_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            {{ $jenis_tanah }}
-                                            @foreach ($jenis_tanah as $item)
-                                                <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
+
+                                            @foreach ($jenis_lain as $item)
+                                                <option value="{{ $item->kode }}">{{ $item->kode }} -
+                                                    {{ $item->jenis_agunan }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">JENIS DOKUMEN</span>
                                         <select type="text" class="form-control jenis_dokumen" style="width: 100%;"
                                             name="jenis_dokumen_kode" required>
                                             <option value="" selected>--PILIH--</option>
-                                            @foreach ($data_tanah as $item)
-                                                <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
+                                            @foreach ($data_lain as $item)
+                                                <option value="{{ $item->kode }}">{{ $item->kode }} -
+                                                    {{ $item->jenis_dokumen }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">NOMOR SERTIFIKAT</span>
-                                        <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('no_dok') }}" name="no_dokumen" id="no_dok"
-                                            placeholder="ENTRI" required>
+                                        <span class="fw-bold">NOMOR DOKUMEN</span>
+                                        <input class="form-control text-uppercase" type="text" name="no_dokumen"
+                                            id="no_dok" value="{{ old('no_dokumen') }}" placeholder="ENTRI" required>
                                     </div>
 
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">PEMILIK SERTIFIKAT</span>
-                                        <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('atas_nama') }}" name="atas_nama" id="atas_nama"
-                                            placeholder="ENTRI" required>
-                                    </div>
                                 </div>
 
                                 <div class="div-right">
-
                                     <div style="margin-top: -15px;">
-                                        <span class="fw-bold">LUAS TANAH (M2)</span>
-                                        <input class="form-control text-uppercase" type="text"
-                                            value="{{ old('luas') }}" name="luas" id="luas" placeholder="ENTRI"
-                                            required>
+                                        <span class="fw-bold">NAMA PEMILIK</span>
+                                        <input class="form-control text-uppercase" type="text" name="atas_nama"
+                                            id="atas_nama" value="{{ old('atas_nama') }}" placeholder="ENTRI" required>
                                     </div>
 
                                     <div style="margin-top: 5px;">
-                                        <span class="fw-bold">LOKASI TANAH</span>
+                                        <span class="fw-bold">LOKASI AGUNAN</span>
                                         <input class="form-control text-uppercase" type="text" name="lokasi"
                                             id="lokasi" value="{{ old('lokasi') ?? $data->alamat_ktp }}"
-                                            placeholder="ENTRI" required>
+                                            placeholder="ENTRI">
                                     </div>
 
-                                    <div style="margin-top: 5px;">
-                                        <span class="fw-bold">LOKASI DATI2</span>
-                                        <select type="text" class="form-control dati2" style="width:100%;"
-                                            name="kode_dati" required>
-                                            <option value="" selected>--PILIH--</option>
-                                            @foreach ($dati as $item)
-                                                <option value="{{ $item->kode_dati }}">{{ $item->nama_dati }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <input class="form-control text-uppercase" type="hidden" name="kode_dati"
+                                        {{ old('kode_dati') }} value="0121">
 
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">CATATAN</span>
@@ -153,7 +137,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('myscript')

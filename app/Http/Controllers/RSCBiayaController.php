@@ -110,12 +110,13 @@ class RSCBiayaController extends Controller
                 'tunggakan_bunga' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
             ];
 
+
             DB::transaction(function () use ($data2, $data, $rsc) {
                 DB::table('rsc_biaya')->where('kode_rsc', $rsc)->update($data);
                 DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->update($data2);
             });
 
-            return response()->back()->with('success', 'Biaya RSC berhasil diubah.');
+            return redirect()->back()->with('success', 'Biaya RSC berhasil diubah.');
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
