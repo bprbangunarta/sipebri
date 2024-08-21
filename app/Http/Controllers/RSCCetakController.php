@@ -188,8 +188,6 @@ class RSCCetakController extends Controller
                     $data->nama_nasabah = trim($data_eks->fnama);
                     $data->alamat_ktp = trim($data_eks->alamat);
                     $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                    $data->jangka_waktu = $data_eks->jkwaktu;
-                    $data->metode_rps = null;
                     $data->no_identitas = $data_eks->noid;
                     $data->no_telp = $data_eks->nohp;
                     $data->no_spk = trim($data_eks->no_spk);
@@ -327,6 +325,21 @@ class RSCCetakController extends Controller
                 $jaminan = [];
             }
 
+            // Jaminan RSC dari SIPEBRI
+            // $jaminan_sipebri = DB::table('rsc_data_jaminan')
+            //     ->select(
+            //         'rsc_data_jaminan.jenis_jaminan as jnsjaminan',
+            //         'rsc_data_jaminan.nilai_taksasi',
+            //         'rsc_data_jaminan.jenis_dokumen as jnsdokumen',
+            //         'rsc_data_jaminan.catatan',
+            //         'rsc_data_jaminan.posisi_agunan',
+            //         'rsc_data_jaminan.kondisi_agunan',
+            //     )
+            //     ->where('kode_rsc', $enc_rsc)->get();
+            //
+
+            // $jaminan = $jaminan->merge($jaminan_sipebri);
+            // dd($jaminan, $jaminan_sipebri);
             //Data Usulan
             if (is_null($data->tgl_update_analisa)) {
                 $tgl = Carbon::parse($data->tgl_add_analisa);
