@@ -1049,7 +1049,7 @@
                                             @php
                                                 $angsuran = $data->penentuan_plafon / $data->jangka_waktu;
                                             @endphp
-                                            <td>{{ 'Rp.' . ' ' . number_format($angsuran, 0, ',', '.') }}</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($data->angsuran_pokok, 0, ',', '.') }}</td>
                                         </tr>
                                         <tr>
                                             <td>Proyeksi Penambahan</td>

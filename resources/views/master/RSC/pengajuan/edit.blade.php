@@ -37,6 +37,9 @@
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>TRACKING</label>
                                             <select type="text" class="form-control tracking" name="status" required>
+                                                <option value=""
+                                                    {{ $data->status == '' || old('') == '' ? 'selected' : '' }}>--Pilih--
+                                                </option>
                                                 <option value="Batal"
                                                     {{ $data->status == 'Batal' || old('Batal') == 'Batal' ? 'selected' : '' }}>
                                                     Batal</option>
@@ -61,12 +64,15 @@
                                                 <option value="Naik Kasi"
                                                     {{ $data->status == 'Naik Kasi' || old('Naik Kasi') == 'Naik Kasi' ? 'selected' : '' }}>
                                                     Naik Kasi</option>
-                                                <option value="Naik Komite I"
-                                                    {{ $data->status == 'Naik Komite I' || old('Naik Komite I') == 'Naik Komite I' ? 'selected' : '' }}>
-                                                    Naik Komite I</option>
-                                                <option value="Naik Komite II"
-                                                    {{ $data->status == 'Naik Komite II' || old('Naik Komite II') == 'Naik Komite II' ? 'selected' : '' }}>
-                                                    Naik Komite II</option>
+                                                <option value="Komite I"
+                                                    {{ $data->status == 'Komite I' || old('Komite I') == 'Komite I' ? 'selected' : '' }}>
+                                                    Komite I</option>
+                                                <option value="Komite II"
+                                                    {{ $data->status == 'Komite II' || old('Komite II') == 'Komite II' ? 'selected' : '' }}>
+                                                    Komite II</option>
+                                                <option value="Komite III"
+                                                    {{ $data->status == 'Komite III' || old('Komite III') == 'Komite III' ? 'selected' : '' }}>
+                                                    Komite III</option>
                                                 <option value="Notifikasi"
                                                     {{ $data->status == 'Notifikasi' || old('Notifikasi') == 'Notifikasi' ? 'selected' : '' }}>
                                                     Notifikasi</option>

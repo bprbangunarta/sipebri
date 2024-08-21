@@ -347,7 +347,7 @@ class RSCCetakController extends Controller
                 $tgl = Carbon::parse($data->tgl_update_analisa);
                 $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
             }
-
+            // dd($pertanian);
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
                 'kondisi' => $kondisi_usaha,
