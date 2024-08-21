@@ -27,10 +27,7 @@ class RSCJaminanController extends Controller
 
             //Agunan Kendaraan
             $jenis_kendaraan = DB::table('ja_kendaraan')->get();
-            $dok_kendaraan = DB::table('da_kendaraan')->get();
-
-            //Agunan Lain
-            $jenis_lain = DB::table('ja_lainnya')->get();
+            $dok_kendaraan = DB::table('data_jenis_dokumen')->get();
 
             // Jaminan
             $jaminan = $this->jaminan($data, $enc, $enc_rsc);
@@ -126,6 +123,10 @@ class RSCJaminanController extends Controller
                 $cek->nilai_taksasi = number_format($cek->nilai_taksasi, '0', ',', '.');
             }
 
+            if (!is_null($cek->taksasi_lama) || $cek->taksasi_lama == '') {
+                $cek->taksasi_lama = number_format($cek->taksasi_lama, '0', ',', '.');
+            }
+
             return response()->json($cek);
         } catch (DecryptException $e) {
             return response()->json('permintaan ditolak.');
@@ -148,7 +149,7 @@ class RSCJaminanController extends Controller
 
             //Agunan Tanah
             $jenis_tanah = DB::table('ja_tanah')->get();
-            $dok_tanah = DB::table('da_tanah')->get();
+            $dok_tanah = DB::table('data_jenis_dokumen')->get();
 
             // Jaminan
             $jaminan = $this->jaminan($data, $enc, $enc_rsc);
@@ -243,7 +244,7 @@ class RSCJaminanController extends Controller
 
             //Agunan Tanah
             $jenis_lain = DB::table('ja_lainnya')->get();
-            $dok_lain = DB::table('da_lainnya')->get();
+            $dok_lain = DB::table('data_jenis_dokumen')->get();
 
             // Jaminan
             $jaminan = $this->jaminan($data, $enc, $enc_rsc);
@@ -328,6 +329,7 @@ class RSCJaminanController extends Controller
                 'jenis_jaminan' => $request->jenis_agunan_kode,
                 'jenis_dokumen' => $request->jenis_dokumen_kode,
                 'catatan' => $request->catatan,
+                'taksasi_lama' => $request->taksasi_lama,
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];

@@ -30,6 +30,22 @@
                                                 value="{{ $data->lokasi }}">
                                         </div>
 
+                                        <div class="form-group" style="margin-top:-5px;">
+                                            <label>STATUS BALIK NAMA</label>
+                                            <select type="text" class="form-control" style="width: 100%;"
+                                                name="status_bl_nama" required>
+                                                <option value="" selected>--PILIH--</option>
+                                                <option value="YES"
+                                                    {{ old('status_bl_nama') == 'YES' || $data->status_bl_nama == 'YES' ? 'selected' : '' }}>
+                                                    YES
+                                                </option>
+                                                <option value="NO"
+                                                    {{ old('status_bl_nama') == 'NO' || $data->status_bl_nama == 'NO' ? 'selected' : '' }}>
+                                                    NO
+                                                </option>
+                                            </select>
+                                        </div>
+
                                     </div>
 
                                     <div class="col-md-4">
@@ -43,6 +59,26 @@
                                             <label>CATATAN</label>
                                             <input type="text" class="form-control" name="catatan" id=""
                                                 value="{{ $data->catatan }}">
+                                        </div>
+
+                                        <div class="form-group" style="margin-top:-5px;">
+                                            <label>STATUS BALIK NAMA</label>
+                                            <select type="text" class="form-control" style="width: 100%;"
+                                                name="jenis_bl_nama">
+                                                <option value="" selected>--PILIH--</option>
+                                                <option value="Balik Nama"
+                                                    {{ old('jenis_bl_nama') == 'Balik Nama' || $data->jenis_bl_nama == 'Balik Nama' ? 'selected' : '' }}>
+                                                    Balik Nama
+                                                </option>
+                                                <option value="Pensertipikatan"
+                                                    {{ old('jenis_bl_nama') == 'Pensertipikatan' || $data->jenis_bl_nama == 'Pensertipikatan' ? 'selected' : '' }}>
+                                                    Pensertipikatan
+                                                </option>
+                                                <option value="Permohonan Peningkatan Sertipikat Hak Milik"
+                                                    {{ old('jenis_bl_nama') == 'Permohonan Peningkatan Sertipikat Hak Milik' || $data->jenis_bl_nama == 'Permohonan Peningkatan Sertipikat Hak Milik' ? 'selected' : '' }}>
+                                                    Permohonan Peningkatan Sertipikat Hak Milik
+                                                </option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -58,6 +94,12 @@
                                             <label>ON CURRENT</label>
                                             <input type="text" class="form-control" name="on_current" id=""
                                                 value="{{ $data->on_current }}">
+                                        </div>
+
+                                        <div class="form-group" style="margin-top:-5px;">
+                                            <label>ATAS NAMA BALIK NAMA</label>
+                                            <input type="text" class="form-control" name="an_bl_nama" id=""
+                                                value="{{ $data->an_bl_nama }}">
                                         </div>
 
                                     </div>

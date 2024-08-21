@@ -35,13 +35,17 @@ class AdminJaminanController extends Controller
     public function edit($id)
     {
         $jaminan = DB::table('data_jaminan')->where('id', $id)->first();
-
+        // dd($jaminan);
         return view('master.jaminan.edit', ['data' => $jaminan]);
     }
 
     public function update(Request $request)
     {
         try {
+            if ($request->status_bl_nama == 'YES' && empty($request->jenis_bl_nama) && empty($request->an_bl_nama)) {
+                return redirect()->back()->with('error', 'Jika status balik nama YES, maka field lainnya harus diisi.');
+            }
+
 
             $data = [
                 'atas_nama' => strtoupper($request->atas_nama),

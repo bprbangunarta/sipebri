@@ -45,6 +45,8 @@
                                                 hidden>
                                             <input type="text" value="{{ $item->jnsdokumen }}" name="jenis_dokumen_kode"
                                                 hidden>
+                                            <input type="text" value="{{ $item->nilai_taksasi }}" name="taksasi_lama"
+                                                hidden>
                                             <input type="text" value="{{ $item->catatan }}" name="catatan" hidden>
 
                                             <button type="submit" class="btn btn-sm btn-danger" title="Add Lain">
@@ -208,6 +210,17 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>TAKSASI LAMA</label>
+                                                <input type="text" class="form-control text-uppercase"
+                                                    name="taksasi_lama" id="taksasi_lama" placeholder="ENTRI"
+                                                    value="" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -252,6 +265,7 @@
                         $('#posisi_agunan').val(response.posisi_agunan)
                         $('#kondisi_agunan').val(response.kondisi_agunan)
                         $('#nilai_taksasi').val(response.nilai_taksasi ?? 0)
+                        $('#taksasi_lama').val(response.taksasi_lama ?? 0)
                         $('#id').val(response.id)
                     }
                 })
