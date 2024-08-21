@@ -298,49 +298,48 @@ class RSCCetakController extends Controller
                 return redirect()->back()->with('error', 'Analisa Keuangan belum diisi.');
             }
 
-            // Cek Jaminan
-            if ($data->status_rsc == 'IN') {
-                $jaminan = DB::table('rsc_data_pengajuan')
-                    ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                    ->select('data_jaminan.catatan', 'data_jaminan.nilai_taksasi')
-                    ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
-            } elseif ($data->status_rsc == 'EKS') {
-                $jaminan = DB::connection('sqlsrv')->table('m_loan')
-                    ->join('m_loan_jaminan', 'm_loan_jaminan.noacc', '=', 'm_loan.noacc')
-                    ->join('m_detil_jaminan', 'm_detil_jaminan.noreg', '=', 'm_loan_jaminan.noreg')
-                    ->select(
-                        'm_detil_jaminan.catatan',
-                        'm_detil_jaminan.nilai_taksasi',
-                    )
-                    ->where('m_loan.noacc', $data->pengajuan_kode)->get();
-                //
+            // Cek Jaminan RSC dari SIPEBRI
+            $jaminan_sipebri = DB::table('rsc_data_jaminan')
+                ->select(
+                    'rsc_data_jaminan.jenis_jaminan as jnsjaminan',
+                    'rsc_data_jaminan.nilai_taksasi',
+                    'rsc_data_jaminan.jenis_dokumen as jnsdokumen',
+                    'rsc_data_jaminan.catatan',
+                    'rsc_data_jaminan.posisi_agunan',
+                    'rsc_data_jaminan.kondisi_agunan',
+                )
+                ->where('kode_rsc', $enc_rsc)->get();
 
-                if ($jaminan) {
-                    foreach ($jaminan as $item) {
-                        $item->catatan = trim($item->catatan);
-                        $item->nilai_taksasi = trim($item->nilai_taksasi);
+            if ($jaminan_sipebri->isEmpty()) {
+                if ($data->status_rsc == 'IN') {
+                    $jaminan = DB::table('rsc_data_pengajuan')
+                        ->leftJoin('data_jaminan', 'data_jaminan.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                        ->select('data_jaminan.catatan', 'data_jaminan.nilai_taksasi')
+                        ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->get();
+                } elseif ($data->status_rsc == 'EKS') {
+                    $jaminan = DB::connection('sqlsrv')->table('m_loan')
+                        ->join('m_loan_jaminan', 'm_loan_jaminan.noacc', '=', 'm_loan.noacc')
+                        ->join('m_detil_jaminan', 'm_detil_jaminan.noreg', '=', 'm_loan_jaminan.noreg')
+                        ->select(
+                            'm_detil_jaminan.catatan',
+                            'm_detil_jaminan.nilai_taksasi',
+                        )
+                        ->where('m_loan.noacc', $data->pengajuan_kode)->get();
+                    //
+
+                    if ($jaminan) {
+                        foreach ($jaminan as $item) {
+                            $item->catatan = trim($item->catatan);
+                            $item->nilai_taksasi = trim($item->nilai_taksasi);
+                        }
                     }
+                } else {
+                    $jaminan = collect();
                 }
             } else {
-                $jaminan = [];
+                $jaminan = collect();
             }
 
-            // Jaminan RSC dari SIPEBRI
-            // $jaminan_sipebri = DB::table('rsc_data_jaminan')
-            //     ->select(
-            //         'rsc_data_jaminan.jenis_jaminan as jnsjaminan',
-            //         'rsc_data_jaminan.nilai_taksasi',
-            //         'rsc_data_jaminan.jenis_dokumen as jnsdokumen',
-            //         'rsc_data_jaminan.catatan',
-            //         'rsc_data_jaminan.posisi_agunan',
-            //         'rsc_data_jaminan.kondisi_agunan',
-            //     )
-            //     ->where('kode_rsc', $enc_rsc)->get();
-            //
-
-            // $jaminan = $jaminan->merge($jaminan_sipebri);
-            // dd($jaminan, $jaminan_sipebri);
-            //Data Usulan
             if (is_null($data->tgl_update_analisa)) {
                 $tgl = Carbon::parse($data->tgl_add_analisa);
                 $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
@@ -359,6 +358,7 @@ class RSCCetakController extends Controller
                 'jasa' => $jasa  ?? null,
                 'lain' => $lain ?? null,
                 'jaminan' => $jaminan,
+                'jaminan_sipebri' => $jaminan_sipebri,
                 'biayaperdagangan' => $biaya_perdagangan,
                 'pendapatanlain' => $pendapatanlain ?? null,
                 'pengeluaranlain' => $pengeluaranlain  ?? null,

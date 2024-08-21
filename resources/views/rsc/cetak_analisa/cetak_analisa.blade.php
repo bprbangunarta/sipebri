@@ -416,71 +416,167 @@
                                 <div class="heads">
                                     2. Kondisi Agunan :
                                 </div>
-                                <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
-                                <table style="border:1px solid black;">
-                                    <tr style="border:1px solid black;">
-                                        <th class="text-center" width="4%" style="border:1px solid black;">No
-                                        </th>
-                                        <th class="text-center" style="border:1px solid black;">Agunan</th>
-                                        <th class="text-center" width="17%" style="border:1px solid black;">Nilai
-                                            Taksasi</th>
-                                    </tr>
-                                    @forelse ($jaminan as $itemj)
+                                @if ($jaminan->isNotEmpty())
+                                    <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
+                                    <table style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Agunan</th>
+                                            <th class="text-center" width="17%" style="border:1px solid black;">
+                                                Nilai
+                                                Taksasi</th>
+                                        </tr>
+                                        @forelse ($jaminan as $itemj)
+                                            <tr style="border:1px solid black;text-transform:uppercase;">
+                                                <td class="text-center" width="4%"
+                                                    style="border:1px solid black;">
+                                                    {{ $loop->iteration }}</td>
+                                                <td style="border:1px solid black; padding-left: 10px;">
+                                                    {{ $itemj->catatan }}.
+                                                </td>
+                                                <td
+                                                    style="border:1px solid black;text-align:right; padding-right: 10px;">
+                                                    {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr style="border:1px solid black;">
+                                                <td class="text-center" style="border:1px solid black;"
+                                                    colspan="3">
+                                                    TIDAK ADA AGUNAN
+                                            </tr>
+                                        @endforelse
+
+                                        @if (count($jaminan) != 0)
+                                            @php
+                                                $totalTaksasi = $jaminan->sum('nilai_taksasi');
+                                            @endphp
+
+                                            <!-- Tampilkan baris dengan total taksasi -->
+                                            <tr style="border:1px solid black;">
+                                                <td class="text-center" style="border:1px solid black;"
+                                                    colspan="2">
+                                                    Jumlah Nilai Taksasi
+                                                    Agunan</td>
+                                                <td
+                                                    style="border:1px solid black;text-align:right; padding-right: 10px;">
+                                                    {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                        @endif
+
+                                    </table>
+
+                                    <table style="border:1px solid black; margin-top:20px; margin-bottom:20px;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Posisi Agunan</th>
+                                            <th class="text-center" width="17%" style="border:1px solid black;">
+                                                Kondisi Agunan</th>
+                                        </tr>
                                         <tr style="border:1px solid black;text-transform:uppercase;">
                                             <td class="text-center" width="4%" style="border:1px solid black;">
-                                                {{ $loop->iteration }}</td>
-                                            <td style="border:1px solid black; padding-left: 10px;">
-                                                {{ $itemj->catatan }}.
+                                                1 </td>
+                                            <td style="border:1px solid black; padding-left: 10px;" width="48%">
+                                                {{ $agunan->posisi_agunan }}.
                                             </td>
-                                            <td style="border:1px solid black;text-align:right; padding-right: 10px;">
-                                                {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}
+                                            <td style="border:1px solid black;text-align:left; padding-left: 10px;"
+                                                width="48%">
+                                                {{ $agunan->kondisi_agunan }}.
                                             </td>
                                         </tr>
-                                    @empty
+                                    </table>
+                                @endif
+
+                                @if ($jaminan_sipebri->isNotEmpty())
+                                    <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
+                                    <table style="border:1px solid black;">
                                         <tr style="border:1px solid black;">
-                                            <td class="text-center" style="border:1px solid black;" colspan="3">
-                                                TIDAK ADA AGUNAN
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Agunan</th>
+                                            <th class="text-center" width="17%" style="border:1px solid black;">
+                                                Nilai
+                                                Taksasi</th>
                                         </tr>
-                                    @endforelse
+                                        @forelse ($jaminan_sipebri as $itemj)
+                                            <tr style="border:1px solid black;text-transform:uppercase;">
+                                                <td class="text-center" width="4%"
+                                                    style="border:1px solid black;">
+                                                    {{ $loop->iteration }}</td>
+                                                <td
+                                                    style="border:1px solid black; padding-left: 10px; padding-top: 5px; padding-bottom: 5px;">
+                                                    {{ $itemj->catatan }}.
+                                                </td>
+                                                <td
+                                                    style="border:1px solid black;text-align:right; padding-right: 10px;">
+                                                    {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $totalTaksasi = $jaminan_sipebri->sum('nilai_taksasi');
+                                            @endphp
 
-                                    @if (count($jaminan) != 0)
-                                        @php
-                                            $totalTaksasi = $jaminan->sum('nilai_taksasi');
-                                        @endphp
+                                            <!-- Tampilkan baris dengan total taksasi -->
+                                            <tr style="border:1px solid black;">
+                                                <td class="text-center" style="border:1px solid black;"
+                                                    colspan="2">
+                                                    Jumlah Nilai Taksasi
+                                                    Agunan</td>
+                                                <td
+                                                    style="border:1px solid black;text-align:right; padding-right: 10px;">
+                                                    {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr style="border:1px solid black;">
+                                                <td class="text-center" style="border:1px solid black;"
+                                                    colspan="3">
+                                                    TIDAK ADA AGUNAN
+                                            </tr>
+                                        @endforelse
 
-                                        <!-- Tampilkan baris dengan total taksasi -->
-                                        <tr style="border:1px solid black;">
-                                            <td class="text-center" style="border:1px solid black;" colspan="2">
-                                                Jumlah Nilai Taksasi
-                                                Agunan</td>
-                                            <td style="border:1px solid black;text-align:right; padding-right: 10px;">
-                                                {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
-                                            </td>
-                                        </tr>
-                                    @endif
+                                    </table>
 
-                                </table>
+                                    @foreach ($jaminan_sipebri as $value)
+                                        <table style="border:1px solid black; margin-top:20px; margin-bottom:20px;">
+                                            <tr style="border:1px solid black;">
+                                                <th class="text-center" width="4%"
+                                                    style="border:1px solid black;">No
+                                                </th>
+                                                <th class="text-center" style="border:1px solid black;">Posisi Agunan
+                                                </th>
+                                                <th class="text-center" width="17%"
+                                                    style="border:1px solid black;">
+                                                    Kondisi Agunan</th>
+                                            </tr>
+                                            <tr style="border:1px solid black;text-transform:uppercase;">
+                                                <td class="text-center" width="4%"
+                                                    style="border:1px solid black;">
+                                                    1 </td>
+                                                <td style="border:1px solid black; padding-left: 10px; padding-top: 5px; padding-bottom: 5px;"
+                                                    width="48%">
+                                                    @if (!empty($value->posisi_agunan))
+                                                        {{ $value->posisi_agunan }}.
+                                                    @else
+                                                        Posisi Agunan Kosong.
+                                                    @endif
 
-                                <table style="border:1px solid black; margin-top:20px; margin-bottom:20px;">
-                                    <tr style="border:1px solid black;">
-                                        <th class="text-center" width="4%" style="border:1px solid black;">No
-                                        </th>
-                                        <th class="text-center" style="border:1px solid black;">Posisi Agunan</th>
-                                        <th class="text-center" width="17%" style="border:1px solid black;">
-                                            Kondisi Agunan</th>
-                                    </tr>
-                                    <tr style="border:1px solid black;text-transform:uppercase;">
-                                        <td class="text-center" width="4%" style="border:1px solid black;">
-                                            1 </td>
-                                        <td style="border:1px solid black; padding-left: 10px;" width="48%">
-                                            {{ $agunan->posisi_agunan }}.
-                                        </td>
-                                        <td style="border:1px solid black;text-align:left; padding-left: 10px;"
-                                            width="48%">
-                                            {{ $agunan->kondisi_agunan }}.
-                                        </td>
-                                    </tr>
-                                </table>
+                                                </td>
+                                                <td style="border:1px solid black;text-align:left; padding-left: 10px; padding-top: 5px; padding-bottom: 5px;"
+                                                    width="48%">
+                                                    @if (!empty($value->kondisi_agunan))
+                                                        {{ $value->kondisi_agunan }}.
+                                                    @else
+                                                        Kondisi Agunan Kosong.
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    @endforeach
+                                @endif
                             </div>
 
                             <div class="contents">
