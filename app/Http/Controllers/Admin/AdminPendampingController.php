@@ -13,8 +13,8 @@ class AdminPendampingController extends Controller
     {
         $keyword = request('keyword');
         $pendamping = DB::table('data_pengajuan')
-            ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('users', 'users.code_user', '=', 'data_pendamping.input_user')
+            ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('users', 'users.code_user', '=', 'data_pendamping.input_user')
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pendamping.nama_pendamping',
@@ -25,7 +25,8 @@ class AdminPendampingController extends Controller
             )
             ->where(function ($query) use ($keyword) {
                 $query->where('data_pendamping.no_identitas', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pendamping.nama_pendamping', 'like', '%' . $keyword . '%');
+                    ->orWhere('data_pendamping.nama_pendamping', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%');
             })
             ->orderBy('data_pendamping.nama_pendamping', 'ASC')
             ->paginate(10);

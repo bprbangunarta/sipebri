@@ -12,15 +12,15 @@ class AdminSurveiController extends Controller
     public function index()
     {
         $keyword = request('keyword');
-        $keyword = request('keyword');
-        $survei = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
-            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
-            ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
 
-            ->whereIn('data_pengajuan.tracking', ['Penjadwalan', 'Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II'])
+        $survei = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+
+            ->whereIn('data_pengajuan.tracking', ['Penjadwalan', 'Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II', 'Realisasi', 'Selesai'])
             // ->whereNotNull('data_kantor')
             ->select(
                 'data_pengajuan.created_at as tanggal',
