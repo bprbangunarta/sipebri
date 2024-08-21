@@ -236,9 +236,6 @@ class RSCAngsuranController extends Controller
 
     private function efektif_musiman($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
     {
-        $plafon = 20000000;
-        $suku_bunga = 31;
-        $jangka_waktu = 24;
         $hpokok = $plafon / ($jangka_waktu / 6);
 
         $hariini = Carbon::now();
