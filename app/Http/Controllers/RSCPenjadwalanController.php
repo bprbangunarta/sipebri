@@ -143,8 +143,6 @@ class RSCPenjadwalanController extends Controller
                     $value->nama_nasabah = trim($data_eks->fnama);
                     $value->alamat_ktp = trim($data_eks->alamat);
                     $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                    $value->jangka_waktu = $data_eks->jkwaktu;
-                    $value->metode_rps = null;
                     $value->plafon = $data_eks->plafond_awal;
                     $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
                 }
@@ -185,8 +183,8 @@ class RSCPenjadwalanController extends Controller
 
             $data = [
                 'kode_rsc' => $enc_rsc,
-                'direksi_kode' => 'MMN',
-                'kabag_kode' => 'SAR',
+                // 'direksi_kode' => 'MMN',
+                // 'kabag_kode' => 'AKE',
                 'kasi_kode' => Auth::user()->code_user,
                 'surveyor_kode' => $request->kode_petugas,
                 'kantor_kode' => $request->kantor_kode,
