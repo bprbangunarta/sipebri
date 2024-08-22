@@ -458,6 +458,10 @@ class RSCJaminanController extends Controller
                 ->where('data_jaminan.pengajuan_kode', $enc)->get();
         }
 
+        foreach ($jaminan as $item) {
+            $item->kode_rsc = null;
+        }
+
         // Jaminan RSC dari SIPEBRI
         $jaminan_sipebri = DB::table('rsc_data_jaminan')
             ->select(
@@ -468,9 +472,21 @@ class RSCJaminanController extends Controller
             )
             ->where('kode_rsc', $enc_rsc)->get();
         //
+        foreach ($jaminan_sipebri as $item) {
+            $item->kode_rsc = $enc_rsc;
+        }
 
-        $mergedJaminan = $jaminan->merge($jaminan_sipebri)->sortBy('nilai_taksasi')->unique('catatan');
+        $mergedJaminan = $jaminan->merge($jaminan_sipebri);
 
-        return $mergedJaminan;
+        $groupedData = $mergedJaminan->groupBy('catatan');
+
+        $filteredData = $groupedData->map(function ($group) {
+            // Prioritaskan item dengan kode_rsc yang tidak null
+            return $group->filter(function ($item) {
+                return !is_null($item->kode_rsc);
+            })->first() ?: $group->first();
+        })->values();
+
+        return $filteredData;
     }
 }
