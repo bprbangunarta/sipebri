@@ -249,7 +249,7 @@ class RSCAngsuranController extends Controller
         foreach ($bulan_array as $i) {
             $bulanberikut = ($bulansekarang + $i) % 12 ?: 12;
             $tahunsekarang += ($bulansekarang + $i) > 12 ? 1 : 0;
-            $jmlhari = Carbon::createFromDate($tahunsekarang, $bulanberikut, 1)->daysInMonth;
+            $jmlhari = Carbon::createFromDate($tahunsekarang, $bulanberikut, 0)->daysInMonth;
 
             $tanggal_setoran = date('d/m/Y', strtotime("+$i month", strtotime($tgl_real)));
             $hbunga = (($plafon * $suku_bunga) / 100) * $jmlhari / 365;
@@ -273,6 +273,7 @@ class RSCAngsuranController extends Controller
                 $plafon -= $hpokok;
             }
         }
+
         return $rincian;
     }
 }
