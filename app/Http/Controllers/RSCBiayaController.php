@@ -41,11 +41,11 @@ class RSCBiayaController extends Controller
                             $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
                         }
                     })
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
 
-            ->where('rsc_data_pengajuan.status', 'Perjanjian Kredit')
+            ->whereIn('rsc_data_pengajuan.status', ['Perjanjian Kredit', 'Selesai'])
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
 
         $data = $data->paginate(10);

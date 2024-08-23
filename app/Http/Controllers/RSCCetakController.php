@@ -49,7 +49,7 @@ class RSCCetakController extends Controller
                             $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
                         }
                     })
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
 
@@ -407,6 +407,7 @@ class RSCCetakController extends Controller
                             $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
                         }
                     })
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -654,6 +655,7 @@ class RSCCetakController extends Controller
                             $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
                         }
                     })
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
@@ -1197,6 +1199,7 @@ class RSCCetakController extends Controller
             ->where(function ($query) use ($keyword) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
