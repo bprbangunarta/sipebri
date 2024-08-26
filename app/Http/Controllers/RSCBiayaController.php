@@ -155,6 +155,7 @@ class RSCBiayaController extends Controller
                     'rsc_data_pengajuan.status_rsc',
                     'rsc_data_pengajuan.baki_debet',
                     'rsc_data_pengajuan.tunggakan_bunga',
+                    'rsc_data_pengajuan.tunggakan_poko',
                     'rsc_data_pengajuan.jangka_waktu',
                     'rsc_data_pengajuan.metode_rps',
                     'rsc_data_pengajuan.suku_bunga',
@@ -182,7 +183,7 @@ class RSCBiayaController extends Controller
                         'm_loan.noacdroping',
                     )
                     ->where('fnama', $data->nama_nasabah)
-                    ->where('plafond', $data->baki_debet)->first();
+                    ->where('plafond', '>', 0)->first();
                 //
                 $data->no_loan = $data_eks->noacc;
                 $data->no_acc_dropping = $data_eks->noacdroping;
@@ -205,7 +206,7 @@ class RSCBiayaController extends Controller
             $tgl_jth_tempo = Carbon::parse($data->tgl_akhir_rsc);
             $data->tgl_akhir_rsc = $tgl_jth_tempo->isoFormat('D MMMM Y');
 
-            $data->kapitalisasi = $data->penentuan_plafon - $data->baki_debet;
+            $data->kapitalisasi = ($data->penentuan_plafon - $data->baki_debet) + $data->poko_dibayar;
 
             return view('rsc.biaya.detail_biaya', [
                 'data' => $data

@@ -81,7 +81,7 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Nn Loan</td>
+                    <td>No Loan</td>
                     <td>:</td>
                     <td colspan="2">{{ $data->no_loan }}</td>
                     <td></td>
