@@ -93,9 +93,13 @@ class RSCBiayaController extends Controller
 
             $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->first();
 
-            $selisih = abs($data_rsc->tunggakan_bunga - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
+            // $selisih = abs($data_rsc->tunggakan_bunga - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
 
-            $bunga_dibayar_baru = $biaya->bunga_dibayar + $selisih;
+            // $bunga_dibayar_baru = $biaya->bunga_dibayar + $selisih;
+
+            $selisih  = abs($data_rsc->penentuan_plafon - $data_rsc->baki_debet);
+
+            $bunga_dibayar_baru = abs($selisih - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
 
             $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
                 $biaya->asuransi_tlo + $bunga_dibayar_baru + $biaya->poko_dibayar + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
@@ -201,7 +205,7 @@ class RSCBiayaController extends Controller
             $tgl_jth_tempo = Carbon::parse($data->tgl_akhir_rsc);
             $data->tgl_akhir_rsc = $tgl_jth_tempo->isoFormat('D MMMM Y');
 
-            $data->kapitalisasi = $data->tunggakan_bunga - $data->bunga_dibayar;
+            $data->kapitalisasi = $data->penentuan_plafon - $data->baki_debet;
 
             return view('rsc.biaya.detail_biaya', [
                 'data' => $data
