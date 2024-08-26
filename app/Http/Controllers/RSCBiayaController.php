@@ -45,7 +45,7 @@ class RSCBiayaController extends Controller
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
 
-            ->whereIn('rsc_data_pengajuan.status', ['Perjanjian Kredit', 'Selesai'])
+            ->whereIn('rsc_data_pengajuan.status', ['Perjanjian Kredit'])
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');
 
         $data = $data->paginate(10);
