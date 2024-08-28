@@ -251,13 +251,15 @@ class RSCCetakController extends Controller
 
             // Data Analisa Usaha
             $perdagangan = RSC::perdagangan_rsc($enc_rsc, $data->status_rsc);
+
             $biaya_perdagangan = [];
             if (count($perdagangan) > 0) {
                 foreach ($perdagangan as $item) {
-                    $biaya_perdagangan = DB::table('rsc_du_perdagangan')->where('usaha_kode', $item->kode_usaha)->get();
+                    $results = DB::table('rsc_du_perdagangan')->where('usaha_kode', $item->kode_usaha)->get();
+                    $biaya_perdagangan = array_merge($biaya_perdagangan, $results->toArray());
                 }
             } else {
-                $biaya_perdagangan = null;
+                $biaya_perdagangan = [];
             }
 
             $pertanian = RSC::pertanian_rsc($enc_rsc, $data->status_rsc);
@@ -347,7 +349,7 @@ class RSCCetakController extends Controller
                 $tgl = Carbon::parse($data->tgl_update_analisa);
                 $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
             }
-            // dd($pertanian);
+            // dd($perdagangan, $biaya_perdagangan);
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
                 'kondisi' => $kondisi_usaha,
