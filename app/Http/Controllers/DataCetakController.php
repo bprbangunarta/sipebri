@@ -484,7 +484,7 @@ class DataCetakController extends Controller
 
         $name = request('name');
         $cek = DB::table('data_spk')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
@@ -520,7 +520,8 @@ class DataCetakController extends Controller
                 'data_survei.tgl_jadul_1',
                 'data_survei.tgl_jadul_2',
                 'users.name'
-            );
+            )
+            ->orderBy('data_spk.created_at', 'DESC');
 
         //Enkripsi kode pengajuan
         $data = $cek->paginate(10);
@@ -1470,10 +1471,11 @@ class DataCetakController extends Controller
                     $targetDate = Carbon::parse($cek->tgl_akhir);
                 }
                 $cek->tgl_jth_tmp = $targetDate->isoFormat('D MMMM Y');
+                $cek->tgl_jth = $targetDate->isoFormat('D');
 
                 $targetDate->addMonths($cek->jangka_pokok);
+
                 $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt - $cek->jangka_pokok);
-                $cek->tgl_jth = $tenMonthsLater->isoFormat('D');
 
                 // $tenMonthsLater = $targetDate->copy()->addMonths($cek->jwt);
                 $bln_jth_tmp = $tenMonthsLater->isoFormat('MMMM');

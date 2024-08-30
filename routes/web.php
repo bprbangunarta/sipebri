@@ -341,6 +341,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/standing-interaction/cetak', [CetakController::class, 'cetak_standing_interaction'])->name('cetak.data.standing.interaction');
         Route::get('/standing-interaction/cetak/wanayasa', [CetakController::class, 'cetak_standing_interaction_wanayasa'])->name('cetak.data.standing.interaction.wanayasa');
 
+        // Cetak Data Realisasi
+        Route::get('/cetak/photo/realisasi', [CetakController::class, 'cetak_photo_realisasi'])->name('cetak.photo.realisasi');
+
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 

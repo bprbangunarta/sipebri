@@ -850,6 +850,64 @@ class CetakController extends Controller
         }
     }
 
+    public function cetak_photo_realisasi()
+    {
+        $tgl1 = request('tgl1');
+        $tgl2 = request('tgl2');
+        $no = 1;
+
+        if (is_null($tgl2)) {
+            $tgl2 = $tgl1;
+        }
+
+        $kantor = request('nama_kantor');
+        $produk = request('kode_produk');
+
+        $dataQuery = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('v_users', 'v_users.code_user', '=', 'data_pengajuan.input_user')
+            ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_realisasi', 'data_realisasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+
+            ->where('data_pengajuan.on_current', 1)
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->whereNotNull('data_spk.no_spk')
+
+            ->select(
+                'data_spk.no_spk',
+                'data_nasabah.nama_nasabah',
+                'data_pendamping.nama_pendamping',
+                'data_realisasi.foto_pemohon',
+                'data_realisasi.foto_pendamping',
+            );
+
+        $dataQuery->when($tgl1 && $tgl2, function ($data) use ($tgl1, $tgl2) {
+            return $data->whereBetween('data_spk.created_at', [$tgl1 . ' 00:00:00', $tgl2 . ' 23:59:59']);
+        });
+
+        // Hanya tambahkan klausa where jika $kantor tidak kosong
+        if ($kantor !== null && $produk !== null) {
+
+            $dataQuery->where('data_survei.kantor_kode', $kantor)
+                ->where('data_pengajuan.produk_kode', $produk);
+        } elseif ($kantor !== null && $produk === null) {
+
+            $dataQuery->where('data_survei.kantor_kode', $kantor);
+        } elseif ($kantor === null && $produk !== null) {
+
+            $dataQuery->where('data_pengajuan.produk_kode', $produk);
+        }
+
+        $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
+
+        return view('cetak.realisasi-kredit.cetak_realisasi', [
+            'data' => $data
+        ]);
+    }
 
     private function roundUp($number)
     {

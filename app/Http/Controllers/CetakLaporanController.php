@@ -526,20 +526,12 @@ class CetakLaporanController extends Controller
 
         $kantor = DB::table('data_kantor')->get();
         $produk = DB::table('data_produk')->get();
-        // $metode = DB::table('data_metode_rps')->get();
-        // $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
-        // $cgc = DB::table('v_tabungan')->get();
-        // $resort = DB::table('v_resort')->get();
 
         $data = $query->paginate(10);
         return view('laporan.realisasi', [
             'data' => $data,
             'kantor' => $kantor,
             'produk' => $produk,
-            // 'metode' => $metode,
-            // 'surveyor' => $surveyor,
-            // 'cgc' => $cgc,
-            // 'resort' => $resort,
         ]);
     }
 
