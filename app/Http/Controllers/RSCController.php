@@ -405,55 +405,6 @@ class RSCController extends Controller
                 }
             }
 
-            // if ($status_rsc == 'EKS') {
-            //     $data = DB::connection('sqlsrv')->table('m_loan')
-            //         ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
-            //         ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
-            //         ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
-            //         ->select(
-            //             'm_loan.fnama as nama_nasabah',
-            //             'm_cif.alamat as alamat_ktp',
-            //             'm_loan.plafond_awal as plafon',
-            //             'm_cif.nohp as no_telp',
-            //             'm_loan.jkwaktu as jangka_waktu',
-            //             'setup_loan.ket',
-            //             'm_loan.no_spk',
-            //             'm_loan.tgleff',
-            //             'm_loan.chgtgljam',
-            //         )
-            //         ->where('m_loan.noacc', $enc)->get();
-            //     //
-            //     $data[0]->nama_nasabah = trim($data[0]->nama_nasabah);
-            //     $data[0]->alamat_ktp = trim($data[0]->alamat_ktp);
-            //     $data[0]->plafon = trim($data[0]->plafon);
-            //     $data[0]->no_telp = trim($data[0]->no_telp);
-            //     $data[0]->jangka_waktu = trim($data[0]->jangka_waktu);
-            //     $data[0]->produk_kode = Midle::data_produk(trim($data[0]->ket));
-            //     $data[0]->created_at = date('Y-m-d H:i:s', strtotime($data[0]->tgleff));
-            //     $data[0]->no_spk = trim($data[0]->no_spk);
-            //     $data[0]->updated_at = date('Y-m-d H:i:s', strtotime($data[0]->chgtgljam));
-            //     $data[0]->metode_rps = null;
-            // } else {
-            //     $data = DB::table('data_pengajuan')
-            //         ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-            //         ->leftJoin('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            //         ->select(
-            //             'data_nasabah.nama_nasabah',
-            //             'data_nasabah.alamat_ktp',
-            //             'data_nasabah.no_telp',
-            //             'data_pengajuan.plafon',
-            //             'data_pengajuan.produk_kode',
-            //             'data_pengajuan.metode_rps',
-            //             'data_pengajuan.jangka_waktu',
-            //             'data_spk.no_spk',
-            //             'data_spk.created_at',
-            //             'data_spk.updated_at',
-            //         )
-            //         ->where('data_pengajuan.kode_pengajuan', $enc)
-            //         ->get();
-            // }
-            //
-
             if (count($data) > 0 && $data[0]->status_rsc == 'IN') {
                 $tgl_realisasi = Carbon::createFromFormat('Y-m-d H:i:s', $data[0]->created_at);
                 $tgl_jth_tempo = $tgl_realisasi->addMonths($data[0]->jangka_waktu);

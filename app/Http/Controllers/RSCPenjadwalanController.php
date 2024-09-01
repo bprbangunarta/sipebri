@@ -183,8 +183,8 @@ class RSCPenjadwalanController extends Controller
 
             $data = [
                 'kode_rsc' => $enc_rsc,
-                // 'direksi_kode' => 'MMN',
-                // 'kabag_kode' => 'AKE',
+                'direksi_kode' => 'MMN',
+                'kabag_kode' => 'AKE',
                 'kasi_kode' => Auth::user()->code_user,
                 'surveyor_kode' => $request->kode_petugas,
                 'kantor_kode' => $request->kantor_kode,
@@ -221,7 +221,7 @@ class RSCPenjadwalanController extends Controller
             $data = [
                 'kode_rsc' => $enc_rsc,
                 'direksi_kode' => 'MMN',
-                'kabag_kode' => 'SAR',
+                'kabag_kode' => 'AKE',
                 'kasi_kode' => Auth::user()->code_user,
                 'surveyor_kode' => $request->kode_petugas,
                 'kantor_kode' => $request->kantor_kode,
