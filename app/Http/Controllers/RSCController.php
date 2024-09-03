@@ -790,7 +790,7 @@ class RSCController extends Controller
                     ->orWhere('rsc_data_survei.kantor_kode', 'like', '%' . $keyword . '%');
             })
 
-            ->where(function ($query) use ($keyword) {
+            ->orWhere(function ($query) use ($keyword) {
                 $query->where('rsc_data_pengajuan.status', 'Notifikasi')
                     ->where('rsc_data_survei.direksi_kode', Auth::user()->code_user);
             })
@@ -803,10 +803,6 @@ class RSCController extends Controller
             ->orWhere(function ($query) use ($keyword) {
                 $query->where('rsc_data_pengajuan.status', 'Notifikasi')
                     ->where('rsc_data_survei.kabag_kode', Auth::user()->code_user);
-            })
-
-            ->orWhere(function ($query) use ($keyword) {
-                $query->where('rsc_data_pengajuan.status', 'Notifikasi');
             })
 
             ->orderBy('rsc_data_pengajuan.created_at', 'desc');

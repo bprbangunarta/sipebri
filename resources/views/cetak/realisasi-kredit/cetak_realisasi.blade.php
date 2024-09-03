@@ -13,18 +13,29 @@
             orientation: landscape;
         }
 
-        .content {
-            border: 1px solid black;
-            margin-left: 1cm;
-            margin-right: 1cm;
-            margin-top: 1cm;
-            margin-bottom: 1cm;
+        body {
+            display: flex;
+            justify-content: space-around;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            box-sizing: border-box;
         }
 
-        .item {
+        .container {
             border: 1px solid black;
-            height: 9.67cm;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .box {
             width: 6.35cm;
+            height: 9.67cm;
+            border: 1px solid black;
+            box-sizing: border-box;
         }
 
         @media print {
@@ -37,31 +48,13 @@
 </head>
 
 <body>
-    <div class="content">
-        <table>
-            <tr>
-                <td>
-                    <div class="item">
-
-                    </div>
-                </td>
-                <td>
-                    <div class="item">
-
-                    </div>
-                </td>
-                <td>
-                    <div class="item">
-
-                    </div>
-                </td>
-                <td>
-                    <div class="item">
-
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <div class="container">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
     </div>
     <script>
         window.print()
