@@ -485,7 +485,6 @@ class RSCController extends Controller
 
             $tgl_jth_temp = $tanggalCarbon->format('Ymd');
 
-
             $total = (int)str_replace(["Rp.", " ", "."], "", $request->baki_debet ?? 0) + (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_bunga ?? 0);
             $data = [
                 'tgl_jth_tempo' => $tgl_jth_temp,
@@ -493,6 +492,8 @@ class RSCController extends Controller
                 'baki_debet' => (int)str_replace(["Rp.", " ", "."], "", $request->baki_debet ?? 0),
                 'plafon' => (int)str_replace(["Rp.", " ", "."], "", $request->plafon ?? 0),
                 'penentuan_plafon_temp' => $total,
+                'jangka_waktu' =>  $request->jangka_waktu,
+                'metode_rps' =>  $request->metode_rps,
                 'jenis_persetujuan' => Str::upper($request->jenis_persetujuan),
                 'tunggakan_poko' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_pokok ?? 0),
                 'tunggakan_bunga' => (int)str_replace(["Rp.", " ", "."], "", $request->tunggakan_bunga ?? 0),

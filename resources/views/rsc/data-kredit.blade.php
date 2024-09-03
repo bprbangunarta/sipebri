@@ -116,6 +116,42 @@
                                                     value="{{ old('bg_dibayar', number_format($data_rsc->bunga_dibayar, '0', ',', '.')) }}">
                                             </div>
 
+                                            <div style="margin-top:5px;width: 49.5%;float:left;">
+                                                <label>JK KREDIT (BULAN)</label>
+                                                <input type="number" class="form-control" name="jangka_waktu"
+                                                    id="jangka_waktu" placeholder="ENTRI"
+                                                    value="{{ old('jangka_waktu', $data->jangka_waktu) }}" required>
+                                            </div>
+
+                                            <div style="margin-top:5px;width: 49.5%;float:right;">
+                                                <label>METODE RPS</label>
+                                                <select class="form-control text-uppercase metode" name="metode_rps"
+                                                    id="select-metodes" required>
+                                                    <option value="">-- PILIH -- </option>
+                                                    <option value="FLAT"
+                                                        {{ old('metode_rps') == 'FLAT' || $data->metode_rps == 'FLAT' ? 'selected' : '' }}>
+                                                        FLAT
+                                                    </option>
+                                                    <option value="PRK"
+                                                        {{ old('metode_rps') == 'PRK' || $data->metode_rps == 'PRK' ? 'selected' : '' }}>
+                                                        PRK
+                                                    </option>
+                                                    <option value="EFEKTIF"
+                                                        {{ old('metode_rps') == 'EFEKTIF' || $data->metode_rps == 'EFEKTIF' ? 'selected' : '' }}>
+                                                        EFEKTIF
+                                                    </option>
+                                                    <option value="EFEKTIF ANUITAS"
+                                                        {{ old('metode_rps') == 'EFEKTIF ANUITAS' || $data->metode_rps == 'EFEKTIF ANUITAS' ? 'selected' : '' }}>
+                                                        EFEKTIF ANUITAS
+                                                    </option>
+                                                    <option value="EFEKTIF MUSIMAN"
+                                                        {{ old('metode_rps') == 'EFEKTIF MUSIMAN' || $data->metode_rps == 'EFEKTIF MUSIMAN' ? 'selected' : '' }}>
+                                                        EFEKTIF MUSIMAN
+                                                    </option>
+                                                </select>
+                                            </div>
+
+
                                         </div>
                                         {{-- Left --}}
 
@@ -214,7 +250,6 @@
                                                     value="{{ old('penentuan_plafon', number_format($data_rsc->penentuan_plafon, '0', ',', '.')) }}"
                                                     readonly>
                                             </div>
-
                                         </div>
                                         {{-- Right --}}
 
@@ -335,6 +370,7 @@
 
 @push('myscript')
     <script>
+        $('.metode').select2()
         $('.jns_usaha').select2()
         $('.klasifikasi_kredit').select2()
         $('.jenis_persetujuan').select2()
