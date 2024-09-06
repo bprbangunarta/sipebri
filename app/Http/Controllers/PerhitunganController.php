@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Google_Client;
+use Google\Service;
 use Google\Service\Sheets;
 use Google_Service_Sheets;
 use Illuminate\Http\Request;
+use Google_Service_Sheets_Request;
 use Google_Service_Sheets_ValueRange;
+use Google_Service_Sheets_ClearValuesRequest;
 
 class PerhitunganController extends Controller
 {
@@ -22,7 +26,12 @@ class PerhitunganController extends Controller
 
     public function simulasi()
     {
-        return view('perhitungan.spreadsheet.index');
+        return view('perhitungan.spreadsheet.asuransi_pasific');
+    }
+
+    public function simulasi_bumida()
+    {
+        return view('perhitungan.spreadsheet.asuransi_bumida');
     }
 
     public function simulasi_tlo()
@@ -41,7 +50,11 @@ class PerhitunganController extends Controller
         $sheetsService = new Google_Service_Sheets($client);
 
         // ID spreadsheet yang ingin Anda akses
-        $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
+        if ($request->query('ajk_name') == 'pasific') {
+            $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
+        } else {
+            $spreadsheetId = '14r9E9KukXcrATdXX1AotqdDMzPs3mJzBxQkZdquqR50';
+        }
 
         $tgl_lahir = $request->tgl_lahir;
         $plafon = (int)str_replace(["Rp", " ", "."], "", $request->plafon);
@@ -132,7 +145,59 @@ class PerhitunganController extends Controller
             $params
         );
 
-        return redirect()->route('sheet');
+        if ($request->query('ajk_name') == 'pasific') {
+            return redirect()->route('sheet');
+        } else {
+            return redirect()->route('sheet_bumida');
+        }
+    }
+
+    public function sheet()
+    {
+        // Inisialisasi Google Client
+        $client = new Google_Client();
+        $client->setApplicationName('Google Sheets Example');
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $sheetsService = new Google_Service_Sheets($client);
+
+        $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
+
+        $range = 'Asuransi Jiwa Kematian'; // Gantilah sesuai dengan nama sheet Anda
+
+        // Mendapatkan data dari spreadsheet
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+
+        $values = $response->getValues();
+
+        return view('perhitungan.spreadsheet.sheet-view', [
+            'data' => $values,
+        ]);
+    }
+
+    public function sheet_bumida()
+    {
+        // Inisialisasi Google Client
+        $client = new Google_Client();
+        $client->setApplicationName('Google Sheets Example');
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $sheetsService = new Google_Service_Sheets($client);
+
+        $spreadsheetId = '14r9E9KukXcrATdXX1AotqdDMzPs3mJzBxQkZdquqR50';
+
+        $range = 'Asuransi Jiwa Kematian'; // Gantilah sesuai dengan nama sheet Anda
+
+        // Mendapatkan data dari spreadsheet
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+
+        $values = $response->getValues();
+
+        return view('perhitungan.spreadsheet.sheet-view-bumida', [
+            'data' => $values,
+        ]);
     }
 
     public function perhitungan_tlo(Request $request)
@@ -153,20 +218,42 @@ class PerhitunganController extends Controller
         $range1 = 'C10:G10';
         $range1i = 'I10';
         $rangecol1 = 'C';
-        $startnumb = 10;
 
-        $data1 = [
-            '1',
-            $request->jenis_kendaraan1,
-            strtoupper($request->nopol1),
-            (int) $request->jw1,
-            $request->tgl_realisasi1,
+        // Hapus Cell tanpa hapus rumus
+        $clearRanges = [
+            $sheetName . '!C10:C14',
+            $sheetName . '!D10:D14',
+            $sheetName . '!E10:E14',
+            $sheetName . '!F10:F14',
+            $sheetName . '!G10:G14',
+            $sheetName . '!I10:I14'
         ];
 
+        $clearRequest = new Google_Service_Sheets_ClearValuesRequest();
+
+        foreach ($clearRanges as $clearRange) {
+            $response = $sheetsService->spreadsheets_values->clear($spreadsheetId, $clearRange, $clearRequest);
+        }
+
+        $data = [];
+
+        for ($i = 1; $i <= 5; $i++) {
+            if (!empty($request->{"jenis_kendaraan$i"})) {
+                $data[] = [
+                    $i,
+                    $request->{"jenis_kendaraan$i"},
+                    strtoupper($request->{"nopol$i"}),
+                    (int) $request->{"jw$i"},
+                    Carbon::parse($request->{"tgl_realisasi$i"})->format('d-m-Y'),
+                    (int) str_replace(".", "", $request->{"pertanggungan$i"}),
+                ];
+            }
+        }
 
         $requestNama = new Google_Service_Sheets_ValueRange([
-            'values' => [[strtoupper($request->nama1)]],
+            'values' => [[strtoupper($request->nama)]],
         ]);
+
         $paramrequestBody1Nama = [
             'valueInputOption' => 'RAW',
         ];
@@ -177,41 +264,44 @@ class PerhitunganController extends Controller
             $paramrequestBody1Nama
         );
 
-        foreach ($data1 as $key => $value) {
-            $column = chr(ord($rangecol1) + $key);
-            $range = $sheetName . '!' . $column . $startnumb;
+        $startnumb = 10;
+        $row = $startnumb;
 
-            $requestBody1 = new Google_Service_Sheets_ValueRange([
-                'values' => [[$value]],
-            ]);
-            $paramrequestBody1 = [
-                'valueInputOption' => 'RAW',
+        foreach ($data as $key => $value) {
+            $ranges = [
+                'C' => $value[0],
+                'D' => $value[1],
+                'E' => $value[2],
+                'F' => $value[3],
+                'G' => $value[4],
+                'I' => $value[5],
             ];
-            $resultCtoG = $sheetsService->spreadsheets_values->update(
-                $spreadsheetId,
-                $range,
-                $requestBody1,
-                $paramrequestBody1
-            );
-        }
 
-        $requestBody1i = new Google_Service_Sheets_ValueRange([
-            'values' => [[(int)str_replace(["", " ", "."], "", $request->pertanggungan1)]],
-        ]);
-        $paramrequestBody11i = [
-            'valueInputOption' => 'RAW',
-        ];
-        $response1i = $sheetsService->spreadsheets_values->update(
-            $spreadsheetId,
-            $sheetName . '!' . $range1i,
-            $requestBody1i,
-            $paramrequestBody11i
-        );
+            foreach ($ranges as $column => $cellValue) {
+                // Menggabungkan kolom dan baris untuk mendapatkan range sel
+                $range = $sheetName . '!' . $column . $row;
+
+                // Menyimpan nilai ke dalam spreadsheet
+                $requestBody1 = new Google_Service_Sheets_ValueRange([
+                    'values' => [[$cellValue]],
+                ]);
+                $paramrequestBody1 = [
+                    'valueInputOption' => 'RAW',
+                ];
+                $result = $sheetsService->spreadsheets_values->update(
+                    $spreadsheetId,
+                    $range,
+                    $requestBody1,
+                    $paramrequestBody1
+                );
+            }
+            $row++;
+        }
 
         return self::sheet_tlo();
     }
 
-    public function sheet()
+    public function sheet_tlo()
     {
         // Inisialisasi Google Client
         $client = new Google_Client();
@@ -224,7 +314,7 @@ class PerhitunganController extends Controller
         // $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
         $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
 
-        $range = 'Asuransi Jiwa Kematian'; // Gantilah sesuai dengan nama sheet Anda
+        $range = 'Total Lost Only'; // Gantilah sesuai dengan nama sheet Anda
 
         // Mendapatkan data dari spreadsheet
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
@@ -233,34 +323,6 @@ class PerhitunganController extends Controller
 
         // Lakukan sesuatu dengan data, seperti menampilkan di view
         // dd($values);
-        return view('perhitungan.spreadsheet.sheet-view', [
-            'data' => $values,
-        ]);
-    }
-
-    public function sheet_tlo()
-    {
-        // // Inisialisasi Google Client
-        // $client = new Google_Client();
-        // $client->setApplicationName('Google Sheets Example');
-        // $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
-        // $client->setAuthConfig(base_path('credential.json'));
-
-        // $sheetsService = new Google_Service_Sheets($client);
-
-        // // $spreadsheetId = '1KcgzKMNfA588xKvQItoQ3wy8Ni0Z8NGbr7wpJeBdigk';
-        // $spreadsheetId = '1IXdjfDjQ5TRhVxKzq2TiG8OzFzPZR8_dy28G9vV-eYE';
-
-        // $range = 'Total Lost Only'; // Gantilah sesuai dengan nama sheet Anda
-
-        // // Mendapatkan data dari spreadsheet
-        // $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
-
-        // $values = $response->getValues();
-        $values = '';
-
-        // Lakukan sesuatu dengan data, seperti menampilkan di view
-
         return view('perhitungan.spreadsheet.tlo-view', [
             'data' => $values,
         ]);

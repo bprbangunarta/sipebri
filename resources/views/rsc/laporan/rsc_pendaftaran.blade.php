@@ -39,13 +39,11 @@
                                         <th class="text-center">KODE RSC</th>
                                         <th class="text-center">NAMA DEBITUR</th>
                                         <th class="text-center">ALAMAT</th>
-                                        <th class="text-center">WIL</th>
                                         <th class="text-center">PDK</th>
                                         <th class="text-center">PLAFON RSC</th>
                                         <th class="text-center">JK</th>
                                         <th class="text-center">RATE</th>
                                         <th class="text-center">METODE RPS</th>
-                                        <th class="text-center">NO HP</th>
                                         <th class="text-center">INPUT USER</th>
                                     </tr>
                                 </thead>
@@ -62,51 +60,12 @@
                                             <td class="text-center">{{ $item->kode_rsc }}</td>
                                             <td>{{ $item->nama_nasabah }}</td>
                                             <td>{{ $item->alamat }}</td>
-                                            <td class="text-center">{{ $item->kantor_kode }}</td>
                                             <td class="text-center">{{ $item->produk_kode }}</td>
                                             <td class="text-right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
                                             <td class="text-center">{{ $item->jangka_waktu }}</td>
+                                            <td class="text-center">{{ $item->suku_bunga }}</td>
+                                            <td class="text-center">{{ $item->metode_rps }}</td>
                                             <td>{{ $item->nama_user }}</td>
-                                            <td class="text-center">
-                                                @if (is_null($item->tgl_survey))
-                                                    -
-                                                @else
-                                                    {{ \Carbon\Carbon::parse($item->tgl_survey)->format('d-m-Y') }}
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                @if (is_null($item->tgl_analisa))
-                                                    -
-                                                @else
-                                                    {{ \Carbon\Carbon::parse($item->tgl_analisa)->format('d-m-Y') }}
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                @if (is_null($item->tgl_persetujuan))
-                                                    -
-                                                @else
-                                                    {{ \Carbon\Carbon::parse($item->tgl_persetujuan)->format('d-m-Y') }}
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                @if (is_null($item->tgl_notif))
-                                                    -
-                                                @else
-                                                    {{ \Carbon\Carbon::parse($item->tgl_notif)->format('d-m-Y') }}
-                                                @endif
-
-                                            </td>
-                                            <td class="text-center">
-                                                @if (is_null($item->tgl_realisasi))
-                                                    -
-                                                @else
-                                                    {{ \Carbon\Carbon::parse($item->tgl_realisasi)->format('d-m-Y') }}
-                                                @endif
-
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->status }}
-                                            </td>
                                         </tr>
                                     @empty
                                         <tr>

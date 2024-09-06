@@ -5,7 +5,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
             <div class="box-body table-responsive" style="overflow: auto; width: 100%; height:425px;">
-                <form action="{{ route('perhitungan.tlo') }}" method="POST">
+                <form action="{{ route('perhitungan.tlo') }}" method="get" target="_blank">
                     @csrf
                     <div class="card-body">
 
@@ -19,13 +19,20 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="no-border">
+                                    <td class="no-border" colspan="6">
+                                        <span class="fw-bold fs-4">Masukan Nama</span>
+                                        <input type="text" class="form-control  text-uppercase" name="nama"
+                                            id="name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {{-- <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
                                         <input type="text" class="form-control text-uppercase" name="nama1"
-                                            id="name" placeholder="Masukan Nama" required>
-                                    </td>
+                                            id="name" required>
+                                    </td> --}}
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Jenis Kendaraan</span>
+                                        <span class="fw-bold fs-4">Kendaraan</span>
                                         <select class="form-control input-sm form-border text-uppercase"
                                             style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
                                             name="jenis_kendaraan1" id="" required>
@@ -36,34 +43,34 @@
                                         </select>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Masukan No Polisi</span>
+                                        <span class="fw-bold fs-4">No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol1"
-                                            placeholder="No Polisi" id="nopol" required>
+                                            id="nopol" required>
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw1"
-                                            placeholder="Jangka Waktu" id="jk" required>
+                                            id="jk" required>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Nilai Pertanggungan</span>
-                                        <input type="text" class="form-control" name="pertanggungan1"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan1" required>
+                                        <span class="fw-bold fs-4">Pertanggungan</span>
+                                        <input type="text" class="form-control" name="pertanggungan1" id="pertanggungan1"
+                                            required>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Tanggal Realisasi</span>
-                                        <input type="text" class="form-control" name="tgl_realisasi1"
-                                            placeholder="Tanggal Sekarang" id="hari1" required>
+                                        <span class="fw-bold fs-4">Tgl Realisasi</span>
+                                        <input type="text" class="form-control" name="tgl_realisasi1" id="hari1"
+                                            required>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="no-border">
+                                    {{-- <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
-                                        <input type="text" class="form-control" name="nama2" id="name"
-                                            placeholder="Masukan Nama">
-                                    </td>
+                                        <input type="text" class="form-control  text-uppercase" name="nama2"
+                                            id="name">
+                                    </td> --}}
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Jenis Kendaraan</span>
+                                        <span class="fw-bold fs-4">Kendaraan</span>
                                         <select class="form-control input-sm form-border text-uppercase"
                                             style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
                                             name="jenis_kendaraan2" id="">
@@ -74,34 +81,33 @@
                                         </select>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Masukan No Polisi</span>
+                                        <span class="fw-bold fs-4">No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol2"
-                                            placeholder="No Polisi" id="nopol">
+                                            id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw2"
-                                            placeholder="Jangka Waktu" id="jk">
+                                            id="jk">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Nilai Pertanggungan</span>
+                                        <span class="fw-bold fs-4">Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan2"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan2">
+                                            id="pertanggungan2">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Tanggal Realisasi</span>
-                                        <input type="text" class="form-control" name="tgl_realisasi2"
-                                            placeholder="Tanggal Sekarang" id="hari2">
+                                        <span class="fw-bold fs-4">Tgl Realisasi</span>
+                                        <input type="text" class="form-control" name="tgl_realisasi2" id="hari2">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="no-border">
+                                    {{-- <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
-                                        <input type="text" class="form-control" name="nama3" id="name"
-                                            placeholder="Masukan Nama">
-                                    </td>
+                                        <input type="text" class="form-control  text-uppercase" name="nama3"
+                                            id="name">
+                                    </td> --}}
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Jenis Kendaraan</span>
+                                        <span class="fw-bold fs-4">Kendaraan</span>
                                         <select class="form-control input-sm form-border text-uppercase"
                                             style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
                                             name="jenis_kendaraan3" id="">
@@ -112,34 +118,33 @@
                                         </select>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Masukan No Polisi</span>
+                                        <span class="fw-bold fs-4">No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol3"
-                                            placeholder="No Polisi" id="nopol">
+                                            id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw3"
-                                            placeholder="Jangka Waktu" id="jk">
+                                            id="jk">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Nilai Pertanggungan</span>
+                                        <span class="fw-bold fs-4">Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan3"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan3">
+                                            id="pertanggungan3">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Tanggal Realisasi</span>
-                                        <input type="text" class="form-control" name="tgl_realisasi3"
-                                            placeholder="Tanggal Sekarang" id="hari3">
+                                        <span class="fw-bold fs-4">Tgl Realisasi</span>
+                                        <input type="text" class="form-control" name="tgl_realisasi3" id="hari3">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="no-border">
+                                    {{-- <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
-                                        <input type="text" class="form-control" name="nama4" id="name"
-                                            placeholder="Masukan Nama">
-                                    </td>
+                                        <input type="text" class="form-control  text-uppercase" name="nama4"
+                                            id="name">
+                                    </td> --}}
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Jenis Kendaraan</span>
+                                        <span class="fw-bold fs-4">Kendaraan</span>
                                         <select class="form-control input-sm form-border text-uppercase"
                                             style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
                                             name="jenis_kendaraan4" id="">
@@ -150,34 +155,33 @@
                                         </select>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Masukan No Polisi</span>
+                                        <span class="fw-bold fs-4">No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol4"
-                                            placeholder="No Polisi" id="nopol">
+                                            id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw4"
-                                            placeholder="Jangka Waktu" id="jk">
+                                            id="jk">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Nilai Pertanggungan</span>
+                                        <span class="fw-bold fs-4">Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan4"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan4">
+                                            id="pertanggungan4">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Tanggal Realisasi</span>
-                                        <input type="text" class="form-control" name="tgl_realisasi4"
-                                            placeholder="Tanggal Sekarang" id="hari4">
+                                        <span class="fw-bold fs-4">Tgl Realisasi</span>
+                                        <input type="text" class="form-control" name="tgl_realisasi4" id="hari4">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="no-border">
+                                    {{-- <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
-                                        <input type="text" class="form-control" name="nama5" id="name"
-                                            placeholder="Masukan Nama">
-                                    </td>
+                                        <input type="text" class="form-control  text-uppercase" name="nama5"
+                                            id="name">
+                                    </td> --}}
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Jenis Kendaraan</span>
+                                        <span class="fw-bold fs-4">Kendaraan</span>
                                         <select class="form-control input-sm form-border text-uppercase"
                                             style="border: 1px solid rgb(196, 196, 196); font-size: 14px; color: black;"
                                             name="jenis_kendaraan5" id="">
@@ -188,29 +192,27 @@
                                         </select>
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Masukan No Polisi</span>
+                                        <span class="fw-bold fs-4">No Polisi</span>
                                         <input type="text" class="form-control text-uppercase" name="nopol5"
-                                            placeholder="No Polisi" id="nopol">
+                                            id="nopol">
                                     </td>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Jangka Waktu</span>
                                         <input type="text" class="form-control text-uppercase" name="jw5"
-                                            placeholder="Jangka Waktu" id="jk">
+                                            id="jk">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Nilai Pertanggungan</span>
+                                        <span class="fw-bold fs-4">Pertanggungan</span>
                                         <input type="text" class="form-control" name="pertanggungan5"
-                                            placeholder="Nilai Pertanggungan" id="pertanggungan5">
+                                            id="pertanggungan5">
                                     </td>
                                     <td class="no-border">
-                                        <span class="fw-bold fs-4">Tanggal Realisasi</span>
-                                        <input type="text" class="form-control" name="tgl_realisasi5"
-                                            placeholder="Tanggal Sekarang" id="hari5">
+                                        <span class="fw-bold fs-4">Tgl Realisasi</span>
+                                        <input type="text" class="form-control" name="tgl_realisasi5" id="hari5">
                                     </td>
                                 </tr>
                                 <tr>
-
-                                    <td class="no-border">
+                                    <td class="no-border" colspan="5">
                                         <button type="submit" class="btn btn-primary" id="submit"
                                             style="margin-top: 20px; width:100%;">
                                             Hitung

@@ -18,27 +18,22 @@
                     <div class="col-md-12">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="ml-4 {{ request()->is('perhitungan/simulasi') ? 'active' : '' }}">
-                                    <a href="{{ route('simulasi_ajk') }}"
-                                        class="{{ request()->is('perhitungan/simulasi') ? 'text-bold' : '' }}">
-                                        FORM SIMULASI PREMI AJK
+                                <li class="ml-4 {{ request()->is('perhitungan/simulasi/pasific') ? 'active' : '' }}">
+                                    <a href="{{ route('simulasi_ajk_pasific') }}"
+                                        class="{{ request()->is('perhitungan/simulasi/pasific') ? 'text-bold' : '' }}">
+                                        FORM ASURANSI PACIFIC
                                     </a>
                                 </li>
-                                {{-- <li class="ml-4 {{ request()->is('perhitungan/simulasi_tlo') ? 'active' : '' }}">
+                                <li class="ml-4 {{ request()->is('perhitungan/simulasi/bumida') ? 'active' : '' }}">
+                                    <a href="{{ route('simulasi_ajk_bumida') }}"
+                                        class="{{ request()->is('perhitungan/simulasi/bumida') ? 'text-bold' : '' }}">
+                                        FORM ASURANSI BUMIDA
+                                    </a>
+                                </li>
+                                <li class="ml-4 {{ request()->is('perhitungan/simulasi_tlo') ? 'active' : '' }}">
                                     <a href="{{ route('simulasi.tlo') }}"
                                         class="{{ request()->is('perhitungan/simulasi_tlo') ? 'text-bold' : '' }}">
                                         FORM ASURANSI PREMI TLO
-                                    </a>
-                                </li> --}}
-                                <li class="ml-4 {{ request()->is('perhitungan/simulasi_ajk') ? 'active' : '' }}">
-                                    <a href="#"
-                                        class="{{ request()->is('perhitungan/simulasi_ajk') ? 'text-bold' : '' }}">
-                                        ASURANSI PREMI AJK
-                                    </a>
-                                </li>
-                                <li class="ml-4 {{ request()->is('perhitungan/tlo') ? 'active' : '' }}">
-                                    <a href="#" class="{{ request()->is('perhitungan/tlo') ? 'text-bold' : '' }}">
-                                        PREMI ASURANSI TLO
                                     </a>
                                 </li>
                             </ul>

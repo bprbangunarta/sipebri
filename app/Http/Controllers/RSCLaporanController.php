@@ -97,6 +97,7 @@ class RSCLaporanController extends Controller
 
     public function pendaftaran_rsc()
     {
+
         try {
             $keyword = request('keyword');
             $keyword_sqlsrv = RSC::get_sqlsrv(request('keyword'));
@@ -104,15 +105,16 @@ class RSCLaporanController extends Controller
             $data = DB::table('rsc_data_pengajuan')
                 ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
                 ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->leftJoin('v_users', 'v_users.code_user', '=', 'rsc_data_survei.surveyor_kode')
+                ->leftJoin('v_users', 'v_users.code_user', '=', 'rsc_data_pengajuan.input_user')
                 ->select(
                     'rsc_data_pengajuan.created_at as tgl_rsc',
                     'rsc_data_pengajuan.kode_rsc',
                     'rsc_data_pengajuan.pengajuan_kode',
                     'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.metode_rps',
                     'rsc_data_pengajuan.penentuan_plafon as plafon',
                     'rsc_data_pengajuan.jangka_waktu',
-                    'rsc_data_pengajuan.status',
                     'data_pengajuan.produk_kode',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.alamat_ktp as alamat',
@@ -156,12 +158,11 @@ class RSCLaporanController extends Controller
                         $item->nama_nasabah = trim($data_eks->fnama);
                         $item->alamat = trim($data_eks->alamat);
                         $item->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                        $item->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
                     }
                 }
             }
 
-            return view('rsc.laporan.rsc_tracking', [
+            return view('rsc.laporan.rsc_pendaftaran', [
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {

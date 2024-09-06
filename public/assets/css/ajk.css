@@ -1,5 +1,5 @@
 table {
-    width: 85%;
+    width: 100%;
 }
 
 thead {
@@ -32,6 +32,7 @@ table tr td {
 }
 tr td {
     border: none;
+    padding-left: 5px;
 }
 
 th {
@@ -45,3 +46,76 @@ th {
 .down {
     text-align: center;
 }
+
+
+
+/* DIV */
+.container {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start;
+}
+
+.containers {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start; 
+    margin-top: 15px;
+    gap: 20px;
+    margin-left: 15px;
+}
+
+.name{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 5px;
+    border: 1px solid black;
+    width: 65%;
+    height: 30px;
+}
+
+.names{
+    display: block;
+    justify-content: left;
+    align-items: center;
+    padding: 7px;
+    border: 1px solid black;
+    width: 30%;
+    height: 180px;
+}
+
+.debitur {
+    margin-right: 10px;
+}
+
+.colon {
+    position: relative;
+    left: 70px; 
+}
+
+.name-value {
+    margin-left: 75px; 
+}
+
+img {
+    position: relative;
+    width: 25%;  
+    max-width: 350px;  
+    height: auto;
+    left: 5%;
+}
+
+@media print {
+            @page {
+                size: landscape;
+                margin-left: 1cm;
+                margin-right: 1cm;
+                margin-left: 1cm;
+                margin-left: 1cm;
+            }
+
+            .main-footer {
+                display: none;
+            }
+        }

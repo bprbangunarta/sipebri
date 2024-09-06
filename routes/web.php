@@ -868,11 +868,13 @@ Route::middleware('auth')->group(function () {
     Route::controller(PerhitunganController::class)->group(function () {
         Route::get('/perhitungan/flat', 'flat')->name('flat');
         Route::get('/perhitungan/efektif_musiman', 'efektif_musiman')->name('efektif_musiman');
-        Route::get('/perhitungan/simulasi', 'simulasi')->name('simulasi_ajk');
+        Route::get('/perhitungan/simulasi/pasific', 'simulasi')->name('simulasi_ajk_pasific');
+        Route::get('/perhitungan/simulasi/bumida', 'simulasi_bumida')->name('simulasi_ajk_bumida');
         Route::get('/perhitungan/premi', 'add')->name('premi');
-        Route::get('/perhitungan/simulasi_ajk', 'sheet')->name('sheet');
+        Route::get('/perhitungan/simulasi_ajk_pasific', 'sheet')->name('sheet');
+        Route::get('/perhitungan/simulasi_ajk_bumida', 'sheet_bumida')->name('sheet_bumida');
         Route::get('/perhitungan/simulasi_tlo', 'simulasi_tlo')->name('simulasi.tlo');
-        Route::POST('/perhitungan/tlo', 'perhitungan_tlo')->name('perhitungan.tlo');
+        Route::get('/perhitungan/tlo', 'perhitungan_tlo')->name('perhitungan.tlo');
     });
 
     //====Route Cetak Laporan====//

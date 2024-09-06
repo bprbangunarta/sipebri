@@ -183,7 +183,7 @@
                     </tr>
                     <tr>
                         <td colspan=""
-                            style="border:1px solid black; height: 70px; font-weight:bold; font-size:18pt;">
+                            style="border:1px solid black; height: 70px; font-weight:bold; font-size:11pt; max-width:30%; word-wrap: break-word; overflow-wrap: break-word; white-space: normal;">
                             @if (!is_null($data[14][6]))
                                 &nbsp;&nbsp;{{ $data[14][6] }}
                             @else
@@ -265,13 +265,9 @@
                 </td>
                 <td style="width: 2%;"><i>*</i></td>
                 <td>
-                    <i>Asuransi Jiwa Kredit hanya berlaku dari usia <b>Minimal
-                            20</b> s/d <b>Maksimal 65 Tahun</b> pada
-                        saat
-                        jatuh
-                        tempo kredit. Harap sesuaikan sisa masa pemberian kredit
-                        apabila usia debitur sudah memasuki
-                        <b>62 Tahun</b></i>
+                    <i>Asuransi Jiwa Kredit hanya berlaku dari usia <b>Minimal 20</b> s/d <b>Maksimal 65 Tahun</b> pada
+                        saat jatuh tempo kredit. Harap sesuaikan sisa masa pemberian kredit
+                        apabila usia debitur sudah memasuki <b>62 Tahun</b></i>
                 </td>
             </tr>
             <tr style="font-size: 12px">
@@ -285,7 +281,7 @@
                 <td><i><b></b></i>
                 </td>
                 <td><i></i></td>
-                <td><i>** PACIFIC
+                <td><i>** BUMIDA 1967 Menurun UP 100
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
                         1 Milyar dengan usia maksimal <b>65 Tahun</b> pada saat
                         jatuh tempo kredit </i></td>
@@ -296,12 +292,9 @@
                 <td><i>*</i></td>
                 <td>
                     <i>
-                        Apabila <b>Plafond Kredit > Maks. Pertanggungan</b>, maka
-                        klaim dihitung berdasarkan <b>sisa
-                            hutang pokok dari nilai Maks. Pertanggungan</b> pada
-                        saat meninggal dunia dengan sistem
-                        angsuran <b>Menurun</b>, sesuai dengan suku bunga kredit
-                        yang berlaku</i>
+                        Apabila <b>Plafond Kredit > Maks. Pertanggungan</b>, maka klaim dihitung berdasarkan <b>sisa
+                            hutang pokok dari nilai Maks. Pertanggungan</b> pada saat meninggal dunia dengan sistem
+                        angsuran <b>Menurun</b>, sesuai dengan suku bunga kredit yang berlaku</i>
                 </td>
             </tr>
         </table>

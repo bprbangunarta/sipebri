@@ -5,7 +5,7 @@
     <div class="tab-content">
         <div class="tab-pane active">
             <div class="box-body table-responsive" style="overflow: auto; width: 100%; height:425px;">
-                <form action="{{ route('premi') }}" method="get">
+                <form action="{{ route('premi') }}" method="get" target="_blank">
                     @csrf
                     <div class="card-body">
 
@@ -14,7 +14,7 @@
                                 <tr>
                                     <th class="text-center fs-4" colspan="5" style="border: none;">
                                         <b>SIMULASI PERHITUNGAN PREMI ASURANSI JIWA
-                                            KREDIT</b>
+                                            KREDIT BUMIDA</b>
                                     </th>
                                 </tr>
                             </thead>
@@ -22,6 +22,8 @@
                                 <tr>
                                     <td class="no-border">
                                         <span class="fw-bold fs-4">Masukan Nama</span>
+                                        <input type="hidden" class="form-control" value="bumida" name="ajk_name"
+                                            id="ajk_name">
                                         <input type="text" class="form-control" name="nama" id="nama" required>
                                     </td>
                                     <td class="no-border">
@@ -86,7 +88,7 @@
                                             placeholder="Tanggal Sekarang" id="hari">
                                     </td>
                                     <td class="no-border">
-                                        <button type="submit" class="btn btn-primary"
+                                        <button type="submit" target='_blank' class="btn btn-primary"
                                             style="margin-top: 20px; width:100%;">
                                             Hitung
                                         </button>
@@ -104,6 +106,10 @@
 @endsection
 @push('myscript')
     <script type='text/javascript'>
+        document.getElementById('nama').addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+
         var plafon = document.getElementById("plafons");
         if (plafon) {
             plafon.addEventListener("keyup", function(e) {
