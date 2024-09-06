@@ -41,7 +41,7 @@
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center">WIL</th>
                                         <th class="text-center">PLAFON</th>
-                                        <th class="text-center" width="7%">TDK DILANJUT</th>
+                                        <th class="text-center" width="7%">DILANJUT</th>
                                         <th class="text-center" width="7%">TDK IKUT</th>
                                     </tr>
                                 </thead>
