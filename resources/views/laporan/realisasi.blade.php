@@ -99,10 +99,10 @@
                                     <i class="fa fa-download"></i>&nbsp; Export Data
                                 </button>
                                 &nbsp;
-                                {{-- <button data-toggle="modal" data-target="#modal-export-photo"
+                                <button data-toggle="modal" data-target="#modal-export-photo"
                                     class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Photo Realisasi
-                                </button> --}}
+                                </button>
 
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
@@ -226,7 +226,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">EXPORT DATA</h4>
                 </div>
-                <form action="{{ route('cetak.photo.realisasi') }}" method="get">
+                <form action="{{ route('cetak.photo.realisasi') }}" method="get" target="_blank">
                     @csrf
                     <div class="modal-body">
                         <div class="row">

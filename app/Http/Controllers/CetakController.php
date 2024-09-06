@@ -854,7 +854,6 @@ class CetakController extends Controller
     {
         $tgl1 = request('tgl1');
         $tgl2 = request('tgl2');
-        $no = 1;
 
         if (is_null($tgl2)) {
             $tgl2 = $tgl1;
