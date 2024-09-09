@@ -150,22 +150,16 @@
                                             id="kode_rsc" readonly>
                                     </div>
 
-                                    {{-- <div style="margin-top: 5px;">
-                                        <span class="fw-bold">TUNGGAKAN BUNGA</span>
-                                        <input class="form-control text-uppercase" name="tunggakan_bunga"
-                                            id="tunggakan_bunga" type="text">
-                                    </div> --}}
-
-                                    {{-- <div style="margin-top: 5px;">
-                                        <span class="fw-bold">TUNGGAKAN DENDA</span>
-                                        <input type="text" class="form-control" name="tunggakan_denda"
-                                            id="tunggakan_denda">
-                                    </div> --}}
-
                                     <div style="margin-top: 5px;">
                                         <span class="fw-bold">KODE PERJANJIAN KREDIT RSC</span>
                                         <input class="form-control text-uppercase" name="pk_rsc" id="generate"
                                             type="text" readonly>
+                                    </div>
+
+                                    <div style="margin-top: 5px;">
+                                        <span class="fw-bold">NAMA PENDAMPING</span>
+                                        <input class="form-control text-uppercase" name="nama_pendamping"
+                                            id="nama_pendamping" type="text">
                                     </div>
 
                                 </div>
@@ -330,6 +324,7 @@
 
                     $('#plafond_rsc').val(response.plafon.toLocaleString("id-ID") ?? 0)
                     $('#spk_rsc').val(response.no_spk)
+                    $('#nama_pendamping').val(response.pendamping)
                     $('#tg_realisasi').val(response.tgL_realisasi)
                     $('#tgL_jth_tmp').val(response.tgl_jth_tempo)
                     $('#kode_rsc').val(response.kode_rsc)

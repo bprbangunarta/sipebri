@@ -168,4 +168,80 @@ class RSCLaporanController extends Controller
         } catch (\Throwable $th) {
         }
     }
+
+    public function realisasi_rsc()
+    {
+        try {
+            $keyword = request('keyword');
+            $keyword_sqlsrv = RSC::get_sqlsrv(request('keyword'));
+
+            $data = DB::table('rsc_spk')
+                ->join('rsc_data_pengajuan', 'rsc_data_pengajuan.kode_rsc', '=', 'rsc_spk.kode_rsc')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
+                ->leftJoin('v_users', 'v_users.code_user', '=', 'rsc_data_pengajuan.input_user')
+                ->select(
+                    'rsc_spk.no_spk',
+                    'rsc_data_pengajuan.created_at as tgl_rsc',
+                    'rsc_data_pengajuan.kode_rsc',
+                    'rsc_data_pengajuan.pengajuan_kode',
+                    'rsc_data_pengajuan.status_rsc',
+                    'rsc_data_pengajuan.suku_bunga',
+                    'rsc_data_pengajuan.metode_rps',
+                    'rsc_data_pengajuan.penentuan_plafon as plafon',
+                    'rsc_data_pengajuan.jangka_waktu',
+                    'data_pengajuan.produk_kode',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp as alamat',
+                    'v_users.nama_user',
+                )
+                ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
+                    $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                        ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                        ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
+                        ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
+                            if ($keyword_sqlsrv) {
+                                $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
+                            }
+                        })
+                        ->orWhere('rsc_data_pengajuan.status', 'like', '%' . $keyword . '%')
+                        ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
+                        ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%');
+                })
+                ->whereNot(function ($query) {
+                    $query->where('rsc_data_pengajuan.status', '=', 'Batal');
+                })
+                ->orderBy('rsc_spk.created_at', 'desc')->paginate(10);
+            //
+
+            foreach ($data as $item) {
+                if ($item->status_rsc == 'EKS') {
+                    $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                        ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                        ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
+                        ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
+                        ->join('REF_PEKERJAAN', 'REF_PEKERJAAN.DESC1', '=', 'm_cif.pekerjaan')
+                        ->select(
+                            'm_loan.fnama',
+                            'm_cif.alamat',
+                            'setup_loan.ket',
+                            'wilayah.ket as wil',
+                        )
+                        ->where('noacc', $item->pengajuan_kode)->first();
+                    //
+                    if ($data_eks) {
+                        $item->nama_nasabah = trim($data_eks->fnama);
+                        $item->alamat = trim($data_eks->alamat);
+                        $item->produk_kode = Midle::data_produk(trim($data_eks->ket));
+                    }
+                }
+            }
+
+            return view('rsc.laporan.rsc_realisasi', [
+                'data' => $data,
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal dimuat');
+        }
+    }
 }

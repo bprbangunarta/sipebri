@@ -967,6 +967,7 @@ class RSCController extends Controller
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
             ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
             ->leftJoin('rsc_data_survei', 'rsc_data_survei.kode_rsc', '=', 'rsc_data_pengajuan.kode_rsc')
+            ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->select(
                 'rsc_data_pengajuan.id',
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
@@ -975,6 +976,7 @@ class RSCController extends Controller
                 'rsc_data_pengajuan.kode_rsc',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
+                'data_pendamping.nama_pendamping as pendamping',
                 'data_survei.kantor_kode',
             )
 
@@ -1003,6 +1005,7 @@ class RSCController extends Controller
                 ->select(
                     'm_loan.fnama',
                     'm_cif.alamat',
+                    'm_cif.slik_pasangan',
                     'm_loan.jkwaktu',
                     'setup_loan.ket',
                     'wilayah.ket as wil',
@@ -1016,6 +1019,7 @@ class RSCController extends Controller
                 $value->jangka_waktu = $data_eks->jkwaktu;
                 $value->metode_rps = null;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
+                $value->pendamping = trim($data_eks->slik_pasangan);
             }
         }
 
@@ -1035,6 +1039,24 @@ class RSCController extends Controller
         $pengajuan = $request->input('pengajuan');
 
         $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc)->first();
+
+        if ($data_rsc->status == 'EKS') {
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
+                ->select(
+                    'm_loan.fnama',
+                    'm_cif.alamat',
+                    'm_cif.slik_pasangan',
+                )
+                ->where('noacc', $data_rsc->pengajuan_kode)->first();
+            $data_rsc->pendamping = trim($data_eks->slik_pasangan);
+        } else {
+            $datas_rsc = DB::table('rsc_data_pengajuan')
+                ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
+                ->select('data_pendamping.nama_pendamping')
+                ->where('kode_rsc', $enc)->first();
+            $data_rsc->pendamping = $datas_rsc->nama_pendamping;
+        }
 
         $cek_spk = DB::table('rsc_spk')->exists();
         if (!$cek_spk) {
@@ -1102,18 +1124,6 @@ class RSCController extends Controller
             $cek = DB::table('rsc_data_pengajuan')->where('kode_rsc', $request->kode_rsc)->first();
             $enc = $request->kode_rsc;
 
-            // $biaya = DB::table('rsc_biaya')->where('kode_rsc', $request->kode_rsc)->first();
-            // $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
-            //     $biaya->asuransi_tlo + $biaya->poko_dibayar + $biaya->poko_dibayar +
-            //     (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
-
-
-            // $data1 = [
-            //     'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
-            //     'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
-            //     'total' =>  $total,
-            // ];
-
             $data2 = [
                 'pengajuan_kode' => $cek->pengajuan_kode,
                 'kode_rsc' => $request->kode_rsc,
@@ -1133,7 +1143,6 @@ class RSCController extends Controller
             }
 
             DB::transaction(function () use ($data2, $data3, $enc) {
-                // DB::table('rsc_biaya')->where('kode_rsc', $enc)->update($data1);
                 DB::table('rsc_spk')->insert($data2);
                 DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc)->update($data3);
             });

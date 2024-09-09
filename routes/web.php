@@ -44,6 +44,7 @@ use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PendampingController;
+use App\Http\Controllers\RSCExsportController;
 use App\Http\Controllers\RSCJaminanController;
 use App\Http\Controllers\RSCLaporanController;
 use App\Http\Controllers\KepemilikanController;
@@ -844,14 +845,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/rsc/angsuran/detail', 'detail_angsuran')->name('rsc.detail.angsuran');
         });
 
-        // Admin Kredit
 
+        // Admin Kredit
         Route::controller(RSCLaporanController::class)->group(function () {
-            Route::get('/rsc/laporan/tracking', 'tracking_rsc')->name('rsc.tracking');
             Route::get('/rsc/laporan/pendaftaran', 'pendaftaran_rsc')->name('rsc.pendaftaran');
+            Route::get('/rsc/laporan/tracking', 'tracking_rsc')->name('rsc.tracking');
+            Route::get('/rsc/laporan/realisasi', 'realisasi_rsc')->name('rsc.realisasi');
         });
 
-
+        Route::controller(RSCExsportController::class)->group(function () {
+            Route::get('/rsc/laporanrealisasi/export', 'laporan_realisasi')->name('rsc.export.laporan.realisasi');
+        });
         //====Route Analisa RSC====//
 
     });
