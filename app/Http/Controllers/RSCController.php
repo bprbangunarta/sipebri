@@ -1134,7 +1134,8 @@ class RSCController extends Controller
             ];
 
             $data3 = [
-                'status' => 'Selesai'
+                'status' => 'Selesai',
+                'nama_pendamping' => Str::upper($request->nama_pendamping),
             ];
 
             $cek_spk = DB::table('rsc_spk')->where('kode_rsc', $request->kode_rsc)->first();
