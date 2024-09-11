@@ -615,6 +615,8 @@ class DataCetakController extends Controller
                 $cek['foto_pemohon'] = $realisasi->foto_pemohon;
             }
 
+
+
             if ($request->file('foto_pendamping')) {
                 if ($request->foto2) {
                     Storage::delete('public/image/photo_realisasi/' . $request->foto2);
@@ -626,14 +628,18 @@ class DataCetakController extends Controller
                 $cek['foto_pendamping'] = $new1;
             } else {
                 $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
-                $cek['foto_pendamping'] = $realisasi->foto_pendamping;
+                if ($realisasi) {
+                    $cek['foto_pendamping'] = $realisasi->foto_pendamping;
+                } else {
+                    $cek['foto_pendamping'] = null;
+                }
             }
 
             $cek['pengajuan_kode'] = $request->kode_pengajuan;
             $cek['input_user'] = Auth::user()->code_user;
             $cek['catatan'] = strtoupper($request->catatan);
             $cek['created_at'] = now();
-            // dd($cek);
+
             $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             if (is_null($realisasi)) {
                 $ds = ['pencairan_dana' => now()];
