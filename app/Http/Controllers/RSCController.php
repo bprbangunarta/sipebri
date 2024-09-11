@@ -645,7 +645,7 @@ class RSCController extends Controller
             $cek_pengajuan_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $enc_rsc)->first();
             $cek_biaya_rsc = DB::table('rsc_biaya')->where('kode_rsc', $enc_rsc)->first();
             $cek_kondisi_usaha = DB::table('rsc_kondisi_usaha')->where('kode_rsc', $enc_rsc)->first();
-            $cek_agunan = DB::table('rsc_agunan')->where('kode_rsc', $enc_rsc)->first();
+            $cek_agunan = DB::table('rsc_data_jaminan')->where('kode_rsc', $enc_rsc)->get();
 
             $cek_perdagangan = DB::table('rsc_au_perdagangan')->where('kode_rsc', $enc_rsc)->get();
             $cek_pertanian = DB::table('rsc_au_pertanian')->where('kode_rsc', $enc_rsc)->get();
@@ -663,8 +663,8 @@ class RSCController extends Controller
                 return redirect()->back()->with('error', 'Biaya RSC belum diisi.');
             } else if (is_null($cek_kondisi_usaha)) {
                 return redirect()->back()->with('error', 'Faktor dipenilaian debitur belum diisi.');
-            } else if (is_null($cek_agunan)) {
-                return redirect()->back()->with('error', 'kondisi agunan belum diisi.');
+            } else if (empty($cek_agunan)) {
+                return redirect()->back()->with('error', 'Agunan belum diisi.');
             } else if ($cek_all <= 0) {
                 return redirect()->back()->with('error', 'Data usaha harus diisi.');
             } else if (is_null($cek_keuangan)) {
