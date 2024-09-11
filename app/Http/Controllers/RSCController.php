@@ -1058,6 +1058,10 @@ class RSCController extends Controller
             $data_rsc->pendamping = $datas_rsc->nama_pendamping;
         }
 
+        if (empty($data_rsc->pendamping)) {
+            $data_rsc->pendamping = $data_rsc->nama_pendamping;
+        }
+
         $cek_spk = DB::table('rsc_spk')->exists();
         if (!$cek_spk) {
             $count = 0001;
