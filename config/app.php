@@ -187,6 +187,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Riskihajar\Terbilang\TerbilangServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -215,9 +216,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'Terbilang' => Riskihajar\Terbilang\Facades\Terbilang::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
-    'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
-    'Terbilang' => Riskihajar\Terbilang\Facades\Terbilang::class,
-
 ];
