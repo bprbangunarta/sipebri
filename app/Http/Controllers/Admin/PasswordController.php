@@ -11,27 +11,29 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
-    public function datareset(Request $request, $user){
-        
+    public function datareset(Request $request, $user)
+    {
+
         $data = User::where('code_user', $user)->get();
         return response()->json($data);
     }
 
-    public function update(Request $request){
-        
+    public function update(Request $request)
+    {
+
         $data = [
             'password' => Hash::make($request->reset)
         ];
 
         if ($request) {
             $user = DB::table('users')
-                    ->select('id')
-                    ->where('code_user', $request->code_user)->get();
+                ->select('id')
+                ->where('code_user', $request->code_user)->get();
             DB::table('users')
-                    ->where('id', $user[0]->id)
-                    ->update($data);
+                ->where('id', $user[0]->id)
+                ->update($data);
             return redirect()->back()->with('success', 'Password telah diubah');
-        }else{
+        } else {
             return redirect()->back()->with('error', 'Password telah diubah');
         }
     }

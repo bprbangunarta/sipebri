@@ -95,9 +95,9 @@ $(document).ready(function () {
                 var kode = hasil.code_user;
                 var nmrole = data.nama_roles;
                 var dtrole = data.kode_roles;
-
+                
                 $("#model_id").val(id);
-                $("#names").val(name);
+                $("#nama").val(name);
                 $("#myForm").attr("action", "/admin/akses/" + kode);
 
                 // Role

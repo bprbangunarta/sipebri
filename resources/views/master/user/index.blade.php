@@ -291,7 +291,7 @@
         </div>
     </div>
 
-    {{--  <div class="modal fade" id="modal-edit">
+    {{-- <div class="modal fade" id="modal-edit">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-yellow">
@@ -368,7 +368,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="modal fade" id="modal-akses">
         <div class="modal-dialog">
@@ -394,7 +394,7 @@
 
                                 <div class="form-group" style="margin-top:-10px;">
                                     <label>NAMA LENGKAP</label>
-                                    <input type="text" class="form-control" name="name" id="name" readonly>
+                                    <input type="text" class="form-control" name="name" id="nama" readonly>
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
@@ -412,7 +412,7 @@
                 </form>
             </div>
         </div>
-    </div>  --}}
+    </div>
 
     <div class="modal fade" id="modal-password">
         <div class="modal-dialog">
@@ -422,8 +422,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">RESET PASSWORD</h4>
                 </div>
-                <form action="{{ route('reset.update', ['reset' => $users[0]->code_user]) }}" method="post"
-                    id="reset-password">
+                <form action="{{ route('reset.update') }}" method="post" id="reset-password">
                     @method('put')
                     @csrf
                     <div class="modal-body">
@@ -438,9 +437,9 @@
                                 </div>
 
                                 <div class="form-group" style="margin-top:-10px;">
-                                    <label>EMAIL ADDRESS</label>
+                                    <label>PASSWORD</label>
                                     <input type="password" class="form-control" name="reset" id="reset"
-                                        value="123456" readonly>
+                                        value="12345" readonly>
                                 </div>
                             </div>
                         </div>
@@ -462,5 +461,12 @@
 
     <script>
         $('.role').select2()
+
+        $(document).ready(function() {
+            $('#modal-password').on('show.bs.modal', function(e) {
+                var userCode = $(e.relatedTarget).data('user');
+                $('#code').val(userCode);
+            });
+        })
     </script>
 @endpush
