@@ -607,7 +607,7 @@ class DataCetakController extends Controller
                 }
 
                 $ekstensi = $cek['foto_pemohon']->getClientOriginalExtension();
-                $new1 =  'realisasi' . '_' . $tanggal .  '_' . 'pemohon' . '.' . $ekstensi;
+                $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'pemohon' . '.' . $ekstensi;
                 $cek['foto_pemohon'] = $request->file('foto_pemohon')->storeAs('image/photo_realisasi', $new1, 'public');
                 $cek['foto_pemohon'] = $new1;
             } else {
@@ -623,7 +623,7 @@ class DataCetakController extends Controller
                 }
 
                 $ekstensi = $cek['foto_pendamping']->getClientOriginalExtension();
-                $new1 =  'realisasi' . '_' . $tanggal .  '_' . 'pendamping' . '.' . $ekstensi;
+                $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'pendamping' . '.' . $ekstensi;
                 $cek['foto_pendamping'] = $request->file('foto_pendamping')->storeAs('image/photo_realisasi', $new1, 'public');
                 $cek['foto_pendamping'] = $new1;
             } else {

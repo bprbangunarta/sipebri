@@ -659,17 +659,29 @@ class RSCController extends Controller
 
             if (is_null($cek_pengajuan_rsc->baki_debet)) {
                 return redirect()->back()->with('error', 'Data kredit belum diisi.');
-            } else if (is_null($cek_biaya_rsc)) {
+            }
+
+            if (is_null($cek_biaya_rsc)) {
                 return redirect()->back()->with('error', 'Biaya RSC belum diisi.');
-            } else if (is_null($cek_kondisi_usaha)) {
+            }
+
+            if (is_null($cek_kondisi_usaha)) {
                 return redirect()->back()->with('error', 'Faktor dipenilaian debitur belum diisi.');
-            } else if (empty($cek_agunan)) {
+            }
+
+            if (empty($cek_agunan)) {
                 return redirect()->back()->with('error', 'Agunan belum diisi.');
-            } else if ($cek_all <= 0) {
+            }
+
+            if ($cek_all <= 0) {
                 return redirect()->back()->with('error', 'Data usaha harus diisi.');
-            } else if (is_null($cek_keuangan)) {
+            }
+
+            if (is_null($cek_keuangan)) {
                 return redirect()->back()->with('error', 'Keuangan harus diisi.');
-            } else if (is_null($cek_pengajuan_rsc->total_angsuran)) {
+            }
+
+            if (is_null($cek_pengajuan_rsc->total_angsuran)) {
                 return redirect()->back()->with('error', 'Usulan plafon harus diisi.');
             }
 
