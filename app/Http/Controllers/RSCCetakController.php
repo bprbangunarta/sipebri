@@ -961,6 +961,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.angsuran_pokok',
                     'rsc_data_pengajuan.angsuran_bunga',
                     'rsc_data_pengajuan.baki_debet',
+                    'rsc_data_pengajuan.nama_pendamping as nm_pendamping',
                     'rsc_data_pengajuan.pengajuan_kode',
                     'rsc_spk.no_spk as spk_rsc',
                     'rsc_biaya.bunga_dibayar',
@@ -1075,6 +1076,10 @@ class RSCCetakController extends Controller
             } else {
 
                 $data->jw_rsc_musiman = null;
+            }
+
+            if (empty($data->nama_pendamping)) {
+                $data->nama_pendamping = $data->nm_pendamping;
             }
 
             if ($data->metode_rps_rsc == "FLAT" && $data->produk_kode == 'KPJ' && $data->tempat_kerja == 'PT HANDSOME') {
