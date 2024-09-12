@@ -20,7 +20,7 @@ class AdminSurveiController extends Controller
             ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->leftJoin('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
 
-            ->whereIn('data_pengajuan.tracking', ['Penjadwalan', 'Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II', 'Realisasi', 'Selesai'])
+            ->whereIn('data_pengajuan.tracking', ['Penjadwalan', 'Proses Survei', 'Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II', 'Realisasi', 'Selesai'])
             // ->whereNotNull('data_kantor')
             ->select(
                 'data_pengajuan.created_at as tanggal',
@@ -63,13 +63,13 @@ class AdminSurveiController extends Controller
         $survei = Survei::where('pengajuan_kode', $kode)->first();
         $kasi = DB::table('v_users')->where('role_name', 'Kasi Analis')->get();
         $analis = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
-        $kantor = DB::table('data_kantor')->get();
+        // $kantor = DB::table('data_kantor')->get();
 
         return view('master.survei.edit', [
             'data' => $survei,
             'kasi' => $kasi,
             'analis' => $analis,
-            'kantor' => $kantor,
+            // 'kantor' => $kantor,
         ]);
     }
 

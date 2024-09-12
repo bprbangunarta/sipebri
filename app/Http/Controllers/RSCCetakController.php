@@ -1031,14 +1031,6 @@ class RSCCetakController extends Controller
                 }
             }
 
-            // // Tanggal Pembuatan PK
-            $tgl = Carbon::parse(trim($data->tgl_create_pk));
-            $data->tgl_create_pk = $tgl->isoFormat('D MMMM Y');
-
-            // // Tanggal Jatuh Tempo
-            $tgl_tempo = Carbon::parse(trim($data->tgl_akhir_pk));
-            $data->tgl_akhir = $tgl_tempo->isoFormat('D MMMM Y');
-
             $tgl_mulai_rsc = Carbon::parse($data->tgl_mulai_rsc);
             $data->tgl_mulai_rsc = $tgl_mulai_rsc->isoFormat('D MMMM Y');
             $data->hari_mulai_rsc = $tgl_mulai_rsc->isoFormat('dddd');

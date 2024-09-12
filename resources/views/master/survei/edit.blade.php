@@ -27,15 +27,22 @@
 
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>KODE KANTOR</label>
-                                            <select type="text" class="form-control" name="kantor_kode" required>
-                                                @foreach ($kantor as $item)
-                                                    @if ($item->kode_kantor == $data->kantor_kode)
-                                                        <option value="{{ $item->kode_kantor }}">
-                                                            {{ $item->nama_kantor }}</option>
-                                                    @endif
-                                                    <option value="{{ $item->kode_kantor }}">
-                                                        {{ $item->nama_kantor }}</option>
-                                                @endforeach
+                                            <select type="text" class="form-control kode_kantor" name="kantor_kode"
+                                                required>
+                                                <option value="PMK" {{ $data->kantor_kode == 'PMK' ? 'selected' : '' }}>
+                                                    KANTOR PUSAT PAMANUKAN</option>
+                                                <option value="PSK" {{ $data->kantor_kode == 'PSK' ? 'selected' : '' }}>
+                                                    KANTOR KAS PUSAKAJAYA</option>
+                                                <option value="SKM" {{ $data->kantor_kode == 'SKM' ? 'selected' : '' }}>
+                                                    KANTOR KAS SUKAMANDI</option>
+                                                <option value="KJT" {{ $data->kantor_kode == 'KJT' ? 'selected' : '' }}>
+                                                    KANTOR KAS KALIJATI</option>
+                                                <option value="SBG" {{ $data->kantor_kode == 'SBG' ? 'selected' : '' }}>
+                                                    KANTOR KAS SUBANG</option>
+                                                <option value="CGK" {{ $data->kantor_kode == 'CGK' ? 'selected' : '' }}>
+                                                    KANTOR KAS JALANCAGAK</option>
+                                                <option value="PGD" {{ $data->kantor_kode == 'PGD' ? 'selected' : '' }}>
+                                                    KANTOR KAS PAGADEN</option>
                                             </select>
                                         </div>
 
@@ -75,7 +82,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group" style="margin-top:-5px;">
                                             <label>STAFF ANALIS</label>
-                                            <select type="text" class="form-control" name="surveyor_kode" required>
+                                            <select type="text" class="form-control surveyor_kode" name="surveyor_kode"
+                                                required>
                                                 @foreach ($analis as $item)
                                                     @if ($item->code_user == $data->surveyor_kode)
                                                         <option value="{{ $item->code_user }}" selected>
@@ -114,3 +122,10 @@
         </section>
     </div>
 @endsection
+
+@push('myscript')
+    <script>
+        $('.surveyor_kode').select2()
+        $('.kode_kantor').select2()
+    </script>
+@endpush
