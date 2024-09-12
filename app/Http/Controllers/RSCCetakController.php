@@ -974,15 +974,15 @@ class RSCCetakController extends Controller
                     'data_pengajuan.produk_kode',
                     'data_pengajuan.jangka_waktu as jw_pk',
                     'data_spk.no_spk',
-                    'data_spk.updated_at as tgl_create_pk',
-                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
-                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar_rsc"),
-                    DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_pk"),
-                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
+                    'data_spk.created_at as tgl_create_pk',
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at), '%Y%m%d') as tgl_mulai_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at) + INTERVAL rsc_data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, data_spk.created_at) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_pk"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
                 )
                 ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)->first();
             //
-            // dd($data);
+
             if ($status_rsc == 'EKS') {
                 $data_eks = DB::connection('sqlsrv')->table('m_loan')
                     ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
@@ -1012,7 +1012,6 @@ class RSCCetakController extends Controller
                     $data->alamat_ktp = trim($data_eks->alamat);
                     $data->produk_kode = Midle::data_produk(trim($data_eks->ket));
                     $data->jangka_waktu = $data_eks->jkwaktu;
-                    $data->metode_rps = null;
                     $data->tempat_kerja = trim($data_eks->tempat_bekerja);
                     $data->no_identitas = trim($data_eks->noid);
                     $data->jw_pk = trim($data_eks->jkwaktu);
@@ -1032,6 +1031,14 @@ class RSCCetakController extends Controller
                 }
             }
 
+            // // Tanggal Pembuatan PK
+            $tgl = Carbon::parse(trim($data->tgl_create_pk));
+            $data->tgl_create_pk = $tgl->isoFormat('D MMMM Y');
+
+            // // Tanggal Jatuh Tempo
+            $tgl_tempo = Carbon::parse(trim($data->tgl_akhir_pk));
+            $data->tgl_akhir = $tgl_tempo->isoFormat('D MMMM Y');
+
             $tgl_mulai_rsc = Carbon::parse($data->tgl_mulai_rsc);
             $data->tgl_mulai_rsc = $tgl_mulai_rsc->isoFormat('D MMMM Y');
             $data->hari_mulai_rsc = $tgl_mulai_rsc->isoFormat('dddd');
@@ -1049,8 +1056,8 @@ class RSCCetakController extends Controller
                     'rsc_spk.no_spk',
                     'rsc_data_pengajuan.penentuan_plafon',
                     'rsc_data_pengajuan.metode_rps',
-                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at, CURDATE()), '%Y%m%d') as tgl_mulai_rsc"),
-                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at, CURDATE()) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
+                    DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at), '%Y%m%d') as tgl_mulai_rsc"),
+                    DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at) + INTERVAL rsc_data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_rsc")
                 )
                 ->where('rsc_spk.kode_rsc', $enc_rsc)->orderBy('rsc_spk.created_at', 'desc')->get();
             //
