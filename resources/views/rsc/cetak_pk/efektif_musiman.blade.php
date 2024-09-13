@@ -224,11 +224,19 @@
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
                                     </font> Rupiah
                                     ) yang terdiri dari kewajiban pokok sebesar Rp.
-                                    {{ number_format($data->baki_debet, '0', ',', '.') }} ( <font
-                                        style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->baki_debet) }}
-                                    </font> Rupiah
-                                    )
+                                    @if ($data->jenis_persetujuan == 'RESTRUCTURING')
+                                        {{ number_format($data->baki_debet, '0', ',', '.') }} ( <font
+                                            style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->baki_debet) }}
+                                        </font> Rupiah
+                                        )
+                                    @else
+                                        {{ number_format($data->penentuan_plafon, '0', ',', '.') }} ( <font
+                                            style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
+                                        </font> Rupiah
+                                        )
+                                    @endif
                                     kewajiban Bunga sebesar Rp.
                                     {{ number_format($data->tunggakan_bunga, '0', ',', '.') }} ( <font
                                         style="text-transform: capitalize;">
@@ -239,7 +247,8 @@
                                         style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_denda) }}
                                     </font> Rupiah
-                                    ).</td>
+                                    ).
+                                </td>
                                 <td class="text-center" width="1%"></td>
                                 <td></td>
                             </tr>

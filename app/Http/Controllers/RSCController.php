@@ -462,7 +462,6 @@ class RSCController extends Controller
                 $item->status_rsc = $data_rsc->status_rsc;
             }
 
-            // dd($data, $status_rsc);
             return view('rsc.data-kredit', [
                 'data' => $data[0],
                 'usaha' => $jenis_usaha,

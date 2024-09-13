@@ -960,6 +960,7 @@ class RSCCetakController extends Controller
                     'rsc_data_pengajuan.metode_rps as metode_rps_rsc',
                     'rsc_data_pengajuan.angsuran_pokok',
                     'rsc_data_pengajuan.angsuran_bunga',
+                    'rsc_data_pengajuan.jenis_persetujuan',
                     'rsc_data_pengajuan.baki_debet',
                     'rsc_data_pengajuan.nama_pendamping as nm_pendamping',
                     'rsc_data_pengajuan.pengajuan_kode',
@@ -1029,6 +1030,7 @@ class RSCCetakController extends Controller
                     // Tanggal Jatuh Tempo
                     $tgl_tempo = Carbon::parse(trim($data_eks->tgljtempo));
                     $data->tgl_akhir = $tgl_tempo->isoFormat('D MMMM Y');
+                    $data->tgl_akhir_pk = $tgl_tempo->isoFormat('D MMMM Y');
                 }
             }
 
