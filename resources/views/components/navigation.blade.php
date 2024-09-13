@@ -721,24 +721,39 @@
             </li>
 
             <li class="header">TOOLS</li>
-            <li class="{{ request()->is('cif') ? 'active' : '' }}">
-                <a href="{{ route('cif.index') }}" title="Pengecekan CIF">
-                    <i class="fa fa-user"></i>
-                    Pengecekan CIF
-                </a>
-            </li>
-            <li class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
-                <a href="{{ route('flat') }}" title="Perhitungan Kredit">
-                    <i class="fa fa-calculator"></i>
-                    Simulasi Kredit
-                </a>
-            </li>
+
             <li
-                class="{{ request()->is('perhitungan/simulasi/pasific', 'perhitungan/simulasi/bumida') ? 'active' : '' }}">
-                <a href="{{ route('simulasi_ajk_pasific') }}" title="Perhitungan Asuransi">
-                    <i class="fa fa-calculator"></i>
-                    Simulasi Asuransi
+                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-folder-open"></i>
+                    <span>Tools Menu</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+
+                <ul class="treeview-menu">
+                    <li class="{{ request()->is('cif') ? 'active' : '' }}">
+                        <a href="{{ route('cif.index') }}" title="Pengecekan CIF">
+                            <i class="fa fa-user"></i>
+                            Pengecekan CIF
+                        </a>
+                    </li>
+                    <li
+                        class="{{ request()->is('perhitungan/flat', 'perhitungan/efektif_musiman') ? 'active' : '' }}">
+                        <a href="{{ route('flat') }}" title="Perhitungan Kredit">
+                            <i class="fa fa-calculator"></i>
+                            Simulasi Kredit
+                        </a>
+                    </li>
+                    <li
+                        class="{{ request()->is('perhitungan/simulasi/pasific', 'perhitungan/simulasi/bumida', 'perhitungan/simulasi_tlo') ? 'active' : '' }}">
+                        <a href="{{ route('simulasi_ajk_pasific') }}" title="Perhitungan Asuransi">
+                            <i class="fa fa-calculator"></i>
+                            Simulasi Asuransi
+                        </a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </section>
