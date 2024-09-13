@@ -486,7 +486,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi/index','themes/rsc/perjanjian_kredit','themes/rsc/cetakanalisa','themes/rsc/cetaknotifikasi','themes/rsc/cetakpersetujuan','themes/rsc/cetakpk','themes/rsc/eksternal/index','themes/rsc/laporan/tracking','themes/rsc/penolakan','themes/rsc/cetak/asuransi','themes/rsc/biayarsc*','themes/rsc/angsuran*','themes/rsc/jaminan/kendaraan*','themes/rsc/jaminan/tanah*','themes/rsc/jaminan/lain*','themes/rsc/laporan/pendaftaran*','themes/rsc/laporan/realisasi*')? 'active': '' }}">
+                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi/index','themes/rsc/perjanjian_kredit','themes/rsc/cetakanalisa','themes/rsc/cetaknotifikasi','themes/rsc/cetakpersetujuan','themes/rsc/cetakpk','themes/rsc/eksternal/index','themes/rsc/laporan/tracking','themes/rsc/penolakan','themes/rsc/cetak/asuransi','themes/rsc/biayarsc*','themes/rsc/angsuran*','themes/rsc/jaminan/kendaraan*','themes/rsc/jaminan/tanah*','themes/rsc/jaminan/lain*','themes/rsc/laporan/pendaftaran*','themes/rsc/laporan/realisasi*','themes/rsc/cetakbiaya*')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-medkit" aria-hidden="true"></i>
                     <span>Reschedulling</span>
@@ -568,7 +568,7 @@
                             </li>
 
                             <li class="{{ request()->is('themes/rsc/biayarsc*') ? 'active' : '' }}">
-                                <a @if (Auth::user()->hasRole('Admin Kredit')) href="{{ route('rsc.biaya.index') }}" @endif
+                                <a @if (Auth::user()->hasRole(['Admin Kredit', 'Realisasi'])) href="{{ route('rsc.biaya.index') }}" @endif
                                     title="Add Biaya RSC">
                                     <i class="fa fa-usd" aria-hidden="true"></i>
                                     Add Biaya RSC
@@ -576,7 +576,7 @@
                             </li>
 
                             <li class="{{ request()->is('themes/rsc/perjanjian_kredit') ? 'active' : '' }}">
-                                <a @if (Auth::user()->hasRole('Admin Kredit')) href="{{ route('rsc.perjanjian_kredit') }}" @endif
+                                <a @if (Auth::user()->hasRole(['Admin Kredit', 'Realisasi'])) href="{{ route('rsc.perjanjian_kredit') }}" @endif
                                     title="Add PK RSC">
                                     <i class="fa fa-exclamation-circle"></i>
                                     Add Perjanjian Kredit RSC
@@ -591,7 +591,8 @@
                             </li>
 
                             <li class="{{ request()->is('themes/rsc/angsuran') ? 'active' : '' }}">
-                                <a href="{{ route('rsc.angsuran') }}" title="Add RSC">
+                                <a @if (Auth::user()->hasRole(['Admin Kredit', 'Realisasi'])) href="{{ route('rsc.angsuran') }}" @endif
+                                    title="Add RSC">
                                     <i class="fa fa-usd" aria-hidden="true"></i>
                                     Tabel Angsuran RSC
                                 </a>
@@ -633,7 +634,7 @@
                     </li>
 
                     <li
-                        class="treeview {{ request()->is('themes/rsc/cetakanalisa', 'themes/rsc/cetakpersetujuan', 'themes/rsc/cetaknotifikasi', 'themes/rsc/cetakpk', 'themes/rsc/cetak/asuransi') ? 'active' : '' }}">
+                        class="treeview {{ request()->is('themes/rsc/cetakanalisa', 'themes/rsc/cetakpersetujuan', 'themes/rsc/cetaknotifikasi', 'themes/rsc/cetakpk', 'themes/rsc/cetak/asuransi', 'themes/rsc/cetakbiaya') ? 'active' : '' }}">
                         <a href="">
                             <i class="fa fa-print" aria-hidden="true"></i>
                             <span>Cetak Berkas RSC</span>
@@ -648,6 +649,14 @@
                                     Cetak Analisa RSC
                                 </a>
                             </li>
+                            @if (Auth::user()->hasRole(['Admin Kredit', 'Realisasi']))
+                                <li class="{{ request()->is('themes/rsc/cetakbiaya') ? 'active' : '' }}">
+                                    <a href="{{ route('rsc.cetakbiaya.index') }}">
+                                        <i class="fa fa-usd" aria-hidden="true"></i>
+                                        Cetak Biaya RSC
+                                    </a>
+                                </li>
+                            @endif
                             <li class="{{ request()->is('themes/rsc/cetakpersetujuan') ? 'active' : '' }}">
                                 <a href="{{ route('rsc.cetakpersetujuan.index') }}">
                                     <i class="fa fa-file-text-o"></i>

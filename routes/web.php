@@ -845,8 +845,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/rsc/angsuran/detail', 'detail_angsuran')->name('rsc.detail.angsuran');
         });
 
-
+        Route::controller(RSCCetakController::class)->group(function () {
+            Route::get('/rsc/cetakbiaya', 'biaya_index')->name('rsc.cetakbiaya.index');
+        });
         // Admin Kredit
+
         Route::controller(RSCLaporanController::class)->group(function () {
             Route::get('/rsc/laporan/pendaftaran', 'pendaftaran_rsc')->name('rsc.pendaftaran');
             Route::get('/rsc/laporan/tracking', 'tracking_rsc')->name('rsc.tracking');
