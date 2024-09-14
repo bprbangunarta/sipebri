@@ -126,14 +126,13 @@ Route::get('/give-permission', function () {
 Route::get('/role', function () {
     // $role = Role::create(['name' => 'Staff Audit']);
 
-    $cek = Role::where('name', 'Staff Audit')->first();
+    // $cek = Role::where('name', 'Staff Audit')->first();
 
-    if ($cek) {
-        // Memperbarui nama role
-        $cek->name = 'Staff Audit Internal';
-        $cek->save();
-    }
-    dd($cek);
+    // if ($cek) {
+    //     $cek->name = 'Staff Audit Internal';
+    //     $cek->save();
+    // }
+    // dd($cek);
 });
 
 Route::get('/login', function () {
