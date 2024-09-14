@@ -723,7 +723,7 @@
             <li class="header">TOOLS</li>
 
             <li
-                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo') ? 'active' : '' }}">
+                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Tools Menu</span>
@@ -751,6 +751,12 @@
                         <a href="{{ route('simulasi_ajk_pasific') }}" title="Perhitungan Asuransi">
                             <i class="fa fa-calculator"></i>
                             Simulasi Asuransi
+                        </a>
+                    </li>
+                    <li class="{{ Route::is('skrining.index') ? 'active' : '' }}">
+                        <a href="{{ route('skrining.index') }}" title="Screening">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Screening
                         </a>
                     </li>
                 </ul>

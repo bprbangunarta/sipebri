@@ -29,6 +29,7 @@ use App\Http\Controllers\DroppingController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\RSCBiayaController;
 use App\Http\Controllers\RSCCetakController;
+use App\Http\Controllers\SkriningController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\Analisa5cController;
@@ -123,8 +124,16 @@ Route::get('/give-permission', function () {
 });
 
 Route::get('/role', function () {
-    // $role = Role::create(['name' => 'Direktur Bisnis']);
-    // dd($role);
+    // $role = Role::create(['name' => 'Staff Audit']);
+
+    $cek = Role::where('name', 'Staff Audit')->first();
+
+    if ($cek) {
+        // Memperbarui nama role
+        $cek->name = 'Staff Audit Internal';
+        $cek->save();
+    }
+    dd($cek);
 });
 
 Route::get('/login', function () {
@@ -882,6 +891,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/perhitungan/simulasi_ajk_bumida', 'sheet_bumida')->name('sheet_bumida');
         Route::get('/perhitungan/simulasi_tlo', 'simulasi_tlo')->name('simulasi.tlo');
         Route::get('/perhitungan/tlo', 'perhitungan_tlo')->name('perhitungan.tlo');
+    });
+
+    Route::controller(SkriningController::class)->group(function () {
+        Route::get('/skrining/nasabah', 'skrining_index')->name('skrining.index');
+        Route::get('/skrining/cek', 'skrining_nasabah')->name('skrining.nasabah');
     });
 
     //====Route Cetak Laporan====//
