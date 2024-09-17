@@ -351,7 +351,12 @@
                 <td class="text-center" width="3%"> : </td>
                 <td style="text-align: justify;">
                     {{ 'Rp. ' . '' . number_format($data->asuransi_kendaraan_motor, 0, ',', '.') }} (total nilai
-                    pertanggungan Rp. {{ number_format($data->plafon, 0, ',', '.') }})</td>
+                    pertanggungan Rp. @if ($data->asuransi_kendaraan_motor > 0)
+                        {{ number_format($data->plafon, 0, ',', '.') }})
+                    @else
+                        {{ '0)' }}
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
