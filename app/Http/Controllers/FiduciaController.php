@@ -79,13 +79,14 @@ class FiduciaController extends Controller
                     'data_pekerjaan.nama_pekerjaan',
                     'data_jaminan.*',
                     'data_spk.no_spk',
+                    'data_spk.created_at as tgl_spk',
                     'data_jaminan.atas_nama as nama_pemilik_bpkb',
                     'data_jenis_agunan.jenis_agunan as nama_jenis_jaminan',
                 )
                 ->where('data_jaminan.id', '=', $enc)
                 ->get();
             //
-            $hari = Carbon::now();
+            $hari = $data[0]->tgl_spk;
             $data[0]->hari_ini = Carbon::parse($hari)->translatedFormat('d F Y');
 
             return view('cetak-berkas.fiducia.cetak-fiducia', [

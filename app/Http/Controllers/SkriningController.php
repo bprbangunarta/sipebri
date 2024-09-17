@@ -201,4 +201,14 @@ class SkriningController extends Controller
 
         return $judi;
     }
+
+    public function analisa_skrining_index()
+    {
+        return view('skrining.analisa_skrining_index');
+    }
+
+    public function cetak_analisa_skrining()
+    {
+        return view('skrining.print_analisa_skrining');
+    }
 }

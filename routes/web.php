@@ -124,7 +124,8 @@ Route::get('/give-permission', function () {
 });
 
 Route::get('/role', function () {
-    // $role = Role::create(['name' => 'Staff Audit']);
+    // $role = Role::create(['name' => 'Kabag Kepatuhan']);
+    // $role = Role::create(['name' => 'Staff Kepatuhan']);
 
     // $cek = Role::where('name', 'Staff Audit')->first();
 
@@ -132,7 +133,7 @@ Route::get('/role', function () {
     //     $cek->name = 'Staff Audit Internal';
     //     $cek->save();
     // }
-    // dd($cek);
+    // dd($role);
 });
 
 Route::get('/login', function () {
@@ -895,6 +896,13 @@ Route::middleware('auth')->group(function () {
     Route::controller(SkriningController::class)->group(function () {
         Route::get('/skrining/nasabah', 'skrining_index')->name('skrining.index');
         Route::get('/skrining/cek', 'skrining_nasabah')->name('skrining.nasabah');
+    });
+
+    Route::group(['middlewae' => ['Kabag Kepatuhan', 'Staff Kepatuhan', 'Administrator']], function () {
+        Route::controller(SkriningController::class)->group(function () {
+            Route::get('/analisa/skrining', 'analisa_skrining_index')->name('analisa.skrining.index');
+            Route::get('/cetak/analisa/skrining', 'cetak_analisa_skrining')->name('analisa.skrining.cetak');
+        });
     });
 
     //====Route Cetak Laporan====//

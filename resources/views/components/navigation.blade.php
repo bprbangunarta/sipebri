@@ -723,7 +723,7 @@
             <li class="header">TOOLS</li>
 
             <li
-                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index') ? 'active' : '' }}">
+                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index', 'analisa.skrining.index') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Tools Menu</span>
@@ -759,6 +759,15 @@
                             Screening
                         </a>
                     </li>
+
+                    @if (Auth::user()->hasRole(['Staff Kepatuhan', 'Kabag Kepatuhan', 'Administrator']))
+                        <li class="{{ Route::is('analisa.skrining.index') ? 'active' : '' }}">
+                            <a href="{{ route('analisa.skrining.index') }}" title="Screening">
+                                <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                                Analisa Screening
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
         </ul>
