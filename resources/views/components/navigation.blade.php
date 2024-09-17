@@ -291,17 +291,17 @@
                         <a @can('cetak perjanjian kredit') href="{{ route('data.perjanjian_kredit') }}" @endcan
                             title="Data Perjanjian Kredit">
                             <i class="fa fa-file" aria-hidden="true"></i>
-                            Data Perjanjian Kredit
+                            Data Pembatalan Kredit
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
                         <a @can('input penolakan') href="{{ route('data.batal_perjanjian_kredit') }}" @endcan
                             title="Data Perjanjian Kredit">
                             <i class="fa fa-ban" aria-hidden="true"></i>
                             Data Pembatalan Kredit
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                         <a @can('realisasi kredit') href="{{ route('realisasi.kredit') }}" @endcan
