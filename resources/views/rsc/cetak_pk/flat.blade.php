@@ -234,12 +234,14 @@
                                         style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_bunga) }}
                                     </font> Rupiah
-                                    ) kewajiban denda sebesar
+                                    ).
+                                    {{-- kewajiban denda sebesar
                                     Rp. {{ number_format($data->tunggakan_denda, '0', ',', '.') }} ( <font
                                         style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_denda) }}
                                     </font> Rupiah
-                                    ).</td>
+                                    ). --}}
+                                </td>
                                 <td class="text-center" width="1%"></td>
                                 <td></td>
                             </tr>
