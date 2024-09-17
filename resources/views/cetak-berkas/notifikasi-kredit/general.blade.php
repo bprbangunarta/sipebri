@@ -349,13 +349,16 @@
                 <td class="text-center" width="2%"></td>
                 <td width="27%">a. Kendaraan (TLO)</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">Rp. 0 (dengan nilai pertanggungan Rp. 0)</td>
+                <td style="text-align: justify;">
+                    {{ 'Rp. ' . '' . number_format($data->asuransi_kendaraan_motor, 0, ',', '.') }} (total nilai
+                    pertanggungan Rp. {{ number_format($data->plafon, 0, ',', '.') }})</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>
                 <td width="27%">b. Jiwa (Ekawaktu)</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">Rp. 0 (dengan nilai pertanggungan Rp. 0)</td>
+                <td style="text-align: justify;">
+                    {{ 'Rp. ' . '' . number_format($data->asuransi_jiwa_menurun2, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"></td>

@@ -184,18 +184,10 @@ class DataCetakController extends Controller
                 )->first();
             //
 
-            if ($cek->produk_kode == 'KTA') {
-                $hari = $cek->tgl_notifikasi;
-                $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
-
-                //QRCode 
-                $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
-                // dd($cek);
-                return view('cetak-berkas.notifikasi-kredit.kta', [
-                    'data' => $cek,
-                    'qr' => $qr,
-                ]);
-            } else if ($cek->produk_kode == 'KBT' && ($cek->kondisi_khusus == 'PERLELEAN' || $cek->kondisi_khusus == 'PERPADIAN') || ($cek->jangka_pokok == $cek->jangka_bunga)) {
+            if (
+                $cek->produk_kode == 'KBT' &&
+                ($cek->kondisi_khusus == 'PERLELEAN' || $cek->kondisi_khusus == 'PERPADIAN')
+            ) {
                 $notifikasi_general = Midle::notifikasi_general($enc);
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
                     $cek->persen_apht = ($cek->proses_apht / $cek->plafon) * 100;
@@ -237,6 +229,19 @@ class DataCetakController extends Controller
                     'jaminan' => $cek_jaminan,
                     'qr' => $qr,
                 ]);
+            }
+
+            if ($cek->produk_kode == 'KTA') {
+                $hari = $cek->tgl_notifikasi;
+                $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
+
+                //QRCode 
+                $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
+                // dd($cek);
+                return view('cetak-berkas.notifikasi-kredit.kta', [
+                    'data' => $cek,
+                    'qr' => $qr,
+                ]);
             } else {
                 $notifikasi_general = Midle::notifikasi_general($enc);
                 if ($cek->proses_apht > 0 && $cek->by_fiducia == 0) {
@@ -265,6 +270,10 @@ class DataCetakController extends Controller
                 $cek->count_jaminan = count($notifikasi_general);
 
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->persen_fiducia;
+
+                //Narasi Angsuran Graceperiode
+                $cek->jw = ($cek->jangka_waktu - $cek->grace_period) / $cek->jangka_pokok;
+                $cek->awal_angsuran = $cek->jangka_pokok + $cek->grace_period;
 
                 //QRCode 
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
