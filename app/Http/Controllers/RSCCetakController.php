@@ -1130,6 +1130,7 @@ class RSCCetakController extends Controller
             //
 
             if (count($cek_spk) > 1) {
+
                 $data->no_spk = $cek_spk[1]->no_spk;
 
                 $data->plafon = $cek_spk[1]->penentuan_plafon;
@@ -1139,6 +1140,19 @@ class RSCCetakController extends Controller
 
                 $tgl_akhir_rsc = Carbon::parse($cek_spk[1]->tgl_mulai_rsc);
                 $data->tgl_akhir_rsc = $tgl_akhir_rsc->isoFormat('D MMMM Y');
+            }
+
+            // Cek PK eks
+
+            $data_pk_eks = $this->cek_pk_eks($data->pengajuan_kode);
+            if (!empty($data_pk_eks)) {
+                $data->pk_rsc_before = $data_pk_eks->no_spk;
+
+                $tgl_realisasi_before = Carbon::createFromFormat('Y-m-d', $data_pk_eks->tgL_realisasi);
+                $data->tgl_realisasi_pk_rsc_before = $tgl_realisasi_before->translatedFormat('d F Y');
+
+                $tgl_tempo = Carbon::createFromFormat('Y-m-d', $data_pk_eks->tgl_jth_tempo);
+                $data->tgl_tempo_pk_rsc_before = $tgl_tempo->translatedFormat('d F Y');
             }
 
             //Bunga dibayar
@@ -1155,7 +1169,7 @@ class RSCCetakController extends Controller
             if (empty($data->nama_pendamping)) {
                 $data->nama_pendamping = $data->nm_pendamping;
             }
-
+            // dd($cek_spk);
             if ($data->metode_rps_rsc == "FLAT" && $data->produk_kode == 'KPJ' && $data->tempat_kerja == 'PT HANDSOME') {
                 return view('rsc.cetak_pk.kpj_flat_handsome', [
                     'data' => $data
@@ -1572,5 +1586,12 @@ class RSCCetakController extends Controller
 
         return $imgname;
     }
+
+    private function cek_pk_eks($kode)
+    {
+        $cek = DB::table('rsc_data_spk')->where('pengajuan_kode', $kode)->first();
+        return $cek;
+    }
+
     //Function Protected
 }

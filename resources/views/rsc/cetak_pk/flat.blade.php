@@ -195,11 +195,21 @@
                                             {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->plafon) }}</font>
                                         Rupiah
                                         )</font> dengan syarat-syarat/ketentuan-ketentuan dan sebagaimana tercantum
-                                    dalam Surat
-                                    Perjanjian Kredit nomor <font class="text-hg">{{ $data->no_spk }}</font> tanggal
-                                    <font class="text-hg">{{ $data->tgl_create_pk }}</font> yang
-                                    telah dibuat oleh para pihak dan atau perjanjian-perjanjian lainnya yang
-                                    bersangkutan.
+                                    dalam Surat Perjanjian Kredit nomor <font class="text-hg">
+                                        @if (!empty($data->pk_rsc_before))
+                                            {{ $data->pk_rsc_before }}
+                                        @else
+                                            {{ $data->no_spk }}
+                                        @endif
+                                    </font>
+                                    tanggal <font class="text-hg">
+                                        @if (!empty($data->pk_rsc_before))
+                                            {{ $data->tgl_realisasi_pk_rsc_before }}
+                                        @else
+                                            {{ $data->tgl_create_pk }}
+                                        @endif
+                                    </font> yang telah dibuat oleh para pihak dan atau perjanjian-perjanjian lainnya
+                                    yang bersangkutan.
                                 </td>
                                 <td class="text-center" width="1%"></td>
                                 <td class="text-hg"></td>
@@ -210,7 +220,13 @@
                             <tr>
                                 <td width="2%">- </td>
                                 <td colspan="3" style="text-align: justify;">Bahwa kredit tersebut berakhir pada
-                                    tanggal <font class="text-hg">{{ $data->tgl_akhir_pk }}</font>.</td>
+                                    tanggal <font class="text-hg">
+                                        @if (!empty($data->pk_rsc_before))
+                                            {{ $data->tgl_tempo_pk_rsc_before }}
+                                        @else
+                                            {{ $data->tgl_akhir_pk }}
+                                        @endif
+                                    </font>.</td>
                                 <td class="text-center" width="1%"></td>
                                 <td class="text-hg"></td>
                             </tr>
@@ -235,12 +251,6 @@
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_bunga) }}
                                     </font> Rupiah
                                     ).
-                                    {{-- kewajiban denda sebesar
-                                    Rp. {{ number_format($data->tunggakan_denda, '0', ',', '.') }} ( <font
-                                        style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_denda) }}
-                                    </font> Rupiah
-                                    ). --}}
                                 </td>
                                 <td class="text-center" width="1%"></td>
                                 <td></td>
@@ -326,7 +336,12 @@
                                 <td>1. </td>
                                 <td>
                                     <b>
-                                        Mengubah ketentuan pasal 1, sehingga untuk selanjutnya berbunyi sebagai berikut
+                                        @if (!empty($data->pk_rsc_before))
+                                            Mengubah ketentuan poin 1
+                                        @else
+                                            Mengubah ketentuan pasal 1
+                                        @endif
+                                        , sehingga untuk selanjutnya berbunyi sebagai berikut
                                         :
                                     </b>
                                 </td>
@@ -346,8 +361,15 @@
                             <tr>
                                 <td style="position: absolute;">2. </td>
                                 <td style="text-align: justify;">
-                                    <b>Mengubah ketentuan pasal 3 ayat 1, sehingga untuk selanjutnya berbunyi sebagai
-                                        berikut :</b>
+                                    <b>
+                                        @if (!empty($data->pk_rsc_before))
+                                            Mengubah ketentuan poin 2
+                                        @else
+                                            Mengubah ketentuan pasal 2 ayat 1
+                                        @endif
+                                        , sehingga untuk selanjutnya berbunyi sebagai
+                                        berikut :
+                                    </b>
                                 </td>
                                 <td></td>
                             </tr>
@@ -366,7 +388,12 @@
                                 <td style="position: absolute;">3. </td>
                                 <td style="text-align: justify;">
                                     <b>
-                                        Mengubah ketentuan pasal 3 Ayat 2, sehingga untuk selanjutnya berbunyi sebagai
+                                        @if (!empty($data->pk_rsc_before))
+                                            Mengubah ketentuan poin 3
+                                        @else
+                                            Mengubah ketentuan pasal 3 Ayat 2
+                                        @endif
+                                        , sehingga untuk selanjutnya berbunyi sebagai
                                         berikut :
                                     </b>
                                 </td>

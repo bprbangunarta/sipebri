@@ -196,8 +196,20 @@
                                         Rupiah
                                         )</font> dengan syarat-syarat/ketentuan-ketentuan dan sebagaimana tercantum
                                     dalam Surat
-                                    Perjanjian Kredit nomor <font class="text-hg">{{ $data->no_spk }}</font> tanggal
-                                    <font class="text-hg">{{ $data->tgl_create_pk }}</font> yang
+                                    Perjanjian Kredit nomor <font class="text-hg">
+                                        @if (!empty($data->pk_rsc_before))
+                                            {{ $data->pk_rsc_before }}
+                                        @else
+                                            {{ $data->no_spk }}
+                                        @endif
+                                    </font> tanggal
+                                    <font class="text-hg">
+                                        @if (!empty($data->pk_rsc_before))
+                                            {{ $data->tgl_realisasi_pk_rsc_before }}
+                                        @else
+                                            {{ $data->tgl_create_pk }}
+                                        @endif
+                                    </font> yang
                                     telah dibuat oleh para pihak dan atau perjanjian-perjanjian lainnya yang
                                     bersangkutan.
                                 </td>
@@ -324,7 +336,12 @@
                                 <td>1. </td>
                                 <td>
                                     <b>
-                                        Mengubah ketentuan pasal 1, sehingga untuk selanjutnya berbunyi sebagai berikut
+                                        @if (!empty($data->pk_rsc_before))
+                                            Mengubah ketentuan poin 1
+                                        @else
+                                            Mengubah ketentuan pasal 1
+                                        @endif
+                                        , sehingga untuk selanjutnya berbunyi sebagai berikut
                                         :
                                     </b>
                                 </td>
@@ -344,8 +361,15 @@
                             <tr>
                                 <td style="position: absolute;">2. </td>
                                 <td style="text-align: justify;">
-                                    <b>Mengubah ketentuan pasal 3 ayat 1, sehingga untuk selanjutnya berbunyi sebagai
-                                        berikut :</b>
+                                    <b>
+                                        @if (!empty($data->pk_rsc_before))
+                                            Mengubah ketentuan poin 2
+                                        @else
+                                            Mengubah ketentuan pasal 2 ayat 1
+                                        @endif
+                                        , sehingga untuk selanjutnya berbunyi sebagai
+                                        berikut :
+                                    </b>
                                 </td>
                                 <td></td>
                             </tr>
@@ -364,7 +388,12 @@
                                 <td style="position: absolute;">3. </td>
                                 <td style="text-align: justify;">
                                     <b>
-                                        Mengubah ketentuan pasal 3 Ayat 2, sehingga untuk selanjutnya berbunyi sebagai
+                                        @if (!empty($data->pk_rsc_before))
+                                            Mengubah ketentuan poin 3
+                                        @else
+                                            Mengubah ketentuan pasal 3 Ayat 2
+                                        @endif
+                                        , sehingga untuk selanjutnya berbunyi sebagai
                                         berikut :
                                     </b>
                                 </td>
