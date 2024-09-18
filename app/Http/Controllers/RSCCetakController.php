@@ -212,10 +212,10 @@ class RSCCetakController extends Controller
             //Kondisi Usaha
 
             //Kondisi Agunan
-            $kondisi_agunan = DB::table('rsc_agunan')->where('kode_rsc', $enc_rsc)->first();
-            if (is_null($kondisi_agunan)) {
-                return redirect()->back()->with('error', 'Kondisi Agunan Masih Kosong.');
-            }
+            // $kondisi_agunan = DB::table('rsc_agunan')->where('kode_rsc', $enc_rsc)->first();
+            // if (is_null($kondisi_agunan)) {
+            //     return redirect()->back()->with('error', 'Kondisi Agunan Masih Kosong.');
+            // }
             //Kondisi Agunan
 
             $usaha = $this->rsc_usaha($enc_rsc);
@@ -349,11 +349,11 @@ class RSCCetakController extends Controller
                 $tgl = Carbon::parse($data->tgl_update_analisa);
                 $data->tgl_usulan = $tgl->isoFormat('D MMMM Y');
             }
-            // dd($perdagangan, $biaya_perdagangan);
+
             return view('rsc.cetak_analisa.cetak_analisa', [
                 'data' => $data,
                 'kondisi' => $kondisi_usaha,
-                'agunan' => $kondisi_agunan,
+                // 'agunan' => $kondisi_agunan,
                 'usaha' => $usaha,
                 'perdagangan' => $perdagangan ?? null,
                 'pertanian' => $pertanian,

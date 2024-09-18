@@ -439,8 +439,8 @@
                                                     style="border:1px solid black;text-align:right; padding-right: 10px;">
                                                     {{ 'Rp. ' . ' ' . number_format($itemj->nilai_taksasi, 0, ',', '.') }}
                                                 </td>
+                                            @empty
                                             </tr>
-                                        @empty
                                             <tr style="border:1px solid black;">
                                                 <td class="text-center" style="border:1px solid black;"
                                                     colspan="3">
@@ -452,20 +452,16 @@
                                             @php
                                                 $totalTaksasi = $jaminan->sum('nilai_taksasi');
                                             @endphp
-
-                                            <!-- Tampilkan baris dengan total taksasi -->
-                                            <tr style="border:1px solid black;">
-                                                <td class="text-center" style="border:1px solid black;"
-                                                    colspan="2">
-                                                    Jumlah Nilai Taksasi
-                                                    Agunan</td>
-                                                <td
-                                                    style="border:1px solid black;text-align:right; padding-right: 10px;">
-                                                    {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
-                                                </td>
-                                            </tr>
                                         @endif
 
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;" colspan="2">
+                                                Jumlah Nilai Taksasi
+                                                Agunan</td>
+                                            <td style="border:1px solid black;text-align:right; padding-right: 10px;">
+                                                {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
                                     </table>
 
                                     <table style="border:1px solid black; margin-top:20px; margin-bottom:20px;">
@@ -1049,7 +1045,8 @@
                                             @php
                                                 $angsuran = $data->penentuan_plafon / $data->jangka_waktu;
                                             @endphp
-                                            <td>{{ 'Rp.' . ' ' . number_format($data->angsuran_pokok, 0, ',', '.') }}</td>
+                                            <td>{{ 'Rp.' . ' ' . number_format($data->angsuran_pokok, 0, ',', '.') }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Proyeksi Penambahan</td>
