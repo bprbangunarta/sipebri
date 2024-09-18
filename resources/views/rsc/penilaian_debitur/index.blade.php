@@ -16,9 +16,9 @@
                                 <a href="#faktor" data-toggle="tab">FAKTOR</a>
                             </li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="#kodisi_agunan" data-toggle="tab">KONDISI AGUNAN</a>
-                            </li>
+                            </li> --}}
                         </ul>
 
                         <div class="tab-content">
