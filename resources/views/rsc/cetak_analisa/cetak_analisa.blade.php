@@ -416,7 +416,7 @@
                                 <div class="heads">
                                     2. Kondisi Agunan :
                                 </div>
-                                @if ($jaminan->isNotEmpty())
+                                {{-- @if ($jaminan->isNotEmpty())
                                     <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
                                     <table style="border:1px solid black;">
                                         <tr style="border:1px solid black;">
@@ -484,7 +484,7 @@
                                             </td>
                                         </tr>
                                     </table>
-                                @endif
+                                @endif --}}
 
                                 @if ($jaminan_sipebri->isNotEmpty())
                                     <h4 style="text-align: center;font-size: 12pt;">TAKSASI JAMINAN</h4>
@@ -514,18 +514,6 @@
                                             @php
                                                 $totalTaksasi = $jaminan_sipebri->sum('nilai_taksasi');
                                             @endphp
-
-                                            <!-- Tampilkan baris dengan total taksasi -->
-                                            <tr style="border:1px solid black;">
-                                                <td class="text-center" style="border:1px solid black;"
-                                                    colspan="2">
-                                                    Jumlah Nilai Taksasi
-                                                    Agunan</td>
-                                                <td
-                                                    style="border:1px solid black;text-align:right; padding-right: 10px;">
-                                                    {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
-                                                </td>
-                                            </tr>
                                         @empty
                                             <tr style="border:1px solid black;">
                                                 <td class="text-center" style="border:1px solid black;"
@@ -534,24 +522,32 @@
                                             </tr>
                                         @endforelse
 
+                                        <!-- Tampilkan baris dengan total taksasi -->
+                                        <tr style="border:1px solid black;">
+                                            <td class="text-center" style="border:1px solid black;" colspan="2">
+                                                Jumlah Nilai Taksasi
+                                                Agunan</td>
+                                            <td style="border:1px solid black;text-align:right; padding-right: 10px;">
+                                                {{ 'Rp. ' . ' ' . number_format($totalTaksasi, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+
                                     </table>
 
-                                    @foreach ($jaminan_sipebri as $value)
-                                        <table style="border:1px solid black; margin-top:20px; margin-bottom:20px;">
-                                            <tr style="border:1px solid black;">
-                                                <th class="text-center" width="4%"
-                                                    style="border:1px solid black;">No
-                                                </th>
-                                                <th class="text-center" style="border:1px solid black;">Posisi Agunan
-                                                </th>
-                                                <th class="text-center" width="17%"
-                                                    style="border:1px solid black;">
-                                                    Kondisi Agunan</th>
-                                            </tr>
+                                    <table style="border:1px solid black; margin-top:20px; margin-bottom:20px;">
+                                        <tr style="border:1px solid black;">
+                                            <th class="text-center" width="4%" style="border:1px solid black;">No
+                                            </th>
+                                            <th class="text-center" style="border:1px solid black;">Posisi Agunan
+                                            </th>
+                                            <th class="text-center" width="17%" style="border:1px solid black;">
+                                                Kondisi Agunan</th>
+                                        </tr>
+                                        @foreach ($jaminan_sipebri as $value)
                                             <tr style="border:1px solid black;text-transform:uppercase;">
                                                 <td class="text-center" width="4%"
                                                     style="border:1px solid black;">
-                                                    1 </td>
+                                                    {{ $loop->iteration }} </td>
                                                 <td style="border:1px solid black; padding-left: 10px; padding-top: 5px; padding-bottom: 5px;"
                                                     width="48%">
                                                     @if (!empty($value->posisi_agunan))
@@ -570,8 +566,8 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        </table>
-                                    @endforeach
+                                        @endforeach
+                                    </table>
                                 @endif
                             </div>
 

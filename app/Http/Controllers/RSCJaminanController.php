@@ -177,7 +177,7 @@ class RSCJaminanController extends Controller
 
             //Data dati
             $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
-            // dd($jaminan);
+
             return view('rsc.jaminan.tanah', [
                 'data' => $data[0],
                 'jenis_tanah' => $jenis_tanah,
