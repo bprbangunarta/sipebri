@@ -22,29 +22,42 @@ class SkriningController extends Controller
         $nama = $request->query('nama');
         $catatan = $request->query('catatan');
 
-        $values_dttot = $this->dttot($nama);
+        $values_dttot = $this->dttot($nik, $nama);
         $values_dppspm = $this->dppspm($nama);
         $values_judi = $this->judi_online($nik, $nama);
         $values_berita = $this->berita_negatif($nama);
         $watch_list = $this->watch_list($nama);
 
-        $tgl = Carbon::now();
-        $tgl = $tgl->format('d F Y');
+        $dppspm = array_values($values_dppspm);
 
-        $data = (object) [
-            'nik' => $nik,
-            'nama' => $nama,
-            'dttot' => $values_dttot,
-            'dppspm' => $values_dppspm,
-            'judi_online' => $values_judi,
-            'pep' => $catatan,
-            'berita_negatif' => $values_berita,
-            'watch_list' => $watch_list,
-            'pemeriksa' => ucwords(strtolower(Auth::user()->name)),
-            'tgl' => $tgl,
-        ];
+        if (!empty($values_dttot)) {
+            $dttot = array_values($values_dttot);
+        } else {
+            $dttot = null;
+        }
 
-        return view('skrining.print_skrining', compact('data'));
+        if (!empty($values_judi)) {
+            $judi = array_values($values_judi);
+        } else {
+            $judi = null;
+        }
+
+        $pep = $catatan;
+
+        if (!empty($values_berita)) {
+            $negative_news = array_values($values_berita);
+        } else {
+            $negative_news = null;
+        }
+
+        if (!empty($watch_list)) {
+            $watch_list = array_values($watch_list);
+        } else {
+            $watch_list = null;
+        }
+
+
+        return view('skrining.hasil_skrining', compact('nik', 'nama', 'dppspm', 'dttot', 'judi', 'pep', 'negative_news', 'watch_list'));
     }
 
     private function google_client()
@@ -57,31 +70,39 @@ class SkriningController extends Controller
         return $client;
     }
 
-    private function dttot($nama)
+    private function dttot($nik, $nama)
     {
         $client = $this->google_client();
         $sheetsService = new Google_Service_Sheets($client);
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'DTTOT!A:A'; // Gantilah sesuai dengan nama sheet Anda
+        $range = 'DTTOT!A:H'; // Gantilah sesuai dengan nama sheet Anda
 
         // Mendapatkan data dari spreadsheet
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
 
         $values = $response->getValues();
 
-        $dttot = array_filter($values, function ($row) use ($nama) {
-            return isset($row[0]) && $row[0] === $nama;
+        $nik_dttot = array_filter($values, function ($row) use ($nik) {
+            return isset($row[1]) && strpos($row[1], $nik) !== false;
         });
 
-        if (!empty($dttot)) {
-            $dttot = 'Terdaftar';
-        } else {
-            $dttot = 'Tidak terdaftar';
+        $nama_dttot = array_filter($values, function ($row) use ($nama) {
+            return isset($row[0]) && strpos($row[0], $nama) !== false;
+        });
+
+        if (!empty($nik_dttot) && !empty($nama_dttot)) {
+            return array_merge($nik_dttot, $nama_dttot);
         }
 
-        return $dttot;
+        if (!empty($nik_dttot)) {
+            return $nik_dttot;
+        }
+
+        if (!empty($nama_dttot)) {
+            return $nama_dttot;
+        }
     }
 
     private function dppspm($nama)
@@ -92,24 +113,25 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'DPPSPM!B:B'; // Gantilah sesuai dengan nama sheet Anda
+        $range = 'DPPSPM!A:U'; // Gantilah sesuai dengan nama sheet Anda
 
         // Mendapatkan data dari spreadsheet
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
 
-        $judi = array_filter($values, function ($row) use ($nama) {
-            return isset($row[0]) && $row[0] === $nama;
+        $dppspm = array_filter($values, function ($row) use ($nama) {
+            return isset($row[1]) && strpos($row[1],  $nama) !== false;
         });
 
+        $dppspmFiltered = array_map(function ($row) {
+            return array_filter($row, function ($value) {
+                return $value !== 'NA';
+            });
+        }, $dppspm);
 
-        if (!empty($judi)) {
-            $judi =  'Terdaftar';
-        } else {
-            $judi =  'Tidak terdaftar';
-        }
+        $reindexedData = array_map('array_values', $dppspmFiltered);
 
-        return $judi;
+        return $reindexedData;
     }
 
     private function judi_online($nik, $nama)
@@ -120,29 +142,27 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'JUDI ONLINE!B:B';
+        $range = 'JUDI ONLINE!B:D';
         $rangeD = 'JUDI ONLINE!D:D';
 
         // Mendapatkan data dari spreadsheet
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
-        $responseD = $sheetsService->spreadsheets_values->get($spreadsheetId, $rangeD);
+        // $responseD = $sheetsService->spreadsheets_values->get($spreadsheetId, $rangeD);
 
         $values = $response->getValues();
-        $valuesd = $responseD->getValues();
 
         $judi = array_filter($values, function ($row) use ($nama) {
-            return isset($row[0]) && $row[0] === $nama;
+            return isset($row[2]) && $row[2] === $nama;
         });
 
-        $judis = array_filter($valuesd, function ($row) use ($nik) {
+        $judis = array_filter($values, function ($row) use ($nik) {
             return isset($row[0]) && $row[0] === $nik;
         });
 
-
         if (!empty($judi) && !empty($judis)) {
-            $judi_online =  'Terdaftar';
+            $judi_online =  $judis;
         } else {
-            $judi_online =  'Tidak terdaftar';
+            $judi_online =  null;
         }
 
         return $judi_online;
@@ -155,24 +175,23 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'Berita Negatif!E:E'; // Gantilah sesuai dengan nama sheet Anda
+        $range = 'Berita Negatif!B:J'; // Gantilah sesuai dengan nama sheet Anda
 
         // Mendapatkan data dari spreadsheet
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
 
-        $judi = array_filter($values, function ($row) use ($nama) {
-            return isset($row[0]) && $row[0] === $nama;
+        $berita_negatif = array_filter($values, function ($row) use ($nama) {
+            return isset($row[3]) && strpos($row[3], $nama) !== false;
         });
 
-
-        if (!empty($judi)) {
-            $judi =  'Terdaftar';
+        if (!empty($berita_negatif)) {
+            $berita_negatif =  $berita_negatif;
         } else {
-            $judi =  'Tidak terdaftar';
+            $berita_negatif =  null;
         }
 
-        return $judi;
+        return $berita_negatif;
     }
 
     private function watch_list($nama)
@@ -183,23 +202,46 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'Watchist !G:G'; // Gantilah sesuai dengan nama sheet Anda
+        $range = 'Watchist !B:R'; // Gantilah sesuai dengan nama sheet Anda
 
         // Mendapatkan data dari spreadsheet
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
 
-        $judi = array_filter($values, function ($row) use ($nama) {
-            return isset($row[0]) && $row[0] === $nama;
+        $watch_list = array_filter($values, function ($row) use ($nama) {
+            return isset($row[5]) && strpos($row[5], $nama) !== false;
         });
 
-        if (!empty($judi)) {
-            $judi =  'Terdaftar';
+        if (!empty($watch_list)) {
+            $watch_list =  $watch_list;
         } else {
-            $judi =  'Tidak terdaftar';
+            $watch_list =  null;
         }
 
-        return $judi;
+        return $watch_list;
+    }
+
+    public function cetak_skrining()
+    {
+        $tgl = Carbon::now();
+        $tgl = $tgl->format('d F Y');
+
+        $data = (object) [
+            'nik' => request()->nik,
+            'nama' => request()->nama,
+            'dttot' => request()->dttot,
+            'dppspm' => request()->dppspm,
+            'judi_online' => request()->judi_online,
+            'pep' => request()->pep,
+            'berita_negatif' => request()->negative_news,
+            'watch_list' => request()->watch_list,
+            'pemeriksa' => ucwords(strtolower(Auth::user()->name)),
+            'tgl' => $tgl,
+        ];
+
+        return view('skrining.print_skrining', [
+            'data' => $data
+        ]);
     }
 
     public function analisa_skrining_index()

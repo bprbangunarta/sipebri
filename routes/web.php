@@ -896,6 +896,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(SkriningController::class)->group(function () {
         Route::get('/skrining/nasabah', 'skrining_index')->name('skrining.index');
         Route::get('/skrining/cek', 'skrining_nasabah')->name('skrining.nasabah');
+        Route::get('/cetak/skrining', 'cetak_skrining')->name('skrining.cetak');
     });
 
     Route::group(['middlewae' => ['Kabag Kepatuhan', 'Staff Kepatuhan', 'Administrator']], function () {
