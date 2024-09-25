@@ -1378,7 +1378,7 @@ class Midle extends Model
         //Hari
         $hari = Carbon::today();
         $memorandum->hari = $hari->isoformat('D MMMM Y');
-        dd($memorandum);
+
         return $memorandum;
     }
 
