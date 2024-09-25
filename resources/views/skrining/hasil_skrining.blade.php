@@ -85,9 +85,9 @@
                                 <td style="display:flex; justify-content:center;">
                                     <select type="text" class="form-control" style="width: 50%; " name="pep"
                                         id="">
-                                        <option value="TERDAFTAR" {{ $pep == 'terdaftar' ? 'selected' : '' }}>TERDAFTAR
+                                        <option value="TERDAFTAR" {{ $pep == 'TERDAFTAR' ? 'selected' : '' }}>TERDAFTAR
                                         </option>
-                                        <option value="TIDAK TERDAFTAR" {{ $pep == 'tidak terdaftar' ? 'selected' : '' }}>
+                                        <option value="TIDAK TERDAFTAR" {{ $pep == 'TIDAK TERDAFTAR' ? 'selected' : '' }}>
                                             TIDAK
                                             TERDAFTAR
                                         </option>
@@ -206,7 +206,7 @@
                                     @foreach ($judi as $row)
                                         <tr>
                                             @foreach ($row as $data)
-                                                <td>{{ $data }}</td>
+                                                <td class="text-center">{{ $data }}</td>
                                             @endforeach
                                         </tr>
                                     @endforeach

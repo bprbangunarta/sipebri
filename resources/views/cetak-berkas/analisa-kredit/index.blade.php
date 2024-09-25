@@ -1914,14 +1914,14 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Besar Permohonan
                 </td>
                 <td> : </td>
-                <td>&nbsp; {{ 'Rp. ' . ' ' . number_format($memorandum->temp_plafon, 0, ',', '.') }}</td>
+                <td>&nbsp; {{ 'Rp. ' . ' ' . number_format($memorandum->plafon_usulan, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Obyek yang Dibiayai
                 </td>
                 <td> : </td>
-                <td>&nbsp; Kredit Konsumsi Lainnya ( Konsumtif )</td>
+                <td>&nbsp; {{ $memorandum->penggunaan_debitur }}</td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i. Lokasi Usaha dan atau Lokasi Kantor</td>

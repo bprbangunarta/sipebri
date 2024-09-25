@@ -8,6 +8,7 @@ use Google_Service_Sheets;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Google_Service_Sheets_ValueRange;
 
 class SkriningController extends Controller
 {
@@ -20,7 +21,7 @@ class SkriningController extends Controller
     {
         $nik = $request->query('nik');
         $nama = $request->query('nama');
-        $catatan = $request->query('catatan');
+        $catatan = $request->query('pep');
 
         $values_dttot = $this->dttot($nik, $nama);
         $values_dppspm = $this->dppspm($nama);
@@ -56,10 +57,61 @@ class SkriningController extends Controller
             $watch_list = null;
         }
 
-
         return view('skrining.hasil_skrining', compact('nik', 'nama', 'dppspm', 'dttot', 'judi', 'pep', 'negative_news', 'watch_list'));
     }
 
+    public function cetak_skrining()
+    {
+        $tgl = Carbon::now();
+        $tgl = $tgl->format('d F Y');
+
+        $data = (object) [
+            'nik' => request()->nik,
+            'nama' => request()->nama,
+            'dttot' => request()->dttot,
+            'dppspm' => request()->dppspm,
+            'judi_online' => request()->judi_online,
+            'pep' => request()->pep,
+            'berita_negatif' => request()->negative_news,
+            'watch_list' => request()->watch_list,
+            'pemeriksa' => ucwords(strtolower(Auth::user()->name)),
+            'tgl' => $tgl,
+        ];
+
+        // VAlidasi Data 
+        // if (
+        //     $data->dttot == 'TERDAFTAR' ||
+        //     $data->judi_online == 'TERDAFTAR' ||
+        //     $data->berita_negatif == 'TERDAFTAR' ||
+        //     $data->watch_list == 'TERDAFTAR' ||
+        //     $data->pep == 'TERDAFTAR'
+        // ) {
+
+        //     $status = 'TERDAFTAR';
+        // } else {
+        //     $status = 'TIDAK TERDAFTAR';
+        // }
+
+        // $this->create_sheet(request()->nik, request()->nama, request()->pep, $status);
+
+
+        return view('skrining.print_skrining', [
+            'data' => $data
+        ]);
+    }
+
+    public function analisa_skrining_index()
+    {
+        return view('skrining.analisa_skrining_index');
+    }
+
+    public function cetak_analisa_skrining()
+    {
+        return view('skrining.print_analisa_skrining');
+    }
+
+
+    // PRIVATE FUNCTION
     private function google_client()
     {
         $client = new Google_Client();
@@ -151,12 +203,12 @@ class SkriningController extends Controller
 
         $values = $response->getValues();
 
-        $judi = array_filter($values, function ($row) use ($nama) {
-            return isset($row[2]) && $row[2] === $nama;
+        $judi = array_filter($values, function ($row) use ($nik) {
+            return isset($row[2]) && $row[2] === $nik;
         });
 
-        $judis = array_filter($values, function ($row) use ($nik) {
-            return isset($row[0]) && $row[0] === $nik;
+        $judis = array_filter($values, function ($row) use ($nama) {
+            return isset($row[0]) && $row[0] === $nama;
         });
 
         if (!empty($judi) && !empty($judis)) {
@@ -221,36 +273,32 @@ class SkriningController extends Controller
         return $watch_list;
     }
 
-    public function cetak_skrining()
+    private function create_sheet($nik, $nama, $catatan, $status)
     {
-        $tgl = Carbon::now();
-        $tgl = $tgl->format('d F Y');
+        $client = $this->google_client();
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
 
-        $data = (object) [
-            'nik' => request()->nik,
-            'nama' => request()->nama,
-            'dttot' => request()->dttot,
-            'dppspm' => request()->dppspm,
-            'judi_online' => request()->judi_online,
-            'pep' => request()->pep,
-            'berita_negatif' => request()->negative_news,
-            'watch_list' => request()->watch_list,
-            'pemeriksa' => ucwords(strtolower(Auth::user()->name)),
-            'tgl' => $tgl,
+        $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
+
+        $range = 'SCREENING!A:E';
+
+        $data = [
+            $nik,
+            $nama,
+            $catatan,
+            Auth::user()->code_user,
+            $status,
         ];
 
-        return view('skrining.print_skrining', [
-            'data' => $data
+        $body = new Google_Service_Sheets_ValueRange([
+            'values' => [$data]
         ]);
-    }
 
-    public function analisa_skrining_index()
-    {
-        return view('skrining.analisa_skrining_index');
-    }
+        $params = [
+            'valueInputOption' => 'RAW'
+        ];
 
-    public function cetak_analisa_skrining()
-    {
-        return view('skrining.print_analisa_skrining');
+        $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
     }
 }

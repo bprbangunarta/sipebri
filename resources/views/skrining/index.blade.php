@@ -6,7 +6,6 @@
         <div class="tab-pane active">
 
             <div class="box-body table-responsive" style="overflow: auto; width: 100%; height:425px;">
-                {{-- <form action="{{ route('skrining.nasabah') }}" method="get" target="_blank"> --}}
                 <form action="{{ route('skrining.nasabah') }}" method="get">
                     @csrf
                     <table class="table table-hover">
@@ -24,7 +23,14 @@
                             <tr>
                                 <td colspan="2">
                                     <span class="fw-bold fs-4">PEP</span>
-                                    <input type="text" class="form-control text-uppercase" name="catatan">
+                                    <select type="text" class="form-control" style="width: 50%; " name="pep"
+                                        id="">
+                                        <option value="">-- PILIH --</option>
+                                        <option value="TERDAFTAR">TERDAFTAR</option>
+                                        <option value="TIDAK TERDAFTAR">
+                                            TIDAK TERDAFTAR
+                                        </option>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
