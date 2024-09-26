@@ -34,7 +34,7 @@
         .data_table td,
         .data_table th {
             border: 1px solid black;
-            padding: 7px;
+            padding: 3px;
             text-align: center;
         }
 
@@ -65,7 +65,93 @@
 
     <div class="content">
         <center>
-            <h3><b>SCREENING CALON NASABAH <br> BPR BANGUNARTA </b></h3>
+            <h3><b>SCREENING CALON NASABAH BPR BANGUNARTA </b></h3>
+        </center>
+
+        <div class="data">
+            <p>Menyatakan dengan ini bahwa :</p>
+            <table style="margin-left: -2px;">
+                <tr>
+                    <td style="width: 50%;">NIK</td>
+                    <td style="width: 5%;">:</td>
+                    <td>{{ $data->nik }}</td>
+                </tr>
+                <tr>
+                    <td>NAMA</td>
+                    <td>:</td>
+                    <td>{{ $data->nama }}</td>
+                </tr>
+            </table>
+
+            <table class="data_table">
+                <thead>
+                    <tr>
+                        <th style="width: 3%;">NO</th>
+                        <th>NAMA</th>
+                        <th>KETERANGAN</th>
+                    </tr>
+                </thead>
+                <br>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td style="text-align: left; padding-left:20px;">DTTOT</td>
+                        <td>{{ strtoupper($data->dttot) }}</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td style="text-align: left; padding-left:20px;">PPSPM</td>
+                        <td>{{ strtoupper($data->dppspm) }}</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td style="text-align: left; padding-left:20px;">JUDI ONLINE</td>
+                        <td>{{ strtoupper($data->judi_online) }}</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td style="text-align: left; padding-left:20px;">PEP</td>
+                        <td>{{ strtoupper($data->pep) }}</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td style="text-align: left; padding-left:20px;">NEGATIVE NEWS</td>
+                        <td>{{ strtoupper($data->berita_negatif) }}</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td style="text-align: left; padding-left:20px;">WATCH LIST</td>
+                        <td>{{ strtoupper($data->watch_list) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="margin-left: -2px; margin-top: 20px;">
+                <tr>
+                    <td style="width: 50%;">Petugas Pemeriksa</td>
+                    <td style="width: 5%;">:</td>
+                    <td>{{ $data->pemeriksa }}</td>
+                </tr>
+                <tr>
+                    <td>Tanggal</td>
+                    <td>:</td>
+                    <td>{{ $data->tgl }}</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="header" style="margin-top: 50px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr>
+    </div>
+
+    <div class="content">
+        <center>
+            <h3><b>SCREENING CALON NASABAH BPR BANGUNARTA </b></h3>
         </center>
 
         <div class="data">

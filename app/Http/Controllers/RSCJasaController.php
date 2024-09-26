@@ -74,52 +74,7 @@ class RSCJasaController extends Controller
             $rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = DB::table('rsc_data_pengajuan')
-                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'rsc_data_pengajuan.nasabah_kode')
-                ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'rsc_data_pengajuan.pengajuan_kode')
-                ->select(
-                    'rsc_data_pengajuan.id',
-                    'rsc_data_pengajuan.created_at as tanggal_rsc',
-                    'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
-                    'rsc_data_pengajuan.kode_rsc',
-                    'data_nasabah.nama_nasabah',
-                    'data_nasabah.alamat_ktp',
-                    'data_survei.kantor_kode',
-                    'data_pengajuan.plafon',
-                    'data_pengajuan.produk_kode',
-                    'data_pengajuan.metode_rps',
-                    'data_pengajuan.jangka_waktu',
-                )
-                ->where('rsc_data_pengajuan.pengajuan_kode', $kode)
-                ->orderBy('rsc_data_pengajuan.created_at', 'desc')
-                ->get();
-
-            foreach ($data as $value) {
-                $data_eks = DB::connection('sqlsrv')->table('m_loan')
-                    ->join('m_cif', 'm_cif.nocif', '=', 'm_loan.nocif')
-                    ->join('setup_loan', 'setup_loan.kodeprd', '=', 'm_loan.kdprd')
-                    ->join('wilayah', 'wilayah.kodewil', '=', 'm_loan.kdwil')
-                    ->select(
-                        'm_loan.fnama',
-                        'm_loan.plafond_awal',
-                        'm_cif.alamat',
-                        'm_loan.jkwaktu',
-                        'setup_loan.ket',
-                        'wilayah.ket as wil',
-                    )
-                    ->where('noacc', $value->kode_pengajuan)->first();
-                //
-                if ($data_eks) {
-                    $value->nama_nasabah = trim($data_eks->fnama);
-                    $value->alamat_ktp = trim($data_eks->alamat);
-                    $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                    $value->jangka_waktu = $data_eks->jkwaktu;
-                    $value->metode_rps = null;
-                    $value->plafon = $data_eks->plafond_awal;
-                    $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
-                }
-            }
+            $data = RSC::get_data_jasa_all_rsc($rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');

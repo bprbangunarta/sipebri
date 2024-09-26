@@ -57,7 +57,20 @@ class SkriningController extends Controller
             $watch_list = null;
         }
 
-        return view('skrining.hasil_skrining', compact('nik', 'nama', 'dppspm', 'dttot', 'judi', 'pep', 'negative_news', 'watch_list'));
+        if (
+            !empty($dttot) ||
+            !empty($dppspm) ||
+            !empty($judi) ||
+            $pep == 'TERDAFTAR' ||
+            !empty($negative_news) ||
+            !empty($watch_list)
+        ) {
+            $status = 'TERDAFTAR';
+        } else {
+            $status = 'TIDAK TERDAFTAR';
+        }
+
+        return view('skrining.hasil_skrining', compact('nik', 'nama', 'dppspm', 'dttot', 'judi', 'pep', 'negative_news', 'watch_list', 'status'));
     }
 
     public function cetak_skrining()
@@ -79,25 +92,30 @@ class SkriningController extends Controller
         ];
 
         // VAlidasi Data 
-        // if (
-        //     $data->dttot == 'TERDAFTAR' ||
-        //     $data->judi_online == 'TERDAFTAR' ||
-        //     $data->berita_negatif == 'TERDAFTAR' ||
-        //     $data->watch_list == 'TERDAFTAR' ||
-        //     $data->pep == 'TERDAFTAR'
-        // ) {
+        if (
+            $data->dttot == 'TERDAFTAR' ||
+            $data->judi_online == 'TERDAFTAR' ||
+            $data->berita_negatif == 'TERDAFTAR' ||
+            $data->watch_list == 'TERDAFTAR' ||
+            $data->pep == 'TERDAFTAR'
+        ) {
 
-        //     $status = 'TERDAFTAR';
-        // } else {
-        //     $status = 'TIDAK TERDAFTAR';
-        // }
+            $status = 'TERDAFTAR';
+        } else {
+            $status = 'TIDAK TERDAFTAR';
+        }
 
-        // $this->create_sheet(request()->nik, request()->nama, request()->pep, $status);
+        $this->create_sheet(request()->nik, request()->nama, request()->pep, $status);
 
 
         return view('skrining.print_skrining', [
             'data' => $data
         ]);
+    }
+
+    public function data_skrining()
+    {
+        return view('skrining.data_skrining_index');
     }
 
     public function analisa_skrining_index()
@@ -283,6 +301,10 @@ class SkriningController extends Controller
 
         $range = 'SCREENING!A:E';
 
+        $sheetsService = new Google_Service_Sheets($client);
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+        $existingValues = $response->getValues();
+
         $data = [
             $nik,
             $nama,
@@ -291,14 +313,32 @@ class SkriningController extends Controller
             $status,
         ];
 
-        $body = new Google_Service_Sheets_ValueRange([
-            'values' => [$data]
-        ]);
+        $nikExists = false;
+        $namaExists = false;
 
-        $params = [
-            'valueInputOption' => 'RAW'
-        ];
+        if (!empty($existingValues)) {
+            foreach ($existingValues as $row) {
+                if (isset($row[0]) && $row[0] == $nik) {
+                    $nikExists = true;
+                }
+                if (isset($row[1]) && $row[1] == $nama) {
+                    $namaExists = true;
+                }
+            }
+        }
 
-        $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
+        if (!$nikExists && !$namaExists) {
+            $body = new Google_Service_Sheets_ValueRange([
+                'values' => [$data]
+            ]);
+
+            $params = [
+                'valueInputOption' => 'RAW'
+            ];
+
+            $sheetsService = new Google_Service_Sheets($client);
+
+            $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
+        }
     }
 }

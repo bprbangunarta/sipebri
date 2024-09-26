@@ -19,7 +19,7 @@ class RSCPertanianController extends Controller
             $enc_rsc = Crypt::decrypt($request->query('rsc'));
             $status_rsc = $request->query('status_rsc');
 
-            $data = RSC::get_data_pertanian_all_rsc($enc_rsc);
+            $data = RSC::get_data_rsc($enc_rsc);
 
             foreach ($data as $item) {
                 $item->kode = $request->query('kode');
@@ -225,15 +225,15 @@ class RSCPertanianController extends Controller
                     'rsc_data_pengajuan.kode_rsc',
                     'rsc_data_pengajuan.kondisi_khusus',
                     'rsc_data_pengajuan.penentuan_plafon',
+                    'rsc_data_pengajuan.penentuan_plafon as plafon',
                     'data_nasabah.nama_nasabah',
                     'data_nasabah.alamat_ktp',
                     'data_survei.kantor_kode',
-                    'data_pengajuan.plafon',
                     'data_pengajuan.produk_kode',
                     'rsc_data_pengajuan.metode_rps',
                     'rsc_data_pengajuan.jangka_waktu',
                 )
-                ->where('rsc_data_pengajuan.pengajuan_kode', $kode)
+                ->where('rsc_data_pengajuan.kode_rsc', $rsc)
                 ->get();
             //
 
@@ -256,7 +256,6 @@ class RSCPertanianController extends Controller
                     $value->nama_nasabah = trim($data_eks->fnama);
                     $value->alamat_ktp = trim($data_eks->alamat);
                     $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                    $value->plafon = $data_eks->plafond_awal;
                     $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
                 }
             }
@@ -331,6 +330,7 @@ class RSCPertanianController extends Controller
                     DB::table('rsc_au_pertanian')->where('kode_usaha', $kode_usaha)->update($dt);
                 }
             }
+
             return view('rsc.usaha_pertanian.keuangan', [
                 'data' => $data[0],
                 'pertanian' => $pertanian,

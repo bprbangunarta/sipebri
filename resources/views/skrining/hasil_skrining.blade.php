@@ -29,110 +29,120 @@
                         </thead>
                     </table>
 
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th style="width: 3%; text-align:center;">NO</th>
-                                <th style="width: 40%; text-align:center;">NAMA</th>
-                                <th style="text-align:center;">KETERANGAN</th>
-                            </tr>
-                        </thead>
-                        <br>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td style="padding-left:45px;">DTTOT</td>
-                                <td style="display:flex; justify-content:center;">
-                                    <select type="text" class="form-control" style="width: 50%; " name="dttot"
-                                        id="">
-                                        <option value="TERDAFTAR" {{ !empty($dttot) ? 'selected' : '' }}>
-                                            TERDAFTAR</option>
-                                        <option value="TIDAK TERDAFTAR" {{ empty($dttot) ? 'selected' : '' }}>TIDAK
-                                            TERDAFTAR
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td style="padding-left:45px;">DPPSPM</td>
-                                <td style="display:flex; justify-content:center;">
-                                    <select type="text" class="form-control" style="width: 50%; " name="dppspm"
-                                        id="">
-                                        <option value="TERDAFTAR" {{ !empty($dppspm) ? 'selected' : '' }}>TERDAFTAR</option>
-                                        <option value="TIDAK TERDAFTAR" {{ empty($dppspm) ? 'selected' : '' }}>TIDAK
-                                            TERDAFTAR
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td style="padding-left:45px;">JUDI ONLINE</td>
-                                <td style="display:flex; justify-content:center;">
-                                    <select type="text" class="form-control" style="width: 50%; " name="judi_online"
-                                        id="">
-                                        <option value="TERDAFTAR" {{ !empty($judi) ? 'selected' : '' }}>TERDAFTAR</option>
-                                        <option value="TIDAK TERDAFTAR" {{ empty($judi) ? 'selected' : '' }}>TIDAK
-                                            TERDAFTAR
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td style="padding-left:45px;">PEP</td>
-                                <td style="display:flex; justify-content:center;">
-                                    <select type="text" class="form-control" style="width: 50%; " name="pep"
-                                        id="">
-                                        <option value="TERDAFTAR" {{ $pep == 'TERDAFTAR' ? 'selected' : '' }}>TERDAFTAR
-                                        </option>
-                                        <option value="TIDAK TERDAFTAR" {{ $pep == 'TIDAK TERDAFTAR' ? 'selected' : '' }}>
-                                            TIDAK
-                                            TERDAFTAR
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td style="padding-left:45px;">NEGATIVE NEWS</td>
-                                <td style="display:flex; justify-content:center;">
-                                    <select type="text" class="form-control" style="width: 50%; " name="negative_news"
-                                        id="">
-                                        <option value="TERDAFTAR" {{ !empty($negative_news) ? 'selected' : '' }}>TERDAFTAR
-                                        </option>
-                                        <option value="TIDAK TERDAFTAR" {{ empty($negative_news) ? 'selected' : '' }}>TIDAK
-                                            TERDAFTAR
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td style="padding-left:45px;">WATCH LIST</td>
-                                <td style="display:flex; justify-content:center;">
-                                    <select type="text" class="form-control" style="width: 50%; " name="watch_list"
-                                        id="">
-                                        <option value="TERDAFTAR" {{ !empty($watch_list) ? 'selected' : '' }}>TERDAFTAR
-                                        </option>
-                                        <option value="TIDAK TERDAFTAR" {{ empty($watch_list) ? 'selected' : '' }}>TIDAK
-                                            TERDAFTAR
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
+                    @if ($status == 'TERDAFTAR')
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%; text-align:center;">NO</th>
+                                    <th style="width: 40%; text-align:center;">NAMA</th>
+                                    <th style="text-align:center;">KETERANGAN</th>
+                                </tr>
+                            </thead>
+                            <br>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td style="padding-left:45px;">DTTOT</td>
+                                    <td style="display:flex; justify-content:center;">
+                                        <select type="text" class="form-control" style="width: 50%; " name="dttot"
+                                            id="">
+                                            <option value="TERDAFTAR" {{ !empty($dttot) ? 'selected' : '' }}>
+                                                TERDAFTAR</option>
+                                            <option value="TIDAK TERDAFTAR" {{ empty($dttot) ? 'selected' : '' }}>TIDAK
+                                                TERDAFTAR
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td style="padding-left:45px;">DPPSPM</td>
+                                    <td style="display:flex; justify-content:center;">
+                                        <select type="text" class="form-control" style="width: 50%; " name="dppspm"
+                                            id="">
+                                            <option value="TERDAFTAR" {{ !empty($dppspm) ? 'selected' : '' }}>TERDAFTAR
+                                            </option>
+                                            <option value="TIDAK TERDAFTAR" {{ empty($dppspm) ? 'selected' : '' }}>TIDAK
+                                                TERDAFTAR
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td style="padding-left:45px;">JUDI ONLINE</td>
+                                    <td style="display:flex; justify-content:center;">
+                                        <select type="text" class="form-control" style="width: 50%; " name="judi_online"
+                                            id="">
+                                            <option value="TERDAFTAR" {{ !empty($judi) ? 'selected' : '' }}>TERDAFTAR
+                                            </option>
+                                            <option value="TIDAK TERDAFTAR" {{ empty($judi) ? 'selected' : '' }}>TIDAK
+                                                TERDAFTAR
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td style="padding-left:45px;">PEP</td>
+                                    <td style="display:flex; justify-content:center;">
+                                        <select type="text" class="form-control" style="width: 50%; " name="pep"
+                                            id="">
+                                            <option value="TERDAFTAR" {{ $pep == 'TERDAFTAR' ? 'selected' : '' }}>TERDAFTAR
+                                            </option>
+                                            <option value="TIDAK TERDAFTAR"
+                                                {{ $pep == 'TIDAK TERDAFTAR' ? 'selected' : '' }}>
+                                                TIDAK
+                                                TERDAFTAR
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td style="padding-left:45px;">NEGATIVE NEWS</td>
+                                    <td style="display:flex; justify-content:center;">
+                                        <select type="text" class="form-control" style="width: 50%; "
+                                            name="negative_news" id="">
+                                            <option value="TERDAFTAR" {{ !empty($negative_news) ? 'selected' : '' }}>
+                                                TERDAFTAR
+                                            </option>
+                                            <option value="TIDAK TERDAFTAR" {{ empty($negative_news) ? 'selected' : '' }}>
+                                                TIDAK
+                                                TERDAFTAR
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td style="padding-left:45px;">WATCH LIST</td>
+                                    <td style="display:flex; justify-content:center;">
+                                        <select type="text" class="form-control" style="width: 50%; " name="watch_list"
+                                            id="">
+                                            <option value="TERDAFTAR" {{ !empty($watch_list) ? 'selected' : '' }}>TERDAFTAR
+                                            </option>
+                                            <option value="TIDAK TERDAFTAR" {{ empty($watch_list) ? 'selected' : '' }}>
+                                                TIDAK
+                                                TERDAFTAR
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
 
 
-                            <tr>
-                                <td>
-                                    <button type="submit" class="btn btn-sm btn-primary"
-                                        style="margin-top:20px;width:100%"><i class="fa fa-print" aria-hidden="true"></i>
-                                        Print</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td>
+                                        <button type="submit" class="btn btn-sm btn-primary"
+                                            style="margin-top:20px;width:100%"><i class="fa fa-print"
+                                                aria-hidden="true"></i>
+                                            Print</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    @endif
+
 
                     <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                         @if (!empty($dttot))

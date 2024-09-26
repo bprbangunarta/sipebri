@@ -723,7 +723,7 @@
             <li class="header">TOOLS</li>
 
             <li
-                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index', 'analisa.skrining.index') ? 'active' : '' }}">
+                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index', 'analisa.skrining.index', 'skrining.nasabah') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Tools Menu</span>
@@ -753,10 +753,17 @@
                             Simulasi Asuransi
                         </a>
                     </li>
-                    <li class="{{ Route::is('skrining.index') ? 'active' : '' }}">
+                    <li class="{{ Route::is('skrining.index', 'skrining.nasabah') ? 'active' : '' }}">
                         <a href="{{ route('skrining.index') }}" title="Screening">
                             <i class="fa fa-search" aria-hidden="true"></i>
                             Screening
+                        </a>
+                    </li>
+
+                    <li class="{{ Route::is('skrining.index', 'skrining.nasabah') ? 'active' : '' }}">
+                        <a href="{{ route('skrining.index') }}" title="Screening">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Data Screening
                         </a>
                     </li>
 

@@ -122,13 +122,13 @@ class RSC extends Model
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.metode_rps',
+                'rsc_data_pengajuan.jangka_waktu',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
                 'data_pengajuan.produk_kode',
-                'data_pengajuan.metode_rps',
-                'data_pengajuan.jangka_waktu',
             )
             ->where('rsc_data_pengajuan.pengajuan_kode', $data)
             ->get();
@@ -152,9 +152,6 @@ class RSC extends Model
                 $value->nama_nasabah = trim($data_eks->fnama);
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->metode_rps = null;
-                $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }
@@ -172,13 +169,13 @@ class RSC extends Model
                 'rsc_data_pengajuan.created_at as tanggal_rsc',
                 'rsc_data_pengajuan.pengajuan_kode as kode_pengajuan',
                 'rsc_data_pengajuan.kode_rsc',
+                'rsc_data_pengajuan.penentuan_plafon as plafon',
+                'rsc_data_pengajuan.metode_rps',
+                'rsc_data_pengajuan.jangka_waktu',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
                 'data_survei.kantor_kode',
-                'data_pengajuan.plafon',
                 'data_pengajuan.produk_kode',
-                'rsc_data_pengajuan.metode_rps',
-                'data_pengajuan.jangka_waktu',
             )
             ->where('rsc_data_pengajuan.kode_rsc', $enc_rsc)
             ->get();
@@ -202,8 +199,6 @@ class RSC extends Model
                 $value->nama_nasabah = trim($data_eks->fnama);
                 $value->alamat_ktp = trim($data_eks->alamat);
                 $value->produk_kode = Midle::data_produk(trim($data_eks->ket));
-                $value->jangka_waktu = $data_eks->jkwaktu;
-                $value->plafon = $data_eks->plafond_awal;
                 $value->kantor_kode = Midle::data_kantor(trim($data_eks->wil));
             }
         }

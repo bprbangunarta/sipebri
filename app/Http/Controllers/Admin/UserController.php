@@ -102,7 +102,7 @@ class UserController extends Controller
         $cek['code_user'] = strtoupper($cek['code_user']); //kapital
         $cek['kantor_kode'] = strtoupper($cek['kantor_kode']); //kapital
         $cek['name'] = strtoupper($cek['name']); //kapital
-        dd($cek);
+
         if ($cek) {
             $data = User::where('code_user', $request->code_user)->get();
             User::where('id', $data[0]->id)
