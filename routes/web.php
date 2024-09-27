@@ -896,6 +896,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(SkriningController::class)->group(function () {
         Route::get('/skrining/nasabah', 'skrining_index')->name('skrining.index');
         Route::get('/skrining/cek', 'skrining_nasabah')->name('skrining.nasabah');
+        Route::get('/daftar/analisa/skrining', 'daftar_analisa_skrining')->name('daftar.analisa.skrining');
+        Route::get('/approve/analisa/skrining', 'approve_analisa_skrining')->name('approve.analisa.skrining');
         Route::get('/cetak/skrining', 'cetak_skrining')->name('skrining.cetak');
         Route::get('/data/skrining', 'data_skrining')->name('skrining.data');
     });
@@ -903,6 +905,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['middlewae' => ['Kabag Kepatuhan', 'Staff Kepatuhan', 'Administrator']], function () {
         Route::controller(SkriningController::class)->group(function () {
             Route::get('/analisa/skrining', 'analisa_skrining_index')->name('analisa.skrining.index');
+            Route::get('/proses/analisa/skrining', 'proses_analisa_skrining')->name('analisa.skrining.proses');
             Route::get('/cetak/analisa/skrining', 'cetak_analisa_skrining')->name('analisa.skrining.cetak');
         });
     });

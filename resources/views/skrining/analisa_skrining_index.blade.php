@@ -6,30 +6,32 @@
         <div class="tab-pane active">
 
             <div class="box-body table-responsive" style="overflow: auto; width: 100%; height:425px;">
-                <form action="{{ route('analisa.skrining.cetak') }}" method="get" target="_blank">
+                <form action="{{ route('analisa.skrining.proses') }}" method="get">
                     @csrf
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <td>
                                     <span class="fw-bold fs-4">NIK</span>
-                                    <input type="text" class="form-control" name="nik">
+                                    <input type="text" value="{{ $nik }}" class="form-control" name="nik"
+                                        readonly>
                                 </td>
                                 <td>
                                     <span class="fw-bold">NAMA CALON NASABAH</span>
-                                    <input type="text" class="form-control" name="nama">
+                                    <input type="text" value="{{ $nama }}" class="form-control" name="nama"
+                                        readonly>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <span class="fw-bold fs-4">CATATAN</span>
-                                    <input type="text" class="form-control text-uppercase" name="catatan">
+                                    <textarea name="catatan" id="" cols="30" rows="5" style="width: 100%;"></textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <button type="submit" class="btn btn-sm btn-primary"
-                                        style="margin-top:20px;width:100%">CEK</button>
+                                        style="margin-top:20px;width:100%">PROSES</button>
                                 </td>
                             </tr>
                         </thead>
