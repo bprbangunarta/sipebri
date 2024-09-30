@@ -1143,7 +1143,6 @@ class RSCCetakController extends Controller
             }
 
             // Cek PK eks
-
             $data_pk_eks = $this->cek_pk_eks($data->pengajuan_kode);
             if (!empty($data_pk_eks)) {
                 $data->pk_rsc_before = $data_pk_eks->no_spk;
@@ -1181,6 +1180,7 @@ class RSCCetakController extends Controller
             }
 
             if ($data->metode_rps_rsc == "EFEKTIF MUSIMAN") {
+
                 return view('rsc.cetak_pk.efektif_musiman', [
                     'data' => $data
                 ]);

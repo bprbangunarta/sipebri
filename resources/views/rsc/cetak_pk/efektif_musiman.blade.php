@@ -334,8 +334,16 @@
                         </table>
                         <br>
                         Sehubungan dengan hal-hal yang telah diuraikan di atas, para pihak setuju untuk dan dengan ini
-                        membuat suatu perubahan dari perjanjian kredit nomor {{ $data->no_spk }} tanggal
-                        {{ $data->tgl_create_pk }} sebagai berikut :
+                        membuat suatu perubahan dari perjanjian kredit nomor @if (!empty($data->pk_rsc_before))
+                            {{ $data->pk_rsc_before }}
+                        @else
+                            {{ $data->no_spk }}
+                        @endif tanggal
+                        @if (!empty($data->pk_rsc_before))
+                            {{ $data->tgl_tempo_pk_rsc_before }}
+                        @else
+                            {{ $data->tgl_akhir_pk }}
+                        @endif sebagai berikut :
                         <table>
                             <tr>
                                 <td>1. </td>
@@ -423,7 +431,11 @@
                                     <font style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_bunga) }}
                                     </font> Rupiah
-                                    ) setiap {{ $data->jp_rsc }} bulan selama {{ $data->jw_rsc }} bulan.
+                                    ) setiap {{ $data->jb_rsc }} (
+                                    <font style="text-transform: capitalize;">
+                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jb_rsc) }}
+                                    </font>
+                                    ) bulan selama {{ $data->jw_rsc }} bulan.
                                 </td>
                             </tr>
                             <tr>
@@ -435,9 +447,18 @@
 
                         <p>Dengan disepakatinya Perubahan Perjanjian Kredit ini, semua syarat-syarat dan
                             ketentuan-ketentuan yang berlaku dalam Surat Perjanjian Kredit (SPK) Nomor
-                            {{ $data->no_spk }} tanggal {{ $data->tgl_create_pk }} maupun dalam perjanjian-perjanjian
-                            lainnya yang bersangkutan dengan pemberian kredit tersebut dengan ini dinyatakan tetap
-                            berlaku, kecuali ketentuan-ketentuan yang telah mengalami perubahan tersebut diatas.</p>
+                            @if (!empty($data->pk_rsc_before))
+                                {{ $data->pk_rsc_before }}
+                            @else
+                                {{ $data->no_spk }}
+                                @endif tanggal @if (!empty($data->pk_rsc_before))
+                                    {{ $data->tgl_tempo_pk_rsc_before }}
+                                @else
+                                    {{ $data->tgl_akhir_pk }}
+                                @endif maupun dalam perjanjian-perjanjian
+                                lainnya yang bersangkutan dengan pemberian kredit tersebut dengan ini dinyatakan tetap
+                                berlaku, kecuali ketentuan-ketentuan yang telah mengalami perubahan tersebut diatas.
+                        </p>
 
                         <p>
                             Demikian Perjanjian Perpanjangan Kredit ini dibuat rangkap dua lembar dalam aslinya dan

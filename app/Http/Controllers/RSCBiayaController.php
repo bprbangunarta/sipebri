@@ -93,27 +93,44 @@ class RSCBiayaController extends Controller
 
             $data_rsc = DB::table('rsc_data_pengajuan')->where('kode_rsc', $rsc)->first();
 
-            // $selisih = abs($data_rsc->tunggakan_bunga - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
+            if ($data_rsc->jenis_persetujuan == 'RESTRUCTURING') {
 
-            // $bunga_dibayar_baru = $biaya->bunga_dibayar + $selisih;
+                $selisih  = abs($data_rsc->penentuan_plafon - $data_rsc->baki_debet);
 
-            $selisih  = abs($data_rsc->penentuan_plafon - $data_rsc->baki_debet);
+                $bunga_dibayar_baru = abs($selisih - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
 
-            $bunga_dibayar_baru = abs($selisih - (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga));
+                $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
+                    $biaya->asuransi_tlo + $bunga_dibayar_baru + $biaya->poko_dibayar + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
 
-            $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
-                $biaya->asuransi_tlo + $bunga_dibayar_baru + $biaya->poko_dibayar + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
+                $data = [
+                    'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $bunga_dibayar_baru),
+                    'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
+                    'total' =>  $total,
+                ];
 
-            $data = [
-                'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $bunga_dibayar_baru),
-                'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
-                'total' =>  $total,
-            ];
+                $data2 = [
+                    'tunggakan_bunga' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+                ];
+            } else {
 
-            $data2 = [
-                'tunggakan_bunga' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
-            ];
+                $total = $biaya->administrasi_nominal + $biaya->asuransi_jiwa +
+                    $biaya->asuransi_tlo + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + $biaya->poko_dibayar + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda);
 
+                $data = [
+                    'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+                    'denda_dibayar' =>  (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
+                    'total' =>  $total,
+                ];
+
+                $total_tunggakan = (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga) + (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda) + $data_rsc->tunggakan_poko;
+
+                $data2 = [
+                    'tunggakan_bunga' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+                    'bunga_dibayar' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_bunga),
+                    'tunggakan_denda' => (int)str_replace(["Rp", " ", "."], "", $request->tunggakan_denda),
+                    'total_tunggakan' => (int) $total_tunggakan,
+                ];
+            }
 
             DB::transaction(function () use ($data2, $data, $rsc) {
                 DB::table('rsc_biaya')->where('kode_rsc', $rsc)->update($data);
