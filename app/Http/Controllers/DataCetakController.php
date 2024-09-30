@@ -1404,7 +1404,7 @@ class DataCetakController extends Controller
                 $cek->banyak_bulan = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
                 $cek->jumlah_bulan = ($cek->jwt - $cek->grace_period) / $cek->jangka_bunga;
                 $cek->tgl_pokok = ($cek->jwt - $cek->grace_period) / $cek->jangka_bunga;
-
+                // dd($cek);
                 return view('cetak.perjanjian-kredit.cetak-pk-kbt-lele', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
@@ -1417,7 +1417,7 @@ class DataCetakController extends Controller
                     'data' => $cek,
                 ]);
                 //Done
-            } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT') {
+            } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'FLAT' || $cek->produk_kode == 'KIH') {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
                     'data' => $cek,
                     'jaminan' => $jaminan,
@@ -1542,7 +1542,7 @@ class DataCetakController extends Controller
                     'agunan' => $cek_jaminan,
                 ]);
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF' || $cek->produk_kode == 'KRS' && $cek->metode_rps == 'EFEKTIF') {
-                // dd($cek);
+
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-efektif', [
 
                     'data' => $cek,
@@ -1551,10 +1551,10 @@ class DataCetakController extends Controller
                 ]);
             } else {
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-flat', [
-
                     'data' => $cek,
                     'jaminan' => $jaminan,
                     'agunan' => $cek_jaminan,
+                    'data_balik_nama' => $data_balik_nama,
                 ]);
             }
         } catch (DecryptException $e) {
