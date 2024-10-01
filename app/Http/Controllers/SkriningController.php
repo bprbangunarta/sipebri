@@ -359,7 +359,7 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'SCREENING!A:E';
+        $range = 'SCREENING!A:N';
 
         $sheetsService = new Google_Service_Sheets($client);
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
@@ -394,6 +394,17 @@ class SkriningController extends Controller
         }
 
         if (!$nikExists && !$namaExists) {
+
+            // $cek = array_filter($existingValues, function ($row) {
+            //     return isset($row[10]) && strpos($row[10], 'DONE') !== false;
+            // });
+
+            // if (!empty($cek)) {
+            //     dd($cek);
+            // } else {
+            //     dd($cek);
+            // }
+
             $body = new Google_Service_Sheets_ValueRange([
                 'values' => [$data]
             ]);
@@ -573,61 +584,6 @@ class SkriningController extends Controller
         }
 
         return $watch_list;
-    }
-
-    private function create_sheet($nik, $nama, $catatan, $status)
-    {
-        $client = $this->google_client();
-        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
-        $client->setAuthConfig(base_path('credential.json'));
-
-        $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
-
-        $range = 'SCREENING!A:E';
-
-        $sheetsService = new Google_Service_Sheets($client);
-        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
-        $existingValues = $response->getValues();
-
-        $data = [
-            $nik,
-            $nama,
-            $catatan,
-            Auth::user()->code_user,
-            $status,
-        ];
-
-        $nikExists = false;
-        $namaExists = false;
-
-        if (!empty($existingValues)) {
-            foreach ($existingValues as $row) {
-                if (isset($row[0]) && $row[0] == $nik) {
-                    $nikExists = true;
-                }
-                if (isset($row[1]) && $row[1] == $nama) {
-                    $namaExists = true;
-                }
-            }
-        }
-
-        if (!$nikExists && !$namaExists) {
-            $body = new Google_Service_Sheets_ValueRange([
-                'values' => [$data]
-            ]);
-
-            $params = [
-                'valueInputOption' => 'RAW'
-            ];
-
-            $sheetsService = new Google_Service_Sheets($client);
-
-            $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
-
-            return redirect()->route('skrining.index')->with('success', 'Data telah dikirim.');
-        } else {
-            return redirect()->route('skrining.index')->with('error', 'Data sedang dianalisa.');
-        }
     }
 
     private function qrcode($user)

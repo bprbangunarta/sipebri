@@ -78,7 +78,7 @@ class AnalisaController extends Controller
         foreach ($data as $item) {
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan);
         }
-        // dd($data);
+
         return view('staff.analisa.index', [
             'data' => $data
         ]);

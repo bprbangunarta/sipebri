@@ -92,13 +92,16 @@
 
                                                 &nbsp;
                                                 @if ($item->tracking == 'Proses Survei' || $item->tracking == 'Proses Analisa')
-                                                    <a data-toggle="modal" data-target="#tolak-batal" data-tolak="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-red" title="Bypass">
+                                                    <a data-toggle="modal" data-target="#tolak-batal"
+                                                        data-tolak="{{ $item->kode_pengajuan }}"
+                                                        class="btn-circle btn-sm bg-red" title="Bypass">
                                                         <i class="fa fa-times"></i>
                                                     </a>
                                                 @else
-                                                <a data-toggle="modal" data-target="#danger2" class="btn-circle btn-sm bg-red" title="Bypass">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
+                                                    <a data-toggle="modal" data-target="#danger2"
+                                                        class="btn-circle btn-sm bg-red" title="Bypass">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -208,7 +211,9 @@
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
                                     <p class="form-control" style="height: 55px;">
-                                        Fitur ini digunakan untuk proses <b class="text-danger">penolakan</b> atau <b class="text-danger">pembatalan</b> pengajuan kredit dengan kondisi tanpa proses input analisa. Terimakasih
+                                        Fitur ini digunakan untuk proses <b class="text-danger">penolakan</b> atau <b
+                                            class="text-danger">pembatalan</b> pengajuan kredit dengan kondisi tanpa proses
+                                        input analisa. Terimakasih
                                     </p>
                                 </div>
                             </div>
@@ -254,11 +259,11 @@
                 </div>
 
                 <div class="modal-body">
-                    <p>Tracking pengajuan kredit sudah dalam proses persetujuan komite kredit, Anda jangan macam-macam dengan fitur ini. Terimakasih</p>
+                    <p>Tracking pengajuan kredit sudah dalam proses persetujuan komite kredit, Anda jangan macam-macam
+                        dengan fitur ini. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn bg-red" style="width: 100%;"
-                        data-dismiss="modal">TUTUP</button>
+                    <button type="button" class="btn bg-red" style="width: 100%;" data-dismiss="modal">TUTUP</button>
                 </div>
             </div>
         </div>
@@ -271,7 +276,7 @@
     <script>
         $(document).ready(function() {
             $("a[data-target='#tolak-batal']").click(function() {
-                // Mendapatkan nilai 'id' dari tombol yang diklik
+
                 var dataId = $(this).data('tolak');
 
                 $('#kode_pengajuan').val(dataId)

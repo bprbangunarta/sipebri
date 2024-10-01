@@ -68,11 +68,24 @@
                                                 @endif
 
                                                 &nbsp;
-
-                                                <a href="{{ route('analisa.skrining.cetak', ['nik' => $item[0], 'nama' => $item[1]]) }}"
-                                                    class="btn-circle btn-sm bg-primary" title="Print" target="_blank">
-                                                    <i class="fa fa-print"></i>
-                                                </a>
+                                                @if (($user == 'Staff Kepatuhan' || $user == 'Kabag Kepatuhan' || $user == 'administrator') && $item[10] == 'DONE')
+                                                    <a href="{{ route('analisa.skrining.cetak', ['nik' => $item[0], 'nama' => $item[1]]) }}"
+                                                        class="btn-circle btn-sm bg-primary" title="Print" target="_blank">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @elseif (
+                                                    ($user == 'Staff Kepatuhan' || $user == 'Kabag Kepatuhan' || $user == 'Administrator') &&
+                                                        ($item[10] == 'DONE' || $item[10] == 'APPROVE KABAG'))
+                                                    <a href="{{ route('analisa.skrining.cetak', ['nik' => $item[0], 'nama' => $item[1]]) }}"
+                                                        class="btn-circle btn-sm bg-primary" title="Print" target="_blank">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="#" class="btn-circle btn-sm bg-gray" title="Print"
+                                                        disabled>
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                @endif
 
                                             </td>
                                         </tr>

@@ -350,12 +350,13 @@
                 <td width="27%">a. Kendaraan (TLO)</td>
                 <td class="text-center" width="3%"> : </td>
                 <td style="text-align: justify;">
-                    {{ 'Rp. ' . '' . number_format($data->asuransi_kendaraan_motor, 0, ',', '.') }} (total nilai
+                    {{ 'Rp. ' . '' . number_format($data->asuransi_kendaraan_motor, 0, ',', '.') }}
+                    {{-- (total nilai
                     pertanggungan Rp. @if ($data->asuransi_kendaraan_motor > 0)
                         {{ number_format($data->plafon, 0, ',', '.') }})
                     @else
                         {{ '0)' }}
-                    @endif
+                    @endif --}}
                 </td>
             </tr>
             <tr>

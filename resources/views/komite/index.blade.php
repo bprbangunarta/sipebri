@@ -65,26 +65,30 @@
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a data-toggle="modal" data-target="#modal-persetujuan"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-green" title="Persetujuan">
+                                                    class="btn-circle btn-sm bg-green" title="Persetujuan"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-check-circle"></i>
                                                 </a>
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#modal-catatan"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Catatan">
+                                                    class="btn-circle btn-sm bg-yellow" title="Catatan"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
+                                                    class="btn-circle btn-sm bg-blue" title="Jadwal Ulang"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
 
                                                 &nbsp;
                                                 <a href="{{ route('cetak.analisa_kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                    target="_blank" class="btn-circle btn-sm btn-info" title="Analisa">
+                                                    target="_blank" class="btn-circle btn-sm btn-info" title="To Analisa"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-file-text"></i>
                                                 </a>
                                             </td>
@@ -343,6 +347,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('myscript')

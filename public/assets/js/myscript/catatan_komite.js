@@ -15,7 +15,7 @@ $(document).ready(function () {
             dataType: "json",
             cache: false,
             success: function (response) {
-                console.log(response);
+                
                 if (response[0]) {
                     var usulan1 = response[0].usulan_plafon ?? null;
                     var text =

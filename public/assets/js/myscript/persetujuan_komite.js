@@ -65,7 +65,7 @@ $(document).ready(function () {
                 $("#provisi").val(hasil.b_provisi) ?? 0;
                 $("#bunga").val(hasil.suku_bunga);
                 $("#admin").val(hasil.b_admin) ?? 0;
-                console.log(role);
+                
                 //Persetujuan
                 if (
                     kategori === "RELOAN" ||

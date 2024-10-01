@@ -589,9 +589,10 @@ Route::middleware('auth')->group(function () {
 
             Route::post('/komite/kredit/data', 'getdata')->name('komite.getdata');
             Route::post('/komite/kredit', 'simpan')->name('komite.simpan');
+            Route::post('/komite/tracking', 'update_tracking')->name('komite.update.tracking');
             Route::get('/komite/kredit/catatan/{pengajuan}', 'catatan')->name('komite.catatan');
 
-            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direksi']], function () {
+            Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi']], function () {
                 Route::get('/komite/kredit/survei/analisa', 'survei_analisa')->name('survei.analisa');
             });
         });
@@ -671,7 +672,6 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(DataBatalPerjanjianKreditController::class)->group(function () {
             route::get('/data/batal/perjanjian/kredit', 'index')->name('data.batal_perjanjian_kredit');
-            // route::post('/data/batal/perjanjian/kredit', 'batal_perjanjian_kredit')->name('data.batal_perjanjian_kredit');
         });
 
         Route::controller(FiduciaController::class)->group(function () {
