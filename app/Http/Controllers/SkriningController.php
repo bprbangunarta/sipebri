@@ -102,6 +102,8 @@ class SkriningController extends Controller
 
     public function data_skrining(Request $request)
     {
+        $search = request('keyword');
+
         $client = $this->google_client();
         $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
         $client->setAuthConfig(base_path('credential.json'));
@@ -115,6 +117,12 @@ class SkriningController extends Controller
         $existingValues = $response->getValues();
 
         $data = array_slice($existingValues, 1);
+
+        if ($search) {
+            $data = array_filter($data, function ($row) use ($search) {
+                return stripos(implode(' ', $row), $search) !== false;
+            });
+        }
 
         $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
 
@@ -379,32 +387,20 @@ class SkriningController extends Controller
             $analisa,
         ];
 
-        $nikExists = false;
-        $namaExists = false;
+        $filteredData = array_slice($existingValues, 1);
 
-        if (!empty($existingValues)) {
-            foreach ($existingValues as $row) {
-                if (isset($row[0]) && $row[0] == $nik) {
-                    $nikExists = true;
-                }
-                if (isset($row[1]) && $row[1] == $nama) {
-                    $namaExists = true;
-                }
-            }
-        }
+        $cek = array_filter($filteredData, function ($row) {
+            return isset($row[10]) && $row[10] === 'DONE';
+        });
 
-        if (!$nikExists && !$namaExists) {
+        if (count($cek) !== count($filteredData)) {
 
-            // $cek = array_filter($existingValues, function ($row) {
-            //     return isset($row[10]) && strpos($row[10], 'DONE') !== false;
-            // });
+            $notDone = array_filter($filteredData, function ($row) {
+                return isset($row[10]) && $row[10] !== 'DONE';
+            });
 
-            // if (!empty($cek)) {
-            //     dd($cek);
-            // } else {
-            //     dd($cek);
-            // }
-
+            return redirect()->back()->with('error', 'Data sedang proses' . ' ' . $notDone[0][10]);
+        } else {
             $body = new Google_Service_Sheets_ValueRange([
                 'values' => [$data]
             ]);
@@ -418,9 +414,40 @@ class SkriningController extends Controller
             $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
 
             return redirect()->route('skrining.index')->with('success', 'Data telah dikirim.');
-        } else {
-            return redirect()->route('skrining.index')->with('error', 'Data sedang dianalisa.');
         }
+
+
+        // $nikExists = false;
+        // $namaExists = false;
+
+        // if (!empty($existingValues)) {
+        //     foreach ($existingValues as $row) {
+        //         if (isset($row[0]) && $row[0] == $nik) {
+        //             $nikExists = true;
+        //         }
+        //         if (isset($row[1]) && $row[1] == $nama) {
+        //             $namaExists = true;
+        //         }
+        //     }
+        // }
+
+        // if (!$nikExists && !$namaExists) {
+        //     $body = new Google_Service_Sheets_ValueRange([
+        //         'values' => [$data]
+        //     ]);
+
+        //     $params = [
+        //         'valueInputOption' => 'RAW'
+        //     ];
+
+        //     $sheetsService = new Google_Service_Sheets($client);
+
+        //     $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
+
+        //     return redirect()->route('skrining.index')->with('success', 'Data telah dikirim.');
+        // } else {
+        //     return redirect()->route('skrining.index')->with('error', 'Data sedang dianalisa.');
+        // }
     }
 
 

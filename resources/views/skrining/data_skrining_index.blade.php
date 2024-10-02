@@ -68,7 +68,12 @@
                                                 @endif
 
                                                 &nbsp;
-                                                @if (($user == 'Staff Kepatuhan' || $user == 'Kabag Kepatuhan' || $user == 'administrator') && $item[10] == 'DONE')
+                                                @if (
+                                                    ($user == 'Customer Service' ||
+                                                        $user == 'Realisasi' ||
+                                                        $user == 'Kabag Operasional' ||
+                                                        $user == 'Kepala Kantor Kas') &&
+                                                        $item[10] == 'DONE')
                                                     <a href="{{ route('analisa.skrining.cetak', ['nik' => $item[0], 'nama' => $item[1]]) }}"
                                                         class="btn-circle btn-sm bg-primary" title="Print" target="_blank">
                                                         <i class="fa fa-print"></i>
