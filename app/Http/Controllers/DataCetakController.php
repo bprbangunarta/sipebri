@@ -867,6 +867,7 @@ class DataCetakController extends Controller
                 $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
             }
         }
+
         return view('cetak.analisa-kredit.index', [
             'data' => $data,
         ]);
@@ -983,7 +984,7 @@ class DataCetakController extends Controller
                     'asuransi_kendaraan_motor' => 0,
                 ];
             }
-            // dd($data[0]);
+            // dd($kualitatif);
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],

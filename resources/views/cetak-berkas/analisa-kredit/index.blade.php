@@ -1679,8 +1679,10 @@
                     <td style="border-right:1px solid black;">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; g. Sumber Informasi Masyarakat
                     </td>
-                    <td style="border-right:1px solid black;">
-                        &nbsp; {{ $kualitatif->info_masyarakat }}
+                    <td style="border-right:1px solid black; text-align:justify;">
+                        <div style="margin-left:5px; margin-right:5px;">
+                            {{ $kualitatif->info_masyarakat }}
+                        </div>
                     </td>
                 </tr>
 
@@ -1802,8 +1804,113 @@
                 </td>
             </tr>
         </table>
-
     </div>
+
+    {{-- 
+    <div class="page-break"></div>
+    <div class="content" style="margin-top: -57px;font-size:12.5px;">
+        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr style="border: 1px solid 034871;">
+        <h4 style="text-align: center;font-size: 12pt;">ANALISA TAMBAHAN</h4>
+        <table>
+            <tr>
+                <td class="text-center" width="2%"> 1. </td>
+                <td width="17%">Kode Pengajuan</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">{{ $cetak->kode_pengajuan }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 2. </td>
+                <td width="17%">Nama Nasabah</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">{{ $cetak->nama_nasabah }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
+                <td width="17%" style="vertical-align: text-top;">Alamat</td>
+                <td class="text-center" width="3%" style="vertical-align: text-top;"> : </td>
+                <td style="text-align: justify;">
+                    {{ $cetak->alamat_ktp }}
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 4. </td>
+                <td width="17%">No. Telp</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">{{ $cetak->no_telp }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 5. </td>
+                <td width="17%">Surveyor</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">{{ $cetak->nama_surveyor }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 6. </td>
+                <td width="17%">Kasi Analis</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">{{ $cetak->nama_kasi }}</td>
+            </tr>
+        </table>
+
+        <table style="margin-top:25px;">
+            <tr>
+                <td colspan="4"><b>Kebutuhan Dana</b></td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 1. </td>
+                <td width="17%">Modal Kerja</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">&nbsp;
+                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->modal_kerja, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 2. </td>
+                <td width="17%">Investasi</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">&nbsp;
+                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->investasi, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
+                <td width="17%" style="vertical-align: text-top;">Konsumtif</td>
+                <td class="text-center" width="3%" style="vertical-align: text-top;"> : </td>
+                <td style="text-align: justify;">
+                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->konsumtif, 0, ',', '.') }}
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 4. </td>
+                <td width="17%">Pelunasan Kredit</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;">&nbsp;
+                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->pelunasan_kredit, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center" width="2%"> 5. </td>
+                <td width="17%">Take Over</td>
+                <td class="text-center" width="3%"> : </td>
+                <td style="text-align: justify;"> &nbsp;
+                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->take_over, 0, ',', '.') }}</td>
+            </tr>
+        </table>
+
+        <table style="margin-top: 25px;">
+            <tr>
+                <td><b>Catatan</b></td>
+            </tr>
+            <tr>
+                <td style="text-align: justify;">
+                    @if (!empty($kualitatif->trade_checking))
+                        {{ $kualitatif->trade_checking }}
+                    @else
+                        ...................
+                    @endif
+                </td>
+            </tr>
+        </table>
+    </div> --}}
+
 
     {{-- Memorandum --}}
     <div class="page-break"></div>
@@ -1834,16 +1941,6 @@
                 <td> : </td>
                 <td>&nbsp; {{ $memorandum->no_telp }} / {{ $memorandum->no_telp_darurat }}</td>
             </tr>
-            {{-- <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Bentuk Usaha</td>
-                <td> : </td>
-                <td>&nbsp; PT</td>
-            </tr>
-            <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e. Pengalaman Usaha</td>
-                <td> : </td>
-                <td>&nbsp; Bukan Lapangan Usaha - Lainnya</td>
-            </tr> --}}
             <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d. Susunan Pengurus & Pemegang Saham</td>
                 <td> : </td>
@@ -2146,7 +2243,11 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Syarat Lainnya
                 </td>
                 <td> : </td>
-                <td>&nbsp; {{ $memorandum->syarat_lainnya }}</td>
+                <td>
+                    <div style="margin-left: 5px; margin-right:5px;">
+                        {{ $memorandum->syarat_lainnya }}
+                    </div>
+                </td>
             </tr>
         </table>
 

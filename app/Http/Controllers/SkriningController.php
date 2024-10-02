@@ -221,7 +221,7 @@ class SkriningController extends Controller
         $client->setAuthConfig(base_path('credential.json'));
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
-        $range = 'SCREENING!A:H';
+        $range = 'SCREENING!A:N';
 
         $sheetsService = new Google_Service_Sheets($client);
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
@@ -230,7 +230,11 @@ class SkriningController extends Controller
         $filteredRowIndex = null;
 
         foreach ($values as $index => $row) {
-            if (isset($row[0]) && strpos($row[0], $nik) !== false && strpos($row[1], $nama) !== false) {
+            if (
+                isset($row[0]) && strpos($row[0], $nik) !== false &&
+                isset($row[1]) && strpos($row[1], $nama) !== false &&
+                isset($row[10]) && $row[10] == 'ANALISA SKRINING'
+            ) {
                 $filteredRowIndex = $index + 1;
                 break;
             }
@@ -306,7 +310,11 @@ class SkriningController extends Controller
         $filteredRowIndex = null;
 
         foreach ($values as $index => $row) {
-            if (isset($row[0]) && strpos($row[0], $nik) !== false && strpos($row[1], $nama) !== false) {
+            if (
+                isset($row[0]) && strpos($row[0], $nik) !== false &&
+                isset($row[1]) && strpos($row[1], $nama) !== false &&
+                isset($row[10]) && $row[10] == 'APPROVE KABAG'
+            ) {
                 $filteredRowIndex = $index + 1;
                 break;
             }
