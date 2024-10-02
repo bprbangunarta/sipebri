@@ -766,15 +766,6 @@
                             Data Screening
                         </a>
                     </li>
-
-                    @if (Auth::user()->hasRole(['Staff Kepatuhan', 'Kabag Kepatuhan', 'Administrator']))
-                        <li class="{{ Route::is('analisa.skrining.index') ? 'active' : '' }}">
-                            <a href="{{ route('analisa.skrining.index') }}" title="Screening">
-                                <i class="fa fa-pie-chart" aria-hidden="true"></i>
-                                Analisa Screening
-                            </a>
-                        </li>
-                    @endif
                 </ul>
             </li>
         </ul>
