@@ -124,7 +124,7 @@ class DenahLokasiController extends Controller
 
             if (count($data) != 0) {
                 if (!is_null($data[0]->latitude) || !is_null($data[0]->longitude)) {
-                    $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah, $data[0]->latitude, $data[0]->longitude);
+                    // $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah, $data[0]->latitude, $data[0]->longitude);
                 } else {
                     $qr_lokasi_rumah = (object) [
                         'latitude' => null,
@@ -155,15 +155,13 @@ class DenahLokasiController extends Controller
             // dd($lokasi_usaha);
             return view('administratif.denah-lokasi.lokasi', [
                 'data' => $data[0],
-                'qr_lokasi_rumah' => $qr_lokasi_rumah,
-                'lokasi_usaha' => $lokasi_usaha,
+                // 'qr_lokasi_rumah' => $qr_lokasi_rumah,
+                // 'lokasi_usaha' => $lokasi_usaha,
             ]);
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
 
-    public function qrcode(Request $request)
-    {
-    }
+    public function qrcode(Request $request) {}
 }

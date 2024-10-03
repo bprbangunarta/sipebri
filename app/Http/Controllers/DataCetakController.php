@@ -217,7 +217,7 @@ class DataCetakController extends Controller
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->persen_fiducia;
 
                 //Narasi Angsuran Graceperiode
-                $cek->jw = ($cek->jangka_waktu - $cek->grace_period) / $cek->jangka_pokok;
+                $cek->jw = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
                 $cek->awal_angsuran = $cek->jangka_pokok + $cek->grace_period;
 
                 //QRCode 
@@ -272,7 +272,7 @@ class DataCetakController extends Controller
                 $cek->biaya_kredit = (float)$cek->b_provisi + (float)$cek->b_admin + (float)$cek->persen_fiducia;
 
                 //Narasi Angsuran Graceperiode
-                $cek->jw = ($cek->jangka_waktu - $cek->grace_period) / $cek->jangka_pokok;
+                $cek->jw = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
                 $cek->awal_angsuran = $cek->jangka_pokok + $cek->grace_period;
 
                 //QRCode 
