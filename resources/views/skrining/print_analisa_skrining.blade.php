@@ -173,7 +173,7 @@
                 <tr>
                     <td colspan="3">
                         <center>
-                            <p>Pamanukan, 15 September 2024</p>
+                            <p>Pamanukan, {{ $tgl }}</p>
                         </center>
                     </td>
                 </tr>

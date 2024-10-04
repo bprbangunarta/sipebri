@@ -27,6 +27,18 @@ class SkriningController extends Controller
         $nama = $request->query('nama');
         $catatan = $request->query('pep');
 
+        if (empty($nik)) {
+            return redirect()->back()->withInput()->with('error', 'NIK harus diisi.');
+        }
+
+        if (empty($nama)) {
+            return redirect()->back()->withInput()->with('error', 'NAMA harus diisi.');
+        }
+
+        if (empty($catatan)) {
+            $catatan = 'TIDAK TERDAFTAR';
+        }
+
         $values_dttot = $this->dttot($nik, $nama);
         $values_dppspm = $this->dppspm($nama);
         $values_judi = $this->judi_online($nik, $nama);
@@ -205,7 +217,10 @@ class SkriningController extends Controller
             $qr_kabag = null;
         }
 
-        return view('skrining.print_analisa_skrining', compact('data', 'qr_staff', 'qr_kabag'));
+        $tgl = Carbon::now();
+        $tgl = $tgl->locale('id')->translatedFormat('d F Y');
+
+        return view('skrining.print_analisa_skrining', compact('data', 'qr_staff', 'qr_kabag', 'tgl'));
     }
 
     public function proses_analisa_skrining()

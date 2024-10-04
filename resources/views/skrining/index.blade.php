@@ -13,11 +13,11 @@
                             <tr>
                                 <td>
                                     <span class="fw-bold fs-4">NIK</span>
-                                    <input type="text" class="form-control" name="nik">
+                                    <input type="text" class="form-control" name="nik" value="{{ old('nik', '') }}">
                                 </td>
                                 <td>
                                     <span class="fw-bold">NAMA CALON NASABAH</span>
-                                    <input type="text" class="form-control" name="nama">
+                                    <input type="text" class="form-control" name="nama" value="{{ old('nama', '') }}">
                                 </td>
                             </tr>
                             <tr>

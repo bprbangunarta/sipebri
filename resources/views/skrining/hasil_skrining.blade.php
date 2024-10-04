@@ -135,7 +135,7 @@
                             </tbody>
                         </table>
                         <button type="submit" class="btn btn-sm btn-primary" style="margin-top:20px;">
-                            Proses Analisa Skrining</button>
+                            Proses Analisa Screening</button>
                     </form>
                 @else
                     <form action="{{ route('skrining.cetak') }}" method="get" target="_blank">

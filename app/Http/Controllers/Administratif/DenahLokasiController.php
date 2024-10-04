@@ -124,7 +124,7 @@ class DenahLokasiController extends Controller
 
             if (count($data) != 0) {
                 if (!is_null($data[0]->latitude) || !is_null($data[0]->longitude)) {
-                    // $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah, $data[0]->latitude, $data[0]->longitude);
+                    $qr_lokasi_rumah = Midle::get_qrcode_denah('Lokasi_Rumah', $data[0]->no_identitas, $data[0]->nama_nasabah, $data[0]->latitude, $data[0]->longitude);
                 } else {
                     $qr_lokasi_rumah = (object) [
                         'latitude' => null,

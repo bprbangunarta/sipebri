@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>Cetak Denah Lokasi</title>
     <style>
         @page {
@@ -17,30 +14,23 @@
 
         body {
             margin: 0;
-            /* font-family: 'Calibri', serif; */
             font-family: "Times New Roman", Times, serif;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            /* border: 2px solid #000000; */
-            /* Menambahkan border ke seluruh tabel */
         }
 
         th,
         td {
             padding: 1px;
             text-align: left;
-            /* border-bottom: 1px solid #000000;
-            border-right: 1px solid #000000; */
-            /* Menambahkan border pada sisi kanan sel */
         }
 
         th:last-child,
         td:last-child {
             border-right: none;
-            /* Menghapus border kanan pada sel terakhir setiap baris */
         }
 
         th {
@@ -72,6 +62,20 @@
             .content {
                 padding: 1.5cm;
             }
+
+            #map,
+            #map * {
+                visibility: visible;
+            }
+
+            #map {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100vh;
+            }
+
         }
 
         .penghasilan {
@@ -110,8 +114,9 @@
         <br>
         <br>
         <div class="row">
-            <div class="map" style="height: 500px;"></div>
-            {{-- <div class="col-sm-5 mt-3">
+            <div id="map" style="border:2px solid black; height: 500px;">
+            </div>
+            {{-- <div class="col-sm-5 mt-3 img">
                 <div class="card">
                     @if (!is_null($data->latitude) || !is_null($data->longitude))
                         <img class="card-img-top" src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}">
@@ -147,29 +152,23 @@
             @endforelse --}}
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-    </script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
-        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <script>
-        $(document).ready(function() {
-            var lot = '-6.3930368';
-            var long = '107.7968896';
+        var lat = -6.5208679;
+        var lng = 107.6741288;
 
-            var map = L.map('map').setView([lot, long], 15);
+        var map = L.map('map').setView([lat, lng], 15);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
 
-            L.marker([lot, long]).addTo(map)
-                .bindPopup('Lokasi Anda') // Menambahkan popup
-                .openPopup();
-        })
+        L.marker([lat, lng]).addTo(map);
 
-        window.print();
+        setTimeout(function() {
+            window.print();
+        }, 1000);
     </script>
 </body>
 
