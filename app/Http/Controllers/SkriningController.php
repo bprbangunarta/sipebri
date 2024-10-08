@@ -398,7 +398,7 @@ class SkriningController extends Controller
 
         $data = [
             $nik,
-            $nama,
+            strtoupper($nama),
             $dttot,
             $dppspm,
             $judi_online,
@@ -412,17 +412,31 @@ class SkriningController extends Controller
 
         $filteredData = array_slice($existingValues, 1);
 
-        $cek = array_filter($filteredData, function ($row) {
-            return isset($row[10]) && $row[10] === 'DONE';
-        });
+        // $cek = array_filter($filteredData, function ($row) {
+        //     return isset($row[10]) && $row[10] === 'DONE';
+        // });
+        $count = 0;
 
-        if (count($cek) !== count($filteredData)) {
+        foreach ($filteredData as $row) {
+            if (isset($row[0]) && strpos($row[0], $nik) !== false) {
+                if (isset($row[10])) {
+                    if ($row[10] == 'DONE') {
+                        $count = 0;
+                        break;
+                    } elseif ($row[10] == 'ANALISA SKRINING') {
+                        $count = 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($count == 1) {
 
             $notDone = array_filter($filteredData, function ($row) {
                 return isset($row[10]) && $row[10] !== 'DONE';
             });
 
-            // return redirect()->back()->with('error', 'Data sedang proses' . ' ' . $notDone[0][10]);
             if (!empty($notDone)) {
                 $firstNotDone = reset($notDone);
                 $status = isset($firstNotDone[10]) ? $firstNotDone[10] : 'Tidak diketahui';
@@ -444,39 +458,6 @@ class SkriningController extends Controller
 
             return redirect()->route('skrining.index')->with('success', 'Data telah dikirim.');
         }
-
-
-        // $nikExists = false;
-        // $namaExists = false;
-
-        // if (!empty($existingValues)) {
-        //     foreach ($existingValues as $row) {
-        //         if (isset($row[0]) && $row[0] == $nik) {
-        //             $nikExists = true;
-        //         }
-        //         if (isset($row[1]) && $row[1] == $nama) {
-        //             $namaExists = true;
-        //         }
-        //     }
-        // }
-
-        // if (!$nikExists && !$namaExists) {
-        //     $body = new Google_Service_Sheets_ValueRange([
-        //         'values' => [$data]
-        //     ]);
-
-        //     $params = [
-        //         'valueInputOption' => 'RAW'
-        //     ];
-
-        //     $sheetsService = new Google_Service_Sheets($client);
-
-        //     $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
-
-        //     return redirect()->route('skrining.index')->with('success', 'Data telah dikirim.');
-        // } else {
-        //     return redirect()->route('skrining.index')->with('error', 'Data sedang dianalisa.');
-        // }
     }
 
 

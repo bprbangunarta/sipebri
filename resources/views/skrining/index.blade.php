@@ -17,7 +17,8 @@
                                 </td>
                                 <td>
                                     <span class="fw-bold">NAMA CALON NASABAH</span>
-                                    <input type="text" class="form-control" name="nama" value="{{ old('nama', '') }}">
+                                    <input type="text" class="form-control text-uppercase" name="nama"
+                                        value="{{ old('nama', '') }}">
                                 </td>
                             </tr>
                             <tr>
@@ -31,6 +32,11 @@
                                             TIDAK TERDAFTAR
                                         </option>
                                     </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <b>Lakukan pengecekan PEP terlebih dahulu di WEB PORTAL, baru lakukan SCREENING.</b>
                                 </td>
                             </tr>
                             <tr>
