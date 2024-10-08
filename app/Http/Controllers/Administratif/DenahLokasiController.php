@@ -152,16 +152,14 @@ class DenahLokasiController extends Controller
             } else {
                 return redirect()->back()->with('error', 'Data Tidak Ditemukan');
             }
-            // dd($lokasi_usaha);
+
             return view('administratif.denah-lokasi.lokasi', [
                 'data' => $data[0],
-                // 'qr_lokasi_rumah' => $qr_lokasi_rumah,
+                'qr_lokasi_rumah' => $qr_lokasi_rumah,
                 // 'lokasi_usaha' => $lokasi_usaha,
             ]);
         } catch (DecryptException $th) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
     }
-
-    public function qrcode(Request $request) {}
 }

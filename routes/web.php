@@ -336,6 +336,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/cetak/motor', [CetakController::class, 'motor'])->name('cetak.motor');
         Route::get('/cetak/mobil', [CetakController::class, 'mobil'])->name('cetak.mobil');
         Route::get('/cetak/tanah', [CetakController::class, 'tanah'])->name('cetak.tanah');
+        Route::get('/cetak/surat/survei', [CetakController::class, 'surat_survei'])->name('cetak.surat.survei');
         Route::get('/cetak/monitoring/kredit', [CetakController::class, 'monitoring'])->name('cetak.monitoring');
 
         // Cetak Notifikasi Kredit
@@ -967,7 +968,6 @@ Route::middleware('auth')->group(function () {
 Route::get('/pengajuan/kredit', [FrontController::class, 'pengajuan']);
 Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
 Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
-Route::get('/lokasi/{qrcode}', [DenahLokasiController::class, 'qrcode']);
 //====FRONT END====//
 
 Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');

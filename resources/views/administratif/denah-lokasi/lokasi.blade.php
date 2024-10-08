@@ -54,6 +54,14 @@
             text-align: justify;
         }
 
+        #map img {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 120px;
+            z-index: 1000;
+        }
+
         @media print {
             body {
                 font-size: 12pt;
@@ -63,24 +71,23 @@
                 padding: 1.5cm;
             }
 
+            hr {
+                border: 0.8px solid black;
+            }
+
             #map,
             #map * {
                 visibility: visible;
             }
 
             #map {
-                position: absolute;
+                position: static;
                 left: 0;
                 top: 0;
                 width: 100%;
                 height: 100vh;
             }
 
-        }
-
-        .penghasilan {
-            margin-left: 40px;
-            margin-top: -14px;
         }
     </style>
 </head>
@@ -89,6 +96,7 @@
     <div class="content">
 
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+        <hr style="border: 2px solid 034871;">
         <h4 style="text-align: center;">DENAH LOKASI CALON DEBITUR</h4>
 
         <table style="font-size: 13px;">
@@ -114,7 +122,12 @@
         <br>
         <br>
         <div class="row">
-            <div id="map" style="border:2px solid black; height: 500px;">
+            <label for=""><b>PETA LOKASI RUMAH</b></label>
+            <div id="map" style="border:2px solid black; height: 400px; margin-top:5px;">
+
+                <img style="width: 80px; position: absolute; bottom: 10px; left: 10px;"
+                    src="data:image/png;base64,{{ $qr_lokasi_rumah }}">
+
             </div>
             {{-- <div class="col-sm-5 mt-3 img">
                 <div class="card">
@@ -155,13 +168,13 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        var lat = -6.5208679;
-        var lng = 107.6741288;
+        var lat = {{ $data->latitude }};
+        var lng = {{ $data->longitude }};
 
         var map = L.map('map').setView([lat, lng], 15);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            maxZoom: 19,
+        var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 17,
         }).addTo(map);
 
         L.marker([lat, lng]).addTo(map);

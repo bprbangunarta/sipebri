@@ -133,6 +133,20 @@
                                                 </a>
                                             </td>
                                         </tr>
+
+                                        <tr>
+                                            <td class="text-uppercase" style="vertical-align: middle;">
+                                                Laporan Hasil Survei
+                                            </td>
+                                            <td class="text-center" width="10%">
+                                                <a href="{{ route('cetak.surat.survei', ['kode' => $data->kd_pengajuan]) }}"
+                                                    target="_blank">
+                                                    <span class="btn bg-blue" style="width: 120px;hight:100%;">
+                                                        Cetak Berkas
+                                                    </span>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

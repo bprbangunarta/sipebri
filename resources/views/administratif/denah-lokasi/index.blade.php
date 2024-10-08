@@ -64,7 +64,7 @@
 
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a href="{{ route('denah.data_lokasi', ['kode' => $item->kd_pengajuan]) }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Lokasi" target="__blank">
+                                                    class="btn-circle btn-sm bg-yellow" title="Lokasi" target="_blank">
                                                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                                                 </a>
                                             </td>

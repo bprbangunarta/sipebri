@@ -422,7 +422,13 @@ class SkriningController extends Controller
                 return isset($row[10]) && $row[10] !== 'DONE';
             });
 
-            return redirect()->back()->with('error', 'Data sedang proses' . ' ' . $notDone[0][10]);
+            // return redirect()->back()->with('error', 'Data sedang proses' . ' ' . $notDone[0][10]);
+            if (!empty($notDone)) {
+                $firstNotDone = reset($notDone);
+                $status = isset($firstNotDone[10]) ? $firstNotDone[10] : 'Tidak diketahui';
+
+                return redirect()->back()->with('error', 'Data sedang proses: ' . $status);
+            }
         } else {
             $body = new Google_Service_Sheets_ValueRange([
                 'values' => [$data]

@@ -372,20 +372,6 @@ class CetakController extends Controller
                 }
             }
 
-
-            // for ($i = 0; $i < count($data); $i++) {
-            //     $surveyor = DB::table('v_users')
-            //         ->where('code_user', $data[$i]->surveyor_kode)
-            //         ->select('nama_user', 'role_name')->get();
-
-
-            //     $thn = Carbon::now()->year;
-            //     $data[$i]->thn = $thn;
-            //     $data[$i]->nama_user = $surveyor[$i]->nama_user;
-            //     $data[$i]->role_name = $surveyor[$i]->role_name;
-            // }
-
-
             return view('cetak.layouts.tanah', [
                 'data' => $data
             ]);
@@ -906,6 +892,34 @@ class CetakController extends Controller
         return view('cetak.realisasi-kredit.cetak_realisasi', [
             'data' => $data
         ]);
+    }
+
+    public function surat_survei(Request $request)
+    {
+        $enc = Crypt::decrypt($request->query('kode'));
+
+        $data = DB::table('data_pengajuan')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+            ->select(
+                'v_users.nama_user as petugas',
+                'v_users.role_name as jabatan',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.created_at',
+            )
+            ->where('data_pengajuan.kode_pengajuan', $enc)->get();
+        //
+        if (!empty($data)) {
+            $data[0]->created_at = Carbon::parse($data[0]->created_at)->year;
+        }
+
+        return view('cetak.layouts.survei', compact('data'));
+        try {
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
     }
 
     private function roundUp($number)
