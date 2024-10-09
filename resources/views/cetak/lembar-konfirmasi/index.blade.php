@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Standing Interaction')
+@section('title', 'Cetak Lembar Konfirmasi')
 
 @section('content')
     <div class="content-wrapper">
@@ -10,10 +10,10 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-print"></i>
-                            <h3 class="box-title">CETAK STANDING INSTRUCTION</h3>
+                            <h3 class="box-title">CETAK LEMBAR KONFIRMASI</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('cetak.lembar.konfirmasi') }}" method="GET">
+                                <form action="{{ route('cetak.standing.interaction') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 170px;" name="keyword" id="keyword"
@@ -41,8 +41,8 @@
                                         <th class="text-center" width="35%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
-                                        <th class="text-center" width="5%">PMK</th>
-                                        <th class="text-center" width="5%">WNY</th>
+                                        <th class="text-center" width="5%">TAB</th>
+                                        <th class="text-center" width="5%">KREDIT</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,33 +65,20 @@
                                             </td>
                                             <td class="text-right" style="vertical-align: middle;">
                                                 {{ number_format($item->plafon, 0, ',', '.') }}</td>
-                                            @if (Auth::user()->kantor_kode == 'KJT')
-                                                <td class="text-center" style="vertical-align: middle;">
-                                                    <a href="{{ route('cetak.data.standing.interaction', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        target="_blank" class="btn-circle btn-sm bg-blue">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                </td>
-                                                <td class="text-center" style="vertical-align: middle;">
-                                                    <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        target="_blank" class="btn-circle btn-sm bg-blue">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                </td>
-                                            @elseif(Auth::user()->kantor_kode == 'PGD')
-                                                <td class="text-center" style="vertical-align: middle;">
-                                                    <a href="{{ route('cetak.data.standing.interaction', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        target="_blank" class="btn-circle btn-sm bg-blue">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                </td>
-                                                <td class="text-center" style="vertical-align: middle;">
-                                                    <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
-                                                        target="_blank" class="btn-circle btn-sm bg-blue">
-                                                        <i class="fa fa-print"></i>
-                                                    </a>
-                                                </td>
-                                            @endif
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a href="{{ route('cetak.konfirmasi.tabungan', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue"
+                                                    title="Cetak Konfirmasi Tabungan">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a href="{{ route('cetak.konfirmasi.kredit', ['pengajuan' => $item->kd_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue"
+                                                    title="Cetak Konfirmasi Kredit">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
                                         </tr>
 
                                     @empty
@@ -139,8 +126,7 @@
                         Silahkan hubungi bagian admin kredit. Terimakasih</p>
                 </div>
                 <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn btn-danger" style="width: 100%;"
-                        data-dismiss="modal">TUTUP</button>
+                    <button type="button" class="btn btn-danger" style="width: 100%;" data-dismiss="modal">TUTUP</button>
                 </div>
             </div>
         </div>

@@ -922,6 +922,142 @@ class CetakController extends Controller
         }
     }
 
+    public function cetak_lembar_konfirmasi()
+    {
+        $usr = Auth::user()->code_user;
+
+        $name = request('keyword');
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->where('data_pengajuan.status', 'Disetujui')
+            ->where('data_pengajuan.on_current', '1')
+
+
+            ->whereNotNull('data_spk.no_spk')
+            ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
+            ->select(
+                'data_spk.*',
+                'data_pengajuan.*',
+                'data_notifikasi.*',
+                'data_pengajuan.*',
+                'data_nasabah.no_identitas as nik',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_survei.surveyor_kode',
+                'data_spk.created_at as tanggal',
+                'data_spk.otorisasi as otorpk',
+                'users.name'
+            )
+            ->orderBy('data_spk.created_at', 'desc');
+
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+        }
+
+        return view('cetak.lembar-konfirmasi.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function cetak_konfirmasi_tabungan()
+    {
+        $kode = Crypt::decrypt(request()->pengajuan);
+
+        $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->select(
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.no_identitas as nik',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.no_rekening',
+                'data_nasabah.created_at',
+            )
+            ->where('data_pengajuan.kode_pengajuan', $kode)
+            ->first();
+
+        // NBP
+        $cek = DB::connection('sqlsrv')->table('m_cif')
+            ->join('m_tabunganb', 'm_cif.nocif', '=', 'm_tabunganb.nocif')
+            ->select(
+                'm_tabunganb.noacc'
+            )
+            ->where('m_cif.noid', $data->nik)
+            ->first();
+        //
+        if (empty($cek)) {
+            $noacc = '';
+        } else {
+            $noacc = $cek->noacc;
+        }
+        $tgl = Carbon::parse($data->created_at);
+        $data->tgl = $tgl->translatedFormat('d F Y');
+
+        return view('cetak.lembar-konfirmasi.tabungan', compact('data', 'noacc'));
+    }
+
+    public function cetak_konfirmasi_kredit()
+    {
+        $kode = Crypt::decrypt(request()->pengajuan);
+
+        $data = DB::table('data_pengajuan')
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->select(
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.no_identitas as nik',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.no_rekening',
+                'data_spk.created_at',
+                'data_spk.no_spk',
+            )
+            ->where('data_pengajuan.kode_pengajuan', $kode)
+            ->first();
+
+        // NBP
+        $cek = DB::connection('sqlsrv')->table('m_cif')
+            ->join('m_loan', 'm_loan.nocif', '=', 'm_cif.nocif')
+            ->select(
+                'm_loan.noacc'
+            )
+            ->where('m_cif.noid', $data->nik)
+            ->where('m_loan.no_spk', $data->no_spk)
+            ->first();
+        //
+        if (empty($cek)) {
+            $noacc = '';
+        } else {
+            $noacc = $cek->noacc;
+        }
+        $tgl = Carbon::parse($data->created_at);
+        $data->tgl = $tgl->translatedFormat('d F Y');
+
+        return view('cetak.lembar-konfirmasi.kredit', compact('data', 'noacc'));
+    }
+
     private function roundUp($number)
     {
         $length = strlen((string) $number);

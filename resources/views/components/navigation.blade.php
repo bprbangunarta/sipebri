@@ -322,7 +322,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction', 'cetak/data/realisasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction', 'cetak/data/realisasi', 'cetak/lembar/konfirmasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -396,10 +396,18 @@
                         </a>
                     </li>
 
+                    <li class="{{ request()->is('cetak/lembar/konfirmasi') ? 'active' : '' }}">
+                        <a @can('cetak perjanjian kredit') href="{{ route('cetak.lembar.konfirmasi') }}" @endcan
+                            title="Cetak Lembar Konfirmasi">
+                            <i class="fa fa-file-text" aria-hidden="true"></i>
+                            Lembar Konfirmasi
+                        </a>
+                    </li>
+
                     @if (Auth::user()->kantor_kode == 'KJT' || Auth::user()->kantor_kode == 'PGD')
                         <li class="{{ request()->is('cetak/standing-interaction') ? 'active' : '' }}">
                             <a @can('cetak perjanjian kredit') href="{{ route('cetak.standing.interaction') }}" @endcan
-                                title="Cetak Perjanjian Kredit">
+                                title="Staging Interaction">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                                 Standing Intraction
                             </a>

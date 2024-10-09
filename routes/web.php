@@ -347,6 +347,11 @@ Route::middleware('auth')->group(function () {
         // Cetak Perjanjian Kredit
         Route::get('/cetak/perjanjian-kredit', [CetakController::class, 'index_perjanjian_kredit'])->name('cetak.perjanjian.index');
 
+        // Cetak Lembar Konfirmasi Nasabah
+        Route::get('/cetak/lembar/konfirmasi', [CetakController::class, 'cetak_lembar_konfirmasi'])->name('cetak.lembar.konfirmasi');
+        Route::get('/cetak/konfirmasi/tabungan', [CetakController::class, 'cetak_konfirmasi_tabungan'])->name('cetak.konfirmasi.tabungan');
+        Route::get('/cetak/konfirmasi/kredit', [CetakController::class, 'cetak_konfirmasi_kredit'])->name('cetak.konfirmasi.kredit');
+
         // Cetak Standing Intraction
         Route::get('/cetak/standing-interaction', [CetakController::class, 'standing_interaction'])->name('cetak.standing.interaction');
         Route::get('/standing-interaction/cetak', [CetakController::class, 'cetak_standing_interaction'])->name('cetak.data.standing.interaction');
