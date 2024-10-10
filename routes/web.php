@@ -910,6 +910,8 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['middlewae' => ['Kabag Kepatuhan', 'Staff Kepatuhan', 'Administrator']], function () {
         Route::controller(SkriningController::class)->group(function () {
+            Route::get('/udpate/data/skrining', 'udpate_data_skrining_index')->name('update.skrining.data.index');
+            Route::get('/udpate/skrining', 'udpate_data_skrining')->name('update.data.skrining');
             Route::get('/analisa/skrining', 'analisa_skrining_index')->name('analisa.skrining.index');
             Route::get('/proses/analisa/skrining', 'proses_analisa_skrining')->name('analisa.skrining.proses');
             Route::get('/cetak/analisa/skrining', 'cetak_analisa_skrining')->name('analisa.skrining.cetak');

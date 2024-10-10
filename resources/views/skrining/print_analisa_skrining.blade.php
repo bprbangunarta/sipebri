@@ -133,6 +133,19 @@
                     </tr>
                 </tbody>
             </table>
+
+            <table style="margin-left: -2px; margin-top: 20px;">
+                <tr>
+                    <td style="width: 50%;">Petugas Pemeriksa</td>
+                    <td style="width: 5%;">:</td>
+                    <td>{{ $data->pemeriksa }}</td>
+                </tr>
+                <tr>
+                    <td>Tanggal</td>
+                    <td>:</td>
+                    <td>{{ $data->tgl_periksa }}</td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -173,7 +186,7 @@
                 <tr>
                     <td colspan="3">
                         <center>
-                            <p>Pamanukan, {{ $tgl }}</p>
+                            <p>Pamanukan, {{ $data->tgl_approve }}</p>
                         </center>
                     </td>
                 </tr>

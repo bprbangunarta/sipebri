@@ -122,7 +122,7 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'SCREENING!A:N';
+        $range = 'SCREENING!A:R';
 
         $sheetsService = new Google_Service_Sheets($client);
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
@@ -156,7 +156,7 @@ class SkriningController extends Controller
         $client->setAuthConfig(base_path('credential.json'));
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
-        $range = 'SCREENING!A:N';
+        $range = 'SCREENING!A:Q';
 
         $sheetsService = new Google_Service_Sheets($client);
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
@@ -178,6 +178,35 @@ class SkriningController extends Controller
             } else {
                 $kabag = ' ';
             }
+
+            if (!empty($filteredRowIndex[8])) {
+
+                $input_user = User::where('code_user', $filteredRowIndex[8])->pluck('name')->first();
+            } else {
+                $input_user = ' ';
+            }
+
+            if (!empty($filteredRowIndex[8])) {
+
+                $input_user = User::where('code_user', $filteredRowIndex[8])->pluck('name')->first();
+            } else {
+                $input_user = ' ';
+            }
+
+            if (!empty($filteredRowIndex[14])) {
+
+                $tgl_periksa = $filteredRowIndex[14];
+            } else {
+                $tgl_periksa = ' ';
+            }
+
+            if (!empty($filteredRowIndex[16])) {
+
+                $tgl_approve = $filteredRowIndex[16];
+            } else {
+                $tgl_approve = ' ';
+            }
+
             $data = (object) [
                 'nik' => $filteredRowIndex[0] ?: null,
                 'nama' => $filteredRowIndex[1],
@@ -187,9 +216,12 @@ class SkriningController extends Controller
                 'pep' => $filteredRowIndex[5],
                 'negative' => $filteredRowIndex[6],
                 'watch' => $filteredRowIndex[7],
+                'pemeriksa' => $input_user,
                 'staff' => $user,
                 'kabag' => $kabag,
                 'catatan' => $filteredRowIndex[12],
+                'tgl_periksa' => $tgl_periksa,
+                'tgl_approve' => $tgl_approve,
             ];
         } else {
             $data = (object) [
@@ -225,18 +257,20 @@ class SkriningController extends Controller
 
     public function proses_analisa_skrining()
     {
+        $tgl = Carbon::now();
         $nik = request()->nik;
         $nama = request()->nama;
         $catatan = request()->catatan;
         $analisa = 'APPROVE KABAG';
         $user = Auth::user()->code_user;
+        $tgl_analisa = $tgl->translatedFormat('d F Y');
 
         $client = $this->google_client();
         $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
         $client->setAuthConfig(base_path('credential.json'));
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
-        $range = 'SCREENING!A:N';
+        $range = 'SCREENING!A:Q';
 
         $sheetsService = new Google_Service_Sheets($client);
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
@@ -298,6 +332,19 @@ class SkriningController extends Controller
                 'valueInputOption' => 'RAW'
             ]);
 
+            $updateRangeP = 'SCREENING!P' . $filteredRowIndex;
+            $updateValuesP = [
+                [$tgl_analisa]
+            ];
+            $bodyP = new Google_Service_Sheets_ValueRange([
+                'values' => $updateValuesP
+            ]);
+
+
+            $sheetsService->spreadsheets_values->update($spreadsheetId, $updateRangeP, $bodyP, [
+                'valueInputOption' => 'RAW'
+            ]);
+
             return redirect()->route('skrining.data')->with('success', 'Data berhasil dianalisa.');
         } else {
             return redirect()->back()->with('error', 'Data gagal dianalisa.');
@@ -306,10 +353,12 @@ class SkriningController extends Controller
 
     public function approve_analisa_skrining()
     {
+        $tgl = Carbon::now();
         $nik = request()->nik;
         $nama = request()->nama;
         $user = Auth::user()->code_user;
         $analisa = "DONE";
+        $tgl_approve = $tgl->translatedFormat('d F Y');
 
         $client = $this->google_client();
         $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
@@ -364,6 +413,19 @@ class SkriningController extends Controller
                 'valueInputOption' => 'RAW'
             ]);
 
+            $updateRangeQ = 'SCREENING!Q' . $filteredRowIndex;
+            $updateValuesQ = [
+                [$tgl_approve]
+            ];
+            $bodyQ = new Google_Service_Sheets_ValueRange([
+                'values' => $updateValuesQ
+            ]);
+
+
+            $sheetsService->spreadsheets_values->update($spreadsheetId, $updateRangeQ, $bodyQ, [
+                'valueInputOption' => 'RAW'
+            ]);
+
             return redirect()->route('skrining.data')->with('success', 'Data berhasil dianalisa.');
         } else {
             return redirect()->back()->with('error', 'Data gagal dianalisa.');
@@ -372,6 +434,7 @@ class SkriningController extends Controller
 
     public function daftar_analisa_skrining(Request $request)
     {
+        $tgl = Carbon::now();
         $nik = $request->query('nik');
         $nama = $request->query('nama');
         $dttot = $request->query('dttot');
@@ -382,6 +445,8 @@ class SkriningController extends Controller
         $watch_list = $request->query('watch_list');
         $status = 'TERDAFTAR';
         $analisa = 'ANALISA SKRINING';
+        $tgl_input = $tgl->translatedFormat('d F Y');
+
 
         // $this->create_sheet($nik, $nama, $pep, 'TERDAFTAR');
         $client = $this->google_client();
@@ -390,11 +455,30 @@ class SkriningController extends Controller
 
         $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
 
-        $range = 'SCREENING!A:N';
+        $range = 'SCREENING!A:R';
 
         $sheetsService = new Google_Service_Sheets($client);
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
         $existingValues = $response->getValues();
+
+        $largestNumber = null;
+
+        if (!empty($existingValues)) {
+            foreach ($existingValues as $row) {
+                if (isset($row[17]) && is_numeric($row[17])) {
+                    $currentNumber = (int) $row[17];
+                    if ($largestNumber === null || $currentNumber > $largestNumber) {
+                        $largestNumber = $currentNumber;
+                    }
+                }
+            }
+        }
+
+        if (is_null($largestNumber)) {
+            $no = 1;
+        } else {
+            $no = $largestNumber + 1;
+        }
 
         $data = [
             $nik,
@@ -408,13 +492,17 @@ class SkriningController extends Controller
             Auth::user()->code_user,
             $status,
             $analisa,
+            '',
+            '',
+            '',
+            $tgl_input,
+            '',
+            '',
+            $no,
         ];
 
         $filteredData = array_slice($existingValues, 1);
 
-        // $cek = array_filter($filteredData, function ($row) {
-        //     return isset($row[10]) && $row[10] === 'DONE';
-        // });
         $count = 0;
 
         foreach ($filteredData as $row) {
@@ -457,6 +545,96 @@ class SkriningController extends Controller
             $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
 
             return redirect()->route('skrining.index')->with('success', 'Data telah dikirim.');
+        }
+    }
+
+    public function udpate_data_skrining_index()
+    {
+        $nik = request()->nik;
+        $nama = request()->nama;
+        $no = request()->no;
+
+        $client = $this->google_client();
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
+        $range = 'SCREENING!A:R';
+
+        $sheetsService = new Google_Service_Sheets($client);
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+        $values = $response->getValues();
+
+        $cek = array_filter($values, function ($row) use ($nik, $nama, $no) {
+            return isset($row[0]) && strpos($row[0], $nik) !== false && isset($row[1]) && strpos($row[1], $nama) !== false && isset($row[17]) && strpos($row[17], $no) !== false;
+        });
+
+        $arrvall = array_values($cek);
+
+        if (!empty($arrvall)) {
+            $catatan = $arrvall[0][12];
+        } else {
+            $catatan = null;
+        }
+
+        if (!empty($arrvall)) {
+            $no = $arrvall[0][17];
+        } else {
+            $no = null;
+        }
+
+        return view('skrining.update_skrining', compact('nik', 'nama', 'catatan', 'no'));
+    }
+
+    public function udpate_data_skrining()
+    {
+        $nik = request()->nik;
+        $nama = request()->nama;
+        $no = request()->no;
+        $catatan = request()->catatan;
+
+        $client = $this->google_client();
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
+        $range = 'SCREENING!A:R';
+
+        $sheetsService = new Google_Service_Sheets($client);
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+        $values = $response->getValues();
+
+        $filteredRowIndex = null;
+
+        foreach ($values as $index => $row) {
+            if (
+                isset($row[0]) && strpos($row[0], $nik) !== false &&
+                isset($row[1]) && strpos($row[1], $nama) !== false &&
+                isset($row[17]) && $row[17] == $no
+            ) {
+                $filteredRowIndex = $index + 1;
+                break;
+            }
+        }
+
+        if ($filteredRowIndex !== null) {
+            $updateValuesM = [
+                [$catatan]
+            ];
+
+            $updateRangeM = 'SCREENING!M' . $filteredRowIndex;
+            $bodyM = new Google_Service_Sheets_ValueRange([
+                'values' => $updateValuesM
+            ]);
+
+
+            $sheetsService->spreadsheets_values->update($spreadsheetId, $updateRangeM, $bodyM, [
+                'valueInputOption' => 'RAW'
+            ]);
+
+            return redirect()->route('skrining.data')->with('success', 'Data berhasil diubah.');
+        } else {
+            return redirect()->back()->with('error', 'Data gagal dianalisa.');
         }
     }
 
