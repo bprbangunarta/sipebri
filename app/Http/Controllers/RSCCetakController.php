@@ -617,11 +617,22 @@ class RSCCetakController extends Controller
 
             $qr = $this->get_qrcode($enc_rsc, 'RSC_NOTIFIKASI', $data->input_user);
 
+            //Syarat Tambahan
+            $syarat = DB::table('rsc_syarat_tambahan')->where('kode_rsc', $enc_rsc)->first();
+            if (is_null($syarat)) {
+                $syarat = (object) [
+                    'sebelum_realisasi' => null,
+                    'syarat_tambahan' => null,
+                    'syarat_lain' => null,
+                ];
+            }
+
             return view('rsc.cetak_notifikasi.cetak_notifikasi', [
                 'data' => $data,
                 'jaminan' => $cek_jaminan,
                 'agunan' => $agunan,
                 'qr' => $qr,
+                'syarat' => $syarat
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

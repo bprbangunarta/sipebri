@@ -615,6 +615,16 @@
                 </td>
             </tr>
         </table>
+
+
+        Catatan : <br>
+        Adapun kelengkapan dokumen yang harus diserahkan saat realisasi kredit adalah : <br>
+
+        <ol>
+            <li>{{ Str::upper($syarat->sebelum_realisasi) }}</li>
+            <li>{{ Str::upper($syarat->syarat_tambahan) }}</li>
+            <li>{{ Str::upper($syarat->syarat_lain) }}</li>
+        </ol>
     </div>
 
     <script>
