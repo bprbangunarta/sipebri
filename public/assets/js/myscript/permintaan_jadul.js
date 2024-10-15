@@ -5,7 +5,7 @@ $(document).ready(function () {
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/themes/permohonan/data_jadul/" + pengajuan + "?_=" + new Date().getTime(),
+            url: "/themes/permohonan/data_jadul/" + pengajuan,
             type: "GET",
             dataType: "json",
             cache: false,
