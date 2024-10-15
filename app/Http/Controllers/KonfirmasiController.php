@@ -81,7 +81,7 @@ class KonfirmasiController extends Controller
                     return redirect()->back()->with('error', 'Data harus diisi sesuai dengan ketentuan');
                 }
             }
-            
+
             //Data auth
             $data = [
                 'auth_user' => Auth::user()->code_user,
@@ -376,78 +376,78 @@ class KonfirmasiController extends Controller
 
     public function ubah_analisa(Request $request)
     {
-        try {
-            $enc = Crypt::decrypt($request->query('pengajuan'));
+        $enc = Crypt::decrypt($request->query('pengajuan'));
 
-            $collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
-            if (is_null($collateral)) {
-                return redirect()->back()->with('error', 'Data Collateral tidak boleh kosong');
-            }
+        $collateral = DB::table('a5c_collateral')->where('pengajuan_kode', $enc)->first();
+        if (is_null($collateral)) {
+            return redirect()->back()->with('error', 'Data Collateral tidak boleh kosong');
+        }
 
-            $memo = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
-            if (is_null($memo->bi_sifat_kode) || is_null($memo->bi_jenis_usaha_kode)) {
-                return redirect()->back()->with('error', 'Data Sandi Lapbul tidak boleh kosong');
-            }
+        $memo = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
+        if (is_null($memo->bi_sifat_kode) || is_null($memo->bi_jenis_usaha_kode)) {
+            return redirect()->back()->with('error', 'Data Sandi Lapbul tidak boleh kosong');
+        }
 
-            //By pas jika produk KTA
-            $pengajuan = DB::table('data_pengajuan')->where('kode_pengajuan', $enc)->first();
+        //By pas jika produk KTA
+        $pengajuan = DB::table('data_pengajuan')->where('kode_pengajuan', $enc)->first();
 
-            if ($pengajuan->produk_kode == 'KTA') {
-                $name = 'ADM';
-                $length = 5;
-                $kode = Midle::kodeacak_adm($name, $length);
-                $data = [
-                    'kode_analisa' => $kode,
-                    'pengajuan_kode' => $enc,
-                    'administrasi' => 0,
-                    'provisi' =>  0,
-                    'materai' => 0,
-                    'asuransi_jiwa_menurun1' =>  0,
-                    'asuransi_jiwa_menurun2' =>  0,
-                    'asuransi_jiwa_menurun3' =>  0,
-                    'asuransi_jiwa_tetap1' =>  0,
-                    'asuransi_jiwa_tetap2' =>  0,
-                    'asuransi_jiwa' =>  0,
-                    'asuransi_kendaraan_motor' =>  0,
-                    'transaksi_kredit' =>  0,
-                    'proses_shm' => 0,
-                    'polis_materai' =>  0,
-                    'pajak_stnk' =>  0,
-                    'proses_apht' =>  0,
-                    'lainnya' =>  0,
-                    'input_user' => Auth::user()->code_user,
-                    'created_at' => now(),
-                ];
-
-                $data3 = [
-                    'tracking' => 'Persetujuan Komite',
-                    'status' => 'Sudah Otorisasi',
-                ];
-                $data2 = ['analisa_kredit' => now()];
-
-                $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
-                if (is_null($adm)) {
-                    DB::transaction(function () use ($enc, $data, $data3, $data2) {
-                        DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
-                        DB::table('a_administrasi')->insert($data);
-                        Pengajuan::where('kode_pengajuan', $enc)->update($data3);
-                    });
-                }
-            }
-
+        if ($pengajuan->produk_kode == 'KTA') {
+            $name = 'ADM';
+            $length = 5;
+            $kode = Midle::kodeacak_adm($name, $length);
 
             $data = [
+                'kode_analisa' => $kode,
+                'pengajuan_kode' => $enc,
+                'administrasi' => 0,
+                'provisi' =>  0,
+                'materai' => 0,
+                'asuransi_jiwa_menurun1' =>  0,
+                'asuransi_jiwa_menurun2' =>  0,
+                'asuransi_jiwa_menurun3' =>  0,
+                'asuransi_jiwa_tetap1' =>  0,
+                'asuransi_jiwa_tetap2' =>  0,
+                'asuransi_jiwa' =>  0,
+                'asuransi_kendaraan_motor' =>  0,
+                'transaksi_kredit' =>  0,
+                'proses_shm' => 0,
+                'polis_materai' =>  0,
+                'pajak_stnk' =>  0,
+                'proses_apht' =>  0,
+                'lainnya' =>  0,
+                'input_user' => Auth::user()->code_user,
+                'created_at' => now(),
+            ];
+
+            $data3 = [
                 'tracking' => 'Persetujuan Komite',
                 'status' => 'Sudah Otorisasi',
             ];
             $data2 = ['analisa_kredit' => now()];
 
-            DB::transaction(function () use ($enc, $data, $data2) {
-                DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
-                Pengajuan::where('kode_pengajuan', $enc)->update($data);
-            });
+            $adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
+            if (is_null($adm)) {
+                DB::transaction(function () use ($enc, $data, $data3, $data2) {
+                    DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
+                    DB::table('a_administrasi')->insert($data);
+                    Pengajuan::where('kode_pengajuan', $enc)->update($data3);
+                });
+            }
+        }
 
-            return redirect()->route('komite.kredit')->with('success', 'Konfirmasi berhasil');
+        $data = [
+            'tracking' => 'Persetujuan Komite',
+            'status' => 'Sudah Otorisasi',
+        ];
+        $data2 = ['analisa_kredit' => now()];
+
+        DB::transaction(function () use ($enc, $data, $data2) {
+            DB::table('data_tracking')->where('pengajuan_kode', $enc)->update($data2);
+            Pengajuan::where('kode_pengajuan', $enc)->update($data);
+        });
+
+        return redirect()->route('komite.kredit')->with('success', 'Konfirmasi berhasil');
+        try {
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }

@@ -1823,7 +1823,7 @@
     </div>
 
 
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
     <div class="content" style="margin-top: -57px;font-size:12.5px;">
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
         <hr style="border: 1px solid 034871;">
@@ -1925,7 +1925,7 @@
                 </td>
             </tr>
         </table>
-    </div>
+    </div> --}}
 
 
     {{-- Memorandum --}}

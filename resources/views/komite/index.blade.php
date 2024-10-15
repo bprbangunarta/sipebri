@@ -79,9 +79,9 @@
                                                     class="btn-circle btn-sm bg-red" title="Pengembalian Berkas"
                                                     style="cursor: pointer;">
                                                     <i class="fa fa-undo" aria-hidden="true"></i>
-                                                </a> --}}
+                                                </a>
 
-                                                &nbsp;
+                                                &nbsp; --}}
                                                 <a data-toggle="modal" data-target="#modal-persetujuan"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm bg-green" title="Persetujuan"
