@@ -68,10 +68,12 @@ class AnalisaController extends Controller
                 'users.name',
                 'data_survei.kantor_kode',
                 'data_pengajuan.produk_kode',
+                'data_pengajuan.status_pengembalian',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_pengajuan.created_at as tgl_daftar'
             )
-            ->orderBy('data_tracking.proses_survey', 'desc');;
+            ->orderByRaw("CASE WHEN status_pengembalian = 'YA' THEN 1 WHEN status_pengembalian = 'TIDAK' THEN 2 ELSE 3 END")
+            ->orderBy('data_tracking.proses_survey', 'desc');
 
         //Enkripsi kode pengajuan
         $data = $cek->paginate(10);
@@ -230,6 +232,52 @@ class AnalisaController extends Controller
             return redirect()->back()->with('success', 'Anda berhasil melakukan perubahan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal melakukan perubahan');
+        }
+    }
+
+    public function perbaikan_berkas()
+    {
+        $kode = request()->input('data');
+
+        $cek = DB::table('pengembalian_berkas')
+            ->where('pengajuan_kode', $kode)
+            ->get();
+        //
+        $data = [];
+        foreach ($cek as $value) {
+            $data[] = [
+                'role' => $value->role_name,
+                'catatan' => $value->catatan,
+            ];
+        }
+
+        return response()->json($data);
+    }
+
+    public function simpan_perbaikan_berkas(Request $request)
+    {
+        try {
+            if (empty($request->kode)) {
+                return redirect()->back()->with('error', 'Kode pengajuan tidak boleh kosong.');
+            }
+
+            $data = [
+                'status_pengembalian' => 'DONE'
+            ];
+
+            $update = Pengajuan::where('kode_pengajuan', $request->kode)->first();
+
+            if (!is_null($update)) {
+                $pu_pengajuan = Pengajuan::where('kode_pengajuan', $request->kode)->update($data);
+
+                if ($pu_pengajuan) {
+                    return redirect()->back()->with('success', 'Data berhsail diubah');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal diubah');
+                }
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal disimpan, Hubungi IT.');
         }
     }
 }

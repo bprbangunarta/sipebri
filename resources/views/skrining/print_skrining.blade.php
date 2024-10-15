@@ -65,7 +65,7 @@
 
     <div class="content">
         <center>
-            <h3><b>SCREENING CALON NASABAH BPR BANGUNARTA </b></h3>
+            <h3><b>SCREENING CALON NASABAH/NASABAH BPR BANGUNARTA </b></h3>
         </center>
 
         <div class="data">
@@ -151,7 +151,7 @@
 
     <div class="content">
         <center>
-            <h3><b>SCREENING CALON NASABAH BPR BANGUNARTA </b></h3>
+            <h3><b>SCREENING CALON NASABAH/NASABAH BPR BANGUNARTA </b></h3>
         </center>
 
         <div class="data">

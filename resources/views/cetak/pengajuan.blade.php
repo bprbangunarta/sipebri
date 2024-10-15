@@ -136,7 +136,7 @@
 
                                         <tr>
                                             <td class="text-uppercase" style="vertical-align: middle;">
-                                                Laporan Hasil Survei
+                                                Laporan Pelaksanaan Survei
                                             </td>
                                             <td class="text-center" width="10%">
                                                 <a href="{{ route('cetak.surat.survei', ['kode' => $data->kd_pengajuan]) }}"

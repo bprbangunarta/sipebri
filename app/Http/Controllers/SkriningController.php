@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Google_Service_Sheets_ValueRange;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SkriningController extends Controller
 {
@@ -92,7 +93,7 @@ class SkriningController extends Controller
     public function cetak_skrining()
     {
         $tgl = Carbon::now();
-        $tgl = $tgl->format('d F Y');
+        $tgl = $tgl->locale('id')->translatedFormat('d F Y');
 
         $data = (object) [
             'nik' => request()->nik,
@@ -137,6 +138,23 @@ class SkriningController extends Controller
         }
 
         $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
+
+        $data = array_reverse($data);
+        $collection = collect($data);
+
+        $currentPage = request()->input('page', 1);
+        $perPage = 10;
+        $total = $collection->count();
+
+        $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $data = new LengthAwarePaginator(
+            $currentPageItems,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('skrining.data_skrining_index', compact('data', 'user'));
     }

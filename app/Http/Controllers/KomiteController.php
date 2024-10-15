@@ -397,4 +397,66 @@ class KomiteController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function pengembalian_berkas(Request $request)
+    {
+        try {
+            if (is_null($request->kode)) {
+                return redirect()->back()->with('error', 'Kode pengajuan tidak boleh kosong.');
+            }
+
+            $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
+
+            $data = [
+                'pengajuan_kode' => $request->kode,
+                'user_code' => Auth::user()->code_user,
+                'role_name' => $user,
+                'catatan' => $request->catatan,
+            ];
+
+            $data2 = [
+                'status_pengembalian' => 'YA'
+            ];
+
+            $cek = DB::table('pengembalian_berkas')->where('pengajuan_kode', $request->kode)->where('user_code', Auth::user()->code_user)->get();
+
+            if ($cek->isEmpty()) {
+                $data['created_at'] = now();
+                $insert = DB::table('pengembalian_berkas')->insert($data);
+
+                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode)->update($data2);
+
+                if ($insert) {
+                    return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal ditambahkan.');
+                }
+            } else {
+                $data['updated_at'] = now();
+                $update = DB::table('pengembalian_berkas')->where('pengajuan_kode', $request->kode)->where('user_code', Auth::user()->code_user)->update($data);
+
+                DB::table('data_pengajuan')->where('kode_pengajuan', $request->kode)->update($data2);
+
+                if ($update) {
+                    return redirect()->back()->with('success', 'Data berhasil diubah.');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal diubah.');
+                }
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+
+    public function update_pengembalian_berkas()
+    {
+        $kode = request()->input('data');
+
+        $cek = DB::table('pengembalian_berkas')
+            ->where('pengajuan_kode', $kode)
+            ->where('user_code', Auth::user()->code_user)
+            ->first();
+
+        return response()->json($cek);
+    }
 }

@@ -238,7 +238,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/kredit/update', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit', 'themes/denah/lokasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('themes/notifikasi/kredit', 'themes/notifikasi/kredit/update', 'themes/notifikasi/perjanjian/kredit', 'otor/perjanjian/kredit', 'themes/notifikasi/realisasi/kredit', 'themes/penolakan/pengajuan', 'themes/data/perjanjian/kredit', 'themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-file-text"></i>
                     <span>Administratif</span>
@@ -295,14 +295,6 @@
                         </a>
                     </li>
 
-                    {{-- <li class="{{ request()->is('themes/data/batal/perjanjian/kredit') ? 'active' : '' }}">
-                        <a @can('input penolakan') href="{{ route('data.batal_perjanjian_kredit') }}" @endcan
-                            title="Data Perjanjian Kredit">
-                            <i class="fa fa-ban" aria-hidden="true"></i>
-                            Data Pembatalan Kredit
-                        </a>
-                    </li> --}}
-
                     <li class="{{ request()->is('themes/notifikasi/realisasi/kredit') ? 'active' : '' }}">
                         <a @can('realisasi kredit') href="{{ route('realisasi.kredit') }}" @endcan
                             title="Realisasi Kredit">
@@ -311,18 +303,11 @@
                         </a>
                     </li>
 
-                    {{-- <li class="{{ request()->is('themes/denah/lokasi') ? 'active' : '' }}">
-                        <a @can('survey dan analisa') href="{{ route('denah.lokasi') }}" @endcan
-                            title="Check Kendaraan & Lokasi">
-                            <i class="fa fa-map" aria-hidden="true"></i>
-                            Denah Lokasi
-                        </a>
-                    </li> --}}
                 </ul>
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction', 'cetak/data/realisasi', 'cetak/lembar/konfirmasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction', 'cetak/data/realisasi', 'cetak/lembar/konfirmasi', 'themes/denah/lokasi') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -345,6 +330,14 @@
                             title="Cetak Analisa Kredit">
                             <i class="fa fa-suitcase"></i>
                             Analisa Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/denah/lokasi') ? 'active' : '' }}">
+                        <a @can('survey dan analisa') href="{{ route('denah.lokasi') }}" @endcan
+                            title="Check Kendaraan & Lokasi">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            Denah Lokasi
                         </a>
                     </li>
 

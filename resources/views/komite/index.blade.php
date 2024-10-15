@@ -39,6 +39,7 @@
                                         <th class="text-center" width="40%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="8%">STATUS</th>
                                         <th class="text-center" width="13%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -62,7 +63,25 @@
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
 
+                                            <td style="text-align: center;">
+                                                @if ($item->status_pengembalian == 'YA')
+                                                    <label for="" style="color: red;">PERBAIKAN</label>
+                                                @elseif ($item->status_pengembalian == 'DONE')
+                                                    <label style="color: green">SELESAI</label>
+                                                @elseif ($item->status_pengembalian == 'TIDAK')
+                                                    <label for="">-</label>
+                                                @endif
+                                            </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
+                                                <a data-toggle="modal" data-target="#modal-pengembalian"
+                                                    data-pengajuan="{{ $item->kode_pengajuan }}"
+                                                    class="btn-circle btn-sm bg-red" title="Pengembalian Berkas"
+                                                    style="cursor: pointer;">
+                                                    <i class="fa fa-undo" aria-hidden="true"></i>
+                                                </a>
+
+                                                &nbsp;
                                                 <a data-toggle="modal" data-target="#modal-persetujuan"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm bg-green" title="Persetujuan"
@@ -296,6 +315,43 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-pengembalian">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PENGEMBALIAN BERKAS</h4>
+                </div>
+                <form action="{{ route('komite.pengembalian.berkas') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+
+                            <div class="row">
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">CATATAN PENGEMBALIAN BERKAS</span>
+                                    <input type="text" name="kode" id="kd_pengajuan" hidden>
+                                    <textarea class="form-control text-uppercase" rows="3" name="catatan" id="catatans" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 14px; color:rgb(0, 0, 0);">
+                            * Berikan catatan kesalahan analisa yang ditemukan.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn bg-red">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="modal-catatan">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -353,4 +409,5 @@
 @push('myscript')
     <script src="{{ asset('assets/js/myscript/persetujuan_komite.js') }}"></script>
     <script src="{{ asset('assets/js/myscript/catatan_komite.js') }}"></script>
+    <script src="{{ asset('assets/js/myscript/pengembalian_berkas.js') }}"></script>
 @endpush

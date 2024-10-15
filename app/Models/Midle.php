@@ -680,6 +680,7 @@ class Midle extends Model
                 'data_pengajuan.kategori',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
+                'data_pengajuan.status_pengembalian',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -695,7 +696,7 @@ class Midle extends Model
                 'users.name as surveyor',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_produk.*'
-            )
+            )->orderByRaw("CASE WHEN status_pengembalian = 'YA' THEN 1 WHEN status_pengembalian = 'TIDAK' THEN 2 ELSE 3 END")
             ->orderBy('data_tracking.analisa_kredit', 'desc');
         return $cek;
     }
@@ -731,6 +732,7 @@ class Midle extends Model
                 'data_pengajuan.kategori',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
+                'data_pengajuan.status_pengembalian',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -747,6 +749,7 @@ class Midle extends Model
                 'data_pengajuan.jangka_waktu as jk',
                 'data_produk.*'
             )
+            ->orderByRaw("CASE WHEN status_pengembalian = 'YA' THEN 1 WHEN status_pengembalian = 'TIDAK' THEN 2 ELSE 3 END")
             ->orderBy('data_tracking.analisa_kredit', 'desc');
 
         return $cek;
@@ -782,6 +785,7 @@ class Midle extends Model
                 'data_pengajuan.kategori',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
+                'data_pengajuan.status_pengembalian',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -798,6 +802,7 @@ class Midle extends Model
                 'data_pengajuan.jangka_waktu as jk',
                 'data_produk.*'
             )
+            ->orderByRaw("CASE WHEN status_pengembalian = 'YA' THEN 1 WHEN status_pengembalian = 'TIDAK' THEN 2 ELSE 3 END")
             ->orderBy('data_tracking.analisa_kredit', 'desc');
 
         return $cek;
@@ -833,6 +838,7 @@ class Midle extends Model
                 'data_pengajuan.kategori',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
+                'data_pengajuan.status_pengembalian',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -849,6 +855,7 @@ class Midle extends Model
                 'data_pengajuan.jangka_waktu as jk',
                 'data_produk.*'
             )
+            ->orderByRaw("CASE WHEN status_pengembalian = 'YA' THEN 1 WHEN status_pengembalian = 'TIDAK' THEN 2 ELSE 3 END")
             ->orderBy('data_tracking.analisa_kredit', 'desc');
 
         return $cek;
@@ -1503,14 +1510,17 @@ class Midle extends Model
 
     public static function get_qrcode_denah($data, $text, $user, $lat, $long)
     {
-        $url = 'https://www.google.com/maps/place/' . $lat . ',' . $long . '/@' . $lat . ',' . $long . ',18z';
+        // $url = "https://www.google.com/maps/place/' . $lat . ',' . $long . '/@' . $lat . ',' . $long . ',18z";
+        $url = "https://www.google.com/maps/place/{$lat},{$long}/@{$lat},{$long},18z";
+
+        // $url = "https://www.google.com/maps/place/";
 
         $logoPath = public_path('assets/img/favicon2.png');
         $qrCode = QrCode::size(300)
             ->format('png')
             ->errorCorrection('H')
             ->merge($logoPath, 0.3, true)
-            ->generate($url);
+            ->generate(strval($url));
 
         $qrCodeBase64 = base64_encode($qrCode);
 

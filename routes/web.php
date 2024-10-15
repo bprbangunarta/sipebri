@@ -409,6 +409,8 @@ Route::middleware('auth')->group(function () {
 
             Route::group(['middleware' => ['role:Staff Analis|Customer Service|Kepala Kantor Kas']], function () {
                 Route::get('/permohonan/analisa', 'index')->name('permohonan.analisa');
+                Route::get('/perbaikan/analisa', 'perbaikan_berkas')->name('perbaikan.analisa');
+                Route::post('/perbaikan/analisa/simpan', 'simpan_perbaikan_berkas')->name('simpan.perbaikan.analisa');
             });
 
 
@@ -597,6 +599,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/komite/kredit', 'simpan')->name('komite.simpan');
             Route::post('/komite/tracking', 'update_tracking')->name('komite.update.tracking');
             Route::get('/komite/kredit/catatan/{pengajuan}', 'catatan')->name('komite.catatan');
+
+            Route::post('/komite/pengembalian/berkas', 'pengembalian_berkas')->name('komite.pengembalian.berkas');
+            Route::get('/komite/update/pengembalian/berkas', 'update_pengembalian_berkas')->name('komite.udpate.pengembalian.berkas');
 
             Route::group(['middleware' => ['role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi']], function () {
                 Route::get('/komite/kredit/survei/analisa', 'survei_analisa')->name('survei.analisa');

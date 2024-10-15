@@ -40,6 +40,7 @@
                                         <th class="text-center" width="40%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
+                                        <th class="text-center" width="8%">STATUS</th>
                                         <th class="text-center" width="13%">AKSI</th>
                                     </tr>
                                 </thead>
@@ -65,7 +66,33 @@
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
 
+                                            <td style="text-align: center;">
+                                                @if ($item->status_pengembalian == 'YA')
+                                                    <label for="" style="color: red;">PERBAIKAN</label>
+                                                @elseif ($item->status_pengembalian == 'DONE')
+                                                    <label style="color: green">SELESAI</label>
+                                                @elseif ($item->status_pengembalian == 'TIDAK')
+                                                    <label for="">-</label>
+                                                @endif
+                                            </td>
+
                                             <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->status_pengembalian == 'YA')
+                                                    <a data-toggle="modal" data-target="#modal-perbaikan"
+                                                        data-pengajuan="{{ $item->kode_pengajuan }}"
+                                                        class="btn-circle btn-sm btn-info" title="Update Perbaikan"
+                                                        style="cursor: pointer;">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    </a>
+                                                    &nbsp;
+                                                @else
+                                                    <a href="#" class="btn-circle btn-sm" title="Update Perbaikan"
+                                                        style="cursor: pointer; background: rgb(220, 220, 220);">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    </a>
+                                                    &nbsp;
+                                                @endif
+
                                                 @if ($item->tracking == 'Proses Survei')
                                                     <a data-toggle="modal" data-target="#modal-danger"
                                                         class="btn-circle btn-sm btn-default" title="Input">
@@ -86,7 +113,8 @@
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#jadwal-ulang"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-blue" title="Jadwal Ulang">
+                                                    class="btn-circle btn-sm bg-blue" title="Jadwal Ulang"
+                                                    style="cursor: pointer;">
                                                     <i class="fa fa-history"></i>
                                                 </a>
 
@@ -94,12 +122,14 @@
                                                 @if ($item->tracking == 'Proses Survei' || $item->tracking == 'Proses Analisa')
                                                     <a data-toggle="modal" data-target="#tolak-batal"
                                                         data-tolak="{{ $item->kode_pengajuan }}"
-                                                        class="btn-circle btn-sm bg-red" title="Bypass">
+                                                        class="btn-circle btn-sm bg-red" title="Bypass"
+                                                        style="cursor: pointer;">
                                                         <i class="fa fa-times"></i>
                                                     </a>
                                                 @else
                                                     <a data-toggle="modal" data-target="#danger2"
-                                                        class="btn-circle btn-sm bg-red" title="Bypass">
+                                                        class="btn-circle btn-sm bg-red" title="Bypass"
+                                                        style="cursor: pointer;">
                                                         <i class="fa fa-times"></i>
                                                     </a>
                                                 @endif
@@ -133,6 +163,43 @@
             </div>
         </section>
 
+    </div>
+
+    <div class="modal fade" id="modal-perbaikan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PENGEMBALIAN BERKAS</h4>
+                </div>
+                <form action="{{ route('simpan.perbaikan.analisa') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="box-body">
+
+                            <div class="row">
+                                <div style="margin-top: 5px;">
+                                    <span class="fw-bold">CATATAN PENGEMBALIAN BERKAS</span>
+                                    <input type="text" name="kode" id="kd_pengajuan" hidden>
+                                    <textarea class="form-control text-uppercase" rows="8" name="catatan" id="catatans" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 14px; color:red;">
+                            * pilih <b>SIMPAN</b> jika telah melakukan perbaikan sesuai catatan.
+                        </p>
+                    </div>
+
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn bg-primary">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="jadwal-ulang">
@@ -280,6 +347,40 @@
                 var dataId = $(this).data('tolak');
 
                 $('#kode_pengajuan').val(dataId)
+            });
+        });
+
+        $(document).ready(function() {
+            $("#modal-perbaikan").on("show.bs.modal", function(event) {
+                var button = $(event.relatedTarget);
+                var pengajuan = button.data("pengajuan");
+
+                $("#kd_pengajuan").val(pengajuan);
+                $.ajax({
+                    url: "/themes/perbaikan/analisa",
+                    type: "get",
+                    dataType: "json",
+                    cache: false,
+                    data: {
+                        data: pengajuan
+                    },
+                    success: function(response) {
+                        $('#catatans').empty()
+                        $.each(response, function(index, value) {
+                            let data = [
+                                '**' + " " + value.role + " " + '**' + "\n" + value
+                                .catatan +
+                                "\n\n"
+                            ]
+                            $('#catatans').append(data.join(''));
+                        })
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
             });
         });
     </script>

@@ -55,12 +55,9 @@
         }
 
         #map img {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 120px;
-            z-index: 1000;
+            display: none;
         }
+
 
         @media print {
             body {
@@ -81,22 +78,43 @@
             }
 
             #map {
-                position: static;
-                left: 0;
-                top: 0;
+                position: relative;
+                left: 50%;
+                transform: translateX(-50%);
                 width: 100%;
-                height: 100vh;
+                height: 400px;
             }
 
+            .qr-background {
+                display: flex;
+                background-color: white;
+                width: 100px;
+                height: 100px;
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                border-radius: 3px;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #map img {
+                display: block;
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                /* Ubah sesuai kebutuhan */
+                width: 80px;
+                z-index: 2000;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="content">
-
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
-        <hr style="border: 2px solid 034871;">
+        <hr style="border: 2px solid #034871;">
         <h4 style="text-align: center;">DENAH LOKASI CALON DEBITUR</h4>
 
         <table style="font-size: 13px;">
@@ -119,69 +137,48 @@
                 <td>{{ $data->nama_user }}</td>
             </tr>
         </table>
+        <br><br>
+        <div class="row">
+            <label for=""><b>PETA LOKASI RUMAH</b></label>
+            <div id="map" style="border:2px solid black; height: 350px; margin-top:5px;">
+                <div class="qr-background">
+                    <img style="width: 80px;" src="data:image/png;base64,{{ $qr_lokasi_rumah }}">
+                </div>
+            </div>
+        </div>
         <br>
         <br>
         <div class="row">
-            <label for=""><b>PETA LOKASI RUMAH</b></label>
-            <div id="map" style="border:2px solid black; height: 400px; margin-top:5px;">
-
-                <img style="width: 80px; position: absolute; bottom: 10px; left: 10px;"
-                    src="data:image/png;base64,{{ $qr_lokasi_rumah }}">
+            <label for=""><b>DENAH LOKASI USAHA</b></label>
+            <div id="map" style="border:2px solid black; height: 350px; margin-top:5px;">
 
             </div>
-            {{-- <div class="col-sm-5 mt-3 img">
-                <div class="card">
-                    @if (!is_null($data->latitude) || !is_null($data->longitude))
-                        <img class="card-img-top" src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}">
-                    @else
-                        <img class="card-img-top" src="{{ asset('assets/img/lokasi.png') }}">
-                    @endif
-                    <div class="card-body">
-                        <h5 class="card-title"><b>LOKASI RUMAH</b></h5>
-                        {{ $data->alamat_ktp }}
-                    </div>
-                </div>
-            </div> --}}
-            {{-- @forelse ($lokasi_usaha as $item)
-                <div class="col-sm-5 mt-3">
-                    <div class="card">
-                        @if ($data->alamat_ktp === $item->lokasi_usaha)
-                            @if (!is_null($data->latitude) || !is_null($data->longitude))
-                                <img class="card-img-top"
-                                    src="{{ asset('storage/image/qr_code/' . $qr_lokasi_rumah) }}">
-                            @else
-                                <img class="card-img-top" src="{{ asset('assets/img/lokasi.png') }}">
-                            @endif
-                        @else
-                            <img class="card-img-top" src="{{ asset('assets/img/lokasi.png') }}">
-                        @endif
-                        <div class="card-body">
-                            <h6 class="card-title"><b>{{ $item->nama_usaha }}</b></h6>
-                            {{ $data->alamat_ktp }}
-                        </div>
-                    </div>
-                </div>
-            @empty
-            @endforelse --}}
         </div>
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
     <script>
         var lat = {{ $data->latitude }};
         var lng = {{ $data->longitude }};
 
-        var map = L.map('map').setView([lat, lng], 15);
+        // URL untuk peta
+        var url = 'https://www.google.com/maps?q=' + lat + ',' + lng + '&z=18&t=k&output=embed';
 
-        var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            maxZoom: 17,
-        }).addTo(map);
+        // Membuat elemen iframe
+        var iframe = document.createElement('iframe');
+        iframe.width = "100%";
+        iframe.height = "100%";
+        iframe.src = url;
+        iframe.frameBorder = "0";
+        iframe.style.border = "0";
+        iframe.allowFullscreen = true;
 
-        L.marker([lat, lng]).addTo(map);
+        document.getElementById('map').appendChild(iframe);
 
-        setTimeout(function() {
-            window.print();
-        }, 1000);
+        iframe.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
     </script>
 </body>
 

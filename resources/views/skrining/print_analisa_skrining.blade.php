@@ -65,6 +65,9 @@
         <hr>
     </div>
     <div class="content">
+        <center>
+            <h3><b>SCREENING CALON NASABAH/NASABAH BPR BANGUNARTA </b></h3>
+        </center>
         <div class="data">
             <br>
             <table style="margin-left: -2px;">
@@ -150,8 +153,7 @@
     </div>
 
     <br>
-    <br>
-    <br>
+
     <br>
 
     <div class="header">
@@ -182,7 +184,7 @@
                 {{ $data->catatan }}
             </p>
 
-            <table style="width:97%; margin-right:50px; margin-top: 15px;">
+            <table style="width:97%; margin-right:50px; margin-top: -15px;">
                 <tr>
                     <td colspan="3">
                         <center>

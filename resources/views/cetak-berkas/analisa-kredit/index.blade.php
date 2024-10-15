@@ -65,6 +65,14 @@
             text-align: justify;
         }
 
+        .content img {
+            display: none;
+        }
+
+        .content hr {
+            display: none;
+        }
+
         @media print {
             body {
                 font-size: 10pt;
@@ -79,6 +87,14 @@
 
             .page-break {
                 page-break-before: always;
+            }
+
+            .content img {
+                display: block;
+            }
+
+            .content hr {
+                display: block;
             }
         }
     </style>
@@ -1806,7 +1822,7 @@
         </table>
     </div>
 
-    {{-- 
+
     <div class="page-break"></div>
     <div class="content" style="margin-top: -57px;font-size:12.5px;">
         <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
@@ -1909,7 +1925,7 @@
                 </td>
             </tr>
         </table>
-    </div> --}}
+    </div>
 
 
     {{-- Memorandum --}}
@@ -2259,30 +2275,17 @@
                     Pamanukan, {{ $memorandum->hari }} <br>
                     <p style="margin-top: 30px;"></p>
                     <center>
-                        {{-- <p style="margin-top:10px;"></p> --}}
                         <img src="{{ asset('storage/image/qr_code/' . $qr) }}" width="100" height="100"
-                            style="margin-top:-30px;">
+                            style="margin-top:-25px;">
                     </center>
                     <b>
-                        <font style="text-transform: uppercase;">{{ $memorandum->nama_surveyor }}</font>
+                        <font style="text-transform: uppercase; margin-top: 5px; display: block;">
+                            {{ $memorandum->nama_surveyor }}
+                        </font>
                     </b>
                 </td>
             </tr>
 
-            {{-- <tr>
-                <td width="70%"></td>
-                <td class="text-center">
-                    <p style="margin-top: -10.5px;"></p>
-                    Pamanukan, {{ $memorandum->hari }} <br>
-                    <center>
-                        <img src="https://firebase.google.com/static/docs/ml-kit/images/examples/qrcode.png?hl=id"
-                            style="width:100px;hight:100px;">
-                    </center>
-                    <b>
-                        <font style="text-transform: uppercase;">{{ $memorandum->nama_surveyor }}</font>
-                    </b>
-                </td>
-            </tr> --}}
         </table>
 
     </div>

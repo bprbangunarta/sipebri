@@ -116,6 +116,17 @@
                             </table>
                         </div>
 
+                        <div class="box-footer clearfix">
+                            <div class="pull-left hidden-xs">
+                                <button class="btn btn-default btn-sm">
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
+                                </button>
+                            </div>
+
+                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
+                        </div>
+
                     </div>
                 </div>
             </div>
