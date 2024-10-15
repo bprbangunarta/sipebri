@@ -665,6 +665,7 @@ class Midle extends Model
                 'data_pengajuan.kategori',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.metode_rps',
+                'data_pengajuan.status_pengembalian',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
                 'data_nasabah.alamat_ktp',
@@ -681,6 +682,7 @@ class Midle extends Model
                 'data_pengajuan.jangka_waktu as jk',
                 'data_produk.*'
             )
+            ->orderByRaw("CASE WHEN status_pengembalian = 'YA' THEN 1 WHEN status_pengembalian = 'TIDAK' THEN 2 ELSE 3 END")
             ->orderBy('data_tracking.analisa_kredit', 'desc');
 
         return $cek;
