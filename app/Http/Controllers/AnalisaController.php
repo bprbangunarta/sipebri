@@ -125,7 +125,7 @@ class AnalisaController extends Controller
                 'catatan' => $request->keterangan,
                 'updated_at' => now(),
             ];
-            dd($survei, $request);
+
             if ($request->tgl_survei === $survei->tgl_survei) {
                 $data = [
                     'catatan_survei' => $request->keterangan,
