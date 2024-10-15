@@ -67,18 +67,18 @@
                                             </td>
 
                                             <td style="text-align: center;">
-                                                {{-- @if ($item->status_pengembalian == 'YA')
+                                                @if ($item->status_pengembalian == 'YA')
                                                     <label for="" style="color: red;">PERBAIKAN</label>
                                                 @elseif ($item->status_pengembalian == 'DONE')
                                                     <label style="color: green">SELESAI</label>
                                                 @elseif ($item->status_pengembalian == 'TIDAK')
                                                     <label for="">-</label>
-                                                @endif --}}
+                                                @endif
                                                 -
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                {{-- @if ($item->status_pengembalian == 'YA')
+                                                @if ($item->status_pengembalian == 'YA')
                                                     <a data-toggle="modal" data-target="#modal-perbaikan"
                                                         data-pengajuan="{{ $item->kode_pengajuan }}"
                                                         class="btn-circle btn-sm btn-info" title="Update Perbaikan"
@@ -92,7 +92,7 @@
                                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                                     </a>
                                                     &nbsp;
-                                                @endif --}}
+                                                @endif
 
                                                 @if ($item->tracking == 'Proses Survei')
                                                     <a data-toggle="modal" data-target="#modal-danger"

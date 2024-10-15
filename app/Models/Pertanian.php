@@ -41,8 +41,7 @@ class Pertanian extends Model
             }
 
             $acak = $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
-        } while (!self::where('kode_usaha', $acak)->exists());
-
+        } while (self::where('kode_usaha', $acak)->exists());
         return $acak;
     }
 

@@ -15,16 +15,40 @@ class Keuangan extends Model
 
     public static function kodeacak($name, $length)
     {
-        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
-            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+        // for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+        //     $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
 
-            // Cek apakah kode sudah ada dalam database
-            if (!self::where('kode_keuangan', $acak)->exists()) {
-                return $acak;
+        //     // Cek apakah kode sudah ada dalam database
+        //     if (!self::where('kode_keuangan', $acak)->exists()) {
+        //         return $acak;
+        //     }
+        // }
+
+        // return null;
+
+        do {
+            $lastCode = self::whereNotNull('kode_keuangan')
+                ->orderBy('kode_keuangan', 'desc')
+                ->value('kode_keuangan');
+
+            if (!$lastCode) {
+                $prefix = $name;
+                $newNumber = 1;
+            } else {
+
+                $prefix = substr($lastCode, 0, 3);
+                $numberPart = substr(
+                    $lastCode,
+                    3
+                );
+
+                $newNumber = (int) $numberPart + 1;
             }
-        }
 
-        return null; // Jika tidak ada kode yang unik ditemukan
+            $acak = $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        } while (self::where('kode_keuangan', $acak)->exists());
+
+        return $acak;
     }
 
     public static function du_kodeacak($length)

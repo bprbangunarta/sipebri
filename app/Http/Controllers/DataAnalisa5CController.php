@@ -200,6 +200,7 @@ class DataAnalisa5CController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
+
             DB::table('a5c_capacity')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {

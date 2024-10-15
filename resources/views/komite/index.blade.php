@@ -64,24 +64,24 @@
                                             </td>
 
                                             <td style="text-align: center;">
-                                                {{-- @if ($item->status_pengembalian == 'YA')
+                                                @if ($item->status_pengembalian == 'YA')
                                                     <label for="" style="color: red;">PERBAIKAN</label>
                                                 @elseif ($item->status_pengembalian == 'DONE')
                                                     <label style="color: green">SELESAI</label>
                                                 @elseif ($item->status_pengembalian == 'TIDAK')
                                                     <label for="">-</label>
-                                                @endif --}}
+                                                @endif
                                             </td>
 
                                             <td class="text-center" style="vertical-align: middle;">
-                                                {{-- <a data-toggle="modal" data-target="#modal-pengembalian"
+                                                <a data-toggle="modal" data-target="#modal-pengembalian"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm bg-red" title="Pengembalian Berkas"
                                                     style="cursor: pointer;">
                                                     <i class="fa fa-undo" aria-hidden="true"></i>
                                                 </a>
 
-                                                &nbsp; --}}
+                                                &nbsp;
                                                 <a data-toggle="modal" data-target="#modal-persetujuan"
                                                     data-pengajuan="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm bg-green" title="Persetujuan"
@@ -315,7 +315,7 @@
         </div>
     </div>
 
-    {{-- <div class="modal fade" id="modal-pengembalian">
+    <div class="modal fade" id="modal-pengembalian">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-red">
@@ -350,7 +350,7 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     <div class="modal fade" id="modal-catatan">
         <div class="modal-dialog">
