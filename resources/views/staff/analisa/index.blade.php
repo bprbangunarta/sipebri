@@ -113,7 +113,7 @@
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#jadwal-ulang"
-                                                    data-pengajuan="{{ $item->kode_pengajuan }}"
+                                                    data-pengajuans="{{ $item->kode_pengajuan }}"
                                                     class="btn-circle btn-sm bg-blue" title="Jadwal Ulang"
                                                     style="cursor: pointer;">
                                                     <i class="fa fa-history"></i>
@@ -222,7 +222,7 @@
                                     <span class="fw-bold">KODE PENGAJUAN</span>
                                     <input type="text" id="id" name="id" hidden>
                                     <input class="form-control text-uppercase" type="text" value="123456789S"
-                                        name="kode_pengajuan" id="kd_pengajuan" readonly>
+                                        name="kode_pengajuan" id="kds_pengajuan" readonly>
                                     <input type="text" value="" name="tgl_survei" id="tgl_survei" hidden>
                                 </div>
 

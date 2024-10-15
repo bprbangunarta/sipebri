@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $("#jadwal-ulang").on("show.bs.modal", function (event) {
         var button = $(event.relatedTarget); // Tombol yang membuka modal
-        var pengajuan = button.data("pengajuan"); // Ambil data-id dari tombol
+        var pengajuan = button.data("pengajuans"); // Ambil data-id dari tombol
 
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
@@ -12,9 +12,10 @@ $(document).ready(function () {
             success: function (response) {
                 
                 $("#id").val(response.id);
-                $("#kd_pengajuan").val(response.kode_pengajuan);
+                $("#kds_pengajuan").val(response.kode_pengajuan);
                 $("#tgl_survei").val(response.tgl_survei);
                 $("#nm_nasabah").val(response.nama_nasabah);
+                
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

@@ -23,25 +23,26 @@ class Perdagangan extends Model
         //     }
         // }
 
-        $lastCode = self::whereNotNull('kode_usaha')
-            ->orderBy('kode_usaha', 'desc')
-            ->value('kode_usaha');
+        do {
+            $lastCode = self::whereNotNull('kode_usaha')
+                ->orderBy('kode_usaha', 'desc')
+                ->value('kode_usaha');
 
-        if (!$lastCode) {
-            $prefix = $name;
-            $newNumber = 1;
-        } else {
+            if (!$lastCode) {
+                $prefix = $name;
+                $newNumber = 1;
+            } else {
 
-            $prefix = substr($lastCode, 0, 4);
-            $numberPart = substr($lastCode, 4);
+                $prefix = substr($lastCode, 0, 4);
+                $numberPart = substr($lastCode, 4);
 
-            $newNumber = (int) $numberPart + 1;
-        }
+                $newNumber = (int) $numberPart + 1;
+            }
 
-        $acak = $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
-        if (!self::where('kode_usaha', $acak)->exists()) {
-            return $acak;
-        }
+            $acak = $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        } while (!self::where('kode_usaha', $acak)->exists());
+
+        return $acak;
 
         return null; // Jika tidak ada kode yang unik ditemukan
     }
