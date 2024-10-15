@@ -80,6 +80,7 @@ class SurveiController extends Controller
                 ->select('code_user', 'nama_user as nama')
                 ->where('role_name', '=', 'Kepala Kantor Kas')
                 ->where('kantor_kode', '=', $kantor_user)
+                ->where('is_active', '=', 1)
                 ->get();
 
             //validasi
