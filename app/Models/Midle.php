@@ -553,16 +553,39 @@ class Midle extends Model
 
     public static function kode_komite($name, $length)
     {
-        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
-            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+        // for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+        //     $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
 
-            // Cek apakah kode sudah ada dalam database
-            if (!DB::table('a_komite')->where('kode_analisa', $acak)->exists()) {
-                return $acak;
+        //     if (!DB::table('a_komite')->where('kode_analisa', $acak)->exists()) {
+        //         return $acak;
+        //     }
+        // }
+
+        // return null;
+
+        do {
+            $lastCode = DB::table('a_komite')
+                ->whereNotNull('kode_analisa')
+                ->orderBy('kode_analisa', 'desc')
+                ->value('kode_analisa');
+
+            if (!$lastCode) {
+                $lastCode = $name . str_pad(
+                    1,
+                    $length,
+                    '0',
+                    STR_PAD_LEFT
+                );
+            } else {
+                $prefix = substr($lastCode, 0, 3);
+                $numberPart = substr($lastCode, 3);
+
+                $newNumber = (int) $numberPart + 1;
+                $newCode = $prefix . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
             }
-        }
+        } while (DB::table('a_administrasi')->where('kode_analisa', $newCode)->exists());
 
-        return null; // Jika tidak ada kode yang unik ditemukan
+        return $newCode;
     }
 
     public static function data_usulan($data, $role)
