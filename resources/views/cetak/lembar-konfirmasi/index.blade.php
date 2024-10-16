@@ -13,7 +13,7 @@
                             <h3 class="box-title">CETAK LEMBAR KONFIRMASI</h3>
 
                             <div class="box-tools">
-                                <form action="{{ route('cetak.standing.interaction') }}" method="GET">
+                                <form action="{{ route('cetak.lembar.konfirmasi') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 170px;" name="keyword" id="keyword"
