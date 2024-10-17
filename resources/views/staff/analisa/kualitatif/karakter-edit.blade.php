@@ -337,8 +337,7 @@
 
                         <div style="margin-top:5px;width: 33%;">
                             <span class="fw-bold">STATUS</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="status1" id=""
-                                required>
+                            <select class="form-control input-sm form-border text-uppercase" name="status1" id="">
                                 <option value="">--Pilih--</option>
                                 <option value="Lancar" {{ $karakter->status1 == 'Lancar' ? 'selected' : '' }}>Lancar
                                 </option>
@@ -387,7 +386,7 @@
                         <div style="margin-top:5px;width: 33%;">
                             <span class="fw-bold">STATUS</span>
                             <select class="form-control input-sm form-border text-uppercase" name="status2"
-                                id="" required>
+                                id="">
                                 <option value="">--Pilih--</option>
                                 <option value="Lancar" {{ $karakter->status2 == 'Lancar' ? 'selected' : '' }}>Lancar
                                 </option>
@@ -434,7 +433,7 @@
                         <div style="margin-top:5px;width: 33%;">
                             <span class="fw-bold">STATUS</span>
                             <select class="form-control input-sm form-border text-uppercase" name="status3"
-                                id="" required>
+                                id="">
                                 <option value="">--Pilih--</option>
                                 <option value="Lancar" {{ $karakter->status3 == 'Lancar' ? 'selected' : '' }}>Lancar
                                 </option>
