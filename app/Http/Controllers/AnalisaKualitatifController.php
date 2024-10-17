@@ -23,7 +23,7 @@ class AnalisaKualitatifController extends Controller
                     'data' => $cek[0],
                 ]);
             }
-
+            // dd($karakter);
             return view('staff.analisa.kualitatif.karakter-edit', [
                 'data' => $cek[0],
                 'karakter' => $karakter,
@@ -42,10 +42,13 @@ class AnalisaKualitatifController extends Controller
                 'bi_checking' => $request->bi_checking,
                 'kewajiban1' => $request->kewajiban1,
                 'ket_kewajiban1' => $request->ket_kewajiban1,
+                'status1' => $request->status1,
                 'kewajiban2' => $request->kewajiban2,
                 'ket_kewajiban2' => $request->ket_kewajiban2,
+                'status2' => $request->status2,
                 'kewajiban3' => $request->kewajiban3,
                 'ket_kewajiban3' => $request->ket_kewajiban3,
+                'status3' => $request->status3,
                 'pihak_berwajib' => $request->pihak_berwajib,
                 'hubungan_tetangga' => $request->hubungan_tetangga,
                 'pengalaman_tki' => $request->pengalaman_tki,
@@ -56,7 +59,7 @@ class AnalisaKualitatifController extends Controller
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
-            // dd($data);
+
             DB::table('au_kualitatif')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (DecryptException $e) {
@@ -74,10 +77,13 @@ class AnalisaKualitatifController extends Controller
                 'bi_checking' => $request->bi_checking,
                 'kewajiban1' => $request->kewajiban1,
                 'ket_kewajiban1' => $request->ket_kewajiban1,
+                'status1' => $request->status1,
                 'kewajiban2' => $request->kewajiban2,
                 'ket_kewajiban2' => $request->ket_kewajiban2,
+                'status2' => $request->status2,
                 'kewajiban3' => $request->kewajiban3,
                 'ket_kewajiban3' => $request->ket_kewajiban3,
+                'status3' => $request->status3,
                 'pihak_berwajib' => $request->pihak_berwajib,
                 'hubungan_tetangga' => $request->hubungan_tetangga,
                 'pengalaman_tki' => $request->pengalaman_tki,
