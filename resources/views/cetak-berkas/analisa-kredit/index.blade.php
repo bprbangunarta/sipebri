@@ -1623,26 +1623,29 @@
                 </tr>
                 <tr>
                     <td style="border-right:1px solid black;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 1
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 1 -
+                        {{ strtoupper($kualitatif->ket_kewajiban1) }}
                     </td>
                     <td style="border-right:1px solid black;">
-                        &nbsp; {{ $kualitatif->kewajiban1 }} - {{ $kualitatif->ket_kewajiban1 }}
-                    </td>
-                </tr>
-                <tr>
-                    <td style="border-right:1px solid black;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 2
-                    </td>
-                    <td style="border-right:1px solid black;">
-                        &nbsp; {{ $kualitatif->kewajiban2 }} - {{ $kualitatif->ket_kewajiban3 }}
+                        &nbsp; {{ $kualitatif->status1 }}
                     </td>
                 </tr>
                 <tr>
                     <td style="border-right:1px solid black;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 3
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 2 -
+                        {{ strtoupper($kualitatif->ket_kewajiban2) }}
                     </td>
                     <td style="border-right:1px solid black;">
-                        &nbsp; {{ $kualitatif->kewajiban3 }} - {{ $kualitatif->ket_kewajiban3 }}
+                        &nbsp; {{ $kualitatif->status2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-right:1px solid black;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Kewajiban 3 -
+                        {{ strtoupper($kualitatif->ket_kewajiban3) }}
+                    </td>
+                    <td style="border-right:1px solid black;">
+                        &nbsp; {{ $kualitatif->status3 }}
                     </td>
                 </tr>
                 <tr>
