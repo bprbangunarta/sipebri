@@ -956,6 +956,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/export/laporan/sesudah-survei', 'data_export_sesudah_survei')->name('export.sesudah_survei');
         Route::post('/export/laporan/sebelum-survei', 'data_export_sebelum_survei')->name('export.sebelum_survei');
         Route::post('/export/laporan/tracking', 'data_export_tracking')->name('export.tracking');
+        Route::post('/export/standing/interaction', 'export_standing_interaction')->name('export.standing.interaction');
     });
 
     // Export Data

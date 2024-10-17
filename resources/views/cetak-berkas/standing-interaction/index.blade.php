@@ -41,8 +41,10 @@
                                         <th class="text-center" width="35%">ALAMAT</th>
                                         <th class="text-center" width="5%">WIL</th>
                                         <th class="text-center" width="8%">PLAFON</th>
-                                        <th class="text-center" width="5%">PMK</th>
-                                        <th class="text-center" width="5%">WNY</th>
+                                        @if (Auth::user()->kantor_kode == 'KJT' || Auth::user()->kantor_kode == 'KJT')
+                                            <th class="text-center" width="5%">PMK</th>
+                                            <th class="text-center" width="5%">WNY</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,6 +106,10 @@
                         </div>
 
                         <div class="box-footer clearfix">
+                            <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                <i class="fa fa-download"></i>&nbsp; Export Data
+                            </button>
+
                             <div class="pull-left hidden xs">
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
@@ -125,23 +131,65 @@
         </section>
     </div>
 
-    <div class="modal fade" id="modal-danger">
+    <div class="modal fade" id="modal-export">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-red">
+                <div class="modal-header bg-green">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">PERJANJIAN KREDIT</h4>
+                    <h4 class="modal-title">EXPORT DATA</h4>
                 </div>
+                <form action="{{ route('export.standing.interaction') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
 
-                <div class="modal-body">
-                    <p>Mohon maaf cetak perjanjian kredit tidak bisa dilakukan karena perjanjian kredit belum di otorisasi.
-                        Silahkan hubungi bagian admin kredit. Terimakasih</p>
-                </div>
-                <div class="modal-footer" style="margin-top: -10px;">
-                    <button type="button" class="btn btn-danger" style="width: 100%;"
-                        data-dismiss="modal">TUTUP</button>
-                </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1"
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control produk" name="kode_produk" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} -
+                                                {{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2"
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control kantor" name="nama_kantor" id=""
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

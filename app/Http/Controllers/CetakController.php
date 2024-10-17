@@ -661,6 +661,11 @@ class CetakController extends Controller
                         ->orWhere(function ($query) {
                             $query->whereIn('data_pengajuan.resort_kode', ['119']);
                         });
+                } else if (Auth::user()->kantor_kode == 'SBG') {
+                    $query->whereIn('data_pengajuan.produk_kode', ['KTA', 'KPS'])
+                        ->orWhere(function ($query) {
+                            $query->whereIn('data_pengajuan.resort_kode', ['058', '057', '055', '129', '141', '095', '090', '130', '131', '141']);
+                        });
                 }
             })
 
@@ -712,8 +717,14 @@ class CetakController extends Controller
             $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
         }
 
+        $kantor = DB::table('data_kantor')->get();
+
+        $produk = DB::table('data_produk')->get();
+
         return view('cetak-berkas.standing-interaction.index', [
-            'data' => $data
+            'data' => $data,
+            'kantor' => $kantor,
+            'produk' => $produk,
         ]);
     }
 

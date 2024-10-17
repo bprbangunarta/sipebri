@@ -397,7 +397,7 @@
                         </a>
                     </li>
 
-                    @if (Auth::user()->kantor_kode == 'KJT' || Auth::user()->kantor_kode == 'PGD')
+                    @if (Auth::user()->kantor_kode == 'KJT' || Auth::user()->kantor_kode == 'PGD' || Auth::user()->kantor_kode == 'SBG')
                         <li class="{{ request()->is('cetak/standing-interaction') ? 'active' : '' }}">
                             <a @can('cetak perjanjian kredit') href="{{ route('cetak.standing.interaction') }}" @endcan
                                 title="Staging Interaction">

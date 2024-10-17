@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Exports\StandingInteraction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -761,5 +763,12 @@ class ExportController extends Controller
         } catch (Exception $e) {
             return;
         }
+    }
+
+    public function export_standing_interaction()
+    {
+        $fileName = 'Laporan Realisasi.xlsx';
+
+        return Excel::download(new StandingInteraction, $fileName);
     }
 }
