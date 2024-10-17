@@ -39,7 +39,7 @@
                 <td></td>
                 <td></td>
                 <td>{{ $item->nama_nasabah }}</td>
-                <td></td>
+                <td>{{ $item->no_karyawan }}</td>
                 <td>{{ $item->no_rekening }}</td>
                 <td></td>
                 <td>{{ $item->no_identitas }}</td>
