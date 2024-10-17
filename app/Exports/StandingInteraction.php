@@ -41,6 +41,7 @@ class StandingInteraction implements FromView
                 'data_pengajuan.plafon as plafon',
                 'data_pengajuan.jangka_waktu',
                 'v_resort.nama_resort',
+                'data_spk.no_spk',
             );
 
         $dataQuery->when($tgl1 && $tgl2, function ($query) use ($tgl1, $tgl2) {
@@ -67,7 +68,9 @@ class StandingInteraction implements FromView
                 ->select(
                     'm_loan.noacc',
                 )
-                ->where('nocif', $value->no_cif)->first();
+                ->where('nocif', $value->no_cif)
+                ->where('no_spk', $value->no_spk)
+                ->first();
             $value->no_loan = $data_eks ? trim($data_eks->noacc) : null;
             $value->nama_resort = trim($value->nama_resort);
         }
