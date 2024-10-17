@@ -389,14 +389,14 @@
                             <select class="form-control input-sm form-border text-uppercase" name="status2"
                                 id="" required>
                                 <option value="">--Pilih--</option>
-                                <option value="Lancar" {{ $karakter->status1 == 'Lancar' ? 'selected' : '' }}>Lancar
+                                <option value="Lancar" {{ $karakter->status2 == 'Lancar' ? 'selected' : '' }}>Lancar
                                 </option>
                                 <option value="Kurang Lancar"
-                                    {{ $karakter->status1 == 'Kurang Lancar' ? 'selected' : '' }}>Kurang Lancar
+                                    {{ $karakter->status2 == 'Kurang Lancar' ? 'selected' : '' }}>Kurang Lancar
                                 </option>
-                                <option value="Diragukan" {{ $karakter->status1 == 'Diragukan' ? 'selected' : '' }}>
+                                <option value="Diragukan" {{ $karakter->status2 == 'Diragukan' ? 'selected' : '' }}>
                                     Diragukan</option>
-                                <option value="Macet" {{ $karakter->status1 == 'Macet' ? 'selected' : '' }}>Macet
+                                <option value="Macet" {{ $karakter->status2 == 'Macet' ? 'selected' : '' }}>Macet
                                 </option>
                             </select>
                         </div>
@@ -436,14 +436,14 @@
                             <select class="form-control input-sm form-border text-uppercase" name="status3"
                                 id="" required>
                                 <option value="">--Pilih--</option>
-                                <option value="Lancar" {{ $karakter->status1 == 'Lancar' ? 'selected' : '' }}>Lancar
+                                <option value="Lancar" {{ $karakter->status3 == 'Lancar' ? 'selected' : '' }}>Lancar
                                 </option>
                                 <option value="Kurang Lancar"
-                                    {{ $karakter->status1 == 'Kurang Lancar' ? 'selected' : '' }}>Kurang Lancar
+                                    {{ $karakter->status3 == 'Kurang Lancar' ? 'selected' : '' }}>Kurang Lancar
                                 </option>
-                                <option value="Diragukan" {{ $karakter->status1 == 'Diragukan' ? 'selected' : '' }}>
+                                <option value="Diragukan" {{ $karakter->status3 == 'Diragukan' ? 'selected' : '' }}>
                                     Diragukan</option>
-                                <option value="Macet" {{ $karakter->status1 == 'Macet' ? 'selected' : '' }}>Macet
+                                <option value="Macet" {{ $karakter->status3 == 'Macet' ? 'selected' : '' }}>Macet
                                 </option>
                             </select>
                         </div>
