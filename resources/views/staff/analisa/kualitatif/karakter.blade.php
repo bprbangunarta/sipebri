@@ -279,8 +279,8 @@
 
                         <div style="margin-top:5px;width: 33%;">
                             <span class="fw-bold">STATUS</span>
-                            <select class="form-control input-sm form-border text-uppercase" name="status1" id=""
-                                required>
+                            <select class="form-control input-sm form-border text-uppercase" name="status1"
+                                id=">
                                 <option value="">--Pilih--</option>
                                 <option value="Lancar" {{ old('status1') == 4 ? 'selected' : '' }}>Lancar</option>
                                 <option value="Kurang Lancar" {{ old('status1') == 3 ? 'selected' : '' }}>Kurang Lancar
@@ -320,7 +320,7 @@
                         <div style="margin-top:5px;width: 33%;">
                             <span class="fw-bold">STATUS</span>
                             <select class="form-control input-sm form-border text-uppercase" name="status2"
-                                id="" required>
+                                id="">
                                 <option value="">--Pilih--</option>
                                 <option value="Lancar" {{ old('status2') == 4 ? 'selected' : '' }}>Lancar</option>
                                 <option value="Kurang Lancar" {{ old('status2') == 3 ? 'selected' : '' }}>Kurang Lancar
@@ -359,7 +359,7 @@
                         <div style="margin-top:5px;width: 33%;">
                             <span class="fw-bold">STATUS</span>
                             <select class="form-control input-sm form-border text-uppercase" name="status3"
-                                id="" required>
+                                id="">
                                 <option value="">--Pilih--</option>
                                 <option value="Lancar" {{ old('status3') == 4 ? 'selected' : '' }}>Lancar</option>
                                 <option value="Kurang Lancar" {{ old('status3') == 3 ? 'selected' : '' }}>Kurang Lancar
