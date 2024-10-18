@@ -390,8 +390,7 @@
                     </li>
 
                     <li class="{{ request()->is('cetak/lembar/konfirmasi') ? 'active' : '' }}">
-                        <a @can('cetak perjanjian kredit') href="{{ route('cetak.lembar.konfirmasi') }}" @endcan
-                            title="Cetak Lembar Konfirmasi">
+                        <a href="{{ route('cetak.lembar.konfirmasi') }}" title="Cetak Lembar Konfirmasi">
                             <i class="fa fa-file-text" aria-hidden="true"></i>
                             Lembar Konfirmasi
                         </a>
