@@ -307,7 +307,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction', 'cetak/data/realisasi', 'cetak/lembar/konfirmasi', 'themes/denah/lokasi') ? 'active' : '' }}">
+                class="treeview {{ request()->is('cetak/pengajuan', 'cetak/pengajuan/detail', 'themes/cetak/analisa/kredit', 'themes/fiducia', 'themes/cetak/penolakan/kredit', 'themes/persetujuan/kredit', 'cetak/notifikasi-kredit', 'cetak/perjanjian-kredit', 'themes/analisa/check/kelengkapan', 'cetak/standing-interaction', 'cetak/data/realisasi', 'cetak/lembar/konfirmasi', 'themes/denah/lokasi', 'cetak/kartu/angsuran') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-print"></i>
                     <span>Cetak Berkas</span>
@@ -388,6 +388,14 @@
                             Perjanjian Kredit
                         </a>
                     </li>
+
+                    {{-- <li class="{{ request()->is('cetak/kartu/angsuran') ? 'active' : '' }}">
+                        <a @can('cetak perjanjian kredit') href="{{ route('cetak.angsuran.index') }}" @endcan
+                            title="Cetak Kartu Angsuran">
+                            <i class="fa fa-exclamation-circle"></i>
+                            Kartu Angsuran
+                        </a>
+                    </li> --}}
 
                     <li class="{{ request()->is('cetak/lembar/konfirmasi') ? 'active' : '' }}">
                         <a href="{{ route('cetak.lembar.konfirmasi') }}" title="Cetak Lembar Konfirmasi">

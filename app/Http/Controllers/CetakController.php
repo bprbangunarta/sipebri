@@ -1069,6 +1069,104 @@ class CetakController extends Controller
         return view('cetak.lembar-konfirmasi.kredit', compact('data', 'noacc'));
     }
 
+    public function index_kartu_angsuran()
+    {
+        $usr = Auth::user()->code_user;
+        $isAdminKredit = DB::table('v_users')->where('code_user', $usr)->first();
+
+        $name = request('keyword');
+        $cek = DB::table('data_pengajuan')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
+            ->leftJoin('data_spk', 'data_pengajuan.kode_pengajuan', '=', 'data_spk.pengajuan_kode')
+            ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+            ->where('data_pengajuan.status', 'Disetujui')
+
+            ->where(function ($query) use ($isAdminKredit) {
+
+                if ($isAdminKredit->role_name == 'Admin Kredit') {
+                } else {
+                    $query->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode);
+                }
+            })
+
+
+            ->whereNotNull('data_spk.no_spk')
+            ->whereColumn('data_pengajuan.kode_pengajuan', 'data_notifikasi.pengajuan_kode')
+
+            ->where(function ($query) use ($name) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $name . '%')
+                    ->orWhere('data_kantor.nama_kantor', 'like', '%' . $name . '%');
+            })
+
+            ->select(
+                'data_spk.*',
+                'data_pengajuan.*',
+                'data_notifikasi.*',
+                'data_pengajuan.*',
+                'data_nasabah.kode_nasabah',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_nasabah.kelurahan',
+                'data_nasabah.kecamatan',
+                'data_pengajuan.plafon',
+                'data_kantor.kode_kantor',
+                'data_survei.surveyor_kode',
+                'data_spk.created_at as tanggal',
+                'data_spk.otorisasi as otorpk',
+                'users.name'
+            )
+            ->orderBy('data_spk.created_at', 'desc');
+
+        //Enkripsi kode pengajuan
+        $c = $cek->get();
+        $count = count($c);
+        $data = $cek->paginate(10);
+        foreach ($data as $item) {
+            $item->kd_pengajuan = Crypt::encrypt($item->kode_pengajuan) ?? null;
+        }
+
+        return view('cetak-berkas.kartu-angsuran.index', [
+            'data' => $data
+        ]);
+    }
+
+    public function detail_kartu_angsuran(Request $request)
+    {
+        try {
+            $kode = Crypt::decrypt($request->query('pengajuan'));
+
+            $data = DB::table('data_pengajuan')
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->join('data_spk', 'data_spk.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->select(
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp',
+                    'data_nasabah.no_cif',
+                    'data_pengajuan.suku_bunga',
+                    'data_pengajuan.jangka_waktu',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.produk_kode',
+                    'data_pengajuan.metode_rps',
+                    'data_spk.no_spk',
+                    DB::raw("DATE_FORMAT((COALESCE(data_spk.created_at, CURDATE())), '%d-%m-%Y') as tgl_realisasi")
+                )
+                ->where('data_pengajuan.kode_pengajuan', $kode)->first();
+
+            // dd($request, $data);
+            return view('cetak-berkas.kartu-angsuran.angsuran_detail', [
+                'data' => $data,
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
     private function roundUp($number)
     {
         $length = strlen((string) $number);
@@ -1081,5 +1179,117 @@ class CetakController extends Controller
         $roundedNumber = ceil($number / $factor) * $factor;
 
         return $roundedNumber;
+    }
+
+    private function flat($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
+    {
+        try {
+            $pokok = $plafon / $jangka_waktu;
+            $bunga = ($plafon * $suku_bunga) / 100 / 12;
+            $jml_setoran = $bunga + $pokok;
+
+            $bulan_array = range(1, $jangka_waktu);
+            $rincian = [];
+
+            foreach ($bulan_array as $bulan_ke) {
+                // Hitung tanggal setoran untuk setiap bulan
+                $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_real)));
+
+                $plafon -= $pokok;
+                // Simpan rincian per bulan
+                $rincian[] = [
+                    'bulan_ke' => $bulan_ke,
+                    'tanggal_setoran' => $tanggal_setoran,
+                    'setoran_pokok' => $pokok,
+                    'setoran_bunga' => $bunga,
+                    'jumlah_setoran' => $jml_setoran,
+                    'sisa_plafon' => $plafon
+                ];
+            }
+
+            return $rincian;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    private function efektif_anuitas($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
+    {
+        try {
+            $ssb = $suku_bunga / 100;
+            $sb = $ssb / 12;
+
+            $bulan_array = range(1, $jangka_waktu);
+            $rincian = [];
+            $total_pokok_dibayar = 0;
+
+            foreach ($bulan_array as $bulan_ke) {
+                $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_real)));
+
+                $per = $bulan_ke;
+                $angsuran = ($plafon * $sb) / (1 - 1 / pow(1 + $sb, $jangka_waktu));
+                $pokok = ($plafon * $sb * pow(1 + $sb, $per - 1)) / (pow(1 + $sb, $jangka_waktu) - 1);
+                $bunga = round($angsuran) - round($pokok);
+
+                $total_pokok_dibayar += $pokok;
+                $sisa_plafon = round($plafon) - round($total_pokok_dibayar);
+
+                $rincian[] = [
+                    'bulan_ke' => $bulan_ke,
+                    'tanggal_setoran' => $tanggal_setoran,
+                    'setoran_pokok' => round($pokok),
+                    'setoran_bunga' => round($bunga),
+                    'jumlah_setoran' => round($angsuran),
+                    'sisa_plafon' => round($sisa_plafon)
+                ];
+            }
+
+            return $rincian;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    private function efektif_musiman($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
+    {
+        $hpokok = $plafon / ($jangka_waktu / 6);
+
+        $hariini = Carbon::now();
+        $bulansekarang = $hariini->month;
+        $tahunsekarang = $hariini->year;
+        $tglskrng = $hariini->day;
+
+        $bulan_array = range(1, $jangka_waktu);
+        $rincian = [];
+
+        foreach ($bulan_array as $i) {
+            $bulanberikut = ($bulansekarang + $i) % 12 ?: 12;
+            $tahunsekarang += ($bulansekarang + $i) > 12 ? 1 : 0;
+            $jmlhari = Carbon::createFromDate($tahunsekarang, $bulanberikut, 0)->daysInMonth;
+
+            $tanggal_setoran = date('d/m/Y', strtotime("+$i month", strtotime($tgl_real)));
+            $hbunga = (($plafon * $suku_bunga) / 100) * $jmlhari / 365;
+
+            // Angsuran pokok hanya setiap 6 bulan
+            $pokok = (($i) % 6 == 0) ? $hpokok : 0;
+            $angsuran = $hbunga + $pokok;
+
+            $sisa_plafon = max($plafon - $pokok, 0);
+
+            $rincian[] = [
+                'bulan_ke' => $i,
+                'tanggal_setoran' => $tanggal_setoran,
+                'setoran_bunga' => $hbunga,
+                'setoran_pokok' => $pokok,
+                'jumlah_setoran' => $angsuran,
+                'sisa_plafon' => $sisa_plafon,
+            ];
+
+            if ($pokok > 0) {
+                $plafon -= $hpokok;
+            }
+        }
+
+        return $rincian;
     }
 }
