@@ -97,16 +97,17 @@
     <div class="header">
         <h4><u>LEMBAR KONFIRMASI PEMAHAMAN NASABAH TABUNGAN</u></h4>
         <p style="font-size: 9pt; text-align:justify;">
-            <i>Lembar konfirmasi ini merupakan bentuk pemenuhan kewajiban PT BPR Bangunarta, sebagaimana diatur dalam
-                Peraturan Otoritas Jasa Keuangan Nomor 22 Tahun 2023 tentang Pelindungan Konsumen dan Masyarakat di
-                Sektor
-                Jasa Keuangan.</i>
+            <i><b>
+                    Lembar konfirmasi ini merupakan bentuk pemenuhan kewajiban PT BPR Bangunarta, sebagaimana diatur
+                    dalam Peraturan Otoritas Jasa Keuangan Nomor 22 Tahun 2023 tentang Pelindungan Konsumen dan
+                    Masyarakat di Sektor Jasa Keuangan.
+                </b></i>
         </p>
     </div>
     <div class="content">
         <table class="info-table">
             <tr>
-                <td style="width: 25%;">Nama</td>
+                <td style="width: 20%;">Nama</td>
                 <td style="width: 2%;">:</td>
                 <td>{{ $data->nama_nasabah }}</td>
             </tr>
@@ -138,7 +139,7 @@
             <tr>
                 <td style="text-align: center">1</td>
                 <td>Nasabah telah membaca dan memahami sepenuhnya rincian biaya yang tercantum dalam Ketentuan Produk
-                    Tabungan</td>
+                    Tabungan.</td>
                 <td></td>
                 <td></td>
             </tr>
@@ -159,13 +160,12 @@
             <tr>
                 <td style="text-align: center">4</td>
                 <td>Nasabah telah membaca dan memahami sepenuhnya setiap dan seluruh hak dan kewajiban masing-masing
-                    pihak dalam Perjanjian Kredit termasuk diantaranya: <br>
+                    pihak dalam ketentuan tabungan termasuk diantaranya: <br>
                     <ol class="custom-list">
                         <li> Mekanisme layanan pengaduan</li>
                         <li> Hak Nasabah untuk mengakhiri perjanjian tanpa dikenakan pinalty atau biaya sanksi
                             bila dalam masa jeda</li>
-                        <li> Mekanisme layanan pengaduan</li>
-                        <li> Mekanisme layanan pengaduan</li>
+                        <li> Nasabah bisa mendapatkan laporan posisi dananya</li>
                     </ol>
                 </td>
                 <td></td>
