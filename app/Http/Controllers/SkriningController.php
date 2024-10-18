@@ -106,6 +106,25 @@ class SkriningController extends Controller
         $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
         $existingValues = $response->getValues();
 
+        $largestNumber = null;
+
+        if (!empty($existingValues)) {
+            foreach ($existingValues as $row) {
+                if (isset($row[17]) && is_numeric($row[17])) {
+                    $currentNumber = (int) $row[17];
+                    if ($largestNumber === null || $currentNumber > $largestNumber) {
+                        $largestNumber = $currentNumber;
+                    }
+                }
+            }
+        }
+
+        if (is_null($largestNumber)) {
+            $no = 1;
+        } else {
+            $no = $largestNumber + 1;
+        }
+
         $data = [
             request()->nik,
             strtoupper(request()->nama),
@@ -117,6 +136,14 @@ class SkriningController extends Controller
             request()->watch_list,
             Auth::user()->code_user,
             'TIDAK TERDAFTAR',
+            'DONE',
+            '',
+            '',
+            '',
+            $tgl,
+            '',
+            '',
+            $no,
         ];
 
         $body = new Google_Service_Sheets_ValueRange([

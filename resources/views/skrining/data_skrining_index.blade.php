@@ -52,10 +52,21 @@
                                             </td>
                                             <td class="text-center">{{ $item[0] }}</td>
                                             <td>{{ $item[1] }}</td>
-                                            <td class="text-center">{{ $item[10] }}</td>
+                                            <td class="text-center">
+                                                @if (empty($item[10]))
+                                                    DONE
+                                                @else
+                                                    {{ $item[10] }}
+                                                @endif
+                                            </td>
                                             <td class="text-center" style="text-align: right;">
-
-                                                @if ($user == 'Staff Kepatuhan' && $item[10] === 'ANALISA SKRINING')
+                                                @if (empty($item[10]))
+                                                    <a href="{{ route('update.skrining.data.index', ['nik' => $item[0], 'nama' => $item[1], 'no' => $item[17]]) }}"
+                                                        class="btn-circle btn-sm bg-green" title="Analisa Skrining"
+                                                        disabled>
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                @elseif ($user == 'Staff Kepatuhan' && $item[10] === 'ANALISA SKRINING')
                                                     <a href="{{ route('analisa.skrining.index', ['nik' => $item[0], 'nama' => $item[1]]) }}"
                                                         class="btn-circle btn-sm bg-yellow" title="Analisa Skrining"
                                                         disabled>
