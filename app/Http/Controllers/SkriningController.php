@@ -95,7 +95,43 @@ class SkriningController extends Controller
         $tgl = Carbon::now();
         $tgl = $tgl->locale('id')->translatedFormat('d F Y');
 
-        $data = (object) [
+        $client = $this->google_client();
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
+
+        $range = 'SCREENING!A:R';
+        $sheetsService = new Google_Service_Sheets($client);
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+        $existingValues = $response->getValues();
+
+        $data = [
+            request()->nik,
+            strtoupper(request()->nama),
+            request()->dttot,
+            request()->dppspm,
+            request()->judi_online,
+            request()->pep,
+            request()->negative_news,
+            request()->watch_list,
+            Auth::user()->code_user,
+            'TIDAK TERDAFTAR',
+        ];
+
+        $body = new Google_Service_Sheets_ValueRange([
+            'values' => [$data]
+        ]);
+
+        $params = [
+            'valueInputOption' => 'RAW'
+        ];
+
+        $sheetsService = new Google_Service_Sheets($client);
+
+        $sheetsService->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
+
+        $datas = (object) [
             'nik' => request()->nik,
             'nama' => request()->nama,
             'dttot' => request()->dttot,
@@ -109,7 +145,7 @@ class SkriningController extends Controller
         ];
 
         return view('skrining.print_skrining', [
-            'data' => $data
+            'data' => $datas
         ]);
     }
 
