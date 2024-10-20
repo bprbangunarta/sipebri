@@ -17,7 +17,7 @@
         }
 
         body {
-            font-family: 'Times New Roman', Times, serif
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
         }
 
         .content {
@@ -83,8 +83,13 @@
 <body>
 
     <center>
-        <h5>PT. BPR PAMANUKAN BANGUNARTA</h5>
-        <h3 style="margin-top: -20px;">TABEL SETORAN PINJAMAN ({{ $data->metode_rps }})</h3>
+        <h4>PT. BPR PAMANUKAN BANGUNARTA</h4>
+        <h3 style="margin-top: -20px;">TABEL SETORAN PINJAMAN @if ($data->produk_kode == 'KBT' && ($data->kondisi_khusus == 'PERPADIAN' || $data->kondisi_khusus == 'PERLELEAN'))
+                EFEKTIF MUSIMAN
+            @else
+                ({{ $data->metode_rps }})
+            @endif
+        </h3>
     </center>
 
     <div class="content">
@@ -93,7 +98,7 @@
 
             <table class="tabel" style="font-size: 9pt;">
                 <tr>
-                    <td style="width: 14%;">Nama Debitur</td>
+                    <td style="width: 12%;">Nama Debitur</td>
                     <td style="width: 1%;">:</td>
                     <td colspan="4" style="width: 60%;">{{ $data->nama_nasabah }}</td>
                     <td style="width: 9%;">No. SPK</td>
@@ -101,9 +106,10 @@
                     <td style="width: 15%;">{{ $data->no_spk }}</td>
                 </tr>
                 <tr>
-                    <td style="width: 14%;">Alamat</td>
+                    <td style="width: 12%;">Alamat</td>
                     <td>:</td>
-                    <td colspan="4" style="width: 60%;" style="text-align: justify; vertical-align: text-top;">
+                    <td colspan="4"
+                        style="width: 60%; font-size: 8pt; text-align: justify; vertical-align: text-top;">
                         {{ $data->alamat_ktp }}
                     </td>
                     <td style="width: 9%;">No. Rek</td>
@@ -116,7 +122,7 @@
                     <td style="width: 15%;">{{ $data->suku_bunga }}% p.a</td>
                     <td style="width: 17%;">Pokok Pinjaman</td>
                     <td style="width: 1%;">:</td>
-                    <td style="width: 27%;">{{ number_format($data->penentuan_plafon, '0', ',', '.') }}</td>
+                    <td style="width: 27%;">{{ number_format($data->plafon, '0', ',', '.') }}</td>
                     <td style="width: 9%;">No. Loan</td>
                     <td>:</td>
                     <td style="width: 15%;">{{ $data->no_kredit }}</td>

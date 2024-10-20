@@ -1153,14 +1153,47 @@ class CetakController extends Controller
                     'data_pengajuan.plafon',
                     'data_pengajuan.produk_kode',
                     'data_pengajuan.metode_rps',
+                    'data_pengajuan.kondisi_khusus',
+                    'data_pengajuan.jangka_pokok',
+                    'data_pengajuan.jangka_bunga',
+                    'data_pengajuan.grace_period',
+                    'data_pengajuan.kondisi_khusus',
                     'data_spk.no_spk',
+                    'data_spk.created_At as tgl_real',
                     DB::raw("DATE_FORMAT((COALESCE(data_spk.created_at, CURDATE())), '%d-%m-%Y') as tgl_realisasi")
                 )
                 ->where('data_pengajuan.kode_pengajuan', $kode)->first();
 
-            // dd($request, $data);
+            //
+            $data->tgl_realisasi = Carbon::parse($data->tgl_realisasi)->translatedFormat('d F Y');
+            if ($data->produk_kode == 'KBT' && $data->kondisi_khusus == "PERPADIAN") {
+                $angsuran = $this->efektif_musiman_padi($data->suku_bunga, $data->jangka_waktu, $data->plafon, $data->tgl_real, $data->jangka_pokok, $data->jangka_bunga);
+            } elseif ($data->produk_kode == 'KBT' && $data->kondisi_khusus == "PERLELEAN") {
+                $angsuran = $this->flat_lele($data->suku_bunga, $data->jangka_waktu, $data->plafon, $data->tgl_real, $data->jangka_pokok, $data->jangka_bunga, $data->grace_period);
+            } elseif ($data->metode_rps == "FLAT") {
+                $angsuran = $this->flat($data->suku_bunga, $data->jangka_waktu, $data->plafon, $data->tgl_real);
+            } elseif ($data->metode_rps == "EFEKTIF ANUITAS") {
+                $angsuran = $this->efektif_anuitas($data->suku_bunga, $data->jangka_waktu, $data->plafon, $data->tgl_real);
+            } elseif ($data->metode_rps == "EFEKTIF MUSIMAN") {
+                $angsuran = $this->efektif_musiman($data->suku_bunga, $data->jangka_waktu, $data->plafon, $data->tgl_real);
+            }
+
+            $data_eks = DB::connection('sqlsrv')->table('m_loan')
+                ->select(
+                    'm_loan.noacc',
+                    'm_loan.noacdroping',
+                )
+                ->where('no_spk', $data->no_spk)
+                ->where('nocif', $data->no_cif)->first();
+            //
+            if ($data_eks) {
+                $data->no_tab = trim($data_eks->noacdroping) ?: null;
+                $data->no_kredit = trim($data_eks->noacc)  ?: null;
+            }
+
             return view('cetak-berkas.kartu-angsuran.angsuran_detail', [
                 'data' => $data,
+                'angsuran' => $angsuran,
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -1291,5 +1324,108 @@ class CetakController extends Controller
         }
 
         return $rincian;
+    }
+
+    private function efektif_musiman_padi($suku_bunga, $jangka_waktu, $plafon, $tgl_real, $jp, $jb)
+    {
+        try {
+            $hpokok = $plafon / ($jangka_waktu / 6);
+            $hariini = Carbon::now();
+            $bulansekarang = $hariini->month;
+            $tahunsekarang = $hariini->year;
+            $tglskrng = $hariini->day;
+
+            $bulan_array = range(1, $jangka_waktu);
+            $rincian = [];
+            $total_bunga = 0;
+
+            foreach ($bulan_array as $i) {
+                $bulanberikut = ($bulansekarang + $i) % 12 ?: 12;
+                $tahunsekarang += ($bulansekarang + $i) > 12 ? 1 : 0;
+                $jmlhari = Carbon::createFromDate($tahunsekarang, $bulanberikut, 0)->daysInMonth;
+
+                $tanggal_setoran = date('d/m/Y', strtotime("+$i month", strtotime($tgl_real)));
+                $hbunga = (($plafon * $suku_bunga) / 100) * $jmlhari / 365;
+
+                $total_bunga += $hbunga;
+                $t_bunga = (($i) % 6 == 0) ? $total_bunga : 0;
+
+                // Angsuran pokok hanya setiap 6 bulan
+                $pokok = (($i) % 6 == 0) ? $hpokok : 0;
+                $angsuran = $t_bunga + $pokok;
+
+                $jml_angsuran = (($i) % 6 == 0) ? $angsuran : 0;
+
+                $sisa_plafon = max($plafon - $pokok, 0);
+
+                $rincian[] = [
+                    'bulan_ke' => $i,
+                    'tanggal_setoran' => $tanggal_setoran,
+                    'setoran_bunga' => $t_bunga,
+                    'setoran_pokok' => $pokok,
+                    'jumlah_setoran' => $jml_angsuran,
+                    'sisa_plafon' => $sisa_plafon,
+                ];
+
+                if ($pokok > 0) {
+                    $plafon -= $hpokok;
+                }
+            }
+
+            return $rincian;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    private function flat_lele($suku_bunga, $jangka_waktu, $plafon, $tgl_real, $jp, $jb, $gp)
+    {
+        try {
+            $pokok = $plafon / ($jangka_waktu - $gp);
+            $bunga = ($plafon * $suku_bunga) / 100 / 12;
+
+            $tgl_mulai = date('Y-m-d', strtotime("+$gp month", strtotime($tgl_real)));
+
+            $bulan_array = range(1, ($jangka_waktu - $gp));
+            $rincian = [];
+
+            $sisa_plafon = $plafon;
+
+            foreach ($bulan_array as $bulan_ke) {
+                $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_mulai)));
+
+                if ($bulan_ke % $jp === 0) {
+
+                    $jumlah_setoran = ($pokok * $jp);
+                    $jumlah_bunga = ($bunga * $jp);
+
+                    $rincian[] = [
+                        'bulan_ke' => $bulan_ke,
+                        'tanggal_setoran' => $tanggal_setoran,
+                        'setoran_pokok' => intval($jumlah_setoran),
+                        'setoran_bunga' => intval($jumlah_bunga),
+                        'jumlah_setoran' => intval($jumlah_setoran + $jumlah_bunga),
+                        'sisa_plafon' => intval($sisa_plafon)
+                    ];
+
+
+                    $sisa_plafon -= $jumlah_setoran;
+                } else {
+
+                    $rincian[] = [
+                        'bulan_ke' => $bulan_ke,
+                        'tanggal_setoran' => $tanggal_setoran,
+                        'setoran_pokok' => 0,
+                        'setoran_bunga' => 0,
+                        'jumlah_setoran' => 0,
+                        'sisa_plafon' => intval($sisa_plafon)
+                    ];
+                }
+            }
+
+            return $rincian;
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 }
