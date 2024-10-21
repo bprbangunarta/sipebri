@@ -83,7 +83,7 @@
 <body>
 
     <center>
-        <h4>PT. BPR PAMANUKAN BANGUNARTA</h4>
+        <h4>PT. BPR BANGUNARTA</h4>
         <h3 style="margin-top: -20px;">TABEL SETORAN PINJAMAN @if ($data->produk_kode == 'KBT' && ($data->kondisi_khusus == 'PERPADIAN' || $data->kondisi_khusus == 'PERLELEAN'))
                 EFEKTIF MUSIMAN
             @else
@@ -96,7 +96,7 @@
 
         <div class="col">
 
-            <table class="tabel" style="font-size: 9pt;">
+            <table class="tabel" style="font-size: 9pt; margin-top: -5px;">
                 <tr>
                     <td style="width: 12%;">Nama Debitur</td>
                     <td style="width: 1%;">:</td>
@@ -141,7 +141,7 @@
                 </tr>
             </table>
             <br>
-            <table class="tabel_setoran">
+            <table class="tabel_setoran" style="margin-top: -5px;">
                 <tr>
                     <th colspan="6">JADWAL SETORAN PINJAMAN</th>
                     <th colspan="6">TRANSAKSI SETORAN</th>

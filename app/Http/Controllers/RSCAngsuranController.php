@@ -168,9 +168,12 @@ class RSCAngsuranController extends Controller
     private function flat($suku_bunga, $jangka_waktu, $plafon, $tgl_real)
     {
         try {
-            $pokok = $plafon / $jangka_waktu;
-            $bunga = ($plafon * $suku_bunga) / 100 / 12;
-            $jml_setoran = $bunga + $pokok;
+            $pokok = round($plafon / $jangka_waktu);
+            $bunga = round(($plafon * $suku_bunga) / 100 / 12);
+            $jml_setoran = round($bunga + $pokok);
+
+            $plafon_awal = $plafon;
+            $total_bunga = (($plafon * $suku_bunga) / 100 / 12) * $jangka_waktu;
 
             $bulan_array = range(1, $jangka_waktu);
             $rincian = [];
@@ -178,6 +181,15 @@ class RSCAngsuranController extends Controller
             foreach ($bulan_array as $bulan_ke) {
                 // Hitung tanggal setoran untuk setiap bulan
                 $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_real)));
+
+                $sisa_plafon = ($bulan_ke == 1) ? $plafon_awal : $plafon;
+
+                if ($bulan_ke == $jangka_waktu && ($plafon_awal != $pokok * $jangka_waktu)) {
+                    $pokok = $plafon_awal - ($pokok * ($jangka_waktu - 1));
+                    $bunga = $total_bunga - ($bunga * ($jangka_waktu - 1));
+                    $jml_setoran = round($pokok + $bunga);
+                    $sisa_plafon = $pokok;
+                }
 
                 $plafon -= $pokok;
                 // Simpan rincian per bulan
@@ -187,7 +199,7 @@ class RSCAngsuranController extends Controller
                     'setoran_pokok' => $pokok,
                     'setoran_bunga' => $bunga,
                     'jumlah_setoran' => $jml_setoran,
-                    'sisa_plafon' => $plafon
+                    'sisa_plafon' => $sisa_plafon
                 ];
             }
 
