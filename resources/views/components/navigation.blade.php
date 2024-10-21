@@ -46,6 +46,13 @@
                             </a>
                         </li>
 
+                        <li class="{{ request()->is('admin/resort') ? 'active' : '' }}">
+                            <a href="{{ route('admin.resort') }}" title=" Data Resort">
+                                <i class="fa fa-circle-o"></i>
+                                Data Resort
+                            </a>
+                        </li>
+
                         <li class="{{ request()->is('perubahan/data') ? 'active' : '' }}">
                             <a href="{{ route('ubah.data') }}" title="Menu Sakti">
                                 <i class="fa fa-circle-o"></i>

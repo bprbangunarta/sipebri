@@ -56,6 +56,7 @@ use App\Http\Controllers\RSCAngsuranController;
 use App\Http\Controllers\RSCKeuanganController;
 use App\Http\Controllers\Admin\KantorController;
 use App\Http\Controllers\Admin\ProdukController;
+use App\Http\Controllers\Admin\ResortController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\CetakAnalisaController;
 use App\Http\Controllers\CetakLaporanController;
@@ -224,6 +225,12 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/jaminan', 'index')->name('admin.jaminan.index');
                     Route::get('/data/jaminan/{id}/edit', 'edit')->name('admin.jaminan.edit');
                     Route::PUT('/data/jaminan/update', 'update')->name('admin.jaminan.update');
+                });
+
+                // Data Resort
+                Route::controller(ResortController::class)->group(function () {
+                    Route::get('/data/resort', 'index')->name('admin.resort');
+                    Route::post('/data/resort/simpan', 'simpan_resort')->name('admin.simpan.resort');
                 });
 
                 // Data Survei
