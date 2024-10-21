@@ -61,19 +61,19 @@
                 margin-top: -1cm;
                 padding-top: 1cm;
                 padding-bottom: 1.5cm;
-                /* padding-left: 1.2cm;
-                padding-right: 1.2cm; */
             }
 
-            /* .col .table {
-                padding-left: 1.0cm;
-                padding-right: 1.0cm;
-            } */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            thead {
+                display: table-header-group;
+            }
 
             .col .tabel_setoran {
                 table-layout: auto;
-                /* padding-left: 1.0cm;
-                padding-right: 1.0cm; */
             }
 
         }
@@ -81,22 +81,23 @@
 </head>
 
 <body>
-
-    <center>
-        <h4>PT. BPR BANGUNARTA</h4>
-        <h3 style="margin-top: -20px;">TABEL SETORAN PINJAMAN @if ($data->produk_kode == 'KBT' && ($data->kondisi_khusus == 'PERPADIAN' || $data->kondisi_khusus == 'PERLELEAN'))
-                EFEKTIF MUSIMAN
-            @else
-                ({{ $data->metode_rps }})
-            @endif
-        </h3>
-    </center>
+    <div class="header" id="header">
+        <center>
+            <h4>PT. BPR BANGUNARTA</h4>
+            <h3 style="margin-top: -20px;">TABEL SETORAN PINJAMAN @if ($data->produk_kode == 'KBT' && ($data->kondisi_khusus == 'PERPADIAN' || $data->kondisi_khusus == 'PERLELEAN'))
+                    EFEKTIF MUSIMAN
+                @else
+                    ({{ $data->metode_rps }})
+                @endif
+            </h3>
+        </center>
+    </div>
 
     <div class="content">
 
         <div class="col">
 
-            <table class="tabel" style="font-size: 9pt; margin-top: -5px;">
+            <table class="tabel" id="header" style="font-size: 9pt; margin-top: -5px;">
                 <tr>
                     <td style="width: 12%;">Nama Debitur</td>
                     <td style="width: 1%;">:</td>
@@ -142,43 +143,50 @@
             </table>
             <br>
             <table class="tabel_setoran" style="margin-top: -5px;">
-                <tr>
-                    <th colspan="6">JADWAL SETORAN PINJAMAN</th>
-                    <th colspan="6">TRANSAKSI SETORAN</th>
-                </tr>
-                <tr>
-                    <th>Bln Ke-</th>
-                    <th width='5%'>Tanggal</th>
-                    <th>Setoran Pokok</th>
-                    <th>Setoran Bunga</th>
-                    <th>Jumlah Setoran</th>
-                    <th>Saldo Pokok</th>
-                    <th width='5%'>Tgl. Setor</th>
-                    <th>Setoran Pokok</th>
-                    <th>Setoran Bunga</th>
-                    <th>Setoran Denda</th>
-                    <th>Saldo Pokok</th>
-                    <th width='5%'>Ket</th>
-                </tr>
-
-                @forelse ($angsuran as $item)
+                <thead>
                     <tr>
-                        <td style="text-align: center;">{{ $item['bulan_ke'] }}</td>
-                        <td style="text-align: center;">{{ $item['tanggal_setoran'] }}</td>
-                        <td style="text-align: center;">{{ number_format($item['setoran_pokok'], '0', ',', '.') }}</td>
-                        <td style="text-align: center;">{{ number_format($item['setoran_bunga'], '0', ',', '.') }}</td>
-                        <td style="text-align: center;">{{ number_format($item['jumlah_setoran'], '0', ',', '.') }}
-                        </td>
-                        <td style="text-align: center;">{{ number_format($item['sisa_plafon'], '0', ',', '.') }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <th colspan="6">JADWAL SETORAN PINJAMAN</th>
+                        <th colspan="6">TRANSAKSI SETORAN</th>
                     </tr>
-                @empty
-                @endforelse
+                    <tr>
+                        <th>Bln Ke-</th>
+                        <th width='5%'>Tanggal</th>
+                        <th>Setoran Pokok</th>
+                        <th>Setoran Bunga</th>
+                        <th>Jumlah Setoran</th>
+                        <th>Saldo Pokok</th>
+                        <th width='5%'>Tgl. Setor</th>
+                        <th>Setoran Pokok</th>
+                        <th>Setoran Bunga</th>
+                        <th>Setoran Denda</th>
+                        <th>Saldo Pokok</th>
+                        <th width='5%'>Ket</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @forelse ($angsuran as $item)
+                        <tr>
+                            <td style="text-align: center;">{{ $item['bulan_ke'] }}</td>
+                            <td style="text-align: center;">{{ $item['tanggal_setoran'] }}</td>
+                            <td style="text-align: center;">{{ number_format($item['setoran_pokok'], '0', ',', '.') }}
+                            </td>
+                            <td style="text-align: center;">{{ number_format($item['setoran_bunga'], '0', ',', '.') }}
+                            </td>
+                            <td style="text-align: center;">{{ number_format($item['jumlah_setoran'], '0', ',', '.') }}
+                            </td>
+                            <td style="text-align: center;">{{ number_format($item['sisa_plafon'], '0', ',', '.') }}
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @empty
+                    @endforelse
+                </tbody>
 
             </table>
         </div>
