@@ -1271,6 +1271,9 @@ class CetakController extends Controller
             $rincian = [];
             $total_pokok_dibayar = 0;
 
+            $sisa_plafon = $plafon;
+            $plafon_awal = $plafon;
+
             foreach ($bulan_array as $bulan_ke) {
                 $tanggal_setoran = date('d/m/Y', strtotime("+$bulan_ke month", strtotime($tgl_real)));
 
@@ -1279,8 +1282,15 @@ class CetakController extends Controller
                 $pokok = ($plafon * $sb * pow(1 + $sb, $per - 1)) / (pow(1 + $sb, $jangka_waktu) - 1);
                 $bunga = round($angsuran) - round($pokok);
 
+                if ($bulan_ke == 1) {
+                    $sisa_plafon = $plafon_awal;
+                } else {
+                    $sisa_plafon = round($sisa_plafon - round($pokok));
+                }
+
+
                 $total_pokok_dibayar += $pokok;
-                $sisa_plafon = round($plafon) - round($total_pokok_dibayar);
+                // $sisa_plafon = round($plafon) - round($total_pokok_dibayar);
 
                 $rincian[] = [
                     'bulan_ke' => $bulan_ke,
