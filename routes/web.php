@@ -121,7 +121,7 @@ Route::get('/give-permission', function () {
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);
-    // dd($role);
+    // dd($permission);
 });
 
 Route::get('/role', function () {

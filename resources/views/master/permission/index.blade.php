@@ -283,7 +283,7 @@
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <form action="/admin/permission/{{ $item->id }}/delete" method="POST">
+                                                {{-- <form action="/admin/permission/{{ $item->id }}/delete" method="POST">
                                                     @method('delete')
                                                     @csrf
                                                     <button style="border: none; background:red;" class="confirmdelete"
@@ -291,7 +291,13 @@
                                                         <i class="fa fa-trash" style="font-size: 12pt; color:white;"
                                                             title="Delete Permission"></i>
                                                     </button>
-                                                </form>
+                                                </form> --}}
+                                                <a data-bs-toggle="modal" data-bs-target="#modal-tambah"
+                                                    data-id="{{ $item->id }}" title="Edit Permission"
+                                                    class="btn-circle btn-sm bg-yellow">
+                                                    <i class="fa fa-trash" style="font-size: 12pt; color:white;"
+                                                        title="Delete Permission"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     @empty
