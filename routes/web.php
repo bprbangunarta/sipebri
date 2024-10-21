@@ -116,8 +116,8 @@ Route::get('/', function () {
 });
 
 Route::get('/give-permission', function () {
-    // $role = Role::find(17);
-    // $permission = Permission::find(52);
+    // $role = Role::find(8);
+    // $permission = Permission::find(46);
 
     // $role->givePermissionTo($permission);
     // $permission->assignRole($role);
@@ -246,6 +246,11 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/rsc/pengajuan/edit', 'edit_pengajuan_rsc')->name('admin.rsc.pengajuan.edit');
                     Route::post('/data/rsc/pengajuan/update', 'update_pengajuan_rsc')->name('admin.rsc.pengajuan.update');
                 });
+
+                // Permission
+                Route::controller(PermissionController::class)->group(function () {
+                    Route::get('/data/permission', 'index')->name('admin.permission.index');
+                });
             });
         });
 
@@ -331,7 +336,7 @@ Route::middleware('auth')->group(function () {
         });
 
         // Cetak Berkas Pengajuan
-        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {
+        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas|Kasi Analis']], function () {
             Route::get('/cetak/pengajuan', [CetakController::class, 'index_pengajuan'])->name('cetak.pengajuan.index');
         });
 

@@ -137,7 +137,7 @@
                             </a>
                         </li>
                         <li class="{{ request()->is('') ? 'active' : '' }}">
-                            <a href="#" title="Permission">
+                            <a href="{{ route('admin.permission.index') }}" title="Permission">
                                 <i class="fa fa-circle-o"></i>
                                 Permission
                             </a>

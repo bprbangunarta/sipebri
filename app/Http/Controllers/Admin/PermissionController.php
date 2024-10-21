@@ -28,7 +28,6 @@ class PermissionController extends Controller
         }
 
         $permission = $query->paginate(10);
-        
         return view('master.permission.index', compact('permission'));
     }
 
@@ -102,12 +101,12 @@ class PermissionController extends Controller
         if (!empty($request->name)) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
-        
+
         $cek = DB::table('role_has_permissions')
-                ->get();
-        
+            ->get();
+
         $permission = $query->paginate(10);
-        
+
         return view('master.role.give-permission', [
             'permission' => $permission,
             'role' => $cek,
@@ -115,23 +114,25 @@ class PermissionController extends Controller
         ]);
     }
 
-    public function postpermission(Request $request){
+    public function postpermission(Request $request)
+    {
         $permission = $request->input('id1');
         $id = $request->input('id2');
-        
+
         try {
             $role = Role::find($id);
             $role->givePermissionTo($permission);
-            return response()->json($permission);            
+            return response()->json($permission);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
     }
 
-    public function destroypermission(Request $request){
+    public function destroypermission(Request $request)
+    {
         $permission = $request->input('id1');
         $id = $request->input('id2');
-        
+
         try {
             $role = Role::find($id);
             $role->revokePermissionTo($permission);
