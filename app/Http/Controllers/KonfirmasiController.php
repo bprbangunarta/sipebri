@@ -388,6 +388,12 @@ class KonfirmasiController extends Controller
             return redirect()->back()->with('error', 'Data Sandi Lapbul tidak boleh kosong');
         }
 
+        $cek_adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
+
+        if(is_null($cek_adm)){
+            return redirect()->back()->with('error', 'Data administrasi harus diisi.');
+        }
+        
         //By pas jika produk KTA
         $pengajuan = DB::table('data_pengajuan')->where('kode_pengajuan', $enc)->first();
 

@@ -396,13 +396,12 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('cetak/kartu/angsuran') ? 'active' : '' }}">
-                        {{-- <a @can('cetak perjanjian kredit') href="{{ route('cetak.angsuran.index') }}" @endcan --}}
+                    {{-- <li class="{{ request()->is('cetak/kartu/angsuran') ? 'active' : '' }}">
                         <a href="{{ route('cetak.angsuran.index') }}" title="Cetak Kartu Angsuran">
                             <i class="fa fa-credit-card" aria-hidden="true"></i>
                             Kartu Angsuran
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ request()->is('cetak/lembar/konfirmasi') ? 'active' : '' }}">
                         <a href="{{ route('cetak.lembar.konfirmasi') }}" title="Cetak Lembar Konfirmasi">
