@@ -346,7 +346,7 @@
                 <tr>
                     <td width="13%">Nama Nasabah</td>
                     <td class="text-center" width="3%"> : </td>
-                    <td style="text-align: justify;">{{ $itemp->kode_usaha }}</td>
+                    <td style="text-align: justify;">{{ $itemp->nama_nasabah }}</td>
                 </tr>
                 <tr>
                     <td>Kode Usaha</td>
