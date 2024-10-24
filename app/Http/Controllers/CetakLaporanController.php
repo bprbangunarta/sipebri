@@ -37,6 +37,7 @@ class CetakLaporanController extends Controller
                 'data_survei.kantor_kode',
                 'data_pengajuan.produk_kode',
                 'data_pengajuan.plafon',
+                'data_pengajuan.temp_plafon',
                 'data_pengajuan.jangka_waktu',
                 'data_pengajuan.suku_bunga',
                 'data_pengajuan.metode_rps',

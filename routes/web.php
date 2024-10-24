@@ -1003,4 +1003,7 @@ Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');
 
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/rekap/analisa', 'rekap.analisa');
+
+Route::view('/error','errors.500');
+
 require __DIR__ . '/auth.php';

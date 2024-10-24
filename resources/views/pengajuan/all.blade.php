@@ -72,18 +72,14 @@
                                                 {{ $item->kantor }}
                                             </td>
 
-                                            @php
-                                                $item->plafon = number_format($item->plafon, 0, ',', '.');
-                                            @endphp
                                             <td class="text-right" style="vertical-align: middle;">
-                                                {{ $item->plafon }}
+                                                @if (!empty($item->temp_plafon))
+                                                    {{ number_format($item->temp_plafon, 0, ',', '.') }}
+                                                @else
+                                                    {{ number_format($item->plafon, 0, ',', '.') }}
+                                                @endif
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                {{-- <a href="{{ route('tracking', ['pengajuan' => $item->kd]) }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Tracking Pengajuan">
-                                                    <i class="fa fa-hourglass-start"></i>
-                                                </a> --}}
-
                                                 <a href="/laporan/tracking/pengajuan?keyword={{ $item->kode }}"
                                                     class="btn-circle btn-sm bg-yellow" title="Tracking Pengajuan"
                                                     target="_blank">

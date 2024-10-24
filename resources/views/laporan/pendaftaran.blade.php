@@ -69,7 +69,11 @@
                                             <td class="text-center">{{ $item->kantor_kode }}</td>
                                             <td class="text-center">{{ $item->produk_kode }}</td>
                                             <td class="text-right">
-                                                {{ number_format($item->plafon, 0, ',', '.') }}
+                                                @if (!empty($item->temp_plafon))
+                                                    {{ number_format($item->temp_plafon, 0, ',', '.') }}
+                                                @else
+                                                    {{ number_format($item->plafon, 0, ',', '.') }}
+                                                @endif
                                             </td>
                                             <td class="text-center">{{ $item->jangka_waktu }}</td>
                                             <td class="text-center">{{ $item->suku_bunga }}%</td>

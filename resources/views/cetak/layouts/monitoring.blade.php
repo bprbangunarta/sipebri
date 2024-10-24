@@ -171,7 +171,13 @@
                 <td class="text-center" width="2%"> 7. </td>
                 <td width="17%">Plafon</td>
                 <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') }}</td>
+                <td style="text-align: justify;">
+                    @if (!empty($data->temp_plafon))
+                        {{ 'Rp.' . ' ' . number_format($data->temp_plafon, 0, ',', '.') }}
+                    @else
+                        {{ 'Rp.' . ' ' . number_format($data->plafon, 0, ',', '.') }}
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td class="text-center" width="2%"> 8. </td>

@@ -139,6 +139,7 @@ class PengajuanController extends Controller
                 'data_pengajuan.nasabah_kode as kd_nasabah',
                 'data_pengajuan.id as id',
                 'data_pengajuan.plafon as plafon',
+                'data_pengajuan.temp_plafon',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_pengajuan.metode_rps',
                 'data_nasabah.nama_nasabah as nama',
