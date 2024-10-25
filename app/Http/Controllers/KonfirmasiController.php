@@ -390,10 +390,10 @@ class KonfirmasiController extends Controller
 
         $cek_adm = DB::table('a_administrasi')->where('pengajuan_kode', $enc)->first();
 
-        if(is_null($cek_adm)){
+        if (is_null($cek_adm)) {
             return redirect()->back()->with('error', 'Data administrasi harus diisi.');
         }
-        
+
         //By pas jika produk KTA
         $pengajuan = DB::table('data_pengajuan')->where('kode_pengajuan', $enc)->first();
 
@@ -521,6 +521,7 @@ class KonfirmasiController extends Controller
             ->leftJoin('data_notifikasi', 'data_pengajuan.kode_pengajuan', '=', 'data_notifikasi.pengajuan_kode')
 
             ->where('data_spk.otorisasi', 'N')
+            ->whereNotIn('data_pengajuan.status', ['BATAL'])
             ->where(function ($query) use ($name) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $name . '%')
                     ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $name . '%')
