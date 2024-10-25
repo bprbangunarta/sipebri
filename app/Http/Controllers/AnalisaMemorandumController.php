@@ -26,7 +26,7 @@ class AnalisaMemorandumController extends Controller
                     'data' => $cek[0],
                 ]);
             }
-            // dd($data);
+
             return view('staff.analisa.memorandum.kebutuhan-edit', [
                 'data' => $cek[0],
                 'kebutuhan' => $data,
@@ -53,6 +53,11 @@ class AnalisaMemorandumController extends Controller
                 'pelunasan_kredit' => (int)str_replace(["Rp", " ", "."], "", $request->pelunasan_kredit),
                 'take_over' => (int)str_replace(["Rp", " ", "."], "", $request->take_over),
                 'kebutuhan_dana' => (int)str_replace(["Rp", " ", "."], "", $request->kebutuhan_dana),
+                'ket_modal_kerja' => strtoupper($request->ket_modal_kerja),
+                'ket_investasi' => strtoupper($request->ket_investasi),
+                'ket_konsumtif' => strtoupper($request->ket_konsumtif),
+                'ket_pelunasan_kredit' => strtoupper($request->ket_pelunasan_kredit),
+                'ket_take_over' => strtoupper($request->ket_take_over),
                 'input_user' => Auth::user()->code_user,
                 'created_at' => now(),
             ];
@@ -75,6 +80,11 @@ class AnalisaMemorandumController extends Controller
                 'pelunasan_kredit' => (int)str_replace(["Rp", " ", "."], "", $request->pelunasan_kredit),
                 'take_over' => (int)str_replace(["Rp", " ", "."], "", $request->take_over),
                 'kebutuhan_dana' => (int)str_replace(["Rp", " ", "."], "", $request->kebutuhan_dana),
+                'ket_modal_kerja' => strtoupper($request->ket_modal_kerja),
+                'ket_investasi' => strtoupper($request->ket_investasi),
+                'ket_konsumtif' => strtoupper($request->ket_konsumtif),
+                'ket_pelunasan_kredit' => strtoupper($request->ket_pelunasan_kredit),
+                'ket_take_over' => strtoupper($request->ket_take_over),
                 'input_user' => Auth::user()->code_user,
                 'updated_at' => now(),
             ];

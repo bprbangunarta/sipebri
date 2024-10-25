@@ -27,11 +27,8 @@
                             <input type="text" class="form-control text-uppercase" name="konsumtif" id="konsumtif"
                                 placeholder="Rp.">
                         </div>
-                    </div>
 
-
-                    <div class="div-right">
-                        <div style="width: 100%;float:left;">
+                        <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">PELUNASAN KREDIT</span>
                             <input type="text" class="form-control text-uppercase" name="pelunasan_kredit" id="pelunasan"
                                 placeholder="Rp.">
@@ -48,6 +45,36 @@
                             <input type="text" class="form-control text-uppercase bg-blue" name="kebutuhan_dana"
                                 id="kebutuhan_dana" value="Rp." readonly>
                         </div>
+                    </div>
+
+
+                    <div class="div-right">
+                        <div style="width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase" name="ket_modal_kerja" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase" name="ket_investasi" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase" name="ket_konsumtif" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase" name="ket_pelunasan_kredit"
+                                id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase" name="ket_take_over" id="">
+                        </div>
+
                     </div>
 
                     <button type="submit" class="btn btn-sm btn-primary" style="margin-top:10px;width:100%">SIMPAN</button>

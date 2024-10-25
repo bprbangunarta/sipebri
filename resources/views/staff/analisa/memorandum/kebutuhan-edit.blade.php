@@ -31,11 +31,8 @@
                                 placeholder="Rp."
                                 value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->konsumtif, 0, ',', '.') }}">
                         </div>
-                    </div>
 
-
-                    <div class="div-right">
-                        <div style="width: 100%;float:left;">
+                        <div style="margin-top:5px;width: 100%;float:left;">
                             <span class="fw-bold">PELUNASAN KREDIT</span>
                             <input type="text" class="form-control text-uppercase" name="pelunasan_kredit" id="pelunasan"
                                 placeholder="Rp."
@@ -55,6 +52,39 @@
                                 id="kebutuhan_dana"
                                 value="{{ 'Rp. ' . ' ' . number_format($kebutuhan->kebutuhan_dana, 0, ',', '.') }}"
                                 readonly>
+                        </div>
+                    </div>
+
+
+                    <div class="div-right">
+                        <div style="width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase"
+                                value="{{ $kebutuhan->ket_modal_kerja }}" name="ket_modal_kerja" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase"
+                                value="{{ $kebutuhan->ket_investasi }}" name="ket_investasi" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase"
+                                value="{{ $kebutuhan->ket_konsumtif }}" name="ket_konsumtif" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase"
+                                value="{{ $kebutuhan->ket_pelunasan_kredit }}" name="ket_pelunasan_kredit" id="">
+                        </div>
+
+                        <div style="margin-top:5px;width: 100%;float:left;">
+                            <span class="fw-bold">KETERANGAN</span>
+                            <input type="text" class="form-control text-uppercase"
+                                value="{{ $kebutuhan->ket_take_over }}" name="ket_take_over" id="">
                         </div>
                     </div>
 
