@@ -195,4 +195,65 @@ class AnalisaKualitatifController extends Controller
         }
         return redirect()->back()->with('success', 'Gagal menambahkan data');
     }
+
+    public function tambahan(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+            $cek = Midle::analisa_usaha($enc);
+
+            $data = DB::table('a_tambahan')->where('pengajuan_kode', $enc)->first();
+
+            if (is_null($data)) {
+                $data = (object) [
+                    'checking_usaha' => null
+                ];
+            }
+
+            return view('staff.analisa.kualitatif.tambahan', [
+                'data' => $cek[0],
+                'trade' => $data
+            ]);
+        } catch (DecryptException $e) {
+            return abort(403, 'Permintaan anda di Tolak.');
+        }
+    }
+
+    public function simpan_tambahan(Request $request)
+    {
+        try {
+            $enc = Crypt::decrypt($request->query('pengajuan'));
+
+            $data = [
+                'pengajuan_kode' => $enc,
+                'checking_usaha' => strtoupper($request->trade_checking_usaha),
+            ];
+
+            $cek = DB::table('a_tambahan')->where('pengajuan_kode', $enc)->first();
+
+            if (is_null($cek)) {
+                $data['created_at'] = now();
+
+                $insert = DB::table('a_tambahan')->insert($data);
+
+                if ($insert) {
+                    return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal ditambahkan.');
+                }
+            } else {
+                $data['updated_at'] = now();
+
+                $update = DB::table('a_tambahan')->where('pengajuan_kode', $enc)->update($data);
+
+                if ($update) {
+                    return redirect()->back()->with('success', 'Data berhasil diubah.');
+                } else {
+                    return redirect()->back()->with('error', 'Data gagal diubah.');
+                }
+            }
+        } catch (DecryptException $e) {
+            return redirect()->back()->with('error', 'HUbungi Staff IT.');
+        }
+    }
 }

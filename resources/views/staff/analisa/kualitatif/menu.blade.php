@@ -42,6 +42,13 @@
                                         ANALISA SWOT
                                     </a>
                                 </li>
+
+                                <li class="{{ request()->is('themes/analisa/kualitatif/tambahan') ? 'active' : '' }}">
+                                    <a href="{{ route('kualitatif.tambahan', ['pengajuan' => $pengajuan]) }}"
+                                        class="{{ request()->is('themes/analisa/kualitatif/tambahan') ? 'text-bold' : '' }}">
+                                        ANALISA TAMBAHAN
+                                    </a>
+                                </li>
                             </ul>
 
                             @yield('content')

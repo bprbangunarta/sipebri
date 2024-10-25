@@ -552,6 +552,8 @@ Route::middleware('auth')->group(function () {
             Route::put('/analisa/kualitatif/usaha', 'updateusaha')->name('kualitatif.updateusaha');
             Route::get('/analisa/kualitatif/swot', 'analisa_swot')->name('kualitatif.analisa_swot');
             Route::POST('/analisa/kualitatif/swot', 'simpan_analisa_swot')->name('simpan_.analisa_swot');
+            Route::get('/analisa/kualitatif/tambahan', 'tambahan')->name('kualitatif.tambahan');
+            Route::POST('/analisa/kualitatif/tambahan', 'simpan_tambahan')->name('kualitatif.simpan.tambahan');
         });
 
         //Analisa Memorandum
@@ -1004,6 +1006,6 @@ Route::view('/amplop', 'cetak-berkas.amplop.cover-depan');
 Route::view('/anuitas', 'perhitungan.anuitas');
 Route::view('/rekap/analisa', 'rekap.analisa');
 
-Route::view('/error','errors.500');
+Route::view('/error', 'errors.500');
 
 require __DIR__ . '/auth.php';

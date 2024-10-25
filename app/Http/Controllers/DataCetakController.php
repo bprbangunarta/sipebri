@@ -985,6 +985,15 @@ class DataCetakController extends Controller
                 ];
             }
 
+            // Analisa Tambahan
+            $tambahan = DB::table('a_tambahan')->where('pengajuan_kode', $enc)->first();
+
+            if (is_null($tambahan)) {
+                $tambahan = (object) [
+                    'checking_usaha' => null
+                ];
+            }
+
             return view('cetak-berkas.analisa-kredit.index', [
                 'data' => $request->query('pengajuan'),
                 'cetak' => $data[0],
@@ -1007,6 +1016,7 @@ class DataCetakController extends Controller
                 'condition' => $condition,
                 'biayaperdagangan' => $biaya_perdagangan,
                 'memorandum' => $memorandum,
+                'tambahan' => $tambahan,
                 'swot' => $swot,
                 'qr' => $qr,
                 'adm' => $adm,

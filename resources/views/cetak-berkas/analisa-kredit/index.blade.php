@@ -1778,13 +1778,17 @@
         <h4 style="text-align: center;font-size: 12pt;">KEBUTUHAN DANA</h4>
         <table style="border:1px solid black;">
             <tr>
-                <th class="text-center" width="50%">Kebutuhan</th>
-                <th class="text-center" width="50%">Nominal</th>
+                <th class="text-center" width="25%">Kebutuhan</th>
+                <th class="text-center" width="50%">Keterangan</th>
+                <th class="text-center" width="25%">Nominal</th>
             </tr>
 
             <tr>
                 <td style="border-top:1px solid black;border-right:1px solid black;">
                     &nbsp; 1. Modal Kerja
+                </td>
+                <td style="border-top:1px solid black;border-right:1px solid black;">
+                    &nbsp; {{ $kebutuhan_dana->ket_modal_kerja }}
                 </td>
                 <td style="border-top:1px solid black;border-right:1px solid black;">
                     &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->modal_kerja, 0, ',', '.') }}
@@ -1795,12 +1799,18 @@
                     &nbsp; 2. Investasi
                 </td>
                 <td style="border-right:1px solid black;">
+                    &nbsp; {{ $kebutuhan_dana->ket_investasi }}
+                </td>
+                <td style="border-right:1px solid black;">
                     &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->investasi, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">
                     &nbsp; 3. Konsumtif
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; {{ $kebutuhan_dana->ket_konsumtif }}
                 </td>
                 <td style="border-right:1px solid black;">
                     &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->konsumtif, 0, ',', '.') }}
@@ -1811,12 +1821,18 @@
                     &nbsp; 4. Pelunasan Kredit
                 </td>
                 <td style="border-right:1px solid black;">
+                    &nbsp; {{ $kebutuhan_dana->ket_pelunasan_kredit }}
+                </td>
+                <td style="border-right:1px solid black;">
                     &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->pelunasan_kredit, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
                 <td style="border-right:1px solid black;">
                     &nbsp; 5. Take Over
+                </td>
+                <td style="border-right:1px solid black;">
+                    &nbsp; {{ $kebutuhan_dana->ket_take_over }}
                 </td>
                 <td style="border-right:1px solid black;">
                     &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->take_over, 0, ',', '.') }}
@@ -1826,109 +1842,71 @@
     </div>
 
 
-    {{-- <div class="page-break"></div>
-    <div class="content" style="margin-top: -57px;font-size:12.5px;">
-        <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
-        <hr style="border: 1px solid 034871;">
-        <h4 style="text-align: center;font-size: 12pt;">ANALISA TAMBAHAN</h4>
-        <table>
-            <tr>
-                <td class="text-center" width="2%"> 1. </td>
-                <td width="17%">Kode Pengajuan</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->kode_pengajuan }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 2. </td>
-                <td width="17%">Nama Nasabah</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->nama_nasabah }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
-                <td width="17%" style="vertical-align: text-top;">Alamat</td>
-                <td class="text-center" width="3%" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">
-                    {{ $cetak->alamat_ktp }}
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 4. </td>
-                <td width="17%">No. Telp</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->no_telp }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 5. </td>
-                <td width="17%">Surveyor</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->nama_surveyor }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 6. </td>
-                <td width="17%">Kasi Analis</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">{{ $cetak->nama_kasi }}</td>
-            </tr>
-        </table>
+    @if ($cetak->produk_kode != 'KTA')
+        <div class="page-break"></div>
+        <div class="content" style="margin-top: -57px;font-size:12.5px;">
+            <img src="{{ asset('assets/img/pba.png') }}" style="width:200px;">
+            <hr style="border: 1px solid 034871;">
+            <h4 style="text-align: center;font-size: 12pt;">ANALISA TAMBAHAN</h4>
+            <table style="font-size: 10pt;">
+                <tr>
+                    <td class="text-center" width="2%"> 1. </td>
+                    <td width="17%">Kode Pengajuan</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $cetak->kode_pengajuan }}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" width="2%"> 2. </td>
+                    <td width="17%">Nama Nasabah</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $cetak->nama_nasabah }}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
+                    <td width="17%" style="vertical-align: text-top;">Alamat</td>
+                    <td class="text-center" width="3%" style="vertical-align: text-top;"> : </td>
+                    <td style="text-align: justify;">
+                        {{ $cetak->alamat_ktp }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center" width="2%"> 4. </td>
+                    <td width="17%">No. Telp</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $cetak->no_telp }}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" width="2%"> 5. </td>
+                    <td width="17%">Surveyor</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $cetak->nama_surveyor }}</td>
+                </tr>
+                <tr>
+                    <td class="text-center" width="2%"> 6. </td>
+                    <td width="17%">Kasi Analis</td>
+                    <td class="text-center" width="3%"> : </td>
+                    <td style="text-align: justify;">{{ $cetak->nama_kasi }}</td>
+                </tr>
+            </table>
 
-        <table style="margin-top:25px;">
-            <tr>
-                <td colspan="4"><b>Kebutuhan Dana</b></td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 1. </td>
-                <td width="17%">Modal Kerja</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">&nbsp;
-                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->modal_kerja, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 2. </td>
-                <td width="17%">Investasi</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">&nbsp;
-                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->investasi, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%" style="vertical-align: text-top;"> 3. </td>
-                <td width="17%" style="vertical-align: text-top;">Konsumtif</td>
-                <td class="text-center" width="3%" style="vertical-align: text-top;"> : </td>
-                <td style="text-align: justify;">
-                    &nbsp; {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->konsumtif, 0, ',', '.') }}
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 4. </td>
-                <td width="17%">Pelunasan Kredit</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;">&nbsp;
-                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->pelunasan_kredit, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <td class="text-center" width="2%"> 5. </td>
-                <td width="17%">Take Over</td>
-                <td class="text-center" width="3%"> : </td>
-                <td style="text-align: justify;"> &nbsp;
-                    {{ 'Rp.' . ' ' . number_format($kebutuhan_dana->take_over, 0, ',', '.') }}</td>
-            </tr>
-        </table>
-
-        <table style="margin-top: 25px;">
-            <tr>
-                <td><b>Catatan</b></td>
-            </tr>
-            <tr>
-                <td style="text-align: justify;">
-                    @if (!empty($kualitatif->trade_checking))
-                        {{ $kualitatif->trade_checking }}
-                    @else
-                        ...................
-                    @endif
-                </td>
-            </tr>
-        </table>
-    </div> --}}
+            <table style="margin-top: 25px; font-size:10pt;">
+                <tr>
+                    <td><b>Catatan</b></td>
+                </tr>
+                <tr>
+                    <td style="text-align: justify;">
+                        @if (!empty($tamabahan->checking_usaha))
+                            {{ $tamabahan->checking_usaha }}
+                        @else
+                            <hr style="border: 0.1px dotted black;"> <br>
+                            <hr style="border: 0.1px dotted black;"> <br>
+                            <hr style="border: 0.1px dotted black;"> <br>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+        </div>
+    @endif
 
 
     {{-- Memorandum --}}
