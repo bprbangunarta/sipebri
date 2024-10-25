@@ -1895,8 +1895,8 @@
                 </tr>
                 <tr>
                     <td style="text-align: justify;">
-                        @if (!empty($tamabahan->checking_usaha))
-                            {{ $tamabahan->checking_usaha }}
+                        @if (!is_null($tambahan->checking_usaha))
+                            {{ $tambahan->checking_usaha }}
                         @else
                             <hr style="border: 0.1px dotted black;"> <br>
                             <hr style="border: 0.1px dotted black;"> <br>
