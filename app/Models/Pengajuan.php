@@ -14,6 +14,7 @@ class Pengajuan extends Model
         'kode_pengajuan',
         'nasabah_kode',
         'plafon',
+        'temp_plafon',
         'jangka_waktu',
         'tabungan_cgc',
         'input_user',

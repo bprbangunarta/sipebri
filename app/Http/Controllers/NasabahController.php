@@ -130,9 +130,6 @@ class NasabahController extends Controller
         if (is_null($nik)) {
             //===Jika NIK tidak ada di data si pebri===//
             //Membuat kode Nasabah otomatis
-            // $date = Carbon::now();
-            // $koderand = random_int(100000, 999999);
-            // $haskode = $date->format('m') . $date->format('y') . $koderand;
             $haskode = Nasabah::nasabahkode();
 
             $ceknasabah['kode_nasabah'] = $haskode;
@@ -164,6 +161,7 @@ class NasabahController extends Controller
             //Hapus format rupiah
             $remove = array("Rp", ".", " ");
             $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+            $cekpengajuan['temp_plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
             $cekpengajuan['kategori'] = $request->kategori;
             $cekpengajuan['input_user'] = $usr;
 
@@ -194,14 +192,6 @@ class NasabahController extends Controller
 
             $lasts = Pengajuan::latest('kode_pengajuan')->first();
             $kodes = Nasabah::kode_nasabah($lasts);
-            // if (is_null($lasts)) {
-            //     $count = 339931;
-            // } else {
-            //     $count = (int) $lasts->kode_pengajuan + 1;
-            // }
-            // $lengths = 8;
-            // $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
-
 
             $cekpengajuan['kode_pengajuan'] = $kodes;
             $cekpengajuan['nasabah_kode'] = $nik->kode_nasabah;
@@ -212,6 +202,7 @@ class NasabahController extends Controller
             //Hapus format rupiah
             $remove = array("Rp", ".", " ");
             $cekpengajuan['plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
+            $cekpengajuan['temp_plafon'] = str_replace($remove, "", $cekpengajuan['plafon']);
             $cekpengajuan['kategori'] = $request->kategori;
             $cekpengajuan['input_user'] = $usr;
 

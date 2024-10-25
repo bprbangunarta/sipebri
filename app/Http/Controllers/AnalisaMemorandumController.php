@@ -415,14 +415,19 @@ class AnalisaMemorandumController extends Controller
             $data2 = [
                 'plafon' => (int)str_replace(["Rp", " ", "."], "", $request->usulan_plafond),
                 'jangka_waktu' => $request->jangka_waktu,
-                'temp_plafon' => (int)$cek[0]->plafon,
                 'suku_bunga' => $request->s_bunga,
                 'b_admin' => number_format($request->b_admin, 2),
                 'b_provisi' => number_format($request->b_provisi, 2),
                 'b_penalti' => number_format($request->b_penalti, 2),
                 'updated_at' => now(),
             ];
-            // dd($request->all());
+
+            if (!empty($cek)) {
+                if (empty($cek[0]->temp_plafon)) {
+                    $data2['temp_plafon'] = (int)$cek[0]->plafon;
+                }
+            }
+
             //cek data memorandum sudah ada apa belum
             $memorandum = DB::table('a_memorandum')->where('pengajuan_kode', $enc)->first();
             // dd($data2);
@@ -447,6 +452,7 @@ class AnalisaMemorandumController extends Controller
                     DB::table('a_memorandum')->where('pengajuan_kode', $enc)->insert($data);
                 });
             }
+
 
             DB::transaction(function () use ($data, $data2, $enc) {
                 Pengajuan::where('kode_pengajuan', $enc)->update($data2);
