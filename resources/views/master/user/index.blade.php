@@ -27,7 +27,7 @@
                             </div>
                         </div>
 
-                        <div class="box-body">
+                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr class="bg-blue">
@@ -72,20 +72,28 @@
                                             </td>
                                             <td class="text-center">
                                                 <a data-toggle="modal" data-target="#modal-edit"
-                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning">
+                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-warning"
+                                                    title="Edit User" style="cursor: pointer;">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#modal-akses"
-                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-success">
+                                                    data-id="{{ $data->code_user }}" class="btn-circle btn-sm btn-success"
+                                                    title="Role" style="cursor: pointer;">
                                                     <i class="fa fa-user"></i>
                                                 </a>
 
                                                 &nbsp;
+                                                <a href="{{ route('permission.to', ['role_id' => $data->role_id, 'user_id' => $data->model_id]) }}"
+                                                    class="btn-circle btn-sm btn-primary" title="Permission">
+                                                    <i class="fa fa-lock"></i>
+                                                </a>
+
+                                                &nbsp;
                                                 <a data-toggle="modal" data-target="#modal-password"
-                                                    data-user="{{ $data->code_user }}"
-                                                    class="btn-circle btn-sm btn-danger">
+                                                    data-user="{{ $data->code_user }}" class="btn-circle btn-sm btn-danger"
+                                                    title="Password" style="cursor: pointer;">
                                                     <i class="fa fa-key"></i>
                                                 </a>
                                             </td>

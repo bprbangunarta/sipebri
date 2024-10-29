@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/role', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit', 'admin/data/survei', 'admin/data/survei/*') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit', 'admin/data/survei', 'admin/data/survei/*', 'admin/give/permission*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -39,7 +39,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
+                        <li class="{{ request()->is('admin/user', 'admin/give/permission*') ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}" title=" Data User">
                                 <i class="fa fa-circle-o"></i>
                                 Data User
@@ -120,7 +120,7 @@
                     </ul>
                 </li>
 
-                <li class="treeview {{ request()->is('') ? 'active' : '' }}">
+                <li class="treeview {{ request()->is('admin/data/permission*', 'admin/role*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-lock"></i>
                         <span>Role & Permission</span>
@@ -130,14 +130,14 @@
                     </a>
                     <ul class="treeview-menu">
 
-                        <li class="{{ request()->is('') ? 'active' : '' }}">
-                            <a href="#" title="Data Role">
+                        <li class="{{ request()->is('admin/role*') ? 'active' : '' }}">
+                            <a href="{{ route('role.index') }}" title="Data Role">
                                 <i class="fa fa-circle-o"></i>
                                 Data Role
                             </a>
                         </li>
-                        <li class="{{ request()->is('') ? 'active' : '' }}">
-                            <a href="{{ route('admin.permission.index') }}" title="Permission">
+                        <li class="{{ request()->is('admin/data/permission*') ? 'active' : '' }}">
+                            <a href="{{ route('permission.index') }}" title="Permission">
                                 <i class="fa fa-circle-o"></i>
                                 Permission
                             </a>

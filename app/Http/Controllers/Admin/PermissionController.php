@@ -2,32 +2,35 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Carbon;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-
 use function Pest\Laravel\json;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
+use RealRashid\SweetAlert\Facades\Alert;
+
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends Controller
 {
     public function index(Request $request)
     {
+        $keyword = $request->query('keyword');
 
         $query = Permission::query();
         $query->select('permissions.*', 'name');
         $query->orderBy('name');
 
-        if (!empty($request->name)) {
-            $query->where('name', 'like', '%' . $request->name . '%');
+        if (!empty($keyword)) {
+            $query->where('name', 'like', '%' . $keyword . '%');
         }
 
         $permission = $query->paginate(10);
+
         return view('master.permission.index', compact('permission'));
     }
 
@@ -94,35 +97,40 @@ class PermissionController extends Controller
     // givePermissionTo
     public function givepermission(Request $request)
     {
-        $query = Permission::query();
-        $query->select('permissions.*', 'name');
-        $query->orderBy('name');
+        $query = User::query();
+        $query->select(
+            'users.name',
+            'roles.name AS position',
+            'roles.id AS role_id',
+        );
+        $query->leftJoin('model_has_roles', 'model_has_roles.model_id', '=', 'users.id');
+        $query->leftJoin('roles', 'roles.id', '=', 'model_has_roles.role_id');
+        $query->where('users.id', $request->user_id);
+        $user = $query->first();
 
-        if (!empty($request->name)) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
+        $permission = DB::table('permissions')->orderBy('name', 'ASC')->get();
 
-        $cek = DB::table('role_has_permissions')
+        $role = DB::table('role_has_permissions')
             ->get();
-
-        $permission = $query->paginate(10);
-
-        return view('master.role.give-permission', [
+        // dd($permission);
+        return view('master.user.give_permission', [
+            'data' => $user,
+            'role' => $role,
             'permission' => $permission,
-            'role' => $cek,
-            'datas' => $request->query('id'),
         ]);
     }
 
     public function postpermission(Request $request)
     {
         $permission = $request->input('id1');
-        $id = $request->input('id2');
+        $role = $request->input('id2');
+
+        $name_persmission = DB::table('permissions')->where('id', $permission)->first();
 
         try {
-            $role = Role::find($id);
+            $role = Role::find($role);
             $role->givePermissionTo($permission);
-            return response()->json($permission);
+            return response()->json($name_persmission->name);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }
@@ -133,10 +141,12 @@ class PermissionController extends Controller
         $permission = $request->input('id1');
         $id = $request->input('id2');
 
+        $name_persmission = DB::table('permissions')->where('id', $permission)->first();
+
         try {
             $role = Role::find($id);
             $role->revokePermissionTo($permission);
-            return response()->json($permission);
+            return response()->json($name_persmission->name);
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan');
         }

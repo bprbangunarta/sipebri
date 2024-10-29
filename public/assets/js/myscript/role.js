@@ -5,16 +5,15 @@ $(document).ready(function () {
         
         // Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
-            url: "/admin/data/permission/" + id + "/edit",
-            type: "GET",
+            url: "/admin/role/" + id + "/edit",
+            type: "get",
             dataType: "json",
             cache: false,
             success: function (response) {
-                // Isi modal dengan data yang diterima
-                var da = JSON.stringify(response);
-                var data = JSON.parse(da);
-                var hasil = data[0];
-                // $("#namepermission").val(hasil.name);
+                
+                $("#names").val(response.name);
+                $("#id_role").val(response.id);
+                
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

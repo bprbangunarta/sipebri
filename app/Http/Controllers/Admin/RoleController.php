@@ -15,17 +15,19 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
+        $keyword = $request->query('keyword');
 
         $query = Role::query();
         $query->select('roles.*', 'name');
         $query->whereNot('name', 'Administrator');
         $query->orderBy('name');
 
-        if (!empty($request->name)) {
-            $query->where('name', 'like', '%' . $request->name . '%');
+        if (!empty($keyword)) {
+            $query->where('name', 'like', '%' . $keyword . '%');
         }
 
         $roles = $query->paginate(10);
+
         return view('master.role.index', compact('roles'));
     }
 
@@ -48,25 +50,24 @@ class RoleController extends Controller
         ]);
 
         if ($role) {
-            return redirect()->back()->with('toast_success', 'Saved successfully!');
+            return redirect()->back()->with('success', 'Role berhasil ditambahkan.');
         } else {
-            toast('Failed to save!', 'error');
-            return redirect()->back()->with('toast_warning', 'Failed to save!');
+            return redirect()->back()->with('error', 'Role gagal ditambahkan.');
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
-        $role_id = $request->role_id;
-        $roles = DB::table('roles')->where('id', $role_id)->first();
+        if ($id) {
+            $permission = DB::table('roles')
+                ->where('id', '=', $id)->first();
 
-        return view('master.role.edit', compact('roles'));
+            return response()->json($permission);
+        }
     }
 
-    public function update($id, Request $request)
+    public function update(Request $request)
     {
-
-        $id = $request->id;
         try {
             $data = [
                 'name'       => request('name'),
@@ -74,12 +75,12 @@ class RoleController extends Controller
                 'updated_at' => Carbon::now(),
             ];
             DB::table('roles')
-                ->where('id', $id)
+                ->where('id', $request->id)
                 ->update($data);
 
-            return redirect()->back()->with('toast_success', 'Successfully updated!');
+            return redirect()->back()->with('success', 'Successfully updated!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('toast_warning', 'Failed to update!');
+            return redirect()->back()->with('error', 'Failed to update!');
         }
     }
 
@@ -94,13 +95,14 @@ class RoleController extends Controller
     public function destroy($id, Request $request)
     {
         $id = $request->id;
+
         $delete = DB::table('roles')->where('id', $id)->delete();
 
         if ($delete) {
-            return redirect()->back()->with('toast_success', 'Successfully deleted!');
+            return redirect()->back()->with('success', 'Successfully deleted!');
         } else {
             toast('Failed to delete!', 'error');
-            return redirect()->back()->with('toast_warning', 'Failed to deleted!');
+            return redirect()->back()->with('error', 'Failed to deleted!');
         }
     }
 }

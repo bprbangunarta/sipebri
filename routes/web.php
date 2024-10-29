@@ -115,14 +115,14 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/give-permission', function () {
-    // $role = Role::find(8);
-    // $permission = Permission::find(46);
+// Route::get('/give-permission', function () {
+//     $role = Role::find(3);
+//     $permission = Permission::find(44);
 
-    // $role->givePermissionTo($permission);
-    // $permission->assignRole($role);
-    // dd($permission);
-});
+//     $role->givePermissionTo($permission);
+//     $permission->assignRole($role);
+//     dd($permission);
+// });
 
 Route::get('/role', function () {
     // $role = Role::create(['name' => 'Kabag Kepatuhan']);
@@ -164,17 +164,17 @@ Route::middleware('auth')->group(function () {
                 // Data Role
                 Route::get('/role', [RoleController::class, 'index'])->name('role.index');
                 Route::post('/role/create', [RoleController::class, 'create'])->name('role.create');
-                Route::post('/role/edit', [RoleController::class, 'edit'])->name('role.edit');
-                Route::post('/role/{id}/update', [RoleController::class, 'update'])->name('role.update');
+                Route::get('/role/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
+                Route::post('/role/update', [RoleController::class, 'update'])->name('role.update');
                 Route::post('/role/delete', [RoleController::class, 'delete'])->name('role.delete');
                 Route::post('/role/{id}/destroy', [RoleController::class, 'destroy'])->name('role.destroy');
 
-                // Data Role
-                Route::get('/permission', [PermissionController::class, 'index'])->name('permission.index');
-                Route::post('/permission/create', [PermissionController::class, 'create'])->name('permission.create');
-                Route::get('/permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
-                Route::put('/permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
-                Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])->name('permission.delete');
+                // Data Permission
+                Route::get('/data/permission', [PermissionController::class, 'index'])->name('permission.index');
+                Route::post('/data/permission/create', [PermissionController::class, 'create'])->name('permission.create');
+                Route::get('/data/permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
+                Route::put('/data/permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
+                Route::delete('/data/permission/{id}/delete', [PermissionController::class, 'destroy'])->name('permission.delete');
 
                 // GivePermissionTo
                 Route::get('/give/permission', [PermissionController::class, 'givepermission'])->name('permission.to');
@@ -245,11 +245,6 @@ Route::middleware('auth')->group(function () {
                     Route::get('/data/rsc/pengajuan/', 'index')->name('admin.rsc.pengajuan.index');
                     Route::get('/data/rsc/pengajuan/edit', 'edit_pengajuan_rsc')->name('admin.rsc.pengajuan.edit');
                     Route::post('/data/rsc/pengajuan/update', 'update_pengajuan_rsc')->name('admin.rsc.pengajuan.update');
-                });
-
-                // Permission
-                Route::controller(PermissionController::class)->group(function () {
-                    Route::get('/data/permission', 'index')->name('admin.permission.index');
                 });
             });
         });

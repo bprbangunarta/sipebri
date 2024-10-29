@@ -219,7 +219,7 @@ class NasabahController extends Controller
                 });
                 return redirect()->back()->with('success', "Data berhasil ditambahkan");
             } catch (Exception $e) {
-                return redirect()->back()->with('error', "Data gagal ditambahkan");
+                return redirect()->back()->with('error', "Data gagal ditambahkan, Hubungi IT.");
             }
         }
     }
