@@ -1896,7 +1896,7 @@
                 <tr>
                     <td style="text-align: justify;">
                         @if (!is_null($tambahan->checking_usaha))
-                            {{ $tambahan->checking_usaha }}
+                            {!! nl2br(e($tambahan->checking_usaha)) !!}
                         @else
                             <hr style="border: 0.1px dotted black;"> <br>
                             <hr style="border: 0.1px dotted black;"> <br>
