@@ -2008,7 +2008,12 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Besar Permohonan
                 </td>
                 <td> : </td>
-                <td>&nbsp; {{ 'Rp. ' . ' ' . number_format($memorandum->plafon_usulan, 0, ',', '.') }}</td>
+                <td>&nbsp; @if (!empty($cetak->temp_plafon))
+                        {{ 'Rp. ' . ' ' . number_format($cetak->temp_plafon, 0, ',', '.') }}
+                    @else
+                        {{ 'Rp. ' . ' ' . number_format($memorandum->plafon_usulan, 0, ',', '.') }}
+                    @endif
+                </td>
             </tr>
             <tr>
                 <td>

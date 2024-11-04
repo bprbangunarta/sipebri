@@ -98,6 +98,7 @@ class CetakController extends Controller
                     'data_tabungan.fnama',
                     'data_pengajuan.produk_kode',
                     'data_pengajuan.plafon',
+                    'data_pengajuan.temp_plafon',
                     'data_pengajuan.jangka_waktu',
                     'data_pengajuan.metode_rps',
                     'data_pengajuan.penggunaan',

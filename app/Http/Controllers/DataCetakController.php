@@ -917,7 +917,7 @@ class DataCetakController extends Controller
                     }
                 }
             }
-            // dd($bu, $lain);
+
             $keuangan = Midle::cetak_dokumen_analisa_keuangan($enc);
             $total_usaha = Midle::cetak_dokumen_analisa_usaha_total($enc);
 
