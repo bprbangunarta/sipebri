@@ -776,7 +776,7 @@
 
                     <li class="{{ Route::is('skrining.data') ? 'active' : '' }}">
                         <a href="{{ route('skrining.data') }}" title="Screening">
-                            <i class="fa fa-search" aria-hidden="true"></i>
+                            <i class="fa fa-filter" aria-hidden="true"></i>
                             Data Screening
                         </a>
                     </li>
