@@ -84,6 +84,8 @@ class AdminSurveiController extends Controller
                 'tgl_survei' => $request->tgl_survei,
                 'tgl_jadul_1' => $request->tgl_jadul_1,
                 'tgl_jadul_2' => $request->tgl_jadul_2,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longtitude,
             ];
 
             Survei::where('pengajuan_kode', $request->input('survei'))->update($data);

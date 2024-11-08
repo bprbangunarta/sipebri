@@ -77,6 +77,13 @@
                                                 value="{{ $data->tgl_survei }}">
                                         </div>
 
+                                        <div class="form-group" style="margin-top:-5px;">
+                                            <label>LATITUDE<i style="color: rgb(110, 110, 110)">( -6.12345
+                                                    )</i></label>
+                                            <input type="text" class="form-control" name="latitude" id=""
+                                                value="{{ $data->latitude }}">
+                                        </div>
+
                                     </div>
 
                                     <div class="col-md-4">
@@ -100,6 +107,13 @@
                                                     )</i></label>
                                             <input type="text" class="form-control" name="tgl_jadul_1" id=""
                                                 value="{{ $data->tgl_jadul_1 }}">
+                                        </div>
+
+                                        <div class="form-group" style="margin-top:-5px;">
+                                            <label>LONGTITUDE<i style="color: rgb(110, 110, 110)">( -6.12345
+                                                    )</i></label>
+                                            <input type="text" class="form-control" name="longtitude" id=""
+                                                value="{{ $data->longitude }}">
                                         </div>
                                     </div>
                                 </div>

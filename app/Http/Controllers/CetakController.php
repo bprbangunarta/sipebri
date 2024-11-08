@@ -466,6 +466,7 @@ class CetakController extends Controller
                 'data_pengajuan.plafon as plafon',
                 'data_pengajuan.jangka_waktu as jk',
                 'data_pengajuan.input_user',
+                'data_pengajuan.temp_plafon',
                 'data_nasabah.nama_nasabah as nama',
                 'data_nasabah.kelurahan',
                 'data_nasabah.kecamatan',

@@ -14,7 +14,9 @@
                             <div class="box-tools">
                                 <form action="{{ route('cetak.pengajuan.index') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 170px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 170px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -25,7 +27,7 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
                             <table class="table table-bordered text-uppercase" style="font-size: 12px;">
                                 <thead>
@@ -47,18 +49,27 @@
                                     @endphp
                                     @forelse ($data as $item)
                                         <tr class="text-uppercase">
-                                            <td class="text-center" style="vertical-align: middle;">{{ $loop->iteration + $data->firstItem() - 1 }}</td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                               {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
+                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }} <br>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kode }}</td>
                                             <td style="vertical-align: middle;">{{ $item->nama }}</td>
                                             <td style="vertical-align: middle;">{{ $item->alamat }}</td>
                                             <td class="text-center" style="vertical-align: middle;">{{ $item->kantor }}</td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->input_user }}</td>
-                                            <td class="text-right" style="vertical-align: middle;">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">{{ $item->input_user }}
+                                            </td>
+                                            <td class="text-right" style="vertical-align: middle;">
+                                                @if (empty($item->temp_plafon))
+                                                    {{ number_format($item->plafon, 0, ',', '.') }}
+                                                @else
+                                                    {{ number_format($item->temp_plafon, 0, ',', '.') }}
+                                                @endif
+                                            </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}" target="_blank" class="btn-circle btn-sm bg-blue">
+                                                <a href="{{ route('cetak.pengajuan', ['pengajuan' => $item->kd]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                             </td>
@@ -78,13 +89,14 @@
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 
                             {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
