@@ -30,7 +30,7 @@
             @can('master data')
                 <li class="header">ADMINISTRATOR</li>
                 <li
-                    class="treeview {{ request()->is('admin/user', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit', 'admin/data/survei', 'admin/data/survei/*', 'admin/give/permission*') ? 'active' : '' }}">
+                    class="treeview {{ request()->is('admin/user', 'admin/permission', 'perubahan/data', 'admin/data/nasabah', 'admin/data/nasabah/*/edit', 'admin/data/pendamping', 'admin/data/pendamping/*', 'admin/data/pendamping/*/edit', 'admin/data/pengajuan', 'admin/data/pengajuan/*', 'admin/data/jaminan', 'admin/data/jaminan/*', 'admin/data/jaminan/*/edit', 'admin/data/survei', 'admin/data/survei/*', 'admin/give/permission*', 'admin/data/cgc*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-cube"></i>
                         <span>Data Master</span>
@@ -43,6 +43,13 @@
                             <a href="{{ route('user.index') }}" title=" Data User">
                                 <i class="fa fa-circle-o"></i>
                                 Data User
+                            </a>
+                        </li>
+
+                        <li class="{{ request()->is('admin/data/cgc') ? 'active' : '' }}">
+                            <a href="{{ route('admin.cgc') }}" title=" Data CGC">
+                                <i class="fa fa-circle-o"></i>
+                                Data CGC
                             </a>
                         </li>
 

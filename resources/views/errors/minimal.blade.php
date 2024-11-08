@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>@yield('title')</title>
 
     <style>
@@ -533,10 +535,24 @@
 </head>
 
 <body class="antialiased">
-    <div
-        class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
-        <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
+    <div class="relative flex items-center justify-center min-h-screen">
+        <div class="mx-auto">
+            <div class="card shadow p-3 bg-body rounded" style="max-width: 500px; margin: 0 auto;">
+                <div class="card-body">
+                    <div class="card-header fs-4 fw-bold bg-light text-center" style="align-items: center; gap: 10px;">
+                        <img src="{{ asset('assets/img/favicon.png') }}" alt=""
+                            style="align-items: center; width: 30px; margin-right: 10px;">
+
+                        SIPEBRI
+                    </div>
+                    <h5 class="card-title fw-bold fs-2 mt-4 mb-4">@yield('code')</h5>
+                    <p class="card-text" style="text-align:justify">@yield('message')</p>
+                    <a href="/dashboard" class="btn btn-primary">Kembali</a>
+                </div>
+            </div>
+
+
+            {{-- <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
                 <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">
                     @yield('code')
                 </div>
@@ -544,9 +560,13 @@
                 <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
                     @yield('message')
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>

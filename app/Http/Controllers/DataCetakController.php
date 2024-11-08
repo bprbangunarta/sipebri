@@ -949,10 +949,6 @@ class DataCetakController extends Controller
                     'nilai_taksasi' => 0,
                     'total_taksasi' => 0,
                 ];
-
-                // for ($i = 0; $i < 2; $i++) {
-                //     $jaminan[$i]->total_taksasi = 0;
-                // }
             }
 
             $character = Midle::cetak_data_analisa5C_character($enc);

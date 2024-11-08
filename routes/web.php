@@ -6,6 +6,7 @@ use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QRController;
+use App\Http\Controllers\CGCController;
 use App\Http\Controllers\RSCController;
 use App\Http\Controllers\DatiController;
 use App\Http\Controllers\JasaController;
@@ -231,6 +232,12 @@ Route::middleware('auth')->group(function () {
                 Route::controller(ResortController::class)->group(function () {
                     Route::get('/data/resort', 'index')->name('admin.resort');
                     Route::post('/data/resort/simpan', 'simpan_resort')->name('admin.simpan.resort');
+                });
+
+                // Data CGC
+                Route::controller(CGCController::class)->group(function () {
+                    Route::get('/data/cgc', 'index')->name('admin.cgc');
+                    Route::post('/data/cgc/simpan', 'simpan')->name('admin.simpan.cgc');
                 });
 
                 // Data Survei

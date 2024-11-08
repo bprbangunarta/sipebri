@@ -2,4 +2,6 @@
 
 @section('title', __('Page Expired'))
 @section('code', '419')
-@section('message', __('Page Expired'))
+@section('message',
+    'Terjadi masalah dengan sesi Anda. Kemungkinan sesi telah kedaluwarsa,
+    silahkan coba lagi setelah memuat ulang halaman atau login kembali untuk melanjutkan.')
