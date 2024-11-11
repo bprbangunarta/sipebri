@@ -132,6 +132,7 @@ class ExportController extends Controller
             ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_resort', 'data_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
             ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
             ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
             ->select(
@@ -142,6 +143,7 @@ class ExportController extends Controller
                 'data_nasabah.no_identitas as no_identitas',
                 'data_nasabah.no_karyawan as no_karyawan',
                 'data_nasabah.alamat_ktp as alamat_ktp',
+                'data_resort.nama_resort',
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.produk_kode as produk',
                 'data_pengajuan.plafon as plafon',
@@ -169,7 +171,7 @@ class ExportController extends Controller
 
         $data = $dataQuery->orderBy('data_pengajuan.created_at', 'asc')->get();
 
-        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "NIK KARYAWAN", "ALAMAT", "PLAFON", "SUKU BUNGA", "PRODUK", "NO TELP", "PENDAMPING", "USER");
+        $data_array[] = array("TANGGAL", "KODE PENGAJUAN", "KODE NASABAH", "NAMA NASABAH", "NO KTP", "ALAMAT",  "NIK KARYAWAN", "RESORT", "PLAFON", "SUKU BUNGA", "PRODUK", "NO TELP", "PENDAMPING", "USER");
         foreach ($data as $item) {
             $data_array[] = array(
                 'TANGGAL'       => \Carbon\Carbon::parse($item->created_at)->format('Y-m-d'),
@@ -177,10 +179,11 @@ class ExportController extends Controller
                 'KODE NASABAH'    => $item->kode_nasabah,
                 'NAMA NASABAH'    => $item->nama_nasabah,
                 'NO KTP'          => " " . $item->no_identitas,
-                'NIK KARYAWAN'     => $item->no_karyawan,
                 'ALAMAT'          => $item->alamat_ktp,
-                'PLAFON'          => number_format($item->plafon, 0, ',', '.'),
-                'SUKU BUNGA'      => $item->suku_bunga . ' ' . '%',
+                'NIK KARYAWAN'    => $item->no_karyawan,
+                'RESORT'          => trim($item->nama_resort),
+                'PLAFON'          => $item->plafon,
+                'SUKU BUNGA'      => $item->suku_bunga,
                 'PRODUK'          => $item->produk,
                 'NO TELP'         => $item->no_telp,
                 'PENDAMPING'      => $item->nama_pendamping,
