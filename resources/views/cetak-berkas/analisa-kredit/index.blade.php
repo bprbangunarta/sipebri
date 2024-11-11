@@ -1891,10 +1891,29 @@
 
             <table style="margin-top: 25px; font-size:10pt;">
                 <tr>
+                    <td width='10px;'><b>A.</b></td>
                     <td><b>Catatan</b></td>
                 </tr>
                 <tr>
-                    <td style="text-align: justify;">
+                    <td colspan="2" style="text-align: justify;">
+                        @if (!is_null($tambahan->catatan))
+                            {!! nl2br(e($tambahan->catatan)) !!}
+                        @else
+                            <hr style="border: 0.1px dotted black;"> <br>
+                            <hr style="border: 0.1px dotted black;"> <br>
+                            <hr style="border: 0.1px dotted black;"> <br>
+                        @endif
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <table style="margin-top: 25px; font-size:10pt;">
+                <tr>
+                    <td width='10px;'><b>B.</b></td>
+                    <td><b>HASIL TRADE CHECKING USAHA</b></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: justify;">
                         @if (!is_null($tambahan->checking_usaha))
                             {!! nl2br(e($tambahan->checking_usaha)) !!}
                         @else

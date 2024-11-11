@@ -206,7 +206,8 @@ class AnalisaKualitatifController extends Controller
 
             if (is_null($data)) {
                 $data = (object) [
-                    'checking_usaha' => null
+                    'checking_usaha' => null,
+                    'catatan' => null,
                 ];
             }
 
@@ -227,6 +228,7 @@ class AnalisaKualitatifController extends Controller
             $data = [
                 'pengajuan_kode' => $enc,
                 'checking_usaha' => strtoupper($request->trade_checking_usaha),
+                'catatan' => strtoupper($request->catatan),
             ];
 
             $cek = DB::table('a_tambahan')->where('pengajuan_kode', $enc)->first();

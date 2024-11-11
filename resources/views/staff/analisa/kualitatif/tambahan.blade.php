@@ -11,6 +11,11 @@
                 <div class="box-body" style="margin-top: -10px;font-size:12px;">
 
                     <div style="margin-top:5px;width: 100%;float:left;">
+                        <span class="fw-bold">CATATAN</span>
+                        <textarea class="form-control form-border text-uppercase" name="catatan" id="" rows="10">{{ $trade->catatan }}</textarea>
+                    </div>
+
+                    <div style="margin-top:5px;width: 100%;float:left;">
                         <span class="fw-bold">TRADE CHECKING USAHA</span>
                         <textarea class="form-control form-border text-uppercase" name="trade_checking_usaha" id="" rows="10">{{ $trade->checking_usaha }}</textarea>
                     </div>
