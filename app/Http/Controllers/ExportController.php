@@ -128,13 +128,13 @@ class ExportController extends Controller
         }
 
         $dataQuery = DB::table('data_pengajuan')
-            ->join('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
-            ->join('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-            ->join('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
+            ->leftJoin('data_pendamping', 'data_pendamping.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('data_resort', 'data_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
-            ->join('users', 'users.code_user', '=', 'data_pengajuan.input_user')
-            ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
+            ->leftJoin('users', 'users.code_user', '=', 'data_pengajuan.input_user')
+            // ->whereIn('data_pengajuan.status', ['Dibatalkan', 'Ditolak', 'Disetujui'])
             ->select(
                 'data_pengajuan.created_at as created_at',
                 'data_nasabah.kode_nasabah',
