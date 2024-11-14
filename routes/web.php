@@ -931,6 +931,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/approve/analisa/skrining', 'approve_analisa_skrining')->name('approve.analisa.skrining');
         Route::get('/cetak/skrining', 'cetak_skrining')->name('skrining.cetak');
         Route::get('/data/skrining', 'data_skrining')->name('skrining.data');
+        Route::get('/data/analisa/skrining', 'data_analisa_skrining')->name('skrining.data.analisa');
     });
 
     Route::group(['middlewae' => ['Kabag Kepatuhan', 'Staff Kepatuhan', 'Administrator']], function () {

@@ -194,6 +194,10 @@ class SkriningController extends Controller
 
         $data = array_slice($existingValues, 1);
 
+        $data = array_filter($data, function ($row) {
+            return stripos(implode(' ', $row), $row[10] = 'DONE') !== false;
+        });
+
         if ($search) {
             $data = array_filter($data, function ($row) use ($search) {
                 return stripos(implode(' ', $row), $search) !== false;
@@ -220,6 +224,56 @@ class SkriningController extends Controller
         );
 
         return view('skrining.data_skrining_index', compact('data', 'user'));
+    }
+
+    public function data_analisa_skrining()
+    {
+        $search = request('keyword');
+
+        $client = $this->google_client();
+        $client->setScopes([Google_Service_Sheets::SPREADSHEETS]);
+        $client->setAuthConfig(base_path('credential.json'));
+
+        $spreadsheetId = '1SQfHolSwSHBZhDzzdSSnQhM9JJu2m-KVlRF2wgFviLU';
+
+        $range = 'SCREENING!A:R';
+
+        $sheetsService = new Google_Service_Sheets($client);
+        $response = $sheetsService->spreadsheets_values->get($spreadsheetId, $range);
+        $existingValues = $response->getValues();
+
+        $data = array_slice($existingValues, 1);
+
+        $data = array_filter($data, function ($row) {
+            return isset($row[10]) && $row[10] !== 'DONE';
+        });
+
+        if ($search) {
+            $data = array_filter($data, function ($row) use ($search) {
+                return stripos(implode(' ', $row), $search) !== false;
+            });
+        }
+
+        $user = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
+
+        $data = array_reverse($data);
+        $collection = collect($data);
+
+        $currentPage = request()->input('page', 1);
+        $perPage = 10;
+        $total = $collection->count();
+
+        $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $data = new LengthAwarePaginator(
+            $currentPageItems,
+            $total,
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        return view('skrining.data_analisa_skrining', compact('data', 'user'));
     }
 
     public function analisa_skrining_index()
@@ -332,6 +386,22 @@ class SkriningController extends Controller
 
         $tgl = Carbon::now();
         $tgl = $tgl->locale('id')->translatedFormat('d F Y');
+
+        if (
+            $data->dttot == 'TIDAK TERDAFTAR' &&
+            $data->dppspm == 'TIDAK TERDAFTAR' &&
+            $data->judi == 'TIDAK TERDAFTAR' &&
+            $data->pep == 'TIDAK TERDAFTAR' &&
+            $data->negative == 'TIDAK TERDAFTAR' &&
+            $data->watch == 'TIDAK TERDAFTAR'
+        ) {
+            $data->judi_online = $data->judi;
+            $data->berita_negatif = $data->negative;
+            $data->watch_list = $data->watch;
+            $data->tgl = $data->tgl_periksa;
+
+            return view('skrining.print_skrining', compact('data', 'qr_staff', 'qr_kabag', 'tgl'));
+        }
 
         return view('skrining.print_analisa_skrining', compact('data', 'qr_staff', 'qr_kabag', 'tgl'));
     }

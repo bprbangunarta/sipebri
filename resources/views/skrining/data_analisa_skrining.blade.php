@@ -9,10 +9,10 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-plus"></i>
-                            <h3 class="box-title">DATA SKRINING</h3>
+                            <h3 class="box-title">DATA ANALISA SKRINING</h3>
 
                             <div class="box-tools">
-                                <form action="#" method="GET">
+                                <form action="{{ route('skrining.data.analisa') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
@@ -59,8 +59,8 @@
                                                     {{ $item[10] }}
                                                 @endif
                                             </td>
-                                            <td class="text-center">
-                                                {{-- @if (empty($item[10]))
+                                            <td class="text-center" style="text-align: right;">
+                                                @if (empty($item[10]))
                                                     <a href="{{ route('update.skrining.data.index', ['nik' => $item[0], 'nama' => $item[1], 'no' => $item[17]]) }}"
                                                         class="btn-circle btn-sm bg-green" title="Analisa Skrining"
                                                         disabled>
@@ -91,7 +91,7 @@
                                                     </a>
                                                 @endif
 
-                                                &nbsp; --}}
+                                                &nbsp;
                                                 @if (
                                                     ($user == 'Customer Service' ||
                                                         $user == 'Realisasi' ||

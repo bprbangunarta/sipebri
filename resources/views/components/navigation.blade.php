@@ -744,7 +744,7 @@
             <li class="header">TOOLS</li>
 
             <li
-                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index', 'analisa.skrining.index', 'skrining.nasabah', 'skrining.data') ? 'active' : '' }}">
+                class="treeview {{ Route::is('cif.index', 'flat', 'efektif_musiman', 'simulasi_ajk_pasific', 'simulasi_ajk_bumida', 'simulasi.tlo', 'skrining.index', 'analisa.skrining.index', 'skrining.nasabah', 'skrining.data', 'skrining.data.analisa') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Tools Menu</span>
@@ -778,6 +778,13 @@
                         <a href="{{ route('skrining.index') }}" title="Screening">
                             <i class="fa fa-search" aria-hidden="true"></i>
                             Screening
+                        </a>
+                    </li>
+
+                    <li class="{{ Route::is('skrining.data.analisa') ? 'active' : '' }}">
+                        <a href="{{ route('skrining.data.analisa') }}" title="Screening">
+                            <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                            Analisa Screening
                         </a>
                     </li>
 
