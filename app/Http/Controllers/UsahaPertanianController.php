@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use App\Http\Controllers\PerhitunganMetodeController;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class UsahaPertanianController extends Controller
@@ -287,17 +288,31 @@ class UsahaPertanianController extends Controller
             $hasil_bersih = $hasil_panen - $bu;
 
             if ($cek[0]->produk_kode == 'KBT' && $cek[0]->kondisi_khusus == 'PERPADIAN') {
-                $ambil = 0;
-                $jW = $cek[0]->jangka_waktu / 6;
-                $saving = $cek[0]->plafon / $jW;
-                $sisa_pendapatan = $saving;
-                $pendapatan_perbulan = ($hasil_bersih - $sisa_pendapatan) / 6;
+                $controller = new PerhitunganMetodeController();
+                $perpadian = $controller->perpadian($hasil_bersih, $cek[0]->jangka_waktu, $cek[0]->plafon);
+
+                $ambil = $perpadian['ambil'];
+                $saving = $perpadian['saving'];
+                $pendapatan_perbulan = $perpadian['pendapatan_perbulan'];
+
+                // $ambil = 0;
+                // $jW = $cek[0]->jangka_waktu / 6;
+                // $saving = $cek[0]->plafon / $jW;
+                // $sisa_pendapatan = $saving;
+                // $pendapatan_perbulan = ($hasil_bersih - $sisa_pendapatan) / 6;
             } else {
-                $ambil = ($hasil_bersih * 70) / 100;
-                $jW = $cek[0]->jangka_waktu / 6;
-                $saving = $cek[0]->plafon / $jW;
-                $sisa_pendapatan = $ambil - $saving;
-                $pendapatan_perbulan = $sisa_pendapatan / 6;
+                $controller = new PerhitunganMetodeController();
+                $efektif_musiman = $controller->musiman($hasil_bersih, $cek[0]->jangka_waktu, $cek[0]->plafon);
+
+                $ambil = $efektif_musiman['ambil'];
+                $saving = $efektif_musiman['saving'];
+                $pendapatan_perbulan = $efektif_musiman['pendapatan_perbulan'];
+
+                // $ambil = ($hasil_bersih * 70) / 100;
+                // $jW = $cek[0]->jangka_waktu / 6;
+                // $saving = $cek[0]->plafon / $jW;
+                // $sisa_pendapatan = $ambil - $saving;
+                // $pendapatan_perbulan = $sisa_pendapatan / 6;
             }
 
 

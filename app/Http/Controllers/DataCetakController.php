@@ -986,7 +986,8 @@ class DataCetakController extends Controller
 
             if (is_null($tambahan)) {
                 $tambahan = (object) [
-                    'checking_usaha' => null
+                    'checking_usaha' => null,
+                    'catatan' => null,
                 ];
             }
 
