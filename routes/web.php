@@ -78,6 +78,7 @@ use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\AnalisaKeuanganController;
 use App\Http\Controllers\AnalisaTambahanController;
 use App\Http\Controllers\DashboardAnalisController;
+use App\Http\Controllers\MonitoringStaffController;
 use App\Http\Controllers\Admin\PendidikanController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\UsahaPerdaganganController;
@@ -387,6 +388,13 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/penjadwalan/{id}', 'edit')->name('analisa.editpenjadwalan');
             Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
+        });
+
+        // Monitoring Staff Analis
+        Route::controller(MonitoringStaffController::class)->prefix('monitoring')->group(function () {
+            Route::get('/index', 'index')->name('monitoring.index');
+            Route::get('/list', 'detail')->name('monitoring.detail');
+            Route::get('/list/status', 'detail_status')->name('monitoring.detail.status');
         });
     });
 
