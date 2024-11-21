@@ -515,7 +515,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi/index','themes/rsc/perjanjian_kredit','themes/rsc/cetakanalisa','themes/rsc/cetaknotifikasi','themes/rsc/cetakpersetujuan','themes/rsc/cetakpk','themes/rsc/eksternal/index','themes/rsc/laporan/tracking','themes/rsc/penolakan','themes/rsc/cetak/asuransi','themes/rsc/biayarsc*','themes/rsc/angsuran*','themes/rsc/jaminan/kendaraan*','themes/rsc/jaminan/tanah*','themes/rsc/jaminan/lain*','themes/rsc/laporan/pendaftaran*','themes/rsc/laporan/realisasi*','themes/rsc/cetakbiaya*')? 'active': '' }}">
+                class="treeview {{ request()->is('themes/rsc/index','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/notifikasi/index','themes/rsc/perjanjian_kredit','themes/rsc/cetakanalisa','themes/rsc/cetaknotifikasi','themes/rsc/cetakpersetujuan','themes/rsc/cetakpk','themes/rsc/eksternal/index','themes/rsc/laporan/tracking','themes/rsc/penolakan','themes/rsc/cetak/asuransi','themes/rsc/biayarsc*','themes/rsc/angsuran*','themes/rsc/jaminan/kendaraan*','themes/rsc/jaminan/tanah*','themes/rsc/jaminan/lain*','themes/rsc/laporan/pendaftaran*','themes/rsc/laporan/realisasi*','themes/rsc/cetakbiaya*','themes/monitoring/rsc*')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-medkit" aria-hidden="true"></i>
                     <span>Reschedulling</span>
@@ -540,7 +540,7 @@
                     </li>
 
                     <li
-                        class="treeview {{ request()->is('themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/jaminan/kendaraan*','themes/rsc/jaminan/tanah*','themes/rsc/jaminan/lain*')? 'active': '' }}">
+                        class="treeview {{ request()->is('themes/rsc/penjadwalan','themes/rsc/penjadwalan/tambah','themes/rsc/analisa','themes/rsc/data/kredit','themes/rsc/penilaian/debitur','themes/rsc/analisa/usaha/perdagangan','themes/rsc/analisa/usaha/perdagangan/identitas','themes/rsc/analisa/usaha/perdagangan/barang','themes/rsc/analisa/usaha/perdagangan/keuangan','themes/rsc/analisa/usaha/pertanian','themes/rsc/analisa/usaha/pertanian/informasi','themes/rsc/analisa/usaha/pertanian/biaya','themes/rsc/analisa/usaha/pertanian/keuangan','themes/rsc/analisa/usaha/jasa','themes/rsc/analisa/usaha/jasa/keuangan','themes/rsc/analisa/usaha/lain','themes/rsc/analisa/usaha/lain/identitas','themes/rsc/analisa/usaha/lain/bahan','themes/rsc/analisa/usaha/lain/keuangan','themes/rsc/keuangan','themes/rsc/data/pengusulan','themes/rsc/konfirmasi','themes/rsc/persetujuan','themes/rsc/persetujuan/informasi','themes/rsc/persetujuan/catatan','themes/rsc/persetujuan/index','themes/rsc/jaminan/kendaraan*','themes/rsc/jaminan/tanah*','themes/rsc/jaminan/lain*','themes/monitoring/rsc*')? 'active': '' }}">
                         <a href="">
                             <i class="fa fa-suitcase" aria-hidden="true"></i>
                             <span>Analisa RSC</span>
@@ -564,6 +564,14 @@
                                 <a href="{{ route('rsc.index.analisa') }}" title="Add Analisa RSC">
                                     <i class="fa fa-edit"></i>
                                     Analisa RSC
+                                </a>
+                            </li>
+
+                            <li class="{{ request()->is('themes/monitoring/rsc*') ? 'active' : '' }}">
+                                <a @if (Auth::user()->hasRole('Kasi Analis')) href="{{ route('monitoring.rsc.index') }}" @endif
+                                    title="Monitoring Petugas">
+                                    <i class="fa fa-filter" aria-hidden="true"></i>
+                                    Monitoring Staff
                                 </a>
                             </li>
 

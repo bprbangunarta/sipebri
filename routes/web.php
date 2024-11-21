@@ -89,6 +89,7 @@ use App\Http\Controllers\Admin\AdminJaminanController;
 use App\Http\Controllers\Admin\RSCPengajuanController;
 use App\Http\Controllers\AnalisaKepemilikanController;
 use App\Http\Controllers\CheckListKendaraanController;
+use App\Http\Controllers\MonitoringRSCStaffController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminPendampingController;
 use App\Http\Controllers\Administratif\DenahLokasiController;
@@ -871,6 +872,13 @@ Route::middleware('auth')->group(function () {
                 Route::POST('/rsc/simpan/penolakan', 'simpan_penolakan')->name('rsc.simpan_penolakan');
                 Route::POST('/rsc/update/penolakan', 'update_penolakan')->name('rsc.update_penolakan');
             });
+        });
+
+        // Monitoring RSC Staff Analis
+        Route::controller(MonitoringRSCStaffController::class)->group(function () {
+            Route::get('/monitoring/rsc/index', 'index')->name('monitoring.rsc.index');
+            Route::get('/monitoring/rsc/detail', 'detail')->name('monitoring.rsc.detail');
+            Route::get('/monitoring/rsc/status', 'detail_status')->name('monitoring.rsc.detail.status');
         });
 
         // Admin Kredit
