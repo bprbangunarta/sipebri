@@ -103,44 +103,6 @@
         </section>
     </div>
 
-    {{-- <div class="modal modal-blur fade" id="modalCreate" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xs modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create Permission</h5>
-                </div>
-
-                <form action="{{ route('permission.create') }}" method="POST" id="formCreate">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-lg-12">
-                                <label class="form-label">Permission Name</label>
-                                <div class="input-icon mb-3">
-                                    <input type="text"
-                                        class="form-control @error('name') 
-                              is-invalid
-                              @enderror"
-                                        name="name" id="name" value="{{ old('name') }}">
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Close</a>
-                        <button type="submit" class="btn btn-primary ms-auto">Create</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
-
     <div class="modal fade" id="modal-tambah">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -149,7 +111,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">TAMBAH PERMISSION</h4>
                 </div>
-                <form action="" method="POST">
+                <form action="{{ route('permission.create') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">

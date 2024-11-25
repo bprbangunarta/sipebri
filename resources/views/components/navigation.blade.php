@@ -170,7 +170,7 @@
             @endhasanyrole
 
             <li
-                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan', 'tracking/pengajuan', 'otorisasi/pengajuan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan', 'tracking/pengajuan', 'otorisasi/pengajuan', 'kirim/berkas/index*', 'terima/berkas/index*') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
@@ -195,6 +195,21 @@
                         </a>
                     </li>
 
+                    <li class="{{ request()->is('kirim/berkas/index') ? 'active' : '' }}">
+                        <a @can('kirim berkas') href="{{ route('kirim.berkas.index') }}" @endcan title="Kirim Berkas">
+                            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                            Kirim berkas
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('terima/berkas/index') ? 'active' : '' }}">
+                        <a @can('terima berkas') href="{{ route('terima.berkas.index') }}" @endcan
+                            title="Terima Berkas">
+                            <i class="fa fa-inbox" aria-hidden="true"></i>
+                            Terima berkas
+                        </a>
+                    </li>
+
                     <li
                         class="{{ request()->is('otor/pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'otorisasi/pengajuan') ? 'active' : '' }}">
                         <a @can('otorisasi pengajuan kredit') href="{{ route('otor.pengajuan') }}" @endcan
@@ -207,7 +222,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit','themes/komite/kredit/survei/analisa','themes/analisa/kualitatif/tambahan*','monitoring*')? 'active': '' }}">
+                class="treeview {{ request()->is('analisa/penjadwalan','themes/permohonan/analisa','themes/analisa/usaha/perdagangan','themes/analisa/usaha/pertanian','themes/analisa/usaha/jasa','themes/analisa/usaha/lainnya','themes/analisa/identitas/usaha/perdagangan','themes/analisa/barang/usaha/perdagangan','themes/analisa/keuangan/usaha/perdagangan','themes/analisa/informasi/usaha/pertanian','themes/analisa/biaya/usaha/pertanian','themes/analisa/keuangan/usaha/pertanian','themes/analisa/keuangan/usaha/jasa','themes/analisa/identitas/usaha/lainnya','themes/analisa/identitas/usaha/lainnya','themes/analisa/keuangan/usaha/lainnya','themes/analisa/keuangan','themes/analisa/kepemilikan','themes/analisa/jaminan/kendaraan','themes/analisa/jaminan/tanah','themes/analisa/jaminan/lainnya','themes/analisa/5c/character*','themes/analisa/5c/capacity*','themes/analisa/5c/capital*','themes/analisa/5c/collateral*','themes/analisa/5c/condition*','themes/analisa/kualitatif/karakter*','themes/analisa/kualitatif/usaha*','themes/analisa/memorandum/kebutuhan','themes/analisa/memorandum/sandi','themes/analisa/memorandum/usulan','themes/analisa/administrasi','themes/analisa/konfirmasi/analisa','themes/komite/kredit','themes/komite/kredit/survei/analisa','themes/analisa/kualitatif/tambahan*','monitoring*','hasil/survei*','hasil/pelaksanaan*','themes/prosfek/index*','themes/data/prosfek/index*')? 'active': '' }}">
                 <a href="#">
                     <i class="fa fa-suitcase"></i>
                     <span>Analisa Kredit</span>
@@ -238,15 +253,43 @@
                         <a @can('survey dan analisa') href="{{ route('survei.analisa') }}" @endcan
                             title="Survey dan Analisa">
                             <i class="fa fa-hourglass-start"></i>
-                            Kontrol Survey
+                            Kontrol Survei
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('hasil/survei') ? 'active' : '' }}">
+                        <a href="{{ route('hasil.survei') }}" title="Hasil Survei">
+                            <i class="fa fa-globe" aria-hidden="true"></i>
+                            Hasil Survei
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('hasil/pelaksanaan') ? 'active' : '' }}">
+                        <a href="{{ route('pelaksanaan.survei') }}" title="Pelaksanaan Survei">
+                            <i class="fa fa-location-arrow" aria-hidden="true"></i>
+                            Pelaksanaan Survei
                         </a>
                     </li>
 
                     <li class="{{ request()->is('monitoring*') ? 'active' : '' }}">
-                        <a @if (Auth::user()->hasRole('Kasi Analis')) href="{{ route('monitoring.index') }}" @endif
+                        <a @if (Auth::user()->hasRole(['Kasi Analis', 'Administrator'])) href="{{ route('monitoring.index') }}" @endif
                             title="Monitoring Petugas">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                             Monitoring Staff
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/prosfek/index') ? 'active' : '' }}">
+                        <a href="{{ route('prosfek.index') }}" title="Monitoring Petugas">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                            Prosfek
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('themes/data/prosfek/index') ? 'active' : '' }}">
+                        <a href="{{ route('data.prosfek.index') }}" title="Monitoring Petugas">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                            Data Prosfek
                         </a>
                     </li>
 
@@ -568,7 +611,7 @@
                             </li>
 
                             <li class="{{ request()->is('themes/monitoring/rsc*') ? 'active' : '' }}">
-                                <a @if (Auth::user()->hasRole('Kasi Analis')) href="{{ route('monitoring.rsc.index') }}" @endif
+                                <a @if (Auth::user()->hasRole(['Kasi Analis', 'Administrator'])) href="{{ route('monitoring.rsc.index') }}" @endif
                                     title="Monitoring Petugas">
                                     <i class="fa fa-filter" aria-hidden="true"></i>
                                     Monitoring Staff

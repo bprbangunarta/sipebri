@@ -16,6 +16,7 @@ use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\AgunanController;
+use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\KomiteController;
 use App\Http\Controllers\SurveiController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\AnalisaController;
 use App\Http\Controllers\FiduciaController;
 use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProsfekController;
 use App\Http\Controllers\RSCJasaController;
 use App\Http\Controllers\RSCLainController;
 use App\Http\Controllers\AsuransiController;
@@ -283,6 +285,19 @@ Route::middleware('auth')->group(function () {
             Route::post('/pengajuan/store', 'store')->name('pengajuan.store');
         });
 
+        // Flow Berkas
+        Route::controller(BerkasController::class)->middleware('permission:kirim berkas')->group(function () {
+            Route::get('kirim/berkas/index', 'index')->name('kirim.berkas.index');
+            Route::post('kirim/berkas/simpan', 'simpan_berkas')->name('kirim.berkas.simpan');
+        });
+
+        Route::controller(BerkasController::class)->middleware('permission:terima berkas')->group(function () {
+            Route::get('terima/berkas/index', 'terima_berkas')->name('terima.berkas.index');
+            Route::get('terima/berkas/get', 'get_berkas')->name('terima.berkas.get');
+            Route::post('terima/berkas/simpan', 'simpan_terima_berkas')->name('terima.berkas.simpan');
+        });
+        // Flow Berkas
+
         Route::controller(AgunanController::class)->group(function () {
             Route::post('/pengajuan/agunan/kendaraan', 'tambah_kendaraan')->name('kendaraan.simpan');
             Route::get('/pengajuan/agunan/{id}/edit', 'edit_agunan');
@@ -390,6 +405,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/penjadwalan/{id}', 'edit')->name('analisa.editpenjadwalan');
             Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
         });
+
+        // Hasil Survei
+        Route::get('/hasil/survei', [SurveiController::class, 'hasil_survei'])->name('hasil.survei');
+        Route::get('/hasil/pelaksanaan', [SurveiController::class, 'pelaksanaan_survei'])->name('pelaksanaan.survei');
 
         // Monitoring Staff Analis
         Route::controller(MonitoringStaffController::class)->prefix('monitoring')->group(function () {
@@ -721,6 +740,19 @@ Route::middleware('auth')->group(function () {
             });
         });
 
+        // Prosfek
+        Route::controller(ProsfekController::class)->group(function () {
+            Route::get('/prosfek/index', 'index')->name('prosfek.index');
+            Route::post('/prosfek/simpan', 'simpan_prosfek')->name('prosfek.simpan');
+        });
+
+        Route::controller(ProsfekController::class)->group(function () {
+            Route::get('/data/prosfek/index', 'data_prosfek_index')->name('data.prosfek.index');
+            Route::get('/data/prosfek/get', 'data_prosfek_get')->name('data.prosfek.get');
+            Route::post('/data/prosfek/update', 'data_prosfek_update')->name('data.prosfek.update');
+            Route::post('/data/prosfek/closing', 'data_prosfek_closing')->name('data.prosfek.closing');
+        });
+        // Prosfek
 
         //====Route Analisa RSC====//
         Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {

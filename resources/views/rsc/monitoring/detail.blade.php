@@ -120,7 +120,7 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if (!is_null($item->tgl_realisasi))
+                                                {{-- @if (!is_null($item->tgl_realisasi))
                                                     @php
                                                         $hari =
                                                             strtotime($item->tgl_realisasi) - strtotime($item->tgl_rsc);
@@ -130,6 +130,29 @@
                                                 @else
                                                     @php
                                                         $hari = strtotime(now()) - strtotime($item->tgl_rsc);
+                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                    @endphp
+                                                    <b class="text-red">{{ $hari }} hari</b>
+                                                @endif --}}
+
+                                                @if ($item->status == 'Ditolak' || $item->status == 'Dibatalkan')
+                                                    @php
+                                                        $hari =
+                                                            strtotime($item->tgl_persetujuan) -
+                                                            strtotime($item->tanggal);
+                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                    @endphp
+                                                    <b class="text-red">{{ $hari }} hari</b>
+                                                @elseif(!is_null($item->tgl_realisasi))
+                                                    @php
+                                                        $hari =
+                                                            strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
+                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                    @endphp
+                                                    <b class="text-green">{{ $hari }} hari</b>
+                                                @else
+                                                    @php
+                                                        $hari = strtotime(now()) - strtotime($item->tanggal);
                                                         $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
                                                     @endphp
                                                     <b class="text-red">{{ $hari }} hari</b>

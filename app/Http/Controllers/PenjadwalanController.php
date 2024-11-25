@@ -24,6 +24,7 @@ class PenjadwalanController extends Controller
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('users as cs', 'cs.code_user', '=', 'data_pengajuan.input_user')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
+            ->leftJoin('data_berkas', 'data_berkas.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
 
             ->select(
                 'data_pengajuan.kode_pengajuan',
@@ -51,6 +52,7 @@ class PenjadwalanController extends Controller
                 'data_produk.*',
                 'cs.username as nama_cs',
                 'cs.kantor_kode as kantor_cs',
+                'data_berkas.tgl_terima',
             )
 
             ->where('data_survei.kasi_kode', '=', $user)

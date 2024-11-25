@@ -71,15 +71,24 @@
                                                 {{ number_format($item->plafon, 0, ',', '.') }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a data-toggle="modal" data-target="#modal-penjadwalan"
-                                                    data-id="{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-yellow" title="Penjadwalan">
-                                                    <i class="fa fa-calendar"></i>
-                                                </a>
+                                                @if (!empty($item->tgl_terima))
+                                                    <a data-toggle="modal" data-target="#modal-penjadwalan"
+                                                        data-id="{{ $item->kode_pengajuan }}"
+                                                        class="btn-circle btn-sm bg-yellow" title="Penjadwalan"
+                                                        style="cursor: pointer">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </a>
+                                                @else
+                                                    <a class="btn-circle btn-sm bg-grey" title="Penjadwalan"
+                                                        style="cursor: pointer">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </a>
+                                                @endif
 
                                                 &nbsp;
                                                 <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}"
-                                                    class="btn-circle btn-sm bg-blue" title="Informasi">
+                                                    class="btn-circle btn-sm bg-blue" title="Informasi"
+                                                    style="cursor: pointer">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>
