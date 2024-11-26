@@ -602,7 +602,50 @@ class CetakLaporanController extends Controller
         $metode = DB::table('data_metode_rps')->get();
         //Data Surveyor
         $surveyor = DB::table('v_users')->where('role_name', 'Staff Analis')->get();
-        // dd($data);
+
+        // Deviasi
+        foreach ($data as $item) {
+            if (!empty($item->tgl_survey) && !empty($item->tgl_analisa)) {
+                $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+                $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+
+                $deviasiHari1 = $tglSurveyCarbon->diffInDays($tglAnalisaCarbon);
+                $item->deviasi_survei_analisa = $deviasiHari1;
+            } else {
+                $item->deviasi_survei_analisa = 0;
+            }
+
+            if (!empty($item->tgl_analisa) && !empty($item->tgl_persetujuan)) {
+                $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+                $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                $deviasiHari2 = $tglAnalisaCarbon->diffInDays($tglPersetujuanCarbon);
+                $item->deviasi_analisa_persetujuan = $deviasiHari2;
+            } else {
+                $item->deviasi_analisa_persetujuan = 0;
+            }
+
+            if (!empty($item->tgl_persetujuan) && !empty($item->tgl_notif)) {
+                $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                $deviasiHari3 = $tglPersetujuanCarbon->diffInDays($tglNotifCarbon);
+                $item->deviasi_persetujuan_notif = $deviasiHari3;
+            } else {
+                $item->deviasi_persetujuan_notif = 0;
+            }
+
+            if (!empty($item->tgl_notif) && !empty($item->tgl_realisasi)) {
+                $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                $tglRealisasiCarbon = Carbon::parse($item->tgl_realisasi);
+
+                $deviasiHari4 = $tglNotifCarbon->diffInDays($tglRealisasiCarbon);
+                $item->deviasi_notif_realisasi = $deviasiHari4;
+            } else {
+                $item->deviasi_notif_realisasi = 0;
+            }
+        }
+
         return view('laporan.tracking-pengajuan', [
             'data' => $data,
             'kantor' => $kantor,

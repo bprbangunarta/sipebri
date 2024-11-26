@@ -48,9 +48,13 @@
                                         <th class="text-center">RATE</th>
                                         <th class="text-center">SURVEYOR</th>
                                         <th class="text-center">SURVEY</th>
+                                        <th class="text-center">D/Hari</th>
                                         <th class="text-center">ANALISA</th>
+                                        <th class="text-center">D/Hari</th>
                                         <th class="text-center">PUTUSAN</th>
+                                        <th class="text-center">D/Hari</th>
                                         <th class="text-center">TGL NOTIF</th>
+                                        <th class="text-center">D/Hari</th>
                                         <th class="text-center">REALISASI</th>
                                         <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
@@ -85,6 +89,7 @@
                                                     {{ \Carbon\Carbon::parse($item->tgl_survey)->format('d-m-Y') }}
                                                 @endif
                                             </td>
+                                            <td class="text-center">{{ $item->deviasi_survei_analisa }}</td>
                                             <td class="text-center">
                                                 @if (is_null($item->tgl_analisa))
                                                     -
@@ -92,6 +97,7 @@
                                                     {{ \Carbon\Carbon::parse($item->tgl_analisa)->format('d-m-Y') }}
                                                 @endif
                                             </td>
+                                            <td class="text-center">{{ $item->deviasi_analisa_persetujuan }}</td>
                                             <td class="text-center">
                                                 @if (is_null($item->tgl_persetujuan))
                                                     -
@@ -99,6 +105,7 @@
                                                     {{ \Carbon\Carbon::parse($item->tgl_persetujuan)->format('d-m-Y') }}
                                                 @endif
                                             </td>
+                                            <td class="text-center">{{ $item->deviasi_persetujuan_notif }}</td>
                                             <td class="text-center">
                                                 @if (is_null($item->tgl_notif))
                                                     -
@@ -107,6 +114,7 @@
                                                 @endif
 
                                             </td>
+                                            <td class="text-center">{{ $item->deviasi_notif_realisasi }}</td>
                                             <td class="text-center">
                                                 @if (is_null($item->tgl_realisasi))
                                                     -
