@@ -309,7 +309,7 @@ class AnalisaMemorandumController extends Controller
                 $cek[0]->laba_usaha_pertanian = $saving;
             } else if ($cek[0]->metode_rps == 'EFEKTIF MUSIMAN' || $cek[0]->metode_rps == 'EFEKTIF') {
 
-                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, $cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
 
                 $tani = DB::table('au_pertanian')->where('pengajuan_kode', $enc)->get();
                 //total semua nilai tani
@@ -332,26 +332,26 @@ class AnalisaMemorandumController extends Controller
 
                 $sb = $ssb / 12;
 
-                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, $cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
 
                 //Max Plafon
                 $cek[0]->maxplafon = $keuangan / ($sb * (pow(1 + $sb, $cek[0]->jangka_waktu) / (pow(1 + $sb, $cek[0]->jangka_waktu) - 1)));
                 //
             } else if ($cek[0]->kategori == 'RELOAN' && $cek[0]->metode_rps == 'FLAT' && !is_null($cek[0]->grace_period)) {
 
-                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, $cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
 
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             } elseif ($cek[0]->metode_rps == 'FLAT') {
-                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, $cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
 
                 $cek[0]->maxplafon = ((int)$keuangan * (int)$cek[0]->jangka_waktu) / (1 + ((int)$cek[0]->jangka_waktu * $mp_sb / 12));
             } else {
-                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, (int)$cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
+                $rc = Midle::perhitungan_rc($enc, $cek[0]->metode_rps, (int)$cek[0]->plafon, $cek[0]->suku_bunga, (int)$cek[0]->jangka_waktu, (int)$cek[0]->grace_period);
                 //Max Plafon
                 $mp_sb = (int)$cek[0]->suku_bunga / 100;
 

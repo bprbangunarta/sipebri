@@ -1416,8 +1416,10 @@ class Midle extends Model
             ->leftJoin('data_produk', 'data_pengajuan.produk_kode', '=', 'data_produk.kode_produk')
             ->leftJoin('bi_sektor_ekonomi', 'a_memorandum.bi_sek_ekonomi_kode', '=', 'bi_sektor_ekonomi.sandi')
             ->leftJoin('bi_sumber_dana_pelunasan', 'a_memorandum.bi_sumber_pelunasan_kode', '=', 'bi_sumber_dana_pelunasan.sandi')
+            ->leftJoin('data_tracking', 'data_tracking.pengajuan_kode', '=', 'a_memorandum.pengajuan_kode')
             ->select(
                 'a_memorandum.*',
+                'a_memorandum.created_at as tgl_memorandum',
                 'data_pengajuan.*',
                 'bi_penggunaan_debitur.keterangan as penggunaan_debitur',
                 'data_pengajuan.jangka_waktu as jk',
@@ -1432,6 +1434,7 @@ class Midle extends Model
                 'a5c_collateral.lokasi_shm',
                 'a5c_condition.evaluasi_condition as nilai_condition',
                 'v_users.nama_user as nama_surveyor',
+                'data_tracking.analisa_kredit'
             )
             ->where('a_memorandum.pengajuan_kode', $data)->first();
         //
@@ -1464,7 +1467,11 @@ class Midle extends Model
         $memorandum->lokasi_shm = Data::a5c_capacity_lokasi_shm($memorandum->lokasi_shm) ?? null;
 
         //Hari
-        $hari = Carbon::today();
+        if (!is_null($memorandum->analisa_kredit)) {
+            $hari = Carbon::parse($memorandum->analisa_kredit);
+        } else {
+            $hari = now();
+        }
         $memorandum->hari = $hari->isoformat('D MMMM Y');
 
         return $memorandum;
