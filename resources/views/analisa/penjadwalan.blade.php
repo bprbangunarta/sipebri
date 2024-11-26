@@ -194,6 +194,82 @@
 
         </div>
     </div>
+
+    <div class="modal fade" id="modal-penjadwalan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PENJADWALAN SURVEY</h4>
+                </div>
+                <form action="{{ route('analisa.updatepenjadwalan') }}" method="POST">
+                    @method('put')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="text" name="alamat" id="alamat" hidden>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>KODE PENGAJUAN</label>
+                                    <input type="text" class="form-control" name="kode_pengajuan" id="kode_pengajuan"
+                                        readonly>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>NAMA NASABAH</label>
+                                    <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah"
+                                        readonly>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>NAMA SURVEYOR</label>
+                                    <select class="form-control petugas" style="width: 100%;" name="kode_petugas"
+                                        id="kode_petugas">
+                                        <option value="">--PILIH--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>TGL. SURVEY</label>
+                                    <input type="date" class="form-control" name="tgl_survei"
+                                        id="datepicker-tanggal-survei" required>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>TGL. JADUL 1</label>
+                                    <input type="date" class="form-control" name="tgl_jadul_1"
+                                        id="datepicker-tanggal-survei1">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>TGL. JADUL 2</label>
+                                    <input type="date" class="form-control" name="tgl_jadul_2"
+                                        id="datepicker-tanggal-survei2">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>CATATAN</label>
+                                    <div class="form-control" id="catatan" style="height: 75px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-warning">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('myscript')
