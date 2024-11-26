@@ -26,6 +26,14 @@
                                     </a>
                                 </li>
 
+                                <li class="{{ request()->is('hasil/pelaksanaan*') ? 'active' : '' }}">
+                                    <a href="{{ route('pelaksanaan.survei') }}"
+                                        class="{{ request()->is('hasil/pelaksanaan*') ? 'text-bold' : '' }}"
+                                        style="cursor: pointer;">
+                                        PELAKSANAAN SURVEI
+                                    </a>
+                                </li>
+
                                 <li class="{{ request()->is('hasil/survei*') ? 'active' : '' }}">
                                     <a href="{{ route('hasil.survei') }}"
                                         class="{{ request()->is('hasil/survei*') ? 'text-bold' : '' }}"
@@ -34,13 +42,6 @@
                                     </a>
                                 </li>
 
-                                <li class="{{ request()->is('hasil/pelaksanaan*') ? 'active' : '' }}">
-                                    <a href="{{ route('pelaksanaan.survei') }}"
-                                        class="{{ request()->is('hasil/pelaksanaan*') ? 'text-bold' : '' }}"
-                                        style="cursor: pointer;">
-                                        PELAKSANAAN SURVEI
-                                    </a>
-                                </li>
                             </ul>
 
                             @yield('content')
