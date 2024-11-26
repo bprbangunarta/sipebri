@@ -605,11 +605,23 @@ class CetakLaporanController extends Controller
 
         // Deviasi
         foreach ($data as $item) {
+            if (!empty($item->tanggal) && !empty($item->tgl_survey)) {
+                $tglTanggalCarbon = Carbon::parse($item->tanggal);
+                $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+
+                $deviasiHaripen = $tglTanggalCarbon->startOfDay()->diffInDays($tglSurveyCarbon->startOfDay());
+
+                $item->deviasi_pend_survei = $deviasiHaripen;
+            } else {
+                $item->deviasi_pend_survei = 0;
+            }
+
             if (!empty($item->tgl_survey) && !empty($item->tgl_analisa)) {
                 $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
                 $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
 
-                $deviasiHari1 = $tglSurveyCarbon->diffInDays($tglAnalisaCarbon);
+                $deviasiHari1 = $tglSurveyCarbon->startOfDay()->diffInDays($tglAnalisaCarbon->startOfDay());
+
                 $item->deviasi_survei_analisa = $deviasiHari1;
             } else {
                 $item->deviasi_survei_analisa = 0;
@@ -619,7 +631,8 @@ class CetakLaporanController extends Controller
                 $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
                 $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
 
-                $deviasiHari2 = $tglAnalisaCarbon->diffInDays($tglPersetujuanCarbon);
+                $deviasiHari2 = $tglAnalisaCarbon->startOfDay()->diffInDays($tglPersetujuanCarbon->startOfDay());
+
                 $item->deviasi_analisa_persetujuan = $deviasiHari2;
             } else {
                 $item->deviasi_analisa_persetujuan = 0;
@@ -629,7 +642,8 @@ class CetakLaporanController extends Controller
                 $tglNotifCarbon = Carbon::parse($item->tgl_notif);
                 $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
 
-                $deviasiHari3 = $tglPersetujuanCarbon->diffInDays($tglNotifCarbon);
+                $deviasiHari3 = $tglPersetujuanCarbon->startOfDay()->diffInDays($tglNotifCarbon->startOfDay());
+
                 $item->deviasi_persetujuan_notif = $deviasiHari3;
             } else {
                 $item->deviasi_persetujuan_notif = 0;
@@ -639,7 +653,8 @@ class CetakLaporanController extends Controller
                 $tglNotifCarbon = Carbon::parse($item->tgl_notif);
                 $tglRealisasiCarbon = Carbon::parse($item->tgl_realisasi);
 
-                $deviasiHari4 = $tglNotifCarbon->diffInDays($tglRealisasiCarbon);
+                $deviasiHari4 = $tglNotifCarbon->startOfDay()->diffInDays($tglRealisasiCarbon->startOfDay());
+
                 $item->deviasi_notif_realisasi = $deviasiHari4;
             } else {
                 $item->deviasi_notif_realisasi = 0;
