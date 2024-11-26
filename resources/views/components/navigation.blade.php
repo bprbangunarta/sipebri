@@ -257,7 +257,7 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('hasil/survei') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('hasil/survei') ? 'active' : '' }}">
                         <a href="{{ route('hasil.survei') }}" title="Hasil Survei">
                             <i class="fa fa-globe" aria-hidden="true"></i>
                             Hasil Survei
@@ -269,7 +269,7 @@
                             <i class="fa fa-location-arrow" aria-hidden="true"></i>
                             Pelaksanaan Survei
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ request()->is('monitoring*') ? 'active' : '' }}">
                         <a @if (Auth::user()->hasRole(['Kasi Analis', 'Administrator'])) href="{{ route('monitoring.index') }}" @endif
@@ -281,7 +281,7 @@
 
                     <li class="{{ request()->is('themes/prosfek/index') ? 'active' : '' }}">
                         <a href="{{ route('prosfek.index') }}" title="Monitoring Petugas">
-                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                            <i class="fa fa-cog" aria-hidden="true"></i>
                             Prosfek
                         </a>
                     </li>

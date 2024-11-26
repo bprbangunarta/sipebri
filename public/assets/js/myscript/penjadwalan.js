@@ -1,9 +1,10 @@
 $(document).ready(function () {
     $("#modal-penjadwalan").on("show.bs.modal", function (event) {
-        $("#kode_petugas").empty();
+        
         var button = $(event.relatedTarget); // Tombol yang membuka modal
         var id = button.data("id"); // Ambil data-id dari tombol
 
+        
         //Kirim permintaan AJAX ke route yang mengambil data berdasarkan ID
         $.ajax({
             url: "/analisa/penjadwalan/" + id,
@@ -25,6 +26,8 @@ $(document).ready(function () {
                 $("#alamat").val(hasil.alamat_ktp);
                 $("#tanggal").val(hasil.created_at);
 
+                $("#kode_petugas").empty();
+
                 $("#kode_petugas").append(
                     $("<option>", {
                         value: hasil.surveyor_kode,
@@ -32,7 +35,7 @@ $(document).ready(function () {
                     }).prop("selected", true)
                 );
 
-                //Kantor
+                //Petugas
                 $.each(datas, function (index, item) {
                     if (item.code_user != hasil.surveyor_kode) {
                         $("#kode_petugas").append(
@@ -40,9 +43,10 @@ $(document).ready(function () {
                                 value: item.code_user,
                                 text: item.nama_user,
                             })
-                        );
+                        ).select2();
                     }
                 });
+
 
                 if (hasil.tgl_survei !== null) {
                     $("#datepicker-tanggal-survei").val(hasil.tgl_survei);
@@ -65,6 +69,7 @@ $(document).ready(function () {
                     $("#datepicker-tanggal-survei2").val("");
                 }
 
+                $('#catatan').empty()
                 if (response[0][0].catatan_survei != null) {
                     $("#catatan").append(
                         "<p>" +
@@ -88,7 +93,6 @@ $(document).ready(function () {
                             "</p>"
                     );
                 }
-                console.log(response);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX

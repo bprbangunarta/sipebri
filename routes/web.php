@@ -408,6 +408,7 @@ Route::middleware('auth')->group(function () {
 
         // Hasil Survei
         Route::get('/hasil/survei', [SurveiController::class, 'hasil_survei'])->name('hasil.survei');
+        Route::get('/hasil/survey', [SurveiController::class, 'get_hasil_survei_spa'])->name('get.hasil.survei');
         Route::get('/hasil/pelaksanaan', [SurveiController::class, 'pelaksanaan_survei'])->name('pelaksanaan.survei');
 
         // Monitoring Staff Analis

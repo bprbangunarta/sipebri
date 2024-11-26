@@ -52,7 +52,9 @@
                                         <th class="text-center" width="8%">FHOTO PROSFEK 3</th>
                                         <th class="text-center" width="8%">FHOTO CLOSING</th>
                                         <th class="text-center" width="8%">TGL CLOSING</th>
-                                        <th class="text-center" width="8%">{{ session('role') }}</th>
+                                        @if (!in_array($role, ['Kasi Analis', 'Kabag Analis']))
+                                            <th class="text-center" width="8%">AKSI</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -110,28 +112,28 @@
                                                 {{ $item->ket3 }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <img style="width: 50px; height: auto; cursor:pointer;"
+                                                <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek1) }}"
                                                     data-toggle="modal" data-target="#imageModal"
                                                     data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek1) }}"
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <img style="width: 50px; height: auto; cursor:pointer;"
+                                                <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek2) }}"
                                                     data-toggle="modal" data-target="#imageModal"
                                                     data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek2) }}"
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <img style="width: 50px; height: auto; cursor:pointer;"
+                                                <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek3) }}"
                                                     data-toggle="modal" data-target="#imageModal"
                                                     data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek3) }}"
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <img style="width: 50px; height: auto; cursor:pointer;"
+                                                <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_closing) }}"
                                                     data-toggle="modal" data-target="#imageModal"
                                                     data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_closing) }}"
@@ -144,40 +146,44 @@
                                                     -
                                                 @endif
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">
-                                                @if (is_null($item->tgl_closing) && (is_null($item->tgl_prosfek2) || is_null($item->tgl_prosfek3)))
-                                                    <a data-toggle="modal" data-target="#prosfek"
-                                                        data-id="{{ $item->id }}" class="btn-circle btn-sm bg-yellow"
-                                                        title="Add Prosfek" style="cursor: pointer;">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @else
-                                                    <a class="btn-circle btn-sm"
-                                                        style="background: grey; color:white; cursor: not-allowed;"
-                                                        title="Tidak dapat menambahkan prosfek">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                @endif
+                                            @if (!in_array($role, ['Kasi Analis', 'Kabag Analis']))
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    @if (is_null($item->tgl_closing) && (is_null($item->tgl_prosfek2) || is_null($item->tgl_prosfek3)))
+                                                        <a data-toggle="modal" data-target="#prosfek"
+                                                            data-id="{{ $item->id }}"
+                                                            class="btn-circle btn-sm bg-yellow" title="Add Prosfek"
+                                                            style="cursor: pointer;">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    @else
+                                                        <a class="btn-circle btn-sm"
+                                                            style="background: grey; color:white; cursor: not-allowed;"
+                                                            title="Tidak dapat menambahkan prosfek">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    @endif
 
 
-                                                &nbsp;
-                                                @if (is_null($item->tgl_closing))
-                                                    <a data-toggle="modal" data-target="#closing"
-                                                        data-id="{{ $item->id }}" class="btn-circle btn-sm bg-red"
-                                                        title="Closing" style="cursor: pointer;">
-                                                        <i class="fa fa-window-close" aria-hidden="true"></i>
-                                                    </a>
-                                                @else
-                                                    <a class="btn-circle btn-sm" style="background: grey; color:white"
-                                                        title="Closing" style="cursor: pointer;">
-                                                        <i class="fa fa-window-close" aria-hidden="true"></i>
-                                                    </a>
-                                                @endif
-                                            </td>
+                                                    &nbsp;
+                                                    @if (is_null($item->tgl_closing))
+                                                        <a data-toggle="modal" data-target="#closing"
+                                                            data-id="{{ $item->id }}"
+                                                            class="btn-circle btn-sm bg-red" title="Closing"
+                                                            style="cursor: pointer;">
+                                                            <i class="fa fa-window-close" aria-hidden="true"></i>
+                                                        </a>
+                                                    @else
+                                                        <a class="btn-circle btn-sm" style="background: grey; color:white"
+                                                            title="Closing" style="cursor: pointer;">
+                                                            <i class="fa fa-window-close" aria-hidden="true"></i>
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                            @endif
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td class="text-center" colspan="9">TIDAK ADA DATA</td>
+                                            <td class="text-center" colspan="21">TIDAK ADA DATA</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

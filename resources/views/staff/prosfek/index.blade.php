@@ -21,8 +21,7 @@
                                 <li>
                                     <a href="#">
                                         <p>
-                                            1. Pilih kantor yang sama jika berkas <br>&nbsp;&nbsp;&nbsp;&nbsp; tidak
-                                            dikirim. <br>
+                                            1. Fhoto wajib diisi. <br>
                                             2. Data harus diisi semua ya.
                                         </p>
                                     </a>

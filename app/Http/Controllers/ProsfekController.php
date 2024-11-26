@@ -72,6 +72,8 @@ class ProsfekController extends Controller
     {
         try {
             $keyword = request('keyword');
+            $role = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
+
             $data = DB::table('data_prosfek')
                 ->join('v_users', 'v_users.code_user', '=', 'data_prosfek.code_user')
                 ->where(function ($query) use ($keyword) {
@@ -82,9 +84,12 @@ class ProsfekController extends Controller
                         ->orWhere('data_prosfek.kecamatan', 'like', '%' . $keyword . '%')
                         ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%');
                 })
+                ->when($role == 'Staff Analis', function ($query) {
+                    $query->where('data_prosfek.code_user', auth()->user()->code_user);
+                })
                 ->paginate(10);
 
-            return view('staff.prosfek.data_prosfek', compact('data'));
+            return view('staff.prosfek.data_prosfek', compact('data', 'role'));
         } catch (\Throwable $th) {
         }
     }
