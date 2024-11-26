@@ -115,28 +115,36 @@
                                                 <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek1) }}"
                                                     data-toggle="modal" data-target="#imageModal"
-                                                    data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek1) }}"
+                                                    @if (!empty($item->fhoto_prosfek1)) data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek1) }}"
+                                                    @else
+                                                    data-image="" @endif
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek2) }}"
                                                     data-toggle="modal" data-target="#imageModal"
-                                                    data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek2) }}"
+                                                    @if (!empty($item->fhoto_prosfek2)) data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek2) }}"
+                                                    @else
+                                                    data-image="" @endif
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek3) }}"
                                                     data-toggle="modal" data-target="#imageModal"
-                                                    data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek3) }}"
+                                                    @if (!empty($item->fhoto_prosfek3)) data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_prosfek3) }}"
+                                                    @else
+                                                    data-image="" @endif
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <img style="width: 50px; height: auto; max-height: 30px; cursor:pointer;"
                                                     src="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_closing) }}"
                                                     data-toggle="modal" data-target="#imageModal"
-                                                    data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_closing) }}"
+                                                    @if (!empty($item->fhoto_closing)) data-image="{{ asset('storage/image/photo_prosfek/' . $item->fhoto_closing) }}"
+                                                    @else
+                                                    data-image="" @endif
                                                     alt="">
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
