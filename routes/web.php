@@ -398,7 +398,7 @@ Route::middleware('auth')->group(function () {
         //Penjadawlan
         Route::controller(PenjadwalanController::class)->prefix('analisa')->group(function () {
 
-            Route::group(['middleware' => ['role:Kasi Analis|Kepala Kantor Kas']], function () {
+            Route::group(['middleware' => ['role:Kasi Analis|Kepala Kantor Kas|Kabag Analis|Direksi|Direktur Bisnis']], function () {
                 Route::get('/penjadwalan', 'index')->name('analisa.penjadwalan');
             });
 

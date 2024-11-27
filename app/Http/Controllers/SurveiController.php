@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\CGC;
+use App\Models\User;
 use App\Models\Midle;
 use App\Models\Kantor;
 use App\Models\Survei;
@@ -212,97 +213,110 @@ class SurveiController extends Controller
 
     public function pelaksanaan_survei()
     {
+        $keyword = request('keyword');
+
+        $data = DB::table('data_survei')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode',)
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+            ->select(
+                'data_pengajuan.created_at as tanggal',
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.plafon',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.tracking',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'v_users.nama_user',
+                'data_survei.surveyor_kode',
+                'data_survei.latitude',
+                'data_survei.longitude',
+                'data_survei.foto',
+                DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%y') as tgl_survei"),
+                'data_survei.catatan_survei',
+                DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%y') as tgl_jadul_1"),
+                'data_survei.catatan_jadul_1',
+                DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%y') as tgl_jadul_2"),
+                'data_survei.catatan_jadul_2',
+            )
+            ->whereNot('data_pengajuan.produk_kode', 'KTA')
+            ->where('data_survei.kasi_kode', '!=', '')
+            ->whereNull('data_survei.foto')
+            ->where(function ($query) {
+                $query->whereRaw("DATE(data_survei.tgl_survei) = ?", [Carbon::today()->toDateString()])
+                    ->orWhereRaw("DATE(data_survei.tgl_jadul_1) = ?", [Carbon::today()->toDateString()])
+                    ->orWhereRaw("DATE(data_survei.tgl_jadul_2) = ?", [Carbon::today()->toDateString()]);
+            })
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('v_users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+            ->orderBy('data_survei.created_at', 'DESC')
+            ->paginate(10);
+
+        foreach ($data as $item) {
+            if ($item->tracking == 'Proses Survei' && is_null($item->foto)) {
+                $item->ket = 'Progress';
+            } elseif ($item->tracking == 'Penjadwalan' && is_null($item->foto)) {
+                $item->ket = 'Pending';
+            } elseif ($item->tracking == 'Proses Analisa') {
+                $item->ket = 'Success';
+            } else {
+                $item->ket = 'Next Survei';
+            }
+
+            if (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->format('Y-m-d') == Carbon::today()->toDateString()) {
+                $item->catatan = $item->catatan_survei;
+            } elseif (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->format('Y-m-d') == Carbon::today()->toDateString()) {
+                $item->catatan = $item->catatan_jadul_1;
+            } elseif (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->format('Y-m-d') == Carbon::today()->toDateString()) {
+                $item->catatan = $item->catatan_jadul_2;
+            } else {
+                $item->catatan = null;
+            }
+        }
+
+        $tgl = now()->format('d F Y');
+
+        // Mendapatkan Jumlah
+        $surveyorCounts = (object) [];
+        foreach ($data as $item) {
+            $kode = $item->surveyor_kode;
+
+            if (!isset($surveyorCounts->$kode)) {
+                $surveyorCounts->$kode = [
+                    'count' => 0,
+                    'name' => null,
+                ];
+            }
+
+            $surveyorCounts->$kode['count']++;
+        }
+
+        foreach ($surveyorCounts as $kode => &$info) {
+            $info['name'] = User::where('code_user', $kode)->pluck('name')->first();
+        }
+
+        $finalResult = [];
+        foreach ($surveyorCounts as $value) {
+            $finalResult[] = (object) [
+                'name' => $value['name'],
+                'count' => $value['count'],
+            ];
+        }
+
+        if (!empty($finalResult)) {
+            $countUser = (object) $finalResult;
+        } else {
+            $countUser = [];
+        }
         try {
-            $keyword = request('keyword');
-
-            $data = DB::table('data_survei')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode',)
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-                ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
-                ->select(
-                    'data_pengajuan.created_at as tanggal',
-                    'data_pengajuan.kode_pengajuan',
-                    'data_pengajuan.plafon',
-                    'data_pengajuan.produk_kode',
-                    'data_pengajuan.tracking',
-                    'data_nasabah.nama_nasabah',
-                    'data_nasabah.alamat_ktp',
-                    'data_survei.kantor_kode',
-                    'v_users.nama_user',
-                    'data_survei.surveyor_kode',
-                    'data_survei.latitude',
-                    'data_survei.longitude',
-                    'data_survei.foto',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%y') as tgl_survei"),
-                    'data_survei.catatan_survei',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%y') as tgl_jadul_1"),
-                    'data_survei.catatan_jadul_1',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%y') as tgl_jadul_2"),
-                    'data_survei.catatan_jadul_2',
-                )
-                ->whereNot('data_pengajuan.produk_kode', 'KTA')
-                ->where('data_survei.kasi_kode', '!=', '')
-                ->whereNull('data_survei.foto')
-                ->where(function ($query) {
-                    $query->whereRaw("DATE(data_survei.tgl_survei) = ?", [Carbon::today()->toDateString()])
-                        ->orWhereRaw("DATE(data_survei.tgl_jadul_1) = ?", [Carbon::today()->toDateString()])
-                        ->orWhereRaw("DATE(data_survei.tgl_jadul_2) = ?", [Carbon::today()->toDateString()]);
-                })
-                ->where(function ($query) use ($keyword) {
-                    $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
-                        ->orWhere('v_users.code_user', 'like', '%' . $keyword . '%')
-                        ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
-                })
-                ->orderBy('data_survei.created_at', 'DESC')
-                ->paginate(10);
-
-            foreach ($data as $item) {
-                if ($item->tracking == 'Proses Survei' && is_null($item->foto)) {
-                    $item->ket = 'Progress';
-                } elseif ($item->tracking == 'Penjadwalan' && is_null($item->foto)) {
-                    $item->ket = 'Pending';
-                } elseif ($item->tracking == 'Proses Analisa') {
-                    $item->ket = 'Success';
-                } else {
-                    $item->ket = null;
-                }
-
-                if (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->format('Y-m-d') == Carbon::today()->toDateString()) {
-                    $item->catatan = $item->catatan_survei;
-                } elseif (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->format('Y-m-d') == Carbon::today()->toDateString()) {
-                    $item->catatan = $item->catatan_jadul_1;
-                } elseif (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->format('Y-m-d') == Carbon::today()->toDateString()) {
-                    $item->catatan = $item->catatan_jadul_2;
-                } else {
-                    $item->catatan = null;
-                }
-            }
-
-            $tgl = now()->format('d F Y');
-
-            // Mendapatkan Jumlah
-            $surveyorCounts = (object) [];
-            foreach ($data as $item) {
-                $kode = $item->surveyor_kode;
-                $name = $item->nama_user;
-
-                if (!isset($surveyorCounts->$kode)) {
-                    $surveyorCounts->$kode = 0;
-                }
-
-                $surveyorCounts->$kode++;
-            }
-
-            foreach ($data as $item) {
-                $kode = $item->surveyor_kode;
-
-                $item->jumlah_survei = $surveyorCounts->$kode;
-            }
-
-            return view('analisa.pelaksanaan.index', compact('data', 'tgl', 'surveyorCounts'));
+            return view('analisa.pelaksanaan.index', compact('data', 'tgl', 'surveyorCounts', 'countUser'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditampilkan');
         }

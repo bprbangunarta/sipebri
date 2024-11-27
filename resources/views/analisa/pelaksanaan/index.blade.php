@@ -38,7 +38,6 @@
                             <th class="text-center">KANTOR</th>
                             <th class="text-center">SURVEYOR</th>
                             <th class="text-center" width="25%">KETERANGAN</th>
-                            <th class="text-center" width="25%">JUMLAH SURVEI</th>
                             <th class="text-center" width="45%">STATUS</th>
                         </tr>
                     </thead>
@@ -67,15 +66,15 @@
                                 <td class="text-center" style="vertical-align: middle;">{{ $item->catatan }}
                                 </td>
                                 <td class="text-center" style="vertical-align: middle;">
-                                    {{ $item->jumlah_survei }}
-                                </td>
-                                <td class="text-center" style="vertical-align: middle;">
                                     @if ($item->ket == 'Progress')
                                         <span class="badge bg-blue">Progress</span>
                                     @elseif ($item->ket == 'Pending')
                                         <span class="badge bg-success" style="background: rgb(245, 51, 51)">Pending</span>
                                     @elseif ($item->ket == 'Success')
                                         <span class="badge bg-success" style="background: rgb(3, 209, 3)">Success</span>
+                                    @elseif ($item->ket == 'Next Survei')
+                                        <span class="badge bg-success" style="background: rgb(245, 51, 51)">Next
+                                            Survei</span>
                                     @else
                                         <span class="badge bg-success" style="background: rgb(103, 103, 103)">Not
                                             Status</span>
@@ -95,6 +94,14 @@
 
             <div class="box-footer clearfix">
                 <div class="pull-left hidden-xs">
+                    <button type="button" class="btn-circle btn-sm bg-blue" title="Informasi" data-toggle="modal"
+                        data-target="#modalInfo" style="cursor: pointer; border:none;">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        &nbsp;
+                        Petugas
+                    </button>
+
+                    &nbsp;
                     <button class="btn btn-default btn-sm">
                         Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                         entries
@@ -104,6 +111,51 @@
                 {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
             </div>
 
-            </section>
         </div>
+
+        <div class="modal fade" id="modalInfo">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">INFORMASI PETUGAS SURVEI</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered" style="font-size:12px;">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th class="text-center" width="3%">NO</th>
+                                    <th class="text-center" width="8%">NAMA</th>
+                                    <th class="text-center" width="8%">JUMLA SURVEI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($countUser as $item)
+                                    <tr>
+                                        <td class="text-center" style="vertical-align: middle;">
+                                            {{ $loop->iteration + $data->firstItem() - 1 }}
+                                        </td>
+
+                                        <td class="text-center" style="vertical-align: middle;">
+                                            {{ $item->name }}
+                                        </td>
+
+                                        <td class="text-center" style="vertical-align: middle;">{{ $item->count }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td class="text-center" colspan="11">TIDAK ADA DATA</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endsection

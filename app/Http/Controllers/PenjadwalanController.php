@@ -9,6 +9,7 @@ use App\Models\Survei;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 
 class PenjadwalanController extends Controller
@@ -17,12 +18,14 @@ class PenjadwalanController extends Controller
     {
         $keyword = request('keyword');
         $user = Auth::user()->code_user;
+
         $cek = DB::table('data_pengajuan')
             ->leftJoin('data_nasabah', 'data_pengajuan.nasabah_kode', '=', 'data_nasabah.kode_nasabah')
             ->leftJoin('data_survei', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode')
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('users', 'data_survei.surveyor_kode', '=', 'users.code_user')
             ->leftJoin('users as cs', 'cs.code_user', '=', 'data_pengajuan.input_user')
+            ->leftJoin('users as kasi', 'kasi.code_user', '=', 'data_survei.kasi_kode')
             ->leftJoin('data_kantor', 'data_survei.kantor_kode', '=', 'data_kantor.kode_kantor')
             ->leftJoin('data_berkas', 'data_berkas.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
 
@@ -55,9 +58,12 @@ class PenjadwalanController extends Controller
                 'data_berkas.tgl_terima',
             )
 
-            ->where('data_survei.kasi_kode', '=', $user)
+            ->when(auth()->user()->roles[0]->name == 'Kasi Analis', function ($query) use ($user) {
+                $query->where('data_survei.kasi_kode', '=', $user);
+            })
             ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
             ->where('data_pengajuan.tracking', '=', 'Penjadwalan')
+            ->where('kasi.is_active', '=', 1)
             // ->orWhere('data_pengajuan.tracking', '=', 'Proses Survei')
 
             ->where(function ($query) use ($keyword) {

@@ -272,7 +272,7 @@
                     </li> --}}
 
                     <li class="{{ request()->is('monitoring*') ? 'active' : '' }}">
-                        <a @if (Auth::user()->hasRole(['Kasi Analis', 'Administrator'])) href="{{ route('monitoring.index') }}" @endif
+                        <a @if (Auth::user()->hasRole(['Kasi Analis', 'Administrator', 'Kabag Analis', 'Direksi', 'Direktur Bisnis'])) href="{{ route('monitoring.index') }}" @endif
                             title="Monitoring Petugas">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                             Monitoring Staff
@@ -280,7 +280,10 @@
                     </li>
 
                     <li class="{{ request()->is('themes/prosfek/index') ? 'active' : '' }}">
-                        <a href="{{ route('prosfek.index') }}" title="Monitoring Petugas">
+                        <a @can('tambah prosfek')
+                            href="{{ route('prosfek.index') }}" 
+                        @endcan
+                            title="Monitoring Petugas">
                             <i class="fa fa-cog" aria-hidden="true"></i>
                             Prosfek
                         </a>
