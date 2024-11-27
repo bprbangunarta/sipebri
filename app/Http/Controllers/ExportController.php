@@ -651,6 +651,64 @@ class ExportController extends Controller
             ->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->get();
 
+        // Deviasi
+        foreach ($data as $item) {
+            if (!empty($item->tanggal) && !empty($item->tgl_survey)) {
+                $tglTanggalCarbon = Carbon::parse($item->tanggal);
+                $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+
+                $deviasiHaripen = $tglTanggalCarbon->startOfDay()->diffInDays($tglSurveyCarbon->startOfDay());
+
+                $item->deviasi_pend_survei = $deviasiHaripen;
+            } else {
+                $item->deviasi_pend_survei = 0;
+            }
+
+            if (!empty($item->tgl_survey) && !empty($item->tgl_analisa)) {
+                $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+                $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+
+                $deviasiHari1 = $tglSurveyCarbon->startOfDay()->diffInDays($tglAnalisaCarbon->startOfDay());
+
+                $item->deviasi_survei_analisa = $deviasiHari1;
+            } else {
+                $item->deviasi_survei_analisa = 0;
+            }
+
+            if (!empty($item->tgl_analisa) && !empty($item->tgl_persetujuan)) {
+                $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+                $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                $deviasiHari2 = $tglAnalisaCarbon->startOfDay()->diffInDays($tglPersetujuanCarbon->startOfDay());
+
+                $item->deviasi_analisa_persetujuan = $deviasiHari2;
+            } else {
+                $item->deviasi_analisa_persetujuan = 0;
+            }
+
+            if (!empty($item->tgl_persetujuan) && !empty($item->tgl_notif)) {
+                $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                $deviasiHari3 = $tglPersetujuanCarbon->startOfDay()->diffInDays($tglNotifCarbon->startOfDay());
+
+                $item->deviasi_persetujuan_notif = $deviasiHari3;
+            } else {
+                $item->deviasi_persetujuan_notif = 0;
+            }
+
+            if (!empty($item->tgl_notif) && !empty($item->tgl_realisasi)) {
+                $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                $tglRealisasiCarbon = Carbon::parse($item->tgl_realisasi);
+
+                $deviasiHari4 = $tglNotifCarbon->startOfDay()->diffInDays($tglRealisasiCarbon->startOfDay());
+
+                $item->deviasi_notif_realisasi = $deviasiHari4;
+            } else {
+                $item->deviasi_notif_realisasi = 0;
+            }
+        }
+
         if (count($data) == 0) {
             return redirect()->back()->with('error', 'Data tidak ada');
         }
@@ -669,11 +727,17 @@ class ExportController extends Controller
             "SURVEYOR",
             "SURVEY",
             "ANALISA",
+            'PUTUSAN',
             "STAFF ANALIS",
             "KASI ANALIS",
             "KOMITE I",
             "KOMITE II",
             "REALISASI",
+            "PEND - SURVEI",
+            "SURVEI - ANALISA",
+            "ANALISA - PUTUSAN",
+            "PUTUSAN - NOTIF",
+            "NOTIF - REALISASI",
             "STATUS"
         );
 
@@ -705,21 +769,21 @@ class ExportController extends Controller
 
             $data_usulan = DB::table('data_usulan')->where('pengajuan_kode', $item->kode_pengajuan)->get();
 
-            $staf_analis = '-';
-            $kasi_analis = '-';
-            $komiteI = '-';
-            $komiteII = '-';
+            $staff_analis = null;
+            $kasi_analis = null;
+            $kabag_analis = null;
+            $komiteI = null;
+            $komiteII = null;
 
             if (count($data_usulan) > 0) {
-                $statusLabels = ['Staf Analis', 'Kasi Analis', 'Komite I', 'Komite II'];
+                $statusLabels = ['Staff Analis', 'Kasi Analis', 'Kabag Analis', 'Komite I', 'Komite II'];
 
                 foreach ($data_usulan as $key => $usulan) {
                     if ($key < count($statusLabels)) {
-                        ${strtolower(str_replace(' ', '_', $statusLabels[$key]))} = $usulan->created_at ?? '-';
+                        ${strtolower(str_replace(' ', '_', $statusLabels[$key]))} = $usulan->created_at;
                     }
                 }
             }
-
 
             $data_array[] = array(
                 'NO'            => $no++,
@@ -733,14 +797,20 @@ class ExportController extends Controller
                 'RATE'          => $item->suku_bunga,
                 'RESORT'        => $item->nama_resort,
                 'SURVEYOR'      => $item->nama_user,
-                'SURVEY'        => $item->tgl_survey,
+                'SURVEY'        => $item->tgl_survey ? date('d-m-Y', strtotime($item->tgl_survey)) : null,
                 'ANALISA'       => $item->tgl_analisa,
-                // 'PUTUSAN'       => $item->tgl_persetujuan,
-                'STAFF ANALISA'       => $staf_analis,
-                'KASI ANALISA'       => $kasi_analis,
+                'PUTUSAN'       => $item->tgl_persetujuan,
+                'STAFF ANALISA' => $staff_analis ? date('d-m-Y', strtotime($staff_analis)) : null,
+                'KASI ANALISA'  => $kasi_analis ? date('d-m-Y', strtotime($kasi_analis))  : null,
+                'KABAG ANALISA'  => $kabag_analis ? date('d-m-Y', strtotime($kabag_analis))  : null,
                 'KOMITEI'       => $komiteI,
-                'KOMITEII'       => $komiteII,
+                'KOMITEII'      => $komiteII,
                 'REALISASI'     => $item->tgl_realisasi,
+                "PEND - SURVEI"     => $item->deviasi_pend_survei,
+                "SURVEI - ANALISA"  => $item->deviasi_survei_analisa,
+                "ANALISA - PUTUSAN" => $item->deviasi_analisa_persetujuan,
+                "PUTUSAN - NOTIF"   => $item->deviasi_persetujuan_notif,
+                "NOTIF - REALISASI" => $item->deviasi_notif_realisasi,
                 'STATUS'        => $item->status,
             );
         }
