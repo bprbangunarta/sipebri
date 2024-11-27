@@ -730,6 +730,7 @@ class ExportController extends Controller
             'PUTUSAN',
             "STAFF ANALIS",
             "KASI ANALIS",
+            "KABAG ANALIS",
             "KOMITE I",
             "KOMITE II",
             "REALISASI",
