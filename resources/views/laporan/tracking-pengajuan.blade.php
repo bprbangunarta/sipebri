@@ -55,7 +55,7 @@
                                         <th class="text-center">PEND - SURVEI</th>
                                         <th class="text-center">SURVEI - ANALISA</th>
                                         <th class="text-center">ANALISA - PUTUSAN</th>
-                                        <th class="text-center">PERS - NOTIF</th>
+                                        <th class="text-center">PUTUSAN - NOTIF</th>
                                         <th class="text-center">NOTIF - REALISASI</th>
                                         <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
