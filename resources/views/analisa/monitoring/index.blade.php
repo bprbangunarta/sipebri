@@ -39,9 +39,9 @@
                                         <th class="text-center" width="7%">PROSES ANALISA</th>
                                         <th class="text-center" width="7%">PERSETUJUAN</th>
                                         <th class="text-center" width="7%">NAIK KASI</th>
-                                        <th class="text-center" width="7%">KABAG</th>
                                         <th class="text-center" width="7%">KOMITE I</th>
                                         <th class="text-center" width="7%">KOMITE II</th>
+                                        <th class="text-center" width="7%">KOMITE III</th>
                                         <th class="text-center" width="7%">BATAL </th>
                                         <th class="text-center" width="7%">TOLAK</th>
                                     </tr>
