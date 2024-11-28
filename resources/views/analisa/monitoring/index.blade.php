@@ -62,11 +62,11 @@
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a
-                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Persetujuan Komite']) }}">{{ $item->total_persetujuan_staff }}</a>
+                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Proses Analisa']) }}">{{ $item->total_analisa }}</a>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a
-                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Proses Analisa']) }}">{{ $item->total_analisa }}</a>
+                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Persetujuan Komite']) }}">{{ $item->total_persetujuan_staff }}</a>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a
