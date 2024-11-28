@@ -289,12 +289,19 @@ Route::middleware('auth')->group(function () {
         Route::controller(BerkasController::class)->middleware('permission:kirim berkas')->group(function () {
             Route::get('kirim/berkas/index', 'index')->name('kirim.berkas.index');
             Route::post('kirim/berkas/simpan', 'simpan_berkas')->name('kirim.berkas.simpan');
+
+            Route::get('serah/terima/index', 'serah_terima')->name('serah.terima.index');
+            Route::post('serah/terima/simpan', 'simpan_serah_terima')->name('serah.terima.simpan');
         });
 
         Route::controller(BerkasController::class)->middleware('permission:terima berkas')->group(function () {
             Route::get('terima/berkas/index', 'terima_berkas')->name('terima.berkas.index');
             Route::get('terima/berkas/get', 'get_berkas')->name('terima.berkas.get');
             Route::post('terima/berkas/simpan', 'simpan_terima_berkas')->name('terima.berkas.simpan');
+        });
+
+        Route::controller(BerkasController::class)->middleware('permission:terima berkas')->group(function () {
+            Route::get('laporan/data/berkas', 'laporan_data_berkas')->name('laporan.data.berkas');
         });
         // Flow Berkas
 
@@ -756,7 +763,7 @@ Route::middleware('auth')->group(function () {
         // Prosfek
 
         //====Route Analisa RSC====//
-        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas']], function () {
+        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas|Staff Analis']], function () {
             Route::get('/rsc/index', [RSCController::class, 'index'])->name('rsc.index');
             Route::post('/rsc/tambah', [RSCController::class, 'tambah_rsc'])->name('rsc.tambah.rsc');
             Route::post('/rsc/tambah/eksternal', [RSCController::class, 'tambah_rsc_eksternal'])->name('rsc.tambah.rsc.eksternal');

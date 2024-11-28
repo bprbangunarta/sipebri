@@ -218,7 +218,7 @@ class RSCController extends Controller
             $item->kode = Crypt::encrypt($item->kode_pengajuan);
             $item->rsc = Crypt::encrypt($item->kode_rsc);
         }
-        // dd($data);
+
         return view('rsc.analisa.index', [
             'kasi' => $kasi,
             'surveyor' => $surveyor,

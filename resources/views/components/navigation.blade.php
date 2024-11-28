@@ -170,7 +170,7 @@
             @endhasanyrole
 
             <li
-                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan', 'tracking/pengajuan', 'otorisasi/pengajuan', 'kirim/berkas/index*', 'terima/berkas/index*') ? 'active' : '' }}">
+                class="treeview {{ request()->is('pengajuan', 'nasabah/edit', 'pendamping/edit', 'pengajuan/edit', 'pengajuan/agunan', 'survei/edit', 'konfirmasi/pengajuan', 'data/pengajuan', 'otor/pengajuan', 'tracking/pengajuan', 'otorisasi/pengajuan', 'kirim/berkas/index*', 'terima/berkas/index*', 'serah/terima/index*') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-users"></i>
                     <span>Pengajuan</span>
@@ -195,7 +195,7 @@
                         </a>
                     </li>
 
-                    <li class="{{ request()->is('kirim/berkas/index') ? 'active' : '' }}">
+                    <li class="{{ request()->is('kirim/berkas/index', 'serah/terima/index*') ? 'active' : '' }}">
                         <a @can('kirim berkas') href="{{ route('kirim.berkas.index') }}" @endcan title="Kirim Berkas">
                             <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
                             Kirim berkas
@@ -484,7 +484,7 @@
             </li>
 
             <li
-                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas', 'laporan/pengajuan/disetujui', 'laporan/pencairan', 'laporan/sebelum/survey', 'laporan/sesudah/survey', 'laporan/tracking/pengajuan') ? 'active' : '' }}">
+                class="treeview {{ request()->is('laporan/fasilitas', 'laporan/realisasi', 'laporan/realisasi/kredit', 'laporan/penolakan', 'laporan/pendaftaran', 'laporan/pendaftaran/kredit', 'laporan/survei', 'laporan/siap-realisasi', 'laporan/siap-realisasi/kredit', 'filter/laporan/fasilitas', 'laporan/pengajuan/disetujui', 'laporan/pencairan', 'laporan/sebelum/survey', 'laporan/sesudah/survey', 'laporan/tracking/pengajuan', 'laporan/data/berkas') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-folder-open"></i>
                     <span>Laporan</span>
@@ -498,6 +498,13 @@
                         <a href="/laporan/pendaftaran">
                             <i class="fa fa-users"></i>
                             Pendaftaran Kredit
+                        </a>
+                    </li>
+
+                    <li class="{{ request()->is('laporan/data/berkas') ? 'active' : '' }}">
+                        <a href="{{ route('laporan.data.berkas') }}">
+                            <i class="fa fa-files-o" aria-hidden="true"></i>
+                            Data Berkas
                         </a>
                     </li>
 

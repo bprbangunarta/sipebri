@@ -43,6 +43,9 @@
                                                 <option value="Batal"
                                                     {{ $data->status == 'Batal' || old('Batal') == 'Batal' ? 'selected' : '' }}>
                                                     Batal</option>
+                                                <option value="Batal"
+                                                    {{ $data->status == 'Batal RSC' || old('Batal RSC') == 'Batal RSC' ? 'selected' : '' }}>
+                                                    Batal RSC</option>
                                                 <option value="Ditolak"
                                                     {{ $data->status == 'Ditolak' || old('Ditolak') == 'Ditolak' ? 'selected' : '' }}>
                                                     Ditolak</option>
