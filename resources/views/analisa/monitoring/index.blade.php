@@ -37,7 +37,11 @@
                                         <th class="text-center" width="15%">PETUGAS SURVEI</th>
                                         <th class="text-center" width="7%">BELUM SURVEI</th>
                                         <th class="text-center" width="7%">PROSES ANALISA</th>
+                                        <th class="text-center" width="7%">PERSETUJUAN</th>
                                         <th class="text-center" width="7%">NAIK KASI</th>
+                                        <th class="text-center" width="7%">KABAG</th>
+                                        <th class="text-center" width="7%">KOMITE I</th>
+                                        <th class="text-center" width="7%">KOMITE II</th>
                                         <th class="text-center" width="7%">BATAL </th>
                                         <th class="text-center" width="7%">TOLAK</th>
                                     </tr>
@@ -58,11 +62,27 @@
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a
+                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Persetujuan Komite']) }}">{{ $item->total_persetujuan_staff }}</a>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a
                                                     href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Proses Analisa']) }}">{{ $item->total_analisa }}</a>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 <a
                                                     href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Naik Kasi']) }}">{{ $item->total_naik_kasi }}</a>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a
+                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Naik Komite I']) }}">{{ $item->total_kabag }}</a>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a
+                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Naik Komite II']) }}">{{ $item->total_direktur_bisnis }}</a>
+                                            </td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                <a
+                                                    href="{{ route('monitoring.detail', ['name' => $item->nama_user, 'user' => $item->code_user, 'status' => 'Naik Komite III']) }}">{{ $item->total_direksi }}</a>
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;"><a
                                                     href="{{ route('monitoring.detail.status', ['name' => $item->nama_user, 'user' => $item->code_user, 'trc' => 'Dibatalkan']) }}">{{ $item->total_batal }}</a>

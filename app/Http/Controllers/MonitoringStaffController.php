@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,11 @@ class MonitoringStaffController extends Controller
                 'v_users.code_user',
                 DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Proses Survei' THEN 1 ELSE 0 END) as total_survei"),
                 DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Proses Analisa' THEN 1 ELSE 0 END) as total_analisa"),
+                DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Persetujuan Komite' THEN 1 ELSE 0 END) as total_persetujuan_staff"),
                 DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Naik Kasi' THEN 1 ELSE 0 END) as total_naik_kasi"),
+                DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Naik Komite I' THEN 1 ELSE 0 END) as total_kabag"),
+                DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Naik Komite II' THEN 1 ELSE 0 END) as total_direktur_bisnis"),
+                DB::raw("SUM(CASE WHEN data_pengajuan.tracking = 'Naik Komite III' THEN 1 ELSE 0 END) as total_direksi"),
                 DB::raw("SUM(CASE WHEN data_pengajuan.status = 'Ditolak' THEN 1 ELSE 0 END) as total_tolak"),
                 DB::raw("SUM(CASE WHEN data_pengajuan.status = 'Dibatalkan' THEN 1 ELSE 0 END) as total_batal")
             )
@@ -88,6 +93,63 @@ class MonitoringStaffController extends Controller
                 })
                 ->paginate(10);
             //
+            // Deviasi
+            foreach ($data as $item) {
+                if (!empty($item->tanggal) && !empty($item->tgl_survey)) {
+                    $tglTanggalCarbon = Carbon::parse($item->tanggal);
+                    $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+
+                    $deviasiHaripen = $tglTanggalCarbon->startOfDay()->diffInDays($tglSurveyCarbon->startOfDay());
+
+                    $item->deviasi_pend_survei = $deviasiHaripen;
+                } else {
+                    $item->deviasi_pend_survei = 0;
+                }
+
+                if (!empty($item->tgl_survey) && !empty($item->tgl_analisa)) {
+                    $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+                    $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+
+                    $deviasiHari1 = $tglSurveyCarbon->startOfDay()->diffInDays($tglAnalisaCarbon->startOfDay());
+
+                    $item->deviasi_survei_analisa = $deviasiHari1;
+                } else {
+                    $item->deviasi_survei_analisa = 0;
+                }
+
+                if (!empty($item->tgl_analisa) && !empty($item->tgl_persetujuan)) {
+                    $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+                    $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                    $deviasiHari2 = $tglAnalisaCarbon->startOfDay()->diffInDays($tglPersetujuanCarbon->startOfDay());
+
+                    $item->deviasi_analisa_persetujuan = $deviasiHari2;
+                } else {
+                    $item->deviasi_analisa_persetujuan = 0;
+                }
+
+                if (!empty($item->tgl_persetujuan) && !empty($item->tgl_notif)) {
+                    $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                    $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                    $deviasiHari3 = $tglPersetujuanCarbon->startOfDay()->diffInDays($tglNotifCarbon->startOfDay());
+
+                    $item->deviasi_persetujuan_notif = $deviasiHari3;
+                } else {
+                    $item->deviasi_persetujuan_notif = 0;
+                }
+
+                if (!empty($item->tgl_notif) && !empty($item->tgl_realisasi)) {
+                    $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                    $tglRealisasiCarbon = Carbon::parse($item->tgl_realisasi);
+
+                    $deviasiHari4 = $tglNotifCarbon->startOfDay()->diffInDays($tglRealisasiCarbon->startOfDay());
+
+                    $item->deviasi_notif_realisasi = $deviasiHari4;
+                } else {
+                    $item->deviasi_notif_realisasi = 0;
+                }
+            }
 
             return view('analisa.monitoring.detail', compact('status', 'user', 'data', 'name'));
         } catch (\Throwable $th) {
@@ -152,6 +214,63 @@ class MonitoringStaffController extends Controller
                 })
                 ->paginate(10);
             //
+            // Deviasi
+            foreach ($data as $item) {
+                if (!empty($item->tanggal) && !empty($item->tgl_survey)) {
+                    $tglTanggalCarbon = Carbon::parse($item->tanggal);
+                    $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+
+                    $deviasiHaripen = $tglTanggalCarbon->startOfDay()->diffInDays($tglSurveyCarbon->startOfDay());
+
+                    $item->deviasi_pend_survei = $deviasiHaripen;
+                } else {
+                    $item->deviasi_pend_survei = 0;
+                }
+
+                if (!empty($item->tgl_survey) && !empty($item->tgl_analisa)) {
+                    $tglSurveyCarbon = Carbon::parse($item->tgl_survey);
+                    $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+
+                    $deviasiHari1 = $tglSurveyCarbon->startOfDay()->diffInDays($tglAnalisaCarbon->startOfDay());
+
+                    $item->deviasi_survei_analisa = $deviasiHari1;
+                } else {
+                    $item->deviasi_survei_analisa = 0;
+                }
+
+                if (!empty($item->tgl_analisa) && !empty($item->tgl_persetujuan)) {
+                    $tglAnalisaCarbon = Carbon::parse($item->tgl_analisa);
+                    $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                    $deviasiHari2 = $tglAnalisaCarbon->startOfDay()->diffInDays($tglPersetujuanCarbon->startOfDay());
+
+                    $item->deviasi_analisa_persetujuan = $deviasiHari2;
+                } else {
+                    $item->deviasi_analisa_persetujuan = 0;
+                }
+
+                if (!empty($item->tgl_persetujuan) && !empty($item->tgl_notif)) {
+                    $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                    $tglPersetujuanCarbon = Carbon::parse($item->tgl_persetujuan);
+
+                    $deviasiHari3 = $tglPersetujuanCarbon->startOfDay()->diffInDays($tglNotifCarbon->startOfDay());
+
+                    $item->deviasi_persetujuan_notif = $deviasiHari3;
+                } else {
+                    $item->deviasi_persetujuan_notif = 0;
+                }
+
+                if (!empty($item->tgl_notif) && !empty($item->tgl_realisasi)) {
+                    $tglNotifCarbon = Carbon::parse($item->tgl_notif);
+                    $tglRealisasiCarbon = Carbon::parse($item->tgl_realisasi);
+
+                    $deviasiHari4 = $tglNotifCarbon->startOfDay()->diffInDays($tglRealisasiCarbon->startOfDay());
+
+                    $item->deviasi_notif_realisasi = $deviasiHari4;
+                } else {
+                    $item->deviasi_notif_realisasi = 0;
+                }
+            }
 
             return view('analisa.monitoring.detail_status', compact('status', 'trc', 'user', 'data', 'name'));
         } catch (\Throwable $th) {

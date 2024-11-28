@@ -52,9 +52,14 @@
                                         <th class="text-center">PUTUSAN</th>
                                         <th class="text-center">TGL NOTIF</th>
                                         <th class="text-center">REALISASI</th>
+                                        <th class="text-center">PEND - SURVEI</th>
+                                        <th class="text-center">SURVEI - ANALISA</th>
+                                        <th class="text-center">ANALISA - PUTUSAN</th>
+                                        <th class="text-center">PUTUSAN - NOTIF</th>
+                                        <th class="text-center">NOTIF - REALISASI</th>
                                         <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
-                                        <th class="text-center">ESTIMASI</th>
+                                        <th class="text-center">DEVIASI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -114,6 +119,11 @@
                                                     {{ \Carbon\Carbon::parse($item->tgl_realisasi)->format('d-m-Y') }}
                                                 @endif
                                             </td>
+                                            <td class="text-center">{{ $item->deviasi_pend_survei }} Hari</td>
+                                            <td class="text-center">{{ $item->deviasi_survei_analisa }} Hari</td>
+                                            <td class="text-center">{{ $item->deviasi_analisa_persetujuan }} Hari</td>
+                                            <td class="text-center">{{ $item->deviasi_persetujuan_notif }} Hari</td>
+                                            <td class="text-center">{{ $item->deviasi_notif_realisasi }} Hari</td>
                                             <td class="text-center">
                                                 @if (
                                                     $item->tracking == 'Proses Analisa' ||
@@ -134,7 +144,15 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if (!is_null($item->tgl_realisasi))
+                                                @if ($item->status == 'Ditolak' || $item->status == 'Dibatalkan')
+                                                    @php
+                                                        $hari =
+                                                            strtotime($item->tgl_persetujuan) -
+                                                            strtotime($item->tanggal);
+                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                    @endphp
+                                                    <b class="text-red">{{ $hari }} hari</b>
+                                                @elseif(!is_null($item->tgl_realisasi))
                                                     @php
                                                         $hari =
                                                             strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
