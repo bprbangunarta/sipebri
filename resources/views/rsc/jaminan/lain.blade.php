@@ -98,8 +98,7 @@
                                             <option value="" selected>--PILIH--</option>
 
                                             @foreach ($jenis_lain as $item)
-                                                <option value="{{ $item->kode }}">{{ $item->kode }} -
-                                                    {{ $item->jenis_agunan }}</option>
+                                                <option value="{{ $item->kode }}">{{ $item->jenis_agunan }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -109,8 +108,7 @@
                                             name="jenis_dokumen_kode" required>
                                             <option value="" selected>--PILIH--</option>
                                             @foreach ($data_lain as $item)
-                                                <option value="{{ $item->kode }}">{{ $item->kode }} -
-                                                    {{ $item->jenis_dokumen }}</option>
+                                                <option value="{{ $item->kode }}">{{ $item->jenis_dokumen }}</option>
                                             @endforeach
                                         </select>
                                     </div>

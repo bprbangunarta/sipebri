@@ -27,7 +27,7 @@ class RSCJaminanController extends Controller
 
             //Agunan Kendaraan
             $jenis_kendaraan = DB::table('ja_kendaraan')->get();
-            $dok_kendaraan = DB::table('data_jenis_dokumen')->get();
+            $dok_kendaraan = DB::table('da_kendaraan')->get();
 
             // Jaminan
             $jaminan = $this->jaminan($data, $enc, $enc_rsc);
@@ -149,7 +149,7 @@ class RSCJaminanController extends Controller
 
             //Agunan Tanah
             $jenis_tanah = DB::table('ja_tanah')->get();
-            $dok_tanah = DB::table('data_jenis_dokumen')->get();
+            $dok_tanah = DB::table('da_tanah')->get();
 
             // Jaminan
             $jaminan = $this->jaminan($data, $enc, $enc_rsc);
@@ -244,7 +244,7 @@ class RSCJaminanController extends Controller
 
             //Agunan Tanah
             $jenis_lain = DB::table('ja_lainnya')->get();
-            $dok_lain = DB::table('data_jenis_dokumen')->get();
+            $dok_lain = DB::table('da_lainnya')->get();
 
             // Jaminan
             $jaminan = $this->jaminan($data, $enc, $enc_rsc);

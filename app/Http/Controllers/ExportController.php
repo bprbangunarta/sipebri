@@ -608,6 +608,8 @@ class ExportController extends Controller
             ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('data_kantor', 'data_kantor.kode_kantor', '=', 'data_survei.kantor_kode')
             ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_notifikasi', 'data_notifikasi.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->leftJoin('data_penolakan', 'data_penolakan.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
             ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
             ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
             ->leftJoin('v_resort', 'v_resort.kode_resort', '=', 'data_pengajuan.resort_kode')
@@ -628,6 +630,9 @@ class ExportController extends Controller
                 'data_tracking.analisa_kredit as tgl_analisa',
                 'data_tracking.keputusan_komite as tgl_persetujuan',
                 'data_tracking.akad_kredit as tgl_realisasi',
+                'data_notifikasi.created_at as tgl_notif',
+                'data_penolakan.created_at as tgl_tolak',
+                // DB::raw('IFNULL(data_notifikasi.updated_at, data_notifikasi.created_at) as tgl_notif'),
                 'v_resort.nama_resort',
                 'data_pengajuan.status',
             )
@@ -733,6 +738,8 @@ class ExportController extends Controller
             "KABAG ANALIS",
             "KOMITE I",
             "KOMITE II",
+            "NOTIF",
+            "TOLAK",
             "REALISASI",
             "PEND - SURVEI",
             "SURVEI - ANALISA",
@@ -806,6 +813,8 @@ class ExportController extends Controller
                 'KABAG ANALISA'  => $kabag_analis ? date('d-m-Y', strtotime($kabag_analis))  : null,
                 'KOMITEI'       => $komiteI,
                 'KOMITEII'      => $komiteII,
+                'NOTIF'      => $item->tgl_tolak ? date('d-m-Y', strtotime($item->tgl_tolak)) : null,
+                'TOLAK'      => $item->tgl_tolak ? date('d-m-Y', strtotime($item->tgl_tolak)) : null,
                 'REALISASI'     => $item->tgl_realisasi,
                 "PEND - SURVEI"     => $item->deviasi_pend_survei,
                 "SURVEI - ANALISA"  => $item->deviasi_survei_analisa,
