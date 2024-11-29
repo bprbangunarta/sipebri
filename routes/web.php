@@ -1012,7 +1012,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/tracking/pengajuan', 'laporan_tracking_pengajuan')->name('laporan.tracking.pengajuan');
 
 
-        // Hapus rout yang tidak digunakan
+        // Hapus route yang tidak digunakan
         Route::get('/laporan/fasilitas', 'laporan_fasilitas')->name('laporan.fasilitas');
         Route::get('/filter/laporan/fasilitas', 'post_laporan_fasilitas')->name('filter.laporan.fasilitas');
         Route::get('/filter/laporan/pencairan', 'post_laporan_pencairan')->name('filter.laporan.pencairan');

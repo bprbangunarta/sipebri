@@ -83,8 +83,11 @@ class BerkasController extends Controller
                 "user" => "required"
             ]);
 
+            $kantor = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('kantor_kode')->first();
+
             $data = [
                 'pengajuan_kode' => $request->kode_pengajuan,
+                'dari_kantor' => $kantor,
                 'user_pengirim' => Auth::user()->code_user,
                 'user_tujuan' => $request->user,
                 'tgl_kirim' => now(),
@@ -121,8 +124,8 @@ class BerkasController extends Controller
             $role = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
 
             $data = DB::table('data_berkas')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_berkas.pengajuan_kode')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->leftJoin('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_berkas.pengajuan_kode')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
                 ->join('v_users', 'v_users.code_user', '=', 'data_berkas.user_pengirim')
                 ->select(
                     'data_berkas.tgl_kirim as tanggal',
@@ -158,7 +161,6 @@ class BerkasController extends Controller
                 ->orderByRaw('data_berkas.tgl_terima IS NULL DESC')
                 ->paginate(10);
             //
-
             return view('pengajuan.terima-berkas.index', compact('data'));
         } catch (\Throwable $th) {
         }
