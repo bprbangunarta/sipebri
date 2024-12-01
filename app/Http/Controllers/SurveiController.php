@@ -261,7 +261,21 @@ class SurveiController extends Controller
                 ->paginate(10);
 
             foreach ($data as $item) {
-                if ($item->tracking == 'Proses Survei' && is_null($item->foto)) {
+                if (
+                    $item->tracking === 'Proses Survei' &&
+                    is_null($item->foto) &&
+                    (
+                        (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->isToday() &&
+                            is_null($item->tgl_jadul_1) &&
+                            is_null($item->tgl_jadul_2)) ||
+
+                        (!is_null($item->tgl_jadul_1) &&  Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() &&
+                            is_null($item->tgl_jadul_2)) ||
+
+                        (!is_null($item->tgl_jadul_2) &&
+                            Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday())
+                    )
+                ) {
                     $item->ket = 'Progress';
                 } elseif ($item->tracking == 'Penjadwalan' && is_null($item->foto)) {
                     $item->ket = 'Pending';
@@ -296,7 +310,9 @@ class SurveiController extends Controller
                     ];
                 }
 
-                $surveyorCounts->$kode['count']++;
+                if ($item->ket == "Progress") {
+                    $surveyorCounts->$kode['count']++;
+                }
             }
 
             foreach ($surveyorCounts as $kode => &$info) {
