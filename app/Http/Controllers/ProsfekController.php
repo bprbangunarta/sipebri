@@ -73,26 +73,27 @@ class ProsfekController extends Controller
     // Data Prosfek
     public function data_prosfek_index()
     {
+        $keyword = request('keyword');
+        $role = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
+
+        $data = DB::table('data_prosfek')
+            ->join('v_users', 'v_users.code_user', '=', 'data_prosfek.code_user')
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_prosfek.calon_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_prosfek.alamat', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_prosfek.kabupaten', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_prosfek.kelurahan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_prosfek.kecamatan', 'like', '%' . $keyword . '%')
+                    ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%');
+            })
+            ->when(in_array($role, ['Staff Analis', 'Kepala Kantor Kas', 'Customer Service']), function ($query) {
+                $query->where('data_prosfek.code_user', auth()->user()->code_user);
+            })
+            ->paginate(10);
+        //
+
+        return view('staff.prosfek.data_prosfek', compact('data', 'role'));
         try {
-            $keyword = request('keyword');
-            $role = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('role_name')->first();
-
-            $data = DB::table('data_prosfek')
-                ->join('v_users', 'v_users.code_user', '=', 'data_prosfek.code_user')
-                ->where(function ($query) use ($keyword) {
-                    $query->where('data_prosfek.calon_nasabah', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_prosfek.alamat', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_prosfek.kabupaten', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_prosfek.kelurahan', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_prosfek.kecamatan', 'like', '%' . $keyword . '%')
-                        ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%');
-                })
-                ->when($role == 'Staff Analis', function ($query) {
-                    $query->where('data_prosfek.code_user', auth()->user()->code_user);
-                })
-                ->paginate(10);
-
-            return view('staff.prosfek.data_prosfek', compact('data', 'role'));
         } catch (\Throwable $th) {
         }
     }
