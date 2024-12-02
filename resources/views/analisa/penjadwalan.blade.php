@@ -69,7 +69,33 @@
                                     {{ number_format($item->plafon, 0, ',', '.') }}
                                 </td>
                                 <td class="text-center" style="vertical-align: middle;">
-                                    @if (!empty($item->tgl_terima))
+                                    @if ($item->kode_produk == 'KTA')
+                                        @can('tambah penjadwalan')
+                                            <a data-toggle="modal" data-target="#modal-penjadwalan"
+                                                data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow"
+                                                title="Penjadwalan" style="cursor: pointer">
+                                                <i class="fa fa-calendar"></i>
+                                            </a>
+                                        @endcan
+                                    @elseif($item->kode_produk != 'KTA' && !empty($item->tgl_terima))
+                                        @can('tambah penjadwalan')
+                                            <a data-toggle="modal" data-target="#modal-penjadwalan"
+                                                data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow"
+                                                title="Penjadwalan" style="cursor: pointer">
+                                                <i class="fa fa-calendar"></i>
+                                            </a>
+                                        @else
+                                            <a class="btn-circle btn-sm bg-grey" title="Penjadwalan" style="cursor: pointer">
+                                                <i class="fa fa-calendar"></i>
+                                            </a>
+                                        @endcan
+                                    @else
+                                        <a class="btn-circle btn-sm bg-grey" title="Penjadwalan" style="cursor: pointer">
+                                            <i class="fa fa-calendar"></i>
+                                    @endif
+
+
+                                    {{-- @if (!empty($item->tgl_terima))
                                         @can('tambah penjadwalan')
                                             <a data-toggle="modal" data-target="#modal-penjadwalan"
                                                 data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow"
@@ -85,7 +111,7 @@
                                         <a class="btn-circle btn-sm bg-grey" title="Penjadwalan" style="cursor: pointer">
                                             <i class="fa fa-calendar"></i>
                                         </a>
-                                    @endif
+                                    @endif --}}
 
                                     &nbsp;
                                     <a data-toggle="modal" data-target="#info-{{ $item->kode_pengajuan }}"
