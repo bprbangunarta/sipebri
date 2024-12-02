@@ -76,6 +76,10 @@
                                                 title="Penjadwalan" style="cursor: pointer">
                                                 <i class="fa fa-calendar"></i>
                                             </a>
+                                        @else
+                                            <a class="btn-circle btn-sm bg-grey" title="Penjadwalan" style="cursor: pointer">
+                                                <i class="fa fa-calendar"></i>
+                                            </a>
                                         @endcan
                                     @elseif($item->kode_produk != 'KTA' && !empty($item->tgl_terima))
                                         @can('tambah penjadwalan')

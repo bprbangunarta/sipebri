@@ -300,7 +300,7 @@ Route::middleware('auth')->group(function () {
             Route::post('terima/berkas/simpan', 'simpan_terima_berkas')->name('terima.berkas.simpan');
         });
 
-        Route::controller(BerkasController::class)->middleware('permission:terima berkas')->group(function () {
+        Route::controller(BerkasController::class)->group(function () {
             Route::get('laporan/data/berkas', 'laporan_data_berkas')->name('laporan.data.berkas');
         });
         // Flow Berkas
