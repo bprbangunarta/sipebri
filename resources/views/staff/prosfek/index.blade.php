@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Prosfek')
+@section('title', 'Prospek')
 @yield('jquery')
 @section('content')
     <div class="content-wrapper">
@@ -34,7 +34,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-plus" aria-hidden="true"></i>
-                            <h3 class="box-title">ADD PROSFEK</h3>
+                            <h3 class="box-title">ADD PROSPEK</h3>
                         </div>
 
                         <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
@@ -74,7 +74,7 @@
 
                                         <div
                                             style="margin-top:5px; width: 100%;float:left; display: flex; flex-direction: column;">
-                                            <label for="">FHOTO PROSFEK</label>
+                                            <label for="">FOTO PROSPEK</label>
                                             <input type="file" class="form-control" class="photo_prosfek"
                                                 name="photo_prosfek" id="photo_prosfek">
                                         </div>
@@ -105,12 +105,12 @@
 
                                         <div
                                             style="margin-top:5px; width: 100%;float:left; display: flex; flex-direction: column;">
-                                            <label for="">PROSFEK VIA</label>
+                                            <label for="">PROSPEK VIA</label>
                                             <select class="form-control text-uppercase via" style="width: 100%;"
                                                 name="prosfek_via" required>
                                                 <option value="">--PILIH--</option>
-                                                <option value="VIDEO CALL">VIDEO CALL</option>
-                                                <option value="DATANG LANGSUNG">DATANG LANGSUNG</option>
+                                                <option value="ONLINE">ONLINE</option>
+                                                <option value="OFFLINE">OFFLINE</option>
                                             </select>
                                         </div>
 

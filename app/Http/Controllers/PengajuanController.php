@@ -278,6 +278,7 @@ class PengajuanController extends Controller
                 'data_nasabah.nama_nasabah as nama',
                 'data_nasabah.kelurahan',
                 'data_nasabah.kecamatan',
+                'data_nasabah.no_identitas',
                 'data_nasabah.no_telp',
                 'data_nasabah.alamat_ktp as alamat',
                 'data_pengajuan.status',
@@ -322,8 +323,16 @@ class PengajuanController extends Controller
             $item->kd_nasabah = Crypt::encrypt($item->kd_nasabah);
             $item->kd = Crypt::encrypt($item->kode);
             $item->user = $dtu->role_name;
+
+            $data_eks = DB::connection('sqlsrv')->table('m_cif')->where('noid', $item->no_identitas)->get();
+            //
+            if (count($data_eks) > 1) {
+                $item->jml_cif = count($data_eks);
+            } else {
+                $item->jml_cif = count($data_eks);
+            }
         }
-        // dd($pengajuan);
+
         return view('pengajuan.index-otor', [
             'data' => $pengajuan,
             'auth' => $auth,

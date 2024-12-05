@@ -162,50 +162,55 @@ class SurveiController extends Controller
 
     public function hasil_survei()
     {
-        $keyword = request('keyword');
-
-        $data = DB::table('data_survei')
-            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode',)
-            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
-            ->select(
-                'data_pengajuan.created_at as tanggal',
-                'data_pengajuan.kode_pengajuan',
-                'data_pengajuan.plafon',
-                'data_pengajuan.produk_kode',
-                'data_pengajuan.tracking',
-                'data_nasabah.nama_nasabah',
-                'data_nasabah.alamat_ktp',
-                'data_survei.kantor_kode',
-                'v_users.nama_user',
-                'data_survei.surveyor_kode',
-                'data_survei.latitude',
-                'data_survei.longitude',
-                DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%y') as tgl_survei"),
-                'data_survei.catatan_survei',
-                DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%y') as tgl_jadul_1"),
-                'data_survei.catatan_jadul_1',
-                DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%y') as tgl_jadul_2"),
-                'data_survei.catatan_jadul_2',
-            )
-            ->whereNot('data_pengajuan.produk_kode', 'KTA')
-            ->where('data_survei.kasi_kode', '!=', '')
-            ->where(function ($query) use ($keyword) {
-                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.created_at', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_pengajuan.tracking', 'like', '%' . $keyword . '%')
-                    ->orWhere('v_users.code_user', 'like', '%' . $keyword . '%')
-                    ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
-                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
-            })
-            ->orderBy('data_survei.created_at', 'DESC')
-            ->paginate(10);
-        //
-
-        return view('analisa.hasil-survei.index', compact('data'));
         try {
+            $keyword = request('keyword');
+
+            $data = DB::table('data_survei')
+                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_survei.pengajuan_kode',)
+                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->join('data_tracking', 'data_tracking.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+                ->select(
+                    'data_pengajuan.created_at as tanggal',
+                    'data_pengajuan.kode_pengajuan',
+                    'data_pengajuan.plafon',
+                    'data_pengajuan.produk_kode',
+                    'data_pengajuan.tracking',
+                    'data_nasabah.nama_nasabah',
+                    'data_nasabah.alamat_ktp',
+                    'data_survei.kantor_kode',
+                    'v_users.nama_user',
+                    'data_survei.surveyor_kode',
+                    'data_survei.latitude',
+                    'data_survei.longitude',
+                    DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%y') as tgl_survei"),
+                    'data_survei.catatan_survei',
+                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%y') as tgl_jadul_1"),
+                    'data_survei.catatan_jadul_1',
+                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%y') as tgl_jadul_2"),
+                    'data_survei.catatan_jadul_2',
+                )
+                ->whereNot('data_pengajuan.produk_kode', 'KTA')
+                ->where('data_survei.kasi_kode', '!=', '')
+                ->where(function ($query) use ($keyword) {
+                    if ($keyword) {
+                        $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                            ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                            ->orWhere('data_pengajuan.created_at', 'like', '%' . $keyword . '%')
+                            ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
+                            ->orWhere('data_pengajuan.tracking', 'like', '%' . $keyword . '%')
+                            ->orWhere('v_users.code_user', 'like', '%' . $keyword . '%')
+                            ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
+                            ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+                    } else {
+                        $query->where('data_tracking.proses_survey', 'like', '%' . Carbon::now()->format('Y-m') . '%');
+                    }
+                })
+                ->orderBy('data_survei.created_at', 'DESC')
+                ->paginate(10);
+            //
+            // dd(Carbon::now()->format('Y-m'));
+            return view('analisa.hasil-survei.index', compact('data'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditampilkan');
         }
@@ -259,21 +264,26 @@ class SurveiController extends Controller
                 })
                 ->orderBy('data_survei.created_at', 'DESC')
                 ->paginate(10);
-
+            // dd($data);
             foreach ($data as $item) {
                 if (
                     $item->tracking === 'Proses Survei' &&
                     is_null($item->foto) &&
                     (
-                        (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->isToday() &&
-                            is_null($item->tgl_jadul_1) &&
-                            is_null($item->tgl_jadul_2)) ||
+                        (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->isToday() && is_null($item->catatan_survei)) ||
 
-                        (!is_null($item->tgl_jadul_1) &&  Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() &&
-                            is_null($item->tgl_jadul_2)) ||
+                        (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() && is_null($item->catatan_jadul_1)) ||
 
-                        (!is_null($item->tgl_jadul_2) &&
-                            Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday())
+                        (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday() && is_null($item->catatan_jadul_2))
+                        // (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->isToday() &&
+                        //     is_null($item->tgl_jadul_1) &&
+                        //     is_null($item->tgl_jadul_2)) ||
+
+                        // (!is_null($item->tgl_jadul_1) &&  Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() &&
+                        //     is_null($item->tgl_jadul_2)) ||
+
+                        // (!is_null($item->tgl_jadul_2) &&
+                        //     Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday())
                     )
                 ) {
                     $item->ket = 'Progress';
@@ -310,9 +320,7 @@ class SurveiController extends Controller
                     ];
                 }
 
-                if ($item->ket == "Progress") {
-                    $surveyorCounts->$kode['count']++;
-                }
+                $surveyorCounts->$kode['count']++;
             }
 
             foreach ($surveyorCounts as $kode => &$info) {
@@ -332,6 +340,7 @@ class SurveiController extends Controller
             } else {
                 $countUser = [];
             }
+
             return view('analisa.pelaksanaan.index', compact('data', 'tgl', 'surveyorCounts', 'countUser'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditampilkan');

@@ -1,5 +1,5 @@
 @extends('theme.app')
-@section('title', 'Data Prosfek')
+@section('title', 'Data Prospek')
 @yield('jquery')
 @section('content')
     <div class="content-wrapper">
@@ -9,7 +9,7 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-inbox" aria-hidden="true"></i>
-                            <h3 class="box-title">DATA PROSFEK</h3>
+                            <h3 class="box-title">DATA PROSPEK</h3>
 
                             <div class="box-tools">
                                 <form action="{{ route('data.prosfek.index') }}" method="GET">
@@ -33,23 +33,23 @@
                                 <thead>
                                     <tr class="bg-blue">
                                         <th class="text-center" width="3%">NO</th>
-                                        <th class="text-center" width="8%">TGL PROSFEK</th>
+                                        <th class="text-center" width="8%">TGL PROSPEK</th>
                                         <th class="text-center" width="16%">CALON NASABAH</th>
                                         <th class="text-center" width="42%">ALAMAT</th>
                                         <th class="text-center" width="8%">NO HP</th>
                                         <th class="text-center" width="8%">USER</th>
-                                        <th class="text-center" width="8%">PROFEK 1 VIA</th>
-                                        <th class="text-center" width="8%">PROFEK 2 VIA</th>
-                                        <th class="text-center" width="8%">PROFEK 3 VIA</th>
-                                        <th class="text-center" width="8%">TGL PROSFEK 1</th>
-                                        <th class="text-center" width="8%">TGL PROSFEK 2</th>
-                                        <th class="text-center" width="8%">TGL PROSFEK 3</th>
-                                        <th class="text-center" width="8%">KET 1</th>
-                                        <th class="text-center" width="8%">KET 2</th>
-                                        <th class="text-center" width="8%">KET 3</th>
-                                        <th class="text-center" width="8%">FHOTO PROSFEK 1</th>
-                                        <th class="text-center" width="8%">FHOTO PROSFEK 2</th>
-                                        <th class="text-center" width="8%">FHOTO PROSFEK 3</th>
+                                        <th class="text-center" width="8%">PROSPEK 1 VIA</th>
+                                        <th class="text-center" width="8%">PROSPEK 2 VIA</th>
+                                        <th class="text-center" width="8%">PROSPEK 3 VIA</th>
+                                        <th class="text-center" width="8%">TGL PROSPEK 1</th>
+                                        <th class="text-center" width="8%">TGL PROSPEK 2</th>
+                                        <th class="text-center" width="8%">TGL PROSPEK 3</th>
+                                        <th class="text-center" width="8%">KETERANGAN 1</th>
+                                        <th class="text-center" width="8%">KETERANGAN 2</th>
+                                        <th class="text-center" width="8%">KETERANGAN 3</th>
+                                        <th class="text-center" width="8%">FHOTO PROSPEK 1</th>
+                                        <th class="text-center" width="8%">FHOTO PROSPEK 2</th>
+                                        <th class="text-center" width="8%">FHOTO PROSPEK 3</th>
                                         <th class="text-center" width="8%">FHOTO CLOSING</th>
                                         <th class="text-center" width="8%">TGL CLOSING</th>
                                         {{-- @if (!in_array($role, ['Kasi Analis', 'Kabag Analis', 'Direktur Bisnis', 'Direksi']))
@@ -266,7 +266,7 @@
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">PROSFEK ULANG</h4>
+                    <h4 class="modal-title">PROSPEK ULANG</h4>
                 </div>
                 <form action="{{ route('data.prosfek.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -289,17 +289,17 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">FHOTO PROSFEK</span>
+                                    <span class="fw-bold">FOTO PROSPEK</span>
                                     <input type="file" class="form-control" class="photo_prosfek"
                                         name="photo_prosfek" id="photo_prosfek" required>
                                 </div>
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">PROSFEK VIA</span>
+                                    <span class="fw-bold">PROSPEK VIA</span>
                                     <select class="form-control text-uppercase via" style="width: 100%;"
                                         name="prosfek_via" required>
                                         <option value="">--PILIH--</option>
-                                        <option value="VIDEO CALL">VIDEO CALL</option>
-                                        <option value="DATANG LANGSUNG">DATANG LANGSUNG</option>
+                                        <option value="ONLINE">ONLINE</option>
+                                        <option value="OFFLINE">OFFLINE</option>
                                     </select>
                                 </div>
 
@@ -314,7 +314,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-primary">TAMBAH PROSFEK</button>
+                        <button type="submit" class="btn btn-primary">TAMBAH PROSPEK</button>
                     </div>
                 </form>
             </div>
@@ -326,7 +326,7 @@
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">CLOSING</h4>
+                    <h4 class="modal-title">BUKTI CLOSING</h4>
                 </div>
                 <form action="{{ route('data.prosfek.closing') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -349,7 +349,7 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
-                                    <span class="fw-bold">FHOTO CLOSING</span>
+                                    <span class="fw-bold">FHOTO PERMOHONAN KREDIT</span>
                                     <input type="file" class="form-control" class="photo_prosfek"
                                         name="photo_closing" id="photo_prosfek" required>
                                 </div>
@@ -358,7 +358,7 @@
                     </div>
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
-                        <button type="submit" class="btn btn-primary">CLOSING</button>
+                        <button type="submit" class="btn btn-primary">SIMPAN</button>
                     </div>
                 </form>
             </div>

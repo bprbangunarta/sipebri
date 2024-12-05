@@ -14,7 +14,9 @@
                             <div class="box-tools">
                                 <form action="{{ route('otor.pengajuan') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right" style="width: 180px;font-size:11.4px;" name="keyword" id="keyword" value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
+                                        <input type="text" class="form-control text-uppercase pull-right"
+                                            style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
+                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
 
                                         <div class="input-group-btn">
                                             <button type="submit" class="btn bg-blue">
@@ -52,14 +54,21 @@
                                             <td class="text-center" style="vertical-align: middle;">
                                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
                                             </td>
-                                            <td class="text-center" style="vertical-align: middle;">{{ $item->kode }}</td>
+                                            <td class="text-center" style="vertical-align: middle;">
+                                                @if ($item->jml_cif > 1)
+                                                    <span class="badge bg-success"
+                                                        style="background: rgb(245, 51, 51)">{{ $item->kode }}</span>
+                                                @else
+                                                    {{ $item->kode }}
+                                                @endif
+                                            </td>
                                             <td style="vertical-align: middle;">{{ strtoupper($item->nama) }}</td>
                                             @if (is_null($item->alamat))
-                                            <td class="text-center" style="vertical-align: middle;">-</td>
+                                                <td class="text-center" style="vertical-align: middle;">-</td>
                                             @else
-                                            <td class="text-uppercase" style="vertical-align: middle;">
-                                                {{ $item->alamat }}
-                                            </td>
+                                                <td class="text-uppercase" style="vertical-align: middle;">
+                                                    {{ $item->alamat }}
+                                                </td>
                                             @endif
 
                                             <td class="text-center" style="vertical-align: middle;">
@@ -73,12 +82,14 @@
                                                 {{ $item->plafon }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}" class="btn-circle btn-sm bg-green" title="Otor Pengajuan">
+                                                <a href="{{ route('nasabah.edit', ['nasabah' => $item->kd]) }}"
+                                                    class="btn-circle btn-sm bg-green" title="Otor Pengajuan">
                                                     <i class="fa fa-check-circle"></i>
                                                 </a>
 
                                                 &nbsp;
-                                                <a data-toggle="modal" data-target="#info-{{ $item->kode }}" class="btn-circle btn-sm bg-blue" title="Informasi">
+                                                <a data-toggle="modal" data-target="#info-{{ $item->kode }}"
+                                                    class="btn-circle btn-sm bg-blue" title="Informasi">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                             </td>
@@ -88,7 +99,8 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-blue">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span></button>
                                                             <h4 class="modal-title">INFORMASI PENGAJUAN</h4>
                                                         </div>
@@ -98,55 +110,67 @@
                                                                     <div class="form-group">
                                                                         <label>NAMA NASABAH</label>
                                                                         <input type="text" class="form-control"
-                                                                        value="{{ $item->nama }} - {{ $item->kategori }}">
+                                                                            value="{{ $item->nama }} - {{ $item->kategori }}">
                                                                     </div>
-                                                                    
-                                                                    <div class="form-group"  style="margin-top:-10px;">
+
+                                                                    <div class="form-group" style="margin-top:-10px;">
                                                                         <label>PRODUK KREDIT</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->produk_kode }} - {{ $item->nama_produk }}">
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $item->produk_kode }} - {{ $item->nama_produk }}">
                                                                     </div>
-                                        
+
                                                                     <div class="form-group" style="margin-top:-10px;">
                                                                         <label>PLAFON KREDIT</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->plafon }}">
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $item->plafon }}">
                                                                     </div>
 
                                                                     <div class="form-group">
                                                                         <label>JANGKA WAKTU</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $item->jk }} BULAN - {{ $item->metode_rps }}">
                                                                     </div>
                                                                 </div>
-                                        
+
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label>DESA KECAMATAN</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->kelurahan }} - {{ $item->kecamatan }}">
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $item->kelurahan }} - {{ $item->kecamatan }}">
                                                                     </div>
-                                        
+
                                                                     <div class="form-group" style="margin-top:-10px;">
                                                                         <label>INPUT USER</label>
-                                                                        <input type="text" class="form-control" value="{{ $item->input_user }}">
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $item->input_user }}">
                                                                     </div>
 
                                                                     <div class="form-group" style="margin-top:-10px;">
                                                                         <label>TRACKING</label>
-                                                                        <input type="text" class="form-control text-uppercase" value="{{ $item->tracking }}">
+                                                                        <input type="text"
+                                                                            class="form-control text-uppercase"
+                                                                            value="{{ $item->tracking }}">
                                                                     </div>
 
                                                                     <div class="form-group" style="margin-top:-10px;">
                                                                         <label>PERSETUJUAN</label>
                                                                         @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
-                                                                            <input type="text" class="form-control text-uppercase" value="{{ $item->status }}">
+                                                                            <input type="text"
+                                                                                class="form-control text-uppercase"
+                                                                                value="{{ $item->status }}">
                                                                         @else
-                                                                            <input type="text" class="form-control text-uppercase" value="BELUM ADA PERSETUJUAN">
+                                                                            <input type="text"
+                                                                                class="form-control text-uppercase"
+                                                                                value="BELUM ADA PERSETUJUAN">
                                                                         @endif
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                        
+
                                                         <div class="modal-footer" style="margin-top: -10px;">
-                                                            <button type="submit" class="btn bg-blue" data-dismiss="modal" style="width: 100%;">TUTUP</button>
+                                                            <button type="submit" class="btn bg-blue"
+                                                                data-dismiss="modal" style="width: 100%;">TUTUP</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -168,7 +192,8 @@
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
                                 <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }} entries
+                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                    entries
                                 </button>
                             </div>
 

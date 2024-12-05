@@ -234,7 +234,7 @@
 
                                 <div style="margin-top: 5px;">
                                     <span class="fw-bold">KETERANGAN</span>
-                                    <textarea class="form-control text-uppercase" name="keterangan" id=""></textarea>
+                                    <textarea class="form-control text-uppercase" name="keterangan" id="" required></textarea>
                                 </div>
                             </div>
                         </div>

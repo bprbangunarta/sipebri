@@ -1439,7 +1439,6 @@ class DataCetakController extends Controller
                     'agunan' => $cek_jaminan,
                 ]);
             } elseif ($cek->produk_kode == 'KPS' || $cek->produk_kode == 'KPJ' || $cek->produk_kode == 'KUP' || $cek->produk_kode == 'KKO') {
-
                 return view('cetak.perjanjian-kredit.cetak-pk-kps-kpj', [
                     'data' => $cek,
                     'jaminan' => $jaminan,

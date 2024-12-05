@@ -411,6 +411,9 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/penjadwalan/{id}', 'edit')->name('analisa.editpenjadwalan');
             Route::put('/penjadwalan', 'update')->name('analisa.updatepenjadwalan');
+
+            // Jadwal Survei
+            Route::get('/jadwal/survei', 'jadwal_survei')->name('jadwal.survei');
         });
 
         // Hasil Survei

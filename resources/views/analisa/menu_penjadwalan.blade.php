@@ -26,6 +26,14 @@
                                     </a>
                                 </li>
 
+                                <li class="{{ request()->is('analisa/jadwal/survei') ? 'active' : '' }}">
+                                    <a href="{{ route('jadwal.survei') }}"
+                                        class="{{ request()->is('analisa/jadwal/survei') ? 'text-bold' : '' }}"
+                                        style="cursor: pointer;">
+                                        JADWAL SURVEI
+                                    </a>
+                                </li>
+
                                 <li class="{{ request()->is('hasil/pelaksanaan*') ? 'active' : '' }}">
                                     <a href="{{ route('pelaksanaan.survei') }}"
                                         class="{{ request()->is('hasil/pelaksanaan*') ? 'text-bold' : '' }}"

@@ -39,6 +39,7 @@
                             <th class="text-center">SURVEYOR</th>
                             <th class="text-center" width="25%">KETERANGAN</th>
                             <th class="text-center" width="45%">STATUS</th>
+                            <th class="text-center" width="45%">TRACKING</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,6 +81,8 @@
                                             Status</span>
                                     @endif
 
+                                </td>
+                                <td class="text-center" style="vertical-align: middle;">{{ $item->tracking }}
                                 </td>
                             </tr>
                         @empty
@@ -127,7 +130,7 @@
                                 <tr class="bg-blue">
                                     <th class="text-center" width="3%">NO</th>
                                     <th class="text-center" width="8%">NAMA</th>
-                                    <th class="text-center" width="8%">JUMLA SURVEI</th>
+                                    <th class="text-center" width="8%">JUMLAH SURVEI</th>
                                 </tr>
                             </thead>
                             <tbody>

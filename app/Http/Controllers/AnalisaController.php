@@ -119,6 +119,9 @@ class AnalisaController extends Controller
 
         try {
             $survei = Survei::where('id', $request->id)->first();
+            if (is_null($request->keterangan)) {
+                return redirect()->back()->with('error', 'Keterangan Harus Diisi.');
+            }
 
             //Cek tanggal 
             $data = [
@@ -126,7 +129,16 @@ class AnalisaController extends Controller
                 'updated_at' => now(),
             ];
 
-            if ($request->tgl_survei === $survei->tgl_survei) {
+
+            // Perubahan tanggal survei tabel data_jadwal_survei 
+            $cek_data_jadwal_survei = DB::table('data_jadwal_survei')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+
+            if (!is_null($cek_data_jadwal_survei)) {
+                $data_jadwal = ['tgl_survei' => null];
+                DB::table('data_jadwal_survei')->where('pengajuan_kode', $request->kode_pengajuan)->update($data_jadwal);
+            }
+
+            if (!is_null($survei->tgl_survei) && is_null($survei->catatan_survei)) {
                 $data = [
                     'catatan_survei' => $request->keterangan,
                     'updated_at' => now(),
@@ -139,7 +151,7 @@ class AnalisaController extends Controller
 
                 Survei::where('id', $request->id)->update($data);
                 Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-            } elseif ($request->tgl_survei === $survei->tgl_jadul_1) {
+            } elseif (!is_null($survei->tgl_jadul_1) && is_null($survei->catatan_jadul_1)) {
                 $data = [
                     'catatan_jadul_1' => $request->keterangan,
                     'updated_at' => now(),
@@ -151,7 +163,7 @@ class AnalisaController extends Controller
 
                 Survei::where('id', $request->id)->update($data);
                 Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-            } elseif ($request->tgl_survei === $survei->tgl_jadul_2) {
+            } elseif (!is_null($survei->tgl_jadul_2) && is_null($survei->catatan_jadul_2)) {
                 $data = [
                     'catatan_jadul_2' => $request->keterangan,
                     'updated_at' => now(),
@@ -163,43 +175,82 @@ class AnalisaController extends Controller
 
                 Survei::where('id', $request->id)->update($data);
                 Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-            } elseif ($request->tgl_survei === $survei->tgl_resurvei) {
-                $data = [
-                    'catatan_resurvei' => $request->keterangan,
-                    'updated_at' => now(),
-                ];
-                $data2 = [
-                    'tracking' => 'Penjadwalan',
-                    'updated_at' => now(),
-                ];
-
-                Survei::where('id', $request->id)->update($data);
-                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-            } elseif ($request->tgl_survei === $survei->tgl_resurvei_1) {
-                $data = [
-                    'catatan_resurvei_1' => $request->keterangan,
-                    'updated_at' => now(),
-                ];
-                $data2 = [
-                    'tracking' => 'Penjadwalan',
-                    'updated_at' => now(),
-                ];
-
-                Survei::where('id', $request->id)->update($data);
-                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
-            } elseif ($request->tgl_survei === $survei->tgl_resurvei_2) {
-                $data = [
-                    'catatan_resurvei_2' => $request->keterangan,
-                    'updated_at' => now(),
-                ];
-                $data2 = [
-                    'tracking' => 'Penjadwalan',
-                    'updated_at' => now(),
-                ];
-
-                Survei::where('id', $request->id)->update($data);
-                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
             }
+
+            // if ($request->tgl_survei == $survei->tgl_survei) {
+            //     $data = [
+            //         'catatan_survei' => $request->keterangan,
+            //         'updated_at' => now(),
+            //     ];
+
+            //     $data2 = [
+            //         'tracking' => 'Penjadwalan',
+            //         'updated_at' => now(),
+            //     ];
+
+            //     Survei::where('id', $request->id)->update($data);
+            //     Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            // } elseif ($request->tgl_survei == $survei->tgl_jadul_1 && is_null($survei->tgl_jadul_2)) {
+            //     $data = [
+            //         'catatan_jadul_1' => $request->keterangan,
+            //         'updated_at' => now(),
+            //     ];
+            //     $data2 = [
+            //         'tracking' => 'Penjadwalan',
+            //         'updated_at' => now(),
+            //     ];
+
+            //     Survei::where('id', $request->id)->update($data);
+            //     Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            // } elseif ($request->tgl_survei == $survei->tgl_jadul_2) {
+            //     $data = [
+            //         'catatan_jadul_2' => $request->keterangan,
+            //         'updated_at' => now(),
+            //     ];
+            //     $data2 = [
+            //         'tracking' => 'Penjadwalan',
+            //         'updated_at' => now(),
+            //     ];
+
+            //     Survei::where('id', $request->id)->update($data);
+            //     Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            // } elseif ($request->tgl_survei === $survei->tgl_resurvei) {
+            //     $data = [
+            //         'catatan_resurvei' => $request->keterangan,
+            //         'updated_at' => now(),
+            //     ];
+            //     $data2 = [
+            //         'tracking' => 'Penjadwalan',
+            //         'updated_at' => now(),
+            //     ];
+
+            //     Survei::where('id', $request->id)->update($data);
+            //     Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            // } elseif ($request->tgl_survei === $survei->tgl_resurvei_1) {
+            //     $data = [
+            //         'catatan_resurvei_1' => $request->keterangan,
+            //         'updated_at' => now(),
+            //     ];
+            //     $data2 = [
+            //         'tracking' => 'Penjadwalan',
+            //         'updated_at' => now(),
+            //     ];
+
+            //     Survei::where('id', $request->id)->update($data);
+            //     Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            // } elseif ($request->tgl_survei === $survei->tgl_resurvei_2) {
+            //     $data = [
+            //         'catatan_resurvei_2' => $request->keterangan,
+            //         'updated_at' => now(),
+            //     ];
+            //     $data2 = [
+            //         'tracking' => 'Penjadwalan',
+            //         'updated_at' => now(),
+            //     ];
+
+            //     Survei::where('id', $request->id)->update($data);
+            //     Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            // }
             return redirect()->back()->with('success', 'Anda berhasil melakukan pembatalan survei');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Anda gagal melakukan pembatalan survei');
