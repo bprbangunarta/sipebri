@@ -30,7 +30,7 @@ class JadwalSurvei implements FromView
                 'data_survei.longitude',
                 'data_survei.foto',
                 DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%y') as tgl_survei"),
-                DB::raw("DATE_FORMAT(data_pengajuan.created_at, '%d-%m-%y') as tanggal"),
+                DB::raw("DATE_FORMAT(data_pengajuan.created_at, '%d-%m-%Y') as tanggal"),
                 'data_survei.catatan_survei',
                 DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%y') as tgl_jadul_1"),
                 'data_survei.catatan_jadul_1',
@@ -49,12 +49,14 @@ class JadwalSurvei implements FromView
 
         $users = [];
         foreach ($data as $value) {
+            $value->tanggal = Carbon::parse($value->tanggal)->translatedFormat('d F Y');
             $users[] = (object) [
                 'kode_pengajuan' => $value->kode_pengajuan,
                 'surveyor_kode'  => $value->surveyor_kode,
                 'nama_user'      => $value->nama_user,
             ];
         }
+
         return view('analisa.exports.jadwal_survei', compact('data', 'users'));
     }
 }

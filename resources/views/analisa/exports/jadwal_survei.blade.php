@@ -1,12 +1,15 @@
 <table>
     <thead>
         <tr>
-            <th>NO</th>
-            <th>NAMA CALON DEBITUR</th>
-            <th>ALAMAT</th>
-            <th>PRODUK</th>
-            <th>KANTOR</th>
-            <th>TANGGAL DAFTAR</th>
+            <th rowspan="2">NO</th>
+            <th rowspan="2">NAMA CALON DEBITUR</th>
+            <th rowspan="2">ALAMAT</th>
+            <th rowspan="2">PRODUK</th>
+            <th rowspan="2">KANTOR</th>
+            <th rowspan="2">TANGGAL DAFTAR</th>
+            <th colspan="{{ count($users) }}">NAMA PETUGAS</th>
+        </tr>
+        <tr>
             @foreach ($users as $user)
                 <th>{{ $user->nama_user }}</th>
             @endforeach

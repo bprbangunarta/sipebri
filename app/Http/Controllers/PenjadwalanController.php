@@ -81,6 +81,7 @@ class PenjadwalanController extends Controller
                     ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
                     ->orWhere('users.code_user', 'like', '%' . $keyword . '%')
                     ->orWhere('users.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('kasi.name', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.kode_kantor', 'like', '%' . $keyword . '%')
                     ->orWhere('data_kantor.nama_kantor', 'like', '%' . $keyword . '%');
             })
