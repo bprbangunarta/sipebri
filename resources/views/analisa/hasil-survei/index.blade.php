@@ -1,5 +1,5 @@
 @extends('analisa.menu_penjadwalan')
-@section('title', 'Penjadwalan SurveI')
+@section('title', 'Hasil Survei')
 
 @section('content')
     <div class="tab-content">
@@ -8,6 +8,13 @@
                 <div class="box-tools">
                     <form action="{{ route('hasil.survei') }}" method="GET">
                         <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                            <button type="button" class="btn-circle btn-sm bg-blue" title="Informasi" data-toggle="modal"
+                                data-target="#modalFilter" style="cursor: pointer; border:none;">
+                                <i class="fa fa-filter" aria-hidden="true"></i>
+                                &nbsp;
+                                FILTER
+                            </button>
+                            &nbsp;
                             <input type="text" class="form-control text-uppercase pull-right"
                                 style="width: 180px;font-size:11.4px;" name="keyword" id="keyword"
                                 value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah/ Produk">
@@ -46,10 +53,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($data as $item)
+                        @forelse ($datas as $item)
                             <tr>
                                 <td class="text-center" style="vertical-align: middle;">
-                                    {{ $loop->iteration + $data->firstItem() - 1 }}
+                                    {{ $loop->iteration + $datas->firstItem() - 1 }}
                                 </td>
 
                                 <td class="text-center" style="vertical-align: middle;">
@@ -97,12 +104,52 @@
             <div class="box-footer clearfix">
                 <div class="pull-left hidden-xs">
                     <button class="btn btn-default btn-sm">
-                        Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                        Showing {{ $datas->firstItem() }} to {{ $datas->lastItem() }} of {{ $datas->total() }}
                         entries
                     </button>
                 </div>
 
-                {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
+                {{ $datas->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFilter">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">FILTER TANGGAL SURVEI</h4>
+                </div>
+                <form action="{{ route('hasil.survei') }}" method="get">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="text" name="alamat" id="alamat" hidden>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-primary">FILTER</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

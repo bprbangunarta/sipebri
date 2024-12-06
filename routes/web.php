@@ -414,6 +414,7 @@ Route::middleware('auth')->group(function () {
 
             // Jadwal Survei
             Route::get('/jadwal/survei', 'jadwal_survei')->name('jadwal.survei');
+            Route::get('/export/jadwal/survei', 'export_jadwal_survei')->name('export.jadwal.survei');
         });
 
         // Hasil Survei

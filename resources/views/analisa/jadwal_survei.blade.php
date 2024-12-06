@@ -78,12 +78,13 @@
 
             <div class="box-footer clearfix">
                 <div class="pull-left hidden-xs">
-                    <button type="button" class="btn-circle btn-sm bg-green" title="Informasi" data-toggle="modal"
-                        data-target="#modalInfo" style="cursor: pointer; border:none;">
+                    <a href="{{ route('export.jadwal.survei') }}" class="btn-circle btn-sm bg-green" title="Informasi"
+                        style="cursor: pointer; border:none; text-decoration: none;">
                         <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                         &nbsp;
                         Export
-                    </button>
+                    </a>
+
 
                     &nbsp;
                     <button class="btn btn-default btn-sm">

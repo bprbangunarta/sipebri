@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\JadwalSurvei;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Midle;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PenjadwalanController extends Controller
 {
@@ -263,5 +265,12 @@ class PenjadwalanController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditampilkan');
         }
+    }
+
+    public function export_jadwal_survei()
+    {
+        $filename = "Jadwal Survei.xlsx";
+
+        return Excel::download(new JadwalSurvei, $filename);
     }
 }
