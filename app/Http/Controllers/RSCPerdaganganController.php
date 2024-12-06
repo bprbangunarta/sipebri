@@ -232,7 +232,8 @@ class RSCPerdaganganController extends Controller
                     'presentase_laba' => sprintf("%.2f", $request->input('persen' . $i), 2),
                     'created_at' => now(),
                 ];
-                DB::table('rsc_du_perdagangan')->where('id', $request->kode_barang . $i)->update($data);
+
+                DB::table('rsc_du_perdagangan')->where('id', $request->input('kode_barang' . $i))->update($data);
             }
 
             $data2 = [
