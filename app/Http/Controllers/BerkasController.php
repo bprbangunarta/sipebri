@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DataBerkas;
 use App\Models\Kantor;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BerkasController extends Controller
 {
@@ -88,6 +90,7 @@ class BerkasController extends Controller
             $data = [
                 'pengajuan_kode' => $request->kode_pengajuan,
                 'dari_kantor' => $kantor,
+                'ke_kantor' => $kantor,
                 'user_pengirim' => Auth::user()->code_user,
                 'user_tujuan' => $request->user,
                 'tgl_kirim' => now(),
@@ -233,6 +236,8 @@ class BerkasController extends Controller
                     'pengirim.nama_user as user_pengirim',
                     'penerima.nama_user as user_penerima',
                     'data_berkas.user_tujuan',
+                    'data_berkas.dari_kantor',
+                    'data_berkas.ke_kantor',
                     'data_berkas.tgl_kirim',
                     'data_berkas.tgl_terima',
                 )
@@ -247,9 +252,32 @@ class BerkasController extends Controller
                 ->paginate(10);
             //
 
-            return view('laporan.data_berkas', compact('data'));
+            //Data Kantor
+            $kantor = DB::table('data_kantor')->get();
+            //Data Produk
+            $produk = DB::table('data_produk')->get();
+
+            return view('laporan.data_berkas', compact('data', 'kantor', 'produk'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal dimuat, Hubungi IT.');
+        }
+    }
+
+    public function export_data_berkas()
+    {
+        try {
+            if (empty(request('tgl_kirim')) && !empty(request('tgl_kirim_sampai'))) {
+                return redirect()->back()->with('error', 'Tanggal kirim harus diisi.');
+            }
+
+            if (empty(request('tgl_terima')) && !empty(request('tgl_terima_sampai'))) {
+                return redirect()->back()->with('error', 'Tanggal terima harus diisi.');
+            }
+
+            $filename = "Data Berkas.xlsx";
+            return Excel::download(new DataBerkas, $filename);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal di export.');
         }
     }
 }

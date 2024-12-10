@@ -244,8 +244,28 @@ class PenjadwalanController extends Controller
                 ->whereNot('data_pengajuan.produk_kode', 'KTA')
                 ->where('data_survei.kasi_kode', '!=', '')
 
+                // ->where(function ($query) {
+                //     $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
+                // })
+
                 ->where(function ($query) {
-                    $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
+                    $today = Carbon::today();
+
+                    if ($today->isFriday()) {
+                        $saturday = $today->copy()->addDay();
+                        $sunday = $today->copy()->addDays(2);
+
+                        $query->where(function ($subQuery) use ($saturday, $sunday) {
+                            $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$saturday->toDateString()])
+                                ->orWhereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$sunday->toDateString()]);
+                        })
+                            ->orWhere(function ($subQuery) use ($today) {
+                                $monday = $today->copy()->next(Carbon::MONDAY);
+                                $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$monday->toDateString()]);
+                            });
+                    } else {
+                        $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$today->addDay()->toDateString()]);
+                    }
                 })
 
                 ->where(function ($query) use ($keyword) {

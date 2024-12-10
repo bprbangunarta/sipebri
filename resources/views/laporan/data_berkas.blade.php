@@ -38,6 +38,8 @@
                                         <th class="text-center">ALAMAT</th>
                                         <th class="text-center">PDK</th>
                                         <th class="text-center">PLAFON</th>
+                                        <th class="text-center">DARI</th>
+                                        <th class="text-center">KE</th>
                                         <th class="text-center">PENGIRIM</th>
                                         <th class="text-center">PENERIMA</th>
                                         <th class="text-center">TGL KIRIM</th>
@@ -54,6 +56,8 @@
                                             <td>{{ $item->alamat_ktp }}</td>
                                             <td class="text-center">{{ $item->produk_kode }}</td>
                                             <td class="text-center">{{ number_format($item->plafon, '0', ',', '.') }}</td>
+                                            <td class="text-center">{{ $item->dari_kantor }}</td>
+                                            <td class="text-center">{{ $item->ke_kantor }}</td>
                                             <td class="text-center">{{ $item->user_pengirim }}</td>
                                             <td class="text-center">{{ $item->user_penerima }}</td>
                                             <td class="text-center">
@@ -72,9 +76,9 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
-                                {{-- <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
+                                <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i>&nbsp; Export Data
-                                </button> --}}
+                                </button>
 
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
@@ -88,5 +92,99 @@
                 </div>
             </div>
         </section>
+
+        <div class="modal fade" id="modal-export">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-green">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">EXPORT DATA</h4>
+                    </div>
+                    <form action="{{ route('export.data.berkas') }}" method="get">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>TANGGAL KIRIM</label>
+                                        <input type="date" class="form-control" name="tgl_kirim" id=""
+                                            style="margin-top:-5px;">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>TANGGAL TERIMA</label>
+                                        <input type="date" class="form-control" name="tgl_terima" id=""
+                                            style="margin-top:-5px;">
+                                    </div>
+
+                                    <div class="form-group" style="margin-top:-10px;">
+                                        <label>DARI KANTOR</label>
+                                        <select class="form-control kantor" name="dari_kantor" id="kantor"
+                                            style="width: 100%;margin-top:-5px;">
+                                            <option value="">--PILIH--</option>
+                                            @foreach ($kantor as $item)
+                                                <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" style="margin-top:-10px;">
+                                        <label>PRODUK</label>
+                                        <select class="form-control produk" name="kode_produk" id="produk"
+                                            style="width: 100%;margin-top:-5px;">
+                                            <option value="">--PILIH--</option>
+                                            @foreach ($produk as $item)
+                                                <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} -
+                                                    {{ $item->nama_produk }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>SAMPAI DENGAN</label>
+                                        <input type="date" class="form-control" name="tgl_kirim_sampai"
+                                            id="" style="margin-top:-5px;">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>SAMPAI DENGAN</label>
+                                        <input type="date" class="form-control" name="tgl_terima_sampai"
+                                            id="" style="margin-top:-5px;">
+                                    </div>
+
+                                    <div class="form-group" style="margin-top:-10px;">
+                                        <label>KE KANTOR</label>
+                                        <select class="form-control kekantor" name="ke_kantor" id="kekantor"
+                                            style="width: 100%;margin-top:-5px;">
+                                            <option value="">--PILIH--</option>
+                                            @foreach ($kantor as $item)
+                                                <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="margin-top: -10px;">
+                                <button type="button" class="btn btn-default pull-left"
+                                    data-dismiss="modal">BATAL</button>
+                                <button type="submit" class="btn btn-success">EXPORT</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
+@push('myscript')
+    <script>
+        $('#produk').select2()
+        $('#kantor').select2()
+        $('#kekantor').select2()
+    </script>
+@endpush

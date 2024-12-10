@@ -302,6 +302,7 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(BerkasController::class)->group(function () {
             Route::get('laporan/data/berkas', 'laporan_data_berkas')->name('laporan.data.berkas');
+            Route::get('laporan/data/berkas/export', 'export_data_berkas')->name('export.data.berkas');
         });
         // Flow Berkas
 
