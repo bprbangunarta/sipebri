@@ -15,10 +15,7 @@ class DataBerkas implements FromView
         $tgl_kirim_sampai = request('tgl_kirim_sampai') ? Carbon::parse(request('tgl_kirim_sampai'))->endOfDay() : null;
         $tgl_terima = request('tgl_terima') ? Carbon::parse(request('tgl_terima'))->startOfDay() : null;
         $tgl_terima_sampai = request('tgl_terima_sampai') ? Carbon::parse(request('tgl_terima_sampai'))->endOfDay() : null;
-        // $tgl_kirim = Carbon::parse(request('tgl_kirim'))->startOfDay()->format('Y-m-d H:i:s');
-        // $tgl_kirim_sampai = request('tgl_kirim_sampai') ? Carbon::parse(request('tgl_kirim_sampai'))->endOfDay()->format('Y-m-d H:i:s') : null;
-        // $tgl_terima = Carbon::parse(request('tgl_terima'))->startOfDay()->format('Y-m-d H:i:s');
-        // $tgl_terima_sampai = request('tgl_terima_sampai') ? Carbon::parse(request('tgl_terima_sampai'))->endOfDay()->format('Y-m-d H:i:s') : null;
+
         $darikantor = request('dari_kantor');
         $kekantor = request('ke_kantor');
         $produk = request('kode_produk');

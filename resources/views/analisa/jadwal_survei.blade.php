@@ -31,6 +31,7 @@
                         <tr class="bg-blue">
                             <th class="text-center" width="3%">NO</th>
                             <th class="text-center" width="8%">TGL DAFTAR</th>
+                            <th class="text-center" width="8%">TGL SURVEI</th>
                             <th class="text-center" width="8%">KODE</th>
                             <th class="text-center" width="16%">NAMA NASABAH</th>
                             <th class="text-center" width="42%">ALAMAT</th>
@@ -49,6 +50,10 @@
 
                                 <td class="text-center" style="vertical-align: middle;">
                                     {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
+                                </td>
+
+                                <td class="text-center" style="vertical-align: middle;">
+                                    {{ $item->tgl_survei }}
                                 </td>
 
                                 <td class="text-center" style="vertical-align: middle;">
@@ -78,12 +83,11 @@
 
             <div class="box-footer clearfix">
                 <div class="pull-left hidden-xs">
-                    <a href="{{ route('export.jadwal.survei') }}" class="btn-circle btn-sm bg-green" title="Informasi"
-                        style="cursor: pointer; border:none; text-decoration: none;">
+                    <button data-toggle="modal" data-target="#modal-export" class="btn btn-success btn-sm">
                         <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                         &nbsp;
-                        Export
-                    </a>
+                        Export Data
+                    </button>
 
 
                     &nbsp;
@@ -98,4 +102,44 @@
 
         </div>
 
-    @endsection
+        <div class="modal fade" id="modal-export">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-green">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">EXPORT DATA</h4>
+                    </div>
+                    <form action="{{ route('export.jadwal.survei') }}" method="get">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>TANGGAL SURVEI</label>
+                                        <input type="date" class="form-control" name="tgl_survei" id=""
+                                            style="margin-top:-5px;">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>SAMPAI DENGAN</label>
+                                        <input type="date" class="form-control" name="tgl_survei_sampai" id=""
+                                            style="margin-top:-5px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="margin-top: -10px;">
+                                <button type="button" class="btn btn-default pull-left"
+                                    data-dismiss="modal">BATAL</button>
+                                <button type="submit" class="btn btn-success">EXPORT</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection

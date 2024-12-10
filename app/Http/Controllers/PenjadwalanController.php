@@ -264,7 +264,12 @@ class PenjadwalanController extends Controller
                                 $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$monday->toDateString()]);
                             });
                     } else {
-                        $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$today->addDay()->toDateString()]);
+                        $query->where(function ($subQuery) use ($today) {
+                            $tomorrow = $today->copy()->addDay();
+
+                            $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$today->toDateString()])
+                                ->orWhereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$tomorrow->toDateString()]);
+                        });
                     }
                 })
 
@@ -276,7 +281,7 @@ class PenjadwalanController extends Controller
                         ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
                         ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
                 })
-                ->orderBy('v_users.nama_user', 'ASC')
+                ->orderBy('data_jadwal_survei.tgl_survei', 'ASC')
                 ->paginate(10);
             // 
 
@@ -290,6 +295,9 @@ class PenjadwalanController extends Controller
 
     public function export_jadwal_survei()
     {
+        if (empty(request('tgl_survei')) && !empty(request('tgl_survei_sampai'))) {
+            return redirect()->back()->with('error', 'Tanggal survei harus diisi.');
+        }
         $filename = "Jadwal Survei.xlsx";
 
         return Excel::download(new JadwalSurvei, $filename);

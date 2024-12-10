@@ -11,6 +11,9 @@ class JadwalSurvei implements FromView
 {
     public function view(): View
     {
+        $tgl_survei = request('tgl_survei');
+        $tgl_survei_sampai = request('tgl_survei_sampai');
+
         $data = DB::table('data_jadwal_survei')
             ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_jadwal_survei.pengajuan_kode',)
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
@@ -39,8 +42,17 @@ class JadwalSurvei implements FromView
             )
             ->whereNot('data_pengajuan.produk_kode', 'KTA')
             ->where('data_survei.kasi_kode', '!=', '')
-            ->where(function ($query) {
-                $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
+            // ->where(function ($query) {
+            //     $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
+            // })
+            ->where(function ($query) use ($tgl_survei, $tgl_survei_sampai) {
+                if (!empty($tgl_survei) && !empty($tgl_survei_sampai)) {
+                    $query->where(function ($subQuery) use ($tgl_survei, $tgl_survei_sampai) {
+                        $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) BETWEEN ? AND ?", [$tgl_survei, $tgl_survei_sampai]);
+                    });
+                } elseif (!empty($tgl_survei) && empty($tgl_survei_sampai)) {
+                    $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
+                }
             })
 
             ->orderBy('data_nasabah.nama_nasabah', 'ASC')
