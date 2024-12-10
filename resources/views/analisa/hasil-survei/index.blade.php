@@ -7,12 +7,12 @@
             <div class="box-header with-border">
                 <div class="box-tools">
                     <form action="{{ route('hasil.survei') }}" method="GET">
-                        <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                        <div class="input-group input-group-sm hidden-xs" style="width: 350px;">
                             <button type="button" class="btn-circle btn-sm bg-blue" title="Informasi" data-toggle="modal"
                                 data-target="#modalFilter" style="cursor: pointer; border:none;">
                                 <i class="fa fa-filter" aria-hidden="true"></i>
                                 &nbsp;
-                                FILTER
+                                FILTER TANGGAL
                             </button>
                             &nbsp;
                             <input type="text" class="form-control text-uppercase pull-right"

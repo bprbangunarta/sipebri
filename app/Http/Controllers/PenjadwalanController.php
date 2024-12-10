@@ -242,11 +242,6 @@ class PenjadwalanController extends Controller
                     'data_survei.catatan_jadul_2',
                 )
                 ->whereNot('data_pengajuan.produk_kode', 'KTA')
-                ->where('data_survei.kasi_kode', '!=', '')
-
-                // ->where(function ($query) {
-                //     $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
-                // })
 
                 ->where(function ($query) {
                     $today = Carbon::today();
