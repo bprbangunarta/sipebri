@@ -39,6 +39,9 @@
                             <th class="text-center">KANTOR</th>
                             <th class="text-center">PLAFON</th>
                             <th class="text-center">SURVEYOR</th>
+                            @if (Auth::user()->roles[0]->name == 'Kasi Analis')
+                                <th class="text-center">AKSI</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -70,6 +73,25 @@
                                 </td>
                                 <td class="text-center" style="vertical-align: middle;">{{ $item->nama_user }}
                                 </td>
+                                @if (Auth::user()->roles[0]->name == 'Kasi Analis')
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        @if (
+                                            $item->tgl_survei != now()->format('d-m-Y') &&
+                                                $item->tgl_jadul_1 != now()->format('d-m-Y') &&
+                                                $item->tgl_jadul_2 != now()->format('d-m-Y'))
+                                            <a data-toggle="modal" data-target="#ubahPenjadwalan"
+                                                data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow"
+                                                title="Ubah Penjadwalan" style="cursor: pointer">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        @else
+                                            <a class="btn-circle btn-sm bg-grey" title="Ubah Penjadwalan"
+                                                style="cursor: pointer">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        @endif
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
@@ -126,8 +148,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>SAMPAI DENGAN</label>
-                                        <input type="date" class="form-control" name="tgl_survei_sampai" id=""
-                                            style="margin-top:-5px;">
+                                        <input type="date" class="form-control" name="tgl_survei_sampai"
+                                            id="" style="margin-top:-5px;">
                                     </div>
                                 </div>
                             </div>
@@ -142,4 +164,107 @@
         </div>
     </div>
 
+    <div class="modal fade" id="ubahPenjadwalan">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-yellow">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">FORM PERUBAHAN PETUGAS SURVEI</h4>
+                </div>
+                <form action="{{ route('update.petugas') }}" method="POST">
+                    @method('POST')
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>KODE PENGAJUAN</label>
+                                    <input type="text" class="form-control" name="kode_pengajuan" id="kode_pengajuan"
+                                        readonly>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <label>NAMA SURVEYOR</label>
+                                    <select class="form-control petugas" style="width: 100%;" name="kode_petugas"
+                                        id="kode_petugas">
+                                        <option value="">--PILIH--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>NAMA NASABAH</label>
+                                    <input type="text" class="form-control" name="nama_nasabah" id="nama_nasabah"
+                                        readonly>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer" style="margin-top: 10px;">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                            <button type="submit" class="btn btn-warning">SIMPAN</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
+@push('myscript')
+    <script>
+        $(document).ready(function() {
+            $("#ubahPenjadwalan").on("show.bs.modal", function(event) {
+
+                var button = $(event.relatedTarget); // Tombol yang membuka modal
+                var id = button.data("id"); // Ambil data-id dari tombol
+
+                $.ajax({
+                    url: "/analisa/penjadwalan/" + id,
+                    type: "GET",
+                    dataType: "json",
+                    cache: false,
+                    success: function(response) {
+                        // Isi modal dengan data yang diterima
+                        var da = JSON.stringify(response[0]);
+                        var data = JSON.parse(da);
+                        var hasil = data[0];
+
+                        var sr = JSON.stringify(response[1]);
+                        var datas = JSON.parse(sr);
+
+                        $("#kode_pengajuan").val(hasil.kode_pengajuan);
+                        $("#nama_nasabah").val(hasil.nama_nasabah);
+
+                        $("#kode_petugas").empty();
+
+                        $("#kode_petugas").append(
+                            $("<option>", {
+                                value: hasil.surveyor_kode,
+                                text: hasil.name,
+                            }).prop("selected", true)
+                        );
+
+                        //Petugas
+                        $.each(datas, function(index, item) {
+                            if (item.code_user != hasil.surveyor_kode) {
+                                $("#kode_petugas").append(
+                                    $("<option>", {
+                                        value: item.code_user,
+                                        text: item.nama_user,
+                                    })
+                                ).select2();
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Tindakan jika terjadi kesalahan dalam permintaan AJAX
+                        console.error("Error:", xhr.responseText);
+                    },
+                });
+            });
+        });
+    </script>
+@endpush

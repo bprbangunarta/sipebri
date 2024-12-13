@@ -214,7 +214,7 @@
                             @endphp
                         @empty
                             <tr>
-                                <td class="text-center" colspan="9">TIDAK ADA DATA</td>
+                                <td class="text-center" colspan="10">TIDAK ADA DATA</td>
                             </tr>
                         @endforelse
                     </tbody>

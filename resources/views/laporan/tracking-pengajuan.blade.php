@@ -127,7 +127,9 @@
                                             <td class="text-center">{{ $item->deviasi_notif_realisasi }} Hari</td>
                                             <td class="text-center">
                                                 @if (
-                                                    $item->tracking == 'Proses Analisa' ||
+                                                    $item->tracking == 'Penjadwalan' ||
+                                                        $item->tracking == 'Proses Survei' ||
+                                                        $item->tracking == 'Proses Analisa' ||
                                                         $item->tracking == 'Naik Kasi' ||
                                                         $item->tracking == 'Naik Komite I' ||
                                                         $item->tracking == 'Naik Komite II' ||
@@ -140,48 +142,41 @@
                                             <td class="text-center">
                                                 @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
                                                     {{ $item->status }}
+                                                    {{-- @elseif($item->tracking == 'Realisasi')
+                                                    Disetujui
                                                 @else
-                                                    -
+                                                    - --}}
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                {{-- @if (!is_null($item->tgl_realisasi))
-                                                    @php
-                                                        $hari =
-                                                            strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
-                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
-                                                    @endphp
-                                                    <b class="text-green">{{ $hari }} hari</b>
+                                                @if (in_array($item->deviasi, ['NOTIF EXPIRED', 'REGISTRATION EXPIRED']))
+                                                    <b class="text-red">{{ $item->deviasi }}</b>
                                                 @else
-                                                    @php
-                                                        $hari = strtotime(now()) - strtotime($item->tanggal);
-                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
-                                                    @endphp
-                                                    <b class="text-red">{{ $hari }} hari</b>
-                                                @endif --}}
-
-                                                @if ($item->status == 'Ditolak' || $item->status == 'Dibatalkan')
+                                                    {{ $item->deviasi }}
+                                                @endif
+                                                {{-- @if ($item->status == 'Ditolak' || $item->status == 'Dibatalkan')
                                                     @php
                                                         $hari =
                                                             strtotime($item->tgl_persetujuan) -
                                                             strtotime($item->tanggal);
-                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                        $hari = floor($hari / (60 * 60 * 24));
                                                     @endphp
                                                     <b class="text-red">{{ $hari }} hari</b>
                                                 @elseif(!is_null($item->tgl_realisasi))
                                                     @php
                                                         $hari =
                                                             strtotime($item->tgl_realisasi) - strtotime($item->tanggal);
-                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                        $hari = floor($hari / (60 * 60 * 24));
                                                     @endphp
                                                     <b class="text-green">{{ $hari }} hari</b>
                                                 @else
                                                     @php
                                                         $hari = strtotime(now()) - strtotime($item->tanggal);
-                                                        $hari = floor($hari / (60 * 60 * 24)); // Konversi detik ke hari
+                                                        $hari = floor($hari / (60 * 60 * 24));
                                                     @endphp
                                                     <b class="text-red">{{ $hari }} hari</b>
-                                                @endif
+                                                @endif --}}
+
                                             </td>
                                         </tr>
                                         @php

@@ -61,16 +61,31 @@ class PenjadwalanController extends Controller
                 'cs.kantor_kode as kantor_cs',
                 'data_berkas.tgl_terima',
                 'kasi.name as nama_kasi',
-            )
+            );
 
-            ->when(auth()->user()->roles[0]->name == 'Kasi Analis', function ($query) use ($user) {
-                $query->where('data_produk.kode_produk', '!=', "KTA")
+        // ->when(auth()->user()->roles[0]->name == 'Kasi Analis', function ($query) use ($user) {
+        //     $query->where('data_produk.kode_produk', '!=', "KTA")
+        //         ->orderBy('data_survei.kasi_kode', 'ASC');
+        // }, function ($query) use ($user) {
+        //     $query->where('data_survei.kasi_kode', '=', $user);
+        // })
+
+        switch (auth()->user()->roles[0]->name) {
+            case 'Kasi Analis':
+                $cek->where('data_produk.kode_produk', '!=', 'KTA')
                     ->orderBy('data_survei.kasi_kode', 'ASC');
-            }, function ($query) use ($user) {
-                $query->where('data_survei.kasi_kode', '=', $user);
-            })
+                break;
 
-            ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
+            case 'Kepala Kantor Kas':
+                $cek->where('data_survei.kasi_kode', '=', $user);
+                break;
+
+            default:
+                $cek->orderBy('data_pengajuan.created_at', 'desc');
+                break;
+        }
+
+        $cek->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
             ->where('data_pengajuan.tracking', '=', 'Penjadwalan')
             ->where('kasi.is_active', '=', 1)
             // ->orWhere('data_pengajuan.tracking', '=', 'Proses Survei')
@@ -234,11 +249,11 @@ class PenjadwalanController extends Controller
                     'data_survei.latitude',
                     'data_survei.longitude',
                     'data_survei.foto',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%y') as tgl_survei"),
+                    DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%Y') as tgl_survei"),
                     'data_survei.catatan_survei',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%y') as tgl_jadul_1"),
+                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%Y') as tgl_jadul_1"),
                     'data_survei.catatan_jadul_1',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%y') as tgl_jadul_2"),
+                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%Y') as tgl_jadul_2"),
                     'data_survei.catatan_jadul_2',
                 )
                 ->whereNot('data_pengajuan.produk_kode', 'KTA')
@@ -285,6 +300,35 @@ class PenjadwalanController extends Controller
             return view('analisa.jadwal_survei', compact('data', 'tgl'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditampilkan');
+        }
+    }
+
+    public function update_petugas(Request $request)
+    {
+        try {
+            if (empty($request->kode_petugas)) {
+                return redirect()->back()->with('error', 'Petugas harus diisi.');
+            }
+
+            $cek_survei = Survei::where('pengajuan_kode', $request->kode_pengajuan)->first();
+
+            $data = [
+                'surveyor_kode' => $request->kode_petugas
+            ];
+
+            if (is_null($cek_survei)) {
+                return redirect()->back()->with('error', 'Data tidak ditemukan.');
+            } else {
+                $update = Survei::where('pengajuan_kode', $request->kode_pengajuan)->update($data);
+
+                if ($update) {
+                    return redirect()->back()->with('success', 'Petugas survei berhasil diubah.');
+                } else {
+                    return redirect()->back()->with('error', 'Petugas survei gagal diubah.');
+                }
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Data gagal diubah.');
         }
     }
 

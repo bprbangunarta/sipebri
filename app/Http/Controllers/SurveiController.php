@@ -223,7 +223,7 @@ class SurveiController extends Controller
                         ]
                     );
                 });
-            } elseif (empty($tgl1) && empty($tgl2)) {
+            } elseif (empty($tgl1) && empty($tgl2) && empty($keyword)) {
                 $data->where(function ($query) use ($keyword) {
                     $query->where(function ($subQuery) {
                         $currentMonth = Carbon::now()->format('Y-m');

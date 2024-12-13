@@ -587,9 +587,21 @@ class CetakLaporanController extends Controller
             })
             ->whereNot(function ($query) {
                 $query->where('data_pengajuan.status', '=', 'Batal');
-            })
+            });
 
-            ->orderBy('data_pengajuan.created_at', 'desc');
+        // if (empty($keyword)) {
+        //     $query->where(function ($data) use ($keyword) {
+        //         $data->where(function ($subQuery) {
+        //             $currentMonth = Carbon::now()->format('Y-m');
+        //             $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+
+        //             $subQuery->whereRaw("DATE_FORMAT(data_tracking.analisa_kredit, '%Y-%m') = ?", [$currentMonth])
+        //                 ->orWhereRaw("DATE_FORMAT(data_tracking.analisa_kredit, '%Y-%m') = ?", [$previousMonth]);
+        //         });
+        //     });
+        // }
+
+        $query->orderBy('data_pengajuan.created_at', 'desc');
 
         $data = $query->paginate(10);
         //Data Kantor
@@ -661,6 +673,53 @@ class CetakLaporanController extends Controller
             }
         }
 
+        foreach ($data as $values) {
+            if (in_array($values->status, ['Ditolak', 'Dibatalkan'])) {
+
+                if (!empty($values->tanggal) && !empty($values->tgl_persetujuan)) {
+                    $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                    $tglPersetujuan = Carbon::parse($values->tgl_persetujuan)->startOfDay();
+
+                    $values->deviasi = $tglRegis->diffInDays($tglPersetujuan) . " Hari";
+                } else {
+                    $values->deviasi = null;
+                }
+            } elseif ($values->status == 'Disetujui' && !empty($values->tgl_realisasi)) {
+                $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                $tglRealisasi = Carbon::parse($values->tgl_realisasi)->startOfDay();
+
+                $values->deviasi = $tglRegis->diffInDays($tglRealisasi) . " Hari";
+            } elseif ($values->status == 'Disetujui' && empty($values->tgl_realisasi)) {
+                $now = Carbon::parse(now())->startOfDay();
+                $tglNotif = Carbon::parse($values->tgl_notif)->startOfDay();
+
+                $countDeviasi = $now->diffInDays($tglNotif);
+
+                if ($countDeviasi > 30) {
+                    $values->deviasi = 'NOTIF EXPIRED';
+                } else {
+                    $values->deviasi = $countDeviasi . " Hari";
+                }
+            } elseif (!in_array($values->status, ['Ditolak', 'Dibatalkan', 'Disetujui'])) {
+                if (empty($values->tgl_notif)) {
+                    $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                    $now = Carbon::parse(now())->startOfDay();
+
+                    $countDeviasi = $tglRegis->diffInDays($now);
+
+                    if ($countDeviasi > 30) {
+                        $values->deviasi = 'REGISTRATION EXPIRED';
+                    } else {
+                        $values->deviasi = $tglRegis->diffInDays($countDeviasi) . " Hari";
+                    }
+                }
+            } else {
+                $values->deviasi = null;
+            }
+        }
+
+
+        // dd($data);
         return view('laporan.tracking-pengajuan', [
             'data' => $data,
             'kantor' => $kantor,

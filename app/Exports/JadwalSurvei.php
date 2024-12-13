@@ -14,6 +14,10 @@ class JadwalSurvei implements FromView
         $tgl_survei = request('tgl_survei');
         $tgl_survei_sampai = request('tgl_survei_sampai');
 
+        if (empty($tgl_survei_sampai)) {
+            $tgl_survei_sampai = $tgl_survei;
+        }
+
         $data = DB::table('data_jadwal_survei')
             ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_jadwal_survei.pengajuan_kode',)
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
