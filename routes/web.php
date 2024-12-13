@@ -363,7 +363,7 @@ Route::middleware('auth')->group(function () {
         });
 
         // Cetak Berkas Pengajuan
-        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas|Kasi Analis']], function () {
+        Route::group(['middleware' => ['role:Customer Service|Kepala Kantor Kas|Kasi Analis|Administrator']], function () {
             Route::get('/cetak/pengajuan', [CetakController::class, 'index_pengajuan'])->name('cetak.pengajuan.index');
         });
 
