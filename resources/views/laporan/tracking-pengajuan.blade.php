@@ -142,10 +142,10 @@
                                             <td class="text-center">
                                                 @if ($item->status == 'Disetujui' || $item->status == 'Ditolak' || $item->status == 'Dibatalkan')
                                                     {{ $item->status }}
-                                                    {{-- @elseif($item->tracking == 'Realisasi')
+                                                @elseif($item->tracking == 'Realisasi')
                                                     Disetujui
                                                 @else
-                                                    - --}}
+                                                    -
                                                 @endif
                                             </td>
                                             <td class="text-center">

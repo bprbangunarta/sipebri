@@ -710,7 +710,7 @@ class CetakLaporanController extends Controller
                     if ($countDeviasi > 30) {
                         $values->deviasi = 'REGISTRATION EXPIRED';
                     } else {
-                        $values->deviasi = $tglRegis->diffInDays($countDeviasi) . " Hari";
+                        $values->deviasi = $countDeviasi . " Hari";
                     }
                 }
             } else {
