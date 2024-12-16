@@ -293,7 +293,7 @@ class SurveiController extends Controller
                 })
                 ->orderBy('data_survei.created_at', 'DESC')
                 ->paginate(10);
-            // dd($data);
+
             foreach ($data as $item) {
                 if (
                     $item->tracking === 'Proses Survei' &&
@@ -301,18 +301,9 @@ class SurveiController extends Controller
                     (
                         (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->isToday() && is_null($item->catatan_survei)) ||
 
-                        (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() && is_null($item->catatan_jadul_1)) ||
+                        (!is_null($item->tgl_jadul_1) &&  Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() && is_null($item->catatan_jadul_1)) ||
 
-                        (Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday() && is_null($item->catatan_jadul_2))
-                        // (Carbon::createFromFormat('d-m-y', $item->tgl_survei)->isToday() &&
-                        //     is_null($item->tgl_jadul_1) &&
-                        //     is_null($item->tgl_jadul_2)) ||
-
-                        // (!is_null($item->tgl_jadul_1) &&  Carbon::createFromFormat('d-m-y', $item->tgl_jadul_1)->isToday() &&
-                        //     is_null($item->tgl_jadul_2)) ||
-
-                        // (!is_null($item->tgl_jadul_2) &&
-                        //     Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday())
+                        (!is_null($item->tgl_jadul_2) && Carbon::createFromFormat('d-m-y', $item->tgl_jadul_2)->isToday() && is_null($item->catatan_jadul_2))
                     )
                 ) {
                     $item->ket = 'Progress';
