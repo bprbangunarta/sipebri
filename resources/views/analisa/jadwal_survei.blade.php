@@ -76,8 +76,8 @@
                                 @if (Auth::user()->roles[0]->name == 'Kasi Analis')
                                     <td class="text-center" style="vertical-align: middle;">
                                         @if (
-                                            $item->tgl_survei != now()->format('d-m-Y') &&
-                                                $item->tgl_jadul_1 != now()->format('d-m-Y') &&
+                                            $item->tgl_survei != now()->format('d-m-Y') ||
+                                                $item->tgl_jadul_1 != now()->format('d-m-Y') ||
                                                 $item->tgl_jadul_2 != now()->format('d-m-Y'))
                                             <a data-toggle="modal" data-target="#ubahPenjadwalan"
                                                 data-id="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-yellow"
