@@ -151,6 +151,54 @@ class MonitoringStaffController extends Controller
                 }
             }
 
+            // Penambahan EXPIRED
+            foreach ($data as $values) {
+                if (in_array($values->status, ['Ditolak', 'Dibatalkan'])) {
+
+                    if (
+                        !empty($values->tanggal) && !empty($values->tgl_persetujuan)
+                    ) {
+                        $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                        $tglPersetujuan = Carbon::parse($values->tgl_persetujuan)->startOfDay();
+
+                        $values->deviasi = $tglRegis->diffInDays($tglPersetujuan) . " Hari";
+                    } else {
+                        $values->deviasi = null;
+                    }
+                } elseif ($values->status == 'Disetujui' && !empty($values->tgl_realisasi)) {
+                    $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                    $tglRealisasi = Carbon::parse($values->tgl_realisasi)->startOfDay();
+
+                    $values->deviasi = $tglRegis->diffInDays($tglRealisasi) . " Hari";
+                } elseif ($values->status == 'Disetujui' && empty($values->tgl_realisasi)) {
+                    $now = Carbon::parse(now())->startOfDay();
+                    $tglNotif = Carbon::parse($values->tgl_notif)->startOfDay();
+
+                    $countDeviasi = $now->diffInDays($tglNotif);
+
+                    if ($countDeviasi > 30) {
+                        $values->deviasi = 'NOTIF EXPIRED';
+                    } else {
+                        $values->deviasi = $countDeviasi . " Hari";
+                    }
+                } elseif (!in_array($values->status, ['Ditolak', 'Dibatalkan', 'Disetujui'])) {
+                    if (empty($values->tgl_notif)) {
+                        $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                        $now = Carbon::parse(now())->startOfDay();
+
+                        $countDeviasi = $tglRegis->diffInDays($now);
+
+                        if ($countDeviasi > 30) {
+                            $values->deviasi = 'REGISTRATION EXPIRED';
+                        } else {
+                            $values->deviasi = $countDeviasi . " Hari";
+                        }
+                    }
+                } else {
+                    $values->deviasi = null;
+                }
+            }
+
             return view('analisa.monitoring.detail', compact('status', 'user', 'data', 'name'));
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data tidak ditemukan.');
@@ -269,6 +317,54 @@ class MonitoringStaffController extends Controller
                     $item->deviasi_notif_realisasi = $deviasiHari4;
                 } else {
                     $item->deviasi_notif_realisasi = 0;
+                }
+            }
+
+            // Penambahan EXPIRED
+            foreach ($data as $values) {
+                if (in_array($values->status, ['Ditolak', 'Dibatalkan'])) {
+
+                    if (
+                        !empty($values->tanggal) && !empty($values->tgl_persetujuan)
+                    ) {
+                        $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                        $tglPersetujuan = Carbon::parse($values->tgl_persetujuan)->startOfDay();
+
+                        $values->deviasi = $tglRegis->diffInDays($tglPersetujuan) . " Hari";
+                    } else {
+                        $values->deviasi = null;
+                    }
+                } elseif ($values->status == 'Disetujui' && !empty($values->tgl_realisasi)) {
+                    $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                    $tglRealisasi = Carbon::parse($values->tgl_realisasi)->startOfDay();
+
+                    $values->deviasi = $tglRegis->diffInDays($tglRealisasi) . " Hari";
+                } elseif ($values->status == 'Disetujui' && empty($values->tgl_realisasi)) {
+                    $now = Carbon::parse(now())->startOfDay();
+                    $tglNotif = Carbon::parse($values->tgl_notif)->startOfDay();
+
+                    $countDeviasi = $now->diffInDays($tglNotif);
+
+                    if ($countDeviasi > 30) {
+                        $values->deviasi = 'NOTIF EXPIRED';
+                    } else {
+                        $values->deviasi = $countDeviasi . " Hari";
+                    }
+                } elseif (!in_array($values->status, ['Ditolak', 'Dibatalkan', 'Disetujui'])) {
+                    if (empty($values->tgl_notif)) {
+                        $tglRegis = Carbon::parse($values->tanggal)->startOfDay();
+                        $now = Carbon::parse(now())->startOfDay();
+
+                        $countDeviasi = $tglRegis->diffInDays($now);
+
+                        if ($countDeviasi > 30) {
+                            $values->deviasi = 'REGISTRATION EXPIRED';
+                        } else {
+                            $values->deviasi = $countDeviasi . " Hari";
+                        }
+                    }
+                } else {
+                    $values->deviasi = null;
                 }
             }
 
