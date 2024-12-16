@@ -589,17 +589,17 @@ class CetakLaporanController extends Controller
                 $query->where('data_pengajuan.status', '=', 'Batal');
             });
 
-        // if (empty($keyword)) {
-        //     $query->where(function ($data) use ($keyword) {
-        //         $data->where(function ($subQuery) {
-        //             $currentMonth = Carbon::now()->format('Y-m');
-        //             $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+        if (empty($keyword)) {
+            $query->where(function ($data) use ($keyword) {
+                $data->where(function ($subQuery) {
+                    $currentMonth = Carbon::now()->format('Y-m');
+                    $previousMonth = Carbon::now()->subMonth()->format('Y-m');
 
-        //             $subQuery->whereRaw("DATE_FORMAT(data_tracking.analisa_kredit, '%Y-%m') = ?", [$currentMonth])
-        //                 ->orWhereRaw("DATE_FORMAT(data_tracking.analisa_kredit, '%Y-%m') = ?", [$previousMonth]);
-        //         });
-        //     });
-        // }
+                    $subQuery->whereRaw("DATE_FORMAT(data_tracking.analisa_kredit, '%Y-%m') = ?", [$currentMonth])
+                        ->orWhereRaw("DATE_FORMAT(data_tracking.analisa_kredit, '%Y-%m') = ?", [$previousMonth]);
+                });
+            });
+        }
 
         $query->orderBy('data_pengajuan.created_at', 'desc');
 
