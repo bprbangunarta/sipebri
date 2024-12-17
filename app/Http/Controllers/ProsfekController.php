@@ -147,8 +147,7 @@ class ProsfekController extends Controller
                     $ekstensi = $photo->getClientOriginalExtension();
                     $new = Str::uuid() . '.' . $ekstensi;
 
-                    // $data['fhoto_prosfek2'] = $photo->storeAs('image/photo_prosfek', $new, 'public');
-                    $photo->move(public_path('storage/image/photo_prosfek'), $new);
+                    $data['fhoto_prosfek2'] = $photo->storeAs('image/photo_prosfek', $new, 'public');
 
                     $data['fhoto_prosfek2'] = $new;
                 } else {
