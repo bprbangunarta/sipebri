@@ -295,7 +295,7 @@ class PenjadwalanController extends Controller
                 ->paginate(10);
             // 
 
-            $tgl = now()->addDay()->format('d F Y');
+            $tgl = now()->addDay()->locale('id')->translatedFormat('d F Y');
 
             return view('analisa.jadwal_survei', compact('data', 'tgl'));
         } catch (\Throwable $th) {
