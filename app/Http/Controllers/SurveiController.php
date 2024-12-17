@@ -326,7 +326,7 @@ class SurveiController extends Controller
                 }
             }
 
-            $tgl = now()->addDay()->locale('id')->translatedFormat('d F Y');
+            $tgl = now()->locale('id')->translatedFormat('d F Y');
 
             // Mendapatkan Jumlah
             $surveyorCounts = (object) [];
