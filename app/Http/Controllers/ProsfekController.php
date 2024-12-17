@@ -146,6 +146,12 @@ class ProsfekController extends Controller
                     $photo = $request->file('photo_prosfek');
                     $ekstensi = $photo->getClientOriginalExtension();
                     $new = Str::uuid() . '.' . $ekstensi;
+
+                    $folderPath = storage_path('app/public/image/photo_prosfek');
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0775, true);
+                    }
+
                     $data['fhoto_prosfek2'] = $photo->storeAs('image/photo_prosfek', $new, 'public');
                     $data['fhoto_prosfek2'] = $new;
                 } else {
