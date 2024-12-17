@@ -648,8 +648,6 @@
                             style="margin-top: 5px; margin-bottom: 5px;">Ambil Gambar</button>
                         <canvas id="canvas-formal" style="overflow: hidden;" hidden></canvas>
                     </div>
-
-
                 </div>
             </div>
         </div>
