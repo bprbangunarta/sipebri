@@ -92,94 +92,95 @@
                 </div>
             </div>
         </section>
+    </div>
 
-        <div class="modal fade" id="modal-export">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-green">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">EXPORT DATA</h4>
-                    </div>
-                    <form action="{{ route('export.data.berkas') }}" method="get">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>TANGGAL KIRIM</label>
-                                        <input type="date" class="form-control" name="tgl_kirim" id=""
-                                            style="margin-top:-5px;">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>TANGGAL TERIMA</label>
-                                        <input type="date" class="form-control" name="tgl_terima" id=""
-                                            style="margin-top:-5px;">
-                                    </div>
-
-                                    <div class="form-group" style="margin-top:-10px;">
-                                        <label>DARI KANTOR</label>
-                                        <select class="form-control kantor" name="dari_kantor" id="kantor"
-                                            style="width: 100%;margin-top:-5px;">
-                                            <option value="">--PILIH--</option>
-                                            @foreach ($kantor as $item)
-                                                <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group" style="margin-top:-10px;">
-                                        <label>PRODUK</label>
-                                        <select class="form-control produk" name="kode_produk" id="produk"
-                                            style="width: 100%;margin-top:-5px;">
-                                            <option value="">--PILIH--</option>
-                                            @foreach ($produk as $item)
-                                                <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} -
-                                                    {{ $item->nama_produk }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>SAMPAI DENGAN</label>
-                                        <input type="date" class="form-control" name="tgl_kirim_sampai"
-                                            id="" style="margin-top:-5px;">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>SAMPAI DENGAN</label>
-                                        <input type="date" class="form-control" name="tgl_terima_sampai"
-                                            id="" style="margin-top:-5px;">
-                                    </div>
-
-                                    <div class="form-group" style="margin-top:-10px;">
-                                        <label>KE KANTOR</label>
-                                        <select class="form-control kekantor" name="ke_kantor" id="kekantor"
-                                            style="width: 100%;margin-top:-5px;">
-                                            <option value="">--PILIH--</option>
-                                            @foreach ($kantor as $item)
-                                                <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer" style="margin-top: -10px;">
-                                <button type="button" class="btn btn-default pull-left"
-                                    data-dismiss="modal">BATAL</button>
-                                <button type="submit" class="btn btn-success">EXPORT</button>
-                            </div>
-                    </form>
+    <div class="modal fade" id="modal-export">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT DATA</h4>
                 </div>
+                <form action="{{ route('export.data.berkas') }}" method="get">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>TANGGAL KIRIM</label>
+                                    <input type="date" class="form-control" name="tgl_kirim" id=""
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>TANGGAL TERIMA</label>
+                                    <input type="date" class="form-control" name="tgl_terima" id=""
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>DARI KANTOR</label>
+                                    <select class="form-control kantor" name="dari_kantor" id="kantor"
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control produk" name="kode_produk" id="produk"
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->kode_produk }} -
+                                                {{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl_kirim_sampai" id=""
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl_terima_sampai" id=""
+                                        style="margin-top:-5px;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KE KANTOR</label>
+                                    <select class="form-control kekantor" name="ke_kantor" id="kekantor"
+                                        style="width: 100%;margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="margin-top: -10px;">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                            <button type="submit" class="btn btn-success">EXPORT</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
 @endsection
 @push('myscript')
     <script>
