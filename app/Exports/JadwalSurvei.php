@@ -46,9 +46,7 @@ class JadwalSurvei implements FromView
             )
             ->whereNot('data_pengajuan.produk_kode', 'KTA')
             ->where('data_survei.kasi_kode', '!=', '')
-            // ->where(function ($query) {
-            //     $query->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [Carbon::today()->addDay()->toDateString()]);
-            // })
+
             ->where(function ($query) use ($tgl_survei, $tgl_survei_sampai) {
                 if (!empty($tgl_survei) && !empty($tgl_survei_sampai)) {
                     $query->where(function ($subQuery) use ($tgl_survei, $tgl_survei_sampai) {
@@ -64,13 +62,25 @@ class JadwalSurvei implements FromView
         //
 
         $users = [];
+        $surveyor = [];
         foreach ($data as $value) {
-            $value->tanggal = Carbon::parse($value->tanggal)->translatedFormat('d F Y');
-            $users[] = (object) [
-                'kode_pengajuan' => $value->kode_pengajuan,
-                'surveyor_kode'  => $value->surveyor_kode,
-                'nama_user'      => $value->nama_user,
-            ];
+            // $value->tanggal = Carbon::parse($value->tanggal)->translatedFormat('d F Y');
+            // $users[] = (object) [
+            //     'kode_pengajuan' => $value->kode_pengajuan,
+            //     'surveyor_kode'  => $value->surveyor_kode,
+            //     'nama_user'      => $value->nama_user,
+            // ];
+
+            if (!in_array($value->surveyor_kode, $surveyor)) {
+                $users[] = (object) [
+                    'kode_pengajuan' => $value->kode_pengajuan,
+                    'surveyor_kode'  => $value->surveyor_kode,
+                    'nama_user'      => $value->nama_user,
+                ];
+
+                // Simpan kode surveyor yang sudah diproses
+                $surveyor[] = $value->surveyor_kode;
+            }
         }
 
         return view('analisa.exports.jadwal_survei', compact('data', 'users'));
