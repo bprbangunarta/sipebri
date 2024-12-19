@@ -718,8 +718,6 @@ class CetakLaporanController extends Controller
             }
         }
 
-
-        // dd($data);
         return view('laporan.tracking-pengajuan', [
             'data' => $data,
             'kantor' => $kantor,

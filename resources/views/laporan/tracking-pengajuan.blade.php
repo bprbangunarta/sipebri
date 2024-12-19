@@ -149,10 +149,18 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">
-                                                @if (in_array($item->deviasi, ['NOTIF EXPIRED', 'REGISTRATION EXPIRED']))
-                                                    <b class="text-red">{{ $item->deviasi }}</b>
+                                                @if (!empty($item->deviasi))
+                                                    @if (in_array($item->deviasi, ['NOTIF EXPIRED', 'REGISTRATION EXPIRED']))
+                                                        <b class="text-red">{{ $item->deviasi }}</b>
+                                                    @else
+                                                        {{ $item->deviasi }}
+                                                    @endif
                                                 @else
-                                                    {{ $item->deviasi }}
+                                                    @php
+                                                        $hari = strtotime(now()) - strtotime($item->tanggal);
+                                                        $hari = floor($hari / (60 * 60 * 24));
+                                                    @endphp
+                                                    {{ $hari }} hari
                                                 @endif
                                                 {{-- @if ($item->status == 'Ditolak' || $item->status == 'Dibatalkan')
                                                     @php
