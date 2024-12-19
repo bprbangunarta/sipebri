@@ -87,11 +87,17 @@
                                 </td>
                                 <td class="text-center" style="vertical-align: middle;">{{ $item->tracking }}
                                 </td>
-                                @if (Auth::user()->roles[0]->name == 'Kasi Analis')
+                                @if (Auth::user()->roles[0]->name == 'Kasi Analis' && $item->tracking == 'Proses Survei')
                                     <td class="text-center" style="vertical-align: middle;">
                                         <a data-toggle="modal" data-target="#jadwal-ulang"
                                             data-pengajuans="{{ $item->kode_pengajuan }}" class="btn-circle btn-sm bg-blue"
                                             title="Jadwal Ulang" style="cursor: pointer;">
+                                            <i class="fa fa-history"></i>
+                                        </a>
+                                    </td>
+                                @else
+                                    <td class="text-center" style="vertical-align: middle;">
+                                        <a class="btn-circle btn-sm bg-grey" title="Jadwal Ulang" style="cursor: pointer;">
                                             <i class="fa fa-history"></i>
                                         </a>
                                     </td>
