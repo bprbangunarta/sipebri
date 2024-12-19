@@ -63,6 +63,7 @@ class JadwalSurvei implements FromView
 
         $users = [];
         $surveyor = [];
+
         foreach ($data as $value) {
             // $value->tanggal = Carbon::parse($value->tanggal)->translatedFormat('d F Y');
             // $users[] = (object) [
