@@ -63,7 +63,7 @@ class SurveiController extends Controller
                 $survey->nama_surveyor = $st->nama_user;
             }
 
-            //Inisialisasi data        
+            //Inisialisasi data
             $survey->tabungan_cgc = $pengajuan->tabungan_cgc;
 
             //Data kasi
@@ -310,6 +310,8 @@ class SurveiController extends Controller
                 } elseif ($item->tracking == 'Penjadwalan' && is_null($item->foto)) {
                     $item->ket = 'Pending';
                 } elseif ($item->tracking == 'Proses Analisa') {
+                    $item->ket = 'Success';
+                } elseif (in_array($item->tracking, ['Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II', 'Naik Komite III', 'Realisasi', 'Selesai'])) {
                     $item->ket = 'Success';
                 } else {
                     $item->ket = 'Next Survei';
