@@ -227,77 +227,88 @@ class PenjadwalanController extends Controller
 
     public function jadwal_survei()
     {
-        try {
-            $keyword = request('keyword');
+        $keyword = request('keyword');
 
-            $data = DB::table('data_jadwal_survei')
-                ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_jadwal_survei.pengajuan_kode',)
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-                ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-                ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
-                ->select(
-                    'data_pengajuan.created_at as tanggal',
-                    'data_pengajuan.kode_pengajuan',
-                    'data_pengajuan.plafon',
-                    'data_pengajuan.produk_kode',
-                    'data_pengajuan.tracking',
-                    'data_nasabah.nama_nasabah',
-                    'data_nasabah.alamat_ktp',
-                    'data_survei.kantor_kode',
-                    'v_users.nama_user',
-                    'data_survei.surveyor_kode',
-                    'data_survei.latitude',
-                    'data_survei.longitude',
-                    'data_survei.foto',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%Y') as tgl_survei"),
-                    'data_survei.catatan_survei',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%Y') as tgl_jadul_1"),
-                    'data_survei.catatan_jadul_1',
-                    DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%Y') as tgl_jadul_2"),
-                    'data_survei.catatan_jadul_2',
-                )
-                ->whereNot('data_pengajuan.produk_kode', 'KTA')
+        $data = DB::table('data_jadwal_survei')
+            ->join('data_pengajuan', 'data_pengajuan.kode_pengajuan', '=', 'data_jadwal_survei.pengajuan_kode',)
+            ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+            ->join('data_survei', 'data_survei.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+            ->join('v_users', 'v_users.code_user', '=', 'data_survei.surveyor_kode')
+            ->select(
+                'data_pengajuan.kode_pengajuan',
+                'data_pengajuan.plafon',
+                'data_pengajuan.produk_kode',
+                'data_pengajuan.tracking',
+                'data_nasabah.nama_nasabah',
+                'data_nasabah.alamat_ktp',
+                'data_survei.kantor_kode',
+                'v_users.nama_user',
+                'data_survei.surveyor_kode',
+                'data_survei.latitude',
+                'data_survei.longitude',
+                'data_survei.foto',
+                DB::raw("DATE_FORMAT(data_pengajuan.created_at, '%d-%m-%Y') as tanggal"),
+                DB::raw("DATE_FORMAT(data_survei.tgl_survei, '%d-%m-%Y') as tgl_survei"),
+                'data_survei.catatan_survei',
+                DB::raw("DATE_FORMAT(data_survei.tgl_jadul_1, '%d-%m-%Y') as tgl_jadul_1"),
+                'data_survei.catatan_jadul_1',
+                DB::raw("DATE_FORMAT(data_survei.tgl_jadul_2, '%d-%m-%Y') as tgl_jadul_2"),
+                'data_survei.catatan_jadul_2',
+            )
+            ->whereNot('data_pengajuan.produk_kode', 'KTA')
 
-                ->where(function ($query) {
-                    $today = Carbon::today();
+            ->where(function ($query) {
+                $today = Carbon::today();
 
-                    if ($today->isFriday()) {
-                        $saturday = $today->copy()->addDay();
-                        $sunday = $today->copy()->addDays(2);
+                if ($today->isFriday()) {
+                    $saturday = $today->copy()->addDay();
+                    $sunday = $today->copy()->addDays(2);
 
-                        $query->where(function ($subQuery) use ($saturday, $sunday) {
-                            $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$saturday->toDateString()])
-                                ->orWhereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$sunday->toDateString()]);
-                        })
-                            ->orWhere(function ($subQuery) use ($today) {
-                                $monday = $today->copy()->next(Carbon::MONDAY);
-                                $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$monday->toDateString()]);
-                            });
-                    } else {
-                        $query->where(function ($subQuery) use ($today) {
-                            $tomorrow = $today->copy()->addDay();
-
-                            $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$today->toDateString()])
-                                ->orWhereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$tomorrow->toDateString()]);
+                    $query->where(function ($subQuery) use ($saturday, $sunday) {
+                        $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$saturday->toDateString()])
+                            ->orWhereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$sunday->toDateString()]);
+                    })
+                        ->orWhere(function ($subQuery) use ($today) {
+                            $monday = $today->copy()->next(Carbon::MONDAY);
+                            $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$monday->toDateString()]);
                         });
-                    }
-                })
+                } else {
+                    $query->where(function ($subQuery) use ($today) {
+                        $tomorrow = $today->copy()->addDay();
 
-                ->where(function ($query) use ($keyword) {
-                    $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
-                        ->orWhere('v_users.code_user', 'like', '%' . $keyword . '%')
-                        ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
-                        ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
-                })
-                ->orderBy('data_jadwal_survei.tgl_survei', 'ASC')
-                ->paginate(10);
-            // 
+                        $subQuery->whereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$today->toDateString()])
+                            ->orWhereRaw("DATE(data_jadwal_survei.tgl_survei) = ?", [$tomorrow->toDateString()]);
+                    });
+                }
+            })
 
-            $tgl = now()->addDay()->locale('id')->translatedFormat('d F Y');
+            ->where(function ($query) use ($keyword) {
+                $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.kode_pengajuan', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_pengajuan.produk_kode', 'like', '%' . $keyword . '%')
+                    ->orWhere('v_users.code_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%')
+                    ->orWhere('data_survei.kantor_kode', 'like', '%' . $keyword . '%');
+            })
+            ->orderBy('data_jadwal_survei.tgl_survei', 'ASC')
+            ->paginate(10);
+        //
 
-            return view('analisa.jadwal_survei', compact('data', 'tgl'));
+        $tgl = now()->addDay()->locale('id')->translatedFormat('d F Y');
+
+        // Validasi tanggal survei
+        foreach ($data as $item) {
+            if (!empty($item->tgl_survei) && empty($item->tgl_jadul_1) && empty($item->tgl_jadul_2)) {
+                $item->tgl_jadwal_survei = $item->tgl_survei;
+            } elseif (!empty($item->tgl_survei) && !empty($item->tgl_jadul_1) && empty($item->tgl_jadul_2)) {
+                $item->tgl_jadwal_survei = $item->tgl_jadul_1;
+            } elseif (!empty($item->tgl_survei) && !empty($item->tgl_jadul_1) && !empty($item->tgl_jadul_2)) {
+                $item->tgl_jadwal_survei = $item->tgl_jadul_2;
+            }
+        }
+
+        return view('analisa.jadwal_survei', compact('data', 'tgl'));
+        try {
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditampilkan');
         }

@@ -56,7 +56,7 @@
                                 </td>
 
                                 <td class="text-center" style="vertical-align: middle;">
-                                    {{ $item->tgl_survei }}
+                                    {{ $item->tgl_jadwal_survei }}
                                 </td>
 
                                 <td class="text-center" style="vertical-align: middle;">
