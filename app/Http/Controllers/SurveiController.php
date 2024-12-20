@@ -330,37 +330,14 @@ class SurveiController extends Controller
 
             $tgl = now()->locale('id')->translatedFormat('d F Y');
 
-            // Mendapatkan Jumlah
-            $surveyorCounts = (object) [];
-            foreach ($data as $item) {
-                $kode = $item->surveyor_kode;
+            $dataCount = Midle::countUser();
 
-                if (!isset($surveyorCounts->$kode)) {
-                    $surveyorCounts->$kode = [
-                        'count' => 0,
-                        'name' => null,
-                    ];
-                }
-
-                $surveyorCounts->$kode['count']++;
-            }
-
-            foreach ($surveyorCounts as $kode => &$info) {
-                $info['name'] = User::where('code_user', $kode)->pluck('name')->first();
-            }
-
-            $finalResult = [];
-            foreach ($surveyorCounts as $value) {
-                $finalResult[] = (object) [
-                    'name' => $value['name'],
-                    'count' => $value['count'],
-                ];
-            }
-
-            if (!empty($finalResult)) {
-                $countUser = (object) $finalResult;
+            if (!empty($dataCount)) {
+                $surveyorCounts = $dataCount[0];
+                $countUser = $dataCount[1];
             } else {
-                $countUser = [];
+                $surveyorCounts = null;
+                $countUser = null;
             }
 
             return view('analisa.pelaksanaan.index', compact('data', 'tgl', 'surveyorCounts', 'countUser'));

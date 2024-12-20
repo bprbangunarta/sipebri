@@ -65,13 +65,6 @@ class JadwalSurvei implements FromView
         $surveyor = [];
 
         foreach ($data as $value) {
-            // $value->tanggal = Carbon::parse($value->tanggal)->translatedFormat('d F Y');
-            // $users[] = (object) [
-            //     'kode_pengajuan' => $value->kode_pengajuan,
-            //     'surveyor_kode'  => $value->surveyor_kode,
-            //     'nama_user'      => $value->nama_user,
-            // ];
-
             if (!in_array($value->surveyor_kode, $surveyor)) {
                 $users[] = (object) [
                     'kode_pengajuan' => $value->kode_pengajuan,
@@ -79,7 +72,6 @@ class JadwalSurvei implements FromView
                     'nama_user'      => $value->nama_user,
                 ];
 
-                // Simpan kode surveyor yang sudah diproses
                 $surveyor[] = $value->surveyor_kode;
             }
         }
