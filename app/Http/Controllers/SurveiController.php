@@ -277,7 +277,7 @@ class SurveiController extends Controller
                 )
                 ->whereNot('data_pengajuan.produk_kode', 'KTA')
                 ->where('data_survei.kasi_kode', '!=', '')
-                ->whereNull('data_survei.foto')
+                // ->whereNull('data_survei.foto')
                 ->where(function ($query) {
                     $query->whereRaw("DATE(data_survei.tgl_survei) = ?", [Carbon::today()->toDateString()])
                         ->orWhereRaw("DATE(data_survei.tgl_jadul_1) = ?", [Carbon::today()->toDateString()])
@@ -309,9 +309,7 @@ class SurveiController extends Controller
                     $item->ket = 'Progress';
                 } elseif ($item->tracking == 'Penjadwalan' && is_null($item->foto)) {
                     $item->ket = 'Pending';
-                } elseif ($item->tracking == 'Proses Analisa') {
-                    $item->ket = 'Success';
-                } elseif (in_array($item->tracking, ['Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II', 'Naik Komite III', 'Realisasi', 'Selesai'])) {
+                } elseif (in_array($item->tracking, ['Proses Analisa', 'Persetujuan Komite', 'Naik Kasi', 'Naik Komite I', 'Naik Komite II', 'Naik Komite III', 'Realisasi', 'Selesai'])) {
                     $item->ket = 'Success';
                 } else {
                     $item->ket = 'Next Survei';

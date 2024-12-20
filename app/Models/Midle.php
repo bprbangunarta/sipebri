@@ -1698,7 +1698,6 @@ class Midle extends Model
             )
             ->whereNot('data_pengajuan.produk_kode', 'KTA')
             ->where('data_survei.kasi_kode', '!=', '')
-            ->whereNull('data_survei.foto')
             ->where(function ($query) {
                 $query->whereRaw("DATE(data_survei.tgl_survei) = ?", [Carbon::today()->toDateString()])
                     ->orWhereRaw("DATE(data_survei.tgl_jadul_1) = ?", [Carbon::today()->toDateString()])
