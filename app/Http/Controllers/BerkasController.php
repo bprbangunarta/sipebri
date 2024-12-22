@@ -227,6 +227,7 @@ class BerkasController extends Controller
                 ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
                 ->join('v_users as pengirim', 'pengirim.code_user', '=', 'data_berkas.user_pengirim')
                 ->leftJoin('v_users as penerima', 'penerima.code_user', '=', 'data_berkas.user_penerima')
+                ->leftJoin('v_users as tujuan', 'tujuan.code_user', '=', 'data_berkas.user_tujuan')
                 ->select(
                     'data_pengajuan.kode_pengajuan',
                     'data_pengajuan.plafon',
@@ -235,6 +236,7 @@ class BerkasController extends Controller
                     'data_nasabah.alamat_ktp',
                     'pengirim.nama_user as user_pengirim',
                     'penerima.nama_user as user_penerima',
+                    'tujuan.nama_user as users_tujuan',
                     'data_berkas.user_tujuan',
                     'data_berkas.dari_kantor',
                     'data_berkas.ke_kantor',

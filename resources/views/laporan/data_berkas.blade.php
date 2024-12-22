@@ -59,7 +59,13 @@
                                             <td class="text-center">{{ $item->dari_kantor }}</td>
                                             <td class="text-center">{{ $item->ke_kantor }}</td>
                                             <td class="text-center">{{ $item->user_pengirim }}</td>
-                                            <td class="text-center">{{ $item->user_penerima }}</td>
+                                            <td class="text-center">
+                                                @if (!empty($item->user_penerima))
+                                                    {{ $item->user_penerima }}
+                                                @else
+                                                    {{ $item->users_tujuan }}
+                                                @endif
+                                            </td>
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($item->tgl_kirim)->format('d-m-Y') }}</td>
                                             <td class="text-center">
