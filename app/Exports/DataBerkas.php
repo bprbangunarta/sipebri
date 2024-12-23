@@ -25,6 +25,7 @@ class DataBerkas implements FromView
             ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
             ->join('v_users as pengirim', 'pengirim.code_user', '=', 'data_berkas.user_pengirim')
             ->leftJoin('v_users as penerima', 'penerima.code_user', '=', 'data_berkas.user_penerima')
+            ->leftJoin('v_users as tujuan', 'tujuan.code_user', '=', 'data_berkas.user_tujuan')
             ->leftJoin('data_survei', 'data_survei.pengajuan_kode', '=', 'data_berkas.pengajuan_kode')
             ->select(
                 'data_pengajuan.kode_pengajuan',
@@ -34,11 +35,12 @@ class DataBerkas implements FromView
                 'data_nasabah.alamat_ktp',
                 'pengirim.nama_user as user_pengirim',
                 'penerima.nama_user as user_penerima',
+                'tujuan.nama_user as user_staffanalis',
                 'data_berkas.user_tujuan',
                 'data_berkas.dari_kantor',
                 'data_berkas.ke_kantor',
-                DB::raw("DATE_FORMAT(data_berkas.tgl_kirim, '%Y-%m-%d') as tgl_kirim"),
-                DB::raw("DATE_FORMAT(data_berkas.tgl_terima, '%Y-%m-%d') as tgl_terima")
+                DB::raw("DATE_FORMAT(data_berkas.tgl_kirim, '%d-%m-%Y') as tgl_kirim"),
+                DB::raw("DATE_FORMAT(data_berkas.tgl_terima, '%d-%m-%Y') as tgl_terima")
             )
 
             ->where(function ($query) use ($tgl_kirim, $tgl_kirim_sampai) {
@@ -82,7 +84,6 @@ class DataBerkas implements FromView
             ->orderBy('data_berkas.tgl_kirim', 'DESC')
             ->get();
         //
-
         return view('analisa.exports.data_berkas', compact('data'));
     }
 }
