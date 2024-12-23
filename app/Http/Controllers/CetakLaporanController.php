@@ -74,9 +74,21 @@ class CetakLaporanController extends Controller
                 ->where('data_survei.surveyor_kode', 'like', '%' . $surveyor . '%')
                 ->where('data_pengajuan.metode_rps', 'like', '%' . $metode . '%')
                 ->where('data_kantor.kode_kantor', 'like', '%' . $kantor . '%');
-        })
+        });
 
-            ->orderBy('data_pengajuan.created_at', 'desc');
+        if (empty($keyword)) {
+            $query->where(function ($data) use ($keyword) {
+                $data->where(function ($subQuery) {
+                    $currentMonth = Carbon::now()->format('Y-m');
+                    $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+
+                    $subQuery->whereRaw("DATE_FORMAT(data_pengajuan.created_at, '%Y-%m') = ?", [$currentMonth])
+                        ->orWhereRaw("DATE_FORMAT(data_pengajuan.created_at, '%Y-%m') = ?", [$previousMonth]);
+                });
+            });
+        };
+
+        $query->orderBy('data_pengajuan.created_at', 'desc');
         $data = $query->paginate(10);
 
         //Data Kantor
@@ -504,7 +516,7 @@ class CetakLaporanController extends Controller
                 'data_pengajuan.jangka_waktu',
                 'data_pengajuan.suku_bunga',
                 'data_pengajuan.metode_rps',
-                // Jth. Tempo dibuat di blade, kalau bisa pindahkan ke controller
+                DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, CURDATE()) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%d-%m-%Y') as jth_tempo"),
                 'v_users.nama_user',
             )
 
@@ -521,14 +533,27 @@ class CetakLaporanController extends Controller
                     ->orWhere('data_pengajuan.suku_bunga', 'like', '%' . $keyword . '%')
                     ->orWhere('data_pengajuan.metode_rps', 'like', '%' . $keyword . '%')
                     ->orWhere('v_users.nama_user', 'like', '%' . $keyword . '%');
-            })
+            });
 
-            ->orderBy('data_spk.created_at', 'desc');
+        if (empty($keyword)) {
+            $query->where(function ($data) use ($keyword) {
+                $data->where(function ($subQuery) {
+                    $currentMonth = Carbon::now()->format('Y-m');
+                    $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+
+                    $subQuery->whereRaw("DATE_FORMAT(data_pengajuan.created_at, '%Y-%m') = ?", [$currentMonth])
+                        ->orWhereRaw("DATE_FORMAT(data_pengajuan.created_at, '%Y-%m') = ?", [$previousMonth]);
+                });
+            });
+        };
+
+        $query->orderBy('data_spk.created_at', 'desc');
 
         $kantor = DB::table('data_kantor')->get();
         $produk = DB::table('data_produk')->get();
 
         $data = $query->paginate(10);
+
         return view('laporan.realisasi', [
             'data' => $data,
             'kantor' => $kantor,

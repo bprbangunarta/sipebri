@@ -85,6 +85,12 @@ class BerkasController extends Controller
                 "user" => "required"
             ]);
 
+            $cekData = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
+
+            if (empty($cekData)) {
+                return redirect()->back()->with('error', 'Kode pengajuan tidak ada.');
+            }
+
             $kantor = DB::table('v_users')->where('code_user', Auth::user()->code_user)->pluck('kantor_kode')->first();
 
             $data = [
@@ -141,8 +147,6 @@ class BerkasController extends Controller
                     'data_nasabah.alamat_ktp',
                     'v_users.nama_user',
                 )
-                // ->where('data_berkas.ke_kantor', Auth::user()->kantor_kode)
-                // ->whereNull('data_berkas.tgl_terima')
 
                 ->where(function ($query) use ($role) {
                     if ($role == 'Staff Analis' || $role == 'Kasi Analis') {
@@ -150,6 +154,7 @@ class BerkasController extends Controller
                             ->where('data_berkas.user_tujuan', '=', Auth::user()->code_user);
                     } else {
                         $query->whereNull('data_berkas.tgl_terima')
+                            ->whereNull('data_berkas.user_tujuan')
                             ->where('data_berkas.ke_kantor', Auth::user()->kantor_kode);
                     }
                 })
@@ -164,6 +169,7 @@ class BerkasController extends Controller
                 ->orderByRaw('data_berkas.tgl_terima IS NULL DESC')
                 ->paginate(10);
             //
+
             return view('pengajuan.terima-berkas.index', compact('data'));
         } catch (\Throwable $th) {
         }

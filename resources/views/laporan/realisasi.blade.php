@@ -73,13 +73,13 @@
                                             <td class="text-center">{{ $item->suku_bunga }}%</td>
                                             <td class="text-center">{{ $item->metode_rps }}</td>
 
-                                            @php
+                                            {{-- @php
                                                 $tanggal = \Carbon\Carbon::parse($item->tanggal);
                                                 $jk = $item->jangka_waktu;
                                                 $tempo = $tanggal->addMonths($jk);
                                                 $jth_tempo = $tempo->format('d-m-Y');
-                                            @endphp
-                                            <td class="text-center">{{ $jth_tempo }}</td>
+                                            @endphp --}}
+                                            <td class="text-center">{{ $item->jth_tempo }}</td>
                                         </tr>
                                         @php
                                             $no++;
