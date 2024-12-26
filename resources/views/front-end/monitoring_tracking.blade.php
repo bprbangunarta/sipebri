@@ -35,9 +35,10 @@
                             <b>Keputusan Komite</b> <br>
                             {{ $data->keputusan_komite && in_array($data->status, ['Disetujui', 'Ditolak', 'Dibatalkan']) ? $data->keputusan_komite : '-' }}
                             <br>
-                            @if (in_array($data->status, ['Disetujui', 'Ditolak', 'Dibatalkan']))
+                            @if ($data->status == 'Disetujui')
                                 <span class="label label-success">{{ $data->status }}</span>
-                            @else
+                            @elseif(in_array($data->status, ['Ditolak', 'Dibatalkan']))
+                                <span class="label label-danger">{{ $data->status }}</span>
                             @endif
                         </td>
                     </tr>
