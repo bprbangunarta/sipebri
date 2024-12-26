@@ -281,7 +281,7 @@
 
                     <li class="{{ request()->is('themes/prosfek/index') ? 'active' : '' }}">
                         <a @can('tambah prosfek')
-                            href="{{ route('prosfek.index') }}" 
+                            href="{{ route('prosfek.index') }}"
                         @endcan
                             title="Monitoring Petugas">
                             <i class="fa fa-cog" aria-hidden="true"></i>
@@ -865,6 +865,26 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- <li class="treeview {{ Route::is('chart.pendaftaran') ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                    <span>Statistic</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+
+                <ul class="treeview-menu">
+                    <li class="{{ Route::is('chart.pendaftaran') ? 'active' : '' }}">
+                        <a href="{{ route('chart.pendaftaran') }}" title="Pendaftaran Kredit">
+                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                            Statistic
+                        </a>
+                    </li>
+                </ul>
+            </li> --}}
+        </ul>
         </ul>
     </section>
 </aside>

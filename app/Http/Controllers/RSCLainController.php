@@ -227,12 +227,13 @@ class RSCLainController extends Controller
             } else {
                 $lain->biaya_bahan = 0;
             }
-            // dd($lain, $total);
+
 
             $cek_pendapatan = DB::table('rsc_pendapatan_lain')->where('usaha_kode', $kode_usaha)->get();
             $cek_pengeluaran = DB::table('rsc_pengeluaran_lain')->where('usaha_kode', $kode_usaha)->get();
 
             if (count($cek_pendapatan) <= 0) {
+
                 return view('rsc.usaha_lainnya.keuangan', [
                     'data' => $data[0],
                     'lain' => $lain,
@@ -330,7 +331,7 @@ class RSCLainController extends Controller
                     'laba_bersih' => (int)str_replace(["Rp.", " ", "."], "", $request->laba_bersih),
                     'updated_at' => now(),
                 ];
-
+                // dd($data3);
                 DB::table('rsc_au_lain')->where('kode_usaha', $kode_usaha)->update($data3);
             });
             return redirect()->back()->with('success', 'Berhasil menambahkan data');

@@ -52,7 +52,7 @@
             <div class="pull-right hidden-xs">
                 <b>VERSI</b> 1.1.0
             </div>
-            <strong>SISTEM PEMBERIAN KREDI</strong>
+            <strong>SISTEM PEMBERIAN KREDIT</strong>
         </div>
     </footer>
     @include('theme.footer')

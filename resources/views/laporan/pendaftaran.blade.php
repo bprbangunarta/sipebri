@@ -14,10 +14,6 @@
                             <div class="box-tools">
                                 <form action="{{ route('laporan.pendaftaran') }}" method="GET">
                                     <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        {{-- <a data-toggle="modal" data-target="#modal-filter" class="btn btn-sm btn-default">
-                                            <i class="fa fa-filter"></i> Short & Filter
-                                        </a> --}}
-
                                         <input type="text" class="form-control text-uppercase pull-right"
                                             style="width: 170px;" name="keyword" id="keyword"
                                             value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">

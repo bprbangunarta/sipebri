@@ -317,6 +317,25 @@
             </tr>
 
         </table>
+
+        <table>
+            <tr>
+                <td width="80%"></td>
+                <td class="text-center">
+                    <p style="margin-top: 0px;"></p>
+                    <center>
+                        <img style="width: 80px;" src="data:image/png;base64,{{ $qr }}">
+                    </center>
+                    <b>
+                        <font style="text-transform: uppercase; margin-top: 5px; display: block;">
+                            QRCode Tracking
+                        </font>
+                    </b>
+                </td>
+            </tr>
+
+        </table>
+
     </div>
 
     <script>

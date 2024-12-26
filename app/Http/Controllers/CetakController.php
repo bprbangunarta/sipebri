@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Midle;
 use App\Models\Pekerjaan;
 use App\Models\Pengajuan;
 use App\Models\Pendidikan;
@@ -176,8 +177,11 @@ class CetakController extends Controller
             $ks = DB::table('v_users')->where('code_user', $data[0]->input_user_survei)->first();
             $data[0]->nama_input_survei = $ks->nama_user;
 
+            $qr = Midle::qrcode_monitoring_kredit($data[0]->kode_pengajuan);
+
             return view('cetak.layouts.monitoring', [
-                'data' => $data[0]
+                'data' => $data[0],
+                'qr' => $qr
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

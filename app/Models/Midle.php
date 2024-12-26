@@ -1615,6 +1615,22 @@ class Midle extends Model
         return $qrCodeBase64;
     }
 
+    public static function qrcode_monitoring_kredit($kode)
+    {
+        $url = 'http://sipebri.bprbangunarta.com/informasi?kode=' . $kode;
+
+        $logoPath = public_path('assets/img/favicon2.png');
+        $qrCode = QrCode::size(300)
+            ->format('png')
+            ->errorCorrection('H')
+            ->merge($logoPath, 0.3, true)
+            ->generate(strval($url));
+
+        $qrCodeBase64 = base64_encode($qrCode);
+
+        return $qrCodeBase64;
+    }
+
     public static function data_kantor($data)
     {
         if ($data == 'KANTOR PUSAT PAMANUKAN') {

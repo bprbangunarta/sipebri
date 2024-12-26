@@ -14,6 +14,7 @@ use App\Http\Controllers\LainController;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\AgunanController;
 use App\Http\Controllers\BerkasController;
@@ -1057,12 +1058,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/perubahan/data', 'perubahan_data_index')->name('ubah.data');
         Route::post('/perubahan/data/tabel', 'ubah_data_tabel')->name('ubah.data_tabel');
     });
+
+    // Chart
+    Route::controller(ChartController::class)->group(function () {
+        Route::get('/chart/pendaftaran', 'index')->name('chart.pendaftaran');
+    });
 });
 
 //====FRONT END====//
 // Route::get('/', [FrontController::class, 'index']);
 Route::get('/pengajuan/kredit', [FrontController::class, 'pengajuan']);
 Route::get('/pengajuan/tracking', [FrontController::class, 'tracking']);
+Route::get('/informasi', [FrontController::class, 'informasi_tracking'])->name('monitoring.informasi_tracking');
+Route::get('/tracking', [FrontController::class, 'monitoring_tracking'])->name('monitoring.tracking');
 Route::get('/verifikasi', [FrontController::class, 'verifikasi']);
 //====FRONT END====//
 
