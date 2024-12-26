@@ -223,6 +223,13 @@
 
             <div class="box-footer clearfix">
                 <div class="pull-left hidden-xs">
+                    <button type="button" class="btn-circle btn-sm bg-green" title="Informasi" data-toggle="modal"
+                        data-target="#modalExport" style="cursor: pointer; border:none;">
+                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        &nbsp;
+                        Export
+                    </button>
+                    &nbsp;
                     <button class="btn btn-default btn-sm">
                         Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                         entries
@@ -305,6 +312,43 @@
                     <div class="modal-footer" style="margin-top: -10px;">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
                         <button type="submit" class="btn btn-warning">SIMPAN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalExport">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT PENJADWALAN</h4>
+                </div>
+                <form action="{{ route('export.penjadwalan') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>NAMA KASI</label>
+                                    <select class="form-control petugas" style="width: 100%;" name="kode_kasi"
+                                        id="kode_kasi">
+                                        <option value="" selected>-- Pilih --</option>
+                                        @foreach ($kasi as $item)
+                                            <option value="{{ $item->code_user }}">{{ $item->nama_user }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
                     </div>
                 </form>
             </div>

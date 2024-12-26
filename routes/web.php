@@ -418,6 +418,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/jadwal/survei', 'jadwal_survei')->name('jadwal.survei');
             Route::POST('/update/petugas/survei', 'update_petugas')->name('update.petugas');
             Route::get('/export/jadwal/survei', 'export_jadwal_survei')->name('export.jadwal.survei');
+
+            // Export
+            Route::post('/export/penjadwalan', 'export_penjadwalan')->name('export.penjadwalan');
         });
 
         // Hasil Survei
