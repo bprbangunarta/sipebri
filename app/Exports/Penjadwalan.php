@@ -42,6 +42,7 @@ class Penjadwalan implements FromView
             )
             ->whereNot('data_pengajuan.produk_kode', 'KTA')
             ->where('data_survei.kasi_kode', '!=', '')
+            ->where('data_pengajuan.status', '=', 'Sudah Otorisasi')
             ->where('data_pengajuan.tracking',  'Penjadwalan')
             ->where('data_survei.kasi_kode', $kasi)
 
