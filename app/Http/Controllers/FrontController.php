@@ -34,12 +34,12 @@ class FrontController extends Controller
 
             DB::statement("SET lc_time_names = 'id_ID'");
             $data = DB::table('data_pengajuan')
-                ->join('data_berkas', 'data_berkas.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
-                ->join('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
-                ->join('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
-                ->join('data_kantor as dari_kantor', 'dari_kantor.kode_kantor', '=', 'data_berkas.dari_kantor')
-                ->join('data_kantor as ke_kantor', 'ke_kantor.kode_kantor', '=', 'data_berkas.ke_kantor')
-                ->join('v_users as pengirim', 'pengirim.code_user', '=', 'data_berkas.user_pengirim')
+                ->leftJoin('data_berkas', 'data_berkas.pengajuan_kode', '=', 'data_pengajuan.kode_pengajuan')
+                ->leftJoin('data_nasabah', 'data_nasabah.kode_nasabah', '=', 'data_pengajuan.nasabah_kode')
+                ->leftJoin('data_produk', 'data_produk.kode_produk', '=', 'data_pengajuan.produk_kode')
+                ->leftJoin('data_kantor as dari_kantor', 'dari_kantor.kode_kantor', '=', 'data_berkas.dari_kantor')
+                ->leftJoin('data_kantor as ke_kantor', 'ke_kantor.kode_kantor', '=', 'data_berkas.ke_kantor')
+                ->leftJoin('v_users as pengirim', 'pengirim.code_user', '=', 'data_berkas.user_pengirim')
                 ->leftJoin('v_users as penerima', 'penerima.code_user', '=', 'data_berkas.user_penerima')
                 ->leftJoin('v_users as tujuan', 'tujuan.code_user', '=', 'data_berkas.user_tujuan')
                 ->select(
