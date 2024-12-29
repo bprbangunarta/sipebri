@@ -60,6 +60,7 @@
                                         <th class="text-center">TRACKING</th>
                                         <th class="text-center">STATUS</th>
                                         <th class="text-center">DEVIASI</th>
+                                        <th class="text-center">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -185,6 +186,13 @@
                                                     <b class="text-red">{{ $hari }} hari</b>
                                                 @endif --}}
 
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('qrcode.tracking.pengajuan', ['kode' => $item->kode_pengajuan]) }}"
+                                                    target="_blank" class="btn-circle btn-sm bg-blue"
+                                                    title="QRCode Tracking">
+                                                    <i class="fa fa-qrcode" aria-hidden="true"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                         @php

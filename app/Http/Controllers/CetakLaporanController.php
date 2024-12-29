@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Midle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CetakLaporanController extends Controller
 {
@@ -1053,5 +1055,13 @@ class CetakLaporanController extends Controller
         return view('laporan.rekap-notifikasi', [
             'data' => $data,
         ]);
+    }
+
+    public function qrcode_tracking_pengajuan()
+    {
+        $kode = request()->input('kode');
+        $qr = Midle::qrcode_tracking_kredit($kode);
+
+        return view('laporan.qrcode', compact('qr'));
     }
 }

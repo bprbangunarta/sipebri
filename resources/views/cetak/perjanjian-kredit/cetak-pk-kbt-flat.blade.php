@@ -304,16 +304,13 @@
                             </li>
                             <li>
                                 Semua pembayaran dapat dilakukan PEMINJAM dikantor BANK dengan menunjukkan kartu
-                                angsuran dan PEMINJAM
-                                akan memperoleh bukti pembayaran dari BANK atau pembayaran dilakukan melalui transfer ke
-                                Rekening milik
-                                BANK yang tercantum dalam kartu angsuran pinjaman. Apabila PEMINJAM melakukan pembayaran
-                                angsuran
-                                pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran pinjaman
-                                maka setelah
-                                dana diterima direkening Bank baru dapat diakui sebagai pembayaran angsuran pinjaman dan
-                                bukti transfer
-                                yang sah dapat diakui sebagai bukti pembayaran angsuran pinjaman.
+                                angsuran dan PEMINJAM akan memperoleh bukti pembayaran dari BANK atau pembayaran
+                                dilakukan melalui transfer ke Rekening milik BANK yang tercantum dalam kartu angsuran
+                                pinjaman melalui mekanisme virtual account. Apabila PEMINJAM melakukan pembayaran
+                                angsuran pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran
+                                pinjaman maka setelah dana diterima direkening Bank baru dapat diakui sebagai pembayaran
+                                angsuran pinjaman dan bukti transferyang sah dapat diakui sebagai bukti pembayaran
+                                angsuran pinjaman.
                             </li>
                         </ol>
                         </p>

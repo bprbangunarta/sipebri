@@ -1620,7 +1620,7 @@ class Midle extends Model
         $url = 'http://sipebri.bprbangunarta.com/informasi?kode=' . $kode;
 
         $logoPath = public_path('assets/img/favicon2.png');
-        $qrCode = QrCode::size(300)
+        $qrCode = QrCode::size(500)
             ->format('png')
             ->errorCorrection('H')
             ->merge($logoPath, 0.3, true)
@@ -1628,6 +1628,21 @@ class Midle extends Model
 
         $qrCodeBase64 = base64_encode($qrCode);
 
+        return $qrCodeBase64;
+    }
+
+    public static function qrcode_tracking_kredit($kode)
+    {
+        $url = 'http://sipebri.bprbangunarta.com/informasi?kode=' . $kode;
+
+        $logoPath = public_path('assets/img/favicon2.png');
+        $qrCode = QrCode::size(700)
+            ->format('png')
+            ->errorCorrection('H')
+            ->merge($logoPath, 0.3, true)
+            ->generate(strval($url));
+
+        $qrCodeBase64 = base64_encode($qrCode);
         return $qrCodeBase64;
     }
 

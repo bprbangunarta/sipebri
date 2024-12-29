@@ -1020,6 +1020,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/laporan/siap-realisasi', 'siap_realisasi')->name('laporan.siap-realisasi');
         Route::get('/laporan/pencairan', 'laporan_pencairan')->name('laporan.pencairan');
         Route::get('/laporan/tracking/pengajuan', 'laporan_tracking_pengajuan')->name('laporan.tracking.pengajuan');
+        Route::get('/qrcode/tracking/pengajuan', 'qrcode_tracking_pengajuan')->name('qrcode.tracking.pengajuan');
 
 
         // Hapus route yang tidak digunakan

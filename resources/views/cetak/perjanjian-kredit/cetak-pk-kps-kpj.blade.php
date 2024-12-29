@@ -299,7 +299,8 @@
                                 angsuran dan PEMINJAM
                                 akan memperoleh bukti pembayaran dari BANK atau pembayaran dilakukan melalui transfer ke
                                 Rekening milik
-                                BANK yang tercantum dalam kartu angsuran pinjaman. Apabila PEMINJAM melakukan pembayaran
+                                BANK yang tercantum dalam kartu angsuran pinjaman melalui mekanisme virtual account.
+                                Apabila PEMINJAM melakukan pembayaran
                                 angsuran
                                 pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran pinjaman
                                 maka setelah
