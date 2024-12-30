@@ -281,7 +281,8 @@
                                 angsuran dan PEMINJAM
                                 akan memperoleh bukti pembayaran dari BANK atau pembayaran dilakukan melalui transfer ke
                                 Rekening milik
-                                BANK yang tercantum dalam kartu angsuran pinjaman melalui mekanisme virtual account.
+                                BANK yang tercantum dalam kartu angsuran pinjaman melalui mekanisme <i>virtual
+                                    account</i>.
                                 Apabila PEMINJAM melakukan pembayaran
                                 angsuran
                                 pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran pinjaman
@@ -349,7 +350,8 @@
                                 tidak tersangkut
                                 dalam perkara / sengketa baik di dalam maupun di luar pengadilan serta tidak ditaruh
                                 dibawah penyitaan
-                                jaminan ( conversatoir / revindicatoir beslag ) serta bebas dari segala beban hukum lain
+                                jaminan ( <i>conversatoir / revindicatoir beslag</i> ) serta bebas dari segala beban
+                                hukum lain
                                 yang
                                 bagaimanapun sifatnya serta tidak diperoleh dari hasil perbuatan yang bertentangan
                                 dengan hukum yang
@@ -506,7 +508,8 @@
                             </center>
                             PEMINJAM mengetahui dan setuju bahwa penutupan asuransi terkait dengan pinjaman ini, pada
                             polisnya akan dipasangsyarat
-                            BANKER's Clouse yaitu apabila ada pembayaran dari asuransi akan diterima terlebih dahulu
+                            <i>BANKER’s Clouse</i> yaitu apabila ada pembayaran dari asuransi akan diterima terlebih
+                            dahulu
                             oleh BANK untuk membayar jumlah
                             seluruh hutang PEMINJAM, apabila ada kelebihan akan dikembalikan pada PEMINJAM, apabila
                             terjadi kekurangan maka

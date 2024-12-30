@@ -265,7 +265,8 @@
                                 angsuran dan PEMINJAM
                                 akan memperoleh bukti pembayaran dari BANK atau pembayaran dilakukan melalui transfer ke
                                 Rekening milik
-                                BANK yang tercantum dalam kartu angsuran pinjaman melalui mekanisme virtual account.
+                                BANK yang tercantum dalam kartu angsuran pinjaman melalui mekanisme <i>virtual
+                                    account</i>.
                                 Apabila PEMINJAM melakukan pembayaran
                                 angsuran
                                 pinjaman melalui transfer ke rekening Bank yang tercantum dalam kartu angsuran pinjaman
@@ -427,7 +428,7 @@
                                 Bahwa PEMINJAM dengan ini menyetujui dan sepakat untuk memberikan hak sepenuhnya kepada
                                 BANK untuk
                                 menyerahkan piutang dan/atau tagihan BANK terhadap PEMINJAM berikut semua janji-janji
-                                accesoir-nya
+                                <i>accesoir</i>-nya
                                 kepada pihak lain yang ditetapkan BANK sendiri setiap saat jika diperlukan oleh BANK.
                             </li>
                         </ol>
