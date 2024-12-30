@@ -19,7 +19,7 @@
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <form action="#" method="get">
+                        <form action="{{ route('monitoring.tracking') }}" method="get">
                             @csrf
                             <div style="width: 100%;">
                                 <input type="text" class="form-control text-center text-uppercase"
