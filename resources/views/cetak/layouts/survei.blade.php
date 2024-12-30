@@ -152,7 +152,6 @@
 
                         <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                             {{ $item->petugas }}
-                            asda
                         </font>
                     </td>
                 </tr>

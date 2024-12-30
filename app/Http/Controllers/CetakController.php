@@ -593,7 +593,7 @@ class CetakController extends Controller
 
             ->where(function ($query) use ($isAdminKredit) {
 
-                if ($isAdminKredit->role_name == 'Admin Kredit') {
+                if ($isAdminKredit->role_name == 'Admin Kredit' || $isAdminKredit->role_name == 'Administrator') {
                 } else {
                     $query->where('data_survei.kantor_kode', '=', Auth::user()->kantor_kode);
                 }
