@@ -866,7 +866,7 @@
                 </ul>
             </li>
 
-            {{-- <li class="treeview {{ Route::is('chart.pendaftaran') ? 'active' : '' }}">
+            <li class="treeview {{ Route::is('chart.pendaftaran') ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-pie-chart" aria-hidden="true"></i>
                     <span>Statistic</span>
@@ -883,7 +883,7 @@
                         </a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
         </ul>
         </ul>
     </section>

@@ -994,6 +994,7 @@ class RSCController extends Controller
             ->where(function ($query) use ($keyword, $keyword_sqlsrv) {
                 $query->where('data_nasabah.nama_nasabah', 'like', '%' . $keyword . '%')
                     ->orWhere('rsc_data_pengajuan.kode_rsc', 'like', '%' . $keyword . '%')
+                    ->orWhere('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . $keyword . '%')
                     ->orWhere(function ($subquery) use ($keyword_sqlsrv) {
                         if ($keyword_sqlsrv) {
                             $subquery->where('rsc_data_pengajuan.pengajuan_kode', 'like', '%' . trim($keyword_sqlsrv->noacc) . '%');
@@ -1078,7 +1079,16 @@ class RSCController extends Controller
             $count = 0001;
         } else {
             $nomor = DB::table('rsc_spk')->latest()->first();
-            $count = (int) $nomor->nomor + 1;
+
+            $result = (int) substr($nomor->no_spk, -4);
+            $now = Carbon::now();
+            $tahun = $now->year;
+
+            if ($result == $tahun) {
+                $count = (int) $nomor->nomor + 1;
+            } else {
+                $count = 0001;
+            }
         }
 
         $lengths = 4;

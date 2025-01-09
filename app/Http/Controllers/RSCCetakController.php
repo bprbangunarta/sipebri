@@ -1059,7 +1059,7 @@ class RSCCetakController extends Controller
                     'data_pengajuan.produk_kode',
                     'data_pengajuan.jangka_waktu as jw_pk',
                     'data_spk.no_spk',
-                    'data_spk.created_at as tgl_create_pk',
+                    DB::raw("DATE_FORMAT(COALESCE(data_spk.created_at), '%Y%m%d') as tgl_create_pk"),
                     DB::raw("DATE_FORMAT(COALESCE(rsc_spk.created_at), '%Y%m%d') as tgl_mulai_rsc"),
                     DB::raw("DATE_FORMAT((COALESCE(rsc_spk.created_at) + INTERVAL rsc_data_pengajuan.jangka_bunga MONTH), '%Y%m%d') as tgl_bayar_rsc"),
                     DB::raw("DATE_FORMAT((COALESCE(data_spk.updated_at, data_spk.created_at) + INTERVAL data_pengajuan.jangka_waktu MONTH), '%Y%m%d') as tgl_akhir_pk"),
@@ -1115,6 +1115,9 @@ class RSCCetakController extends Controller
                     $data->tgl_akhir = $tgl_tempo->isoFormat('D MMMM Y');
                     $data->tgl_akhir_pk = $tgl_tempo->isoFormat('D MMMM Y');
                 }
+            } else {
+                $tgl_pk = Carbon::parse($data->tgl_akhir_pk);
+                $data->tgl_akhir_pk = $tgl_pk->isoFormat('D MMMM Y');
             }
 
             $tgl_mulai_rsc = Carbon::parse($data->tgl_mulai_rsc);
@@ -1126,6 +1129,9 @@ class RSCCetakController extends Controller
 
             $tgl_akhir_rsc = Carbon::parse($data->tgl_akhir_rsc);
             $data->tgl_akhir_rsc = $tgl_akhir_rsc->isoFormat('D MMMM Y');
+
+            $tgl_create_pk = Carbon::parse($data->tgl_create_pk);
+            $data->tgl_create_pk = $tgl_create_pk->isoFormat('D MMMM Y');
 
             //Pengkondisian PK RSC jika lebih dari 1
             $cek_spk = DB::table('rsc_spk')
@@ -1160,6 +1166,7 @@ class RSCCetakController extends Controller
 
                 $tgl_realisasi_before = Carbon::createFromFormat('Y-m-d', $data_pk_eks->tgL_realisasi);
                 $data->tgl_realisasi_pk_rsc_before = $tgl_realisasi_before->translatedFormat('d F Y');
+                $data->plafon_rsc_before = $data_pk_eks->plafon;
 
                 $tgl_tempo = Carbon::createFromFormat('Y-m-d', $data_pk_eks->tgl_jth_tempo);
                 $data->tgl_tempo_pk_rsc_before = $tgl_tempo->translatedFormat('d F Y');
@@ -1179,7 +1186,7 @@ class RSCCetakController extends Controller
             if (empty($data->nama_pendamping)) {
                 $data->nama_pendamping = $data->nm_pendamping;
             }
-            // dd($cek_spk);
+
             if ($data->metode_rps_rsc == "FLAT" && $data->produk_kode == 'KPJ' && $data->tempat_kerja == 'PT HANDSOME') {
                 return view('rsc.cetak_pk.kpj_flat_handsome', [
                     'data' => $data
@@ -1191,7 +1198,6 @@ class RSCCetakController extends Controller
             }
 
             if ($data->metode_rps_rsc == "EFEKTIF MUSIMAN") {
-
                 return view('rsc.cetak_pk.efektif_musiman', [
                     'data' => $data
                 ]);

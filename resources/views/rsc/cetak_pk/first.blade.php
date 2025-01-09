@@ -226,11 +226,19 @@
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
                                     </font> Rupiah
                                     ) yang terdiri dari kewajiban pokok sebesar Rp.
-                                    {{ number_format($data->baki_debet, '0', ',', '.') }} ( <font
-                                        style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->baki_debet) }}
-                                    </font> Rupiah
-                                    )
+                                    @if ($data->jenis_persetujuan == 'RESTRUCTURING')
+                                        {{ number_format($data->baki_debet, '0', ',', '.') }} ( <font
+                                            style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->baki_debet) }}
+                                        </font> Rupiah
+                                        )
+                                    @else
+                                        {{ number_format($data->penentuan_plafon, '0', ',', '.') }} ( <font
+                                            style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
+                                        </font> Rupiah
+                                        )
+                                    @endif
                                     kewajiban Bunga sebesar Rp.
                                     {{ number_format($data->tunggakan_bunga, '0', ',', '.') }} ( <font
                                         style="text-transform: capitalize;">
@@ -241,7 +249,8 @@
                                         style="text-transform: capitalize;">
                                         {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->tunggakan_denda) }}
                                     </font> Rupiah
-                                    ).</td>
+                                    ).
+                                </td>
                                 <td class="text-center" width="1%"></td>
                                 <td></td>
                             </tr>
@@ -302,163 +311,175 @@
                         </table>
                         <br>
                         Sehubungan dengan hal-hal yang telah diuraikan di atas, para pihak setuju untuk dan dengan ini
-                        membuat suatu perubahan dari perjanjian kredit nomor {{ $data->no_spk }} tanggal
-                        {{ $data->tgl_create_pk }} sebagai berikut :
-                        <table>
-                            <tr>
-                                <td>1. </td>
-                                <td>
-                                    <b>
-                                        Mengubah ketentuan pasal 1, sehingga untuk selanjutnya berbunyi sebagai berikut
-                                        :
-                                    </b>
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td style="text-align: justify;">
-                                    Bahwa pengambil kredit mengakui telah meminjam uang dari Bank sejumlah Rp.
-                                    {{ number_format($data->penentuan_plafon, '0', ',', '.') }} ( <font
-                                        style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
-                                    </font> Rupiah
-                                    ).
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: absolute;">2. </td>
-                                <td style="text-align: justify;">
-                                    <b>Mengubah ketentuan pasal 3 ayat 1, sehingga untuk selanjutnya berbunyi sebagai
-                                        berikut :</b>
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td style="text-align: justify;">
-                                    Dengan mengindahkan syarat-syarat dan ketentuan perjanjian Kredit, batas waktu
-                                    penggunaan pinjaman ditentukan dalam jangka waktu {{ $data->jw_rsc }} (
-                                    <font style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jw_rsc) }}
-                                    </font>) bulan atau
-                                    harus sudah lunas paling lambat tanggal {{ $data->tgl_akhir_rsc }}.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: absolute;">3. </td>
-                                <td style="text-align: justify;">
-                                    <b>
-                                        Mengubah ketentuan pasal 3 Ayat 2, sehingga untuk selanjutnya berbunyi sebagai
-                                        berikut :
-                                    </b>
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    - &nbsp;&nbsp;Angsuran Pokok Rp.
-                                    {{ number_format($data->angsuran_pokok, '0', ',', '.') }} ( <font
-                                        style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_pokok) }}
-                                    </font> Rupiah
-                                    ) setiap {{ $data->jp_rsc }} bulan selama @if (is_null($data->jw_rsc_musiman))
-                                        {{ $data->jw_rsc }} bulan.
-                                    @else
-                                        {{ $data->jw_rsc }} musim.
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    - &nbsp;&nbsp;Angsuran Bunga Rp.
-                                    {{ number_format($data->angsuran_bunga, '0', ',', '.') }} (
-                                    <font style="text-transform: capitalize;">
-                                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_bunga) }}
-                                    </font> Rupiah
-                                    ) setiap {{ $data->jp_rsc }} bulan selama @if (is_null($data->jw_rsc_musiman))
-                                        {{ $data->jw_rsc }} bulan.
-                                    @else
-                                        {{ $data->jw_rsc }} musim.
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    Pembayaran kewajiban-kewajiban tersebut diatas tidak diperkenankan untuk menunggak.
-                                </td>
-                            </tr>
-                        </table>
+                        membuat suatu perubahan dari perjanjian kredit nomor @if (!empty($data->pk_rsc_before))
+                            {{ $data->pk_rsc_before }}
+                        @else
+                            {{ $data->no_spk }}
+                            @endif tanggal @if (!empty($data->pk_rsc_before))
+                                {{ $data->tgl_realisasi_pk_rsc_before }}
+                            @else
+                                {{ $data->tgl_create_pk }}
+                            @endif sebagai berikut :
+                            <table>
+                                <tr>
+                                    <td>1. </td>
+                                    <td>
+                                        <b>
+                                            Mengubah ketentuan pasal 1, sehingga untuk selanjutnya berbunyi sebagai
+                                            berikut
+                                            :
+                                        </b>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align: justify;">
+                                        Bahwa pengambil kredit mengakui telah meminjam uang dari Bank sejumlah Rp.
+                                        {{ number_format($data->penentuan_plafon, '0', ',', '.') }} ( <font
+                                            style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->penentuan_plafon) }}
+                                        </font> Rupiah
+                                        ).
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="position: absolute;">2. </td>
+                                    <td style="text-align: justify;">
+                                        <b>Mengubah ketentuan pasal 3 ayat 1, sehingga untuk selanjutnya berbunyi
+                                            sebagai
+                                            berikut :</b>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align: justify;">
+                                        Dengan mengindahkan syarat-syarat dan ketentuan perjanjian Kredit, batas waktu
+                                        penggunaan pinjaman ditentukan dalam jangka waktu {{ $data->jw_rsc }} (
+                                        <font style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->jw_rsc) }}
+                                        </font>) bulan atau
+                                        harus sudah lunas paling lambat tanggal {{ $data->tgl_akhir_rsc }}.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="position: absolute;">3. </td>
+                                    <td style="text-align: justify;">
+                                        <b>
+                                            Mengubah ketentuan pasal 3 Ayat 2, sehingga untuk selanjutnya berbunyi
+                                            sebagai
+                                            berikut :
+                                        </b>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        - &nbsp;&nbsp;Angsuran Pokok Rp.
+                                        {{ number_format($data->angsuran_pokok, '0', ',', '.') }} ( <font
+                                            style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_pokok) }}
+                                        </font> Rupiah
+                                        ) setiap {{ $data->jp_rsc }} bulan selama @if (is_null($data->jw_rsc_musiman))
+                                            {{ $data->jw_rsc }} bulan.
+                                        @else
+                                            {{ $data->jw_rsc }} musim.
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        - &nbsp;&nbsp;Angsuran Bunga Rp.
+                                        {{ number_format($data->angsuran_bunga, '0', ',', '.') }} (
+                                        <font style="text-transform: capitalize;">
+                                            {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran_bunga) }}
+                                        </font> Rupiah
+                                        ) setiap {{ $data->jp_rsc }} bulan selama @if (is_null($data->jw_rsc_musiman))
+                                            {{ $data->jw_rsc }} bulan.
+                                        @else
+                                            {{ $data->jw_rsc }} musim.
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        Pembayaran kewajiban-kewajiban tersebut diatas tidak diperkenankan untuk
+                                        menunggak.
+                                    </td>
+                                </tr>
+                            </table>
 
-                        <p>Dengan disepakatinya Perubahan Perjanjian Kredit ini, semua syarat-syarat dan
-                            ketentuan-ketentuan yang berlaku dalam Surat Perjanjian Kredit (SPK) Nomor
-                            {{ $data->no_spk }} tanggal {{ $data->tgl_create_pk }} maupun dalam perjanjian-perjanjian
-                            lainnya yang bersangkutan dengan pemberian kredit tersebut dengan ini dinyatakan tetap
-                            berlaku, kecuali ketentuan-ketentuan yang telah mengalami perubahan tersebut diatas.</p>
+                            <p>Dengan disepakatinya Perubahan Perjanjian Kredit ini, semua syarat-syarat dan
+                                ketentuan-ketentuan yang berlaku dalam Surat Perjanjian Kredit (SPK) Nomor
+                                {{ $data->no_spk }} tanggal {{ $data->tgl_create_pk }} maupun dalam
+                                perjanjian-perjanjian
+                                lainnya yang bersangkutan dengan pemberian kredit tersebut dengan ini dinyatakan tetap
+                                berlaku, kecuali ketentuan-ketentuan yang telah mengalami perubahan tersebut diatas.</p>
 
-                        <p>
-                            Demikian Perjanjian Perpanjangan Kredit ini dibuat rangkap dua lembar dalam aslinya dan
-                            ditandatangani di Pamanukan, pada hari {{ $data->hari_mulai_rsc }} tanggal
-                            {{ $data->tgl_mulai_rsc }}.
-                        </p>
+                            <p>
+                                Demikian Perjanjian Perpanjangan Kredit ini dibuat rangkap dua lembar dalam aslinya dan
+                                ditandatangani di Pamanukan, pada hari {{ $data->hari_mulai_rsc }} tanggal
+                                {{ $data->tgl_mulai_rsc }}.
+                            </p>
 
-                        <br>
-                        <br>
+                            <br>
+                            <br>
 
-                        <table>
-                            <tr>
-                                <td style="width:30%;">
-                                    <center>
-                                        Pengambil Kredit,
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <b><u>{{ $data->nama_nasabah }}</u></b>
-                                    </center>
-                                </td>
-                                <td style="width:40%;">
-                                    &nbsp;
-                                </td>
-                                <td style="width:30%;">
-                                    <center>
-                                        PT. BPR Bangunarta
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <b><u>MOHAMAD MUKSIN</u></b>
-                                    </center>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    &nbsp;
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    &nbsp;
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <center>
-                                        Turut Bertanggungjawab
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <br>
-                                        <b><u>{{ $data->nama_pendamping }}</u></b>
-                                    </center>
-                                </td>
-                            </tr>
-                        </table>
+                            <table>
+                                <tr>
+                                    <td style="width:30%;">
+                                        <center>
+                                            Pengambil Kredit,
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <b><u>{{ $data->nama_nasabah }}</u></b>
+                                        </center>
+                                    </td>
+                                    <td style="width:40%;">
+                                        &nbsp;
+                                    </td>
+                                    <td style="width:30%;">
+                                        <center>
+                                            PT. BPR Bangunarta
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <b><u>MOHAMAD MUKSIN</u></b>
+                                        </center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <center>
+                                            Turut Bertanggungjawab
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <b><u>{{ $data->nama_pendamping }}</u></b>
+                                        </center>
+                                    </td>
+                                </tr>
+                            </table>
 
                     </div>
                 </td>
