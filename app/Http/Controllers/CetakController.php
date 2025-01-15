@@ -675,7 +675,6 @@ class CetakController extends Controller
                 }
             })
 
-
             ->where(function ($query) use ($isAdminKredit) {
 
                 if ($isAdminKredit->role_name == 'Admin Kredit') {
