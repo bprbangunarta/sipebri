@@ -436,7 +436,7 @@
                     <div class="modal-body">
                         <div class="row">
 
-                            <input type="hidden" class="form-control" name="code_user" id="code">
+                            <input type="hidden" class="form-control" name="code_user" id="ccode">
 
                             <div class="col-md-12">
                                 <div class="form-group">

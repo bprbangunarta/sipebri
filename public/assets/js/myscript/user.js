@@ -95,7 +95,7 @@ $(document).ready(function () {
                 var kode = hasil.code_user;
                 var nmrole = data.nama_roles;
                 var dtrole = data.kode_roles;
-                
+
                 $("#model_id").val(id);
                 $("#nama").val(name);
                 $("#myForm").attr("action", "/admin/akses/" + kode);
@@ -156,7 +156,7 @@ $(document).ready(function () {
                 var code = hasil[0].code_user;
 
                 $("#name_user").val(name);
-                $("#code").val(code);
+                $("#ccode").val(code);
             },
             error: function (xhr, status, error) {
                 // Tindakan jika terjadi kesalahan dalam permintaan AJAX
