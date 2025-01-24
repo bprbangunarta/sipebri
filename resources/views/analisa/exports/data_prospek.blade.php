@@ -5,7 +5,7 @@
             <th>CALON NASABAH</th>
             <th>ALAMAT</th>
             <th>NO HP</th>
-            <th>USER</th>
+            <th>PETUGAS</th>
             <th>PROSPEK 1 VIA</th>
             <th>PROSPEK 2 VIA</th>
             <th>PROSPEK 3 VIA</th>
@@ -19,11 +19,13 @@
         </tr>
     </thead>
     <tbody>
-        @forelse ($data as $item)
+        @forelse ($data as $index => $item)
             <tr>
+                <td>{{ $index + 1 }}</td>
                 <td>{{ $item->calon_nasabah }}</td>
                 <td>{{ $item->alamat }}</td>
                 <td>{{ $item->no_hp }}</td>
+                <td>{{ $item->nama_user }}</td>
                 <td>{{ $item->prosfek1_via }}</td>
                 <td>{{ $item->prosfek2_via }}</td>
                 <td>{{ $item->prosfek3_via }}</td>
