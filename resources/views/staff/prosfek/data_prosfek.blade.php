@@ -47,10 +47,10 @@
                                         <th class="text-center" width="8%">KETERANGAN 1</th>
                                         <th class="text-center" width="8%">KETERANGAN 2</th>
                                         <th class="text-center" width="8%">KETERANGAN 3</th>
-                                        <th class="text-center" width="8%">FHOTO PROSPEK 1</th>
-                                        <th class="text-center" width="8%">FHOTO PROSPEK 2</th>
-                                        <th class="text-center" width="8%">FHOTO PROSPEK 3</th>
-                                        <th class="text-center" width="8%">FHOTO CLOSING</th>
+                                        <th class="text-center" width="8%">FOTO PROSPEK 1</th>
+                                        <th class="text-center" width="8%">FOTO PROSPEK 2</th>
+                                        <th class="text-center" width="8%">FOTO PROSPEK 3</th>
+                                        <th class="text-center" width="8%">FOTO CLOSING</th>
                                         <th class="text-center" width="8%">TGL CLOSING</th>
                                         {{-- @if (!in_array($role, ['Kasi Analis', 'Kabag Analis', 'Direktur Bisnis', 'Direksi']))
                                             <th class="text-center" width="8%">AKSI</th>
@@ -89,7 +89,7 @@
                                                 {{ $item->prosfek3_via }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
-                                                {{ \Carbon\Carbon::parse($item->tgl_prosfek3)->format('d-m-Y') }}
+                                                {{ \Carbon\Carbon::parse($item->tgl_prosfek1)->format('d-m-Y') }}
                                             </td>
                                             <td class="text-center" style="vertical-align: middle;">
                                                 @if (empty($item->tgl_prosfek2))
@@ -235,6 +235,13 @@
 
                         <div class="box-footer clearfix">
                             <div class="pull-left hidden-xs">
+                                <button type="button" class="btn-circle btn-sm bg-green" title="Export Data"
+                                    data-toggle="modal" data-target="#modalExport" style="cursor: pointer; border:none;">
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                    &nbsp;
+                                    Export
+                                </button>
+                                &nbsp;
                                 <button class="btn btn-default btn-sm">
                                     Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
                                     entries
@@ -320,6 +327,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="closing">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -364,6 +372,46 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalExport">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT PROSPEK</h4>
+                </div>
+                <form action="{{ route('data.prosfek.export') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>TANGGAL PROSPEK</label>
+                                    <input type="date" class="form-control" name="tgl_prospek" id=""
+                                        style="margin-top:-5px;">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl_prospek_sampai" id=""
+                                        style="margin-top:-5px;">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @push('myscript')
     <script>

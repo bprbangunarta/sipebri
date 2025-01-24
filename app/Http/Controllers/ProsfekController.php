@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DataProspek;
 use Carbon\Carbon;
 use App\Models\Kantor;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProsfekController extends Controller
 {
@@ -16,6 +17,7 @@ class ProsfekController extends Controller
     {
         $kantor = Kantor::get();
         $kab = DB::select('select distinct kode_dati, nama_dati from v_dati');
+
         return view('staff.prosfek.index', compact('kantor', 'kab'));
     }
 
@@ -92,7 +94,7 @@ class ProsfekController extends Controller
                 })
                 ->paginate(10);
             //
-
+            // dd($data);
             return view('staff.prosfek.data_prosfek', compact('data', 'role'));
         } catch (\Throwable $th) {
         }
@@ -225,5 +227,15 @@ class ProsfekController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Data gagal ditambahkan, Hubungi IT.');
         }
+    }
+
+    public function data_prosfek_export(Request $request)
+    {
+        if (empty($request->tgl_prospek)) {
+            return redirect()->back()->with('error', 'Tanggal harus diisi');
+        }
+        $filename = "Data Prospek.xlsx";
+
+        return Excel::download(new DataProspek, $filename);
     }
 }

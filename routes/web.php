@@ -769,6 +769,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/data/prosfek/get', 'data_prosfek_get')->name('data.prosfek.get');
             Route::post('/data/prosfek/update', 'data_prosfek_update')->name('data.prosfek.update');
             Route::post('/data/prosfek/closing', 'data_prosfek_closing')->name('data.prosfek.closing');
+            Route::post('/data/prosfek/export', 'data_prosfek_export')->name('data.prosfek.export');
         });
         // Prosfek
 
