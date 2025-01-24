@@ -123,14 +123,13 @@ class AnalisaController extends Controller
                 return redirect()->back()->with('error', 'Keterangan Harus Diisi.');
             }
 
-            //Cek tanggal 
+            //Cek tanggal
             $data = [
                 'catatan' => $request->keterangan,
                 'updated_at' => now(),
             ];
 
-
-            // Perubahan tanggal survei tabel data_jadwal_survei 
+            // Perubahan tanggal survei tabel data_jadwal_survei
             $cek_data_jadwal_survei = DB::table('data_jadwal_survei')->where('pengajuan_kode', $request->kode_pengajuan)->first();
 
             if (!is_null($cek_data_jadwal_survei)) {
@@ -168,6 +167,20 @@ class AnalisaController extends Controller
                     'catatan_jadul_2' => $request->keterangan,
                     'updated_at' => now(),
                 ];
+                $data2 = [
+                    'tracking' => 'Penjadwalan',
+                    'updated_at' => now(),
+                ];
+
+                Survei::where('id', $request->id)->update($data);
+                Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->update($data2);
+            } elseif (!is_null($survei->tgl_survei) && !is_null($survei->tgl_jadul_1) && !is_null($survei->tgl_jadul_2)) {
+                $data = [
+                    'tgl_jadul_2' => null,
+                    'catatan_jadul_2' => null,
+                    'updated_at' => now(),
+                ];
+
                 $data2 = [
                     'tracking' => 'Penjadwalan',
                     'updated_at' => now(),

@@ -211,7 +211,7 @@
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">JADWAL ULANG</h4>
                 </div>
-                <form action="{{ Route('permohonan.simpanjadul') }}" method="POST">
+                <form action="{{ route('permohonan.simpanjadul') }}" method="POST">
                     @csrf
                     <div class="modal-body">
 
