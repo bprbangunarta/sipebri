@@ -4,6 +4,7 @@
             <th rowspan="2">NO</th>
             <th rowspan="2">NAMA CALON DEBITUR</th>
             <th rowspan="2">ALAMAT</th>
+            <th rowspan="2">PLAFON</th>
             <th rowspan="2">KECAMATAN</th>
             <th rowspan="2">KELURAHAN</th>
             <th rowspan="2">KOTA</th>
@@ -24,6 +25,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->nama_nasabah }}</td>
                 <td>{{ $item->alamat_ktp }}</td>
+                <td>{{ $item->plafon }}</td>
                 <td>{{ $item->kecamatan }}</td>
                 <td>{{ $item->kelurahan }}</td>
                 <td>{{ $item->kota }}</td>
