@@ -309,7 +309,7 @@
 
     <div class="ttd">
         <center>
-            Pamanukan, {{ \Carbon\Carbon::parse('31-07-2024')->translatedFormat('d F Y') }}
+            {{ $data[25][9] }}
             <br>
             <table width='100%' style="text-align: center;">
                 <tr>
