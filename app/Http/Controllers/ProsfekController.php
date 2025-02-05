@@ -48,7 +48,7 @@ class ProsfekController extends Controller
 
             if ($request->hasFile('photo_prosfek')) {
                 $request->validate([
-                    'photo_prosfek' => 'required|mimes:png,jpg,jpeg,svg|max:2048',
+                    'photo_prosfek' => 'required|mimes:png,jpg,jpeg,svg|max:5120',
                 ]);
                 $photo = $request->file('photo_prosfek');
                 $ekstensi = $photo->getClientOriginalExtension();

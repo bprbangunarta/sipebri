@@ -4,6 +4,7 @@
             <th rowspan="2">NO</th>
             <th rowspan="2">NAMA CALON DEBITUR</th>
             <th rowspan="2">ALAMAT</th>
+            <th rowspan="2">PLAFON</th>
             <th rowspan="2">PRODUK</th>
             <th rowspan="2">KANTOR</th>
             <th rowspan="2">TANGGAL DAFTAR</th>
@@ -21,6 +22,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->nama_nasabah }}</td>
                 <td>{{ $item->alamat_ktp }}</td>
+                <td>{{ $item->plafon }}</td>
                 <td>{{ $item->produk_kode }}</td>
                 <td>{{ $item->kantor_kode }}</td>
                 <td>{{ $item->tanggal }}</td>
