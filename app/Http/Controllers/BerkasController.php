@@ -27,10 +27,11 @@ class BerkasController extends Controller
                 return redirect()->back()->with('error', 'Data harus diisi semua.');
             }
 
-            $validasi = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
-            if ($validasi->tracking !== 'Penjadwalan') {
-                return redirect()->back()->with('error', 'Tidak bisa melakukan pengiriman berkas.');
-            }
+            // $validasi = Pengajuan::where('kode_pengajuan', $request->kode_pengajuan)->first();
+            // dd($validasi);
+            // if ($validasi->tracking !== 'Penjadwalan') {
+            //     return redirect()->back()->with('error', 'Tidak bisa melakukan pengiriman berkas.');
+            // }
 
             $cek = DB::table('data_berkas')->where('pengajuan_kode', $request->kode_pengajuan)->first();
             $data = [
