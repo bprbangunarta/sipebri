@@ -1019,19 +1019,26 @@ class CetakController extends Controller
         $cek = DB::connection('sqlsrv')->table('m_cif')
             ->join('m_tabunganb', 'm_cif.nocif', '=', 'm_tabunganb.nocif')
             ->select(
-                'm_tabunganb.noacc'
+                'm_tabunganb.noacc',
+                'm_tabunganb.inptgljam'
             )
             ->where('m_cif.noid', $data->nik)
             ->first();
         //
         if (empty($cek)) {
             $noacc = '';
-        } else {
-            $noacc = $cek->noacc;
-        }
-        $tgl = Carbon::parse($data->created_at);
-        $data->tgl = $tgl->translatedFormat('d F Y');
 
+            $tgl = Carbon::parse($data->created_at);
+            $data->tgl = $tgl->translatedFormat('d F Y');
+        } else {
+            $tgl = Carbon::createFromFormat('YmdHis', $cek->inptgljam);
+            $konv_tgl = $tgl->translatedFormat('d F Y');
+
+            $noacc = $cek->noacc;
+            $data->tgl = $konv_tgl;
+        }
+
+        // dd($data, $cek);
         return view('cetak.lembar-konfirmasi.tabungan', compact('data', 'noacc'));
     }
 
