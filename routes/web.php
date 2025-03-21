@@ -5,6 +5,8 @@ use App\Models\Nasabah;
 use App\Models\Kepemilikan;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\QRController;
 use App\Http\Controllers\CGCController;
 use App\Http\Controllers\RSCController;
@@ -1038,6 +1040,7 @@ Route::middleware('auth')->group(function () {
     // Export Data
     Route::controller(ExportController::class)->group(function () {
         Route::post('/export/laporan/fasilitas', 'data_laporan_fasilitas')->name('export.fasilitas');
+        Route::post('/export/laporan/si', 'export_laporan_si')->name('export.laporan.si');
         Route::post('/export/laporan/pendaftaran', 'data_laporan_pendaftaran')->name('export.pendaftaran');
         Route::post('/export/laporan/realisasi', 'data_laporan_realisasi')->name('export.realisasi');
         Route::post('/export/laporan/siap-realisasi', 'data_laporan_siap_realisasi')->name('export.siap-realisasi');

@@ -101,7 +101,11 @@
                                 &nbsp;
                                 <button data-toggle="modal" data-target="#modal-export-photo"
                                     class="btn btn-success btn-sm">
-                                    <i class="fa fa-download"></i>&nbsp; Export Photo Realisasi
+                                    <i class="fa fa-download"></i>&nbsp; Export Foto Realisasi
+                                </button>
+                                &nbsp;
+                                <button data-toggle="modal" data-target="#modal-export-si" class="btn btn-success btn-sm">
+                                    <i class="fa fa-download"></i>&nbsp; Export Data SI
                                 </button>
 
                                 <button class="btn btn-default btn-sm">
@@ -166,6 +170,66 @@
                     <h4 class="modal-title">EXPORT DATA</h4>
                 </div>
                 <form action="{{ route('export.fasilitas') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>MULAI DARI</label>
+                                    <input type="date" class="form-control" name="tgl1" id="tgl1"
+                                        style="margin-top:-5px;">
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>PRODUK</label>
+                                    <select class="form-control" name="kode_produk" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($produk as $item)
+                                            <option value="{{ $item->kode_produk }}">{{ $item->nama_produk }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SAMPAI DENGAN</label>
+                                    <input type="date" class="form-control" name="tgl2" id="tgl2"
+                                        style="margin-top:-5px;">
+                                </div>
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <label>KANTOR</label>
+                                    <select class="form-control" name="nama_kantor" id=""
+                                        style="margin-top:-5px;">
+                                        <option value="">--PILIH--</option>
+                                        @foreach ($kantor as $item)
+                                            <option value="{{ $item->kode_kantor }}">{{ $item->nama_kantor }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="margin-top: -10px;">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">BATAL</button>
+                        <button type="submit" class="btn btn-success">EXPORT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-export-si">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">EXPORT DATA SI</h4>
+                </div>
+                <form action="{{ route('export.laporan.si') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">

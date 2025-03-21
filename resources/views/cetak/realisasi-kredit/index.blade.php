@@ -144,6 +144,14 @@
                                 </div>
 
                                 <div style="margin-top: 5px;">
+                                    <span class="fw-bold">FOTO STANDING INTERACTION</span>
+                                    <a href="#" class="pull-right fw-bold" id="interaction">PREVIEW</a>
+                                    <input type="text" name="foto3" hidden>
+                                    <input type="file" class="form-control" name="foto_standing_interaction"
+                                        id="foto_standing_interaction" hidden>
+                                </div>
+
+                                <div style="margin-top: 5px;">
                                     <span class="fw-bold">CATATAN</span>
                                     <textarea class="form-control text-uppercase" name="catatan" id="catatan" rows="3"></textarea>
                                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DataSI;
 use Carbon\Carbon;
 use App\Exports\StandingInteraction;
 use Illuminate\Http\Request;
@@ -853,5 +854,12 @@ class ExportController extends Controller
         $fileName = 'Laporan Realisasi.xlsx';
 
         return Excel::download(new StandingInteraction, $fileName);
+    }
+
+    public function export_laporan_si()
+    {
+        $fileName = 'Laporan Data SI.xlsx';
+
+        return Excel::download(new DataSI, $fileName);
     }
 }

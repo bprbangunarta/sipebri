@@ -220,7 +220,7 @@ class DataCetakController extends Controller
                 $cek->jw = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
                 $cek->awal_angsuran = $cek->jangka_pokok + $cek->grace_period;
 
-                //QRCode 
+                //QRCode
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
                 // dd($cek);
                 return view('cetak-berkas.notifikasi-kredit.kbt-perlelean', [
@@ -235,7 +235,7 @@ class DataCetakController extends Controller
                 $hari = $cek->tgl_notifikasi;
                 $cek->tgl_notifikasi = Carbon::parse($hari)->translatedFormat('d F Y');
 
-                //QRCode 
+                //QRCode
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
 
                 return view('cetak-berkas.notifikasi-kredit.kta', [
@@ -275,7 +275,7 @@ class DataCetakController extends Controller
                 $cek->jw = ($cek->jwt - $cek->grace_period) / $cek->jangka_pokok;
                 $cek->awal_angsuran = $cek->jangka_pokok + $cek->grace_period;
 
-                //QRCode 
+                //QRCode
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
 
                 return view('cetak-berkas.notifikasi-kredit.general', [
@@ -572,6 +572,8 @@ class DataCetakController extends Controller
                 $foto = $realisasi->foto_pemohon ? asset('storage/image/photo_realisasi/' . $realisasi->foto_pemohon) : null;
             } else if ($array_data[1] == 'pendamping') {
                 $foto = $realisasi->foto_pendamping ? asset('storage/image/photo_realisasi/' . $realisasi->foto_pendamping) : null;
+            } else if ($array_data[1] == 'standing_interaction') {
+                $foto = $realisasi->foto_standing_interaction ? asset('storage/image/photo_realisasi/' . $realisasi->foto_standing_interaction) : null;
             }
         }
 
@@ -600,67 +602,90 @@ class DataCetakController extends Controller
 
     public function simpan_realisasi(Request $request)
     {
+        $cek = $request->validate([
+            'foto_pemohon' => 'image|mimes:jpeg,png,jpg|max:10240',
+            'foto_pendamping' => 'image|mimes:jpeg,png,jpg|max:10240',
+            'foto_standing_interaction' => 'image|mimes:jpeg,png,jpg|max:10240',
+        ]);
 
-        try {
-            $cek = $request->validate([
-                'foto_pemohon' => 'image|mimes:jpeg,png,jpg|max:5120',
-                'foto_pendamping' => 'image|mimes:jpeg,png,jpg|max:5120',
-            ]);
+        $tanggalSekarang = Carbon::now();
+        $tanggal = $tanggalSekarang->format('dmY');
 
-            $tanggalSekarang = Carbon::now();
-            $tanggal = $tanggalSekarang->format('dmY');
-
-            if ($request->file('foto_pemohon')) {
-                if ($request->foto1) {
-                    Storage::delete('public/image/photo_realisasi/' . $request->foto1);
-                }
-
-                $ekstensi = $cek['foto_pemohon']->getClientOriginalExtension();
-                $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'pemohon' . '.' . $ekstensi;
-                $cek['foto_pemohon'] = $request->file('foto_pemohon')->storeAs('image/photo_realisasi', $new1, 'public');
-                $cek['foto_pemohon'] = $new1;
-            } else {
-                $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
-                $cek['foto_pemohon'] = $realisasi->foto_pemohon;
+        if ($request->file('foto_pemohon')) {
+            if ($request->foto1) {
+                Storage::delete('public/image/photo_realisasi/' . $request->foto1);
             }
 
-
-
-            if ($request->file('foto_pendamping')) {
-                if ($request->foto2) {
-                    Storage::delete('public/image/photo_realisasi/' . $request->foto2);
-                }
-
-                $ekstensi = $cek['foto_pendamping']->getClientOriginalExtension();
-                $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'pendamping' . '.' . $ekstensi;
-                $cek['foto_pendamping'] = $request->file('foto_pendamping')->storeAs('image/photo_realisasi', $new1, 'public');
-                $cek['foto_pendamping'] = $new1;
-            } else {
-                $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
-                if ($realisasi) {
-                    $cek['foto_pendamping'] = $realisasi->foto_pendamping;
-                } else {
-                    $cek['foto_pendamping'] = null;
-                }
-            }
-
-            $cek['pengajuan_kode'] = $request->kode_pengajuan;
-            $cek['input_user'] = Auth::user()->code_user;
-            $cek['catatan'] = strtoupper($request->catatan);
-            $cek['created_at'] = now();
-
+            $ekstensi = $cek['foto_pemohon']->getClientOriginalExtension();
+            $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'pemohon' . '.' . $ekstensi;
+            $cek['foto_pemohon'] = $request->file('foto_pemohon')->storeAs('image/photo_realisasi', $new1, 'public');
+            $cek['foto_pemohon'] = $new1;
+        } else {
             $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
-            if (is_null($realisasi)) {
-                $ds = ['pencairan_dana' => now()];
-                DB::table('data_realisasi')->insert($cek);
-                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($ds);
+            if ($realisasi) {
+                $cek['foto_pemohon'] = $realisasi->foto_pemohon;
             } else {
-                $ds = ['pencairan_dana' => now()];
-                DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->update($cek);
-                DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($ds);
+                $cek['foto_pemohon'] = null;
+            }
+        }
+
+
+
+        if ($request->file('foto_pendamping')) {
+            if ($request->foto2) {
+                Storage::delete('public/image/photo_realisasi/' . $request->foto2);
             }
 
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            $ekstensi = $cek['foto_pendamping']->getClientOriginalExtension();
+            $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'pendamping' . '.' . $ekstensi;
+            $cek['foto_pendamping'] = $request->file('foto_pendamping')->storeAs('image/photo_realisasi', $new1, 'public');
+            $cek['foto_pendamping'] = $new1;
+        } else {
+            $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+            if ($realisasi) {
+                $cek['foto_pendamping'] = $realisasi->foto_pendamping;
+            } else {
+                $cek['foto_pendamping'] = null;
+            }
+        }
+
+        if ($request->file('foto_standing_interaction')) {
+            if ($request->foto3) {
+                Storage::delete('public/image/photo_realisasi/' . $request->foto3);
+            }
+
+            $ekstensi = $cek['foto_standing_interaction']->getClientOriginalExtension();
+            $new1 =  'realisasi' . '_' . $request->kode_pengajuan . '_' . $tanggal .  '_' . 'SI' . '.' . $ekstensi;
+            $cek['foto_standing_interaction'] = $request->file('foto_standing_interaction')->storeAs('image/photo_realisasi', $new1, 'public');
+            $cek['foto_standing_interaction'] = $new1;
+            $cek['created_at_si'] = now();
+        } else {
+            $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+            if ($realisasi) {
+                $cek['foto_standing_interaction'] = $realisasi->foto_standing_interaction;
+            } else {
+                $cek['foto_standing_interaction'] = null;
+            }
+        }
+
+        $cek['pengajuan_kode'] = $request->kode_pengajuan;
+        $cek['input_user'] = Auth::user()->code_user;
+        $cek['catatan'] = strtoupper($request->catatan);
+        $cek['created_at'] = Carbon::now();
+
+        $realisasi = DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->first();
+        if (is_null($realisasi)) {
+            $ds = ['pencairan_dana' => now()];
+            DB::table('data_realisasi')->insert($cek);
+            DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($ds);
+        } else {
+            $ds = ['pencairan_dana' => now()];
+            DB::table('data_realisasi')->where('pengajuan_kode', $request->kode_pengajuan)->update($cek);
+            DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($ds);
+        }
+
+        return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        try {
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
@@ -1218,7 +1243,7 @@ class DataCetakController extends Controller
                     $data[] = $usulan[$i];
                     $rc[] = $usulan[$i]->rc;
 
-                    //QRCode 
+                    //QRCode
                     $usulan[$i]->qr = Midle::get_qrcode($enc, 'Perjanjian Kredit', $usulan[$i]->input_user);
                 }
                 // $total_taksasi = array_sum($total) ?? 0;
@@ -1354,7 +1379,7 @@ class DataCetakController extends Controller
                 }
             }
 
-            //Khusus Reloan 
+            //Khusus Reloan
             if ($cek->kategori == 'RELOAN' && $cek->metode_rps == 'FLAT' && !is_null($cek->grace_period)) {
 
                 $cek->jangka_pokok = $cek->jwt - $cek->grace_period;
