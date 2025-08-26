@@ -185,15 +185,21 @@ class RSCPersetujuanController extends Controller
                 $rl = 'Komite I';
             }
 
+            // if ($role->role_name == 'Kabag Analis' && $request->status != '') {
+            //     $rl = $request->status;
+            // } elseif ($role->role_name == 'Kabag Analis' && $request->status == '') {
+            //     $rl = 'Komite II';
+            // }
+
+            // if ($role->role_name == 'Direktur Bisnis' && $request->status != '') {
+            //     $rl = $request->status;
+            // } elseif ($role->role_name == 'Direktur Bisnis' && $request->status == '') {
+            //     $rl = 'Komite III';
+            // }
+
             if ($role->role_name == 'Kabag Analis' && $request->status != '') {
                 $rl = $request->status;
             } elseif ($role->role_name == 'Kabag Analis' && $request->status == '') {
-                $rl = 'Komite II';
-            }
-
-            if ($role->role_name == 'Direktur Bisnis' && $request->status != '') {
-                $rl = $request->status;
-            } elseif ($role->role_name == 'Direktur Bisnis' && $request->status == '') {
                 $rl = 'Komite III';
             }
 
