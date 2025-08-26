@@ -88,10 +88,10 @@ $(document).ready(function () {
                         ];
                     } else if (role == "Direktur Bisnis") {
                         var options = [
-                            { value: "", text: "--Pilih--" },
-                            { value: "Disetujui", text: "Disetujui" },
-                            { value: "Dibatalkan", text: "Dibatalkan" },
-                            { value: "Ditolak", text: "Ditolak" },
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
                         ];
                     } else if (role == "Direksi") {
                         var options = [
@@ -165,8 +165,10 @@ $(document).ready(function () {
                         ];
                     } else if (role == "Direktur Bisnis" && pal > 300000000) {
                         var options = [
-                            { value: "", text: "--Pilih--" },
-                            { value: "Disetujui", text: "Disetujui" },
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
@@ -292,8 +294,10 @@ $(document).ready(function () {
                         ];
                     } else if (role == "Direktur Bisnis" && pal > 300000000) {
                         var options = [
-                            { value: "", text: "--Pilih--" },
-                            { value: "Disetujui", text: "Disetujui" },
+                            {
+                                value: "Naik Komite III",
+                                text: "Naik Komite III",
+                            },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
                         ];
