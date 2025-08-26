@@ -74,6 +74,34 @@ $(document).ready(function () {
                     (hasil.produk_kode === "KBT" &&
                         hasil.kondisi_khusus == "PERLELEAN")
                 ) {
+                    // if (role === "Staff Analis") {
+                    //     var options = [
+                    //         { value: "Naik Kasi", text: "Naik Kasi" },
+                    //     ];
+                    // } else if (role == "Kasi Analis") {
+                    //     var options = [
+                    //         { value: "Naik Komite I", text: "Naik Komite I" },
+                    //     ];
+                    // } else if (role == "Kabag Analis") {
+                    //     var options = [
+                    //         { value: "Naik Komite II", text: "Naik Komite II" },
+                    //     ];
+                    // } else if (role == "Direktur Bisnis") {
+                    //     var options = [
+                    //         {
+                    //             value: "Naik Komite III",
+                    //             text: "Naik Komite III",
+                    //         },
+                    //     ];
+                    // } else if (role == "Direksi") {
+                    //     var options = [
+                    //         { value: "", text: "--Pilih--" },
+                    //         { value: "Disetujui", text: "Disetujui" },
+                    //         { value: "Dibatalkan", text: "Dibatalkan" },
+                    //         { value: "Ditolak", text: "Ditolak" },
+                    //     ];
+                    // }
+
                     if (role === "Staff Analis") {
                         var options = [
                             { value: "Naik Kasi", text: "Naik Kasi" },
@@ -87,13 +115,6 @@ $(document).ready(function () {
                             { value: "Naik Komite II", text: "Naik Komite II" },
                         ];
                     } else if (role == "Direktur Bisnis") {
-                        var options = [
-                            {
-                                value: "Naik Komite III",
-                                text: "Naik Komite III",
-                            },
-                        ];
-                    } else if (role == "Direksi") {
                         var options = [
                             { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
