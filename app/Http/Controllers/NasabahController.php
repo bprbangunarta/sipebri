@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Log;
 
 class NasabahController extends Controller
 {
@@ -181,6 +182,7 @@ class NasabahController extends Controller
                 });
                 return redirect()->back()->with('success', "Data berhasil ditambahkan");
             } catch (Exception $e) {
+                Log::error('PENDAFTARAN: ' . $e->getMessage());
                 return redirect()->back()->with('error', "Data gagal ditambahkan");
             }
         } else {
@@ -219,6 +221,7 @@ class NasabahController extends Controller
                 });
                 return redirect()->back()->with('success', "Data berhasil ditambahkan");
             } catch (Exception $e) {
+                Log::error('PENDAFTARAN: ' . $e->getMessage());
                 return redirect()->back()->with('error', "Data gagal ditambahkan, Hubungi IT.");
             }
         }
