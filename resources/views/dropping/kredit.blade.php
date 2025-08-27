@@ -2,128 +2,143 @@
 @section('title', 'Dropping Pengajuan Kredit')
 
 @section('content')
-    <div class="content-wrapper">
-        <section class="content">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-primary">
-                        <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
-                            <i class="fa fa-download"></i>
-                            <h3 class="box-title">DROPPING PENGAJUAN KREDIT</h3>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border" style="border-bottom: 1px solid #3C8DBC;">
+                        <i class="fa fa-download"></i>
+                        <h3 class="box-title">DROPPING PENGAJUAN KREDIT</h3>
 
-                            <div class="box-tools">
-                                <form action="{{ route('dropping.kredit') }}" method="GET">
-                                    <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
-                                        <input type="text" class="form-control text-uppercase pull-right"
-                                            style="width: 170px;" name="keyword" id="keyword"
-                                            value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
+                        <div class="box-tools">
+                            <form action="{{ route('dropping.kredit') }}" method="GET">
+                                <div class="input-group input-group-sm hidden-xs" style="width: 305px;">
+                                    <input type="text" class="form-control text-uppercase pull-right"
+                                        style="width: 170px;" name="keyword" id="keyword"
+                                        value="{{ request('keyword') }}" placeholder="Nama/ Kode/ Wilayah">
 
-                                        <div class="input-group-btn">
-                                            <button type="submit" class="btn bg-blue">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </div>
+                                    <div class="input-group-btn">
+                                        <button type="submit" class="btn bg-blue">
+                                            <i class="fa fa-search"></i>
+                                        </button>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
+                    </div>
 
-                        <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
-                            <table class="table table-bordered text-uppercase" style="font-size: 12px;">
-                                <thead>
-                                    <tr class="bg-blue">
-                                        <th class="text-center" width="3%">#</th>
-                                        <th class="text-center">TANGGAL</th>
-                                        <th class="text-center">KODE</th>
-                                        <th class="text-center">NAMA DEBITUR</th>
-                                        <th class="text-center">ALAMAT</th>
-                                        <th class="text-center">WIL</th>
-                                        <th class="text-center">PDK</th>
-                                        <th class="text-center">PLAFON</th>
-                                        <th class="text-center">NO. SPK</th>
-                                        <th class="text-center">JK</th>
-                                        <th class="text-center">RATE</th>
-                                        <th class="text-center">METODE RPS</th>
-                                        <th class="text-center">JTH. TEMPO</th>
+                    <div class="box-body" style="overflow: auto;white-space: nowrap;width: 100%;">
+                        <table class="table table-bordered text-uppercase" style="font-size: 12px;">
+                            <thead>
+                                <tr class="bg-blue">
+                                    <th class="text-center" width="3%">#</th>
+                                    <th class="text-center">TANGGAL</th>
+                                    <th class="text-center">KODE</th>
+                                    <th class="text-center">NAMA DEBITUR</th>
+                                    <th class="text-center">ALAMAT</th>
+                                    <th class="text-center">WIL</th>
+                                    <th class="text-center">PDK</th>
+                                    <th class="text-center">PLAFON</th>
+                                    <th class="text-center">NO. SPK</th>
+                                    <th class="text-center">JK</th>
+                                    <th class="text-center">RATE</th>
+                                    <th class="text-center">METODE RPS</th>
+                                    <th class="text-center">JTH. TEMPO</th>
 
-                                        @can('dropping kredit')
-                                            <th class="text-center">AKSI</th>
-                                        @endcan
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
-                                    @forelse ($data as $item)
-                                        <tr class="text-uppercase">
-                                            <td class="text-center">
-                                                {{ $loop->iteration + $data->firstItem() - 1 }}</td>
-                                            <td class="text-center">
-                                                {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('d-m-Y') }}
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $item->kode_pengajuan }}</td>
-                                            <td>{{ $item->nama_nasabah }}</td>
-                                            <td>{{ $item->alamat }}</td>
-                                            <td class="text-center">{{ $item->wilayah }}</td>
-                                            <td class="text-center">{{ $item->kode_produk }}</td>
-                                            <td class="text-right">
-                                                {{ number_format($item->plafon, 0, ',', '.') }}
-                                            </td>
-                                            <td class="text-center">{{ $item->no_spk }}</td>
-                                            <td class="text-center">{{ $item->jangka_waktu }}</td>
-                                            <td class="text-center">{{ number_format($item->rate_bunga, 0) }}%</td>
-                                            <td class="text-center">{{ $item->nama_metode }}</td>
-                                            <td class="text-center">
-                                                {{ \Carbon\Carbon::parse($item->tgl_akhir)->format('d-m-Y') }}
-                                            </td>
-
-                                            @can('dropping kredit')
-                                                <td class="text-center">
-                                                    <form method="POST"
-                                                        action="{{ route('hapus.spk', ['pengajuan' => $item->kode_pengajuan]) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-
-                                                        <button type="submit"
-                                                            class="btn btn-circle btn-sm bg-red confirmdelete" title="Hapus"
-                                                            style='height: 23px; width: 23px; display: flex; justify-content: center; align-items: center;'>
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            @endcan
-                                        </tr>
+                                    @can('dropping kredit')
+                                    <th class="text-center">AKSI</th>
+                                    @endcan
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                $no = 1;
+                                @endphp
+                                @forelse ($data as $item)
+                                <tr class="text-uppercase">
+                                    <td class="text-center">
+                                        {{ $loop->iteration + $data->firstItem() - 1 }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('d-m-Y') }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ $item->kode_pengajuan }}
+                                    </td>
+                                    <td>{{ $item->nama_nasabah }}</td>
+                                    <td>{{ $item->alamat }}</td>
+                                    <td class="text-center">{{ $item->wilayah }}</td>
+                                    <td class="text-center">{{ $item->kode_produk }}</td>
+                                    <td class="text-right">
+                                        {{ number_format($item->plafon, 0, ',', '.') }}
+                                    </td>
+                                    <td class="text-center">{{ $item->no_spk }}</td>
+                                    <td class="text-center">{{ $item->jangka_waktu }}</td>
+                                    <td class="text-center">
                                         @php
-                                            $no++;
+                                        // paksa ke float dulu supaya "11.75.00" jadi 11.75
+                                        $rate = (float) $item->rate_bunga;
+                                        // format 2 desimal, lalu hilangkan nol/titik berlebih
+                                        $rateFormatted = rtrim(rtrim(number_format($rate, 2, '.', ''), '0'), '.');
                                         @endphp
-                                    @empty
-                                        <tr>
-                                            <td class="text-center" colspan="15">TIDAK ADA DATA</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+
+                                        @if (strlen((string)$item->rate_bunga) >= 5)
+                                        {{ $rateFormatted }}%
+                                        @else
+                                        {{ number_format($rate, 0) }}%
+                                        @endif
+                                    </td>
+                                    <td class="text-center">{{ $item->nama_metode }}</td>
+                                    <td class="text-center">
+                                        {{ \Carbon\Carbon::parse($item->tgl_akhir)->format('d-m-Y') }}
+                                    </td>
+
+                                    @can('dropping kredit')
+                                    <td class="text-center">
+                                        <form method="POST"
+                                            action="{{ route('hapus.spk', ['pengajuan' => $item->kode_pengajuan]) }}">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit"
+                                                class="btn btn-circle btn-sm bg-red confirmdelete" title="Hapus"
+                                                style='height: 23px; width: 23px; display: flex; justify-content: center; align-items: center;'>
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    @endcan
+                                </tr>
+                                @php
+                                $no++;
+                                @endphp
+                                @empty
+                                <tr>
+                                    <td class="text-center" colspan="15">TIDAK ADA DATA</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="box-footer clearfix">
+                        <div class="pull-left hidden-xs">
+                            <button class="btn btn-default btn-sm">
+                                Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
+                                entries
+                            </button>
                         </div>
 
-                        <div class="box-footer clearfix">
-                            <div class="pull-left hidden-xs">
-                                <button class="btn btn-default btn-sm">
-                                    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }} of {{ $data->total() }}
-                                    entries
-                                </button>
-                            </div>
-
-                            {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
-                        </div>
+                        {{ $data->withQueryString()->onEachSide(0)->links('vendor.pagination.adminlte') }}
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
-    {{-- <div class="modal fade" id="hapus">
+{{-- <div class="modal fade" id="hapus">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-red">
@@ -144,5 +159,5 @@
     </div> --}}
 @endsection
 @push('myscript')
-    <script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
+<script src="{{ asset('assets/js/myscript/delete.js') }}"></script>
 @endpush
