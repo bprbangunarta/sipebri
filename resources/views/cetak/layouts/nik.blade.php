@@ -123,16 +123,18 @@
         <table>
             <tr>
                 <td class="text-center">
-                    Yang Menyatakan,<br><br><br><br><br>
+                    Yang Menyatakan,<br><br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_nasabah }}</font>
                 </td>
                 <td class="text-center">
-                    Petugas Pengecek NIK,<br><br><br><br><br>
+                    Petugas Pengecek NIK,<br>
+
+                    <img src="{{ asset('storage/qr/' . $petugas['qrcode']) }}" width="80" height="80" alt="QR Code" style="margin-top:3px;"> <br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         <span
-                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;"></span>
+                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;">{{ $petugas['nama'] }}</span>
                     </font>
                 </td>
             </tr>
@@ -177,16 +179,18 @@
         <table>
             <tr>
                 <td class="text-center">
-                    Yang Menyatakan,<br><br><br><br><br>
+                    Yang Menyatakan,<br><br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;">{{ $data->nama_pendamping }}</font>
                 </td>
                 <td class="text-center">
-                    Petugas Pengecek NIK,<br><br><br><br><br>
+                    Petugas Pengecek NIK,<br>
+
+                    <img src="{{ asset('storage/qr/' . $petugas['qrcode']) }}" width="80" height="80" alt="QR Code" style="margin-top:3px;"> <br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         <span
-                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;"></span>
+                            style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;">{{ $petugas['nama'] }}</span>
                     </font>
                 </td>
             </tr>

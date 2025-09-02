@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class CetakController extends Controller
 {
@@ -206,8 +208,27 @@ class CetakController extends Controller
             $hari = Carbon::today();
             $data[0]->hari = $hari->isoformat('D MMMM Y');
 
+            $code = time();
+            $adminName = 'Nisa Noormania';
+
+            // isi QR gabungan time + nama
+            $content = $code . ' - ' . $adminName;
+
+            // generate QR dan simpan ke file PNG
+            $qr = QrCode::format('png')->size(80)->generate($content);
+            $qrImageName = $code . '.png';
+
+            Storage::put('public/qr/' . $qrImageName, $qr);
+
+            // data petugas
+            $petugas = [
+                'nama'   => $adminName,
+                'qrcode' => $qrImageName,
+            ];
+
             return view('cetak.layouts.nik', [
-                'data' => $data[0]
+                'data'    => $data[0],
+                'petugas' => $petugas
             ]);
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');

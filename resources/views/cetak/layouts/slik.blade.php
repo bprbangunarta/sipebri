@@ -141,21 +141,23 @@
         <table>
             <tr>
                 <td class="text-center">
-                    Pelaksana IDEB,<br><br><br><br><br>
+                    Pelaksana IDEB,<br>
+
+                    <img src="{{ asset('storage/qr/' . $petugas['qrcode']) }}" width="80" height="80" alt="QR Code" style="margin-top:3px;"> <br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
-                        <span style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;"></span>
+                        <span style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -2px;">{{ $petugas['nama'] }}</span>
                     </font>
                 </td>
                 <td class="text-center">
-                    Menyetujui,<br><br><br><br><br>
+                    Menyetujui,<br><br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         {{ $data->kasi_kode }}
                     </font>
                 </td>
                 <td class="text-center">
-                    Pemohon,<br><br><br><br><br>
+                    Pemohon,<br><br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         {{ $data->surveyor_kode }}
@@ -222,22 +224,24 @@
         <table>
             <tr>
                 <td class="text-center">
-                    Pelaksana IDEB,<br><br><br><br><br>
+                    Pelaksana IDEB,<br>
+
+                    <img src="{{ asset('storage/qr/' . $petugas['qrcode']) }}" width="80" height="80" alt="QR Code" style="margin-top:3px;"> <br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform: uppercase;">
-                        <span style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -3px;"></span>
+                        <span style="border-bottom: 1px solid black; display: inline-block; width: 150px; margin-bottom: -3px;">{{ $petugas['nama'] }}</span>
                     </font>
 
                 </td>
                 <td class="text-center">
-                    Menyetujui,<br><br><br><br><br>
+                    Menyetujui,<br><br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         {{ $data->kasi_kode }}
                     </font>
                 </td>
                 <td class="text-center">
-                    Pemohon,<br><br><br><br><br>
+                    Pemohon,<br><br><br><br><br><br>
 
                     <font style="font-weight: bold;text-decoration: underline;text-transform:uppercase;">
                         {{ $data->surveyor_kode }}
