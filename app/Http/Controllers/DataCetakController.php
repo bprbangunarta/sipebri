@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Contracts\Encryption\DecryptException;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class DataCetakController extends Controller
 {
