@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Log;
 
 class DataCetakController extends Controller
 {
@@ -330,14 +331,31 @@ class DataCetakController extends Controller
             ->where('data_pengajuan.kode_pengajuan', '=', $kode)->get();
         //
 
-        $lasts = DB::table('data_notifikasi')->latest('nomor')->first();
+        // NOMOR LAMA 4 DIGIT
+        // $lasts = DB::table('data_notifikasi')->latest('nomor')->first();
+        // if (is_null($lasts)) {
+        //     $count = 0000;
+        // } else {
+        //     $count = (int) $lasts->nomor + 1;
+        // }
+        // $lengths = 4;
+        // $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+
+        // NOMOR BARU 5 DIGIT
+        $lasts = DB::table('data_notifikasi')->orderByRaw('CAST(nomor AS UNSIGNED) DESC')->first();
         if (is_null($lasts)) {
-            $count = 0000;
+            $count = 0;
         } else {
             $count = (int) $lasts->nomor + 1;
         }
-        $lengths = 4;
+        $lengths = 5; // ubah panjang kode menjadi 5 digit
+        $max = 99999;
+        if ($count > $max) {
+            throw new \Exception("Nomor sudah mencapai batas maksimal 99999.");
+        }
         $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
 
 
         $now = Carbon::now();
@@ -441,6 +459,8 @@ class DataCetakController extends Controller
             DB::table('data_notifikasi')->insert($data);
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+
             return redirect()->back()->with('error', 'Gagal menambahkan data');
         }
     }
