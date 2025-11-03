@@ -70,11 +70,14 @@
                                     </td>
 
                                     <td class="text-center" style="vertical-align: middle;">
+                                        @if (Auth::user()->roles->pluck('name')->first() == 'Kepala Kantor Kas')
+                                        @else
                                         <a data-toggle="modal" data-target="#generate-code"
                                             data-id="{{ $item->kode_pengajuan }}"
                                             class="btn-circle btn-sm bg-green" title="Generate">
                                             <i class="fa fa-file-text"></i>
                                         </a>
+                                        @endif
 
                                         &nbsp;
                                         <a data-toggle="modal" data-target="#catatan"

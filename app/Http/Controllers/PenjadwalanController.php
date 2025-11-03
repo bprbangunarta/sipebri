@@ -73,8 +73,12 @@ class PenjadwalanController extends Controller
 
         switch (auth()->user()->roles[0]->name) {
             case 'Kasi Analis':
-                $cek->where('data_produk.kode_produk', '!=', 'KTA')
-                    ->orderBy('data_survei.kasi_kode', 'ASC');
+                // $cek->where('data_produk.kode_produk', '!=', 'KTA')
+                //     ->orderBy('data_survei.kasi_kode', 'ASC');
+                // break;
+
+                $cek->where('data_survei.kasi_kode', $user)
+                    ->orderBy('data_survei.created_at', 'desc');
                 break;
 
             case 'Kepala Kantor Kas':
@@ -172,7 +176,9 @@ class PenjadwalanController extends Controller
                 DB::table('data_tracking')->where('pengajuan_kode', $request->kode_pengajuan)->update($tracking);
                 Survei::where('pengajuan_kode', $request->kode_pengajuan)->update($filteredArray);
             });
-            return redirect()->route('permohonan.analisa')->with('success', "Berhasil Menambahkan Data");
+
+            // return redirect()->route('permohonan.analisa')->with('success', "Berhasil Menambahkan Data");
+            return redirect()->back()->with('success', "Penjadwalan telah dibuat");
         }
 
         //Data Tracking

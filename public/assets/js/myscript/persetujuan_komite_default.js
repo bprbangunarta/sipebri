@@ -229,19 +229,13 @@ $(document).ready(function () {
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
-                            { value: "Naik Kasi", text: "Naik Kasi" },
-                        ];
-                    } else if (role == "Staff Analis" && pal > 10000000) {
-                        var options = [
-                            { value: "", text: "--Pilih--" },
-                            { value: "Naik Kasi", text: "Naik Kasi" },
-                        ];
-                    } else if (role == "Kasi Analis") {
-                        var options = [
-                            { value: "", text: "--Pilih--" },
                             { value: "Disetujui", text: "Disetujui" },
                             { value: "Dibatalkan", text: "Dibatalkan" },
                             { value: "Ditolak", text: "Ditolak" },
+                        ];
+                    } else if (role == "Staff Analis" && pal > 10000000) {
+                        var options = [
+                            { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     }
 
