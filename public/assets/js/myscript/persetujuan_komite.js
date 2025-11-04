@@ -231,7 +231,7 @@ $(document).ready(function () {
                             { value: "", text: "--Pilih--" },
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
-                    } else if (role == "Staff Analis" && pal > 10000000) {
+                    } else if (role == "Customer Service") {
                         var options = [
                             { value: "", text: "--Pilih--" },
                             { value: "Naik Kasi", text: "Naik Kasi" },
