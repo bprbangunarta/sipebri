@@ -206,43 +206,43 @@
             </tr>
 
             @forelse ($usulan as $item)
-                <tr>
-                    <td></td>
-                    <td class="text-center" style="width: 22%;" style="vertical-align: text-top;">
-                        <img src="{{ asset('storage/image/qr_code/' . $item->qr) }}" width="100" height="100">
-                    </td>
-                    <td style="width: 2%;"></td>
-                    <td>
-                        <b>{{ $item->role_name }}</b> <br>
-                        {{ $item->nama_user }}
-                        <p></p>
+            <tr>
+                <td></td>
+                <td class="text-center" style="width: 22%;" style="vertical-align: text-top;">
+                    <img src="{{ asset('storage/image/qr_code/' . $item->qr) }}" width="100" height="100">
+                </td>
+                <td style="width: 2%;"></td>
+                <td>
+                    <b>{{ $item->role_name }}</b> <br>
+                    {{ $item->nama_user }}
+                    <p></p>
 
-                        <b>Komentar</b> <br>
-                        {{ ucwords($item->catatan) }} <br>
-                        Layak untuk diberikan pinjaman sebesar
-                        {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}
-                        <p></p>
+                    <b>Komentar</b> <br>
+                    {{ ucwords($item->catatan) }} <br>
+                    Layak untuk diberikan pinjaman sebesar
+                    {{ 'Rp. ' . ' ' . number_format($item->usulan_plafon, 0, ',', '.') }}
+                    <p></p>
 
-                        Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu
-                        {{ $data->jangka_waktu }} bulan
-                        <br>
-                        Biaya ADM
-                        {{ 'Rp. ' . ' ' . number_format($data->biaya_admin, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
-                        Biaya Provisi
-                        {{ 'Rp. ' . ' ' . number_format($data->biaya_provisi, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
-                        Biaya APHT
-                        {{ 'Rp. ' . ' ' . number_format($data->biaya_apht, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
-                        dan Biaya Fiducia
-                        {{ 'Rp. ' . ' ' . number_format($data->biaya_fiducia, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
-                        <p></p>
-                        <p></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <hr>
-                    </td>
-                </tr>
+                    Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu
+                    {{ $data->jangka_waktu }} bulan
+                    <br>
+                    Biaya ADM
+                    {{ 'Rp. ' . ' ' . number_format($data->biaya_admin, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                    Biaya Provisi
+                    {{ 'Rp. ' . ' ' . number_format($data->biaya_provisi, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                    Biaya APHT
+                    {{ 'Rp. ' . ' ' . number_format($data->biaya_apht, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                    dan Biaya Fiducia
+                    {{ 'Rp. ' . ' ' . number_format($data->biaya_fiducia, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }},
+                    <p></p>
+                    <p></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <hr>
+                </td>
+            </tr>
             @empty
             @endforelse
 
@@ -253,21 +253,21 @@
                     <p style="margin-top:30px;"></p>
                     <img src="{{ asset('storage/image/qr_code/' . $item->qr) }}" width="100" height="100" style="margin-top:-30px;">
 
-                    <br>
-                    {{ $item->nama_user }}
-                    <hr>
-                    <font style="text-transform: uppercase;">{{ $item->role_name }}</font>
-                </td>
-                <td></td>
-                <td style="text-align: justify;vertical-align: text-top;">
-                    Komentar: <br>
-                    {{ ucwords($item->catatan) }}
-                    <p>
+            <br>
+            {{ $item->nama_user }}
+            <hr>
+            <font style="text-transform: uppercase;">{{ $item->role_name }}</font>
+            </td>
+            <td></td>
+            <td style="text-align: justify;vertical-align: text-top;">
+                Komentar: <br>
+                {{ ucwords($item->catatan) }}
+                <p>
                     Dengan suku bunga {{ $data->suku_bunga }} % / bulan {{ $item->metode_rps }} untuk jangka waktu {{ $data->jangka_waktu }} bulan
                     <br>
                     Biaya ADM {{ 'Rp. ' . ' ' . number_format($data->biaya_admin, 0, ',', '.') ?? 'Rp. ' . ' ' . '0' }}
-                    </p>
-                </td>
+                </p>
+            </td>
             </tr>
             @empty
             @endforelse --}}
