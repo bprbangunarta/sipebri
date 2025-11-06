@@ -1308,7 +1308,8 @@ class DataCetakController extends Controller
 
             // Jika produk KTA, kecualikan role_name "Kepala Kantor Kas"
             if ($cek->produk_kode == "KTA") {
-                $usulanQuery->where('v_users.role_name', '<>', 'Kepala Kantor Kas');
+                $usulanQuery->where('v_users.role_name', '<>', 'Kepala Kantor Kas')
+                    ->orWhere('v_users.role_name', '<>', 'Customer Service');
             }
 
             $usulan = $usulanQuery->get();
