@@ -1271,63 +1271,62 @@ class DataCetakController extends Controller
             $cek->total_taksasi = $total_taksasi ?? 0;
 
             //Data Usulan
-            // $usulan = DB::table('data_usulan')
-            //     ->leftJoin('v_users', 'v_users.code_user', '=', 'data_usulan.input_user')
-            //     ->select(
-            //         'data_usulan.*',
-            //         'v_users.nama_user',
-            //     )
-            //     ->where('pengajuan_kode', $enc)->get();
-            // if (count($usulan) != 0) {
-            //     $data = [];
-            //     $rc = [];
-            //     for ($i = 0; $i < count($usulan); $i++) {
-            //         $data[] = $usulan[$i];
-            //         $rc[] = $usulan[$i]->rc;
-
-            //         //QRCode
-            //         $usulan[$i]->qr = Midle::get_qrcode($enc, 'Perjanjian Kredit', $usulan[$i]->input_user);
-            //     }
-            //     // $total_taksasi = array_sum($total) ?? 0;
-
-            //     //RC
-            //     $rc_akhir = end($rc);
-            //     $data_akhir = end($data);
-            // }
-
-            //Data Usulan
-            //Data Usulan
-            $usulanQuery = DB::table('data_usulan')
+            $usulan = DB::table('data_usulan')
                 ->leftJoin('v_users', 'v_users.code_user', '=', 'data_usulan.input_user')
                 ->select(
                     'data_usulan.*',
                     'v_users.nama_user',
-                    'v_users.role_name' // pastikan kita join role_name juga
                 )
-                ->where('pengajuan_kode', $enc);
-
-            // Jika produk KTA, kecualikan role_name "Kepala Kantor Kas"
-            if ($cek->produk_kode == "KTA") {
-                $usulanQuery->whereIn('v_users.role_name', '<>', ['Kepala Kantor Kas', 'Customer Service']);
-            }
-
-            $usulan = $usulanQuery->get();
-
+                ->where('pengajuan_kode', $enc)->get();
             if (count($usulan) != 0) {
                 $data = [];
                 $rc = [];
-                foreach ($usulan as $item) {
-                    $data[] = $item;
-                    $rc[] = $item->rc;
+                for ($i = 0; $i < count($usulan); $i++) {
+                    $data[] = $usulan[$i];
+                    $rc[] = $usulan[$i]->rc;
 
                     //QRCode
-                    $item->qr = Midle::get_qrcode($enc, 'Perjanjian Kredit', $item->input_user);
+                    $usulan[$i]->qr = Midle::get_qrcode($enc, 'Perjanjian Kredit', $usulan[$i]->input_user);
                 }
+                // $total_taksasi = array_sum($total) ?? 0;
 
                 //RC
                 $rc_akhir = end($rc);
                 $data_akhir = end($data);
             }
+
+            //Data Usulan
+            // $usulanQuery = DB::table('data_usulan')
+            //     ->leftJoin('v_users', 'v_users.code_user', '=', 'data_usulan.input_user')
+            //     ->select(
+            //         'data_usulan.*',
+            //         'v_users.nama_user',
+            //         'v_users.role_name' // pastikan kita join role_name juga
+            //     )
+            //     ->where('pengajuan_kode', $enc);
+
+            // // Jika produk KTA, kecualikan role_name "Kepala Kantor Kas"
+            // if ($cek->produk_kode == "KTA") {
+            //     $usulanQuery->whereIn('v_users.role_name', '<>', ['Kepala Kantor Kas', 'Customer Service']);
+            // }
+
+            // $usulan = $usulanQuery->get();
+
+            // if (count($usulan) != 0) {
+            //     $data = [];
+            //     $rc = [];
+            //     foreach ($usulan as $item) {
+            //         $data[] = $item;
+            //         $rc[] = $item->rc;
+
+            //         //QRCode
+            //         $item->qr = Midle::get_qrcode($enc, 'Perjanjian Kredit', $item->input_user);
+            //     }
+
+            //     //RC
+            //     $rc_akhir = end($rc);
+            //     $data_akhir = end($data);
+            // }
 
             $cek->total_taksasi = $total_taksasi ?? 0;
             $cek->rc_akhir = $rc_akhir ?? 0;
