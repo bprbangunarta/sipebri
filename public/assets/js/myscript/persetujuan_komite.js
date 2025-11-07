@@ -76,6 +76,7 @@ $(document).ready(function () {
                 ) {
                     if (role === "Staff Analis") {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     } else if (role == "Kasi Analis") {
@@ -109,6 +110,7 @@ $(document).ready(function () {
                     //Persetujuan Lele
                     if (role === "Staff Analis") {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     }
@@ -195,12 +197,11 @@ $(document).ready(function () {
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
-                            { value: "Disetujui", text: "Disetujui" },
-                            { value: "Dibatalkan", text: "Dibatalkan" },
-                            { value: "Ditolak", text: "Ditolak" },
+                            { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     } else if (role == "Staff Analis" && pal > 10000000) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     }
@@ -212,12 +213,11 @@ $(document).ready(function () {
                     ) {
                         var options = [
                             { value: "", text: "--Pilih--" },
-                            { value: "Disetujui", text: "Disetujui" },
-                            { value: "Dibatalkan", text: "Dibatalkan" },
-                            { value: "Ditolak", text: "Ditolak" },
+                            { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     } else if (role == "Staff Analis" && pal > 10000000) {
                         var options = [
+                            { value: "", text: "--Pilih--" },
                             { value: "Naik Kasi", text: "Naik Kasi" },
                         ];
                     }
