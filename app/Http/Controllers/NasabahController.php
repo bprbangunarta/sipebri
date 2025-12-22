@@ -144,15 +144,23 @@ class NasabahController extends Controller
             $ceknasabah['tanggal_lahir'] = $tanggal;
 
             //Generate kode otomatis dari kanan ke kiri data pengajuan
-            $lasts = Pengajuan::latest('kode_pengajuan')->first();
-            if (is_null($lasts)) {
+            // $lasts = Pengajuan::latest('kode_pengajuan')->first();
+            // if (is_null($lasts)) {
+            //     $count = 339931;
+            // } else {
+            //     $count = (int) $lasts->kode_pengajuan + 1;
+            // }
+            // $lengths = 8;
+            // $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
+
+            $lasts = Pengajuan::orderByRaw('CAST(kode_pengajuan AS UNSIGNED) DESC')->first();
+            if (! $lasts) {
                 $count = 339931;
             } else {
                 $count = (int) $lasts->kode_pengajuan + 1;
             }
+            $kodes = str_pad($count, 8, '0', STR_PAD_LEFT);
 
-            $lengths = 8;
-            $kodes = str_pad($count, $lengths, '0', STR_PAD_LEFT);
             $cekpengajuan['kode_pengajuan'] = $kodes;
             $cekpengajuan['nasabah_kode'] = $ceknasabah['kode_nasabah'];
 
