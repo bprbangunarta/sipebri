@@ -1,20 +1,9 @@
 <?php
 
-use App\Models\Lain;
-use App\Models\Nasabah;
-use App\Models\Kepemilikan;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\QRController;
 use App\Http\Controllers\CGCController;
 use App\Http\Controllers\RSCController;
 use App\Http\Controllers\DatiController;
-use App\Http\Controllers\JasaController;
-use App\Http\Controllers\LainController;
-use Spatie\Permission\Models\Permission;
-use App\Http\Controllers\AnalisaTambahan;
 use App\Http\Controllers\CetakController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\FrontController;
@@ -32,31 +21,25 @@ use App\Http\Controllers\RSCJasaController;
 use App\Http\Controllers\RSCLainController;
 use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\DroppingController;
-use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\RSCBiayaController;
 use App\Http\Controllers\RSCCetakController;
 use App\Http\Controllers\SkriningController;
 use App\Http\Controllers\TabunganController;
 use App\Http\Controllers\TrackingController;
-use App\Http\Controllers\Analisa5cController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DataCetakController;
 use App\Http\Controllers\PengajuanController;
-use App\Http\Controllers\PertanianController;
 use App\Http\Controllers\UsahaJasaController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\KonfirmasiController;
-use App\Http\Controllers\KualitatifController;
 use App\Http\Controllers\MemorandumController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PendampingController;
 use App\Http\Controllers\RSCExsportController;
 use App\Http\Controllers\RSCJaminanController;
 use App\Http\Controllers\RSCLaporanController;
-use App\Http\Controllers\KepemilikanController;
 use App\Http\Controllers\PenjadwalanController;
-use App\Http\Controllers\PerdaganganController;
 use App\Http\Controllers\PerhitunganController;
 use App\Http\Controllers\RSCAngsuranController;
 use App\Http\Controllers\RSCKeuanganController;
@@ -77,7 +60,6 @@ use App\Http\Controllers\AnalisaJaminanController;
 use App\Http\Controllers\RSCPenjadwalanController;
 use App\Http\Controllers\RSCPerdaganganController;
 use App\Http\Controllers\RSCPersetujuanController;
-use App\Http\Controllers\TaksasiJaminanController;
 use App\Http\Controllers\UsahaPertanianController;
 use App\Http\Controllers\Admin\PekerjaanController;
 use App\Http\Controllers\AnalisaKeuanganController;
@@ -114,35 +96,7 @@ use App\Http\Controllers\Administratif\DataBatalPerjanjianKreditController;
 */
 
 Route::get('/', function () {
-    // $role = Role::find(2);
-    // $permission = Permission::find(47);
-
-    // $role->givePermissionTo($permission);
-    // $permission->assignRole($role);
-    // dd($permission);
     return redirect('login');
-});
-
-// Route::get('/give-permission', function () {
-//     $role = Role::find(3);
-//     $permission = Permission::find(44);
-
-//     $role->givePermissionTo($permission);
-//     $permission->assignRole($role);
-//     dd($permission);
-// });
-
-Route::get('/role', function () {
-    // $role = Role::create(['name' => 'Kabag Kepatuhan']);
-    // $role = Role::create(['name' => 'Staff Kepatuhan']);
-
-    // $cek = Role::where('name', 'Staff Audit')->first();
-
-    // if ($cek) {
-    //     $cek->name = 'Staff Audit Internal';
-    //     $cek->save();
-    // }
-    // dd($role);
 });
 
 Route::get('/login', function () {
@@ -1090,3 +1044,5 @@ Route::view('/rekap/analisa', 'rekap.analisa');
 Route::view('/error', 'errors.500');
 
 require __DIR__ . '/auth.php';
+
+require base_path('routes/codex.php');

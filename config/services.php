@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'codex' => [
+        'endpoint' => env('CODEX_ENDPOINT'),
+        'id'       => env('CODEX_ID'),
+        'secret'   => env('CODEX_SECRET'),
+        'token'    => env('CODEX_TOKEN'),
+    ],
 ];
