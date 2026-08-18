@@ -942,18 +942,38 @@ class Midle extends Model
         return $cek;
     }
 
+    // public static function kode_tracking($name, $length)
+    // {
+    //     for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
+    //         $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+
+    //         // Cek apakah kode sudah ada dalam database
+    //         if (!DB::table('data_tracking')->where('kode_tracking', $acak)->exists()) {
+    //             return $acak;
+    //         }
+    //     }
+
+    //     return null; // Jika tidak ada kode yang unik ditemukan
+    // }
     public static function kode_tracking($name, $length)
     {
-        for ($i = 1; $i <= pow(10, $length) - 1; $i++) {
-            $acak = $name . str_pad($i, $length, '0', STR_PAD_LEFT);
+        $last = DB::table('data_tracking')
+            ->where('kode_tracking', 'like', $name . '%')
+            ->orderByDesc('kode_tracking')
+            ->value('kode_tracking');
 
-            // Cek apakah kode sudah ada dalam database
-            if (!DB::table('data_tracking')->where('kode_tracking', $acak)->exists()) {
-                return $acak;
-            }
+        if (!$last) {
+            return $name . str_pad(1, $length, '0', STR_PAD_LEFT);
         }
 
-        return null; // Jika tidak ada kode yang unik ditemukan
+        $number = (int) substr($last, strlen($name));
+        $number++;
+
+        if ($number > (pow(10, $length) - 1)) {
+            return null;
+        }
+
+        return $name . str_pad($number, $length, '0', STR_PAD_LEFT);
     }
 
     public static function taksasi_agunan($data, $plafon)
