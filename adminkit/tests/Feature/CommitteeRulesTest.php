@@ -21,7 +21,7 @@ class CommitteeRulesTest extends TestCase
 
     public function test_seeder_creates_default_paths(): void
     {
-        $this->assertSame(17, CommitteePath::count());
+        $this->assertSame(19, CommitteePath::count());
         $this->assertSame('hierarki', CommitteePath::whereNull('product_id')->where('condition', 'RELOAN')->value('mechanism'));
     }
 
@@ -36,7 +36,7 @@ class CommitteeRulesTest extends TestCase
 
     public function test_condition_is_uppercased_and_path_created(): void
     {
-        $product = Product::where('alias', 'KPP')->firstOrFail();
+        $product = Product::where('alias', 'KRISPI')->firstOrFail();
 
         $this->actingAs($this->admin())
             ->post('/committees', ['product_id' => $product->id, 'condition' => 'perpadian', 'mechanism' => 'plafon'])

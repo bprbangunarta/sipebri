@@ -381,3 +381,6 @@ Konteks: aplikasi disiapkan menjadi **SIPEBRI** (sistem pemberian kredit BPR Ban
 ### Tambahan (2026-06-19, ekspor aturan komite)
 - Tombol **Ekspor** di halaman Komite Kredit (`GET /committees/export`, izin `committees.view`) mengunduh SATU berkas `.xlsx` berisi seluruh jalur + jenjangnya (satu baris per jenjang: Kode/Nama Produk, Kondisi, Mekanisme, Status, Urutan, Nama Jenjang, Peranan Pemutus, Plafon Min/Maks, Keputusan Diizinkan, Catatan) supaya review bisa sekaligus tanpa membuka detail satu per satu. Tercatat di Audit Trail.
 - Uji: `tests/Feature/CommitteeRulesTest::test_committee_export_returns_xlsx` (7 tes lulus) + unduhan nyata di browser (`komite-kredit-YYYYMMDD-HHmm.xlsx`).
+
+### Tambahan (2026-06-19, jalur komite KPP & KRISPI)
+- Produk **KPP** (Kredit Pensiun PN Channeling) dan **KRISPI** (Kredit Pasar Mingguan) ditambahkan ke jalur **Kewenangan Plafon (jalur umum)** — masing-masing 4 jenjang (Kasi ≤35 jt → Komite I ≤100 jt → Komite II ≤300 jt → Komite III >300 jt). `CommitteeSeeder::PLAFON_PRODUCTS` kini 14 produk. Total data: **19 jalur / 76 jenjang**. Tes fitur diperbarui (7 lulus) dan README disesuaikan.

@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 
 /**
  * Aturan komite kredit bawaan sesuai dokumentasi kebijakan:
- *  - Jalur PLAFON: 12 produk umum + KBT (PERPADIAN).
+ *  - Jalur PLAFON: 14 produk umum + KBT (PERPADIAN).
  *  - Jalur HIERARKI: KUP, KKO, KBT (PERLELEAN), dan kategori RELOAN (lintas produk).
  * Jenjang berisi HANYA level pemutus. Hak mengajukan/meneruskan berkas ke komite
  * bukan jenjang komite, melainkan izin pada modul pengajuan kredit.
@@ -18,7 +18,10 @@ use Illuminate\Database\Seeder;
 class CommitteeSeeder extends Seeder
 {
     /** Produk yang memakai kewenangan plafon (alias produk). */
-    private const PLAFON_PRODUCTS = ['KRU', 'KRM', 'PRK', 'KTO', 'KPS', 'KIH', 'KPJ', 'KRS', 'KPN', 'KIU', 'KTA', 'KPM'];
+    private const PLAFON_PRODUCTS = [
+        'KRU', 'KRM', 'PRK', 'KTO', 'KPS', 'KIH', 'KPJ', 'KRS',
+        'KPN', 'KIU', 'KTA', 'KPM', 'KPP', 'KRISPI',
+    ];
 
     /** Produk yang memakai hierarki komite tanpa batas plafon. */
     private const HIERARKI_PRODUCTS = ['KUP', 'KKO'];
