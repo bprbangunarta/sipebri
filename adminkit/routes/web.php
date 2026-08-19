@@ -154,6 +154,8 @@ Route::middleware('auth')->group(function () {
         ->middleware('permission:committees.view')->name('committees.index');
     Route::get('/committees/export', [CommitteeController::class, 'export'])
         ->middleware('permission:committees.view')->name('committees.export');
+    Route::get('/committees/simulate', [CommitteeController::class, 'simulate'])
+        ->middleware('permission:committees.view')->name('committees.simulate');
     Route::get('/committees/{path}', [CommitteeController::class, 'show'])
         ->middleware('permission:committees.view')->name('committees.show');
 

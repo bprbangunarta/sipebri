@@ -8,8 +8,11 @@ use App\Models\ActivityLog;
 use App\Models\CommitteePath;
 use App\Models\CommitteeTier;
 use App\Models\Product;
+use App\Support\Committee;
 use App\Support\Excel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -37,6 +40,13 @@ class CommitteeController extends Controller
             'pathOptions' => CommitteePath::with('product')->has('tiers')->get()
                 ->map(fn (CommitteePath $p) => ['value' => (string) $p->id, 'label' => $p->title()])
                 ->all(),
+            'conditionOptions' => [
+                ['value' => '', 'label' => 'Normal'],
+                ...CommitteePath::whereNotNull('condition')->distinct()->orderBy('condition')
+                    ->pluck('condition')
+                    ->map(fn (string $c) => ['value' => $c, 'label' => $c])
+                    ->all(),
+            ],
         ]);
     }
 
@@ -63,6 +73,22 @@ class CommitteeController extends Controller
             'roleOptions' => Role::orderBy('name')->pluck('name')
                 ->map(fn ($n) => ['value' => $n, 'label' => $n])->all(),
         ]);
+    }
+
+    /** Simulasi kewenangan: menampilkan pemutus untuk produk, kondisi, dan plafon tertentu. */
+    public function simulate(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'product_id' => ['nullable', 'integer', 'exists:products,id'],
+            'condition' => ['nullable', 'string', 'max:30'],
+            'amount' => ['required', 'integer', 'min:0'],
+        ]);
+
+        return response()->json(Committee::resolve(
+            $data['product_id'] ?? null,
+            $data['condition'] ?? null,
+            (int) $data['amount'],
+        ));
     }
 
     /** Unduh seluruh jalur beserta jenjangnya dalam satu berkas Excel (untuk review). */

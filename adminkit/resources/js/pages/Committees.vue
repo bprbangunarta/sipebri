@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { Download, Gavel, Loader2, Pencil, Plus, Save, Scale, Trash2, X } from 'lucide-vue-next';
+import { Download, Gavel, Loader2, Pencil, Play, Plus, Save, Scale, Trash2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
@@ -14,6 +14,7 @@ import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
 import Input from '@/components/ui/Input.vue';
 import Label from '@/components/ui/Label.vue';
 import Switch from '@/components/ui/Switch.vue';
+import CommitteeSimulator from '@/components/composite/CommitteeSimulator.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
@@ -24,6 +25,7 @@ const props = defineProps({
     paths: { type: Array, required: true },
     productOptions: { type: Array, default: () => [] },
     pathOptions: { type: Array, default: () => [] },
+    conditionOptions: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -41,6 +43,7 @@ const columns = [
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ];
 
+const simulatorOpen = ref(false);
 const dialogOpen = ref(false);
 const editing = ref(null);
 const form = useForm({
@@ -113,6 +116,9 @@ const copyOptions = computed(() => [
                 @row-click="router.visit(`/committees/${$event.id}`)"
             >
                 <template #header-action>
+                    <Button variant="outline" size="sm" data-testid="committees-simulate" @click="simulatorOpen = true">
+                        <Play class="size-4" /> Simulasi
+                    </Button>
                     <Button variant="outline" size="sm" as="a" href="/committees/export" data-testid="committees-export">
                         <Download class="size-4" /> {{ ACTION.export }}
                     </Button>
@@ -252,6 +258,12 @@ const copyOptions = computed(() => [
                     </Button>
                 </template>
             </Dialog>
+
+            <CommitteeSimulator
+                v-model:open="simulatorOpen"
+                :product-options="props.productOptions"
+                :condition-options="props.conditionOptions"
+            />
 
             <ConfirmDeleteDialog
                 :open="Boolean(deleting)"

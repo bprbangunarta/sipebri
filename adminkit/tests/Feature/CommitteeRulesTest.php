@@ -78,6 +78,42 @@ class CommitteeRulesTest extends TestCase
         $this->assertStringContainsString('spreadsheetml', (string) $response->headers->get('content-type'));
     }
 
+    public function test_simulation_finds_plafon_decider(): void
+    {
+        $product = Product::where('alias', 'KRU')->firstOrFail();
+
+        $this->actingAs($this->admin())
+            ->getJson("/committees/simulate?product_id={$product->id}&amount=150000000")
+            ->assertOk()
+            ->assertJsonPath('found', true)
+            ->assertJsonPath('path.mechanism', 'plafon')
+            ->assertJsonPath('decider.role', 'Direktur Bisnis');
+    }
+
+    public function test_simulation_prioritises_condition_over_product_path(): void
+    {
+        $product = Product::where('alias', 'KRU')->firstOrFail();
+
+        $this->actingAs($this->admin())
+            ->getJson("/committees/simulate?product_id={$product->id}&condition=reloan&amount=5000000")
+            ->assertOk()
+            ->assertJsonPath('path.mechanism', 'hierarki')
+            ->assertJsonPath('path.matched_globally', true)
+            ->assertJsonPath('decider.role', 'Direktur Utama');
+    }
+
+    public function test_simulation_warns_when_amount_has_no_decider(): void
+    {
+        $product = Product::where('alias', 'KRU')->firstOrFail();
+
+        $response = $this->actingAs($this->admin())
+            ->getJson("/committees/simulate?product_id={$product->id}&amount=500")
+            ->assertOk()
+            ->assertJsonPath('decider', null);
+
+        $this->assertNotEmpty($response->json('warnings'));
+    }
+
     public function test_deleting_path_removes_its_tiers(): void
     {
         $path = CommitteePath::has('tiers')->firstOrFail();

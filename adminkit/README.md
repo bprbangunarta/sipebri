@@ -226,6 +226,7 @@ app/
 │   └── TelescopeServiceProvider.php    # gate & middleware Telescope
 └── Support/
     ├── Branding.php                    # pembacaan setelan branding (+cache)
+    ├── Committee.php                   # resolver jalur & pemutus komite (simulasi + nanti alur kredit)
     ├── Excel.php                       # unduhan & pembacaan berkas .xlsx (PhpSpreadsheet)
     ├── FileStorage.php                 # satu pintu unggahan (local/s3, prefix disk)
     ├── Modules.php                     # daftar modul & izin inti
@@ -283,7 +284,7 @@ Pengaturan **kewenangan persetujuan kredit** (dipakai SIPEBRI). Rute `/committee
 2. **Jenjang** (`committee_tiers`) — urutan, nama jenjang (mis. `Komite I`), **peranan pemutus** (peranan Spatie, bukan user tertentu), `min_amount`/`max_amount`, dan keputusan yang diizinkan: `can_escalate` (Naik Komite), `can_approve`, `can_cancel`, `can_reject`.
    Urutan diubah lewat tombol naik/turun; rute jenjang memakai `scopeBindings()` sehingga jenjang milik jalur lain tidak bisa disentuh.
 
-Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (satu jalur dibuat sekali, sisanya disalin). Jenjang berisi **hanya level pemutus** — hak *mengajukan/meneruskan* berkas ke komite bukan jenjang komite, melainkan izin pada modul pengajuan kredit. Data bawaan `CommitteeSeeder` mengikuti dokumen kebijakan: 14 produk umum (termasuk KPP dan KRISPI) + KBT `PERPADIAN` memakai jalur plafon (Kasi Analis ≤35 jt → Komite I/Kabag Analis ≤100 jt → Komite II/Direktur Bisnis ≤300 jt → Komite III/Direktur Utama >300 jt), sedangkan KUP, KKO, KBT `PERLELEAN`, dan `RELOAN` memakai hierarki (Kasi Analis → Komite I → Komite II → Komite III, hanya Komite III yang memutus).
+Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (satu jalur dibuat sekali, sisanya disalin). Tombol **Simulasi** di header membuka dialog untuk mencoba aturan: masukkan **produk + kondisi + plafon**, sistem menampilkan jalur yang cocok, rantai keputusan (mana yang *Naik Komite*, mana **Pemutus**, mana *Tidak diperlukan*), jumlah pengguna pemegang tiap peranan, serta **peringatan** bila tidak ada pemutus, peranan pemutus belum ada penghuninya, atau ada **celah/tumpang tindih** rentang plafon. Logikanya ada di `App\Support\Committee::resolve()` (`GET /committees/simulate`) sehingga siap dipakai ulang oleh alur pengajuan kredit — simulasi tidak menyimpan apa pun dan tidak butuh akun uji per peranan. Jenjang berisi **hanya level pemutus** — hak *mengajukan/meneruskan* berkas ke komite bukan jenjang komite, melainkan izin pada modul pengajuan kredit. Data bawaan `CommitteeSeeder` mengikuti dokumen kebijakan: 14 produk umum (termasuk KPP dan KRISPI) + KBT `PERPADIAN` memakai jalur plafon (Kasi Analis ≤35 jt → Komite I/Kabag Analis ≤100 jt → Komite II/Direktur Bisnis ≤300 jt → Komite III/Direktur Utama >300 jt), sedangkan KUP, KKO, KBT `PERLELEAN`, dan `RELOAN` memakai hierarki (Kasi Analis → Komite I → Komite II → Komite III, hanya Komite III yang memutus).
 
 ---
 
@@ -609,6 +610,7 @@ Nilai `'all'` dipakai sebagai sentinel filter "semua" karena `reka-ui` melarang 
 | POST/PUT/DELETE | `/{slug}`, `/{slug}/{id}`, `/{slug}/bulk` | Simpan, perbarui, hapus (per baris & massal) data referensi |
 | GET | `/committees`, `/committees/{path}` | Jalur komite kredit & pengelolaan jenjangnya |
 | GET | `/committees/export` | Unduh seluruh jalur + jenjang dalam satu Excel (untuk review) |
+| GET | `/committees/simulate?product_id=&condition=&amount=` | JSON simulasi kewenangan: jalur yang cocok, rantai keputusan, pemutus, peringatan |
 | POST/PUT/DELETE | `/committees`, `/committees/{path}` | CRUD jalur komite |
 | POST/PUT/DELETE | `/committees/{path}/tiers`, `/committees/{path}/tiers/{tier}` | CRUD jenjang (route ter-scope ke jalurnya) |
 | PUT | `/committees/{path}/tiers/{tier}/move/{up\|down}` | Geser urutan jenjang |
@@ -644,8 +646,8 @@ Catatan penting: `App\Providers\TelescopeServiceProvider::boot()` mendaftarkan u
 ## Pengujian
 
 ```bash
-php artisan test                             # seluruh suite (15 tes)
-php artisan test --filter=CommitteeRulesTest # aturan komite: seeder, keunikan jalur, scope jenjang, ekspor
+php artisan test                             # seluruh suite (18 tes)
+php artisan test --filter=CommitteeRulesTest # aturan komite: seeder, keunikan jalur, scope jenjang, ekspor, simulasi
 php artisan test --filter=ExcelIoTest        # ekspor/impor .xlsx & penolakan berkas CSV
 php artisan test --filter=ErrorPageTest      # 404/403 memakai halaman error Inertia
 ./vendor/bin/pint --test                     # pemeriksaan gaya kode
