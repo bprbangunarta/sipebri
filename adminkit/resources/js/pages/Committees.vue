@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { Gavel, Loader2, Pencil, Plus, Save, Scale, Trash2, X } from 'lucide-vue-next';
+import { Download, Gavel, Loader2, Pencil, Plus, Save, Scale, Trash2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
@@ -113,6 +113,9 @@ const copyOptions = computed(() => [
                 @row-click="router.visit(`/committees/${$event.id}`)"
             >
                 <template #header-action>
+                    <Button variant="outline" size="sm" as="a" href="/committees/export" data-testid="committees-export">
+                        <Download class="size-4" /> {{ ACTION.export }}
+                    </Button>
                     <Button v-if="canManage" size="sm" data-testid="committees-add" @click="openCreate">
                         <Plus class="size-4" /> {{ ACTION.add }}
                     </Button>

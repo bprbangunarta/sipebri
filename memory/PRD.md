@@ -377,3 +377,7 @@ Konteks: aplikasi disiapkan menjadi **SIPEBRI** (sistem pemberian kredit BPR Ban
 ### Penyesuaian (2026-06-19, jenjang komite = hanya pemutus)
 - Baris jenjang "Pengusul" (Staff Analis, Customer Service, Kepala Kantor Kas) DIHAPUS dari seluruh jalur komite (43 baris) — disepakati bersama user: mengajukan/meneruskan berkas bukan keputusan komite, aksesnya nanti diatur lewat izin modul Pengajuan Kredit (`credits.*`).
 - Jenjang kini: jalur plafon = Kasi Analis → Komite I (Kabag) → Komite II (Dir. Bisnis) → Komite III (Dir. Utama); jalur hierarki = Kasi → Komite I → Komite II → Komite III (hanya Komite III memutus). Total 17 jalur / 68 jenjang. `CommitteeSeeder` + README diperbarui; `php artisan test` 14 lulus; diverifikasi lewat screenshot.
+
+### Tambahan (2026-06-19, ekspor aturan komite)
+- Tombol **Ekspor** di halaman Komite Kredit (`GET /committees/export`, izin `committees.view`) mengunduh SATU berkas `.xlsx` berisi seluruh jalur + jenjangnya (satu baris per jenjang: Kode/Nama Produk, Kondisi, Mekanisme, Status, Urutan, Nama Jenjang, Peranan Pemutus, Plafon Min/Maks, Keputusan Diizinkan, Catatan) supaya review bisa sekaligus tanpa membuka detail satu per satu. Tercatat di Audit Trail.
+- Uji: `tests/Feature/CommitteeRulesTest::test_committee_export_returns_xlsx` (7 tes lulus) + unduhan nyata di browser (`komite-kredit-YYYYMMDD-HHmm.xlsx`).

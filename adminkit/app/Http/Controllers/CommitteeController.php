@@ -8,10 +8,12 @@ use App\Models\ActivityLog;
 use App\Models\CommitteePath;
 use App\Models\CommitteeTier;
 use App\Models\Product;
+use App\Support\Excel;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Aturan komite kredit. Satu **jalur** = produk (atau semua produk) + kondisi/
@@ -61,6 +63,61 @@ class CommitteeController extends Controller
             'roleOptions' => Role::orderBy('name')->pluck('name')
                 ->map(fn ($n) => ['value' => $n, 'label' => $n])->all(),
         ]);
+    }
+
+    /** Unduh seluruh jalur beserta jenjangnya dalam satu berkas Excel (untuk review). */
+    public function export(): StreamedResponse
+    {
+        $rows = [];
+
+        foreach (CommitteePath::with(['product', 'tiers'])->orderBy('product_id')->orderBy('condition')->get() as $path) {
+            $base = [
+                $path->product?->alias ?? 'SEMUA',
+                $path->product?->name ?? 'Semua Produk',
+                $path->condition ?: 'Normal',
+                CommitteePath::MECHANISMS[$path->mechanism] ?? $path->mechanism,
+                $path->is_active ? 'Aktif' : 'Nonaktif',
+            ];
+
+            if ($path->tiers->isEmpty()) {
+                $rows[] = [...$base, null, 'Belum ada jenjang', null, null, null, null, $path->note];
+
+                continue;
+            }
+
+            foreach ($path->tiers as $index => $tier) {
+                $decisions = collect([
+                    'Naik Komite' => $tier->can_escalate,
+                    'Disetujui' => $tier->can_approve,
+                    'Dibatalkan' => $tier->can_cancel,
+                    'Ditolak' => $tier->can_reject,
+                ])->filter()->keys()->implode(', ');
+
+                $rows[] = [
+                    ...$base,
+                    $index + 1,
+                    $tier->label,
+                    $tier->role,
+                    $path->mechanism === 'plafon' ? $tier->min_amount : null,
+                    $path->mechanism === 'plafon' ? $tier->max_amount : null,
+                    $decisions ?: '—',
+                    $path->note,
+                ];
+            }
+        }
+
+        ActivityLog::record('Mengekspor aturan komite kredit (Excel)', self::MODULE, 'info');
+
+        return Excel::download(
+            Excel::filename('komite-kredit'),
+            [
+                'Kode Produk', 'Nama Produk', 'Kondisi / Kategori', 'Mekanisme', 'Status Jalur',
+                'Urutan', 'Nama Jenjang', 'Peranan Pemutus', 'Plafon Minimal', 'Plafon Maksimal',
+                'Keputusan Diizinkan', 'Catatan',
+            ],
+            $rows,
+            'Komite Kredit',
+        );
     }
 
     public function store(StorePathRequest $request): RedirectResponse

@@ -309,7 +309,8 @@ Empat modul data master sederhana (`kode` + `nama`) berbagi **satu** basis kode:
 
 | Halaman | Rute | Kolom |
 | --- | --- | --- |
-| Pengguna | `GET /users/export?search=&status=&role=` | Nama Lengkap, Nama Pengguna, Alamat Email, Nomor HP, Peranan, Status, Terakhir Login |
+| Pengguna | `GET /users/export?search=&status=&role=` | Nama Lengkap, Nama Pengguna, Alamat Email, Nomor HP, Peranan, Kantor, Alias, Kode MSO, Kode Kolektor, Status, Terakhir Login |
+| Komite Kredit | `GET /committees/export` | Kode Produk, Nama Produk, Kondisi/Kategori, Mekanisme, Status Jalur, Urutan, Nama Jenjang, Peranan Pemutus, Plafon Minimal, Plafon Maksimal, Keputusan Diizinkan, Catatan — **satu baris per jenjang**, seluruh jalur dalam satu berkas untuk keperluan review |
 | Perizinan | `GET /permissions/export?search=&entity=&sort=&dir=` | Nama Izin, Entitas, Aksi, Guard, Jumlah Peranan |
 | Audit Trail | `GET /audit-trail/export?search=&date_from=&date_to=&sort=&dir=` | Waktu, Pelaku, Aksi, Modul, Level, Alamat IP, Metode, Kode Status, URL |
 
