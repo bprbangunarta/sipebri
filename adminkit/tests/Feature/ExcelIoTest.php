@@ -50,7 +50,7 @@ class ExcelIoTest extends TestCase
 
     public function test_impor_pengguna_dari_xlsx(): void
     {
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $spreadsheet->getActiveSheet()->fromArray([
             ['Nama Lengkap', 'Nama Pengguna', 'Alamat Email', 'Nomor HP', 'Peranan', 'Kata Sandi'],
             ['Uji Impor Excel', 'ujiimporxlsx', 'ujiimporxlsx@example.com', '081999000111', 'Super Admin', 'password'],
@@ -70,7 +70,7 @@ class ExcelIoTest extends TestCase
 
     public function test_impor_peranan_dari_xlsx(): void
     {
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $spreadsheet->getActiveSheet()->fromArray([['Nama Peranan'], ['Peranan Uji Excel']], null, 'A1');
 
         $path = tempnam(sys_get_temp_dir(), 'imp').'.xlsx';

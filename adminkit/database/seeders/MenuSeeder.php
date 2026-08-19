@@ -16,8 +16,8 @@ class MenuSeeder extends Seeder
         'member' => [
             ['Dashboard', '/', 'chart-pie', 'dashboard.view', []],
             ['Referensi', null, 'library-big', null, [
-                ['Data Instansi', '/institutions', 'hash', 'institutions.view', []],
-                ['Data Produk', '/products', 'wallet-cards', 'products.view', []],
+                ['Data Instansi', '/institutions', 'building-2', 'institutions.view', []],
+                ['Data Produk', '/products', 'box', 'products.view', []],
                 ['Sistem Cicilan', '/installments', 'calendar-clock', 'installments.view', []],
                 ['Sistem Bunga', '/methods', 'badge-percent', 'methods.view', []],
                 ['Komite Kredit', '/committees', 'gavel', 'committees.view', []],

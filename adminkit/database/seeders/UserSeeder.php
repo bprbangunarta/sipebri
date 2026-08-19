@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
 {
     /** [nama, username, email, telepon, kantor, kata sandi awal, peranan] */
     private const USERS = [
-        ['IT Support', 'superadmin', 'sa@bprbangunarta.co.id', null, 'Kantor Pusat', 'SA@4dm1n', RoleName::SuperAdmin->value],
+        ['IT Support', 'superadmin', 'sa@bprbangunarta.co.id', '081200000001', 'Kantor Pusat', 'SA@4dm1n', RoleName::SuperAdmin->value],
     ];
 
     public function run(): void

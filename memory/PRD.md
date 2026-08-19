@@ -384,3 +384,11 @@ Konteks: aplikasi disiapkan menjadi **SIPEBRI** (sistem pemberian kredit BPR Ban
 
 ### Tambahan (2026-06-19, jalur komite KPP & KRISPI)
 - Produk **KPP** (Kredit Pensiun PN Channeling) dan **KRISPI** (Kredit Pasar Mingguan) ditambahkan ke jalur **Kewenangan Plafon (jalur umum)** — masing-masing 4 jenjang (Kasi ≤35 jt → Komite I ≤100 jt → Komite II ≤300 jt → Komite III >300 jt). `CommitteeSeeder::PLAFON_PRODUCTS` kini 14 produk. Total data: **19 jalur / 76 jenjang**. Tes fitur diperbarui (7 lulus) dan README disesuaikan.
+
+## Checkpoint proyek (2026-06-19) — dokumentasi & seeder disegarkan
+Atas permintaan user, pekerjaan disimpan sampai titik ini.
+- **Seeder disinkronkan dengan data hidup**: `SettingSeeder` (branding SIPEBRI: app_name SIPEBRI, tagline "Sistem Pemberian Kredit", canonical sipebri.bprbangunarta.co.id, footer & support email BPR Bangunarta, company "PT BPR Bangunarta", OG diselaraskan ke SIPEBRI, thumbnail lama era CODEX dikosongkan), `MenuSeeder` (ikon terkini: chart-pie, library-big, building-2, box, calendar-clock, badge-percent, gavel), `UserSeeder` (nomor HP 081200000001), `CommitteeSeeder` (14 produk plafon termasuk KPP & KRISPI → 19 jalur / 76 jenjang), plus Product/Installment/MethodSeeder.
+- **Verifikasi**: `php artisan db:seed` idempoten pada DB hidup, dan `migrate:fresh --seed` pada DB sementara menghasilkan 1 user / 45 peranan / 26 izin / 14 menu / 24 setelan / 17 produk / 8 cicilan / 10 bunga / 19 jalur / 76 jenjang. `php artisan test` → **15 tes lulus**.
+- **README dirapikan**: judul & pengantar menjadi SIPEBRI + status pengembangan, daftar isi menambahkan Modul Komite Kredit & Modul Data Referensi, bagian Fitur diperbarui (Manajemen Pengguna dengan halaman tambah/ubah + arsip, blok duplikat dibuang, aksi massal terkini), tabel Rute mencakup rute pengguna baru, data referensi, komite kredit + ekspornya, Struktur Proyek & bagian Pengujian disegarkan.
+- `/app/memory/test_credentials.md` diperbarui (nomor HP + catatan pengguna terarsip tidak bisa login).
+- **Catatan untuk sesi berikutnya**: lanjutan SIPEBRI ada di `/app/memory/sipebri_discussion.md` (daftar pertanyaan kebijakan yang masih menunggu jawaban user + rencana modul Parameter Produk dan alur berkas kredit).

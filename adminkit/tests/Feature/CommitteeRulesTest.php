@@ -78,7 +78,8 @@ class CommitteeRulesTest extends TestCase
         $this->assertStringContainsString('spreadsheetml', (string) $response->headers->get('content-type'));
     }
 
-    public function test_deleting_path_removes_its_tiers(): void    {
+    public function test_deleting_path_removes_its_tiers(): void
+    {
         $path = CommitteePath::has('tiers')->firstOrFail();
         $tierIds = $path->tiers()->pluck('id');
 

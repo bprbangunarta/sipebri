@@ -1,8 +1,10 @@
-# CODEX — AdminKit Starter Kit
+# SIPEBRI — Sistem Pemberian Kredit (di atas AdminKit Starter Kit)
 
-Starter kit panel admin **compact UI** yang siap dikembangkan: Laravel 12 + Vue 3 + Inertia.js + TailwindCSS 3 di atas SQLite, lengkap dengan autentikasi, hak akses berbasis peranan, audit trail, pengaturan penampilan, dan object storage (S3) yang dikonfigurasi lewat `.env`.
+Starter kit panel admin **compact UI** yang kini dipakai sebagai fondasi **SIPEBRI** (sistem pemberian kredit PT BPR Bangunarta): Laravel 12 + Vue 3 + Inertia.js + TailwindCSS 3 di atas SQLite, lengkap dengan autentikasi, hak akses berbasis peranan, audit trail, pengaturan penampilan, object storage (S3), data referensi (produk/cicilan/bunga mengikuti core banking), dan **aturan komite kredit**.
 
 > Design system mengikuti **FlowDesk** (compact, monokrom) dengan komponen porting **shadcn/ui** dan dukungan **dark mode**.
+>
+> **Status pengembangan:** fondasi + master data + aturan komite kredit **selesai**. Alur berkas kredit (pengajuan → penjadwalan → survey → analisa → persetujuan komite → notifikasi → akad → pencairan → posting core banking) **belum dibangun** — rancangannya dicatat di `/app/memory/sipebri_discussion.md`.
 
 ---
 
@@ -15,6 +17,8 @@ Starter kit panel admin **compact UI** yang siap dikembangkan: Laravel 12 + Vue 
 - [Perintah Harian](#perintah-harian)
 - [Struktur Proyek](#struktur-proyek)
 - [Skema Basis Data](#skema-basis-data)
+- [Modul Komite Kredit](#modul-komite-kredit)
+- [Modul Data Referensi](#modul-data-referensi)
 - [Ekspor & Impor Excel](#ekspor--impor-excel)
 - [Standar Validasi (WAJIB)](#standar-validasi-wajib)
 - [Hak Akses & Peranan](#hak-akses--peranan)
@@ -56,21 +60,16 @@ Starter kit panel admin **compact UI** yang siap dikembangkan: Laravel 12 + Vue 
 - Halaman profil: ubah data diri, unggah/hapus foto profil, ganti kata sandi.
 
 **Manajemen Pengguna**
-- Tabel server-side: pencarian, sortir, paginasi, filter **Peranan** (dinamis) dan **Status**.
-- Dialog tambah/ubah dengan validasi cepat; hanya **Nama, Peranan, Kata Sandi** yang wajib.
+- Tabel server-side: pencarian, sortir, paginasi, filter **Peranan** (dinamis) dan **Status** (Aktif / Terarsip / Semua).
+- **Tambah & ubah lewat halaman tersendiri** (`/users/create`, `/users/{user}/edit`) — 3 kartu: identitas, penempatan & kode, keamanan.
+- Kolom pegawai: `role` (cermin peranan Spatie), `office`, `alias`, `mso_code`, `collector_code` (unik, otomatis HURUF BESAR).
+- **Arsip (SoftDelete)** menggantikan status aktif: Arsipkan / Pulihkan / Hapus Permanen — per baris maupun massal; pengguna terarsip **tidak dapat masuk**, dan akun sendiri selalu dilewati.
 - **Impor Excel** (`.xlsx` sesuai template yang dapat diunduh; baris judul diabaikan, baris tidak valid dilewati, kata sandi kosong diisi acak) dan **Ekspor Excel** mengikuti filter aktif.
 - `username`, `email`, `phone` opsional namun **unik**; nomor HP hanya menerima angka (boleh `+`).
 
-**Perizinan**
-- Halaman `/permissions` untuk mengelola permission Spatie: tabel server-side (pencarian, sortir, filter **Entitas** dinamis, paginasi), tambah/ubah/hapus, dan hapus massal.
-- Nama izin wajib berformat `entitas.aksi` huruf kecil (mis. `projects.view`, `projects.delete_any`).
-- **Izin inti** bawaan modul (`Modules::permissions()`) terkunci: ikon kunci, tanpa menu aksi, dan ditolak 403 dari server bila dipaksa diubah/dihapus.
-- **Generator izin standar**: masukkan entitas lalu pilih aksi (`view`, `view_any`, `create`, `update`, `delete`, `delete_any`) — izin yang sudah ada dilewati.
-
-**Peranan** (dinamis) dan **Status**.
-- Dialog tambah/ubah dengan validasi cepat; hanya **Nama, Peranan, Kata Sandi** yang wajib.
-- **Impor Excel** (`.xlsx` sesuai template yang dapat diunduh; baris judul diabaikan, baris tidak valid dilewati, kata sandi kosong diisi acak) dan **Ekspor Excel** mengikuti filter aktif.
-- `username`, `email`, `phone` opsional namun **unik**; nomor HP hanya menerima angka (boleh `+`).
+**Data Referensi & Komite Kredit** (fondasi SIPEBRI)
+- Master mengikuti core banking: **Data Instansi**, **Data Produk**, **Sistem Cicilan**, **Sistem Bunga** (lihat [Modul Data Referensi](#modul-data-referensi)).
+- **Komite Kredit**: jalur kewenangan per produk/kondisi (mekanisme plafon atau hierarki) beserta jenjang pemutusnya, plus ekspor seluruh aturan dalam satu Excel (lihat [Modul Komite Kredit](#modul-komite-kredit)).
 
 **Perizinan**
 - Halaman `/permissions` untuk mengelola permission Spatie: tabel server-side (pencarian, sortir, filter **Entitas** dinamis, paginasi), tambah/ubah/hapus, dan hapus massal.
@@ -99,9 +98,10 @@ Starter kit panel admin **compact UI** yang siap dikembangkan: Laravel 12 + Vue 
 - Lonceng di header menampilkan jumlah belum dibaca, tombol **Tandai** (tandai semua dibaca), dan klik item menandai dibaca lalu membuka halaman terkait.
 
 **Aksi Massal**
-- Checkbox pada tabel Pengguna & Peranan (pilih baris / pilih semua baris pada halaman aktif).
-- Pengguna: **Aktifkan**, **Nonaktifkan**, **Hapus** (akun sendiri otomatis dilewati).
+- Checkbox pada tabel Pengguna, Peranan, dan modul data referensi (pilih baris / pilih semua baris pada halaman aktif).
+- Pengguna: **Pulihkan**, **Arsipkan**, **Hapus Permanen** (akun sendiri otomatis dilewati; hapus permanen hanya untuk yang sudah terarsip).
 - Peranan: **Hapus** (Super Admin dan peranan yang masih dipakai otomatis dilewati).
+- Data referensi: **Hapus** (permanen).
 
 **Pengaturan**
 - **Penampilan**: identitas aplikasi (nama, tagline, inisial brand), logo terang/gelap, favicon, SEO & metadata (termasuk Open Graph), kontak & footer.
@@ -217,10 +217,10 @@ php artisan cache:clear  # WAJIB setelah mengubah tabel settings langsung dari D
 app/
 ├── Enums/RoleName.php                  # enum nama peranan
 ├── Http/
-│   ├── Controllers/                    # Auth, DashboardController, User, Permission, Role, Notification, Profile, Appearance, ActivityLog
+│   ├── Controllers/                    # Auth, Dashboard, User, Permission, Role, Notification, Profile, Appearance, ActivityLog, Menu, ObjectStorage, Committee, Reference (+Institution/Product/Installment/Method)
 │   ├── Middleware/HandleInertiaRequests.php   # share auth, branding, flash
 │   └── Requests/                       # SATU Form Request per form (lihat Standar Validasi)
-├── Models/                             # User, Role & Permission (Spatie), ActivityLog, Notification, Setting
+├── Models/                             # User, Role & Permission (Spatie), ActivityLog, Notification, Setting, Menu, Institution, Product, Installment, Method, CommitteePath, CommitteeTier
 ├── Providers/
 │   ├── AppServiceProvider.php          # branding untuk blade root + locale Carbon
 │   └── TelescopeServiceProvider.php    # gate & middleware Telescope
@@ -240,11 +240,13 @@ resources/
 │   │   ├── composite/                  # DataTableCard, RowActions, StateChip, BrandMark, AssetUploader, dll
 │   │   ├── layout/                     # AppLayout, AppSidebar, AuthLayout
 │   │   └── ui/                         # porting shadcn/ui (Button, Card, Table, Dialog, Combobox, DatePicker, ...)
-│   ├── composables/                    # useServerTable, useLiveValidation, useTheme, useFlashToast, useToast
+│   ├── composables/                    # useServerTable, useLiveValidation, useTheme, useFlashToast, useToast, useMenuLabel, useNetworkStatus
 │   ├── config/navigation.js            # area, menu, breadcrumb (ROUTE_TRAILS)
 │   ├── constants/labels.js             # label aksi (Title Case)
+│   ├── constants/committee.js          # mekanisme & keputusan jenjang komite, format Rupiah
+│   ├── lib/menuIcons.js                # nama ikon Lucide → komponen (dinamis, seluruh koleksi)
 │   ├── lib/validators.js               # cermin Rules.php untuk validasi cepat UI
-│   └── pages/                          # Dashboard, Users, Permissions, Roles, RoleDetail, AuditTrail, AuditDetail, Appearance, Profile, Error, auth/Login
+│   └── pages/                          # Dashboard, Users, UserForm, Permissions, Roles, RoleDetail, AuditTrail, AuditDetail, Appearance, Menus, ObjectStorage, Reference, Committees, CommitteeDetail, Profile, Error, auth/Login
 └── views/app.blade.php                 # root blade (judul, favicon, meta SEO/OG)
 
 lang/id/, lang/id.json                  # terjemahan Laravel Lang (pesan validasi bawaan)
@@ -493,7 +495,7 @@ Aturan:
 </DataTableCard>
 ```
 
-Backend memakai Form Request (`BulkUserRequest`, `BulkRoleRequest`) dengan validasi `ids.*` `exists`, mencatat audit trail beserta jumlah baris yang dilewati, dan mengirim notifikasi bertarget.
+Backend memakai Form Request (`BulkUserRequest`, `BulkRoleRequest`, `Reference\BulkReferenceRequest`) dengan validasi `ids.*` `exists`, mencatat audit trail beserta jumlah baris yang dilewati, dan mengirim notifikasi bertarget.
 
 ## Pengaturan Penampilan (Branding)
 
@@ -577,8 +579,11 @@ Nilai `'all'` dipakai sebagai sentinel filter "semua" karena `reka-ui` melarang 
 | GET | `/profile` | Profil pengguna |
 | PUT | `/profile`, `/profile/password` | Perbarui profil & kata sandi |
 | POST/DELETE | `/profile/avatar` | Unggah/hapus foto profil |
-| GET | `/users` | Daftar pengguna (search, sort, filter peranan & status) |
-| POST/PUT/DELETE | `/users`, `/users/{user}` | CRUD pengguna |
+| GET | `/users` | Daftar pengguna (search, sort, filter peranan & status Aktif/Terarsip/Semua) |
+| GET | `/users/create`, `/users/{user}/edit` | Halaman tambah & ubah pengguna |
+| POST/PUT/DELETE | `/users`, `/users/{user}` | Simpan, perbarui, arsipkan (soft delete) pengguna |
+| POST | `/users/{user}/restore` | Pulihkan pengguna terarsip |
+| DELETE | `/users/{user}/force` | Hapus permanen pengguna terarsip |
 | GET | `/permissions` | Daftar izin (Perizinan) |
 | POST/PUT/DELETE | `/permissions`, `/permissions/{permission}` | CRUD izin |
 | POST | `/permissions/bulk-destroy` | Hapus massal izin |
@@ -592,7 +597,7 @@ Nilai `'all'` dipakai sebagai sentinel filter "semua" karena `reka-ui` melarang 
 | POST/PUT/DELETE | `/roles`, `/roles/{role}` | CRUD peranan |
 | POST | `/roles/import` | Impor peranan dari Excel |
 | GET | `/roles/import/template` | Unduh template impor peranan |
-| POST | `/users/bulk` | Aksi massal pengguna (`delete`/`activate`/`deactivate`) |
+| POST | `/users/bulk` | Aksi massal pengguna (`archive`/`restore`/`force-delete`) |
 | POST | `/roles/bulk-destroy` | Hapus massal peranan |
 | POST | `/notifications/read-all`, `/notifications/{notification}/read` | Tandai notifikasi dibaca |
 | GET | `/audit-trail`, `/audit-trail/{log}` | Audit trail & detail |
@@ -600,6 +605,13 @@ Nilai `'all'` dipakai sebagai sentinel filter "semua" karena `reka-ui` melarang 
 | GET | `/appearance` | Pengaturan penampilan |
 | PUT | `/appearance/{identity\|seo\|contact}` | Simpan per bagian |
 | POST/DELETE | `/appearance/asset/{key}` | Unggah/hapus aset merek |
+| GET | `/institutions`, `/products`, `/installments`, `/methods` | Data referensi (CRUD via dialog, hapus permanen) |
+| POST/PUT/DELETE | `/{slug}`, `/{slug}/{id}`, `/{slug}/bulk` | Simpan, perbarui, hapus (per baris & massal) data referensi |
+| GET | `/committees`, `/committees/{path}` | Jalur komite kredit & pengelolaan jenjangnya |
+| GET | `/committees/export` | Unduh seluruh jalur + jenjang dalam satu Excel (untuk review) |
+| POST/PUT/DELETE | `/committees`, `/committees/{path}` | CRUD jalur komite |
+| POST/PUT/DELETE | `/committees/{path}/tiers`, `/committees/{path}/tiers/{tier}` | CRUD jenjang (route ter-scope ke jalurnya) |
+| PUT | `/committees/{path}/tiers/{tier}/move/{up\|down}` | Geser urutan jenjang |
 | GET | `/telescope` | Laravel Telescope (login + email diizinkan) |
 | * | selain di atas | `Route::fallback()` → halaman error 404 bertema |
 
@@ -632,10 +644,11 @@ Catatan penting: `App\Providers\TelescopeServiceProvider::boot()` mendaftarkan u
 ## Pengujian
 
 ```bash
-php artisan test                        # seluruh suite
-php artisan test --filter=ExcelIoTest   # ekspor/impor .xlsx & penolakan berkas CSV
-php artisan test --filter=ErrorPageTest # 404/403 memakai halaman error Inertia
-./vendor/bin/pint --test                # pemeriksaan gaya kode
+php artisan test                             # seluruh suite (15 tes)
+php artisan test --filter=CommitteeRulesTest # aturan komite: seeder, keunikan jalur, scope jenjang, ekspor
+php artisan test --filter=ExcelIoTest        # ekspor/impor .xlsx & penolakan berkas CSV
+php artisan test --filter=ErrorPageTest      # 404/403 memakai halaman error Inertia
+./vendor/bin/pint --test                     # pemeriksaan gaya kode
 ```
 
 Catatan pengujian manual/otomatis:
