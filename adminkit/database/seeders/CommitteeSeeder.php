@@ -10,6 +10,8 @@ use Illuminate\Database\Seeder;
  * Aturan komite kredit bawaan sesuai dokumentasi kebijakan:
  *  - Jalur PLAFON: 12 produk umum + KBT (PERPADIAN).
  *  - Jalur HIERARKI: KUP, KKO, KBT (PERLELEAN), dan kategori RELOAN (lintas produk).
+ * Jenjang berisi HANYA level pemutus. Hak mengajukan/meneruskan berkas ke komite
+ * bukan jenjang komite, melainkan izin pada modul pengajuan kredit.
  * Idempoten: jalur dikenali dari kombinasi produk + kondisi; jenjang hanya diisi
  * saat jalur belum memiliki jenjang, sehingga penyesuaian manual tidak tertimpa.
  */
@@ -23,9 +25,6 @@ class CommitteeSeeder extends Seeder
 
     /** [label, peranan, min, max, naik, setuju, batal, tolak] */
     private const PLAFON_TIERS = [
-        ['Pengusul', 'Staff Analis', null, null, true, false, false, false],
-        ['Pengusul', 'Customer Service', null, null, true, false, false, false],
-        ['Pengusul', 'Kepala Kantor Kas', null, null, true, false, false, false],
         ['Kasi', 'Kasi Analis', 1000, 35_000_000, true, true, true, true],
         ['Komite I', 'Kabag Analis', 35_000_001, 100_000_000, true, true, true, true],
         ['Komite II', 'Direktur Bisnis', 100_000_001, 300_000_000, true, true, true, true],
@@ -33,7 +32,6 @@ class CommitteeSeeder extends Seeder
     ];
 
     private const HIERARKI_TIERS = [
-        ['Pengusul', 'Staff Analis', true, false, false, false],
         ['Kasi', 'Kasi Analis', true, false, false, false],
         ['Komite I', 'Kabag Analis', true, false, false, false],
         ['Komite II', 'Direktur Bisnis', true, false, false, false],

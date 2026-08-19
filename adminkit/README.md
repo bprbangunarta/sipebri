@@ -183,7 +183,7 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 | `SettingSeeder` | Identitas merek, SEO/OG, kontak, zona waktu, urutan entitas izin |
 | `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + 7 menu Administrator |
 | `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder` | Data referensi mengikuti core banking: 17 produk kredit, 8 pola cicilan, 10 metode bunga |
-| `CommitteeSeeder` | 17 jalur komite kredit + jenjang kewenangannya sesuai dokumen kebijakan |
+| `CommitteeSeeder` | 17 jalur komite kredit + jenjang pemutus sesuai dokumen kebijakan |
 
 ```bash
 php artisan db:seed                          # semua seeder (idempoten)
@@ -281,7 +281,7 @@ Pengaturan **kewenangan persetujuan kredit** (dipakai SIPEBRI). Rute `/committee
 2. **Jenjang** (`committee_tiers`) — urutan, nama jenjang (mis. `Komite I`), **peranan pemutus** (peranan Spatie, bukan user tertentu), `min_amount`/`max_amount`, dan keputusan yang diizinkan: `can_escalate` (Naik Komite), `can_approve`, `can_cancel`, `can_reject`.
    Urutan diubah lewat tombol naik/turun; rute jenjang memakai `scopeBindings()` sehingga jenjang milik jalur lain tidak bisa disentuh.
 
-Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (satu jalur dibuat sekali, sisanya disalin). Data bawaan `CommitteeSeeder` mengikuti dokumen kebijakan: 12 produk umum + KBT `PERPADIAN` memakai jalur plafon (Kasi ≤35 jt → Kabag ≤100 jt → Direktur Bisnis ≤300 jt → Direktur Utama >300 jt), sedangkan KUP, KKO, KBT `PERLELEAN`, dan `RELOAN` memakai hierarki (Staff Analis → Kasi → Komite I → Komite II → Komite III/Direktur Utama).
+Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (satu jalur dibuat sekali, sisanya disalin). Jenjang berisi **hanya level pemutus** — hak *mengajukan/meneruskan* berkas ke komite bukan jenjang komite, melainkan izin pada modul pengajuan kredit. Data bawaan `CommitteeSeeder` mengikuti dokumen kebijakan: 12 produk umum + KBT `PERPADIAN` memakai jalur plafon (Kasi Analis ≤35 jt → Komite I/Kabag Analis ≤100 jt → Komite II/Direktur Bisnis ≤300 jt → Komite III/Direktur Utama >300 jt), sedangkan KUP, KKO, KBT `PERLELEAN`, dan `RELOAN` memakai hierarki (Kasi Analis → Komite I → Komite II → Komite III, hanya Komite III yang memutus).
 
 ---
 
