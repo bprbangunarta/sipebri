@@ -8,7 +8,7 @@ import Combobox from '@/components/ui/Combobox.vue';
 import Dialog from '@/components/ui/Dialog.vue';
 import Input from '@/components/ui/Input.vue';
 import Label from '@/components/ui/Label.vue';
-import { digitsOnly, rupiah } from '@/constants/committee';
+import { conditionLabel, digitsOnly, rupiah } from '@/constants/committee';
 
 /** Simulasi kewenangan komite — hanya membaca aturan, tidak menyimpan apa pun. */
 const props = defineProps({
@@ -75,7 +75,7 @@ const conditions = computed(() => {
 
     return [...new Set([...own, ...global])]
         .sort()
-        .map((value) => ({ value, label: value || 'Normal' }));
+        .map((value) => ({ value, label: value ? conditionLabel(value) : 'Normal' }));
 });
 
 watch(productId, () => {
@@ -144,7 +144,9 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
                 <div class="flex flex-wrap items-center gap-2 rounded-md border bg-muted/30 p-3 text-sm">
                     <Scale class="size-4 text-muted-foreground" />
                     <span class="font-medium">{{ result.path.product_label }}</span>
-                    <Badge variant="secondary" class="font-medium">{{ result.path.condition_label }}</Badge>
+                    <Badge variant="secondary" class="font-medium">
+                        {{ conditionLabel(result.path.condition_label) }}
+                    </Badge>
                     <Badge class="font-medium">{{ result.path.mechanism_label }}</Badge>
                     <span
                         v-if="result.path.matched_globally"

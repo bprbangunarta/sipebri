@@ -11,6 +11,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MethodController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ObjectStorageController;
+use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -175,6 +176,7 @@ Route::middleware('auth')->group(function () {
 
     /* ── Data referensi (kode + nama), satu pola untuk semua ────────────── */
     $references = [
+        'offices' => OfficeController::class,
         'institutions' => InstitutionController::class,
         'products' => ProductController::class,
         'installments' => InstallmentController::class,

@@ -68,7 +68,7 @@ Starter kit panel admin **compact UI** yang kini dipakai sebagai fondasi **SIPEB
 - `username`, `email`, `phone` opsional namun **unik**; nomor HP hanya menerima angka (boleh `+`).
 
 **Data Referensi & Komite Kredit** (fondasi SIPEBRI)
-- Master mengikuti core banking: **Data Instansi**, **Data Produk**, **Sistem Cicilan**, **Sistem Bunga** (lihat [Modul Data Referensi](#modul-data-referensi)).
+- Master mengikuti core banking: **Data Kantor**, **Data Instansi**, **Data Produk**, **Sistem Cicilan**, **Sistem Bunga** (lihat [Modul Data Referensi](#modul-data-referensi)).
 - **Komite Kredit**: jalur kewenangan per produk/kondisi (mekanisme plafon atau hierarki) beserta jenjang pemutusnya, plus ekspor seluruh aturan dalam satu Excel (lihat [Modul Komite Kredit](#modul-komite-kredit)).
 
 **Perizinan**
@@ -180,10 +180,10 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 | `PermissionSeeder` | izin (`view`/`manage` per entitas) diturunkan dari `App\Support\Modules::MAP` |
 | `RoleSeeder` | `Super Admin` (selalu sinkron dengan SELURUH izin) + `Guest` + 43 peranan struktur organisasi (tanpa izin) |
 | `UserSeeder` | Akun bawaan `IT Support` / `superadmin` / `sa@bprbangunarta.co.id` (peranan Super Admin) |
-| `SettingSeeder` | Identitas merek, SEO/OG, kontak, zona waktu, urutan entitas izin |
-| `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + 7 menu Administrator |
-| `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder` | Data referensi mengikuti core banking: 17 produk kredit, 8 pola cicilan, 10 metode bunga |
-| `CommitteeSeeder` | 19 jalur komite kredit + jenjang pemutus sesuai dokumen kebijakan |
+| `SettingSeeder` | Identitas merek SIPEBRI, SEO/OG, kontak, zona waktu, dan urutan 15 entitas pada matriks izin |
+| `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + 7 menu Administrator |
+| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga |
+| `CommitteeSeeder` | 19 jalur komite kredit + 76 jenjang pemutus sesuai dokumen kebijakan |
 
 ```bash
 php artisan db:seed                          # semua seeder (idempoten)
@@ -220,7 +220,7 @@ app/
 │   ├── Controllers/                    # Auth, Dashboard, User, Permission, Role, Notification, Profile, Appearance, ActivityLog, Menu, ObjectStorage, Committee, Reference (+Institution/Product/Installment/Method)
 │   ├── Middleware/HandleInertiaRequests.php   # share auth, branding, flash
 │   └── Requests/                       # SATU Form Request per form (lihat Standar Validasi)
-├── Models/                             # User, Role & Permission (Spatie), ActivityLog, Notification, Setting, Menu, Institution, Product, Installment, Method, CommitteePath, CommitteeTier
+├── Models/                             # User, Role & Permission (Spatie), ActivityLog, Notification, Setting, Menu, Office, Institution, Product, Installment, Method, CommitteePath, CommitteeTier
 ├── Providers/
 │   ├── AppServiceProvider.php          # branding untuk blade root + locale Carbon
 │   └── TelescopeServiceProvider.php    # gate & middleware Telescope
@@ -262,7 +262,7 @@ database/{migrations,seeders,factories}
 | Tabel | Isi penting |
 | --- | --- |
 | `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `role` (cermin peranan Spatie), `office`, `alias`/`mso_code`/`collector_code` (unik), `password`, `avatar`, `last_login_at`, `deleted_at` (SoftDelete = Terarsip) |
-| `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, khusus `products`), `name` |
+| `offices`, `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, pada `offices` & `products`), `name` |
 | `committee_paths` | jalur komite: `product_id` (null = semua produk), `condition` (null = Normal), `mechanism` (`plafon`/`hierarki`), `is_active`, `note` |
 | `committee_tiers` | jenjang: `committee_path_id`, `sort`, `label`, `role`, `min_amount`, `max_amount`, `can_escalate`, `can_approve`, `can_cancel`, `can_reject` |
 | `roles`, `permissions`, `model_has_roles`, `role_has_permissions` | standar `spatie/laravel-permission`; nama izin memakai pola `entitas.aksi` |
@@ -290,17 +290,18 @@ Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (s
 
 ## Modul Data Referensi
 
-Empat modul data master sederhana (`kode` + `nama`) berbagi **satu** basis kode:
+Lima modul data master sederhana (`kode` + `nama`, sebagian dengan `alias`) berbagi **satu** basis kode:
 
 | Modul | Rute | Kolom | Izin |
 |---|---|---|---|
+| Data Kantor | `/offices` | code (unik), alias (unik), name | `offices.view/manage` |
 | Data Instansi | `/institutions` | code (unik), name | `institutions.view/manage` |
 | Data Produk | `/products` | code (unik), alias (unik), name | `products.view/manage` |
 | Sistem Cicilan | `/installments` | code (unik), name | `installments.view/manage` |
 | Sistem Bunga | `/methods` | code (unik), name | `methods.view/manage` |
 
 - Backend: `ReferenceController` (abstrak) menyediakan index/store/update/destroy/bulkDestroy + aturan validasi; turunannya hanya mendefinisikan `model()`, `slug()`, `label()`, dan `fields()`. Validasi lewat `Reference\StoreReferenceRequest` (mengambil aturan dari controller, `trim` semua nilai, `UPPERCASE` untuk kolom bertanda `uppercase`, `unique` hanya untuk kolom bertanda `unique`).
-- Frontend: satu halaman generik `pages/Reference.vue` (DataTableCard server-side + dialog tambah/ubah dinamis dari `fields`).
+- Frontend: satu halaman generik `pages/Reference.vue` (DataTableCard server-side + dialog tambah/ubah dinamis dari `fields`). Kolom bertanda `hide_below` disembunyikan di layar kecil dan nilainya tetap tampil sebagai baris ringkas di bawah kolom pertama (responsif tanpa penyesuaian tambahan).
 - **Penghapusan permanen** (tanpa arsip), tersedia per baris dan massal; semua aksi tercatat di Audit Trail.
 - Menambah modul referensi baru: buat migrasi + model, satu controller turunan (≈20 baris), satu entri di `Modules::MAP`, satu entri pada `$references` di `routes/web.php`, lalu tambahkan menunya di Menu Navigasi.
 
@@ -606,7 +607,7 @@ Nilai `'all'` dipakai sebagai sentinel filter "semua" karena `reka-ui` melarang 
 | GET | `/appearance` | Pengaturan penampilan |
 | PUT | `/appearance/{identity\|seo\|contact}` | Simpan per bagian |
 | POST/DELETE | `/appearance/asset/{key}` | Unggah/hapus aset merek |
-| GET | `/institutions`, `/products`, `/installments`, `/methods` | Data referensi (CRUD via dialog, hapus permanen) |
+| GET | `/offices`, `/institutions`, `/products`, `/installments`, `/methods` | Data referensi (CRUD via dialog, hapus permanen) |
 | POST/PUT/DELETE | `/{slug}`, `/{slug}/{id}`, `/{slug}/bulk` | Simpan, perbarui, hapus (per baris & massal) data referensi |
 | GET | `/committees`, `/committees/{path}` | Jalur komite kredit & pengelolaan jenjangnya |
 | GET | `/committees/export` | Unduh seluruh jalur + jenjang dalam satu Excel (untuk review) |

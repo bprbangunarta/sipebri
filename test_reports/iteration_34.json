@@ -1,0 +1,35 @@
+{
+  "summary": "Frontend-only audit (iterasi 34) untuk SIPEBRI/AdminKit: (a) verifikasi label kondisi/kategori Capitalize, (b) audit responsivitas 16 halaman pada 5 viewport (390x844, 768x1024, 1024x768, 1440x900, 1920x1080), (c) regresi fungsional Komite Kredit + CRUD referensi + CRUD pengguna. Semua pengujian dilakukan via URL publik dengan login nyata (sa@bprbangunarta.co.id). Hasil: tidak ada isu kritis; 2 temuan minor kosmetik.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "ConfirmDialog (arsipkan pengguna)", "issue": "Judul dialog 'Arsipkan Pengguna?' tetapi tombol konfirmasi berlabel 'Hapus' (bukan 'Arsipkan'). Sama pada dialog restore/arsip lain — label aksi menyesatkan.", "selector": "[role='dialog'] button (konfirmasi)", "priority": "LOW"},
+      {"component": "Toast Komite Kredit", "issue": "Pesan toast masih memakai kondisi HURUF BESAR ('Jalur komite KRS · TESTKONDISI ditambahkan./dihapus.') sedangkan aturan tampilan baru = Capitalize. Tidak konsisten dengan badge/judul yang sudah Capitalize (helper conditionLabel() belum dipakai pada pesan flash/toast).", "selector": "toast sukses", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/audit-trail mobile 390px", "issues": ["Kolom AKSI terpotong di tepi kanan kartu; hanya bisa dilihat dengan scroll horizontal di dalam tabel dan tidak ada indikator/afordansi scroll (bukan overflow dokumen, jadi minor)"]},
+      {"screen": "Dashboard mobile (transien)", "issues": ["Pada pengukuran saat hidrasi awal kartu 'Aktivitas Terakhir' sempat terukur 469px pada viewport 390px; setelah render selesai (reload & resize) kembali 358px dan tidak ada overflow. Tidak reproducible pada keadaan stabil — hanya catatan"]}
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_34.json"],
+  "action_items": [
+    "OPSIONAL (kosmetik): pakai conditionLabel() juga pada pesan flash/toast Komite Kredit agar konsisten Capitalize",
+    "OPSIONAL (kosmetik): ganti label tombol konfirmasi dialog arsip dari 'Hapus' menjadi 'Arsipkan'"
+  ],
+  "critical_code_review_comments": [
+    "conditionLabel() memakai regex \\p{L} dengan flag u — aman di browser modern; sudah dipakai konsisten di Committees.vue, CommitteeDetail.vue, CommitteeSimulator.vue. Data DB tetap HURUF BESAR (dikonfirmasi: PERPADIAN/PERLELEAN/RELOAN).",
+    "DataTableCard.vue memakai kelas literal HIDE_BELOW (bukan dinamis) sehingga aman terhadap purge Tailwind — implementasi benar; Table.vue membungkus tabel dengan overflow-auto sehingga kolom tersembunyi tidak menyebabkan overflow dokumen."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend-only request); 2 endpoint dicek via browser: /committees/export 200 xlsx, /committees/simulate 200 found=true", "frontend": "100% (semua skenario yang diminta lulus, kecuali 2 temuan kosmetik minor)"},
+  "seed_data_creation": "Sementara: jalur komite KRS · TESTKONDISI + 1 jenjang (dihapus), produk 99/TST TEST_PRODUK QA (dibuat→diubah→dihapus), pengguna 'Qa Tester Uji' (dibuat→diarsipkan→dipulihkan→dihapus permanen). Verifikasi akhir DB: paths=19, tiers=76, products=17, users=1 — data bawaan utuh.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "sa@bprbangunarta.co.id / SA@4dm1n (valid, login sukses)",
+  "context_for_next_testing_agent": "BUKTI ANGKA scrollWidth vs innerWidth (semua OK, sw == iw): mobile 390 → /, /users, /users/create, /roles, /permissions, /audit-trail, /appearance, /menus, /institutions, /products, /installments, /methods, /committees, /committees/2, /profile, /object-storage semuanya sw=390 iw=390; 768x1024 semua sw=768; 1024x768 semua sw=1024; 1440x900 semua sw=1440; 1920x1080 semua sw=1920. Kolom desktop lengkap: /committees ['PRODUK','KONDISI / KATEGORI','MEKANISME','JENJANG','STATUS'] di 1024/1920; /committees/2 ['#','NAMA JENJANG','PERANAN PEMUTUS','BATAS PLAFON','KEPUTUSAN DIIZINKAN'] di 1440/1920. Ringkasan mobile: /committees baris kecil 'Reloan · Hierarki Komite · 4 jenjang · Aktif' (Capitalize benar untuk Reloan/Perpadian/Perlelean/Normal); /committees/2 slot role menampilkan peranan + batas plafon + daftar keputusan; /products menampilkan alias di bawah kode. Dialog di 390px (Tambah Jalur, Tambah Jenjang, Simulasi, Tambah Produk) semua left=0 right=390, seluruh tombol footer inView=True, tidak ada overflow dokumen; /users/create sw=390. Sidebar toggle (data-testid=sidebar-trigger) buka/tutup OK di 768; nav-referensi-toggle expand/collapse OK. Simulasi KRU+Normal+150.000.000 → 'Komite II · Direktur Bisnis' = Pemutus (Disetujui/Dibatalkan/Ditolak) + peringatan belum ada pengguna aktif. Opsi kondisi Capitalize: KRU ['Normal','Reloan'], KBT ['Perlelean','Perpadian','Reloan']. API: GET /committees/export → 200, content-type xlsx; GET /committees/simulate?product_id=19&condition=PERLELEAN&amount=20000000 → 200 found=true (catatan: product_id KBT = 19, bukan 6).",
+  "rca_of_the_issue": "Tidak ada bug fungsional. Dua temuan kosmetik: (1) pesan flash/toast di CommitteeController tidak melewati helper tampilan conditionLabel(), sehingga masih menampilkan kondisi HURUF BESAR; (2) komponen konfirmasi generik memakai label tombol default 'Hapus' walaupun aksinya arsip/pulihkan."
+}

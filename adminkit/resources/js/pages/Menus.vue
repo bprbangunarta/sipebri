@@ -219,7 +219,7 @@ const destroy = () => {
                         <li
                             v-for="(row, index) in rows[area.id]"
                             :key="row.id"
-                            class="flex items-center gap-2 px-4 py-2 transition-colors hover:bg-muted/40"
+                            class="flex flex-wrap items-center gap-2 px-4 py-2 transition-colors hover:bg-muted/40"
                             draggable="true"
                             :data-testid="`menu-row-${row.id}`"
                             @dragstart="onDragStart(area.id, index, $event)"
@@ -235,20 +235,20 @@ const destroy = () => {
                                 aria-hidden="true"
                             />
                             <span class="min-w-0 flex-1">
-                                <span class="flex items-center gap-2">
-                                    <span class="truncate text-[13px] font-medium">{{ row.label }}</span>
+                                <span class="flex flex-wrap items-center gap-2">
+                                    <span class="text-[13px] font-medium">{{ row.label }}</span>
                                     <Badge variant="outline" class="font-normal">Tingkat {{ row.depth + 1 }}</Badge>
                                     <Badge v-if="!row.href" variant="secondary" class="font-normal">Grup</Badge>
                                     <Badge v-if="!row.is_active" variant="secondary" class="font-normal">Nonaktif</Badge>
                                 </span>
-                                <span class="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span class="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                                     <span v-if="row.href" class="flex items-center gap-1 font-mono text-[11px]">
                                         <Link2 class="size-3" aria-hidden="true" /> {{ row.href }}
                                     </span>
                                     <span v-if="row.permission" class="font-mono text-[11px]">{{ row.permission }}</span>
                                 </span>
                             </span>
-                            <span class="flex shrink-0 items-center gap-1">
+                            <span class="ml-auto flex shrink-0 items-center gap-1">
                                 <Button
                                     variant="ghost"
                                     size="icon"

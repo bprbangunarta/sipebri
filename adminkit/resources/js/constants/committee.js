@@ -17,4 +17,10 @@ export const rupiah = (value) =>
         ? '—'
         : `Rp ${new Intl.NumberFormat('id-ID').format(value)}`;
 
+/** Kondisi/kategori disimpan HURUF BESAR, ditampilkan Capitalize (RELOAN → Reloan). */
+export const conditionLabel = (value) =>
+    String(value ?? '')
+        .toLowerCase()
+        .replace(/\b\p{L}/gu, (c) => c.toUpperCase());
+
 export const digitsOnly = (value) => String(value ?? '').replace(/\D/g, '');

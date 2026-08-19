@@ -27,11 +27,17 @@ class CommitteePath extends Model
         return $this->hasMany(CommitteeTier::class)->orderBy('sort')->orderBy('id');
     }
 
-    /** Judul jalur, mis. "KRU · RELOAN" atau "Semua Produk · Normal". */
+    /** Judul jalur, mis. "KRU · Reloan" atau "Semua Produk · Normal". */
     public function title(): string
     {
         $product = $this->product?->alias ?? 'Semua Produk';
 
-        return $product.' · '.($this->condition ?: 'Normal');
+        return $product.' · '.$this->conditionLabel();
+    }
+
+    /** Kondisi disimpan HURUF BESAR, ditampilkan Capitalize. */
+    public function conditionLabel(): string
+    {
+        return $this->condition ? str($this->condition)->lower()->title()->value() : 'Normal';
     }
 }

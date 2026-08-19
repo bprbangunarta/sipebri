@@ -10,6 +10,7 @@ const props = defineProps({
     title: { type: String, default: 'Hapus Data?' },
     description: { type: String, default: 'Tindakan ini tidak dapat dibatalkan.' },
     processing: { type: Boolean, default: false },
+    confirmLabel: { type: String, default: '' },
 });
 const emit = defineEmits(['update:open', 'confirm']);
 </script>
@@ -36,7 +37,7 @@ const emit = defineEmits(['update:open', 'confirm']);
                 data-testid="confirm-delete-submit"
                 @click="emit('confirm')"
             >
-                <Trash2 class="size-4" /> {{ ACTION.delete }}
+                <Trash2 class="size-4" /> {{ props.confirmLabel || ACTION.delete }}
             </Button>
         </template>
     </Dialog>

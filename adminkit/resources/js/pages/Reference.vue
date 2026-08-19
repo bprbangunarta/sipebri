@@ -37,9 +37,22 @@ const canManage = computed(() =>
 const pageTitle = computed(() => menuLabelOf(`/${props.slug}`, props.title));
 
 const columns = computed(() => [
-    ...props.fields.map((field) => ({ key: field.key, label: field.label })),
+    ...props.fields.map((field) => ({ key: field.key, label: field.label, hideBelow: field.hide_below })),
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ]);
+
+const firstKey = computed(() => props.fields[0].key);
+const firstSlot = computed(() => `cell-${firstKey.value}`);
+const lastKey = computed(() => props.fields[props.fields.length - 1].key);
+const lastSlot = computed(() => `cell-${lastKey.value}`);
+
+// Nilai kolom yang disembunyikan pada layar kecil tetap terlihat sebagai baris ringkas.
+const hiddenSummary = (row) =>
+    props.fields
+        .filter((f) => f.hide_below)
+        .map((f) => row[f.key])
+        .filter(Boolean)
+        .join(' · ');
 
 const { query, loading, reload, onSearch, onSort, onPage, onPerPage, sortState } = useServerTable({
     url: `/${props.slug}`,
@@ -166,6 +179,20 @@ const runBulkDelete = () => {
                     >
                         <Plus class="size-4" /> {{ ACTION.add }}
                     </Button>
+                </template>
+
+                <template #[firstSlot]="{ row }">
+                    <span class="block font-medium">{{ row[firstKey] }}</span>
+                    <span
+                        v-if="hiddenSummary(row)"
+                        class="mt-0.5 block whitespace-normal text-xs text-muted-foreground sm:hidden"
+                    >
+                        {{ hiddenSummary(row) }}
+                    </span>
+                </template>
+
+                <template #[lastSlot]="{ row }">
+                    <span class="block max-w-[45vw] truncate sm:max-w-none">{{ row[lastKey] }}</span>
                 </template>
 
                 <template #cell-actions="{ row }">

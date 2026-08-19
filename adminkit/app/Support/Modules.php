@@ -23,6 +23,7 @@ class Modules
         'activity' => ['label' => 'Audit Trail', 'abilities' => ['view', 'manage']],
         'menus' => ['label' => 'Menu Sidebar', 'abilities' => ['view', 'manage']],
         'storage' => ['label' => 'Object Storage', 'abilities' => ['view', 'manage']],
+        'offices' => ['label' => 'Data Kantor', 'abilities' => ['view', 'manage']],
         'institutions' => ['label' => 'Data Instansi', 'abilities' => ['view', 'manage']],
         'products' => ['label' => 'Data Produk', 'abilities' => ['view', 'manage']],
         'installments' => ['label' => 'Sistem Cicilan', 'abilities' => ['view', 'manage']],

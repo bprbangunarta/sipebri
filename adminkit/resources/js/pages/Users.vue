@@ -382,6 +382,7 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
             <ConfirmDeleteDialog
                 :open="bulkConfirm === 'archive'"
                 title="Arsipkan Pengguna Terpilih?"
+                :confirm-label="ACTION.archive"
                 :description="`${selected.length} pengguna akan diarsipkan dan tidak dapat masuk lagi. Akun Anda sendiri dilewati.`"
                 :processing="bulkForm.processing"
                 @update:open="bulkConfirm = null"
@@ -400,6 +401,7 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
             <ConfirmDeleteDialog
                 :open="Boolean(archiving)"
                 title="Arsipkan Pengguna?"
+                :confirm-label="ACTION.archive"
                 description="Pengguna tidak dapat masuk lagi, namun datanya tetap tersimpan dan bisa dipulihkan."
                 :processing="rowForm.processing"
                 @update:open="archiving = null"

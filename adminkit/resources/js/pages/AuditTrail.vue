@@ -28,7 +28,7 @@ const columns = [
     { key: 'actor', label: 'Pelaku', sortKey: 'actor_name', hideBelow: 'md' },
     { key: 'action', label: 'Aksi' },
     { key: 'module', label: 'Modul', hideBelow: 'sm' },
-    { key: 'level_label', label: 'Level', sortKey: 'level' },
+    { key: 'level_label', label: 'Level', sortKey: 'level', hideBelow: 'sm' },
 ];
 
 const { query, loading, reload, onSearch, onSort, onPage, onPerPage, onFilter, sortState } = useServerTable({

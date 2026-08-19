@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Office;
 
-class ProductController extends ReferenceController
+class OfficeController extends ReferenceController
 {
     protected function model(): string
     {
-        return Product::class;
+        return Office::class;
     }
 
     protected function slug(): string
     {
-        return 'products';
+        return 'offices';
     }
 
     protected function label(): string
     {
-        return 'Data Produk';
+        return 'Data Kantor';
     }
 
     protected function fields(): array

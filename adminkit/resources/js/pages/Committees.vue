@@ -19,7 +19,7 @@ import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue'
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
 import { ACTION } from '@/constants/labels';
-import { MECHANISM_OPTIONS } from '@/constants/committee';
+import { MECHANISM_OPTIONS, conditionLabel } from '@/constants/committee';
 
 const props = defineProps({
     paths: { type: Array, required: true },
@@ -36,10 +36,10 @@ const pageTitle = computed(() => menuLabelOf('/committees', 'Komite Kredit'));
 
 const columns = [
     { key: 'product_label', label: 'Produk' },
-    { key: 'condition_label', label: 'Kondisi / Kategori' },
-    { key: 'mechanism_label', label: 'Mekanisme' },
-    { key: 'tiers_count', label: 'Jenjang', align: 'right' },
-    { key: 'status_label', label: 'Status', sortable: false },
+    { key: 'condition_label', label: 'Kondisi / Kategori', hideBelow: 'sm' },
+    { key: 'mechanism_label', label: 'Mekanisme', hideBelow: 'md' },
+    { key: 'tiers_count', label: 'Jenjang', align: 'right', hideBelow: 'sm' },
+    { key: 'status_label', label: 'Status', sortable: false, hideBelow: 'sm' },
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ];
 
@@ -128,12 +128,17 @@ const copyOptions = computed(() => [
                 </template>
 
                 <template #cell-product_label="{ row }">
-                    <span class="font-medium">{{ row.product_label }}</span>
+                    <span class="block truncate font-medium">{{ row.product_label }}</span>
+                    <span class="mt-0.5 block whitespace-normal text-xs text-muted-foreground md:hidden">
+                        {{ conditionLabel(row.condition_label) }} · {{ row.mechanism_label }} ·
+                        {{ row.tiers_count }} jenjang ·
+                        {{ row.status_label }}
+                    </span>
                 </template>
 
                 <template #cell-condition_label="{ row }">
                     <Badge :variant="row.condition ? 'default' : 'secondary'" class="font-medium">
-                        {{ row.condition_label }}
+                        {{ conditionLabel(row.condition_label) }}
                     </Badge>
                 </template>
 

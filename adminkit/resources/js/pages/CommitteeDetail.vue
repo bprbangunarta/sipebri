@@ -21,7 +21,7 @@ import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue'
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
 import { ACTION } from '@/constants/labels';
-import { TIER_DECISIONS, digitsOnly, rupiah } from '@/constants/committee';
+import { TIER_DECISIONS, conditionLabel, digitsOnly, rupiah } from '@/constants/committee';
 
 const props = defineProps({
     path: { type: Object, required: true },
@@ -35,12 +35,17 @@ const canManage = computed(() =>
 
 const isPlafon = computed(() => props.path.mechanism === 'plafon');
 
+// Judul memakai kondisi ber-Capitalize tanpa mengubah kode produk.
+const title = computed(() =>
+    props.path.title.replace(props.path.condition_label, conditionLabel(props.path.condition_label)),
+);
+
 const columns = [
-    { key: 'sort', label: '#', width: '48px', sortable: false },
+    { key: 'sort', label: '#', width: '48px', sortable: false, hideBelow: 'sm' },
     { key: 'label', label: 'Nama Jenjang', sortable: false },
     { key: 'role', label: 'Peranan Pemutus', sortable: false },
-    { key: 'range', label: 'Batas Plafon', sortable: false },
-    { key: 'decisions', label: 'Keputusan Diizinkan', sortable: false },
+    { key: 'range', label: 'Batas Plafon', sortable: false, hideBelow: 'md' },
+    { key: 'decisions', label: 'Keputusan Diizinkan', sortable: false, hideBelow: 'lg' },
     { key: 'actions', label: '', align: 'right', width: '96px', sortable: false },
 ];
 
@@ -124,7 +129,7 @@ const confirmDelete = () =>
 </script>
 
 <template>
-    <Head :title="`Jalur ${props.path.title}`" />
+    <Head :title="`Jalur ${title}`" />
     <AppLayout>
         <div class="space-y-6" data-testid="committee-detail-view">
             <Card>
@@ -138,7 +143,7 @@ const confirmDelete = () =>
                         >
                             <ArrowLeft class="size-4" />
                         </Button>
-                        {{ props.path.title }}
+                        {{ title }}
                     </CardTitle>
                     <div class="flex items-center gap-2">
                         <Badge variant="secondary" class="font-medium">{{ props.path.mechanism_label }}</Badge>
@@ -154,7 +159,7 @@ const confirmDelete = () =>
                     </div>
                     <div>
                         <p class="text-xs uppercase tracking-wider text-muted-foreground">Kondisi / Kategori</p>
-                        <p class="font-medium">{{ props.path.condition_label }}</p>
+                        <p class="font-medium">{{ conditionLabel(props.path.condition_label) }}</p>
                     </div>
                     <div>
                         <p class="text-xs uppercase tracking-wider text-muted-foreground">Catatan</p>
@@ -189,6 +194,16 @@ const confirmDelete = () =>
 
                 <template #cell-label="{ row }">
                     <span class="font-medium">{{ row.label || '—' }}</span>
+                </template>
+
+                <template #cell-role="{ row }">
+                    <span class="block">{{ row.role }}</span>
+                    <span class="mt-0.5 block whitespace-normal text-xs text-muted-foreground md:hidden">
+                        {{ rangeOf(row) }}
+                    </span>
+                    <span class="mt-0.5 block whitespace-normal text-xs text-muted-foreground lg:hidden">
+                        {{ TIER_DECISIONS.filter((d) => row[d.key]).map((d) => d.label).join(' · ') || 'Belum diatur' }}
+                    </span>
                 </template>
 
                 <template #cell-range="{ row }">
