@@ -40,13 +40,14 @@ class CommitteeController extends Controller
             'pathOptions' => CommitteePath::with('product')->has('tiers')->get()
                 ->map(fn (CommitteePath $p) => ['value' => (string) $p->id, 'label' => $p->title()])
                 ->all(),
-            'conditionOptions' => [
-                ['value' => '', 'label' => 'Normal'],
-                ...CommitteePath::whereNotNull('condition')->distinct()->orderBy('condition')
-                    ->pluck('condition')
-                    ->map(fn (string $c) => ['value' => $c, 'label' => $c])
-                    ->all(),
-            ],
+            // Kondisi yang sah per produk (untuk simulasi): kondisi milik produk itu
+            // sendiri + kondisi lintas produk seperti RELOAN. Kunci `global` dipakai
+            // untuk jalur tanpa produk.
+            'conditionMap' => CommitteePath::where('is_active', true)
+                ->get()
+                ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
+                ->map(fn ($paths) => $paths->map(fn (CommitteePath $p) => (string) $p->condition)
+                    ->unique()->sort()->values()->all()),
         ]);
     }
 

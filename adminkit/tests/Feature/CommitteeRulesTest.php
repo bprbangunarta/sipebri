@@ -114,6 +114,17 @@ class CommitteeRulesTest extends TestCase
         $this->assertNotEmpty($response->json('warnings'));
     }
 
+    public function test_simulation_rejects_condition_that_does_not_belong_to_product(): void
+    {
+        $product = Product::where('alias', 'KRU')->firstOrFail();
+
+        $this->actingAs($this->admin())
+            ->getJson("/committees/simulate?product_id={$product->id}&condition=PERLELEAN&amount=20000000")
+            ->assertOk()
+            ->assertJsonPath('found', false)
+            ->assertJsonPath('chain', []);
+    }
+
     public function test_deleting_path_removes_its_tiers(): void
     {
         $path = CommitteePath::has('tiers')->firstOrFail();

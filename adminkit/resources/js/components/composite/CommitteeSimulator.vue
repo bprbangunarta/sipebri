@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { AlertTriangle, Gavel, Loader2, Play, Scale, X } from 'lucide-vue-next';
 
 import Badge from '@/components/ui/Badge.vue';
@@ -14,7 +14,7 @@ import { digitsOnly, rupiah } from '@/constants/committee';
 const props = defineProps({
     open: { type: Boolean, default: false },
     productOptions: { type: Array, default: () => [] },
-    conditionOptions: { type: Array, default: () => [] },
+    conditionMap: { type: Object, default: () => ({}) },
 });
 const emit = defineEmits(['update:open']);
 
@@ -61,6 +61,29 @@ const close = () => emit('update:open', false);
 
 // Produk wajib dipilih: simulasi untuk "Semua Produk" tidak bermakna.
 const products = computed(() => props.productOptions.filter((o) => o.value !== ''));
+
+/**
+ * Kondisi/kategori dibatasi sesuai produk terpilih: kondisi milik produk itu
+ * ditambah kondisi lintas produk (mis. RELOAN), supaya kombinasi yang bukan
+ * peruntukannya (mis. KRU + PERLELEAN) tidak bisa dipilih.
+ */
+const conditions = computed(() => {
+    if (!productId.value) return [];
+
+    const own = props.conditionMap[productId.value] ?? [];
+    const global = props.conditionMap.global ?? [];
+
+    return [...new Set([...own, ...global])]
+        .sort()
+        .map((value) => ({ value, label: value || 'Normal' }));
+});
+
+watch(productId, () => {
+    result.value = null;
+    if (!conditions.value.some((o) => o.value === condition.value)) {
+        condition.value = conditions.value[0]?.value ?? '';
+    }
+});
 const canRun = computed(() => Boolean(productId.value) && amount.value !== '' && !loading.value);
 </script>
 
@@ -91,8 +114,9 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
                     <Label>Kondisi / Kategori</Label>
                     <Combobox
                         v-model="condition"
-                        :options="props.conditionOptions"
-                        placeholder="Normal"
+                        :options="conditions"
+                        :disabled="!productId"
+                        placeholder="Pilih Produk dahulu"
                         data-testid="simulate-condition"
                     />
                 </div>

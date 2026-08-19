@@ -22,7 +22,9 @@ class Committee
         if (! $path) {
             return [
                 'found' => false,
-                'message' => 'Belum ada jalur komite yang cocok. Buat jalur untuk produk ini atau jalur lintas produk untuk kondisi tersebut.',
+                'message' => $condition === null
+                    ? 'Belum ada jalur komite untuk produk ini pada kondisi Normal.'
+                    : "Kondisi/kategori {$condition} bukan peruntukan produk ini — belum ada jalur komitenya.",
                 'chain' => [],
                 'warnings' => [],
             ];
@@ -50,32 +52,25 @@ class Committee
     }
 
     /**
-     * Kondisi/kategori diprioritaskan (mis. RELOAN mengesampingkan jalur plafon),
-     * lalu jalur produk, lalu jalur lintas produk.
+     * Kondisi/kategori dicari apa adanya: jalur produk lebih dulu, lalu jalur
+     * lintas produk (mis. RELOAN). TIDAK ada penurunan ke jalur Normal — supaya
+     * kombinasi yang bukan peruntukannya (mis. KRU + PERLELEAN) tidak terhitung.
      */
     private static function path(?int $productId, ?string $condition): ?CommitteePath
     {
-        $candidates = [
-            ['product_id' => $productId, 'condition' => $condition],
-            ['product_id' => null, 'condition' => $condition],
-        ];
+        $candidates = [$productId, null];
 
-        if ($condition !== null) {
-            $candidates[] = ['product_id' => $productId, 'condition' => null];
-            $candidates[] = ['product_id' => null, 'condition' => null];
-        }
-
-        foreach ($candidates as $where) {
-            if ($where['product_id'] === null && $productId !== null && $where['condition'] === null) {
+        foreach ($candidates as $candidateProduct) {
+            if ($candidateProduct === null && $productId !== null && $condition === null) {
                 continue;
             }
 
             $path = CommitteePath::with(['product', 'tiers'])
                 ->where('is_active', true)
-                ->where('product_id', $where['product_id'])
-                ->where(fn ($q) => $where['condition'] === null
+                ->where('product_id', $candidateProduct)
+                ->where(fn ($q) => $condition === null
                     ? $q->whereNull('condition')
-                    : $q->where('condition', $where['condition']))
+                    : $q->where('condition', $condition))
                 ->first();
 
             if ($path && $path->tiers->isNotEmpty()) {

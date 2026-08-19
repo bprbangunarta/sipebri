@@ -25,7 +25,7 @@ const props = defineProps({
     paths: { type: Array, required: true },
     productOptions: { type: Array, default: () => [] },
     pathOptions: { type: Array, default: () => [] },
-    conditionOptions: { type: Array, default: () => [] },
+    conditionMap: { type: Object, default: () => ({}) },
 });
 
 const page = usePage();
@@ -262,7 +262,7 @@ const copyOptions = computed(() => [
             <CommitteeSimulator
                 v-model:open="simulatorOpen"
                 :product-options="props.productOptions"
-                :condition-options="props.conditionOptions"
+                :condition-map="props.conditionMap"
             />
 
             <ConfirmDeleteDialog
