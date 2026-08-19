@@ -497,6 +497,7 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 - Jangan menambahkan `CardDescription` di bawah judul kartu.
 - Header dialog (`ui/Dialog.vue`): judul dan tombol tutup sejajar vertikal (`items-center`, judul `leading-6`, tombol tutup kotak `size-7`). Judul dialog memakai Title Case dan diakhiri `?` untuk konfirmasi.
 - Ikon memakai `lucide-vue-next`; jangan memakai emoji.
+- **Ikon menu bebas dari seluruh koleksi Lucide** (~1.600 ikon). Kolom `menus.icon` menerima nama Lucide apa pun — kebab-case (`house-wifi`) maupun PascalCase (`HouseWifi`), alias lama seperti `Users2` tetap dikenali. `resources/js/lib/menuIcons.js` memetakan nama → komponen lewat `import.meta.glob` ke berkas ikon Lucide, sehingga tiap ikon dimuat sebagai chunk terpisah saat dipakai (bundel utama tidak memuat semua ikon). Form Menu Navigasi memakai **input teks bebas** dengan pratinjau ikon di sebelahnya; nama yang tidak dikenali memunculkan galat dan jatuh ke ikon `Folder`.
 - **Setiap elemen interaktif dan informasi penting wajib punya `data-testid`** dengan format kebab-case, mis. `user-form-save`, `users-filter-role`.
 - Sidebar mendukung mode ikon (`collapsible="icon"`): elemen non-ikon disembunyikan dengan `group-data-[collapsible=icon]:hidden`, dan ikon utama memakai `shrink-0`.
 

@@ -347,3 +347,9 @@ Persiapan sistem baru (branch baru), berdasarkan migrasi `users` yang diubah use
 - Konvensi UI baru didokumentasikan: footer dengan tepat dua tombol memakai `justify-between` (Batal kiri, Simpan kanan) — diperbaiki di `UserForm.vue`; `DataTableCard` kini meneruskan `emptyDescription` ke `EmptyState`.
 - **Uji**: testing agent iterasi 31 → 26 tes backend lulus + seluruh alur frontend lulus. Bug HIGH yang ditemukan (aksi massal Hapus Permanen bisa menghapus pengguna aktif) SUDAH DIPERBAIKI dengan guard `trashed()`.
 - Sisa temuan minor (belum dikerjakan): aturan unik belum `withoutTrashed()` (pengguna terarsip masih memegang email/username/kode), email sambutan dikirim sinkron (~5s saat simpan), Combobox belum ber-`role="option"`.
+
+## Selesai (2026-06-19, ikon menu bebas seluruh koleksi Lucide)
+- `resources/js/lib/menuIcons.js` ditulis ulang: whitelist 23 ikon dihapus, kini nama ikon di kolom `menus.icon` diselesaikan dinamis ke SELURUH koleksi Lucide (~1.600 ikon) via `import.meta.glob('/node_modules/lucide-vue-next/dist/esm/icons/*.js')` + `defineAsyncComponent` (chunk per ikon, dimuat saat dipakai). Menerima kebab-case (`house-wifi`) & PascalCase (`HouseWifi`), toleran prefiks `Lucide`/sufiks `Icon`, alias lama (`Users2`→`users-round`), fallback `Folder`.
+- Form Menu Navigasi: Combobox ikon diganti **input teks bebas** + pratinjau ikon di kirinya; nama tak dikenal → pesan "Ikon tidak ditemukan di Lucide." (tanpa teks bantuan lain, sesuai permintaan user). `isKnownIcon()` diekspor untuk validasi live. Backend sudah menerima string bebas (maks 40) — tidak diubah.
+- `MenuSeeder` + data DB: ikon `Users2` diubah ke `UsersRound`. Biaya bundel: chunk AppLayout naik ~270KB mentah (~71KB gzip) karena peta impor ikon; tiap ikon hanya ~0,5KB saat diambil.
+- Diverifikasi via screenshot: pratinjau `house-wifi` tampil, `ikon-ngawur` memunculkan galat + fallback Folder, ikon sidebar & daftar menu normal.
