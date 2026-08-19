@@ -27,6 +27,7 @@ class Modules
         'products' => ['label' => 'Data Produk', 'abilities' => ['view', 'manage']],
         'installments' => ['label' => 'Sistem Cicilan', 'abilities' => ['view', 'manage']],
         'methods' => ['label' => 'Sistem Bunga', 'abilities' => ['view', 'manage']],
+        'committees' => ['label' => 'Komite Kredit', 'abilities' => ['view', 'manage']],
         'profile' => ['label' => 'Profil Pengguna', 'abilities' => ['view']],
     ];
 

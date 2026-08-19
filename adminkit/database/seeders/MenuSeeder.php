@@ -19,7 +19,8 @@ class MenuSeeder extends Seeder
                 ['Data Instansi', '/institutions', 'hash', 'institutions.view', []],
                 ['Data Produk', '/products', 'wallet-cards', 'products.view', []],
                 ['Sistem Cicilan', '/installments', 'calendar-clock', 'installments.view', []],
-                ['Sistem Bunga', '/methods', 'pencil-ruler', 'methods.view', []],
+                ['Sistem Bunga', '/methods', 'badge-percent', 'methods.view', []],
+                ['Komite Kredit', '/committees', 'gavel', 'committees.view', []],
             ]],
         ],
         'admin' => [

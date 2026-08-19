@@ -44,3 +44,28 @@ EFEKTIF ANUITAS (anuitas), KBT PERPADIAN (bunga saja), KBT PERLELEAN (bunga+poko
 A.2–A.5, B.6–B.11, C.12–C.17, D.18–D.22, E.23–E.28 (lihat riwayat percakapan).
 User menilai pertanyaannya terlalu banyak sekaligus → tanyakan bertahap, sedikit-sedikit,
 setelah user selesai mengisi data master di menu baru.
+
+## Keputusan desain yang DISETUJUI user (2026-06-19)
+- Pengaturan komite kredit **punya menu tersendiri** ("Komite Kredit", href `/committees`, ada di grup Referensi
+  — menu dibuat user), BUKAN di dalam detail produk. Alasan: master produk adalah cermin CBS,
+  aturan komite banyak baris, perlu tampilan lintas produk, ada aturan lintas produk (RELOAN), perlu snapshot versi.
+- Struktur induk–anak disetujui: Jalur (produk + kondisi/kategori + mekanisme) → Jenjang (peranan pemutus,
+  batas plafon, keputusan diizinkan). Fitur "Salin Jenjang Dari" jalur lain.
+- Rencana lanjutan yang juga disetujui (BELUM dibuat): modul **Parameter Produk** terpisah
+  (plafon min/maks, jangka waktu, bunga/provisi/admin default, metode & pola cicilan default, ambang RC)
+  supaya master produk CBS tetap murni.
+- User akan mereview hasilnya bersama bagian terkait di perusahaan → siap menerima koreksi aturan.
+
+## Sudah dibangun (2026-06-19)
+Modul Komite Kredit: migrasi `committee_paths`/`committee_tiers`, model, CommitteeController,
+StorePathRequest/StoreTierRequest, halaman `Committees.vue` + `CommitteeDetail.vue`,
+izin `committees.view/manage`, `CommitteeSeeder` (17 jalur / 111 jenjang sesuai dokumen kebijakan),
+serta ProductSeeder/InstallmentSeeder/MethodSeeder (data CBS yang diisi user).
+
+## Masih menunggu jawaban user (tanyakan bertahap, maks 2-3 sekali)
+A.2 satu pemutus per level?; A.4 pengaruh kantor; A.5 delegasi;
+B.6 batas Rp1.000; B.9 wewenang ikut turun bila plafon diturunkan?; B.10 boleh naikkan plafon?; B.11 asal max_plafond;
+C.12 beda Dibatalkan vs Ditolak; C.13 jalur hierarki tanpa opsi tolak di level bawah (kebijakan atau bug?);
+C.14 boleh kembalikan ke analisa/survey; C.15 boleh lompat level; C.16 nilai final versi siapa; C.17 setuju bersyarat;
+D.18-D.22 RC & rumus (ambang RC, EFEKTIF tanpa pokok, pembulatan);
+E.24 master kondisi/kategori; E.25 definisi RELOAN; E.27 atribut Parameter Produk; E.28 cetak berita acara komite.

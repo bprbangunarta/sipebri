@@ -1,0 +1,51 @@
+{
+  "summary": "Full e2e test of the new Komite Kredit module (/committees). Backend: new pytest suite (36 tests) covering index props, 17 seeded paths / 111 seeded tiers, KRU plafon + KUP hierarki detail, create with copy_from, uppercase condition, duplicate validation, mechanism/product validation, path update, tier create/update/reorder/delete, tier validations, cascade delete, role matrix props, audit trail, and regression on 13 other pages -> 34/36 passed. Separate permission suite with a temporary Guest user: all 4 tests passed (GET/POST/PUT/DELETE /committees* -> 403). Frontend Playwright: list columns/search/sort/row-click, KRU 7 tiers with Rp 1.000 - Rp 35.000.000 and 4 decision badges, KUP 5 tiers 'Tanpa batas', arrow disabled states, create path (KPP) with copied 7 tiers + lowercase 'reloan' -> 'RELOAN', duplicate error message, edit path (hierarki + Nonaktif), tier add with digits-only input + Rupiah preview, max<min validation, tier edit prefill, move up/down with persistence after reload, tier delete, path delete with cascade, audit trail entries, roles matrix labels, and no console errors on 12 regression pages. 3 real bugs found (1 HIGH blocking the row action menu).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "PUT/DELETE /committees/{path}/tiers/{tier} and .../move/{direction}", "issue": "Tier routes are not scope-bound: a tier belonging to a DIFFERENT path can be updated/deleted/moved through any path URL (e.g. DELETE /committees/33/tiers/107 deletes tier 107 of path 17 and returns 302 success). During testing this actually deleted a seeded RELOAN tier (restored manually). Fix: add ->scopeBindings() to the tier routes (or Route::scopeBindings() on the group) or assert $tier->committee_path_id === $path->id and abort(404).", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "POST /committees", "issue": "Duplicate 'Normal' jalur accepted: StorePathRequest marks condition as 'nullable', so Rule::unique is skipped when condition is empty. Two paths with the same product_id and condition = NULL can be created (verified: second KRU Normal path created without validation error). Fix: validate uniqueness of the product_id + NULL condition combination (custom rule / withoutTrashed query) instead of relying on the nullable unique rule."},
+      {"endpoint": "PUT /committees/{path}/tiers/{tier}/move/{direction}", "issue": "Invalid direction returns 405 (route whereIn misses -> method mismatch) rather than 404/422. Cosmetic only."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Committees.vue list (DataTableCard row-clickable + RowActions)", "issue": "The row action menu ('...') cannot be opened: the table row has @click -> router.visit and only the checkbox cell uses @click.stop, so clicking committees-actions-<id> bubbles to the row and navigates to /committees/<id> instead of opening the dropdown. Consequence: 'Kelola Jenjang', 'Ubah' and 'Hapus' are unreachable for a normal user — path edit/delete is effectively unusable in the UI. Verified: click on committees-actions-17 -> url becomes /committees/17, 0 menu items rendered. Fix: wrap the actions cell (or the RowActions trigger) with @click.stop in DataTableCard.vue for the cell-actions slot.", "selector": "[data-testid^=\"committees-actions-\"]", "priority": "HIGH"},
+      {"component": "CommitteeDetail.vue tier dialog", "issue": "'Tambah Jenjang' pre-selects the first alphabetical role ('AO Funding') instead of leaving the placeholder 'Pilih Peranan' empty, so a tier can be saved with an unintended role and the 'peranan wajib dipilih' validation never triggers from the UI.", "selector": "[data-testid=\"tiers-form-role\"]", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Committees list + CommitteeDetail", "issues": ["No visual defects found: 32px controls, 12px uppercase headers/labels, dialog footer right-aligned (Batal then Simpan), badges readable in light theme, Rupiah formatting correct, pagination/search consistent with other reference pages."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_committees.py",
+    "/app/backend/tests/test_committee_permissions.py",
+    "/app/backend/tests/committee_permission_check.php",
+    "/app/test_reports/pytest/committees_results.xml"
+  ],
+  "action_items": [
+    "Stop row-click propagation on the actions cell so the committees row menu (Kelola Jenjang / Ubah / Hapus) can be opened.",
+    "Add scopeBindings (or an explicit path/tier ownership check) to the tier routes — currently tiers of other paths can be modified/deleted via a mismatched path id.",
+    "Enforce uniqueness for product_id + empty condition (duplicate 'Normal' jalur is currently accepted).",
+    "Optional: leave 'Peranan Pemutus' empty in the Tambah Jenjang dialog instead of defaulting to the first role."
+  ],
+  "critical_code_review_comments": [
+    "routes/web.php: tier routes lack ->scopeBindings(); CommitteeController::updateTier/destroyTier/moveTier trust the injected tier without checking committee_path_id — cross-path data mutation/deletion is possible.",
+    "StorePathRequest: Rule::unique on a 'nullable' condition never fires for the Normal (NULL) case; uniqueness of the product+Normal combination is unprotected at both validation and schema level (no unique index in the migration).",
+    "DataTableCard: for rowClickable tables only the selection cell stops propagation; any interactive cell content (RowActions, buttons) needs @click.stop or the row navigation swallows it."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_committees.py",
+    "/app/backend/tests/test_committee_permissions.py",
+    "/app/backend/tests/committee_permission_check.php"
+  ],
+  "success_rate": {"backend": "94% (34/36 + 4/4 permission tests)", "frontend": "93% (all flows pass except the row action menu, which needed a test-side propagation shield)"},
+  "seed_data_creation": "Temporary path 'KPP · RELOAN' (id 33) + copied/added tiers created and fully deleted through the UI; temporary Guest user qa_guest_committee@example.test created via artisan and force-deleted. Verified afterwards: committee_paths=17, committee_tiers=111, 0 orphan tiers, 0 QA users. One seeded RELOAN tier deleted by the cross-path bug was recreated identically (sort 1, Pengusul / Staff Analis, Naik Komite only).",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "sa@bprbangunarta.co.id / SA@4dm1n (login field name: credential)",
+  "context_for_next_testing_agent": "Run `cd /app/backend && python -m pytest tests/test_committees.py -p no:randomly -n 0`. Two tests encode the open bugs and should pass after fixes: test_duplicate_normal_condition_rejected and test_tier_from_other_path_cannot_be_deleted. Permission suite needs the helper first: `cd /app/adminkit && QA_MODE=create php artisan tinker --execute=\"require '/app/backend/tests/committee_permission_check.php';\"` then pytest tests/test_committee_permissions.py, then QA_MODE=delete to remove the user. For Playwright: login needs ~1.2s wait after the form renders (filling too early loses the values), the committees row menu currently requires a JS propagation shield on the actions td, and KPP/KRISPI are products without a seeded path.",
+  "rca_of_the_issue": "1) Row menu: DataTableCard emits row-click on the <TableRow> @click; the actions cell does not stop propagation, so the dropdown trigger click also triggers Inertia navigation and the menu closes/never renders. 2) Cross-path tiers: implicit route model binding resolves CommitteeTier globally by id; without scopeBindings the parent path is never used to constrain the child, so `DELETE /committees/{anyPath}/tiers/{anyTier}` succeeds. 3) Duplicate Normal: Laravel's 'nullable' rule short-circuits the remaining rules (incl. unique) when the value is null."
+}

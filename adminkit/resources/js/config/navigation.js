@@ -28,6 +28,8 @@ const ROUTE_TRAILS = [
     [/^\/products$/, ['Referensi', 'Data Produk']],
     [/^\/installments$/, ['Referensi', 'Sistem Cicilan']],
     [/^\/methods$/, ['Referensi', 'Sistem Bunga']],
+    [/^\/committees$/, ['Referensi', 'Komite Kredit']],
+    [/^\/committees\/\d+$/, ['Referensi', 'Komite Kredit', 'Detail']],
     [/^\/object-storage$/, ['Object Storage']],
     [/^\/audit-trail$/, ['Audit Trail']],
     [/^\/audit-trail\/\d+$/, ['Audit Trail', 'Detail']],

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AppearanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\InstitutionController;
@@ -146,6 +147,26 @@ Route::middleware('auth')->group(function () {
         Route::put('/menus/reorder', [MenuController::class, 'reorder'])->name('menus.reorder');
         Route::put('/menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
         Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
+    });
+
+    /* ── Komite kredit: jalur & jenjang kewenangan ──────────────────────── */
+    Route::get('/committees', [CommitteeController::class, 'index'])
+        ->middleware('permission:committees.view')->name('committees.index');
+    Route::get('/committees/{path}', [CommitteeController::class, 'show'])
+        ->middleware('permission:committees.view')->name('committees.show');
+
+    Route::middleware('permission:committees.manage')->scopeBindings()->group(function () {
+        Route::post('/committees', [CommitteeController::class, 'store'])->name('committees.store');
+        Route::put('/committees/{path}', [CommitteeController::class, 'update'])->name('committees.update');
+        Route::delete('/committees/{path}', [CommitteeController::class, 'destroy'])->name('committees.destroy');
+        Route::post('/committees/{path}/tiers', [CommitteeController::class, 'storeTier'])
+            ->name('committees.tiers.store');
+        Route::put('/committees/{path}/tiers/{tier}', [CommitteeController::class, 'updateTier'])
+            ->name('committees.tiers.update');
+        Route::delete('/committees/{path}/tiers/{tier}', [CommitteeController::class, 'destroyTier'])
+            ->name('committees.tiers.destroy');
+        Route::put('/committees/{path}/tiers/{tier}/move/{direction}', [CommitteeController::class, 'moveTier'])
+            ->whereIn('direction', ['up', 'down'])->name('committees.tiers.move');
     });
 
     /* ── Data referensi (kode + nama), satu pola untuk semua ────────────── */

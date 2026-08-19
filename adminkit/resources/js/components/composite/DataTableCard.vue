@@ -338,7 +338,12 @@ const pageSizeOptions = [
                                         @update:model-value="toggleRow(row, $event)"
                                     />
                                 </TableCell>
-                                <TableCell v-for="col in props.columns" :key="col.key" :class="cellClass(col)">
+                                <TableCell
+                                    v-for="col in props.columns"
+                                    :key="col.key"
+                                    :class="cellClass(col)"
+                                    @click="col.key === 'actions' && $event.stopPropagation()"
+                                >
                                     <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]">
                                         {{ row[col.key] ?? '\u2014' }}
                                     </slot>

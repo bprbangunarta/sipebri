@@ -177,11 +177,13 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 
 | Seeder | Isi |
 |---|---|
-| `PermissionSeeder` | 16 izin (`view`/`manage` per entitas) diturunkan dari `App\Support\Modules::MAP` |
+| `PermissionSeeder` | izin (`view`/`manage` per entitas) diturunkan dari `App\Support\Modules::MAP` |
 | `RoleSeeder` | `Super Admin` (selalu sinkron dengan SELURUH izin) + `Guest` + 43 peranan struktur organisasi (tanpa izin) |
 | `UserSeeder` | Akun bawaan `IT Support` / `superadmin` / `sa@bprbangunarta.co.id` (peranan Super Admin) |
-| `SettingSeeder` | Identitas merek CODEX, SEO/OG, kontak, zona waktu, urutan entitas izin |
-| `MenuSeeder` | Menu sidebar: `Dashboard` (Member) + 7 menu Administrator |
+| `SettingSeeder` | Identitas merek, SEO/OG, kontak, zona waktu, urutan entitas izin |
+| `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + 7 menu Administrator |
+| `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder` | Data referensi mengikuti core banking: 17 produk kredit, 8 pola cicilan, 10 metode bunga |
+| `CommitteeSeeder` | 17 jalur komite kredit + jenjang kewenangannya sesuai dokumen kebijakan |
 
 ```bash
 php artisan db:seed                          # semua seeder (idempoten)
@@ -258,11 +260,28 @@ database/{migrations,seeders,factories}
 | --- | --- |
 | `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `role` (cermin peranan Spatie), `office`, `alias`/`mso_code`/`collector_code` (unik), `password`, `avatar`, `last_login_at`, `deleted_at` (SoftDelete = Terarsip) |
 | `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, khusus `products`), `name` |
+| `committee_paths` | jalur komite: `product_id` (null = semua produk), `condition` (null = Normal), `mechanism` (`plafon`/`hierarki`), `is_active`, `note` |
+| `committee_tiers` | jenjang: `committee_path_id`, `sort`, `label`, `role`, `min_amount`, `max_amount`, `can_escalate`, `can_approve`, `can_cancel`, `can_reject` |
 | `roles`, `permissions`, `model_has_roles`, `role_has_permissions` | standar `spatie/laravel-permission`; nama izin memakai pola `entitas.aksi` |
 | `activity_logs` | `actor_name`, `action`, `module`, `level`, `subject_type/id`, `changes` (JSON diff), `context` (JSON), `ip`, `method`, `url`, `status_code`, `user_agent` |
 | `notifications` | satu baris per penerima: `user_id`, `title`, `body`, `module`, `level`, `url`, `actor_id`, `read_at` |
 | `settings` | `key` (primary), `value` — branding, SEO, dan `permission_entity_order` (urutan kartu entitas matriks) |
 | `telescope_entries`, `telescope_entries_tags`, `telescope_monitoring` | penyimpanan Laravel Telescope |
+
+---
+
+## Modul Komite Kredit
+
+Pengaturan **kewenangan persetujuan kredit** (dipakai SIPEBRI). Rute `/committees`, izin `committees.view/manage`, struktur induk–anak:
+
+1. **Jalur Komite** (`committee_paths`) — satu baris per kombinasi **produk + kondisi/kategori**:
+   - `product_id` kosong = **berlaku lintas produk** (mis. kategori `RELOAN`), `condition` kosong = **Normal**.
+   - `mechanism`: `plafon` (kewenangan mengikuti batas plafon) atau `hierarki` (wajib naik berjenjang tanpa batas plafon).
+   - Kombinasi produk + kondisi dijaga unik (termasuk kondisi kosong), kondisi selalu disimpan HURUF BESAR.
+2. **Jenjang** (`committee_tiers`) — urutan, nama jenjang (mis. `Komite I`), **peranan pemutus** (peranan Spatie, bukan user tertentu), `min_amount`/`max_amount`, dan keputusan yang diizinkan: `can_escalate` (Naik Komite), `can_approve`, `can_cancel`, `can_reject`.
+   Urutan diubah lewat tombol naik/turun; rute jenjang memakai `scopeBindings()` sehingga jenjang milik jalur lain tidak bisa disentuh.
+
+Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (satu jalur dibuat sekali, sisanya disalin). Data bawaan `CommitteeSeeder` mengikuti dokumen kebijakan: 12 produk umum + KBT `PERPADIAN` memakai jalur plafon (Kasi ≤35 jt → Kabag ≤100 jt → Direktur Bisnis ≤300 jt → Direktur Utama >300 jt), sedangkan KUP, KKO, KBT `PERLELEAN`, dan `RELOAN` memakai hierarki (Staff Analis → Kasi → Komite I → Komite II → Komite III/Direktur Utama).
 
 ---
 
