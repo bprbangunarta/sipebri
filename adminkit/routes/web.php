@@ -4,10 +4,14 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AppearanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MethodController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ObjectStorageController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -143,6 +147,27 @@ Route::middleware('auth')->group(function () {
         Route::put('/menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
         Route::delete('/menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
     });
+
+    /* ── Data referensi (kode + nama), satu pola untuk semua ────────────── */
+    $references = [
+        'institutions' => InstitutionController::class,
+        'products' => ProductController::class,
+        'installments' => InstallmentController::class,
+        'methods' => MethodController::class,
+    ];
+
+    foreach ($references as $slug => $controller) {
+        Route::get("/{$slug}", [$controller, 'index'])
+            ->middleware("permission:{$slug}.view")
+            ->name("{$slug}.index");
+
+        Route::middleware("permission:{$slug}.manage")->group(function () use ($slug, $controller) {
+            Route::post("/{$slug}", [$controller, 'store'])->name("{$slug}.store");
+            Route::post("/{$slug}/bulk", [$controller, 'bulkDestroy'])->name("{$slug}.bulk");
+            Route::put("/{$slug}/{id}", [$controller, 'update'])->name("{$slug}.update");
+            Route::delete("/{$slug}/{id}", [$controller, 'destroy'])->name("{$slug}.destroy");
+        });
+    }
 
 });
 

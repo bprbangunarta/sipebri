@@ -256,12 +256,31 @@ database/{migrations,seeders,factories}
 
 | Tabel | Isi penting |
 | --- | --- |
-| `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `password`, `avatar`, `is_active`, `last_login_at` |
+| `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `role` (cermin peranan Spatie), `office`, `alias`/`mso_code`/`collector_code` (unik), `password`, `avatar`, `last_login_at`, `deleted_at` (SoftDelete = Terarsip) |
+| `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, khusus `products`), `name` |
 | `roles`, `permissions`, `model_has_roles`, `role_has_permissions` | standar `spatie/laravel-permission`; nama izin memakai pola `entitas.aksi` |
 | `activity_logs` | `actor_name`, `action`, `module`, `level`, `subject_type/id`, `changes` (JSON diff), `context` (JSON), `ip`, `method`, `url`, `status_code`, `user_agent` |
 | `notifications` | satu baris per penerima: `user_id`, `title`, `body`, `module`, `level`, `url`, `actor_id`, `read_at` |
 | `settings` | `key` (primary), `value` — branding, SEO, dan `permission_entity_order` (urutan kartu entitas matriks) |
 | `telescope_entries`, `telescope_entries_tags`, `telescope_monitoring` | penyimpanan Laravel Telescope |
+
+---
+
+## Modul Data Referensi
+
+Empat modul data master sederhana (`kode` + `nama`) berbagi **satu** basis kode:
+
+| Modul | Rute | Kolom | Izin |
+|---|---|---|---|
+| Data Instansi | `/institutions` | code (unik), name | `institutions.view/manage` |
+| Data Produk | `/products` | code (unik), alias (unik), name | `products.view/manage` |
+| Sistem Cicilan | `/installments` | code (unik), name | `installments.view/manage` |
+| Sistem Bunga | `/methods` | code (unik), name | `methods.view/manage` |
+
+- Backend: `ReferenceController` (abstrak) menyediakan index/store/update/destroy/bulkDestroy + aturan validasi; turunannya hanya mendefinisikan `model()`, `slug()`, `label()`, dan `fields()`. Validasi lewat `Reference\StoreReferenceRequest` (mengambil aturan dari controller, `trim` semua nilai, `UPPERCASE` untuk kolom bertanda `uppercase`, `unique` hanya untuk kolom bertanda `unique`).
+- Frontend: satu halaman generik `pages/Reference.vue` (DataTableCard server-side + dialog tambah/ubah dinamis dari `fields`).
+- **Penghapusan permanen** (tanpa arsip), tersedia per baris dan massal; semua aksi tercatat di Audit Trail.
+- Menambah modul referensi baru: buat migrasi + model, satu controller turunan (≈20 baris), satu entri di `Modules::MAP`, satu entri pada `$references` di `routes/web.php`, lalu tambahkan menunya di Menu Navigasi.
 
 ---
 

@@ -14,7 +14,13 @@ class MenuSeeder extends Seeder
 {
     private const MENUS = [
         'member' => [
-            ['Dashboard', '/', 'LayoutDashboard', 'dashboard.view', []],
+            ['Dashboard', '/', 'chart-pie', 'dashboard.view', []],
+            ['Referensi', null, 'library-big', null, [
+                ['Data Instansi', '/institutions', 'hash', 'institutions.view', []],
+                ['Data Produk', '/products', 'wallet-cards', 'products.view', []],
+                ['Sistem Cicilan', '/installments', 'calendar-clock', 'installments.view', []],
+                ['Sistem Bunga', '/methods', 'pencil-ruler', 'methods.view', []],
+            ]],
         ],
         'admin' => [
             ['Kelola Perizinan', '/permissions', 'KeyRound', 'permissions.view', []],

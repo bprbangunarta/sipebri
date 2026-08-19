@@ -44,7 +44,7 @@ const groups = computed(() => {
             ...group,
             abilities: term
                 ? group.abilities.filter(
-                      (a) => a.name.includes(term) || group.entity.includes(term),
+                      (a) => a.name.includes(term) || group.entity.includes(term) || (group.label ?? "").toLowerCase().includes(term),
                   )
                 : group.abilities,
         }))
@@ -176,7 +176,7 @@ const save = () => form.put(`/roles/${props.role.id}/permissions`, { preserveScr
                                         :data-testid="`permission-group-${group.entity}-handle`"
                                         aria-hidden="true"
                                     />
-                                    <span class="truncate font-mono text-xs font-semibold">{{ group.entity }}</span>
+                                    <span class="truncate text-xs font-semibold">{{ group.label ?? group.entity }}</span>
                                 </span>
                                 <Switch
                                     :model-value="groupChecked(group)"

@@ -1,0 +1,41 @@
+{
+  "summary": "Tested the 4 new reference CRUD modules (/institutions, /products, /installments, /methods) end-to-end. Backend: created pytest suite (37 tests, session-auth via Laravel + Inertia data-page props) covering page load, create/uppercase, required + unique validation, update, delete, bulk delete, search/sort/server pagination, audit trail, permission matrix props, and regression on /users, /users/create, /menus, /permissions, /roles, /appearance, /object-storage, /audit-trail, /profile — 36/37 passed. Frontend: Playwright flows on all 4 pages (empty state, dialog add/edit/delete, duplicate errors, 12-row pagination, sorting, search, bulk delete, role matrix, audit trail) — all core flows work, no console errors. One real backend validation bug and one label mismatch on the role matrix found.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST/PUT /{institutions|products|installments|methods}", "issue": "ReferenceController::rules() applies Rule::unique() to EVERY field, so `name` is wrongly enforced unique. Creating two institutions with different codes but the same name is rejected with 'Nama sudah ada sebelumnya.' Spec says only code (and alias for produk) must be unique; migration has no unique index on `name`, so validation contradicts the schema. Fix: only apply unique to fields flagged as unique (e.g. add 'unique' => true in fields() config, or restrict unique to code/alias).", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "POST /{slug}/bulk", "issue": "ids.* has no `exists:<table>,id` rule — non-existent ids are silently ignored (returns 'Tidak ada data yang dapat dihapus.' only when all ids miss). Acceptable but weak input validation."},
+      {"endpoint": "POST/PUT /{slug}", "issue": "Only uppercase fields are trim()-ed in StoreReferenceRequest::prepareForValidation; `name` keeps leading/trailing spaces (e.g. '  Nama  ' stored as-is)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "RoleDetail matrix (/roles/{id})", "issue": "New permissions appear but entity cards are labelled with raw slugs (institutions, products, installments, methods) and abilities as 'View'/'Manage'. Requirement asks for 'Data Instansi / Data Produk / Sistem Cicilan / Sistem Bunga' with 'Lihat' & 'Kelola'. RoleController::matrix() derives labels from permission names instead of using App\\Support\\Modules::matrix() which already has the Indonesian labels (this also affects existing modules).", "selector": "[data-testid=\"permission-group-institutions\"]", "priority": "MEDIUM"},
+      {"component": "AuditTrail level badge", "issue": "Successful delete/bulk-delete of reference data is logged with level 'danger' and rendered as a red 'Gagal' (failed) badge, e.g. 'Menghapus Data Instansi UIQA1 — Gagal'. Misleading; pre-existing convention (Pengguna/Menu do the same) but now visible on the 4 new modules.", "selector": "audit table level column", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Reference pages (all 4)", "issues": ["No visual issues found: 32px controls, 12px uppercase labels, dialog footer right-aligned (Batal then Simpan), empty state with Database icon and correct sentence-case title, page title follows sidebar menu label."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_reference_modules.py", "/app/test_reports/pytest/reference_results.xml"],
+  "action_items": [
+    "Fix ReferenceController::rules(): do not enforce unique on `name` (only code, and alias for products).",
+    "Make the role permission matrix use Modules::matrix() labels so entities read 'Data Instansi/Data Produk/Sistem Cicilan/Sistem Bunga' and abilities read 'Lihat/Kelola'.",
+    "Optional: log successful deletions with a level that does not render as 'Gagal' in Audit Trail, and trim() non-uppercase fields."
+  ],
+  "critical_code_review_comments": [
+    "ReferenceController::rules() blanket-applies Rule::unique to all fields — schema/spec mismatch (name is not unique in the migration).",
+    "Reference.vue front-end rules only check required/max, so the unique-name rejection surfaces only after a server round-trip; validation source of truth should be shared/config-driven.",
+    "BulkReferenceRequest should validate ids exist for the specific table to return a proper 422 instead of silently no-op."
+  ],
+  "updated_files": ["/app/backend/tests/test_reference_modules.py"],
+  "success_rate": {"backend": "97% (36/37)", "frontend": "95% (all CRUD/bulk/search/sort/pagination flows pass; role matrix labelling mismatch)"},
+  "seed_data_creation": "Temporary rows with codes prefixed TEST*/UI* were created in institutions/products/installments/methods and fully removed afterwards (all 4 tables verified back to 0 rows). sa@bprbangunarta.co.id untouched; no migrate:fresh run.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "sa@bprbangunarta.co.id / SA@4dm1n (from /app/memory/test_credentials.md) — login field name is `credential`",
+  "context_for_next_testing_agent": "Backend suite /app/backend/tests/test_reference_modules.py logs in via POST /login (fields credential/password) with X-XSRF-TOKEN from cookie and reads Inertia props from the <script data-page=\"app\"> tag. Run serially: `cd /app/backend && python -m pytest tests/test_reference_modules.py -n 0`. test_duplicate_name_should_be_allowed is the only failing test and encodes the unique-name bug — it should pass once rules() is fixed. Note /roles list search box is client-side only (no ?search= support), so navigate to /roles/1 directly for the Super Admin matrix.",
+  "rca_of_the_issue": "ReferenceController::rules() maps every configured field to ['required','string','max:255', Rule::unique(table, field)]. Because fields() includes `name`, the validator queries uniqueness on a column with no unique index, so a legitimate duplicate name (different code) is rejected. Reproduce: POST /institutions {code: A1, name: 'X'} then {code: A2, name: 'X'} → errors.name = 'Nama sudah ada sebelumnya.' Mitigation: mark unique columns explicitly in fields() (e.g. 'unique' => true for code/alias) and build rules accordingly."
+}

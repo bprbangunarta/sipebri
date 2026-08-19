@@ -11,6 +11,7 @@ use App\Http\Requests\Role\SyncRolePermissionsRequest;
 use App\Models\ActivityLog;
 use App\Models\Setting;
 use App\Support\Excel;
+use App\Support\Modules;
 use App\Support\Notify;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
@@ -80,9 +81,11 @@ class RoleController extends Controller
             ->groupBy(fn (string $name) => str($name)->before('.')->value())
             ->map(fn ($names, $entity) => [
                 'entity' => $entity,
+                'label' => Modules::MAP[$entity]['label'] ?? str($entity)->replace('_', ' ')->headline()->value(),
                 'abilities' => $names->map(fn (string $name) => [
                     'name' => $name,
-                    'label' => str($name)->after('.')->replace('_', ' ')->title()->value(),
+                    'label' => Modules::ABILITY_LABELS[str($name)->after('.')->value()]
+                        ?? str($name)->after('.')->replace('_', ' ')->title()->value(),
                 ])->values()->all(),
             ])
             ->sortBy(function (array $group) use ($order) {
