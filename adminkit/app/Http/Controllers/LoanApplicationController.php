@@ -13,6 +13,7 @@ use App\Models\LoanApplication;
 use App\Models\Method;
 use App\Models\Office;
 use App\Models\Product;
+use App\Models\ProductParameter;
 use App\Models\Region;
 use App\Models\User;
 use App\Support\CustomerDirectory;
@@ -325,6 +326,17 @@ class LoanApplicationController extends Controller
                 ->get()
                 ->map(fn (Region $r) => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"])
                 ->all(),
+            'parameterMap' => ProductParameter::all()
+                ->keyBy(fn (ProductParameter $p) => (string) $p->product_id)
+                ->map(fn (ProductParameter $p) => [
+                    'method_ids' => (array) ($p->allowed_method_ids ?? []),
+                    'installment_ids' => (array) ($p->allowed_installment_ids ?? []),
+                    'default_method_id' => $p->default_method_id,
+                    'default_installment_id' => $p->default_installment_id,
+                    'interest_rate' => $p->interest_rate,
+                    'provision_rate' => $p->provision_rate,
+                    'admin_rate' => $p->admin_rate,
+                ]),
             'categoryMap' => CommitteePath::where('is_active', true)
                 ->orderBy('condition')
                 ->get(['id', 'product_id', 'condition'])

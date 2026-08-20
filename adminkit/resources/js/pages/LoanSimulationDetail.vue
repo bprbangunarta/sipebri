@@ -31,6 +31,7 @@ const props = defineProps({
     installments: { type: Array, default: () => [] },
     supervisors: { type: Array, default: () => [] },
     categoryMap: { type: Object, default: () => ({}) },
+    parameterMap: { type: Object, default: () => ({}) },
     collateralTypes: { type: Array, default: () => [] },
     bindingTypes: { type: Array, default: () => [] },
     regionOptions: { type: Array, default: () => [] },
@@ -69,8 +70,28 @@ const categoryOptions = computed(
     () => props.categoryMap[String(form.product_id)] ?? props.categoryMap.global ?? [],
 );
 
+/** Parameter produk menentukan pilihan & nilai bawaan sistem bunga, cicilan, dan suku bunga. */
+const parameter = computed(() => props.parameterMap[String(form.product_id)] ?? null);
+
+const filterByIds = (options, ids) =>
+    ids?.length ? options.filter((o) => ids.map(Number).includes(Number(o.value))) : options;
+
+const methodOptions = computed(() => filterByIds(props.methods, parameter.value?.method_ids));
+const installmentOptions = computed(() => filterByIds(props.installments, parameter.value?.installment_ids));
+
+const pick = (options, preferred) => {
+    if (options.some((o) => Number(o.value) === Number(preferred))) return preferred;
+
+    return options.length === 1 ? options[0].value : '';
+};
+
 watch(() => form.product_id, () => {
     if (!categoryOptions.value.some((o) => o.value === form.committee_path_id)) form.committee_path_id = '';
+
+    const param = parameter.value;
+    form.method_id = pick(methodOptions.value, param?.default_method_id ?? form.method_id);
+    form.installment_id = pick(installmentOptions.value, param?.default_installment_id ?? form.installment_id);
+    form.interest_rate = param?.interest_rate ?? '';
 });
 
 const attachForm = useForm({ collateral_simulation_id: '' });
@@ -224,7 +245,8 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             <Label>Sistem Bunga <span class="text-destructive">*</span></Label>
                             <Combobox
                                 v-model="form.method_id"
-                                :options="props.methods"
+                                :options="methodOptions"
+                                :disabled="!form.product_id"
                                 placeholder="-- Pilih --"
                                 data-testid="loan-detail-method"
                             />
@@ -236,7 +258,8 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             <Label>Sistem Cicilan <span class="text-destructive">*</span></Label>
                             <Combobox
                                 v-model="form.installment_id"
-                                :options="props.installments"
+                                :options="installmentOptions"
+                                :disabled="!form.product_id"
                                 placeholder="-- Pilih --"
                                 data-testid="loan-detail-installment"
                             />
