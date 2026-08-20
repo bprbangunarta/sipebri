@@ -13,9 +13,6 @@ class CollateralSimulation extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'paripasu' => 'integer',
-        'auto_number' => 'boolean',
-        'owner_same_as_cif' => 'boolean',
         'value_guarantee' => 'integer',
         'value_adjustment' => 'integer',
         'value_fair' => 'integer',
@@ -32,8 +29,9 @@ class CollateralSimulation extends Model
     public function toCbsPayload(): array
     {
         return [
-            'no_rek' => (string) ($this->file_number ?? ''),
-            'kepemilikan' => (string) ($this->ownership ?? ''),
+            // Kolom no_rek & kepemilikan tetap ada di kontrak CBS namun tidak lagi disimpan SIPEBRI.
+            'no_rek' => '',
+            'kepemilikan' => '',
             'keterangan' => (string) ($this->description ?? ''),
             'pemilik_nama' => (string) ($this->owner_name ?? ''),
             'pemilik_alamat' => (string) ($this->owner_address ?? ''),

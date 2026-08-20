@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="31" time="20.124" timestamp="2026-08-20T16:38:15.522254+00:00" hostname="agent-env-4d9fb681-ed40-442b-b1e5-ef9c14370765"><testcase classname="tests.test_schema_drafts.TestSchemaDraftListing" name="test_index_lists_seeded_drafts" time="1.414" /><testcase classname="tests.test_schema_drafts.TestSchemaDraftListing" name="test_existing_table_diff_all_same" time="0.291" /><testcase classname="tests.test_schema_drafts.TestSchemaDraftListing" name="test_existing_table_migration_uses_schema_table" time="0.338" /><testcase classname="tests.test_schema_drafts.TestSchemaDraftListing" name="test_new_table_migration_uses_schema_create" time="0.300" /><testcase classname="tests.test_schema_drafts.TestDraftValidation" name="test_uppercase_table_name_rejected" time="0.217" /><testcase classname="tests.test_schema_drafts.TestDraftValidation" name="test_duplicate_table_name_rejected" time="0.232" /><testcase classname="tests.test_schema_drafts.TestDraftValidation" name="test_validation_errors_surface_in_session" time="0.471" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_01_create_draft" time="0.476" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_02_add_columns" time="0.612" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_03_invalid_column_name_rejected" time="0.410" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_04_duplicate_column_rejected" time="0.449" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_05_update_column" time="0.873" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_06_reorder_persists" time="1.038" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_07_reorder_rejects_foreign_ids" time="0.554" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_08_column_route_is_scoped_to_draft" time="0.562"><failure message="AssertionError: DELETE /schema-drafts/9/columns/149 -&gt; 303 &lt;!DOCTYPE html&gt;&#10;  &lt;html&gt;&#10;      &lt;head&gt;&#10;          &lt;meta charset=&quot;UTF-8&quot; /&gt;&#10;          &lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url='https://inertia-admin-panel.preview.emergentagent.com'&quot; /&gt;&#10;  &#10;          &lt;title&gt;Redirecting to https://inertia-admin-panel.preview.emergentagent.com&lt;/title&gt;&#10;      &lt;/head&gt;&#10;      &lt;body&gt;&#10;          Redirecting to &lt;a href=&quot;https://inertia-admin-panel.preview.emergentagent.com&quot;&gt;https://inertia-admi&#10;assert 303 in (403, 404)&#10; +  where 303 = &lt;Response [303]&gt;.status_code">self = &lt;test_schema_drafts.TestDraftLifecycle object at 0x7b9c9d53cb10&gt;
+admin = &lt;requests.sessions.Session object at 0x7b9c9d536e50&gt;
+
+    def test_08_column_route_is_scoped_to_draft(self, admin):
+        """Deleting another draft's column through this draft must not succeed."""
+        did = TestDraftLifecycle.draft_id
+        other = inertia_get(admin, "/schema-drafts/1")
+        victim = other["columns"][0]
+&gt;       send(admin, "DELETE", f"/schema-drafts/{did}/columns/{victim['id']}", expect=(403, 404))
+
+tests/test_schema_drafts.py:226: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+session = &lt;requests.sessions.Session object at 0x7b9c9d536e50&gt;
+method = 'DELETE', path = '/schema-drafts/9/columns/149', data = None
+expect = (403, 404)
+
+    def send(session, method, path, data=None, expect=(302, 303)):
+        r = session.request(
+            method,
+            f"{BASE_URL}{path}",
+            json=data or {},
+            headers={
+                "X-XSRF-TOKEN": xsrf(session),
+                "X-Inertia": "true",
+                "X-Inertia-Version": VERSION,
+                "Accept": "text/html, application/xhtml+xml",
+            },
+            allow_redirects=False,
+            timeout=30,
+        )
+&gt;       assert r.status_code in expect, f"{method} {path} -&gt; {r.status_code} {r.text[:400]}"
+E       AssertionError: DELETE /schema-drafts/9/columns/149 -&gt; 303 &lt;!DOCTYPE html&gt;
+E         &lt;html&gt;
+E             &lt;head&gt;
+E                 &lt;meta charset="UTF-8" /&gt;
+E                 &lt;meta http-equiv="refresh" content="0;url='https://inertia-admin-panel.preview.emergentagent.com'" /&gt;
+E         
+E                 &lt;title&gt;Redirecting to https://inertia-admin-panel.preview.emergentagent.com&lt;/title&gt;
+E             &lt;/head&gt;
+E             &lt;body&gt;
+E                 Redirecting to &lt;a href="https://inertia-admin-panel.preview.emergentagent.com"&gt;https://inertia-admi
+E       assert 303 in (403, 404)
+E        +  where 303 = &lt;Response [303]&gt;.status_code
+
+tests/test_schema_drafts.py:84: AssertionError</failure></testcase><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_09_delete_column" time="1.076" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_10_import_requires_existing_table" time="0.630" /><testcase classname="tests.test_schema_drafts.TestDraftLifecycle" name="test_11_delete_draft" time="0.417" /><testcase classname="tests.test_schema_drafts.TestDiffAndImport" name="test_new_column_marked_baru_then_dihapus" time="2.008" /><testcase classname="tests.test_schema_drafts.TestDiffAndImport" name="test_import_restores_columns_from_real_table" time="0.845" /><testcase classname="tests.test_schema_drafts.TestAuthorization" name="test_staff_without_permission_gets_403" time="1.222" /><testcase classname="tests.test_schema_drafts.TestAuthorization" name="test_staff_cannot_write" time="1.059" /><testcase classname="tests.test_schema_drafts.TestAuthorization" name="test_guest_redirected_to_login" time="0.204" /><testcase classname="tests.test_schema_drafts.TestCollateralDetail" name="test_detail_columns_exclude_dropped" time="0.468" /><testcase classname="tests.test_schema_drafts.TestCollateralDetail" name="test_payload_keys" time="0.420" /><testcase classname="tests.test_schema_drafts.TestCollateralDetail" name="test_detail_404_for_missing" time="0.155" /><testcase classname="tests.test_schema_drafts.TestCollateralWrites" name="test_01_create" time="0.878" /><testcase classname="tests.test_schema_drafts.TestCollateralWrites" name="test_02_update" time="0.782" /><testcase classname="tests.test_schema_drafts.TestCollateralWrites" name="test_03_cleanup" time="0.385" /><testcase classname="tests.test_schema_drafts.TestNoSchemaSideEffects" name="test_no_new_migration_files" time="0.002" /><testcase classname="tests.test_schema_drafts.TestNoSchemaSideEffects" name="test_draft_tables_not_created" time="0.256" /></testsuite></testsuites>

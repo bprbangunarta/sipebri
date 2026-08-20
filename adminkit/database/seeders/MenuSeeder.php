@@ -42,6 +42,7 @@ class MenuSeeder extends Seeder
             ['Penampilan UI', '/appearance', 'Palette', 'appearance.view', []],
             ['Menu Navigasi', '/menus', 'ListTree', 'menus.view', []],
             ['Object Storage', '/object-storage', 'Database', 'storage.view', []],
+            ['Skema Migrasi', '/schema-drafts', 'Table2', 'schema-drafts.view', []],
             ['Audit Trail Log', '/audit-trail', 'ScrollText', 'activity.view', []],
         ],
     ];

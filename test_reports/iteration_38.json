@@ -1,0 +1,34 @@
+{
+  "summary": "Tested the new 'Skema Migrasi' module (/schema-drafts) and the developer-style Detail Agunan page end-to-end on the public URL. Backend: 31 pytest cases via real Laravel session auth + Inertia JSON props (/app/backend/tests/test_schema_drafts.py) — 30 passed, 1 failed (unscoped column route binding). Frontend: 4 Playwright runs covering collateral row menu (Payload removed), Database/Payload CBS tabs + search + Salin/Posting toast, sidebar 'Skema Migrasi', draft CRUD + validation, column CRUD with Combobox type, HTML5 drag reorder persistence, Diff & Migration tabs, 'Impor dari tabel', collateral create+edit forms (DatePicker), 403 for mohmuksin, responsive 768/390 (no horizontal overflow). Verified the module has NO schema side effects: no new files in database/migrations (still 24), no test_* tables created, collateral_simulations still 29 columns, seeded rows untouched, drafts back to ids 1 & 2.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "DELETE|PUT /schema-drafts/{schemaDraft}/columns/{column}", "issue": "Route model binding is not scoped: a column belonging to draft A can be edited/deleted through draft B's URL (test deleted draft 1's 'collateral_id' column via a freshly created draft and got 303 success instead of 404). Fix: add ->scopeBindings() to the schema-drafts group (or resolve the column via $schemaDraft->columns()->findOrFail()). Same applies to updateColumn — the unique-name rule is also evaluated against the wrong draft."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_schema_drafts.py",
+    "/app/test_reports/pytest/schema_drafts.xml"
+  ],
+  "action_items": [
+    "Scope the schema-draft column routes (->scopeBindings() or $schemaDraft->columns()->findOrFail($id)) so columns of other drafts cannot be updated/deleted through a foreign draft id."
+  ],
+  "critical_code_review_comments": [
+    "SchemaDraftController::updateColumn/destroyColumn accept an unscoped SchemaDraftColumn — validate ownership (schema_draft_id) before writing; reorder() already scopes correctly via Rule::exists.",
+    "SchemaDesign::alterBody emits dropColumn() for every column present in DB but absent from the draft. This is intended, but the preview UI should keep the prominent 'Pratinjau saja' warning it already has (verified present) since an unwary paste could drop production columns.",
+    "CollateralSimulationController::index still ships the full CBS payload for every row (row()['payload']) even though the Payload row action was removed — dead weight in the list response; consider dropping it."
+  ],
+  "updated_files": ["/app/backend/tests/test_schema_drafts.py"],
+  "success_rate": {"backend": "97% (30/31)", "frontend": "100% of tested flows"},
+  "seed_data_creation": "All test data created during testing was removed: drafts 'test_qa_designs'/'test_ui_designs' deleted, draft 1 restored via 'Impor dari tabel' (26 columns, diff all 'Sama'), collateral rows TEST-QA-001 / TEST UI * deleted (2 seeded rows remain).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "superadmin / SA@4dm1n ; mohmuksin / password",
+  "context_for_next_testing_agent": "Laravel+Inertia app at /app/adminkit served on REACT_APP_BACKEND_URL. Backend API testing pattern: POST /login with field name 'credential' (not 'login'), send X-XSRF-TOKEN from XSRF-TOKEN cookie, and X-Inertia + X-Inertia-Version scraped from the login HTML ('\"version\":\"...\"') — a wrong version returns 409. See helpers in /app/backend/tests/test_schema_drafts.py (run with -n0 -p no:randomly; class-ordered tests share state). Combobox options use data-testid=combobox-option-{value}; DatePicker exposes datepicker-today/-day-{n}. Only open defect: unscoped schema-draft column route binding (test_08).",
+  "rca_of_the_issue": "Laravel does not scope nested route bindings unless ->scopeBindings() is declared or the child is resolved through the parent relation. Repro: create draft B, then DELETE /schema-drafts/{B}/columns/{id-of-draft-A-column} → 303 and the column of draft A is deleted. Impact is limited to developer draft data (no real schema change), but it silently corrupts other drafts."
+}

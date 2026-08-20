@@ -22,6 +22,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SchemaDraftController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -223,6 +224,23 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/collateral-simulation/{collateralSimulation}', [CollateralSimulationController::class, 'show'])
         ->middleware('permission:collateral-simulation.view')->name('collateral-simulation.show');
+
+    // Skema Migrasi — alat developer, tidak pernah mengubah skema database.
+    Route::get('/schema-drafts', [SchemaDraftController::class, 'index'])
+        ->middleware('permission:schema-drafts.view')->name('schema-drafts.index');
+    Route::get('/schema-drafts/{schemaDraft}', [SchemaDraftController::class, 'show'])
+        ->middleware('permission:schema-drafts.view')->name('schema-drafts.show');
+
+    Route::middleware('permission:schema-drafts.manage')->scopeBindings()->group(function () {
+        Route::post('/schema-drafts', [SchemaDraftController::class, 'store'])->name('schema-drafts.store');
+        Route::put('/schema-drafts/{schemaDraft}', [SchemaDraftController::class, 'update'])->name('schema-drafts.update');
+        Route::delete('/schema-drafts/{schemaDraft}', [SchemaDraftController::class, 'destroy'])->name('schema-drafts.destroy');
+        Route::post('/schema-drafts/{schemaDraft}/import', [SchemaDraftController::class, 'import'])->name('schema-drafts.import');
+        Route::put('/schema-drafts/{schemaDraft}/reorder', [SchemaDraftController::class, 'reorder'])->name('schema-drafts.reorder');
+        Route::post('/schema-drafts/{schemaDraft}/columns', [SchemaDraftController::class, 'storeColumn'])->name('schema-drafts.columns.store');
+        Route::put('/schema-drafts/{schemaDraft}/columns/{column}', [SchemaDraftController::class, 'updateColumn'])->name('schema-drafts.columns.update');
+        Route::delete('/schema-drafts/{schemaDraft}/columns/{column}', [SchemaDraftController::class, 'destroyColumn'])->name('schema-drafts.columns.destroy');
+    });
 
     Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');

@@ -8,7 +8,6 @@ use App\Models\CollateralCondition;
 use App\Models\CollateralMethod;
 use App\Models\CollateralSimulation;
 use App\Models\CollateralType;
-use App\Models\OwnershipStatus;
 use App\Models\Region;
 use App\Support\TableQuery;
 use Illuminate\Http\RedirectResponse;
@@ -135,7 +134,7 @@ class CollateralSimulationController extends Controller
     private function withDefaults(array $data): array
     {
         // Semua teks yang diketik pengguna disimpan HURUF BESAR (mengikuti CBS).
-        foreach (['collateral_id', 'file_number', 'document_number', 'ownership', 'description', 'owner_name', 'owner_address', 'appraiser_name', 'independent_appraiser_name'] as $key) {
+        foreach (['collateral_id', 'document_number', 'description', 'owner_name', 'owner_address', 'appraiser_name', 'independent_appraiser_name'] as $key) {
             if (filled($data[$key] ?? null)) {
                 $data[$key] = mb_strtoupper($data[$key]);
             }
@@ -147,7 +146,6 @@ class CollateralSimulationController extends Controller
 
         return [
             ...$data,
-            'paripasu' => (int) ($data['paripasu'] ?? 0),
             'insured' => ($data['insured'] ?? '') ?: 'T',
             'ppap_code' => ($data['ppap_code'] ?? '') ?: '1',
         ];
@@ -160,19 +158,13 @@ class CollateralSimulationController extends Controller
 
         return $request->validate([
             'collateral_id' => ['nullable', 'string', 'max:50'],
-            'paripasu' => ['nullable', 'integer', 'min:0', 'max:100'],
-            'file_number' => ['nullable', 'string', 'max:50'],
-            'auto_number' => ['boolean'],
             'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
-            'ownership' => ['nullable', 'string', 'max:100'],
             'document_number' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:255'],
             'owner_name' => ['required', 'string', 'max:100'],
             'owner_address' => ['required', 'string', 'max:255'],
-            'owner_same_as_cif' => ['boolean'],
             'region_code' => ['required', 'string', 'max:8'],
-            'region_id' => ['nullable', 'integer', 'exists:regions,id'],
             'region_label' => ['nullable', 'string', 'max:150'],
             'value_guarantee' => ['nullable', 'integer', 'min:0'],
             'value_adjustment' => ['nullable', 'integer', 'min:0'],
@@ -230,10 +222,6 @@ class CollateralSimulationController extends Controller
                 ->get()
                 ->map(fn (Region $r) => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"])
                 ->all(),
-            'ownershipStatuses' => OwnershipStatus::orderBy('code')
-                ->get(['collateral_type_code', 'code', 'name'])
-                ->groupBy('collateral_type_code')
-                ->map(fn ($rows) => $rows->map(fn ($r) => ['value' => $r->name, 'label' => $r->name])->all()),
         ];
     }
 
@@ -241,16 +229,13 @@ class CollateralSimulationController extends Controller
     {
         return [
             ...$r->only([
-                'id', 'collateral_id', 'paripasu', 'file_number', 'auto_number', 'collateral_type_code',
-                'binding_type_code', 'securities_rank', 'rating_agency', 'ownership', 'document_number',
-                'description', 'owner_name', 'owner_address', 'owner_same_as_cif', 'region_code',
+                'id', 'collateral_id', 'collateral_type_code',
+                'binding_type_code', 'securities_rank', 'rating_agency', 'document_number',
+                'description', 'owner_name', 'owner_address', 'region_code',
                 'region_label', 'value_guarantee', 'value_adjustment', 'value_fair', 'value_njop',
                 'value_appraisal', 'value_independent', 'appraiser_name', 'independent_appraiser_name',
-                'condition_code', 'insured', 'ppap_code', 'region_id',
+                'condition_code', 'insured', 'ppap_code',
             ]),
-            'region' => $r->region_id
-                ? Region::where('id', $r->region_id)->first(['id', 'regency', 'district', 'village'])
-                : null,
             'appraised_at' => $r->appraised_at?->format('Y-m-d'),
             'independent_appraised_at' => $r->independent_appraised_at?->format('Y-m-d'),
             'condition_date' => $r->condition_date?->format('Y-m-d'),
@@ -267,7 +252,6 @@ class CollateralSimulationController extends Controller
                 : null,
             'created_at' => $r->created_at?->translatedFormat('d M Y H:i'),
             'updated_at' => $r->updated_at?->translatedFormat('d M Y H:i'),
-            'payload' => $r->toCbsPayload(),
         ];
     }
 }

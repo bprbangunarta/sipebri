@@ -36,6 +36,7 @@ class Modules
         'collateral-simulation' => ['label' => 'Simulasi Agunan Kredit', 'abilities' => ['view', 'manage']],
         'regions' => ['label' => 'Data Wilayah', 'abilities' => ['view', 'manage']],
         'analysis-simulation' => ['label' => 'Simulasi Analisa Kredit', 'abilities' => ['view']],
+        'schema-drafts' => ['label' => 'Skema Migrasi', 'abilities' => ['view', 'manage']],
         'profile' => ['label' => 'Profil Pengguna', 'abilities' => ['view']],
     ];
 
