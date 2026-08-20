@@ -1,18 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import {
-    ArrowLeft,
-    Check,
-    ClipboardCheck,
-    FileSignature,
-    Plus,
-    Save,
-    ShieldCheck,
-    Trash2,
-    X,
-    Users,
-} from 'lucide-vue-next';
+import { ArrowLeft, FileInput, Plus, Save, Send, ShieldCheck, Trash2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Button from '@/components/ui/Button.vue';
@@ -22,19 +11,18 @@ import CardFooter from '@/components/ui/CardFooter.vue';
 import CardHeader from '@/components/ui/CardHeader.vue';
 import CardTitle from '@/components/ui/CardTitle.vue';
 import Combobox from '@/components/ui/Combobox.vue';
-import DatePicker from '@/components/ui/DatePicker.vue';
 import DecimalInput from '@/components/ui/DecimalInput.vue';
+import Dialog from '@/components/ui/Dialog.vue';
 import Input from '@/components/ui/Input.vue';
 import Label from '@/components/ui/Label.vue';
 import NumberInput from '@/components/ui/NumberInput.vue';
 import { rupiah } from '@/constants/committee';
 
-/** Berkas pengajuan: tahapan Pengajuan → Jaminan → Surveyor → Konfirmasi. */
+/** Berkas pengajuan: data pengajuan + agunan. Status awal DRAFT, lalu diajukan. */
 const props = defineProps({
     record: { type: Object, required: true },
     collaterals: { type: Array, default: () => [] },
     collateralOptions: { type: Array, default: () => [] },
-    statuses: { type: Array, default: () => [] },
     usageTypes: { type: Array, default: () => [] },
     offices: { type: Array, default: () => [] },
     products: { type: Array, default: () => [] },
@@ -42,11 +30,15 @@ const props = defineProps({
     methods: { type: Array, default: () => [] },
     installments: { type: Array, default: () => [] },
     supervisors: { type: Array, default: () => [] },
-    surveyors: { type: Array, default: () => [] },
+    categoryMap: { type: Object, default: () => ({}) },
+    collateralTypes: { type: Array, default: () => [] },
+    bindingTypes: { type: Array, default: () => [] },
+    regionOptions: { type: Array, default: () => [] },
     canManage: { type: Boolean, default: false },
 });
 
 const STATUS_TONE = {
+    DRAFT: 'border-slate-500/30 bg-slate-500/15 text-slate-700 dark:text-slate-300',
     DIAJUKAN: 'border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-400',
     ANALISA: 'border-purple-500/30 bg-purple-500/15 text-purple-700 dark:text-purple-400',
     KOMITE: 'border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-400',
@@ -56,52 +48,59 @@ const STATUS_TONE = {
     REALISASI: 'border-teal-500/30 bg-teal-500/15 text-teal-700 dark:text-teal-400',
 };
 
-const STEPS = [
-    { id: 'pengajuan', label: 'Data Pengajuan', icon: FileSignature, check: 'pengajuan' },
-    { id: 'jaminan', label: 'Data Jaminan', icon: ShieldCheck, check: 'jaminan' },
-    { id: 'surveyor', label: 'Data Surveyor', icon: Users, check: 'surveyor' },
-    { id: 'konfirmasi', label: 'Konfirmasi', icon: ClipboardCheck, check: null },
-];
-
-const CHECK_LABELS = {
-    nasabah: 'Nomor KTP terverifikasi di sistem data nasabah',
-    pengajuan: 'Informasi Pengajuan (produk, plafon, jangka waktu)',
-    jaminan: 'Informasi Jaminan (minimal satu agunan)',
-    surveyor: 'Informasi Surveyor (kantor & surveyor)',
-};
-
-const tab = ref('pengajuan');
-
 const form = useForm({
     application_date: props.record.application_date ?? '',
-    office_id: props.record.office_id ?? '',
     product_id: props.record.product_id ?? '',
-    institution_id: props.record.institution_id ?? '',
+    committee_path_id: props.record.committee_path_id ?? '',
     requested_amount: props.record.requested_amount ?? 0,
     requested_tenor: props.record.requested_tenor ?? 0,
-    tenor_principal: props.record.tenor_principal ?? '',
-    tenor_interest: props.record.tenor_interest ?? '',
-    usage_type: props.record.usage_type ?? '',
     method_id: props.record.method_id ?? '',
     installment_id: props.record.installment_id ?? '',
     interest_rate: props.record.interest_rate ?? '',
-    provision_rate: props.record.provision_rate ?? '',
-    admin_rate: props.record.admin_rate ?? '',
-    purpose: props.record.purpose ?? '',
-    note: props.record.note ?? '',
-});
-
-const surveyForm = useForm({
+    usage_type: props.record.usage_type ?? '',
+    institution_id: props.record.institution_id ?? '',
+    marketing: props.record.marketing ?? '',
     office_id: props.record.office_id ?? '',
     supervisor_id: props.record.supervisor_id ?? '',
-    surveyor_id: props.record.surveyor_id ?? '',
+});
+
+/** Kategori mengikuti jalur komite produk terpilih (sama seperti Simulasi Kewenangan Komite). */
+const categoryOptions = computed(
+    () => props.categoryMap[String(form.product_id)] ?? props.categoryMap.global ?? [],
+);
+
+watch(() => form.product_id, () => {
+    if (!categoryOptions.value.some((o) => o.value === form.committee_path_id)) form.committee_path_id = '';
 });
 
 const attachForm = useForm({ collateral_simulation_id: '' });
 const actionForm = useForm({});
 
-const saveApplication = () => form.put(`/loan-simulation/${props.record.id}`, { preserveScroll: true });
-const saveSurvey = () => surveyForm.put(`/loan-simulation/${props.record.id}/survey`, { preserveScroll: true });
+const newCollateral = useForm({
+    collateral_type_code: '',
+    binding_type_code: '',
+    document_number: '',
+    owner_name: '',
+    owner_address: '',
+    region_code: '',
+    region_label: '',
+    description: '',
+});
+
+const showCollateralForm = ref(false);
+
+const openCollateralForm = () => {
+    newCollateral.reset();
+    newCollateral.clearErrors();
+    showCollateralForm.value = true;
+};
+
+const onRegion = (value) => {
+    newCollateral.region_code = value;
+    newCollateral.region_label = props.regionOptions.find((o) => o.value === value)?.label ?? '';
+};
+
+const save = () => form.put(`/loan-simulation/${props.record.id}`, { preserveScroll: true });
 
 const attach = () => {
     if (!attachForm.collateral_simulation_id) return;
@@ -111,27 +110,28 @@ const attach = () => {
     });
 };
 
+const saveCollateral = () =>
+    newCollateral.post(`/loan-simulation/${props.record.id}/collaterals/new`, {
+        preserveScroll: true,
+        onSuccess: () => (showCollateralForm.value = false),
+    });
+
 const detach = (id) =>
     actionForm.delete(`/loan-simulation/${props.record.id}/collaterals/${id}`, { preserveScroll: true });
 
-const confirmFile = () =>
-    actionForm.post(`/loan-simulation/${props.record.id}/confirm`, { preserveScroll: true });
+const submitFile = () => actionForm.post(`/loan-simulation/${props.record.id}/confirm`, { preserveScroll: true });
 
 const totalAppraisal = computed(() =>
     props.collaterals.reduce((sum, row) => sum + Number(row.appraisal_value ?? 0), 0),
 );
 
-const allChecked = computed(() => Object.values(props.record.checklist ?? {}).every(Boolean));
-
-const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.check]) : allChecked.value);
-
+const ready = computed(() => Object.values(props.record.checklist ?? {}).every(Boolean));
 </script>
 
 <template>
     <Head :title="`Berkas ${props.record.application_code}`" />
     <AppLayout>
         <div class="space-y-4" data-testid="loan-detail-page">
-            <!-- Kepala berkas -->
             <div class="flex flex-wrap items-center gap-3 border-b pb-3">
                 <Button
                     variant="ghost"
@@ -163,59 +163,21 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                     <p class="text-xs text-muted-foreground">Plafon Diajukan</p>
                     <p class="text-sm font-semibold tabular-nums">{{ rupiah(props.record.requested_amount) }}</p>
                 </div>
-            </div>
-
-            <!-- Tahapan berkas -->
-            <div class="-mx-1 flex items-stretch gap-2 overflow-x-auto px-1 pb-1">
-                <button
-                    v-for="(step, index) in STEPS"
-                    :key="step.id"
-                    type="button"
-                    class="group flex min-w-[168px] flex-1 items-center gap-2.5 rounded-lg border px-3 py-2 text-left transition-colors"
-                    :class="
-                        tab === step.id
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border/60 bg-card hover:border-border hover:bg-muted/40'
-                    "
-                    :data-testid="`loan-detail-tab-${step.id}`"
-                    @click="tab = step.id"
+                <Button
+                    v-if="props.canManage && props.record.status === 'DRAFT'"
+                    size="sm"
+                    :disabled="!ready || actionForm.processing"
+                    data-testid="loan-detail-submit"
+                    @click="submitFile"
                 >
-                    <span
-                        class="flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors"
-                        :class="
-                            stepDone(step)
-                                ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
-                                : tab === step.id
-                                    ? 'border-primary bg-primary text-primary-foreground'
-                                    : 'border-border text-muted-foreground'
-                        "
-                    >
-                        <Check v-if="stepDone(step)" class="size-3.5" />
-                        <template v-else>{{ index + 1 }}</template>
-                    </span>
-                    <span class="min-w-0">
-                        <span class="block truncate text-xs font-semibold">{{ step.label }}</span>
-                        <span class="block text-[11px] text-muted-foreground">
-                            {{ stepDone(step) ? 'Lengkap' : 'Belum lengkap' }}
-                        </span>
-                    </span>
-                </button>
+                    <Send class="size-4" /> Ajukan
+                </Button>
             </div>
 
-            <!-- Tahap 1: Data Pengajuan -->
-            <form
-                v-if="tab === 'pengajuan'"
-                class="form-dense space-y-4"
-                novalidate
-                @submit.prevent="saveApplication"
-            >
+            <form class="form-dense" novalidate @submit.prevent="save">
                 <Card>
-                    <CardHeader><CardTitle>Informasi Dasar</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Data Pengajuan</CardTitle></CardHeader>
                     <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label>Tanggal Pengajuan <span class="text-destructive">*</span></Label>
-                            <DatePicker v-model="form.application_date" data-testid="loan-detail-date" />
-                        </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label>Produk <span class="text-destructive">*</span></Label>
                             <Combobox
@@ -229,39 +191,20 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label>Penggunaan</Label>
+                            <Label>Kategori <span class="text-destructive">*</span></Label>
                             <Combobox
-                                v-model="form.usage_type"
-                                :options="props.usageTypes"
-                                placeholder="(Opsional)"
-                                data-testid="loan-detail-usage"
+                                v-model="form.committee_path_id"
+                                :options="categoryOptions"
+                                placeholder="-- Pilih --"
+                                data-testid="loan-detail-category"
                             />
+                            <p v-if="form.errors.committee_path_id" class="text-xs font-medium text-destructive">
+                                {{ form.errors.committee_path_id }}
+                            </p>
+                            <p v-else-if="form.product_id && !categoryOptions.length" class="text-xs text-muted-foreground">
+                                Produk ini belum punya jalur komite aktif.
+                            </p>
                         </div>
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label>Resort / Instansi</Label>
-                            <Combobox
-                                v-model="form.institution_id"
-                                :options="props.institutions"
-                                placeholder="(Opsional)"
-                                data-testid="loan-detail-institution"
-                            />
-                        </div>
-                        <div class="space-y-[var(--item-gap)] sm:col-span-2 lg:col-span-4">
-                            <Label for="d-purpose">Tujuan Penggunaan</Label>
-                            <Input
-                                id="d-purpose"
-                                v-model="form.purpose"
-                                placeholder="(Opsional)"
-                                class="uppercase"
-                                data-testid="loan-detail-purpose"
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader><CardTitle>Parameter Kredit</CardTitle></CardHeader>
-                    <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="d-amount">Plafon <span class="text-destructive">*</span></Label>
                             <NumberInput id="d-amount" v-model="form.requested_amount" data-testid="loan-detail-amount" />
@@ -277,68 +220,90 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-tenor-principal">JK Pokok (bln)</Label>
-                            <NumberInput
-                                id="d-tenor-principal"
-                                v-model="form.tenor_principal"
-                                placeholder="(Opsional)"
-                                data-testid="loan-detail-tenor-principal"
-                            />
-                            <p v-if="form.errors.tenor_principal" class="text-xs font-medium text-destructive">
-                                {{ form.errors.tenor_principal }}
-                            </p>
-                        </div>
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-tenor-interest">JW Bunga (bln)</Label>
-                            <NumberInput
-                                id="d-tenor-interest"
-                                v-model="form.tenor_interest"
-                                placeholder="(Opsional)"
-                                data-testid="loan-detail-tenor-interest"
-                            />
-                            <p v-if="form.errors.tenor_interest" class="text-xs font-medium text-destructive">
-                                {{ form.errors.tenor_interest }}
-                            </p>
-                        </div>
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label>Sistem Bunga</Label>
+                            <Label>Sistem Bunga <span class="text-destructive">*</span></Label>
                             <Combobox
                                 v-model="form.method_id"
                                 :options="props.methods"
-                                placeholder="(Opsional)"
+                                placeholder="-- Pilih --"
                                 data-testid="loan-detail-method"
                             />
+                            <p v-if="form.errors.method_id" class="text-xs font-medium text-destructive">
+                                {{ form.errors.method_id }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label>Sistem Cicilan</Label>
+                            <Label>Sistem Cicilan <span class="text-destructive">*</span></Label>
                             <Combobox
                                 v-model="form.installment_id"
                                 :options="props.installments"
-                                placeholder="(Opsional)"
+                                placeholder="-- Pilih --"
                                 data-testid="loan-detail-installment"
                             />
+                            <p v-if="form.errors.installment_id" class="text-xs font-medium text-destructive">
+                                {{ form.errors.installment_id }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-rate">Suku Bunga (%)</Label>
+                            <Label for="d-rate">Suku Bunga (%) <span class="text-destructive">*</span></Label>
                             <DecimalInput id="d-rate" v-model="form.interest_rate" data-testid="loan-detail-rate" />
+                            <p v-if="form.errors.interest_rate" class="text-xs font-medium text-destructive">
+                                {{ form.errors.interest_rate }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-provision">Provisi (%)</Label>
-                            <DecimalInput id="d-provision" v-model="form.provision_rate" data-testid="loan-detail-provision" />
+                            <Label>Penggunaan <span class="text-destructive">*</span></Label>
+                            <Combobox
+                                v-model="form.usage_type"
+                                :options="props.usageTypes"
+                                placeholder="-- Pilih --"
+                                data-testid="loan-detail-usage"
+                            />
+                            <p v-if="form.errors.usage_type" class="text-xs font-medium text-destructive">
+                                {{ form.errors.usage_type }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-admin">Biaya Admin (%)</Label>
-                            <DecimalInput id="d-admin" v-model="form.admin_rate" data-testid="loan-detail-admin" />
+                            <Label>Resort / Instansi</Label>
+                            <Combobox
+                                v-model="form.institution_id"
+                                :options="props.institutions"
+                                placeholder="(Opsional)"
+                                data-testid="loan-detail-institution"
+                            />
                         </div>
-                        <div class="space-y-[var(--item-gap)] sm:col-span-2 lg:col-span-3">
-                            <Label for="d-note">Keterangan</Label>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="d-marketing">Marketing</Label>
                             <Input
-                                id="d-note"
-                                v-model="form.note"
+                                id="d-marketing"
+                                v-model="form.marketing"
                                 placeholder="(Opsional)"
                                 class="uppercase"
-                                data-testid="loan-detail-note"
+                                data-testid="loan-detail-marketing"
                             />
+                        </div>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label>Wilayah / Kantor <span class="text-destructive">*</span></Label>
+                            <Combobox
+                                v-model="form.office_id"
+                                :options="props.offices"
+                                placeholder="-- Pilih --"
+                                data-testid="loan-detail-office"
+                            />
+                            <p v-if="form.errors.office_id" class="text-xs font-medium text-destructive">
+                                {{ form.errors.office_id }}
+                            </p>
+                        </div>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label>Kasi Analis <span class="text-destructive">*</span></Label>
+                            <Combobox
+                                v-model="form.supervisor_id"
+                                :options="props.supervisors"
+                                placeholder="-- Pilih --"
+                                data-testid="loan-detail-supervisor"
+                            />
+                            <p v-if="form.errors.supervisor_id" class="text-xs font-medium text-destructive">
+                                {{ form.errors.supervisor_id }}
+                            </p>
                         </div>
                     </CardContent>
                     <CardFooter class="justify-between">
@@ -364,10 +329,9 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                 </Card>
             </form>
 
-            <!-- Tahap 2: Data Jaminan -->
-            <Card v-else-if="tab === 'jaminan'" data-testid="loan-detail-collaterals">
+            <Card data-testid="loan-detail-collaterals">
                 <CardHeader class="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
-                    <CardTitle>Agunan pada Berkas</CardTitle>
+                    <CardTitle>Data Agunan</CardTitle>
                     <span class="text-xs text-muted-foreground">
                         Total taksasi
                         <span class="ml-1 text-sm font-semibold tabular-nums text-foreground">
@@ -376,32 +340,26 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                     </span>
                 </CardHeader>
                 <CardContent class="form-dense space-y-3">
-                    <div v-if="props.canManage" class="flex flex-col gap-2 sm:flex-row sm:items-end">
-                        <div class="flex-1 space-y-[var(--item-gap)]">
-                            <Label>Pilih Agunan</Label>
-                            <Combobox
-                                v-model="attachForm.collateral_simulation_id"
-                                :options="props.collateralOptions"
-                                placeholder="-- Pilih agunan --"
-                                data-testid="loan-detail-collateral-select"
-                            />
-                        </div>
+                    <div v-if="props.canManage" class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        <Combobox
+                            v-model="attachForm.collateral_simulation_id"
+                            :options="props.collateralOptions"
+                            placeholder="-- Pilih --"
+                            class="flex-1"
+                            data-testid="loan-detail-collateral-select"
+                        />
                         <div class="flex items-center gap-2">
                             <Button
                                 size="sm"
+                                variant="outline"
                                 :disabled="attachForm.processing"
                                 data-testid="loan-detail-collateral-attach"
                                 @click="attach"
                             >
-                                <Plus class="size-4" /> Lekatkan
+                                <FileInput class="size-4" /> Lekatkan
                             </Button>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                data-testid="loan-detail-collateral-new"
-                                @click="router.visit('/collateral-simulation/create')"
-                            >
-                                Agunan Baru
+                            <Button size="sm" data-testid="loan-detail-collateral-new" @click="openCollateralForm">
+                                <Plus class="size-4" /> Tambah
                             </Button>
                         </div>
                     </div>
@@ -455,140 +413,97 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot class="border-t bg-muted/40">
-                                <tr>
-                                    <td class="px-3 py-2 text-xs font-semibold uppercase tracking-wider" colspan="3">
-                                        Total Taksasi
-                                    </td>
-                                    <td class="whitespace-nowrap px-3 py-2 text-right text-sm font-semibold tabular-nums">
-                                        {{ rupiah(totalAppraisal) }}
-                                    </td>
-                                    <td />
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </CardContent>
             </Card>
 
-            <!-- Tahap 3: Data Surveyor -->
-            <form v-else-if="tab === 'surveyor'" class="form-dense" novalidate @submit.prevent="saveSurvey">
-                <Card>
-                    <CardHeader><CardTitle>Penugasan Survei</CardTitle></CardHeader>
-                    <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-3">
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label>Wilayah / Kantor <span class="text-destructive">*</span></Label>
-                            <Combobox
-                                v-model="surveyForm.office_id"
-                                :options="props.offices"
-                                placeholder="-- Pilih --"
-                                data-testid="loan-detail-office"
-                            />
-                            <p v-if="surveyForm.errors.office_id" class="text-xs font-medium text-destructive">
-                                {{ surveyForm.errors.office_id }}
-                            </p>
-                        </div>
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label>Kasi Analis</Label>
-                            <Combobox
-                                v-model="surveyForm.supervisor_id"
-                                :options="props.supervisors"
-                                placeholder="(Opsional)"
-                                data-testid="loan-detail-supervisor"
-                            />
-                        </div>
-                        <div class="space-y-[var(--item-gap)]">
-                            <Label>Surveyor</Label>
-                            <Combobox
-                                v-model="surveyForm.surveyor_id"
-                                :options="props.surveyors"
-                                placeholder="(Opsional)"
-                                data-testid="loan-detail-surveyor"
-                            />
-                        </div>
-                        <p class="text-xs text-muted-foreground sm:col-span-2 lg:col-span-3">
-                            Daftar petugas mengikuti peranan pengguna SIPEBRI (Kasi Analis, Staff Analis, AO Kredit).
+            <!-- Agunan baru langsung dari berkas -->
+            <Dialog
+                :open="showCollateralForm"
+                title="Tambah Agunan"
+                class="max-w-3xl"
+                @update:open="showCollateralForm = $event"
+            >
+                <div class="form-dense grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="space-y-[var(--item-gap)]">
+                        <Label>Jenis Agunan <span class="text-destructive">*</span></Label>
+                        <Combobox
+                            v-model="newCollateral.collateral_type_code"
+                            :options="props.collateralTypes"
+                            placeholder="-- Pilih --"
+                            data-testid="collateral-modal-type"
+                        />
+                        <p v-if="newCollateral.errors.collateral_type_code" class="text-xs font-medium text-destructive">
+                            {{ newCollateral.errors.collateral_type_code }}
                         </p>
-                    </CardContent>
-                    <CardFooter class="justify-between">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            type="button"
-                            data-testid="loan-detail-survey-cancel"
-                            @click="router.visit('/loan-simulation')"
-                        >
-                            <X class="size-4" /> Batal
-                        </Button>
-                        <Button
-                            v-if="props.canManage"
-                            size="sm"
-                            type="submit"
-                            :disabled="surveyForm.processing"
-                            data-testid="loan-detail-survey-save"
-                        >
-                            <Save class="size-4" /> {{ surveyForm.processing ? 'Menyimpan...' : 'Simpan' }}
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </form>
+                    </div>
+                    <div class="space-y-[var(--item-gap)]">
+                        <Label>Jenis Pengikatan</Label>
+                        <Combobox
+                            v-model="newCollateral.binding_type_code"
+                            :options="props.bindingTypes"
+                            placeholder="(Opsional)"
+                            data-testid="collateral-modal-binding"
+                        />
+                    </div>
+                    <div class="space-y-[var(--item-gap)]">
+                        <Label for="m-doc">No. Dokumen <span class="text-destructive">*</span></Label>
+                        <Input id="m-doc" v-model="newCollateral.document_number" class="uppercase" data-testid="collateral-modal-document" />
+                        <p v-if="newCollateral.errors.document_number" class="text-xs font-medium text-destructive">
+                            {{ newCollateral.errors.document_number }}
+                        </p>
+                    </div>
+                    <div class="space-y-[var(--item-gap)]">
+                        <Label for="m-owner">Nama Pemilik <span class="text-destructive">*</span></Label>
+                        <Input id="m-owner" v-model="newCollateral.owner_name" class="uppercase" data-testid="collateral-modal-owner" />
+                        <p v-if="newCollateral.errors.owner_name" class="text-xs font-medium text-destructive">
+                            {{ newCollateral.errors.owner_name }}
+                        </p>
+                    </div>
+                    <div class="space-y-[var(--item-gap)] sm:col-span-2">
+                        <Label for="m-address">Alamat Agunan <span class="text-destructive">*</span></Label>
+                        <Input id="m-address" v-model="newCollateral.owner_address" class="uppercase" data-testid="collateral-modal-address" />
+                        <p v-if="newCollateral.errors.owner_address" class="text-xs font-medium text-destructive">
+                            {{ newCollateral.errors.owner_address }}
+                        </p>
+                    </div>
+                    <div class="space-y-[var(--item-gap)]">
+                        <Label>Lokasi Agunan <span class="text-destructive">*</span></Label>
+                        <Combobox
+                            :model-value="newCollateral.region_code"
+                            :options="props.regionOptions"
+                            placeholder="-- Pilih --"
+                            data-testid="collateral-modal-region"
+                            @update:model-value="onRegion"
+                        />
+                        <p v-if="newCollateral.errors.region_code" class="text-xs font-medium text-destructive">
+                            {{ newCollateral.errors.region_code }}
+                        </p>
+                    </div>
+                    <div class="space-y-[var(--item-gap)] sm:col-span-2">
+                        <Label for="m-desc">Keterangan Agunan <span class="text-destructive">*</span></Label>
+                        <Input id="m-desc" v-model="newCollateral.description" class="uppercase" data-testid="collateral-modal-description" />
+                        <p v-if="newCollateral.errors.description" class="text-xs font-medium text-destructive">
+                            {{ newCollateral.errors.description }}
+                        </p>
+                    </div>
+                </div>
 
-            <!-- Tahap 4: Konfirmasi -->
-            <Card v-else data-testid="loan-detail-confirm">
-                <CardHeader><CardTitle>Konfirmasi Kelengkapan</CardTitle></CardHeader>
-                <CardContent class="space-y-3">
-                    <p class="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
-                        Pastikan seluruh tahapan sudah benar. Setelah dikonfirmasi, berkas masuk tahap analisa
-                        dan perubahan berikutnya perlu otorisasi ulang.
-                    </p>
-                    <ul class="divide-y divide-border/60 overflow-hidden rounded-lg border">
-                        <li
-                            v-for="(ok, key) in props.record.checklist"
-                            :key="key"
-                            class="flex items-center gap-3 px-3 py-2.5"
-                            :data-testid="`loan-detail-check-${key}`"
-                        >
-                            <span
-                                class="flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold"
-                                :class="ok
-                                    ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
-                                    : 'border-border text-muted-foreground'"
-                            >
-                                <Check v-if="ok" class="size-3.5" />
-                                <template v-else>!</template>
-                            </span>
-                            <span class="min-w-0 flex-1 text-sm" :class="ok ? 'font-medium' : 'text-muted-foreground'">
-                                {{ CHECK_LABELS[key] }}
-                            </span>
-                            <span
-                                class="shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold"
-                                :class="ok
-                                    ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
-                                    : 'text-muted-foreground'"
-                            >
-                                {{ ok ? 'Lengkap' : 'Belum' }}
-                            </span>
-                        </li>
-                    </ul>
-                </CardContent>
-                <CardFooter class="justify-between">
-                    <p class="text-xs text-muted-foreground">
-                        {{ props.record.confirmed_at
-                            ? `Dikonfirmasi ${props.record.confirmed_at}`
-                            : 'Berkas belum dikonfirmasi.' }}
-                    </p>
-                    <Button
-                        v-if="props.canManage"
-                        size="sm"
-                        :disabled="!allChecked || actionForm.processing || Boolean(props.record.confirmed_at)"
-                        data-testid="loan-detail-confirm-button"
-                        @click="confirmFile"
-                    >
-                        <Check class="size-4" />
-                        {{ props.record.confirmed_at ? 'Sudah dikonfirmasi' : 'Konfirmasi Berkas' }}
+                <template #footer>
+                    <Button variant="outline" size="sm" data-testid="collateral-modal-cancel" @click="showCollateralForm = false">
+                        <X class="size-4" /> Batal
                     </Button>
-                </CardFooter>
-            </Card>
+                    <Button
+                        size="sm"
+                        :disabled="newCollateral.processing"
+                        data-testid="collateral-modal-save"
+                        @click="saveCollateral"
+                    >
+                        <Save class="size-4" /> {{ newCollateral.processing ? 'Menyimpan...' : 'Simpan' }}
+                    </Button>
+                </template>
+            </Dialog>
         </div>
     </AppLayout>
 </template>

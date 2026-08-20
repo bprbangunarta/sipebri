@@ -3,8 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\CollateralSimulation;
+use App\Models\CollateralType;
+use App\Models\CommitteePath;
+use App\Models\Installment;
 use App\Models\LoanApplication;
+use App\Models\Method;
+use App\Models\Office;
 use App\Models\Product;
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
@@ -38,8 +44,8 @@ class LoanApplicationFlowTest extends TestCase
 
     private function makeCollateral(): CollateralSimulation
     {
-        \App\Models\CollateralType::firstOrCreate(['code' => '05'], ['name' => 'TANAH DAN BANGUNAN']);
-        \App\Models\Region::firstOrCreate(['code' => '0121'], [
+        CollateralType::firstOrCreate(['code' => '05'], ['name' => 'TANAH DAN BANGUNAN']);
+        Region::firstOrCreate(['code' => '0121'], [
             'regency' => 'Kab. Subang', 'district' => 'Subang', 'village' => 'Subang',
         ]);
 
@@ -118,7 +124,7 @@ class LoanApplicationFlowTest extends TestCase
         $this->assertGreaterThanOrEqual('00800001', $record->application_code);
         $this->assertSame('YAYAT SUHAYAT', $record->full_name);
         $this->assertSame('CIF-000123', $record->cif_number);
-        $this->assertSame('DIAJUKAN', $record->status);
+        $this->assertSame('DRAFT', $record->status);
         $this->assertSame(0, $record->requested_amount);
 
         // show page renders with customer prop
@@ -131,35 +137,37 @@ class LoanApplicationFlowTest extends TestCase
             'requested_tenor' => 36,
         ])->assertSessionHasErrors('product_id');
 
-        $product = Product::first();
-        $this->put("/loan-simulation/{$record->id}", [
+        $path = CommitteePath::where('is_active', true)->firstOrFail();
+        $product = Product::findOrFail($path->product_id);
+        $office = Office::firstOrFail();
+        $supervisor = User::whereHas('roles', fn ($q) => $q->where('name', 'Kasi Analis'))->firstOrFail();
+        $payload = [
             'application_date' => '2026-07-01',
             'product_id' => $product->id,
+            'committee_path_id' => $path->id,
             'requested_amount' => 30000000,
             'requested_tenor' => 36,
-            'tenor_principal' => 36,
-            'tenor_interest' => 36,
-            'usage_type' => 'KONSUMTIF',
+            'method_id' => Method::firstOrFail()->id,
+            'installment_id' => Installment::firstOrFail()->id,
             'interest_rate' => 1.5,
-            'purpose' => 'modal usaha',
-            'note' => 'catatan uji',
-        ])->assertSessionHasNoErrors();
+            'usage_type' => 'KONSUMTIF',
+            'office_id' => $office->id,
+            'supervisor_id' => $supervisor->id,
+            'marketing' => 'agus setiawan',
+        ];
+
+        $this->put("/loan-simulation/{$record->id}", $payload)->assertSessionHasNoErrors();
 
         $record->refresh();
         $this->assertSame($product->id, $record->product_id);
+        $this->assertSame($path->id, $record->committee_path_id);
         $this->assertSame('KONSUMTIF', $record->usage_type);
-        $this->assertSame('MODAL USAHA', $record->purpose);
-        $this->assertSame('CATATAN UJI', $record->note);
-        $this->assertSame(36, (int) $record->tenor_principal);
+        $this->assertSame('AGUS SETIAWAN', $record->marketing);
+        $this->assertSame($supervisor->id, $record->supervisor_id);
 
         // usage_type invalid ditolak
-        $this->put("/loan-simulation/{$record->id}", [
-            'application_date' => '2026-07-01',
-            'product_id' => $product->id,
-            'requested_amount' => 30000000,
-            'requested_tenor' => 36,
-            'usage_type' => 'SALAH',
-        ])->assertSessionHasErrors('usage_type');
+        $this->put("/loan-simulation/{$record->id}", [...$payload, 'usage_type' => 'SALAH'])
+            ->assertSessionHasErrors('usage_type');
 
         // Tab Jaminan — lekatkan dua kali tidak duplikat
         $collateral = $this->makeCollateral();
@@ -169,37 +177,31 @@ class LoanApplicationFlowTest extends TestCase
             ->assertSessionHasNoErrors();
         $this->assertSame(1, $record->collaterals()->count());
 
-        // Tab Surveyor — kantor wajib
-        $this->put("/loan-simulation/{$record->id}/survey", [])->assertSessionHasErrors('office_id');
-
-        $supervisor = User::whereHas('roles', fn ($q) => $q->where('name', 'Kasi Analis'))->firstOrFail();
-        $surveyor = User::whereHas('roles', fn ($q) => $q->where('name', 'Staff Analis'))->firstOrFail();
-        $office = \App\Models\Office::firstOrFail();
-
-        $this->put("/loan-simulation/{$record->id}/survey", [
-            'office_id' => $office->id,
-            'supervisor_id' => $supervisor->id,
-            'surveyor_id' => $surveyor->id,
+        // Agunan baru langsung dari berkas
+        $this->post("/loan-simulation/{$record->id}/collaterals/new", [
+            'collateral_type_code' => CollateralType::firstOrFail()->code,
+            'document_number' => 'shm 123',
+            'owner_name' => 'yayat suhayat',
+            'owner_address' => 'kampung cicariu',
+            'region_code' => Region::firstOrFail()->code,
+            'description' => 'tanah dan bangunan',
         ])->assertSessionHasNoErrors();
+        $this->assertSame(2, $record->collaterals()->count());
 
-        $record->refresh();
-        $this->assertSame($surveyor->id, $record->surveyor_id);
-        $this->assertSame($supervisor->id, $record->supervisor_id);
-
-        // Konfirmasi
+        // Ajukan
         $this->post("/loan-simulation/{$record->id}/confirm")->assertSessionHas('success');
         $record->refresh();
-        $this->assertSame('ANALISA', $record->status);
+        $this->assertSame('DIAJUKAN', $record->status);
         $this->assertNotNull($record->confirmed_at);
         $this->assertSame($user->id, $record->confirmed_by);
 
         // Filter status pada daftar
-        $this->get('/loan-simulation?status=ANALISA')->assertOk();
+        $this->get('/loan-simulation?status=DIAJUKAN')->assertOk();
         $this->get('/loan-simulation?search='.$record->application_code)->assertOk();
 
         // Lepas agunan
         $this->delete("/loan-simulation/{$record->id}/collaterals/{$collateral->id}")->assertSessionHasNoErrors();
-        $this->assertSame(0, $record->collaterals()->count());
+        $this->assertSame(1, $record->collaterals()->count());
 
         // Hapus (arsip)
         $this->delete("/loan-simulation/{$record->id}")->assertRedirect('/loan-simulation');
@@ -215,8 +217,7 @@ class LoanApplicationFlowTest extends TestCase
         $record = LoanApplication::latest('id')->first();
         $record->forceFill([
             'product_id' => Product::first()->id,
-            'office_id' => \App\Models\Office::first()->id,
-            'surveyor_id' => $user->id,
+            'office_id' => Office::first()->id,
             'status' => 'ANALISA',
             'confirmed_at' => now(),
             'confirmed_by' => $user->id,
@@ -235,7 +236,7 @@ class LoanApplicationFlowTest extends TestCase
         $record = LoanApplication::latest('id')->first();
 
         $this->post("/loan-simulation/{$record->id}/confirm")->assertSessionHas('error');
-        $this->assertSame('DIAJUKAN', $record->refresh()->status);
+        $this->assertSame('DRAFT', $record->refresh()->status);
 
         $record->forceDelete();
     }

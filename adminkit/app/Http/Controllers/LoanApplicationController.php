@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\BindingType;
 use App\Models\CollateralSimulation;
+use App\Models\CollateralType;
+use App\Models\CommitteePath;
 use App\Models\Installment;
 use App\Models\Institution;
 use App\Models\LoanApplication;
 use App\Models\Method;
 use App\Models\Office;
 use App\Models\Product;
+use App\Models\Region;
 use App\Models\User;
 use App\Support\CustomerDirectory;
 use App\Support\TableQuery;
@@ -30,7 +34,7 @@ class LoanApplicationController extends Controller
 {
     private const LABEL = 'Pengajuan Kredit';
 
-    public const STATUSES = ['DIAJUKAN', 'ANALISA', 'KOMITE', 'DISETUJUI', 'DITOLAK', 'DIBATALKAN', 'REALISASI'];
+    public const STATUSES = ['DRAFT', 'DIAJUKAN', 'ANALISA', 'KOMITE', 'DISETUJUI', 'DITOLAK', 'DIBATALKAN', 'REALISASI'];
 
     public const USAGE_TYPES = ['KONSUMTIF', 'PRODUKTIF', 'INVESTASI'];
 
@@ -123,7 +127,7 @@ class LoanApplicationController extends Controller
         $record = LoanApplication::create([
             'application_code' => LoanApplication::nextCode(),
             'application_date' => now()->toDateString(),
-            'status' => 'DIAJUKAN',
+            'status' => 'DRAFT',
             'nik' => $data['nik'],
             'full_name' => $customer['full_name'],
             'cif_number' => $customer['cif_number'] ?? null,
@@ -143,33 +147,33 @@ class LoanApplicationController extends Controller
 
         $data = $request->validate([
             'application_date' => ['required', 'date'],
-            'office_id' => ['nullable', 'integer', 'exists:offices,id'],
             'product_id' => ['required', 'integer', 'exists:products,id'],
-            'institution_id' => ['nullable', 'integer', 'exists:institutions,id'],
+            'committee_path_id' => ['required', 'integer', 'exists:committee_paths,id'],
             'requested_amount' => ['required', 'integer', 'min:1'],
             'requested_tenor' => ['required', 'integer', 'min:1', 'max:600'],
-            'tenor_principal' => ['nullable', 'integer', 'min:1', 'max:600', 'lte:requested_tenor'],
-            'tenor_interest' => ['nullable', 'integer', 'min:1', 'max:600', 'lte:requested_tenor'],
-            'usage_type' => ['nullable', Rule::in(self::USAGE_TYPES)],
-            'method_id' => ['nullable', 'integer', 'exists:methods,id'],
-            'installment_id' => ['nullable', 'integer', 'exists:installments,id'],
-            'interest_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'provision_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'admin_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'purpose' => ['nullable', 'string', 'max:255'],
-            'note' => ['nullable', 'string', 'max:255'],
+            'method_id' => ['required', 'integer', 'exists:methods,id'],
+            'installment_id' => ['required', 'integer', 'exists:installments,id'],
+            'interest_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'usage_type' => ['required', Rule::in(self::USAGE_TYPES)],
+            'office_id' => ['required', 'integer', 'exists:offices,id'],
+            'supervisor_id' => ['required', 'integer', 'exists:users,id'],
+            'institution_id' => ['nullable', 'integer', 'exists:institutions,id'],
+            'marketing' => ['nullable', 'string', 'max:100'],
         ], [], [
             'product_id' => 'produk',
+            'committee_path_id' => 'kategori',
             'requested_amount' => 'plafon',
-            'requested_tenor' => 'jangka waktu',
-            'tenor_principal' => 'jk pokok',
-            'tenor_interest' => 'jw bunga',
+            'requested_tenor' => 'jk kredit',
+            'method_id' => 'sistem bunga',
+            'installment_id' => 'sistem cicilan',
+            'interest_rate' => 'suku bunga',
+            'usage_type' => 'penggunaan',
+            'office_id' => 'wilayah/kantor',
+            'supervisor_id' => 'kasi analis',
         ]);
 
-        foreach (['purpose', 'note'] as $key) {
-            if (filled($data[$key] ?? null)) {
-                $data[$key] = mb_strtoupper($data[$key]);
-            }
+        if (filled($data['marketing'] ?? null)) {
+            $data['marketing'] = mb_strtoupper($data['marketing']);
         }
 
         $loanApplication->update($data);
@@ -185,20 +189,6 @@ class LoanApplicationController extends Controller
         return back()->with('success', 'Data pengajuan disimpan.');
     }
 
-    /** Tahap "Data Surveyor". */
-    public function updateSurvey(Request $request, LoanApplication $loanApplication): RedirectResponse
-    {
-        $data = $request->validate([
-            'office_id' => ['required', 'integer', 'exists:offices,id'],
-            'supervisor_id' => ['nullable', 'integer', 'exists:users,id'],
-            'surveyor_id' => ['nullable', 'integer', 'exists:users,id'],
-        ], [], ['office_id' => 'wilayah/kantor']);
-
-        $loanApplication->update($data);
-
-        return back()->with('success', 'Penugasan surveyor disimpan.');
-    }
-
     public function attachCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         $data = $request->validate([
@@ -210,6 +200,44 @@ class LoanApplicationController extends Controller
         return back()->with('success', 'Agunan dilekatkan ke berkas.');
     }
 
+    /** Agunan baru dibuat langsung dari berkas lalu otomatis dilekatkan. */
+    public function storeCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $data = $request->validate([
+            'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
+            'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
+            'document_number' => ['required', 'string', 'max:100'],
+            'owner_name' => ['required', 'string', 'max:100'],
+            'owner_address' => ['required', 'string', 'max:255'],
+            'region_code' => ['required', 'string', 'max:8'],
+            'region_label' => ['nullable', 'string', 'max:150'],
+            'description' => ['required', 'string', 'max:255'],
+        ], [], [
+            'collateral_type_code' => 'jenis agunan',
+            'document_number' => 'no. dokumen',
+            'owner_name' => 'nama pemilik',
+            'owner_address' => 'alamat agunan',
+            'region_code' => 'lokasi agunan',
+            'description' => 'keterangan agunan',
+        ]);
+
+        foreach (['document_number', 'owner_name', 'owner_address', 'description'] as $key) {
+            $data[$key] = mb_strtoupper($data[$key]);
+        }
+
+        $collateral = CollateralSimulation::create([...$data, 'insurance_code' => 'T', 'ppap_code' => '1']);
+        $loanApplication->collaterals()->syncWithoutDetaching([$collateral->id]);
+
+        ActivityLog::record(
+            "Menambah agunan pada berkas {$loanApplication->application_code}",
+            self::LABEL,
+            'success',
+            $loanApplication,
+        );
+
+        return back()->with('success', 'Agunan baru ditambahkan ke berkas.');
+    }
+
     public function detachCollateral(LoanApplication $loanApplication, CollateralSimulation $collateral): RedirectResponse
     {
         $loanApplication->collaterals()->detach($collateral->id);
@@ -217,28 +245,26 @@ class LoanApplicationController extends Controller
         return back()->with('success', 'Agunan dilepas dari berkas.');
     }
 
-    /** Tahap "Konfirmasi Data" — berkas berpindah ke tahap analisa. */
+    /** Berkas DRAFT diajukan setelah data pengajuan & agunan lengkap. */
     public function confirm(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
-        if ($loanApplication->confirmed_at) {
-            return back()->with('error', 'Berkas sudah dikonfirmasi.');
+        if ($loanApplication->status !== 'DRAFT') {
+            return back()->with('error', 'Berkas sudah diajukan.');
         }
 
-        $checks = $this->checklist($loanApplication);
-
-        if (in_array(false, $checks, true)) {
-            return back()->with('error', 'Lengkapi seluruh tahapan sebelum konfirmasi.');
+        if (in_array(false, $this->checklist($loanApplication), true)) {
+            return back()->with('error', 'Lengkapi data pengajuan dan agunan sebelum diajukan.');
         }
 
         $loanApplication->update([
-            'status' => 'ANALISA',
+            'status' => 'DIAJUKAN',
             'confirmed_at' => now(),
             'confirmed_by' => $request->user()->id,
         ]);
 
-        ActivityLog::record("Konfirmasi pengajuan {$loanApplication->application_code}", self::LABEL, 'success', $loanApplication);
+        ActivityLog::record("Mengajukan berkas {$loanApplication->application_code}", self::LABEL, 'success', $loanApplication);
 
-        return back()->with('success', 'Berkas dikonfirmasi dan masuk tahap analisa.');
+        return back()->with('success', 'Berkas diajukan.');
     }
 
     public function destroy(LoanApplication $loanApplication): RedirectResponse
@@ -259,9 +285,9 @@ class LoanApplicationController extends Controller
 
         return [
             'nasabah' => (bool) $this->customerCache,
-            'pengajuan' => (bool) $r->product_id && $r->requested_amount > 0 && $r->requested_tenor > 0,
+            'pengajuan' => (bool) $r->product_id && (bool) $r->committee_path_id && (bool) $r->office_id
+                && (bool) $r->supervisor_id && $r->requested_amount > 0 && $r->requested_tenor > 0,
             'jaminan' => $r->collaterals()->exists(),
-            'surveyor' => (bool) $r->office_id && (bool) $r->surveyor_id,
         ];
     }
 
@@ -287,8 +313,26 @@ class LoanApplicationController extends Controller
                 ->map(fn ($m) => ['value' => $m->id, 'label' => "{$m->code} : {$m->name}"])->all(),
             'installments' => Installment::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($i) => ['value' => $i->id, 'label' => "{$i->code} : {$i->name}"])->all(),
-            'supervisors' => $byRoles(['Kasi Analis', 'Kabag Analis']),
-            'surveyors' => $byRoles(['Staff Analis', 'AO Kredit']),
+            'supervisors' => $byRoles(['Kasi Analis']),
+            'collateralTypes' => CollateralType::orderBy('code')->get(['code', 'name'])
+                ->map(fn ($t) => ['value' => $t->code, 'label' => "{$t->code} : {$t->name}"])->all(),
+            'bindingTypes' => BindingType::orderBy('code')->get(['code', 'name'])
+                ->map(fn ($t) => ['value' => $t->code, 'label' => "{$t->code} : {$t->name}"])->all(),
+            'regionOptions' => Region::query()
+                ->select('code', 'regency')
+                ->distinct()
+                ->orderBy('code')
+                ->get()
+                ->map(fn (Region $r) => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"])
+                ->all(),
+            'categoryMap' => CommitteePath::where('is_active', true)
+                ->orderBy('condition')
+                ->get(['id', 'product_id', 'condition'])
+                ->groupBy(fn (CommitteePath $p) => (string) ($p->product_id ?? 'global'))
+                ->map(fn ($paths) => $paths->map(fn (CommitteePath $p) => [
+                    'value' => $p->id,
+                    'label' => $p->condition ?: 'Normal',
+                ])->values()->all()),
         ];
     }
 
@@ -297,9 +341,8 @@ class LoanApplicationController extends Controller
         return [
             ...$this->row($r),
             ...$r->only([
-                'institution_id', 'tenor_principal', 'tenor_interest', 'usage_type', 'method_id',
-                'installment_id', 'interest_rate', 'provision_rate', 'admin_rate', 'purpose',
-                'note', 'collateral_note', 'cif_number', 'supervisor_id', 'surveyor_id',
+                'institution_id', 'marketing', 'committee_path_id', 'usage_type', 'method_id',
+                'installment_id', 'interest_rate', 'cif_number', 'supervisor_id',
             ]),
             'confirmed_at' => $r->confirmed_at?->translatedFormat('d M Y H:i'),
             'checklist' => $this->checklist($r),

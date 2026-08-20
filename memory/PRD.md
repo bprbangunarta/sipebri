@@ -579,3 +579,20 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   `DecimalInput`, angka murni (KTP/NPWP/telepon) → `DigitsInput`; wajib diuji dengan MENGETIK HURUF.
 - Verifikasi browser: mengetik `jhjkjh` → kolom tetap kosong; `abc321301def120395x0001!!` →
   hanya `3213011203950001` (terpotong 16 digit).
+
+## Selesai (2026-06-21, berkas pengajuan mengikuti referensi sistem lama)
+- Tab **Data Surveyor** & **Konfirmasi** dihapus. Halaman berkas kini 2 kartu saja:
+  **Data Pengajuan** (Produk*, Kategori*, Plafon*, JK Kredit*, Sistem Bunga*, Sistem Cicilan*,
+  Suku Bunga*, Penggunaan*, Resort/Instansi, Marketing, Wilayah/Kantor*, Kasi Analis* — footer
+  Batal/Simpan) dan **Data Agunan** (pilih agunan + Lekatkan + Tambah).
+- **Kategori** = jalur komite aktif milik produk terpilih (`committee_paths.condition`), sama seperti
+  modal Simulasi Kewenangan Komite; berubah otomatis saat produk diganti. **Kasi Analis** hanya
+  pengguna aktif (tidak terarsip) dengan peranan Kasi Analis.
+- Status awal berkas = **DRAFT**; tombol **Ajukan** di header (aktif bila data pengajuan & agunan
+  lengkap) mengubah status ke DIAJUKAN. Kolom baru `marketing`.
+- Tombol **Tambah** pada Data Agunan membuka **modal** (Jenis Agunan*, Jenis Pengikatan, No. Dokumen*,
+  Nama Pemilik*, Alamat Agunan*, Lokasi Agunan*, Keterangan Agunan*) → agunan dibuat dan langsung
+  dilekatkan (`POST /loan-simulation/{id}/collaterals/new`), tidak lagi pindah halaman.
+- Uji: `php artisan test` → 47 lulus (tes alur diperbarui), screenshot halaman + modal, konsol bersih.
+- Catatan lingkungan: pod restart membuat supervisor `frontend` FATAL (`php: not found` saat boot) →
+  cukup `sudo supervisorctl restart frontend`.

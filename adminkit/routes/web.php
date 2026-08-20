@@ -235,8 +235,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:loan-simulation.manage')->scopeBindings()->group(function () {
         Route::post('/loan-simulation', [LoanApplicationController::class, 'store'])->name('loan-simulation.store');
         Route::put('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'update'])->name('loan-simulation.update');
-        Route::put('/loan-simulation/{loanApplication}/survey', [LoanApplicationController::class, 'updateSurvey'])->name('loan-simulation.survey');
         Route::post('/loan-simulation/{loanApplication}/collaterals', [LoanApplicationController::class, 'attachCollateral'])->name('loan-simulation.collaterals.attach');
+        Route::post('/loan-simulation/{loanApplication}/collaterals/new', [LoanApplicationController::class, 'storeCollateral'])->name('loan-simulation.collaterals.store');
         Route::delete('/loan-simulation/{loanApplication}/collaterals/{collateral}', [LoanApplicationController::class, 'detachCollateral'])->name('loan-simulation.collaterals.detach');
         Route::post('/loan-simulation/{loanApplication}/confirm', [LoanApplicationController::class, 'confirm'])->name('loan-simulation.confirm');
         Route::delete('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'destroy'])->name('loan-simulation.destroy');
