@@ -14,6 +14,7 @@ import Checkbox from '@/components/ui/Checkbox.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import DatePicker from '@/components/ui/DatePicker.vue';
 import Input from '@/components/ui/Input.vue';
+import NumberInput from '@/components/ui/NumberInput.vue';
 import Label from '@/components/ui/Label.vue';
 import { ACTION } from '@/constants/labels';
 
@@ -161,7 +162,7 @@ const submit = () => {
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-paripasu">Paripasu (%)</Label>
-                            <Input id="f-paripasu" v-model="form.paripasu" type="number" min="0" max="100" data-testid="collateral-form-paripasu" />
+                            <NumberInput id="f-paripasu" v-model="form.paripasu" data-testid="collateral-form-paripasu" />
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-file-number">Nomor Berkas</Label>
@@ -288,27 +289,27 @@ const submit = () => {
                 <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-3">
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-guarantee">{{ guaranteeLabel }}</Label>
-                        <Input id="f-guarantee" v-model="form.value_guarantee" type="number" min="0" data-testid="collateral-form-guarantee" />
+                        <NumberInput id="f-guarantee" v-model="form.value_guarantee" data-testid="collateral-form-guarantee" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-adjust">Adjusment</Label>
-                        <Input id="f-adjust" v-model="form.value_adjustment" type="number" min="0" data-testid="collateral-form-adjustment" />
+                        <NumberInput id="f-adjust" v-model="form.value_adjustment" data-testid="collateral-form-adjustment" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-fair">Nilai Wajar/Pasar</Label>
-                        <Input id="f-fair" v-model="form.value_fair" type="number" min="0" data-testid="collateral-form-fair" />
+                        <NumberInput id="f-fair" v-model="form.value_fair" data-testid="collateral-form-fair" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-njop">NJOP</Label>
-                        <Input id="f-njop" v-model="form.value_njop" type="number" min="0" data-testid="collateral-form-njop" />
+                        <NumberInput id="f-njop" v-model="form.value_njop" data-testid="collateral-form-njop" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-appraisal">Nilai Taksasi (Internal)</Label>
-                        <Input id="f-appraisal" v-model="form.value_appraisal" type="number" min="0" data-testid="collateral-form-appraisal" />
+                        <NumberInput id="f-appraisal" v-model="form.value_appraisal" data-testid="collateral-form-appraisal" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-independent">Nilai Apraisal Independen</Label>
-                        <Input id="f-independent" v-model="form.value_independent" type="number" min="0" data-testid="collateral-form-independent" />
+                        <NumberInput id="f-independent" v-model="form.value_independent" data-testid="collateral-form-independent" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-appraiser">Nama Penilai (Internal)</Label>

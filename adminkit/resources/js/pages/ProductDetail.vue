@@ -14,10 +14,11 @@ import CardTitle from '@/components/ui/CardTitle.vue';
 import Checkbox from '@/components/ui/Checkbox.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import Input from '@/components/ui/Input.vue';
+import NumberInput from '@/components/ui/NumberInput.vue';
 import Label from '@/components/ui/Label.vue';
 import Switch from '@/components/ui/Switch.vue';
 import { ACTION } from '@/constants/labels';
-import { digitsOnly, rupiah } from '@/constants/committee';
+import { rupiah } from '@/constants/committee';
 
 /** Parameter produk (SK Direksi) — hanya acuan, petugas tetap bisa mengubah saat transaksi. */
 const props = defineProps({
@@ -106,23 +107,19 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                     <div class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-min">Plafon Minimal</Label>
-                        <Input
+                        <NumberInput
                             id="p-min"
-                            :model-value="form.min_amount"
-                            inputmode="numeric"
+                            v-model="form.min_amount"
                             data-testid="param-min-amount"
-                            @input="form.min_amount = digitsOnly($event.target.value)"
                         />
                         <p class="text-xs text-muted-foreground">{{ rupiah(form.min_amount || null) }}</p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-max">Plafon Maksimal</Label>
-                        <Input
+                        <NumberInput
                             id="p-max"
-                            :model-value="form.max_amount"
-                            inputmode="numeric"
+                            v-model="form.max_amount"
                             data-testid="param-max-amount"
-                            @input="form.max_amount = digitsOnly($event.target.value)"
                         />
                         <p class="text-xs text-muted-foreground">{{ rupiah(form.max_amount || null) }}</p>
                         <p v-if="form.errors.max_amount" class="text-xs font-medium text-destructive" data-testid="param-max-amount-error">
@@ -131,22 +128,18 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-min-tenor">Tenor Minimal (Bulan)</Label>
-                        <Input
+                        <NumberInput
                             id="p-min-tenor"
-                            :model-value="form.min_tenor"
-                            inputmode="numeric"
+                            v-model="form.min_tenor"
                             data-testid="param-min-tenor"
-                            @input="form.min_tenor = digitsOnly($event.target.value)"
                         />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-max-tenor">Tenor Maksimal (Bulan)</Label>
-                        <Input
+                        <NumberInput
                             id="p-max-tenor"
-                            :model-value="form.max_tenor"
-                            inputmode="numeric"
+                            v-model="form.max_tenor"
                             data-testid="param-max-tenor"
-                            @input="form.max_tenor = digitsOnly($event.target.value)"
                         />
                         <p v-if="form.errors.max_tenor" class="text-xs font-medium text-destructive" data-testid="param-max-tenor-error">
                             {{ form.errors.max_tenor }}

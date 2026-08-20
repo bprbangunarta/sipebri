@@ -7,8 +7,9 @@ import Button from '@/components/ui/Button.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import Dialog from '@/components/ui/Dialog.vue';
 import Input from '@/components/ui/Input.vue';
+import NumberInput from '@/components/ui/NumberInput.vue';
 import Label from '@/components/ui/Label.vue';
-import { conditionLabel, digitsOnly, rupiah } from '@/constants/committee';
+import { conditionLabel, rupiah } from '@/constants/committee';
 
 /** Simulasi kewenangan komite — hanya membaca aturan, tidak menyimpan apa pun. */
 const props = defineProps({
@@ -122,13 +123,11 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
                 </div>
                 <div class="space-y-[var(--item-gap)]">
                     <Label for="simulate-amount">Plafon</Label>
-                    <Input
+                    <NumberInput
                         id="simulate-amount"
-                        :model-value="amount"
-                        inputmode="numeric"
+                        v-model="amount"
                         placeholder="150000000"
                         data-testid="simulate-amount"
-                        @input="amount = digitsOnly($event.target.value)"
                     />
                     <p class="text-xs text-muted-foreground">{{ rupiah(amount || null) }}</p>
                 </div>

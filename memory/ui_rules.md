@@ -14,7 +14,17 @@ Untuk tiap lebar, cek:
 5. Header aksi: `flex-col sm:flex-row`, filter `flex-1 sm:w-[170px]`, tombol teks
    disembunyikan di ponsel (`hidden sm:inline`).
 
-## Pola grid yang aman
+## Format angka Indonesia (WAJIB, tanpa kecuali)
+- **Semua angka yang TAMPIL** (tabel, kartu, grafik, ringkasan) memakai format Indonesia:
+  pemisah ribuan titik → `1000` ditampilkan `1.000`; uang pakai `rupiah()` (`Rp 1.000`).
+- **Semua kolom INPUT angka** memakai `components/ui/NumberInput.vue`:
+  `1.000` hanyalah tampilan, **nilai yang disimpan/dikirim tetap `1000`** (integer murni,
+  tanpa titik). Jangan pernah mengirim string berformat ke backend/API.
+- Jangan memakai `<Input type="number">` untuk rupiah/plafon/tenor/persen bulat — pakai `NumberInput`.
+- Desimal (mis. suku bunga) tetap memakai titik desimal pada nilai simpan; bila ditampilkan,
+  format ke gaya Indonesia (koma desimal) hanya pada teks tampilan, bukan pada nilai.
+
+
 - KPI 5 kartu: `grid-cols-2 md:grid-cols-3 xl:grid-cols-5`, kartu terakhir `col-span-2 md:col-span-1`.
 - Dua kartu berdampingan: `lg:grid-cols-2`; tiga kartu: `lg:grid-cols-3` (jangan 5 kolom di `lg`).
 - Kartu jangan pakai tinggi grafik tetap besar; pakai konten yang tumbuh agar tidak ada ruang kosong.

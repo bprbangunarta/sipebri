@@ -15,13 +15,14 @@ import Dialog from '@/components/ui/Dialog.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
 import Input from '@/components/ui/Input.vue';
+import NumberInput from '@/components/ui/NumberInput.vue';
 import Label from '@/components/ui/Label.vue';
 import Switch from '@/components/ui/Switch.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
 import { ACTION } from '@/constants/labels';
-import { TIER_DECISIONS, conditionLabel, digitsOnly, rupiah } from '@/constants/committee';
+import { TIER_DECISIONS, conditionLabel, rupiah } from '@/constants/committee';
 
 const props = defineProps({
     path: { type: Object, required: true },
@@ -103,10 +104,6 @@ const openEdit = (tier) => {
     });
     form.reset();
     dialogOpen.value = true;
-};
-
-const onAmountInput = (field, event) => {
-    form[field] = digitsOnly(event.target.value);
 };
 
 const submit = () => {
@@ -301,13 +298,11 @@ const confirmDelete = () =>
                     <div v-if="isPlafon" class="grid gap-[var(--field-gap)] sm:grid-cols-2">
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="tier-min">Plafon Minimal</Label>
-                            <Input
+                            <NumberInput
                                 id="tier-min"
-                                :model-value="form.min_amount"
-                                inputmode="numeric"
+                                v-model="form.min_amount"
                                 placeholder="0"
                                 data-testid="tiers-form-min"
-                                @input="onAmountInput('min_amount', $event)"
                             />
                             <p class="text-xs text-muted-foreground">{{ rupiah(form.min_amount || null) }}</p>
                             <p v-if="form.errors.min_amount" class="text-xs font-medium text-destructive">
@@ -316,13 +311,11 @@ const confirmDelete = () =>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="tier-max">Plafon Maksimal</Label>
-                            <Input
+                            <NumberInput
                                 id="tier-max"
-                                :model-value="form.max_amount"
-                                inputmode="numeric"
+                                v-model="form.max_amount"
                                 placeholder="Kosongkan = tanpa batas"
                                 data-testid="tiers-form-max"
-                                @input="onAmountInput('max_amount', $event)"
                             />
                             <p class="text-xs text-muted-foreground">{{ rupiah(form.max_amount || null) }}</p>
                             <p v-if="form.errors.max_amount" class="text-xs font-medium text-destructive" data-testid="tiers-form-max-error">
