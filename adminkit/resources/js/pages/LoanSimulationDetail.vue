@@ -65,10 +65,11 @@ const form = useForm({
     supervisor_id: props.record.supervisor_id ?? '',
 });
 
-/** Kategori mengikuti jalur komite produk terpilih (sama seperti Simulasi Kewenangan Komite). */
-const categoryOptions = computed(
-    () => props.categoryMap[String(form.product_id)] ?? props.categoryMap.global ?? [],
-);
+/** Kategori = jalur komite produk terpilih + jalur "Semua Produk". */
+const categoryOptions = computed(() => [
+    ...(props.categoryMap[String(form.product_id)] ?? []),
+    ...(props.categoryMap.global ?? []),
+]);
 
 /** Parameter produk menentukan pilihan & nilai bawaan sistem bunga, cicilan, dan suku bunga. */
 const parameter = computed(() => props.parameterMap[String(form.product_id)] ?? null);
