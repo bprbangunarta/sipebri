@@ -94,9 +94,16 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                         </Button>
                         <span class="truncate">{{ props.product.alias }} — {{ props.product.name }}</span>
                     </CardTitle>
-                    <Badge variant="secondary" class="font-medium">Kode {{ props.product.code }}</Badge>
+                    <div class="flex items-center gap-2">
+                        <Badge variant="secondary" class="font-medium">Kode {{ props.product.code }}</Badge>
+                        <Badge :variant="props.parameter ? 'secondary' : 'destructive'" class="font-medium">
+                            {{ props.parameter ? 'Parameter Tersimpan' : 'Belum Diatur' }}
+                        </Badge>
+                    </div>
                 </CardHeader>
-                <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
+                <CardContent class="space-y-3">
+                    <p class="text-sm font-medium">Plafon &amp; Tenor</p>
+                    <div class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-min">Plafon Minimal</Label>
                         <Input
@@ -145,6 +152,7 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                             {{ form.errors.max_tenor }}
                         </p>
                     </div>
+                    </div>
                 </CardContent>
             </Card>
 
@@ -178,15 +186,26 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
 
             <Card>
                 <CardHeader><CardTitle>Metode Bunga &amp; Pola Cicilan</CardTitle></CardHeader>
-                <CardContent class="grid gap-[var(--field-gap)] lg:grid-cols-2">
+                <CardContent class="grid items-start gap-x-8 gap-y-[var(--field-gap)] lg:grid-cols-2">
                     <div class="space-y-[var(--field-gap)]">
                         <div class="space-y-[var(--item-gap)]">
-                            <Label>Metode Bunga Diizinkan</Label>
-                            <div class="grid gap-1.5 rounded-md border p-3 sm:grid-cols-2">
+                            <div class="flex items-baseline justify-between gap-2">
+                                <Label>Metode Bunga Diizinkan</Label>
+                                <button
+                                    type="button"
+                                    class="text-[11px] font-medium text-muted-foreground underline-offset-2 transition-colors hover:text-foreground hover:underline"
+                                    data-testid="param-method-clear"
+                                    @click="form.allowed_method_ids = []"
+                                >
+                                    {{ form.allowed_method_ids.length ? `${form.allowed_method_ids.length} dipilih · Bersihkan` : 'Semua diizinkan' }}
+                                </button>
+                            </div>
+                            <div class="h-[168px] overflow-y-auto rounded-md border">
                                 <label
-                                    v-for="option in props.methodOptions"
+                                    v-for="(option, index) in props.methodOptions"
                                     :key="option.value"
-                                    class="flex cursor-pointer items-center gap-2 text-sm normal-case"
+                                    class="flex h-8 cursor-pointer items-center gap-2.5 px-3 text-sm normal-case tracking-normal transition-colors hover:bg-muted/50"
+                                    :class="index ? 'border-t' : ''"
                                 >
                                     <Checkbox
                                         :model-value="isChecked('allowed_method_ids', option.value)"
@@ -196,7 +215,6 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                                     <span class="truncate">{{ option.label }}</span>
                                 </label>
                             </div>
-                            <p class="text-xs text-muted-foreground">Kosongkan bila semua metode diizinkan.</p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label>Metode Bunga Bawaan</Label>
@@ -214,12 +232,23 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
 
                     <div class="space-y-[var(--field-gap)]">
                         <div class="space-y-[var(--item-gap)]">
-                            <Label>Pola Cicilan Diizinkan</Label>
-                            <div class="grid gap-1.5 rounded-md border p-3 sm:grid-cols-2">
+                            <div class="flex items-baseline justify-between gap-2">
+                                <Label>Pola Cicilan Diizinkan</Label>
+                                <button
+                                    type="button"
+                                    class="text-[11px] font-medium text-muted-foreground underline-offset-2 transition-colors hover:text-foreground hover:underline"
+                                    data-testid="param-installment-clear"
+                                    @click="form.allowed_installment_ids = []"
+                                >
+                                    {{ form.allowed_installment_ids.length ? `${form.allowed_installment_ids.length} dipilih · Bersihkan` : 'Semua diizinkan' }}
+                                </button>
+                            </div>
+                            <div class="h-[168px] overflow-y-auto rounded-md border">
                                 <label
-                                    v-for="option in props.installmentOptions"
+                                    v-for="(option, index) in props.installmentOptions"
                                     :key="option.value"
-                                    class="flex cursor-pointer items-center gap-2 text-sm normal-case"
+                                    class="flex h-8 cursor-pointer items-center gap-2.5 px-3 text-sm normal-case tracking-normal transition-colors hover:bg-muted/50"
+                                    :class="index ? 'border-t' : ''"
                                 >
                                     <Checkbox
                                         :model-value="isChecked('allowed_installment_ids', option.value)"
@@ -229,7 +258,6 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                                     <span class="truncate">{{ option.label }}</span>
                                 </label>
                             </div>
-                            <p class="text-xs text-muted-foreground">Kosongkan bila semua pola diizinkan.</p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label>Pola Cicilan Bawaan</Label>
@@ -258,7 +286,7 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                         <Label for="p-note">Catatan</Label>
                         <Input id="p-note" v-model="form.note" maxlength="255" data-testid="param-note" />
                     </div>
-                    <label class="flex items-center justify-between gap-3 rounded-md border px-3 py-1.5 sm:col-span-2">
+                    <label class="flex h-8 items-center justify-between gap-3 rounded-md border px-3 sm:col-span-2">
                         <span class="text-sm">Wajib Agunan</span>
                         <Switch v-model="form.collateral_required" data-testid="param-collateral" />
                     </label>
