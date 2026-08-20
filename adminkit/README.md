@@ -265,6 +265,7 @@ database/{migrations,seeders,factories}
 | --- | --- |
 | `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `role` (cermin peranan Spatie), `office`, `alias`/`mso_code`/`collector_code` (unik), `password`, `avatar`, `last_login_at`, `deleted_at` (SoftDelete = Terarsip) |
 | `offices`, `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, pada `offices` & `products`), `name` |
+| `collateral_types`, `binding_types`, `collateral_conditions`, `collateral_methods` | referensi agunan (`code` unik + `name`) untuk rute `/collateral-types`, `/collateral-bindings`, `/collateral-conditions`, `/collateral-methods` |
 | `product_parameters` | parameter SK Direksi per produk: plafon & tenor min/maks, `interest_rate`/`provision_rate`/`admin_rate`/`rc_threshold` (persen), metode & pola cicilan yang diizinkan (JSON) + nilai bawaan, `collateral_required`, `decree`, `note` |
 | `committee_paths` | jalur komite: `product_id` (null = semua produk), `condition` (null = Normal), `mechanism` (`plafon`/`hierarki`), `is_active`, `note` |
 | `committee_tiers` | jenjang: `committee_path_id`, `sort`, `label`, `role`, `min_amount`, `max_amount`, `can_escalate`, `can_approve`, `can_cancel`, `can_reject` |
@@ -664,8 +665,8 @@ Catatan penting: `App\Providers\TelescopeServiceProvider::boot()` mendaftarkan u
 ## Pengujian
 
 ```bash
-php artisan test                             # seluruh suite (26 tes)
-php artisan test --filter=SeederTest         # data awal: jumlah referensi, peranan, kata sandi bawaan, idempotensi
+php artisan test                             # seluruh suite (27 tes)
+php artisan test --filter=SeederTest         # data awal: jumlah referensi, peranan, kata sandi bawaan, idempotensi, semua menu bawaan hidup
 php artisan test --filter=CommitteeRulesTest # aturan komite: seeder, keunikan jalur, scope jenjang, ekspor, simulasi
 php artisan test --filter=ExcelIoTest        # ekspor/impor .xlsx & penolakan berkas CSV
 php artisan test --filter=ErrorPageTest      # 404/403 memakai halaman error Inertia

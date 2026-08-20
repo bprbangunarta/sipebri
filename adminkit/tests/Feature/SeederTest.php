@@ -98,6 +98,26 @@ class SeederTest extends TestCase
         $this->assertFalse(User::withTrashed()->find($staff->id)->trashed());
     }
 
+    public function test_setiap_menu_bawaan_mengarah_ke_rute_yang_hidup(): void
+    {
+        $admin = User::where('username', 'superadmin')->firstOrFail();
+        $menus = DB::table('menus')->whereNotNull('href')->get();
+
+        $this->assertSame(18, $menus->count());
+
+        foreach ($menus as $menu) {
+            $this->actingAs($admin)->get($menu->href)
+                ->assertOk("Menu {$menu->label} ({$menu->href}) tidak dapat dibuka.");
+
+            if ($menu->permission) {
+                $this->assertTrue(
+                    Permission::where('name', $menu->permission)->exists(),
+                    "Izin {$menu->permission} untuk menu {$menu->label} belum terdaftar.",
+                );
+            }
+        }
+    }
+
     public function test_login_memakai_kata_sandi_bawaan(): void
     {
         $staff = User::where('username', '350010923')->firstOrFail();

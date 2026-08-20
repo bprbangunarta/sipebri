@@ -13,7 +13,7 @@ class BindingTypeController extends ReferenceController
 
     protected function slug(): string
     {
-        return 'collateral-binding';
+        return 'collateral-bindings';
     }
 
     protected function label(): string

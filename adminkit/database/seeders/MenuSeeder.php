@@ -25,7 +25,7 @@ class MenuSeeder extends Seeder
             ]],
             ['Agunan', null, 'shield-check', null, [
                 ['Jenis Agunan', '/collateral-types', 'landmark', 'collateral-types.view', []],
-                ['Jenis Pengikatan', '/collateral-binding', 'file-signature', 'collateral-binding.view', []],
+                ['Jenis Pengikatan', '/collateral-bindings', 'file-signature', 'collateral-bindings.view', []],
                 ['Kondisi Agunan', '/collateral-conditions', 'triangle-alert', 'collateral-conditions.view', []],
                 ['Metode Hitung', '/collateral-methods', 'calculator', 'collateral-methods.view', []],
             ]],

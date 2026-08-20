@@ -188,7 +188,7 @@ Route::middleware('auth')->group(function () {
         'installments' => InstallmentController::class,
         'methods' => MethodController::class,
         'collateral-types' => CollateralTypeController::class,
-        'collateral-binding' => BindingTypeController::class,
+        'collateral-bindings' => BindingTypeController::class,
         'collateral-conditions' => CollateralConditionController::class,
         'collateral-methods' => CollateralMethodController::class,
     ];
