@@ -15,17 +15,7 @@ use Illuminate\Support\Facades\Schema;
 class SchemaDraftSeeder extends Seeder
 {
     /** Rancangan tabel yang belum dimigrasikan. */
-    private const PLANNED = [
-        [
-            'name' => 'Berkas Pengajuan',
-            'table_name' => 'credit_applications',
-            'note' => 'Rangka tahap 1 dari 9: pintu masuk berkas kredit.',
-            'columns' => [
-                ['name' => 'register_number', 'type' => 'string', 'length' => '30', 'is_unique' => true],
-                ['name' => 'product_id', 'type' => 'foreignId', 'foreign_table' => 'products'],
-            ],
-        ],
-    ];
+    private const PLANNED = [];
 
     /** Rancangan yang mengikuti tabel nyata. `lead` = kolom yang ditaruh paling atas. */
     private const MIRRORED = [
@@ -34,6 +24,23 @@ class SchemaDraftSeeder extends Seeder
             'table_name' => 'collateral_simulations',
             'note' => 'Cerminan skema tabel agunan yang berjalan.',
             'lead' => ['credit_account', 'collateral_id'],
+        ],
+        [
+            'name' => 'Pengajuan Kredit',
+            'table_name' => 'loan_applications',
+            'note' => 'Berkas pengajuan sampai keputusan komite (analisa per produk menyusul).',
+            'with_soft_deletes' => true,
+            'lead' => ['application_code', 'application_date', 'status'],
+        ],
+        [
+            'name' => 'Agunan pada Pengajuan',
+            'table_name' => 'loan_application_collaterals',
+            'note' => 'Penghubung berkas pengajuan dengan agunan yang dipakai.',
+        ],
+        [
+            'name' => 'Persetujuan Komite',
+            'table_name' => 'loan_approvals',
+            'note' => 'Jejak keputusan berjenjang mengikuti jalur komite produk.',
         ],
     ];
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MethodController;
 use App\Http\Controllers\NotificationController;
@@ -224,6 +225,18 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/collateral-simulation/{collateralSimulation}', [CollateralSimulationController::class, 'show'])
         ->middleware('permission:collateral-simulation.view')->name('collateral-simulation.show');
+
+    // Pengajuan Kredit — tahap 1 dari 9.
+    Route::get('/loan-simulation', [LoanApplicationController::class, 'index'])
+        ->middleware('permission:loan-simulation.view')->name('loan-simulation.index');
+
+    Route::middleware('permission:loan-simulation.manage')->group(function () {
+        Route::get('/loan-simulation/create', [LoanApplicationController::class, 'create'])->name('loan-simulation.create');
+        Route::post('/loan-simulation', [LoanApplicationController::class, 'store'])->name('loan-simulation.store');
+        Route::get('/loan-simulation/{loanApplication}/edit', [LoanApplicationController::class, 'edit'])->name('loan-simulation.edit');
+        Route::put('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'update'])->name('loan-simulation.update');
+        Route::delete('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'destroy'])->name('loan-simulation.destroy');
+    });
 
     // Skema Migrasi — alat developer, tidak pernah mengubah skema database.
     Route::get('/schema-drafts', [SchemaDraftController::class, 'index'])

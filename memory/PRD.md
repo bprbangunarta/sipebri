@@ -499,3 +499,27 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - Validasi `appraised_at` wajib pada mode ubah dihapus (kini otomatis).
 - Uji: `php artisan test` → 37 lulus (termasuk 9 tes agunan yang disesuaikan), screenshot form ubah
   memperlihatkan keterangan Penaksir otomatis dan validasi kolom wajib tetap jalan.
+
+## Selesai (2026-06-21, modul Pengajuan Kredit + rancangan DB sampai persetujuan)
+- Migration `2026_08_21_040000_create_loan_applications_tables.php`: **`loan_applications`**
+  (identitas berkas, data pemohon, permohonan, rangka analisa, persetujuan komite, realisasi
+  `credit_account`, softDeletes), **`loan_application_collaterals`** (berkas ↔ agunan),
+  **`loan_approvals`** (jejak keputusan berjenjang mengikuti `committee_tiers`).
+- Kode pengajuan `application_code`: 8 digit unik, otomatis mulai **00800001** (sistem lama berakhir
+  00360623). Kolom wajib sesuai permintaan user: kode pengajuan, `nik` (angka saja), `full_name`.
+- Modul: `LoanApplicationController` + `LoanSimulation.vue` (daftar, cari, filter status, hapus)
+  dan `LoanSimulationForm.vue` (3 kartu: Berkas, Data Pemohon, Permohonan) di `/loan-simulation`.
+  Izin `loan-simulation.view/manage`, menu "Pengajuan Kredit" masuk MenuSeeder (grup Simulasi, paling atas).
+- `SchemaDraftSeeder` mencerminkan 3 tabel baru ke modul Skema Migrasi agar user bisa meninjau
+  (draft `credit_applications` lama dihapus, diganti `loan_applications`).
+- Dokumentasi: `/app/memory/pengajuan_kredit.md`.
+- Uji: `php artisan test` → 37 lulus; uji UI (screenshot) — NIK huruf ditolak validasi frontend,
+  simpan berhasil menghasilkan kode `00800001`, daftar & toast sukses tampil normal.
+
+### Backlog terbaru (P1 → P3)
+1. P1 Modul **analisa kredit per produk** (RC/kelayakan) → isi `analyst_id`, `analyzed_at`, `rc_ratio`.
+2. P1 UI **relasi berkas ↔ agunan** + alur **keputusan komite** (tabel sudah siap).
+3. P1 Posting ke CBS: kirim data kredit → simpan `credit_account` ke berkas & agunan terkait.
+4. P2 Master **nasabah/CIF** (kini data pemohon direkam per berkas).
+5. P2 Diff Skema Migrasi belum membandingkan panjang kolom, komentar, dan relasi FK.
+6. P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter audit trail.

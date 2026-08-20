@@ -31,6 +31,7 @@ class MenuSeeder extends Seeder
                 ['Metode Hitung', '/collateral-methods', 'calculator', 'collateral-methods.view', []],
             ]],
             ['Simulasi', null, 'flask-conical', null, [
+                ['Pengajuan Kredit', '/loan-simulation', 'file-text', 'loan-simulation.view', []],
                 ['Agunan Kredit', '/collateral-simulation', 'shield-check', 'collateral-simulation.view', []],
                 ['Analisa Kredit', '/analysis-simulation', 'calculator', 'analysis-simulation.view', []],
             ]],
