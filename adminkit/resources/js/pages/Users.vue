@@ -40,7 +40,6 @@ const columns = [
     { key: 'phone', label: 'Nomor HP', hideBelow: 'xl' },
     { key: 'role', label: 'Peranan', hideBelow: 'sm' },
     { key: 'office', label: 'Kantor', hideBelow: 'xl' },
-    { key: 'last_login_at', label: 'Terakhir Login', hideBelow: 'xl' },
     { key: 'status_label', label: 'Status', sortable: false },
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ];
@@ -80,8 +79,17 @@ const officeFilterOptions = computed(() => [
     ...props.officeOptions,
 ]);
 
-const sendWelcomeEmail = (row) =>
-    router.post(`/users/${row.id}/welcome-email`, {}, { preserveScroll: true, preserveState: true });
+const emailTarget = ref(null);
+const emailForm = useForm({});
+
+const sendWelcomeEmail = () =>
+    emailForm.post(`/users/${emailTarget.value.id}/welcome-email`, {
+        preserveScroll: true,
+        preserveState: true,
+        onFinish: () => {
+            emailTarget.value = null;
+        },
+    });
 
 const restore = (row) =>
     router.post(`/users/${row.id}/restore`, {}, { preserveScroll: true, preserveState: true });
@@ -305,10 +313,6 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                     <span>{{ row.office ?? '—' }}</span>
                 </template>
 
-                <template #cell-last_login_at="{ row }">
-                    <span class="whitespace-nowrap text-xs text-muted-foreground">{{ row.last_login_at }}</span>
-                </template>
-
                 <template #cell-status_label="{ row }">
                     <Badge
                         :variant="row.archived ? 'destructive' : 'secondary'"
@@ -333,15 +337,15 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                             :data-testid="`users-set-password-${row.id}`"
                             @select="openPassword(row)"
                         >
-                            <KeyRound />Atur Kata Sandi
+                            <KeyRound />Reset Sandi
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             v-if="!row.archived"
                             :disabled="!row.email"
                             :data-testid="`users-welcome-email-${row.id}`"
-                            @select="sendWelcomeEmail(row)"
+                            @select="emailTarget = row"
                         >
-                            <MailCheck />Kirim Email Sambutan
+                            <MailCheck />Kirim Email
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             v-if="row.archived"
@@ -428,27 +432,35 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                 </template>
             </Dialog>
 
-            <!-- Dialog Atur Kata Sandi -->
+            <!-- Dialog Reset Sandi -->
             <Dialog
                 :open="Boolean(passwordTarget)"
-                :title="`Atur Kata Sandi — ${passwordTarget?.name ?? ''}`"
+                :title="`Reset Sandi — ${passwordTarget?.name ?? ''}`"
                 class="max-w-md"
                 @update:open="passwordTarget = null"
             >
-                <div class="form-dense space-y-[var(--item-gap)]">
-                    <Label for="user-password-new">Kata Sandi Baru</Label>
-                    <PasswordInput
-                        id="user-password-new"
-                        v-model="passwordForm.password"
-                        placeholder="Minimal 8 karakter"
-                        testid="user-password-input"
-                    />
-                    <p v-if="passwordForm.errors.password" class="text-xs font-medium text-destructive" data-testid="user-password-error">
-                        {{ passwordForm.errors.password }}
-                    </p>
-                    <p class="text-xs text-muted-foreground">
-                        Pengguna akan memakai kata sandi ini pada masuk berikutnya. Sesi “ingat saya” lamanya dihentikan.
-                    </p>
+                <div class="form-dense space-y-[var(--field-gap)]">
+                    <div class="flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm">
+                        <span class="text-muted-foreground">Terakhir Login</span>
+                        <span class="font-medium" data-testid="user-password-last-login">
+                            {{ passwordTarget?.last_login_at ?? '—' }}
+                        </span>
+                    </div>
+                    <div class="space-y-[var(--item-gap)]">
+                        <Label for="user-password-new">Kata Sandi Baru</Label>
+                        <PasswordInput
+                            id="user-password-new"
+                            v-model="passwordForm.password"
+                            placeholder="Minimal 8 karakter"
+                            testid="user-password-input"
+                        />
+                        <p v-if="passwordForm.errors.password" class="text-xs font-medium text-destructive" data-testid="user-password-error">
+                            {{ passwordForm.errors.password }}
+                        </p>
+                        <p class="text-xs text-muted-foreground">
+                            Pengguna akan memakai kata sandi ini pada masuk berikutnya. Sesi “ingat saya” lamanya dihentikan.
+                        </p>
+                    </div>
                 </div>
 
                 <template #footer>
@@ -464,6 +476,36 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                         <Loader2 v-if="passwordForm.processing" class="size-4 animate-spin" />
                         <Save v-else class="size-4" />
                         {{ passwordForm.processing ? ACTION.saving : ACTION.save }}
+                    </Button>
+                </template>
+            </Dialog>
+
+            <!-- Konfirmasi Kirim Email Sambutan -->
+            <Dialog
+                :open="Boolean(emailTarget)"
+                title="Kirim Email Sambutan?"
+                class="max-w-md"
+                @update:open="emailTarget = null"
+            >
+                <p class="text-sm text-muted-foreground">
+                    Email sambutan akan dikirim ke
+                    <span class="font-medium text-foreground">{{ emailTarget?.email }}</span>
+                    ({{ emailTarget?.name }}). Kata sandi tidak disertakan dalam email ini.
+                </p>
+
+                <template #footer>
+                    <Button variant="outline" size="sm" data-testid="users-welcome-email-cancel" @click="emailTarget = null">
+                        <X class="size-4" /> {{ ACTION.cancel }}
+                    </Button>
+                    <Button
+                        size="sm"
+                        :disabled="emailForm.processing"
+                        data-testid="users-welcome-email-confirm"
+                        @click="sendWelcomeEmail"
+                    >
+                        <Loader2 v-if="emailForm.processing" class="size-4 animate-spin" />
+                        <MailCheck v-else class="size-4" />
+                        {{ emailForm.processing ? 'Mengirim...' : 'Kirim' }}
                     </Button>
                 </template>
             </Dialog>
