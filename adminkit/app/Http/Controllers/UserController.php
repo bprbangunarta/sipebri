@@ -146,6 +146,26 @@ class UserController extends Controller
         return to_route('users.index')->with('success', "Pengguna {$user->name} diperbarui.");
     }
 
+    /** Atur ulang kata sandi pengguna langsung dari daftar (tanpa membuka form ubah). */
+    public function updatePassword(Request $request, User $user): RedirectResponse
+    {
+        $data = $request->validate(
+            ['password' => Rules::password()],
+            Rules::messages(),
+            ['password' => 'kata sandi'],
+        );
+
+        // Token remember diganti agar sesi "ingat saya" lama tidak lagi berlaku.
+        $user->forceFill([
+            'password' => Hash::make($data['password']),
+            'remember_token' => Str::random(60),
+        ])->save();
+
+        ActivityLog::record("Mengatur ulang kata sandi pengguna {$user->name}", 'Pengguna', 'warning', $user);
+
+        return back()->with('success', "Kata sandi {$user->name} diperbarui.");
+    }
+
     /** Kirim ulang email sambutan ke pengguna tertentu. */
     public function sendWelcomeEmail(User $user): RedirectResponse
     {

@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function () {
             ->name('users.import.template');
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/users/{user}/password', [UserController::class, 'updatePassword'])
+            ->name('users.password');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::post('/users/{user}/restore', [UserController::class, 'restore'])
             ->withTrashed()->name('users.restore');

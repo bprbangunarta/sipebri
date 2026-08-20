@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { ArchiveRestore, Download, FileDown, Loader2, MailCheck, Pencil, Plus, Trash2, Upload, Users2, X } from 'lucide-vue-next';
+import { ArchiveRestore, Download, FileDown, KeyRound, Loader2, MailCheck, Pencil, Plus, Save, Trash2, Upload, Users2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
@@ -14,6 +14,7 @@ import FileInput from '@/components/ui/FileInput.vue';
 import Label from '@/components/ui/Label.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
+import PasswordInput from '@/components/composite/PasswordInput.vue';
 import UploadProgress from '@/components/composite/UploadProgress.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
@@ -39,6 +40,7 @@ const columns = [
     { key: 'phone', label: 'Nomor HP', hideBelow: 'xl' },
     { key: 'role', label: 'Peranan', hideBelow: 'sm' },
     { key: 'office', label: 'Kantor', hideBelow: 'xl' },
+    { key: 'last_login_at', label: 'Terakhir Login', hideBelow: 'xl' },
     { key: 'status_label', label: 'Status', sortable: false },
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ];
@@ -118,6 +120,25 @@ const submitImport = () =>
             importOpen.value = false;
             importForm.reset();
             importInput.value?.clear();
+        },
+    });
+
+/* ── Atur kata sandi langsung dari daftar ──────────────────────────── */
+const passwordTarget = ref(null);
+const passwordForm = useForm({ password: '' });
+
+const openPassword = (row) => {
+    passwordForm.clearErrors();
+    passwordForm.reset();
+    passwordTarget.value = row;
+};
+
+const submitPassword = () =>
+    passwordForm.put(`/users/${passwordTarget.value.id}/password`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            passwordTarget.value = null;
+            passwordForm.reset();
         },
     });
 
@@ -284,6 +305,10 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                     <span>{{ row.office ?? '—' }}</span>
                 </template>
 
+                <template #cell-last_login_at="{ row }">
+                    <span class="whitespace-nowrap text-xs text-muted-foreground">{{ row.last_login_at }}</span>
+                </template>
+
                 <template #cell-status_label="{ row }">
                     <Badge
                         :variant="row.archived ? 'destructive' : 'secondary'"
@@ -302,6 +327,13 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                             @select="router.visit(`/users/${row.id}/edit`)"
                         >
                             <Pencil />{{ ACTION.edit }}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            v-if="!row.archived"
+                            :data-testid="`users-set-password-${row.id}`"
+                            @select="openPassword(row)"
+                        >
+                            <KeyRound />Atur Kata Sandi
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             v-if="!row.archived"
@@ -392,6 +424,46 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                         <Loader2 v-if="importForm.processing" class="size-4 animate-spin" />
                         <Upload v-else class="size-4" />
                         {{ ACTION.import }}
+                    </Button>
+                </template>
+            </Dialog>
+
+            <!-- Dialog Atur Kata Sandi -->
+            <Dialog
+                :open="Boolean(passwordTarget)"
+                :title="`Atur Kata Sandi — ${passwordTarget?.name ?? ''}`"
+                class="max-w-md"
+                @update:open="passwordTarget = null"
+            >
+                <div class="form-dense space-y-[var(--item-gap)]">
+                    <Label for="user-password-new">Kata Sandi Baru</Label>
+                    <PasswordInput
+                        id="user-password-new"
+                        v-model="passwordForm.password"
+                        placeholder="Minimal 8 karakter"
+                        testid="user-password-input"
+                    />
+                    <p v-if="passwordForm.errors.password" class="text-xs font-medium text-destructive" data-testid="user-password-error">
+                        {{ passwordForm.errors.password }}
+                    </p>
+                    <p class="text-xs text-muted-foreground">
+                        Pengguna akan memakai kata sandi ini pada masuk berikutnya. Sesi “ingat saya” lamanya dihentikan.
+                    </p>
+                </div>
+
+                <template #footer>
+                    <Button variant="outline" size="sm" data-testid="user-password-cancel" @click="passwordTarget = null">
+                        <X class="size-4" /> {{ ACTION.cancel }}
+                    </Button>
+                    <Button
+                        size="sm"
+                        :disabled="!passwordForm.password || passwordForm.processing"
+                        data-testid="user-password-submit"
+                        @click="submitPassword"
+                    >
+                        <Loader2 v-if="passwordForm.processing" class="size-4 animate-spin" />
+                        <Save v-else class="size-4" />
+                        {{ passwordForm.processing ? ACTION.saving : ACTION.save }}
                     </Button>
                 </template>
             </Dialog>

@@ -225,7 +225,7 @@ const back = () => router.visit('/users');
                             {{ form.errors.collector_code }}
                         </p>
                     </div>
-                    <div class="space-y-[var(--item-gap)]">
+                    <div v-if="editing" class="space-y-[var(--item-gap)]">
                         <Label for="f-last-login">Terakhir Login</Label>
                         <Input
                             id="f-last-login"
@@ -235,20 +235,12 @@ const back = () => router.visit('/users');
                             data-testid="user-form-last-login"
                         />
                     </div>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Keamanan</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div class="space-y-[var(--item-gap)] sm:max-w-md">
+                    <div v-else class="space-y-[var(--item-gap)]">
                         <Label for="f-password">Kata Sandi</Label>
                         <PasswordInput
                             id="f-password"
                             v-model="form.password"
-                            :placeholder="editing ? 'Biarkan kosong bila tidak diubah' : 'Minimal 8 karakter'"
+                            placeholder="Minimal 8 karakter"
                             testid="user-form-password"
                             @blur="check.validate('password')"
                         />
