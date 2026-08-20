@@ -19,6 +19,8 @@ import Button from '@/components/ui/Button.vue';
 import Card from '@/components/ui/Card.vue';
 import CardContent from '@/components/ui/CardContent.vue';
 import CardFooter from '@/components/ui/CardFooter.vue';
+import CardHeader from '@/components/ui/CardHeader.vue';
+import CardTitle from '@/components/ui/CardTitle.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import DatePicker from '@/components/ui/DatePicker.vue';
 import DecimalInput from '@/components/ui/DecimalInput.vue';

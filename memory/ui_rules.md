@@ -56,3 +56,12 @@ Aturan:
 - Setiap kali membuat kolom angka baru: uji dengan MENGETIK HURUF, lalu pastikan kolom benar-benar
   kosong/menolak huruf pada tampilan (bukan hanya di state), lewat screenshot atau evaluasi
   `input.value` di browser.
+
+## Setelah mengubah file .vue (WAJIB)
+- Pastikan **semua komponen yang dipakai di template sudah di-import**. Pernah terjadi:
+  `CardHeader` & `CardTitle` hilang dari import saat file disunting lewat skrip → judul kartu
+  tampil sebagai teks melayang tanpa header bar (user marah).
+- Setelah `yarn build`, ambil screenshot **dengan `capture_logs`/console listener** dan pastikan
+  TIDAK ada peringatan `Failed to resolve component`.
+- Pola kartu form baku: `Card > CardHeader(CardTitle) + CardContent(grid field) + CardFooter(Batal/Simpan)`
+  — persis seperti `CollateralSimulationForm.vue`.
