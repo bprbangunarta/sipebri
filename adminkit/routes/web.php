@@ -3,6 +3,8 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AppearanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BindingTypeController;
+use App\Http\Controllers\CollateralTypeController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstallmentController;
@@ -183,6 +185,8 @@ Route::middleware('auth')->group(function () {
         'products' => ProductController::class,
         'installments' => InstallmentController::class,
         'methods' => MethodController::class,
+        'collateral-types' => CollateralTypeController::class,
+        'binding-types' => BindingTypeController::class,
     ];
 
     Route::get('/products/{id}', [ProductController::class, 'show'])

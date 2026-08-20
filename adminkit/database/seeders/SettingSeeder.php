@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Setting;
+use App\Support\Branding;
 use Illuminate\Database\Seeder;
 
 /** Setelan aplikasi: identitas merek, SEO, kontak, dan preferensi tampilan. */
@@ -27,7 +28,7 @@ class SettingSeeder extends Seeder
         'og_description' => 'Sistem pemberian kredit PT BPR Bangunarta: pengajuan, survey, analisa, hingga persetujuan komite.',
         'og_image' => null,
         'og_title' => 'SIPEBRI: Sistem Pemberian Kredit',
-        'permission_entity_order' => '["permissions","roles","users","appearance","menus","storage","activity","dashboard","profile","offices","institutions","products","installments","methods","committees"]',
+        'permission_entity_order' => '["permissions","roles","users","appearance","menus","storage","activity","dashboard","profile","offices","institutions","products","installments","methods","committees","collateral-types","binding-types"]',
         'search_indexable' => '0',
         'support_email' => 'info@bprbangunarta.co.id',
         'tagline' => 'Sistem Pemberian Kredit',
@@ -40,5 +41,8 @@ class SettingSeeder extends Seeder
         foreach (self::SETTINGS as $key => $value) {
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
+
+        // Cache branding disimpan selamanya — wajib dibuang agar hasil seeding langsung terpakai.
+        Branding::forget();
     }
 }

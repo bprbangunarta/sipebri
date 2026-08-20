@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             InstallmentSeeder::class,
             MethodSeeder::class,
+            CollateralTypeSeeder::class,
+            BindingTypeSeeder::class,
             CommitteeSeeder::class,
         ]);
     }

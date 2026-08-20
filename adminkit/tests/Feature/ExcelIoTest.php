@@ -52,9 +52,9 @@ class ExcelIoTest extends TestCase
     {
         $spreadsheet = new Spreadsheet;
         $spreadsheet->getActiveSheet()->fromArray([
-            ['Nama Lengkap', 'Nama Pengguna', 'Alamat Email', 'Nomor HP', 'Peranan', 'Kata Sandi'],
-            ['Uji Impor Excel', 'ujiimporxlsx', 'ujiimporxlsx@example.com', '081999000111', 'Super Admin', 'password'],
-            ['', '', '', '', '', ''],
+            ['Nama Lengkap', 'Nama Pengguna', 'Alamat Email', 'Nomor HP', 'Peranan', 'Kantor', 'Alias', 'Kode MSO', 'Kode Kolektor', 'Kata Sandi'],
+            ['Uji Impor Excel', 'ujiimporxlsx', 'ujiimporxlsx@example.com', '081999000111', 'Super Admin', 'PMK', 'UIX', '', '', 'password'],
+            ['', '', '', '', '', '', '', '', '', ''],
         ], null, 'A1');
 
         $path = tempnam(sys_get_temp_dir(), 'imp').'.xlsx';
@@ -64,7 +64,8 @@ class ExcelIoTest extends TestCase
             ->post('/users/import', ['file' => new UploadedFile($path, 'impor.xlsx', null, null, true)])
             ->assertRedirect();
 
-        $this->assertDatabaseHas('users', ['username' => 'ujiimporxlsx']);
+        // Kolom Kantor diisi alias (PMK) — harus dipetakan ke nama resmi kantor.
+        $this->assertDatabaseHas('users', ['username' => 'ujiimporxlsx', 'office' => 'Pamanukan']);
         User::where('username', 'ujiimporxlsx')->delete();
     }
 

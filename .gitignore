@@ -87,3 +87,4 @@ credentials.json
 *.key
 .credentials
 adminkit/database/database.sqlite
+memory/db_backup_before_seed_test.sqlite

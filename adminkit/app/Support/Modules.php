@@ -29,6 +29,8 @@ class Modules
         'installments' => ['label' => 'Sistem Cicilan', 'abilities' => ['view', 'manage']],
         'methods' => ['label' => 'Sistem Bunga', 'abilities' => ['view', 'manage']],
         'committees' => ['label' => 'Komite Kredit', 'abilities' => ['view', 'manage']],
+        'collateral-types' => ['label' => 'Jenis Agunan', 'abilities' => ['view', 'manage']],
+        'binding-types' => ['label' => 'Jenis Pengikatan', 'abilities' => ['view', 'manage']],
         'profile' => ['label' => 'Profil Pengguna', 'abilities' => ['view']],
     ];
 
