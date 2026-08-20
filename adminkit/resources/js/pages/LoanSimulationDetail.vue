@@ -10,6 +10,7 @@ import {
     Save,
     ShieldCheck,
     Trash2,
+    X,
     Users,
 } from 'lucide-vue-next';
 
@@ -42,8 +43,6 @@ const props = defineProps({
     surveyors: { type: Array, default: () => [] },
     canManage: { type: Boolean, default: false },
 });
-
-const LABEL = 'text-[11px] font-medium uppercase tracking-wider text-muted-foreground';
 
 const STATUS_TONE = {
     DIAJUKAN: 'border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-400',
@@ -159,7 +158,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                     </p>
                 </div>
                 <div class="text-right">
-                    <p :class="LABEL">Plafon Diajukan</p>
+                    <p class="text-xs text-muted-foreground">Plafon Diajukan</p>
                     <p class="text-sm font-semibold tabular-nums">{{ rupiah(props.record.requested_amount) }}</p>
                 </div>
             </div>
@@ -210,13 +209,13 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
             >
                 <Card>
                     <CardHeader><CardTitle>Informasi Dasar</CardTitle></CardHeader>
-                    <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-3">
+                    <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Tanggal Pengajuan <span class="text-destructive">*</span></Label>
+                            <Label>Tanggal Pengajuan <span class="text-destructive">*</span></Label>
                             <DatePicker v-model="form.application_date" data-testid="loan-detail-date" />
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Produk <span class="text-destructive">*</span></Label>
+                            <Label>Produk <span class="text-destructive">*</span></Label>
                             <Combobox
                                 v-model="form.product_id"
                                 :options="props.products"
@@ -228,7 +227,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Penggunaan</Label>
+                            <Label>Penggunaan</Label>
                             <Combobox
                                 v-model="form.usage_type"
                                 :options="props.usageTypes"
@@ -237,7 +236,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             />
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Resort / Instansi</Label>
+                            <Label>Resort / Instansi</Label>
                             <Combobox
                                 v-model="form.institution_id"
                                 :options="props.institutions"
@@ -245,8 +244,8 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                                 data-testid="loan-detail-institution"
                             />
                         </div>
-                        <div class="space-y-[var(--item-gap)] lg:col-span-2">
-                            <Label for="d-purpose" :class="LABEL">Tujuan Penggunaan</Label>
+                        <div class="space-y-[var(--item-gap)] sm:col-span-2 lg:col-span-4">
+                            <Label for="d-purpose">Tujuan Penggunaan</Label>
                             <Input
                                 id="d-purpose"
                                 v-model="form.purpose"
@@ -262,21 +261,21 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                     <CardHeader><CardTitle>Parameter Kredit</CardTitle></CardHeader>
                     <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-amount" :class="LABEL">Plafon <span class="text-destructive">*</span></Label>
+                            <Label for="d-amount">Plafon <span class="text-destructive">*</span></Label>
                             <NumberInput id="d-amount" v-model="form.requested_amount" data-testid="loan-detail-amount" />
                             <p v-if="form.errors.requested_amount" class="text-xs font-medium text-destructive">
                                 {{ form.errors.requested_amount }}
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-tenor" :class="LABEL">JK Kredit (bln) <span class="text-destructive">*</span></Label>
+                            <Label for="d-tenor">JK Kredit (bln) <span class="text-destructive">*</span></Label>
                             <NumberInput id="d-tenor" v-model="form.requested_tenor" data-testid="loan-detail-tenor" />
                             <p v-if="form.errors.requested_tenor" class="text-xs font-medium text-destructive">
                                 {{ form.errors.requested_tenor }}
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-tenor-principal" :class="LABEL">JK Pokok (bln)</Label>
+                            <Label for="d-tenor-principal">JK Pokok (bln)</Label>
                             <NumberInput
                                 id="d-tenor-principal"
                                 v-model="form.tenor_principal"
@@ -288,7 +287,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-tenor-interest" :class="LABEL">JW Bunga (bln)</Label>
+                            <Label for="d-tenor-interest">JW Bunga (bln)</Label>
                             <NumberInput
                                 id="d-tenor-interest"
                                 v-model="form.tenor_interest"
@@ -300,7 +299,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Sistem Bunga</Label>
+                            <Label>Sistem Bunga</Label>
                             <Combobox
                                 v-model="form.method_id"
                                 :options="props.methods"
@@ -309,7 +308,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             />
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Sistem Cicilan</Label>
+                            <Label>Sistem Cicilan</Label>
                             <Combobox
                                 v-model="form.installment_id"
                                 :options="props.installments"
@@ -318,21 +317,19 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             />
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label for="d-rate" :class="LABEL">Suku Bunga (%)</Label>
+                            <Label for="d-rate">Suku Bunga (%)</Label>
                             <DecimalInput id="d-rate" v-model="form.interest_rate" data-testid="loan-detail-rate" />
                         </div>
-                        <div class="grid grid-cols-2 gap-[var(--field-gap)]">
-                            <div class="space-y-[var(--item-gap)]">
-                                <Label for="d-provision" :class="LABEL">Provisi (%)</Label>
-                                <DecimalInput id="d-provision" v-model="form.provision_rate" data-testid="loan-detail-provision" />
-                            </div>
-                            <div class="space-y-[var(--item-gap)]">
-                                <Label for="d-admin" :class="LABEL">Admin (%)</Label>
-                                <DecimalInput id="d-admin" v-model="form.admin_rate" data-testid="loan-detail-admin" />
-                            </div>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="d-provision">Provisi (%)</Label>
+                            <DecimalInput id="d-provision" v-model="form.provision_rate" data-testid="loan-detail-provision" />
                         </div>
-                        <div class="space-y-[var(--item-gap)] sm:col-span-2 lg:col-span-4">
-                            <Label for="d-note" :class="LABEL">Keterangan</Label>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="d-admin">Biaya Admin (%)</Label>
+                            <DecimalInput id="d-admin" v-model="form.admin_rate" data-testid="loan-detail-admin" />
+                        </div>
+                        <div class="space-y-[var(--item-gap)] sm:col-span-2 lg:col-span-3">
+                            <Label for="d-note">Keterangan</Label>
                             <Input
                                 id="d-note"
                                 v-model="form.note"
@@ -342,7 +339,16 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             />
                         </div>
                     </CardContent>
-                    <CardFooter class="justify-end">
+                    <CardFooter class="justify-between">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            type="button"
+                            data-testid="loan-detail-cancel"
+                            @click="router.visit('/loan-simulation')"
+                        >
+                            <X class="size-4" /> Batal
+                        </Button>
                         <Button
                             v-if="props.canManage"
                             size="sm"
@@ -370,7 +376,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                 <CardContent class="form-dense space-y-3">
                     <div v-if="props.canManage" class="flex flex-col gap-2 sm:flex-row sm:items-end">
                         <div class="flex-1 space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Pilih Agunan</Label>
+                            <Label>Pilih Agunan</Label>
                             <Combobox
                                 v-model="attachForm.collateral_simulation_id"
                                 :options="props.collateralOptions"
@@ -469,7 +475,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                     <CardHeader><CardTitle>Penugasan Survei</CardTitle></CardHeader>
                     <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-3">
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Wilayah / Kantor <span class="text-destructive">*</span></Label>
+                            <Label>Wilayah / Kantor <span class="text-destructive">*</span></Label>
                             <Combobox
                                 v-model="surveyForm.office_id"
                                 :options="props.offices"
@@ -481,7 +487,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Kasi Analis</Label>
+                            <Label>Kasi Analis</Label>
                             <Combobox
                                 v-model="surveyForm.supervisor_id"
                                 :options="props.supervisors"
@@ -490,7 +496,7 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             />
                         </div>
                         <div class="space-y-[var(--item-gap)]">
-                            <Label :class="LABEL">Surveyor</Label>
+                            <Label>Surveyor</Label>
                             <Combobox
                                 v-model="surveyForm.surveyor_id"
                                 :options="props.surveyors"
@@ -502,7 +508,16 @@ const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.c
                             Daftar petugas mengikuti peranan pengguna SIPEBRI (Kasi Analis, Staff Analis, AO Kredit).
                         </p>
                     </CardContent>
-                    <CardFooter class="justify-end">
+                    <CardFooter class="justify-between">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            type="button"
+                            data-testid="loan-detail-survey-cancel"
+                            @click="router.visit('/loan-simulation')"
+                        >
+                            <X class="size-4" /> Batal
+                        </Button>
                         <Button
                             v-if="props.canManage"
                             size="sm"
