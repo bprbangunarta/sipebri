@@ -15,12 +15,14 @@ berkas bisa dibuka cepat lalu dilengkapi pada tahap berikutnya.
 ## Tabel `loan_applications`
 - **Identitas berkas**: `application_code`, `application_date`, `status`, `office_id`,
   `product_id`, `purpose`, `economic_sector`, `source`.
-- **Pemohon** (master nasabah belum ada, jadi direkam di berkas): `cif_number`, `nik`,
-  `full_name`, `birth_place`, `birth_date`, `gender`, `marital_status`, `mother_name`, `npwp`,
-  `address`, `region_code`, `region_label`, `phone`, `email`, `occupation`, `employer_name`,
-  `monthly_income`, `other_income`, `monthly_expense`, `spouse_name`, `spouse_nik`, `spouse_income`.
-- **Permohonan**: `requested_amount`, `requested_tenor`, `method_id`, `installment_id`,
-  `interest_rate`, `provision_rate`, `admin_rate`, `collateral_note`.
+- **Pemohon**: HANYA `nik`, `full_name`, `cif_number`. Identitas lengkap **tidak disimpan** —
+  diambil dari API sistem pengelola nasabah lewat nomor KTP (lihat bagian di bawah).
+- **Permohonan**: `requested_amount`, `requested_tenor`, `tenor_principal` (JK Pokok),
+  `tenor_interest` (JW Bunga), `usage_type` (KONSUMTIF/PRODUKTIF/INVESTASI), `method_id`,
+  `installment_id`, `interest_rate`, `provision_rate`, `admin_rate`, `institution_id`
+  (resort/instansi — opsional, hanya untuk pengelompokan), `purpose`, `note`, `collateral_note`.
+- **Penugasan & konfirmasi**: `supervisor_id` (Kasi Analis), `surveyor_id`, `confirmed_at`, `confirmed_by`.
+  Pilihan Kasi Analis/Surveyor diambil dari pengguna SIPEBRI sesuai peranan.
 - **Analisa (rangka)**: `analyst_id`, `analyzed_at`, `analysis_note`, `rc_ratio`,
   `repayment_capacity`, `recommended_amount`, `recommended_tenor`.
   Metode analisa berbeda per produk → modul analisa dibuat terpisah menyusul.
@@ -44,3 +46,21 @@ berkas bisa dibuka cepat lalu dilengkapi pada tahap berikutnya.
 2. UI relasi berkas ↔ agunan dan alur keputusan komite (tabel sudah siap).
 3. Posting ke CBS: kirim data kredit → simpan `credit_account` ke berkas & agunan terkait.
 4. Master nasabah/CIF (saat ini data pemohon direkam per berkas).
+
+## Data pemohon: dari sistem lain, bukan milik SIPEBRI (keputusan user 21/06/2026)
+- Bank sudah punya sistem pengelola nasabah & calon nasabah. SIPEBRI **hit API dengan nomor KTP**;
+  bila KTP tidak ditemukan, pengajuan **tidak bisa dilanjutkan** (nasabah harus didaftarkan dulu).
+- Identitas (termasuk data **pendamping**) hanya ditampilkan read-only pada panel "Info Nasabah".
+  Tanggal lahir tidak dipakai/disimpan.
+- Implementasi sementara **MOCK**: `App\Support\CustomerDirectory` dengan 3 KTP contoh
+  (`3213011203950001`, `3213012509880007`, `3213015207920003`). Ganti isi `find()` dengan panggilan
+  HTTP saat endpoint siap; endpoint UI-nya `GET /loan-simulation/lookup?nik=`.
+- Kategori pengajuan (BARU/RSC/dll) di sistem lama **tidak dipakai** — jalur komite sudah ditentukan
+  oleh produk + Komite Kredit.
+
+## Alur UI
+1. `/loan-simulation/create` — form ringkas: No. KTP + tombol **Cek KTP** (panel identitas muncul),
+   plafon, jangka waktu. Tombol "Buka Berkas" nonaktif sampai KTP ditemukan.
+2. `/loan-simulation/{id}` — berkas dengan tab: **Data Pengajuan** → **Data Jaminan**
+   (lekatkan agunan + total taksasi) → **Data Surveyor** (kantor, Kasi Analis, Surveyor) →
+   **Konfirmasi** (checklist 4 baris; setelah dikonfirmasi status jadi `ANALISA`, tidak bisa ulang).

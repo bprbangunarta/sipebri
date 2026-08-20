@@ -1,0 +1,61 @@
+{
+  "summary": "Modul Pengajuan Kredit (SIPEBRI/Laravel di /app/adminkit) diuji end-to-end: skema tabel, MOCK CustomerDirectory (lookup KTP), pembukaan berkas, 4 tab tahapan (Pengajuan/Jaminan/Surveyor/Konfirmasi), daftar (cari/filter/buka/hapus), otorisasi & scopeBindings, serta responsif 390/768px. Backend: PHPUnit feature test baru (10 kasus) + seluruh suite (47 kasus) dijalankan — 46 lulus, 1 gagal karena bug nyata. Frontend: 4 sesi Playwright pada URL publik. SATU BUG KRITIS: halaman berkas 500 setelah dikonfirmasi (confirmed_at tidak di-cast datetime).",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "GET /loan-simulation/{id} (setelah POST /loan-simulation/{id}/confirm)",
+        "issue": "HTTP 500 'Call to a member function translatedFormat() on string' di LoanApplicationController::detail() baris 305. Kolom confirmed_at TIDAK terdaftar di $casts pada App\\Models\\LoanApplication, sehingga bernilai string. Akibatnya begitu berkas dikonfirmasi, tombol 'Konfirmasi Berkas' memicu redirect back() ke halaman berkas yang langsung 500 dan berkas ANALISA TIDAK BISA dibuka lagi (permanen). Perbaikan: tambahkan 'confirmed_at' => 'datetime' (dan hapus cast kolom yang sudah didrop).",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "App\\Models\\LoanApplication::$casts",
+        "issue": "Masih memuat cast untuk kolom yang sudah dihapus migrasi reshape: birth_date, monthly_income, other_income, monthly_expense, spouse_income. Menyesatkan dan menyembunyikan cast yang benar-benar hilang (confirmed_at)."
+      },
+      {
+        "endpoint": "PUT /loan-simulation/{id}",
+        "issue": "Tidak ada validasi silang: tenor_principal / tenor_interest boleh melebihi requested_tenor (mis. JK Pokok 600 vs JK Kredit 12) dan diterima 200. Perlu aturan lte:requested_tenor bila memang jadi kebijakan bisnis."
+      },
+      {
+        "endpoint": "POST /loan-simulation/{id}/confirm",
+        "issue": "Berkas yang sudah ANALISA dapat dikonfirmasi ulang (confirmed_at & confirmed_by tertimpa). Sebaiknya idempoten / ditolak bila confirmed_at sudah terisi."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "LoanSimulationDetail (tab Konfirmasi)",
+        "issue": "Klik 'Konfirmasi Berkas' → status berubah ANALISA di DB, tetapi UI menampilkan halaman Internal Server Error (500) alih-alih toast sukses + ringkasan 'Dikonfirmasi'. Ini konsekuensi bug cast confirmed_at di backend.",
+        "selector": "[data-testid=\"loan-detail-confirm-button\"]",
+        "priority": "CRITICAL"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/adminkit/tests/Feature/LoanApplicationFlowTest.php"
+  ],
+  "action_items": [
+    "WAJIB: tambahkan cast 'confirmed_at' => 'datetime' di App\\Models\\LoanApplication (atau format via Carbon::parse) agar halaman berkas ANALISA tidak 500. Berkas uji 00800002 (id=2) saat ini berstatus ANALISA dan 500 — pakai untuk verifikasi perbaikan.",
+    "Bersihkan $casts dari kolom identitas yang sudah didrop (birth_date, monthly_income, other_income, monthly_expense, spouse_income).",
+    "Pertimbangkan validasi tenor_principal/tenor_interest <= requested_tenor dan tolak konfirmasi ganda."
+  ],
+  "critical_code_review_comments": [
+    "LoanApplicationController::detail() memanggil ->translatedFormat() pada atribut tanpa cast; setelah migrasi menambah kolom datetime baru, cast model harus ikut diperbarui.",
+    "checklist() memanggil CustomerDirectory::find() per-render dan juga di detail() → 2x panggilan; saat MOCK diganti HTTP nyata, cache/pemanggilan tunggal per request perlu diterapkan agar tidak dobel hit API nasabah.",
+    "Filter daftar hanya mencari kolom lokal (application_code, full_name, nik, credit_account) — konsisten dengan keputusan tidak menyimpan identitas; tidak ada masalah."
+  ],
+  "updated_files": [
+    "/app/adminkit/tests/Feature/LoanApplicationFlowTest.php"
+  ],
+  "success_rate": {"backend": "97% (46/47 kasus PHPUnit lulus; 1 gagal = bug confirmed_at)", "frontend": "92% (semua alur lulus kecuali render pasca-konfirmasi)"},
+  "seed_data_creation": "Berkas 00800002 (id=2, NIK 3213011203950001 YAYAT SUHAYAT, status ANALISA, 1 agunan terlekat) tersisa di DB sebagai reproduksi bug. Berkas 00800003 (KANA SUTISNA) dibuat lalu diarsipkan lewat aksi Hapus. Test PHPUnit memakai sqlite :memory: (RefreshDatabase) sehingga tidak mengotori DB nyata.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "superadmin / SA@4dm1n (dari /app/memory/test_credentials.md) — valid, login berhasil",
+  "context_for_next_testing_agent": "Yang SUDAH terverifikasi lulus: (1) skema loan_applications — 19 kolom identitas hilang, 9 kolom baru ada; (2) lookup KTP tidak terdaftar → pesan 'Nomor KTP belum terdaftar...' + tombol Buka Berkas nonaktif; (3) input KTP menyaring huruf & maksimal 16 digit; (4) panel identitas MOCK tampil lengkap (YAYAT SUHAYAT/CIF-000123); (5) store menolak KTP tak terdaftar (ValidationException) & wajib 16 digit; (6) kode otomatis 8 digit mulai 00800001; (7) tab Data Pengajuan: error 'Produk wajib diisi.' tanpa produk, semua nilai (produk, penggunaan, sistem bunga/cicilan, resort, JK pokok/JW bunga, suku bunga, tujuan, keterangan → uppercase) persist setelah reload; (8) tab Jaminan: lekatkan, total taksasi benar (Rp 17.295.845), lekat ganda tidak duplikat, detach berhasil; (9) tab Surveyor: error 'Wilayah/kantor wajib diisi.', pilihan Kasi Analis/Surveyor persist; (10) tab Konfirmasi: checklist Lengkap/Belum benar, tombol nonaktif saat belum lengkap, konfirmasi ditolak (session error) bila belum lengkap; (11) daftar: cari kode/nama/KTP, filter status ANALISA, klik baris, aksi Hapus (soft delete); (12) 403 untuk user tanpa izin loan-simulation.view; (13) scopeBindings — detach agunan milik berkas lain → 404; (14) responsif 390/768px tanpa overflow, kontrol 32px; (15) regresi /collateral-simulation OK, seluruh suite lain lulus. Sisa yang perlu diuji ulang setelah perbaikan: render halaman berkas setelah konfirmasi (test 'show after confirm does not crash' di LoanApplicationFlowTest.php) dan ringkasan 'Dikonfirmasi' terisi tanggal + tombol berubah menjadi 'Sudah dikonfirmasi'.",
+  "rca_of_the_issue": "Migrasi 2026_08_21_050000 menambah kolom dateTime confirmed_at tetapi App\\Models\\LoanApplication::$casts tidak diperbarui (masih memuat cast kolom lama yang didrop). Karena confirmed_at bukan Carbon, LoanApplicationController::detail() baris 305 memanggil translatedFormat() pada string → Error fatal → GET /loan-simulation/{id} membalas 500 untuk setiap berkas yang sudah dikonfirmasi. Reproduksi: konfirmasi berkas lengkap lalu buka /loan-simulation/2. Mitigasi: tambahkan 'confirmed_at' => 'datetime' pada $casts."
+}

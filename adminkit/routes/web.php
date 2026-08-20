@@ -227,16 +227,24 @@ Route::middleware('auth')->group(function () {
         ->middleware('permission:collateral-simulation.view')->name('collateral-simulation.show');
 
     // Pengajuan Kredit — tahap 1 dari 9.
-    Route::get('/loan-simulation', [LoanApplicationController::class, 'index'])
-        ->middleware('permission:loan-simulation.view')->name('loan-simulation.index');
+    Route::middleware('permission:loan-simulation.view')->group(function () {
+        Route::get('/loan-simulation', [LoanApplicationController::class, 'index'])->name('loan-simulation.index');
+        Route::get('/loan-simulation/lookup', [LoanApplicationController::class, 'lookup'])->name('loan-simulation.lookup');
+    });
 
-    Route::middleware('permission:loan-simulation.manage')->group(function () {
+    Route::middleware('permission:loan-simulation.manage')->scopeBindings()->group(function () {
         Route::get('/loan-simulation/create', [LoanApplicationController::class, 'create'])->name('loan-simulation.create');
         Route::post('/loan-simulation', [LoanApplicationController::class, 'store'])->name('loan-simulation.store');
-        Route::get('/loan-simulation/{loanApplication}/edit', [LoanApplicationController::class, 'edit'])->name('loan-simulation.edit');
         Route::put('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'update'])->name('loan-simulation.update');
+        Route::put('/loan-simulation/{loanApplication}/survey', [LoanApplicationController::class, 'updateSurvey'])->name('loan-simulation.survey');
+        Route::post('/loan-simulation/{loanApplication}/collaterals', [LoanApplicationController::class, 'attachCollateral'])->name('loan-simulation.collaterals.attach');
+        Route::delete('/loan-simulation/{loanApplication}/collaterals/{collateral}', [LoanApplicationController::class, 'detachCollateral'])->name('loan-simulation.collaterals.detach');
+        Route::post('/loan-simulation/{loanApplication}/confirm', [LoanApplicationController::class, 'confirm'])->name('loan-simulation.confirm');
         Route::delete('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'destroy'])->name('loan-simulation.destroy');
     });
+
+    Route::get('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'show'])
+        ->middleware('permission:loan-simulation.view')->name('loan-simulation.show');
 
     // Skema Migrasi — alat developer, tidak pernah mengubah skema database.
     Route::get('/schema-drafts', [SchemaDraftController::class, 'index'])

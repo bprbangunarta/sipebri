@@ -20,13 +20,10 @@ class LoanApplication extends Model
 
     protected $casts = [
         'application_date' => 'date:Y-m-d',
-        'birth_date' => 'date:Y-m-d',
-        'monthly_income' => 'integer',
-        'other_income' => 'integer',
-        'monthly_expense' => 'integer',
-        'spouse_income' => 'integer',
         'requested_amount' => 'integer',
         'requested_tenor' => 'integer',
+        'tenor_principal' => 'integer',
+        'tenor_interest' => 'integer',
         'interest_rate' => 'decimal:2',
         'provision_rate' => 'decimal:2',
         'admin_rate' => 'decimal:2',
@@ -39,6 +36,7 @@ class LoanApplication extends Model
         'approved_amount' => 'integer',
         'approved_tenor' => 'integer',
         'approved_rate' => 'decimal:2',
+        'confirmed_at' => 'datetime',
         'disbursed_at' => 'date:Y-m-d',
     ];
 

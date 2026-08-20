@@ -3,28 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\CollateralSimulation;
 use App\Models\Installment;
+use App\Models\Institution;
 use App\Models\LoanApplication;
 use App\Models\Method;
 use App\Models\Office;
 use App\Models\Product;
-use App\Models\Region;
+use App\Models\User;
+use App\Support\CustomerDirectory;
 use App\Support\TableQuery;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
 /**
- * Pengajuan Kredit — tahap 1 dari 9. Berkas direkam apa adanya;
- * analisa (metode per produk) dan posting ke core banking menyusul.
+ * Pengajuan Kredit — tahap 1 dari 9.
+ * Data pemohon TIDAK disimpan: identitas diambil dari API sistem nasabah (CustomerDirectory)
+ * memakai nomor KTP. Berkas hanya menyimpan nik, nama, dan nomor CIF.
  */
 class LoanApplicationController extends Controller
 {
     private const LABEL = 'Pengajuan Kredit';
 
     public const STATUSES = ['DIAJUKAN', 'ANALISA', 'KOMITE', 'DISETUJUI', 'DITOLAK', 'DIBATALKAN', 'REALISASI'];
+
+    public const USAGE_TYPES = ['KONSUMTIF', 'PRODUKTIF', 'INVESTASI'];
+
+    private ?array $customerCache = null;
 
     public function index(Request $request): Response
     {
@@ -58,39 +68,123 @@ class LoanApplicationController extends Controller
     public function create(): Response
     {
         return Inertia::render('LoanSimulationForm', [
-            'record' => null,
             'nextCode' => LoanApplication::nextCode(),
-            ...$this->references(),
+            'sampleNiks' => CustomerDirectory::sampleNiks(),
         ]);
     }
 
-    public function edit(LoanApplication $loanApplication): Response
+    /** Identitas nasabah dari sistem lain (MOCK sampai endpoint API siap). */
+    public function lookup(Request $request): JsonResponse
     {
-        return Inertia::render('LoanSimulationForm', [
-            'record' => $this->row($loanApplication, full: true),
-            'nextCode' => $loanApplication->application_code,
+        $nik = (string) $request->query('nik', '');
+        $customer = CustomerDirectory::find($nik);
+
+        return response()->json([
+            'found' => (bool) $customer,
+            'customer' => $customer,
+            'message' => $customer
+                ? null
+                : 'Nomor KTP belum terdaftar di sistem data nasabah. Daftarkan nasabah terlebih dahulu.',
+        ]);
+    }
+
+    public function show(LoanApplication $loanApplication): Response
+    {
+        $loanApplication->load(['collaterals', 'product:id,code,name', 'office:id,code,name']);
+
+        return Inertia::render('LoanSimulationDetail', [
+            'record' => $this->detail($loanApplication),
+            'customer' => $this->customerCache ?? CustomerDirectory::find((string) $loanApplication->nik),
+            'collaterals' => $loanApplication->collaterals
+                ->map(fn (CollateralSimulation $c) => [
+                    ...$c->only(['id', 'collateral_id', 'collateral_type_code', 'owner_name', 'document_number', 'description']),
+                    'appraisal_value' => (int) $c->appraisal_value,
+                ])->all(),
+            'collateralOptions' => CollateralSimulation::query()
+                ->orderBy('id')
+                ->get(['id', 'collateral_id', 'owner_name', 'description'])
+                ->map(fn ($c) => [
+                    'value' => $c->id,
+                    'label' => trim(($c->collateral_id ?? "#{$c->id}").' — '.($c->owner_name ?? '').' — '.mb_substr((string) $c->description, 0, 40)),
+                ])->all(),
+            'canManage' => (bool) request()->user()?->can('loan-simulation.manage'),
             ...$this->references(),
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $data = $this->prepare($this->validated($request));
-        $data['application_code'] = LoanApplication::nextCode();
-        $data['created_by'] = $request->user()->id;
+        $data = $request->validate([
+            'nik' => ['required', 'string', 'digits:16'],
+            'requested_amount' => ['nullable', 'integer', 'min:0'],
+            'requested_tenor' => ['nullable', 'integer', 'min:0', 'max:600'],
+        ], [
+            'nik.digits' => 'Kolom nomor KTP harus 16 angka.',
+        ], ['nik' => 'nomor ktp']);
 
-        $record = LoanApplication::create($data);
+        $customer = CustomerDirectory::find($data['nik']);
+
+        if (! $customer) {
+            throw ValidationException::withMessages([
+                'nik' => 'Nomor KTP belum terdaftar di sistem data nasabah. Pengajuan tidak dapat dilanjutkan.',
+            ]);
+        }
+
+        $record = LoanApplication::create([
+            'application_code' => LoanApplication::nextCode(),
+            'application_date' => now()->toDateString(),
+            'status' => 'DIAJUKAN',
+            'nik' => $data['nik'],
+            'full_name' => $customer['full_name'],
+            'cif_number' => $customer['cif_number'] ?? null,
+            'requested_amount' => (int) ($data['requested_amount'] ?? 0),
+            'requested_tenor' => (int) ($data['requested_tenor'] ?? 0),
+            'created_by' => $request->user()->id,
+        ]);
 
         ActivityLog::record("Menambah pengajuan {$record->application_code}", self::LABEL, 'success', $record);
 
-        return to_route('loan-simulation.index')
-            ->with('success', "Pengajuan {$record->application_code} ditambahkan.");
+        return to_route('loan-simulation.show', $record)
+            ->with('success', "Pengajuan {$record->application_code} dibuka. Lengkapi tahapannya.");
     }
 
+    /** Tahap "Data Pengajuan". */
     public function update(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         $before = $loanApplication->getOriginal();
-        $loanApplication->update($this->prepare($this->validated($request, $loanApplication)));
+
+        $data = $request->validate([
+            'application_date' => ['required', 'date'],
+            'office_id' => ['nullable', 'integer', 'exists:offices,id'],
+            'product_id' => ['required', 'integer', 'exists:products,id'],
+            'institution_id' => ['nullable', 'integer', 'exists:institutions,id'],
+            'requested_amount' => ['required', 'integer', 'min:1'],
+            'requested_tenor' => ['required', 'integer', 'min:1', 'max:600'],
+            'tenor_principal' => ['nullable', 'integer', 'min:1', 'max:600', 'lte:requested_tenor'],
+            'tenor_interest' => ['nullable', 'integer', 'min:1', 'max:600', 'lte:requested_tenor'],
+            'usage_type' => ['nullable', Rule::in(self::USAGE_TYPES)],
+            'method_id' => ['nullable', 'integer', 'exists:methods,id'],
+            'installment_id' => ['nullable', 'integer', 'exists:installments,id'],
+            'interest_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'provision_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'admin_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'purpose' => ['nullable', 'string', 'max:255'],
+            'note' => ['nullable', 'string', 'max:255'],
+        ], [], [
+            'product_id' => 'produk',
+            'requested_amount' => 'plafon',
+            'requested_tenor' => 'jangka waktu',
+            'tenor_principal' => 'jk pokok',
+            'tenor_interest' => 'jw bunga',
+        ]);
+
+        foreach (['purpose', 'note'] as $key) {
+            if (filled($data[$key] ?? null)) {
+                $data[$key] = mb_strtoupper($data[$key]);
+            }
+        }
+
+        $loanApplication->update($data);
 
         ActivityLog::record(
             "Memperbarui pengajuan {$loanApplication->application_code}",
@@ -100,8 +194,63 @@ class LoanApplicationController extends Controller
             ActivityLog::diffOf($loanApplication, $before),
         );
 
-        return to_route('loan-simulation.index')
-            ->with('success', "Pengajuan {$loanApplication->application_code} diperbarui.");
+        return back()->with('success', 'Data pengajuan disimpan.');
+    }
+
+    /** Tahap "Data Surveyor". */
+    public function updateSurvey(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $data = $request->validate([
+            'office_id' => ['required', 'integer', 'exists:offices,id'],
+            'supervisor_id' => ['nullable', 'integer', 'exists:users,id'],
+            'surveyor_id' => ['nullable', 'integer', 'exists:users,id'],
+        ], [], ['office_id' => 'wilayah/kantor']);
+
+        $loanApplication->update($data);
+
+        return back()->with('success', 'Penugasan surveyor disimpan.');
+    }
+
+    public function attachCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $data = $request->validate([
+            'collateral_simulation_id' => ['required', 'integer', 'exists:collateral_simulations,id'],
+        ], [], ['collateral_simulation_id' => 'agunan']);
+
+        $loanApplication->collaterals()->syncWithoutDetaching([$data['collateral_simulation_id']]);
+
+        return back()->with('success', 'Agunan dilekatkan ke berkas.');
+    }
+
+    public function detachCollateral(LoanApplication $loanApplication, CollateralSimulation $collateral): RedirectResponse
+    {
+        $loanApplication->collaterals()->detach($collateral->id);
+
+        return back()->with('success', 'Agunan dilepas dari berkas.');
+    }
+
+    /** Tahap "Konfirmasi Data" — berkas berpindah ke tahap analisa. */
+    public function confirm(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        if ($loanApplication->confirmed_at) {
+            return back()->with('error', 'Berkas sudah dikonfirmasi.');
+        }
+
+        $checks = $this->checklist($loanApplication);
+
+        if (in_array(false, $checks, true)) {
+            return back()->with('error', 'Lengkapi seluruh tahapan sebelum konfirmasi.');
+        }
+
+        $loanApplication->update([
+            'status' => 'ANALISA',
+            'confirmed_at' => now(),
+            'confirmed_by' => $request->user()->id,
+        ]);
+
+        ActivityLog::record("Konfirmasi pengajuan {$loanApplication->application_code}", self::LABEL, 'success', $loanApplication);
+
+        return back()->with('success', 'Berkas dikonfirmasi dan masuk tahap analisa.');
     }
 
     public function destroy(LoanApplication $loanApplication): RedirectResponse
@@ -111,113 +260,67 @@ class LoanApplicationController extends Controller
 
         ActivityLog::record("Menghapus pengajuan {$code}", self::LABEL, 'warning');
 
-        return back()->with('success', "Pengajuan {$code} dihapus.");
+        return to_route('loan-simulation.index')->with('success', "Pengajuan {$code} dihapus.");
     }
 
-    /** Teks disimpan huruf besar dan angka dipastikan bertipe bilangan. */
-    private function prepare(array $data): array
+    /** Kelengkapan tiap tahap untuk kartu konfirmasi. */
+    private function checklist(LoanApplication $r): array
     {
-        foreach (['full_name', 'birth_place', 'mother_name', 'address', 'occupation', 'employer_name', 'spouse_name', 'purpose', 'economic_sector', 'collateral_note'] as $key) {
-            if (filled($data[$key] ?? null)) {
-                $data[$key] = mb_strtoupper($data[$key]);
-            }
-        }
-
-        foreach (['monthly_income', 'other_income', 'monthly_expense', 'spouse_income', 'requested_amount', 'requested_tenor'] as $key) {
-            $data[$key] = (int) ($data[$key] ?? 0);
-        }
+        // Satu panggilan per request; nanti diganti HTTP ke sistem nasabah.
+        $this->customerCache ??= CustomerDirectory::find((string) $r->nik);
 
         return [
-            ...$data,
-            'application_date' => $data['application_date'] ?? now()->toDateString(),
-            'status' => $data['status'] ?? 'DIAJUKAN',
+            'nasabah' => (bool) $this->customerCache,
+            'pengajuan' => (bool) $r->product_id && $r->requested_amount > 0 && $r->requested_tenor > 0,
+            'jaminan' => $r->collaterals()->exists(),
+            'surveyor' => (bool) $r->office_id && (bool) $r->surveyor_id,
         ];
-    }
-
-    private function validated(Request $request, ?LoanApplication $current = null): array
-    {
-        return $request->validate([
-            'application_date' => ['nullable', 'date'],
-            'status' => ['nullable', Rule::in(self::STATUSES)],
-            'office_id' => ['nullable', 'integer', 'exists:offices,id'],
-            'product_id' => ['nullable', 'integer', 'exists:products,id'],
-            'purpose' => ['nullable', 'string', 'max:255'],
-            'economic_sector' => ['nullable', 'string', 'max:255'],
-            'source' => ['nullable', 'string', 'max:30'],
-
-            'cif_number' => ['nullable', 'string', 'max:20'],
-            'nik' => ['required', 'string', 'digits_between:8,20'],
-            'full_name' => ['required', 'string', 'min:3', 'max:100'],
-            'birth_place' => ['nullable', 'string', 'max:60'],
-            'birth_date' => ['nullable', 'date'],
-            'gender' => ['nullable', 'in:L,P'],
-            'marital_status' => ['nullable', 'string', 'max:20'],
-            'mother_name' => ['nullable', 'string', 'max:100'],
-            'npwp' => ['nullable', 'string', 'max:25'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'region_code' => ['nullable', 'string', 'max:8'],
-            'region_label' => ['nullable', 'string', 'max:150'],
-            'phone' => ['nullable', 'string', 'max:25'],
-            'email' => ['nullable', 'email', 'max:100'],
-            'occupation' => ['nullable', 'string', 'max:60'],
-            'employer_name' => ['nullable', 'string', 'max:100'],
-            'monthly_income' => ['nullable', 'integer', 'min:0'],
-            'other_income' => ['nullable', 'integer', 'min:0'],
-            'monthly_expense' => ['nullable', 'integer', 'min:0'],
-            'spouse_name' => ['nullable', 'string', 'max:100'],
-            'spouse_nik' => ['nullable', 'string', 'digits_between:8,20'],
-            'spouse_income' => ['nullable', 'integer', 'min:0'],
-
-            'requested_amount' => ['nullable', 'integer', 'min:0'],
-            'requested_tenor' => ['nullable', 'integer', 'min:0', 'max:600'],
-            'method_id' => ['nullable', 'integer', 'exists:methods,id'],
-            'installment_id' => ['nullable', 'integer', 'exists:installments,id'],
-            'interest_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'provision_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'admin_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'collateral_note' => ['nullable', 'string', 'max:255'],
-
-            'credit_account' => [
-                'nullable', 'string', 'max:30',
-                Rule::unique('loan_applications', 'credit_account')->ignore($current?->id),
-            ],
-        ], [
-            'nik.digits_between' => 'Kolom nomor KTP hanya boleh angka (8–20 digit).',
-        ], [
-            'nik' => 'nomor ktp',
-            'full_name' => 'nama lengkap',
-            'requested_amount' => 'plafon diajukan',
-            'requested_tenor' => 'jangka waktu',
-            'product_id' => 'produk',
-            'office_id' => 'kantor',
-        ]);
     }
 
     private function references(): array
     {
+        $byRoles = fn (array $roles) => User::query()
+            ->whereHas('roles', fn ($q) => $q->whereIn('name', $roles))
+            ->orderBy('name')
+            ->get(['id', 'name', 'role'])
+            ->map(fn (User $u) => ['value' => $u->id, 'label' => "{$u->name} — {$u->role}"])
+            ->all();
+
         return [
             'statuses' => self::STATUSES,
+            'usageTypes' => collect(self::USAGE_TYPES)->map(fn ($v) => ['value' => $v, 'label' => $v])->all(),
             'offices' => Office::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($o) => ['value' => $o->id, 'label' => "{$o->code} : {$o->name}"])->all(),
             'products' => Product::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($p) => ['value' => $p->id, 'label' => "{$p->code} : {$p->name}"])->all(),
+            'institutions' => Institution::orderBy('name')->get(['id', 'name'])
+                ->map(fn ($i) => ['value' => $i->id, 'label' => $i->name])->all(),
             'methods' => Method::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($m) => ['value' => $m->id, 'label' => "{$m->code} : {$m->name}"])->all(),
             'installments' => Installment::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($i) => ['value' => $i->id, 'label' => "{$i->code} : {$i->name}"])->all(),
-            'regionOptions' => Region::query()
-                ->select('code', 'regency')
-                ->distinct()
-                ->orderBy('code')
-                ->get()
-                ->map(fn (Region $r) => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"])
-                ->all(),
+            'supervisors' => $byRoles(['Kasi Analis', 'Kabag Analis']),
+            'surveyors' => $byRoles(['Staff Analis', 'AO Kredit']),
         ];
     }
 
-    private function row(LoanApplication $r, bool $full = false): array
+    private function detail(LoanApplication $r): array
     {
-        $base = [
+        return [
+            ...$this->row($r),
+            ...$r->only([
+                'institution_id', 'tenor_principal', 'tenor_interest', 'usage_type', 'method_id',
+                'installment_id', 'interest_rate', 'provision_rate', 'admin_rate', 'purpose',
+                'note', 'collateral_note', 'cif_number', 'supervisor_id', 'surveyor_id',
+            ]),
+            'confirmed_at' => $r->confirmed_at?->translatedFormat('d M Y H:i'),
+            'checklist' => $this->checklist($r),
+        ];
+    }
+
+    private function row(LoanApplication $r): array
+    {
+        return [
             ...$r->only([
                 'id', 'application_code', 'status', 'office_id', 'product_id',
                 'nik', 'full_name', 'requested_amount', 'requested_tenor', 'credit_account',
@@ -225,22 +328,6 @@ class LoanApplicationController extends Controller
             'application_date' => $r->application_date?->format('Y-m-d'),
             'product_label' => $r->product ? "{$r->product->code} : {$r->product->name}" : null,
             'office_label' => $r->office ? "{$r->office->code} : {$r->office->name}" : null,
-        ];
-
-        if (! $full) {
-            return $base;
-        }
-
-        return [
-            ...$base,
-            ...$r->only([
-                'purpose', 'economic_sector', 'source', 'cif_number', 'birth_place', 'gender',
-                'marital_status', 'mother_name', 'npwp', 'address', 'region_code', 'region_label',
-                'phone', 'email', 'occupation', 'employer_name', 'monthly_income', 'other_income',
-                'monthly_expense', 'spouse_name', 'spouse_nik', 'spouse_income', 'method_id',
-                'installment_id', 'interest_rate', 'provision_rate', 'admin_rate', 'collateral_note',
-            ]),
-            'birth_date' => $r->birth_date?->format('Y-m-d'),
         ];
     }
 }

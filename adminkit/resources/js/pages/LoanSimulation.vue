@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { FileText, Pencil, Plus, Trash2 } from 'lucide-vue-next';
+import { FileText, FolderOpen, Plus, Trash2 } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
@@ -91,11 +91,13 @@ const confirmDelete = () =>
                 empty-title="Belum ada pengajuan"
                 empty-description="Berkas pengajuan adalah pintu masuk proses pemberian kredit."
                 :show-refresh="false"
+                row-clickable
                 @update:search="onSearch"
                 @update:sort="onSort"
                 @update:page="onPage"
                 @update:per-page="onPerPage"
                 @refresh="reload()"
+                @row-click="router.visit(`/loan-simulation/${$event.id}`)"
             >
                 <template #header-action>
                     <Button
@@ -150,13 +152,13 @@ const confirmDelete = () =>
 
                 <template #cell-actions="{ row }">
                     <RowActions :testid="`loan-simulation-actions-${row.id}`">
+                        <DropdownMenuItem
+                            :data-testid="`loan-simulation-open-${row.id}`"
+                            @select="router.visit(`/loan-simulation/${row.id}`)"
+                        >
+                            <FolderOpen />Buka Berkas
+                        </DropdownMenuItem>
                         <template v-if="canManage">
-                            <DropdownMenuItem
-                                :data-testid="`loan-simulation-edit-${row.id}`"
-                                @select="router.visit(`/loan-simulation/${row.id}/edit`)"
-                            >
-                                <Pencil />{{ ACTION.edit }}
-                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 class="text-destructive data-[highlighted]:text-destructive"

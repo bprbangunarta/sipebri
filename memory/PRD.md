@@ -523,3 +523,21 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 4. P2 Master **nasabah/CIF** (kini data pemohon direkam per berkas).
 5. P2 Diff Skema Migrasi belum membandingkan panjang kolom, komentar, dan relasi FK.
 6. P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter audit trail.
+
+## Selesai (2026-06-21 lanjutan, Pengajuan Kredit tanpa data pemohon)
+- Keputusan user: **SIPEBRI tidak menyimpan data pemohon**. Migration `2026_08_21_050000` menghapus
+  19 kolom identitas dari `loan_applications` (sisa `nik`, `full_name`, `cif_number`) dan menambah
+  `institution_id` (resort/instansi), `tenor_principal`, `tenor_interest`, `usage_type`, `note`,
+  `supervisor_id`, `surveyor_id`, `confirmed_at`, `confirmed_by`. Kategori pengajuan tidak dipakai
+  (jalur komite ditentukan produk + Komite Kredit).
+- `App\Support\CustomerDirectory` — **MOCK** API sistem nasabah (3 KTP contoh) + endpoint
+  `GET /loan-simulation/lookup?nik=`. KTP tidak terdaftar → pengajuan diblokir (frontend & backend).
+- Form tambah ringkas (No. KTP + Cek KTP + plafon + jangka waktu) → berkas dibuka sebagai halaman
+  tab: Data Pengajuan → Data Jaminan (lekat/lepas agunan + total taksasi) → Data Surveyor
+  (kantor, Kasi Analis, Surveyor dari pengguna SIPEBRI sesuai peranan) → Konfirmasi (checklist 4 baris,
+  status jadi ANALISA, tidak bisa dikonfirmasi dua kali).
+- Uji: testing agent iterasi 40 — backend 47/47 setelah perbaikan, frontend seluruh alur lulus.
+  Bug KRITIS yang ditemukan & diperbaiki: cast `confirmed_at` hilang → halaman berkas 500 setelah
+  konfirmasi; juga dibersihkan cast kolom yang sudah dihapus, ditambah validasi
+  `tenor_principal`/`tenor_interest` ≤ `requested_tenor`, dan konfirmasi ganda ditolak.
+  Verifikasi ulang via screenshot: berkas 00800002 (ANALISA) tampil normal + "Sudah dikonfirmasi".
