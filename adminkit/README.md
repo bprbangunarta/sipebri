@@ -264,9 +264,9 @@ database/{migrations,seeders,factories}
 
 ## Aturan format angka & responsif (wajib)
 - Detail lengkap: `/app/memory/ui_rules.md`.
-- Ringkas: setiap angka yang tampil memakai format Indonesia (`1.000`); setiap input angka
-  memakai `resources/js/components/ui/NumberInput.vue` — `1.000` hanya tampilan, nilai
-  yang disimpan/dikirim tetap `1000`.
+- Ringkas: setiap angka yang tampil memakai format Indonesia (`1.000`, `12,75%`); input bilangan
+  bulat memakai `resources/js/components/ui/NumberInput.vue` (`1.000` → simpan `1000`) dan input
+  desimal memakai `DecimalInput.vue` (`12,75` → simpan `12.75`).
 
 ## Skema Basis Data
 

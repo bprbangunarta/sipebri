@@ -14,6 +14,7 @@ import CardTitle from '@/components/ui/CardTitle.vue';
 import Checkbox from '@/components/ui/Checkbox.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import Input from '@/components/ui/Input.vue';
+import DecimalInput from '@/components/ui/DecimalInput.vue';
 import NumberInput from '@/components/ui/NumberInput.vue';
 import Label from '@/components/ui/Label.vue';
 import Switch from '@/components/ui/Switch.vue';
@@ -154,22 +155,22 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                 <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-interest">Suku Bunga (%)</Label>
-                        <Input id="p-interest" v-model="form.interest_rate" inputmode="decimal" data-testid="param-interest" />
+                        <DecimalInput id="p-interest" v-model="form.interest_rate" data-testid="param-interest" />
                         <p v-if="form.errors.interest_rate" class="text-xs font-medium text-destructive">
                             {{ form.errors.interest_rate }}
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-provision">Provisi (%)</Label>
-                        <Input id="p-provision" v-model="form.provision_rate" inputmode="decimal" data-testid="param-provision" />
+                        <DecimalInput id="p-provision" v-model="form.provision_rate" data-testid="param-provision" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-admin">Biaya Admin (%)</Label>
-                        <Input id="p-admin" v-model="form.admin_rate" inputmode="decimal" data-testid="param-admin" />
+                        <DecimalInput id="p-admin" v-model="form.admin_rate" data-testid="param-admin" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="p-rc">Ambang RC Maksimal (%)</Label>
-                        <Input id="p-rc" v-model="form.rc_threshold" inputmode="decimal" data-testid="param-rc" />
+                        <DecimalInput id="p-rc" v-model="form.rc_threshold" data-testid="param-rc" />
                         <p v-if="form.errors.rc_threshold" class="text-xs font-medium text-destructive">
                             {{ form.errors.rc_threshold }}
                         </p>

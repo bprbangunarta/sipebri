@@ -12,6 +12,12 @@ export const TIER_DECISIONS = [
     { key: 'can_reject', label: 'Ditolak' },
 ];
 
+/** Persentase gaya Indonesia: 12.75 → "12,75%" (koma desimal). */
+export const persen = (value, decimals = 2) =>
+    value === null || value === undefined || value === ''
+        ? '—'
+        : `${new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: decimals }).format(Number(value))}%`;
+
 export const rupiah = (value) =>
     value === null || value === undefined || value === ''
         ? '—'

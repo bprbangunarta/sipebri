@@ -21,6 +21,7 @@ import TableRow from '@/components/ui/TableRow.vue';
 import EmptyState from '@/components/composite/EmptyState.vue';
 import MiniBarChart from '@/components/composite/MiniBarChart.vue';
 import { ACTION } from '@/constants/labels';
+import { persen } from '@/constants/committee';
 
 /* ── DATA CONTOH (statis) — belum tersambung ke basis data ─────────────────
    Angka kantor tertentu diturunkan dari porsi kantor terhadap total. */
@@ -201,7 +202,7 @@ const target = computed(() => ({ realisasi: money(18.4), target: money(24), perc
                                 <span class="text-xs text-muted-foreground">dari {{ target.target }}</span>
                             </div>
                             <Progress :value="target.percent" class="h-2" />
-                            <p class="text-xs text-muted-foreground">{{ target.percent }}% target penyaluran tercapai</p>
+                            <p class="text-xs text-muted-foreground">{{ persen(target.percent, 0) }} target penyaluran tercapai</p>
                         </div>
                         <div class="space-y-2 border-t pt-3">
                             <p class="text-xs uppercase tracking-wider text-muted-foreground">Hasil Keputusan Komite</p>
@@ -219,7 +220,7 @@ const target = computed(() => ({ realisasi: money(18.4), target: money(24), perc
                                         <span class="size-2 rounded-sm" :style="{ backgroundColor: `hsl(var(${d.token}))` }" />
                                         {{ d.label }}
                                     </span>
-                                    <span class="tabular-nums">{{ d.percent }}%</span>
+                                    <span class="tabular-nums">{{ persen(d.percent, 1) }}</span>
                                 </li>
                             </ul>
                         </div>

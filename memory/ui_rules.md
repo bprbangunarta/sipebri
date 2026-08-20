@@ -21,8 +21,10 @@ Untuk tiap lebar, cek:
   `1.000` hanyalah tampilan, **nilai yang disimpan/dikirim tetap `1000`** (integer murni,
   tanpa titik). Jangan pernah mengirim string berformat ke backend/API.
 - Jangan memakai `<Input type="number">` untuk rupiah/plafon/tenor/persen bulat — pakai `NumberInput`.
-- Desimal (mis. suku bunga) tetap memakai titik desimal pada nilai simpan; bila ditampilkan,
-  format ke gaya Indonesia (koma desimal) hanya pada teks tampilan, bukan pada nilai.
+- Desimal (suku bunga, provisi, biaya admin, ambang RC, persentase): pakai
+  `components/ui/DecimalInput.vue` → **tampil `12,75`**, **nilai simpan `12.75`**.
+  Untuk teks tampilan persen pakai `persen(value, decimals)` dari `constants/committee.js`
+  (`12.75` → `12,75%`).
 
 
 - KPI 5 kartu: `grid-cols-2 md:grid-cols-3 xl:grid-cols-5`, kartu terakhir `col-span-2 md:col-span-1`.
