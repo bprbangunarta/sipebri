@@ -30,7 +30,7 @@ const columns = [
     { key: 'collateral_type_code', label: 'Jenis Agunan', hideBelow: 'md' },
     { key: 'owner_name', label: 'Pemilik' },
     { key: 'binding_label', label: 'Pengikatan', hideBelow: 'lg', sortable: false },
-    { key: 'value_appraisal', label: 'Nilai Taksasi', align: 'right', hideBelow: 'md', sortable: false },
+    { key: 'appraisal_value', label: 'Nilai Taksasi', align: 'right', hideBelow: 'md', sortable: false },
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ];
 
@@ -113,8 +113,8 @@ const confirmDelete = () =>
                     <span class="whitespace-normal">{{ row.binding_label ?? 'Belum diikat' }}</span>
                 </template>
 
-                <template #cell-value_appraisal="{ row }">
-                    <span class="whitespace-nowrap tabular-nums">{{ rupiah(row.value_appraisal) }}</span>
+                <template #cell-appraisal_value="{ row }">
+                    <span class="whitespace-nowrap tabular-nums">{{ rupiah(row.appraisal_value) }}</span>
                 </template>
 
                 <template #cell-actions="{ row }">

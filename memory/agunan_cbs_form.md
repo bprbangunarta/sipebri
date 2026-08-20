@@ -93,3 +93,34 @@ Catatan penting:
    **Peringkat Surat Berharga & Lembaga Pemeringkat**.
 3. Field bersyarat menurut jenis agunan (No. SHM, peringkat surat berharga) — tetap dikirim apa adanya ke CBS.
 4. Nilai uang disimpan bulat, apa adanya, tanpa turunan hitungan.
+
+## Nama kolom `collateral_simulations` setelah tinjauan skema (21/06/2026)
+
+Kolom yang **dihapus** karena tidak dipakai form/payload: `paripasu`, `file_number`,
+`auto_number`, `ownership`, `owner_same_as_cif`, `region_id`.
+Akibatnya key payload `no_rek` dan `kepemilikan` **selalu string kosong** — bila CBS benar-benar
+membutuhkannya, kolom tersebut harus dikembalikan.
+
+Kolom yang **diganti nama** (mengikuti rancangan user di modul Skema Migrasi):
+
+| Lama | Baru |
+|---|---|
+| `insured` | `insurance_code` (`Y`/`T`, default `T`) |
+| `insurance_start_date` | `insurance_date` |
+| `value_guarantee` | `guarantee_value` |
+| `value_fair` | `fair_value` |
+| `value_njop` | `njop_value` |
+| `value_adjustment` | `adjustment_value` |
+| `value_appraisal` | `appraisal_value` |
+| `value_independent` | `independent_value` |
+| `independent_appraiser_name` | `independent_name` |
+| `independent_appraised_at` | `independent_at` |
+
+Perubahan lain: `collateral_id` kini **unique** dan diisi otomatis `AGN-000001` bila dikosongkan;
+`ppap_code` default `1`. Migration: `2026_08_21_000000_drop_unused_columns_...` dan
+`2026_08_21_020000_rename_collateral_simulation_columns.php`. Struktur payload CBS **tidak berubah**.
+
+Belum ada di form (catatan hasil uji iterasi 39):
+- Input **Agunan ID** tidak ditampilkan di form, jadi aturan unique hanya berlaku dari sisi API.
+- Input **Penaksir** (`appraiser_name`) & **Penaksir Independen** (`independent_name`) belum ada di
+  form, sehingga `penaksir.*.penaksir` pada payload selalu kosong kecuali diisi lewat seeder/API.

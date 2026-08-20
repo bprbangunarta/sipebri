@@ -459,3 +459,29 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - Halaman rancangan `/schema-drafts/{id}` bertab: **Kolom** (drag untuk urutkan + tambah/ubah/hapus), **Diff** (baru/berubah/dihapus/sama terhadap `Schema::getColumns()` nyata), **Migration** (pratinjau kode `Schema::create`/`Schema::table`, tombol Salin). Tombol **Impor dari tabel** mengisi rancangan dari tabel yang sudah ada. Modul TIDAK menulis file migration dan TIDAK menjalankan migration (keputusan user).
 - Data awal: rancangan `collateral_simulations` (hasil impor) dan `credit_applications` (rangka Pengajuan Kredit).
 - **Uji**: testing agent iterasi 38 → backend 30/31, frontend 100% (drag persist, diff, migration preview, 403 tanpa izin, responsif 390/768). Satu temuan (route binding kolom tidak ter-scope) sudah diperbaiki dengan `->scopeBindings()` + tes regresi `tests/Feature/SchemaDraftScopeTest.php`. `php artisan test` → 28 lulus.
+
+## Selesai (2026-06-21, rancangan skema agunan diterapkan)
+- User menyusun rancangan tabel `collateral_simulations` di modul Skema Migrasi; agent menerapkannya:
+  migration `2026_08_21_020000_rename_collateral_simulation_columns.php` → 10 kolom di-`renameColumn`
+  (`insured`→`insurance_code`, `insurance_start_date`→`insurance_date`, `value_*`→`*_value`,
+  `independent_appraiser_name`→`independent_name`, `independent_appraised_at`→`independent_at`),
+  `collateral_id` jadi **unique** + terisi otomatis `AGN-000001` bila kosong (anti-tabrakan),
+  `ppap_code` default `1`. Data lama utuh. Struktur payload CBS tidak berubah.
+- Seluruh kode ikut nama baru: model, controller, `CollateralSimulationForm.vue`, tabel index, detail.
+- **Diff Skema Migrasi diperluas**: kini juga membandingkan default, unique, dan index
+  (sebelumnya hanya tipe & nullable). `importFrom()` ikut mengambil flag unique/index.
+- Seeder: `CollateralSimulationSeeder` pakai nama kolom baru + `region_label` diseragamkan
+  (`0121 : Kab. Subang`); **`SchemaDraftSeeder` baru** (rancangan `collateral_simulations` dicerminkan
+  dari skema nyata + rangka `credit_applications`), didaftarkan di `DatabaseSeeder`.
+- Dokumentasi: `/app/memory/skema_migrasi.md` (baru) & bagian nama kolom baru di `/app/memory/agunan_cbs_form.md`.
+- **Uji**: testing agent iterasi 39 (frontend + backend) lulus — data lama utuh, auto Agunan ID,
+  tab Database hanya nama kolom baru, payload CBS sesuai kontrak, diff 26 kolom "Sama",
+  responsif 390/768px. `php artisan test` → 37 lulus.
+
+### Backlog (P1 → P3)
+1. P1 **Pengajuan Kredit** tahap 1 dari 9 (rancangan `credit_applications` sudah tersedia di Skema Migrasi).
+2. P1 Form agunan: tampilkan input **Agunan ID** (opsional) + **Penaksir**/**Penaksir Independen**
+   (`appraiser_name`, `independent_name`) — sekarang `penaksir.*` di payload selalu kosong.
+3. P1 Aktifkan tombol Posting payload ke endpoint CBS bila URL siap (+ log riwayat posting).
+4. P2 Diff Skema Migrasi belum membandingkan panjang kolom, komentar, dan relasi FK.
+5. P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter audit trail.

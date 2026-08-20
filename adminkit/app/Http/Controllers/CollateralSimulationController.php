@@ -13,6 +13,7 @@ use App\Support\TableQuery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -95,6 +96,9 @@ class CollateralSimulationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
+        $data['collateral_id'] = filled($data['collateral_id'] ?? null)
+            ? $data['collateral_id']
+            : $this->nextCollateralId();
         $record = CollateralSimulation::create($this->withDefaults($data));
 
         ActivityLog::record("Menambah contoh agunan {$record->collateral_id}", self::LABEL, 'success', $record);
@@ -130,23 +134,35 @@ class CollateralSimulationController extends Controller
         return back()->with('success', "Contoh agunan {$id} dihapus.");
     }
 
+    /** Agunan ID diisi sistem bila pengguna membiarkannya kosong. */
+    private function nextCollateralId(): string
+    {
+        $next = CollateralSimulation::max('id') + 1;
+
+        while (CollateralSimulation::where('collateral_id', $id = 'AGN-'.str_pad((string) $next, 6, '0', STR_PAD_LEFT))->exists()) {
+            $next++;
+        }
+
+        return $id;
+    }
+
     /** Kolom yang tak boleh null di basis data diberi nilai bawaan CBS. */
     private function withDefaults(array $data): array
     {
         // Semua teks yang diketik pengguna disimpan HURUF BESAR (mengikuti CBS).
-        foreach (['collateral_id', 'document_number', 'description', 'owner_name', 'owner_address', 'appraiser_name', 'independent_appraiser_name'] as $key) {
+        foreach (['collateral_id', 'document_number', 'description', 'owner_name', 'owner_address', 'appraiser_name', 'independent_name'] as $key) {
             if (filled($data[$key] ?? null)) {
                 $data[$key] = mb_strtoupper($data[$key]);
             }
         }
 
-        foreach (['value_guarantee', 'value_adjustment', 'value_fair', 'value_njop', 'value_appraisal', 'value_independent'] as $key) {
+        foreach (['guarantee_value', 'adjustment_value', 'fair_value', 'njop_value', 'appraisal_value', 'independent_value'] as $key) {
             $data[$key] = (int) ($data[$key] ?? 0);
         }
 
         return [
             ...$data,
-            'insured' => ($data['insured'] ?? '') ?: 'T',
+            'insurance_code' => ($data['insurance_code'] ?? '') ?: 'T',
             'ppap_code' => ($data['ppap_code'] ?? '') ?: '1',
         ];
     }
@@ -157,7 +173,10 @@ class CollateralSimulationController extends Controller
         $onEdit = $current ? ['required'] : ['nullable'];
 
         return $request->validate([
-            'collateral_id' => ['nullable', 'string', 'max:50'],
+            'collateral_id' => [
+                'nullable', 'string', 'max:50',
+                Rule::unique('collateral_simulations', 'collateral_id')->ignore($current?->id),
+            ],
             'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
             'document_number' => ['required', 'string', 'max:100'],
@@ -166,21 +185,21 @@ class CollateralSimulationController extends Controller
             'owner_address' => ['required', 'string', 'max:255'],
             'region_code' => ['required', 'string', 'max:8'],
             'region_label' => ['nullable', 'string', 'max:150'],
-            'value_guarantee' => ['nullable', 'integer', 'min:0'],
-            'value_adjustment' => ['nullable', 'integer', 'min:0'],
-            'value_fair' => ['nullable', 'integer', 'min:0'],
-            'value_njop' => ['nullable', 'integer', 'min:0'],
-            'value_appraisal' => ['nullable', 'integer', 'min:0'],
-            'value_independent' => ['nullable', 'integer', 'min:0'],
+            'guarantee_value' => ['nullable', 'integer', 'min:0'],
+            'adjustment_value' => ['nullable', 'integer', 'min:0'],
+            'fair_value' => ['nullable', 'integer', 'min:0'],
+            'njop_value' => ['nullable', 'integer', 'min:0'],
+            'appraisal_value' => ['nullable', 'integer', 'min:0'],
+            'independent_value' => ['nullable', 'integer', 'min:0'],
             'appraiser_name' => ['nullable', 'string', 'max:100'],
             'appraised_at' => [...$onEdit, 'date'],
-            'independent_appraiser_name' => ['nullable', 'string', 'max:100'],
-            'independent_appraised_at' => ['nullable', 'date'],
+            'independent_name' => ['nullable', 'string', 'max:100'],
+            'independent_at' => ['nullable', 'date'],
             'condition_code' => [...$onEdit, 'string', 'exists:collateral_conditions,code'],
             'condition_date' => [...$onEdit, 'date'],
-            'insured' => [...$onEdit, 'in:Y,T'],
+            'insurance_code' => [...$onEdit, 'in:Y,T'],
             'ppap_code' => ['nullable', 'string', 'exists:collateral_methods,code'],
-            'insurance_start_date' => [...$onEdit, 'date'],
+            'insurance_date' => [...$onEdit, 'date'],
         ], [], [
             'collateral_id' => 'agunan id',
             'collateral_type_code' => 'jenis agunan',
@@ -193,8 +212,8 @@ class CollateralSimulationController extends Controller
             'description' => 'keterangan agunan',
             'condition_code' => 'kondisi',
             'condition_date' => 'tgl kondisi',
-            'insured' => 'diasuransikan',
-            'insurance_start_date' => 'tgl asuransi',
+            'insurance_code' => 'diasuransikan',
+            'insurance_date' => 'tgl asuransi',
             'appraised_at' => 'tgl taksasi',
         ]);
     }
@@ -232,14 +251,14 @@ class CollateralSimulationController extends Controller
                 'id', 'collateral_id', 'collateral_type_code',
                 'binding_type_code', 'securities_rank', 'rating_agency', 'document_number',
                 'description', 'owner_name', 'owner_address', 'region_code',
-                'region_label', 'value_guarantee', 'value_adjustment', 'value_fair', 'value_njop',
-                'value_appraisal', 'value_independent', 'appraiser_name', 'independent_appraiser_name',
-                'condition_code', 'insured', 'ppap_code',
+                'region_label', 'guarantee_value', 'adjustment_value', 'fair_value', 'njop_value',
+                'appraisal_value', 'independent_value', 'appraiser_name', 'independent_name',
+                'condition_code', 'insurance_code', 'ppap_code',
             ]),
             'appraised_at' => $r->appraised_at?->format('Y-m-d'),
-            'independent_appraised_at' => $r->independent_appraised_at?->format('Y-m-d'),
+            'independent_at' => $r->independent_at?->format('Y-m-d'),
             'condition_date' => $r->condition_date?->format('Y-m-d'),
-            'insurance_start_date' => $r->insurance_start_date?->format('Y-m-d'),
+            'insurance_date' => $r->insurance_date?->format('Y-m-d'),
             'type_label' => CollateralType::where('code', $r->collateral_type_code)->value('name'),
             'binding_label' => $r->binding_type_code
                 ? BindingType::where('code', $r->binding_type_code)->value('name')

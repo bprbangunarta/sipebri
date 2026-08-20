@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/app/adminkit/phpunit.xml" tests="37" assertions="224" errors="0" failures="0" skipped="0" time="7.736882">
+    <testsuite name="Unit" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.002763">
+      <testsuite name="Tests\Unit\ExampleTest" file="/app/adminkit/tests/Unit/ExampleTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.002763">
+        <testcase name="test_that_true_is_true" file="/app/adminkit/tests/Unit/ExampleTest.php" line="12" class="Tests\Unit\ExampleTest" classname="Tests.Unit.ExampleTest" assertions="1" time="0.002763"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="Feature" tests="36" assertions="223" errors="0" failures="0" skipped="0" time="7.734120">
+      <testsuite name="Tests\Feature\CollateralSimulationTest" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" tests="9" assertions="78" errors="0" failures="0" skipped="0" time="2.958189">
+        <testcase name="test_table_has_new_columns_and_unique_collateral_id" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="68" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="21" time="2.459724"/>
+        <testcase name="test_store_generates_collateral_id_when_blank" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="88" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="6" time="0.108376"/>
+        <testcase name="test_store_requires_mandatory_fields" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="104" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="7" time="0.043759"/>
+        <testcase name="test_duplicate_collateral_id_is_rejected_with_validation_error" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="116" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="3" time="0.051708"/>
+        <testcase name="test_update_saves_values_and_dates" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="130" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="12" time="0.065462"/>
+        <testcase name="test_update_requires_analysis_fields" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="166" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="6" time="0.062586"/>
+        <testcase name="test_cbs_payload_contract" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="177" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="8" time="0.021210"/>
+        <testcase name="test_index_and_show_render" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="204" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="6" time="0.087373"/>
+        <testcase name="test_diff_detects_default_unique_and_index_changes" file="/app/adminkit/tests/Feature/CollateralSimulationTest.php" line="222" class="Tests\Feature\CollateralSimulationTest" classname="Tests.Feature.CollateralSimulationTest" assertions="9" time="0.057991"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\CommitteeRulesTest" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" tests="11" assertions="28" errors="0" failures="0" skipped="0" time="0.564059">
+        <testcase name="test_seeder_creates_default_paths" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="22" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.027782"/>
+        <testcase name="test_duplicate_normal_path_is_rejected" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="28" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.050542"/>
+        <testcase name="test_condition_is_uppercased_and_path_created" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="37" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.046471"/>
+        <testcase name="test_tier_routes_are_scoped_to_their_path" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="48" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.037518"/>
+        <testcase name="test_tier_max_amount_must_be_greater_than_min" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="60" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.038495"/>
+        <testcase name="test_committee_export_returns_xlsx" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="73" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.105477"/>
+        <testcase name="test_simulation_finds_plafon_decider" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="81" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="4" time="0.059223"/>
+        <testcase name="test_simulation_prioritises_condition_over_product_path" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="93" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="4" time="0.051007"/>
+        <testcase name="test_simulation_warns_when_amount_has_no_decider" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="105" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="3" time="0.051481"/>
+        <testcase name="test_simulation_rejects_condition_that_does_not_belong_to_product" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="117" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="3" time="0.043874"/>
+        <testcase name="test_deleting_path_removes_its_tiers" file="/app/adminkit/tests/Feature/CommitteeRulesTest.php" line="128" class="Tests\Feature\CommitteeRulesTest" classname="Tests.Feature.CommitteeRulesTest" assertions="2" time="0.052189"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\ErrorPageTest" file="/app/adminkit/tests/Feature/ErrorPageTest.php" tests="3" assertions="9" errors="0" failures="0" skipped="0" time="0.131404">
+        <testcase name="test_404_memakai_halaman_error_inertia" file="/app/adminkit/tests/Feature/ErrorPageTest.php" line="16" class="Tests\Feature\ErrorPageTest" classname="Tests.Feature.ErrorPageTest" assertions="3" time="0.041613"/>
+        <testcase name="test_403_memakai_halaman_error_inertia" file="/app/adminkit/tests/Feature/ErrorPageTest.php" line="24" class="Tests\Feature\ErrorPageTest" classname="Tests.Feature.ErrorPageTest" assertions="3" time="0.064260"/>
+        <testcase name="test_permintaan_json_tetap_menerima_json" file="/app/adminkit/tests/Feature/ErrorPageTest.php" line="37" class="Tests\Feature\ErrorPageTest" classname="Tests.Feature.ErrorPageTest" assertions="3" time="0.025531"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\ExcelIoTest" file="/app/adminkit/tests/Feature/ExcelIoTest.php" tests="4" assertions="26" errors="0" failures="0" skipped="0" time="0.713840">
+        <testcase name="test_semua_ekspor_dan_template_menghasilkan_xlsx" file="/app/adminkit/tests/Feature/ExcelIoTest.php" line="38" class="Tests\Feature\ExcelIoTest" classname="Tests.Feature.ExcelIoTest" assertions="20" time="0.402849"/>
+        <testcase name="test_impor_pengguna_dari_xlsx" file="/app/adminkit/tests/Feature/ExcelIoTest.php" line="51" class="Tests\Feature\ExcelIoTest" classname="Tests.Feature.ExcelIoTest" assertions="2" time="0.190291"/>
+        <testcase name="test_impor_peranan_dari_xlsx" file="/app/adminkit/tests/Feature/ExcelIoTest.php" line="72" class="Tests\Feature\ExcelIoTest" classname="Tests.Feature.ExcelIoTest" assertions="2" time="0.067978"/>
+        <testcase name="test_berkas_csv_ditolak" file="/app/adminkit/tests/Feature/ExcelIoTest.php" line="87" class="Tests\Feature\ExcelIoTest" classname="Tests.Feature.ExcelIoTest" assertions="2" time="0.052722"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\SchemaDraftScopeTest" file="/app/adminkit/tests/Feature/SchemaDraftScopeTest.php" tests="1" assertions="4" errors="0" failures="0" skipped="0" time="0.050040">
+        <testcase name="test_column_of_other_draft_cannot_be_deleted" file="/app/adminkit/tests/Feature/SchemaDraftScopeTest.php" line="16" class="Tests\Feature\SchemaDraftScopeTest" classname="Tests.Feature.SchemaDraftScopeTest" assertions="4" time="0.050040"/>
+      </testsuite>
+      <testsuite name="Tests\Feature\SeederTest" file="/app/adminkit/tests/Feature/SeederTest.php" tests="8" assertions="78" errors="0" failures="0" skipped="0" time="3.316587">
+        <testcase name="test_jumlah_data_referensi_sesuai_cetakan" file="/app/adminkit/tests/Feature/SeederTest.php" line="30" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="16" time="0.035781"/>
+        <testcase name="test_setiap_pengguna_punya_tepat_satu_peranan" file="/app/adminkit/tests/Feature/SeederTest.php" line="50" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="2" time="0.026403"/>
+        <testcase name="test_kata_sandi_bawaan_pegawai_dan_super_admin" file="/app/adminkit/tests/Feature/SeederTest.php" line="58" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="3" time="0.046722"/>
+        <testcase name="test_kantor_pengguna_mengacu_data_kantor" file="/app/adminkit/tests/Feature/SeederTest.php" line="68" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="1" time="0.017327"/>
+        <testcase name="test_seeding_ulang_tidak_menggandakan_atau_mengubah_kata_sandi" file="/app/adminkit/tests/Feature/SeederTest.php" line="79" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="5" time="0.596218"/>
+        <testcase name="test_akun_terarsip_dipulihkan_oleh_seeder" file="/app/adminkit/tests/Feature/SeederTest.php" line="93" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="2" time="0.291664"/>
+        <testcase name="test_setiap_menu_bawaan_mengarah_ke_rute_yang_hidup" file="/app/adminkit/tests/Feature/SeederTest.php" line="104" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="45" time="2.270203"/>
+        <testcase name="test_login_memakai_kata_sandi_bawaan" file="/app/adminkit/tests/Feature/SeederTest.php" line="124" class="Tests\Feature\SeederTest" classname="Tests.Feature.SeederTest" assertions="4" time="0.032270"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

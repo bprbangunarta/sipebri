@@ -69,6 +69,9 @@ class SchemaDesign
         }
 
         $actual = collect(Schema::getColumns($draft->table_name))->keyBy('name');
+        $indexes = collect(Schema::getIndexes($draft->table_name));
+        $uniqueCols = $indexes->where('unique', true)->pluck('columns')->flatten()->all();
+        $indexedCols = $indexes->pluck('columns')->flatten()->all();
         $rows = [];
 
         foreach ($draft->columns as $column) {
@@ -96,6 +99,23 @@ class SchemaDesign
 
             if ((bool) $real['nullable'] !== $column->is_nullable) {
                 $notes[] = $column->is_nullable ? 'jadi nullable' : 'jadi wajib (NOT NULL)';
+            }
+
+            $realDefault = self::cleanDefault($real['default']);
+            $draftDefault = filled($column->default_value) ? $column->default_value : null;
+
+            if ($realDefault !== $draftDefault) {
+                $notes[] = 'default '.($realDefault ?? '—').' → '.($draftDefault ?? '—');
+            }
+
+            $isUnique = in_array($column->name, $uniqueCols, true);
+
+            if ($isUnique !== $column->is_unique) {
+                $notes[] = $column->is_unique ? 'tambah unique' : 'lepas unique';
+            }
+
+            if ($column->is_index && ! in_array($column->name, $indexedCols, true)) {
+                $notes[] = 'tambah index';
             }
 
             $rows[] = [
@@ -170,6 +190,9 @@ class SchemaDesign
     /** Kolom hasil impor dari tabel nyata (untuk mengisi rancangan). */
     public static function importFrom(string $table): array
     {
+        $indexes = collect(Schema::getIndexes($table));
+        $uniqueCols = $indexes->where('unique', true)->pluck('columns')->flatten()->all();
+        $indexedCols = $indexes->where('unique', false)->pluck('columns')->flatten()->all();
         $rows = [];
         $sort = 0;
 
@@ -185,8 +208,8 @@ class SchemaDesign
                 'length' => null,
                 'is_nullable' => (bool) $column['nullable'],
                 'default_value' => self::cleanDefault($column['default']),
-                'is_unique' => false,
-                'is_index' => false,
+                'is_unique' => in_array($column['name'], $uniqueCols, true),
+                'is_index' => in_array($column['name'], $indexedCols, true),
                 'foreign_table' => null,
                 'comment' => $column['comment'] ?? null,
             ];

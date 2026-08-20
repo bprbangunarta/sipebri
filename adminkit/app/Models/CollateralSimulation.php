@@ -13,16 +13,16 @@ class CollateralSimulation extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'value_guarantee' => 'integer',
-        'value_adjustment' => 'integer',
-        'value_fair' => 'integer',
-        'value_njop' => 'integer',
-        'value_appraisal' => 'integer',
-        'value_independent' => 'integer',
+        'guarantee_value' => 'integer',
+        'adjustment_value' => 'integer',
+        'fair_value' => 'integer',
+        'njop_value' => 'integer',
+        'appraisal_value' => 'integer',
+        'independent_value' => 'integer',
         'appraised_at' => 'date:Y-m-d',
-        'independent_appraised_at' => 'date:Y-m-d',
+        'independent_at' => 'date:Y-m-d',
         'condition_date' => 'date:Y-m-d',
-        'insurance_start_date' => 'date:Y-m-d',
+        'insurance_date' => 'date:Y-m-d',
     ];
 
     /** Bentuk payload POST agunan sesuai kontrak API CBS. */
@@ -36,19 +36,19 @@ class CollateralSimulation extends Model
             'pemilik_nama' => (string) ($this->owner_name ?? ''),
             'pemilik_alamat' => (string) ($this->owner_address ?? ''),
             'lokasi' => (string) ($this->region_code ?? ''),
-            'asuransi' => $this->insured,
-            'startdate' => $this->insurance_start_date?->format('Y-m-d') ?? '',
+            'asuransi' => $this->insurance_code,
+            'startdate' => $this->insurance_date?->format('Y-m-d') ?? '',
             'peringkat_sb' => (string) ($this->securities_rank ?? ''),
             'pemeringkat_sb' => (string) ($this->rating_agency ?? ''),
             'jenis' => $this->collateral_type_code,
             'jenis_pengikat' => (string) ($this->binding_type_code ?? ''),
             'nilai' => [
-                'njop' => $this->value_njop,
-                'jaminan' => $this->value_guarantee,
-                'adjust' => $this->value_adjustment,
-                'wajar' => $this->value_fair,
-                'taksasi' => $this->value_appraisal,
-                'independen' => $this->value_independent,
+                'njop' => $this->njop_value,
+                'jaminan' => $this->guarantee_value,
+                'adjust' => $this->adjustment_value,
+                'wajar' => $this->fair_value,
+                'taksasi' => $this->appraisal_value,
+                'independen' => $this->independent_value,
             ],
             'penaksir' => [
                 'taksasi' => [
@@ -56,8 +56,8 @@ class CollateralSimulation extends Model
                     'tanggal' => $this->appraised_at?->format('Y-m-d') ?? '',
                 ],
                 'independen' => [
-                    'penaksir' => (string) ($this->independent_appraiser_name ?? ''),
-                    'tanggal' => $this->independent_appraised_at?->format('Y-m-d') ?? '',
+                    'penaksir' => (string) ($this->independent_name ?? ''),
+                    'tanggal' => $this->independent_at?->format('Y-m-d') ?? '',
                 ],
             ],
             'ppap' => (int) $this->ppap_code,

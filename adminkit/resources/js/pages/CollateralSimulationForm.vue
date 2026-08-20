@@ -41,16 +41,16 @@ const form = useForm({
     description: props.record?.description ?? '',
     condition_code: props.record?.condition_code ?? '',
     condition_date: props.record?.condition_date ?? '',
-    insured: props.record?.insured ?? '',
-    insurance_start_date: props.record?.insurance_start_date ?? '',
-    value_guarantee: props.record?.value_guarantee ?? 0,
-    value_fair: props.record?.value_fair ?? 0,
-    value_njop: props.record?.value_njop ?? '',
-    value_adjustment: props.record?.value_adjustment ?? '',
-    value_appraisal: props.record?.value_appraisal ?? 0,
+    insurance_code: props.record?.insurance_code ?? '',
+    insurance_date: props.record?.insurance_date ?? '',
+    guarantee_value: props.record?.guarantee_value ?? 0,
+    fair_value: props.record?.fair_value ?? 0,
+    njop_value: props.record?.njop_value ?? '',
+    adjustment_value: props.record?.adjustment_value ?? '',
+    appraisal_value: props.record?.appraisal_value ?? 0,
     appraised_at: props.record?.appraised_at ?? '',
-    value_independent: props.record?.value_independent ?? '',
-    independent_appraised_at: props.record?.independent_appraised_at ?? '',
+    independent_value: props.record?.independent_value ?? '',
+    independent_at: props.record?.independent_at ?? '',
     ppap_code: props.record?.ppap_code ?? '1',
 });
 
@@ -79,12 +79,12 @@ const schema = {
         ? {
             condition_code: required('kondisi'),
             condition_date: required('tgl kondisi'),
-            insured: required('diasuransikan'),
-            insurance_start_date: required('tgl asuransi'),
+            insurance_code: required('diasuransikan'),
+            insurance_date: required('tgl asuransi'),
             appraised_at: required('tgl taksasi'),
-            value_guarantee: positive('nilai jaminan'),
-            value_fair: positive('nilai pasar'),
-            value_appraisal: positive('nilai taksasi'),
+            guarantee_value: positive('nilai jaminan'),
+            fair_value: positive('nilai pasar'),
+            appraisal_value: positive('nilai taksasi'),
         }
         : {}),
 };
@@ -221,47 +221,47 @@ const submit = () =>
                     <div class="space-y-[var(--item-gap)]">
                         <Label>Diasuransikan <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
-                            v-model="form.insured"
+                            v-model="form.insurance_code"
                             :options="INSURED_OPTIONS"
                             placeholder="-- Pilih --"
-                            data-testid="collateral-form-insured"
+                            data-testid="collateral-form-insurance_code"
                         />
-                        <p v-if="form.errors.insured" class="text-xs font-medium text-destructive">
-                            {{ form.errors.insured }}
+                        <p v-if="form.errors.insurance_code" class="text-xs font-medium text-destructive">
+                            {{ form.errors.insurance_code }}
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label>Tgl Asuransi <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <DatePicker
-                            v-model="form.insurance_start_date"
+                            v-model="form.insurance_date"
                             placeholder="-- Pilih --"
                             data-testid="collateral-form-insurance-start"
                         />
-                        <p v-if="form.errors.insurance_start_date" class="text-xs font-medium text-destructive">
-                            {{ form.errors.insurance_start_date }}
+                        <p v-if="form.errors.insurance_date" class="text-xs font-medium text-destructive">
+                            {{ form.errors.insurance_date }}
                         </p>
                     </div>
 
                     <div class="grid gap-[var(--field-gap)] sm:col-span-2 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-4">
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-guarantee">Nilai Jaminan</Label>
-                            <NumberInput id="f-guarantee" v-model="form.value_guarantee" data-testid="collateral-form-guarantee" />
-                            <p v-if="form.errors.value_guarantee" class="text-xs font-medium text-destructive">
-                                {{ form.errors.value_guarantee }}
+                            <NumberInput id="f-guarantee" v-model="form.guarantee_value" data-testid="collateral-form-guarantee" />
+                            <p v-if="form.errors.guarantee_value" class="text-xs font-medium text-destructive">
+                                {{ form.errors.guarantee_value }}
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-fair">Nilai Pasar</Label>
-                            <NumberInput id="f-fair" v-model="form.value_fair" data-testid="collateral-form-fair" />
-                            <p v-if="form.errors.value_fair" class="text-xs font-medium text-destructive">
-                                {{ form.errors.value_fair }}
+                            <NumberInput id="f-fair" v-model="form.fair_value" data-testid="collateral-form-fair" />
+                            <p v-if="form.errors.fair_value" class="text-xs font-medium text-destructive">
+                                {{ form.errors.fair_value }}
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-njop">Nilai NJOP</Label>
                             <NumberInput
                                 id="f-njop"
-                                v-model="form.value_njop"
+                                v-model="form.njop_value"
                                 placeholder="(Opsional)"
                                 data-testid="collateral-form-njop"
                             />
@@ -270,7 +270,7 @@ const submit = () =>
                             <Label for="f-adjust">Adjusment</Label>
                             <NumberInput
                                 id="f-adjust"
-                                v-model="form.value_adjustment"
+                                v-model="form.adjustment_value"
                                 placeholder="(Opsional)"
                                 data-testid="collateral-form-adjustment"
                             />
@@ -279,9 +279,9 @@ const submit = () =>
 
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-appraisal">Nilai Taksasi</Label>
-                        <NumberInput id="f-appraisal" v-model="form.value_appraisal" data-testid="collateral-form-appraisal" />
-                            <p v-if="form.errors.value_appraisal" class="text-xs font-medium text-destructive">
-                                {{ form.errors.value_appraisal }}
+                        <NumberInput id="f-appraisal" v-model="form.appraisal_value" data-testid="collateral-form-appraisal" />
+                            <p v-if="form.errors.appraisal_value" class="text-xs font-medium text-destructive">
+                                {{ form.errors.appraisal_value }}
                             </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
@@ -299,7 +299,7 @@ const submit = () =>
                         <Label for="f-independent">Nilai Apraisal</Label>
                         <NumberInput
                             id="f-independent"
-                            v-model="form.value_independent"
+                            v-model="form.independent_value"
                             placeholder="(Opsional)"
                             data-testid="collateral-form-independent"
                         />
@@ -307,7 +307,7 @@ const submit = () =>
                     <div class="space-y-[var(--item-gap)]">
                         <Label>Tgl Apraisal</Label>
                         <DatePicker
-                            v-model="form.independent_appraised_at"
+                            v-model="form.independent_at"
                             placeholder="(Opsional)"
                             data-testid="collateral-form-independent-appraised-at"
                         />

@@ -1,0 +1,46 @@
+{
+  "summary": "Diuji rename 10 kolom agunan + auto Agunan ID + unique + perluasan Diff Skema Migrasi. Backend: file baru /app/adminkit/tests/Feature/CollateralSimulationTest.php (9 tes, 78 assertion) — semua lulus; suite penuh Laravel 37 tes lulus. Frontend (Playwright, superadmin): /collateral-simulation memuat 2 data lama dengan nilai taksasi utuh (Rp 17.295.843 / Rp 73.740.000), tambah agunan tanpa mengisi ID menghasilkan AGN-000003 (id 3), edit menyimpan kondisi/asuransi/nilai (150.000.000 dst) dengan format ribuan di UI & angka mentah di DB, tab Database hanya memuat 10 nama kolom BARU (tidak ada value_*/insured/insurance_start_date/independent_appraiser_*), Payload CBS sesuai kontrak (asuransi=Y, startdate, nilai.*, penaksir.*, ppap=1). /schema-drafts/1 tab Diff: 26 kolom 'Sama' (Baru 0, Berubah 0, Dihapus 0); menyalakan unique + mengubah Nilai Bawaan menandai kolom 'Berubah' dengan catatan 'default — → UJI, tambah unique', setelah dikembalikan kembali 'Sama'. Tab Migration menghasilkan Schema::table (bukan create) dan tidak ada file baru di database/migrations. Responsif 390px & 768px tanpa overflow horizontal. Data uji sudah dihapus lewat UI (tersisa 2 baris).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /collateral-simulation", "issue": "nextCollateralId() = 'AGN-'.str_pad(max(id)+1) tidak aman tabrakan. Terbukti (uji manual): jika sudah ada baris ber-collateral_id 'AGN-<maxId+1>' (mis. setelah baris terakhir dihapus atau ID diisi manual), simpan dengan Agunan ID kosong melempar Illuminate\\Database\\UniqueConstraintViolationException (HTTP 500), bukan pesan validasi. Saran: loop/increment sampai unik atau pakai firstWhereNot + retry."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "CollateralSimulationForm.vue", "issue": "Tidak ada input 'Agunan ID' sama sekali (create maupun edit). Skenario uji 'Agunan ID dikosongkan' hanya lolos karena field tidak pernah ditampilkan, dan aturan unique Rule::unique + pesan validasinya TIDAK BISA dipicu dari UI (hanya bisa dari API). Jika memang diinginkan pengguna dapat mengisi ID, field opsional perlu ditambahkan (dengan data-testid).", "selector": "[data-testid=\"collateral-form-collateral-id\"] (tidak ada)", "priority": "HIGH"},
+      {"component": "CollateralSimulationForm.vue", "issue": "Kolom 'Penaksir' (appraiser_name) dan 'Penaksir Independen' (independent_name) tidak ada di form edit, padahal divalidasi controller & dikirim di payload CBS (penaksir.taksasi.penaksir selalu \"\"). Nilai hanya bisa diisi via API/seed.", "selector": "input#f-appraiser (tidak ada)", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [
+      {"flow": "Simpan/Update agunan → toast sukses", "issue": "Toast 'Sukses' tampil pada modul Skema Migrasi tetapi tidak terdeteksi setelah simpan/update agunan maupun setelah tombol 'Posting payload CBS' (mocked). Perlu dicek apakah flash success dirender pada redirect ke index & pada tab Payload.", "affected_selectors": ["[data-sonner-toast]", "[data-testid=\"collateral-detail-payload-post\"]"]}
+    ],
+    "design_issues": [
+      {"screen": "/collateral-simulation (daftar)", "issues": ["Format region_label tidak konsisten: data baru tersimpan '0121 : Kab. Subang' (mengikuti label combobox) sedangkan data seeder '0121 · Kab. Subang'. Sebaiknya normalisasi di controller/form."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/adminkit/tests/Feature/CollateralSimulationTest.php",
+    "/app/test_reports/pytest/adminkit_junit.xml"
+  ],
+  "action_items": [
+    "Buat nextCollateralId() anti-tabrakan (increment sampai unik) agar tidak 500 saat 'AGN-<maxId+1>' sudah dipakai.",
+    "Putuskan: tampilkan input opsional 'Agunan ID' di form (agar aturan unique bisa diuji/dipakai pengguna) atau hapus field dari validasi UI-facing.",
+    "Tambahkan input Penaksir (appraiser_name) & Penaksir Independen (independent_name) di form edit — sekarang payload CBS selalu mengirim penaksir kosong.",
+    "Normalisasi region_label agar konsisten ('0121 · Kab. Subang').",
+    "Cek flash/toast sukses setelah simpan & update agunan dan pada tombol Posting payload CBS."
+  ],
+  "critical_code_review_comments": [
+    "CollateralSimulationController::nextCollateralId() memakai max('id')+1 — tidak unik-safe dan bergantung pada auto-increment; gunakan pencarian ID bebas atau tangkap UniqueConstraintViolationException.",
+    "region_label dikirim mentah dari label combobox tanpa normalisasi; sebaiknya dibentuk di server dari Region agar seragam.",
+    "Rule::unique('collateral_simulations','collateral_id') sudah benar dengan ->ignore($current?->id) (terbukti update tanpa mengubah ID tidak error).",
+    "SchemaDesign::diff kini membandingkan default/unique/index dengan benar; migrationCode memakai Schema::table saat tabel ada dan modul tidak menulis file migration (dikonfirmasi)."
+  ],
+  "updated_files": ["/app/adminkit/tests/Feature/CollateralSimulationTest.php"],
+  "success_rate": {"backend": "100% (37/37 tes Laravel)", "frontend": "90% (semua alur inti lulus; 2 field yang diminta skenario tidak ada di UI)"},
+  "seed_data_creation": "1 agunan uji (AGN-000003, pemilik QA TESTER) dibuat & dihapus kembali lewat UI; draft Skema Migrasi #1 dikembalikan ke kondisi awal (26 kolom Sama).",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "superadmin / SA@4dm1n",
+  "context_for_next_testing_agent": "Tes Laravel baru: tests/Feature/CollateralSimulationTest.php. PENTING: RefreshDatabase pada sqlite :memory: hanya migrate/seed SEKALI per run, jadi setiap kelas tes WAJIB `protected bool $seed = true;` (tanpa itu kelas yang berjalan lebih dulu secara alfabet membuat 23 tes lain gagal ModelNotFoundException — sudah diperbaiki). Jalankan `cd /app/adminkit && php artisan test`. Belum diuji: field Agunan ID & Penaksir (belum ada di UI), alur duplicate collateral_id dari UI (hanya dari API/tes).",
+  "rca_of_the_issue": "Auto ID: nextCollateralId() menurunkan nomor dari max(id)+1 tanpa memeriksa keunikan collateral_id; karena collateral_id kini UNIQUE, setiap kondisi di mana 'AGN-<maxId+1>' sudah ada (penghapusan baris terakhir, ID diisi manual, atau data impor) menyebabkan UniqueConstraintViolationException/500. Direproduksi dengan tes sementara (record ber-ID 'AGN-<id+1>' lalu POST tanpa Agunan ID)."
+}
