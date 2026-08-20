@@ -269,6 +269,11 @@ Bila `php: not found` (pod baru), pasang ulang: `apt-get install -y php8.2-cli p
 php8.2-curl php8.2-xml php8.2-mbstring php8.2-zip php8.2-gd php8.2-bcmath php8.2-intl`
 lalu `sudo supervisorctl restart frontend`.
 
+## Aturan placeholder kolom form (wajib)
+- Kolom **tidak wajib** → placeholder `(Opsional)` (termasuk selectbox & date picker).
+- Kolom **wajib** → tanpa placeholder; selectbox memakai `-- Pilih --`.
+- Angka opsional yang dikirim ke CBS tetap tersimpan `0` bila dikosongkan.
+
 ## Aturan format angka & responsif (wajib)
 - Detail lengkap: `/app/memory/ui_rules.md`.
 - Ringkas: setiap angka yang tampil memakai format Indonesia (`1.000`, `12,75%`); input bilangan

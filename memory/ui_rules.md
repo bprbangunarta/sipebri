@@ -14,6 +14,12 @@ Untuk tiap lebar, cek:
 5. Header aksi: `flex-col sm:flex-row`, filter `flex-1 sm:w-[170px]`, tombol teks
    disembunyikan di ponsel (`hidden sm:inline`).
 
+## Placeholder kolom form (WAJIB, berlaku untuk semua form sekarang & nanti)
+- Kolom **TIDAK WAJIB** → placeholder **`(Opsional)`**, termasuk selectbox/combobox dan date picker.
+- Kolom **WAJIB** → **tanpa placeholder**; khusus selectbox/combobox placeholder-nya **`-- Pilih --`**.
+- Kolom angka opsional yang dikirim ke CBS (mis. NJOP, Adjusment): placeholder `(Opsional)`,
+  namun bila dibiarkan kosong **nilai yang disimpan/dikirim = 0** (lihat `withDefaults()`).
+
 ## Format angka Indonesia (WAJIB, tanpa kecuali)
 - **Semua angka yang TAMPIL** (tabel, kartu, grafik, ringkasan) memakai format Indonesia:
   pemisah ribuan titik → `1000` ditampilkan `1.000`; uang pakai `rupiah()` (`Rp 1.000`).

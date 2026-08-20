@@ -43,6 +43,8 @@ const form = useForm({
     insurance_start_date: props.record?.insurance_start_date ?? '',
     value_guarantee: props.record?.value_guarantee ?? 0,
     value_fair: props.record?.value_fair ?? 0,
+    value_njop: props.record?.value_njop ?? '',
+    value_adjustment: props.record?.value_adjustment ?? '',
     value_appraisal: props.record?.value_appraisal ?? 0,
     appraised_at: props.record?.appraised_at ?? '',
     value_independent: props.record?.value_independent ?? '',
@@ -93,7 +95,7 @@ const submit = () => {
                         <Combobox
                             v-model="form.binding_type_code"
                             :options="props.bindingTypes"
-                            placeholder="-- Pilih --"
+                            placeholder="(Opsional)"
                             data-testid="collateral-form-binding"
                         />
                     </div>
@@ -128,7 +130,13 @@ const submit = () => {
                     </div>
                     <div class="space-y-[var(--item-gap)] lg:col-span-2">
                         <Label for="f-desc">Keterangan Agunan</Label>
-                        <Input id="f-desc" v-model="form.description" maxlength="255" data-testid="collateral-form-description" />
+                        <Input
+                            id="f-desc"
+                            v-model="form.description"
+                            maxlength="255"
+                            placeholder="(Opsional)"
+                            data-testid="collateral-form-description"
+                        />
                     </div>
                 </CardContent>
             </Card>
@@ -141,7 +149,7 @@ const submit = () => {
                         <Combobox
                             v-model="form.condition_code"
                             :options="props.conditions"
-                            placeholder="-- Pilih --"
+                            placeholder="(Opsional)"
                             data-testid="collateral-form-condition"
                         />
                     </div>
@@ -149,7 +157,7 @@ const submit = () => {
                         <Label>Tgl Kondisi</Label>
                         <DatePicker
                             v-model="form.condition_date"
-                            placeholder="-- Pilih --"
+                            placeholder="(Opsional)"
                             data-testid="collateral-form-condition-date"
                         />
                     </div>
@@ -158,7 +166,7 @@ const submit = () => {
                         <Combobox
                             v-model="form.insured"
                             :options="INSURED_OPTIONS"
-                            placeholder="-- Pilih --"
+                            placeholder="(Opsional)"
                             data-testid="collateral-form-insured"
                         />
                     </div>
@@ -166,18 +174,38 @@ const submit = () => {
                         <Label>Tgl Asuransi</Label>
                         <DatePicker
                             v-model="form.insurance_start_date"
-                            placeholder="-- Pilih --"
+                            placeholder="(Opsional)"
                             data-testid="collateral-form-insurance-start"
                         />
                     </div>
 
-                    <div class="space-y-[var(--item-gap)] sm:col-span-2">
-                        <Label for="f-guarantee">Nilai Jaminan</Label>
-                        <NumberInput id="f-guarantee" v-model="form.value_guarantee" data-testid="collateral-form-guarantee" />
-                    </div>
-                    <div class="space-y-[var(--item-gap)] sm:col-span-2">
-                        <Label for="f-fair">Nilai Pasar</Label>
-                        <NumberInput id="f-fair" v-model="form.value_fair" data-testid="collateral-form-fair" />
+                    <div class="grid gap-[var(--field-gap)] sm:col-span-2 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-4">
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="f-guarantee">Nilai Jaminan</Label>
+                            <NumberInput id="f-guarantee" v-model="form.value_guarantee" data-testid="collateral-form-guarantee" />
+                        </div>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="f-fair">Nilai Pasar</Label>
+                            <NumberInput id="f-fair" v-model="form.value_fair" data-testid="collateral-form-fair" />
+                        </div>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="f-njop">Nilai NJOP</Label>
+                            <NumberInput
+                                id="f-njop"
+                                v-model="form.value_njop"
+                                placeholder="(Opsional)"
+                                data-testid="collateral-form-njop"
+                            />
+                        </div>
+                        <div class="space-y-[var(--item-gap)]">
+                            <Label for="f-adjust">Adjusment</Label>
+                            <NumberInput
+                                id="f-adjust"
+                                v-model="form.value_adjustment"
+                                placeholder="(Opsional)"
+                                data-testid="collateral-form-adjustment"
+                            />
+                        </div>
                     </div>
 
                     <div class="space-y-[var(--item-gap)]">
@@ -188,7 +216,7 @@ const submit = () => {
                         <Label>Tgl Taksasi</Label>
                         <DatePicker
                             v-model="form.appraised_at"
-                            placeholder="-- Pilih --"
+                            placeholder="(Opsional)"
                             data-testid="collateral-form-appraised-at"
                         />
                     </div>

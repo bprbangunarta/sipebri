@@ -130,10 +130,10 @@ class CollateralSimulationController extends Controller
             'ownership' => ['nullable', 'string', 'max:100'],
             'document_number' => ['nullable', 'string', 'max:100'],
             'description' => ['nullable', 'string', 'max:255'],
-            'owner_name' => ['nullable', 'string', 'max:100'],
-            'owner_address' => ['nullable', 'string', 'max:255'],
+            'owner_name' => ['required', 'string', 'max:100'],
+            'owner_address' => ['required', 'string', 'max:255'],
             'owner_same_as_cif' => ['boolean'],
-            'region_code' => ['nullable', 'string', 'max:8'],
+            'region_code' => ['required', 'string', 'max:8'],
             'region_id' => ['nullable', 'integer', 'exists:regions,id'],
             'region_label' => ['nullable', 'string', 'max:150'],
             'value_guarantee' => ['nullable', 'integer', 'min:0'],
@@ -154,6 +154,9 @@ class CollateralSimulationController extends Controller
         ], [], [
             'collateral_id' => 'agunan id',
             'collateral_type_code' => 'jenis agunan',
+            'owner_name' => 'nama pemilik',
+            'owner_address' => 'alamat agunan',
+            'region_code' => 'lokasi agunan',
             'binding_type_code' => 'jenis pengikatan',
             'ppap_code' => 'metode hitung',
         ]);
