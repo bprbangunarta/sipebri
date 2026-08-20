@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { Code2, Copy, Pencil, Plus, Send, ShieldCheck, Trash2, X } from 'lucide-vue-next';
+import { Code2, Copy, Eye, Pencil, Plus, Send, ShieldCheck, Trash2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button.vue';
 import Dialog from '@/components/ui/Dialog.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
+import CollateralDetailDialog from '@/components/composite/CollateralDetailDialog.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
@@ -56,6 +57,7 @@ const confirmDelete = () =>
         onFinish: () => (deleting.value = null),
     });
 
+const detailRow = ref(null);
 const payloadRow = ref(null);
 const payloadText = computed(() => (payloadRow.value ? JSON.stringify(payloadRow.value.payload, null, 2) : ''));
 const copyPayload = () => navigator.clipboard?.writeText(payloadText.value);
@@ -136,6 +138,12 @@ const postPayload = () => notify.info('Posting ke core banking belum diaktifkan.
                             <Pencil />{{ ACTION.edit }}
                         </DropdownMenuItem>
                         <DropdownMenuItem
+                            :data-testid="`collateral-simulation-detail-${row.id}`"
+                            @select="detailRow = row"
+                        >
+                            <Eye />Detail
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                             :data-testid="`collateral-simulation-payload-${row.id}`"
                             @select="payloadRow = row"
                         >
@@ -154,6 +162,12 @@ const postPayload = () => notify.info('Posting ke core banking belum diaktifkan.
                     </RowActions>
                 </template>
             </DataTableCard>
+
+            <CollateralDetailDialog
+                :open="Boolean(detailRow)"
+                :row="detailRow"
+                @update:open="detailRow = null"
+            />
 
             <Dialog
                 :open="Boolean(payloadRow)"

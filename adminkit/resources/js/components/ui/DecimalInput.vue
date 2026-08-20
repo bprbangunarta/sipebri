@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 import Input from './Input.vue';
 
 /**
@@ -16,6 +16,7 @@ const emit = defineEmits(['update:modelValue']);
 const toDisplay = (value) =>
     value === null || value === undefined || value === '' ? '' : String(value).replace('.', ',');
 
+const el = ref(null);
 const display = ref(toDisplay(props.modelValue));
 
 watch(
@@ -36,9 +37,14 @@ const onInput = (value) => {
 
     display.value = raw;
     emit('update:modelValue', raw === '' ? '' : raw.replace(',', '.'));
+
+    nextTick(() => {
+        const node = el.value?.$el;
+        if (node && node.value !== display.value) node.value = display.value;
+    });
 };
 </script>
 
 <template>
-    <Input :model-value="display" inputmode="decimal" @update:model-value="onInput" />
+    <Input ref="el" :model-value="display" inputmode="decimal" @update:model-value="onInput" />
 </template>

@@ -435,3 +435,14 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - **Uji**: testing agent iterasi 36 → 24 tes backend + seluruh alur frontend LULUS, 0 bug fungsional; responsif di 390/768/1440 tanpa overflow. Dua catatan kosmetik ditutup: maxlength catatan diselaraskan (255) dan formulir kini **disabled** untuk pengguna tanpa `products.manage`.
 - Catatan: nilai parameter belum diisi user (kecuali data uji KRU dari testing agent) sehingga **belum dibuat seeder-nya**; setelah user mengisi SK per produk, buat `ProductParameterSeeder`.
 - README diperbarui (bagian Parameter Produk, rute, skema DB). PHP CLI sempat hilang lagi karena pod restart (recurrence ke-5) → dipulihkan dengan `/app/memory/restore_php.sh`.
+
+## Selesai (2026-06-21, Detail Agunan Kredit)
+- Validasi ketat frontend form Agunan (sesi sebelumnya): `NumberInput`/`DecimalInput` menolak keystroke non-angka, `useLiveValidation` menampilkan pesan error per kolom sinkron dengan controller, kolom wajib bertanda bintang merah, semua teks otomatis UPPERCASE.
+- **Aksi baris baru "Detail" (ikon mata)** di /collateral-simulation, diletakkan tepat di bawah "Ubah". Membuka dialog `components/composite/CollateralDetailDialog.vue` yang menampilkan **seluruh kolom tabel `collateral_simulations`** dalam grid ringkas 6 kelompok: Identitas, Pemilik & Lokasi, Nilai Agunan, Penaksir, Kondisi/Asuransi/PPAP, Rekam Jejak. Kolom kosong tampil "—" agar mudah dievaluasi mana yang perlu dihapus/ditambah.
+- Controller `row()` menambah `condition_label`, `method_label`, `created_at`, `updated_at`.
+- Uji: `yarn build` sukses + screenshot (menu aksi & dialog detail) terverifikasi.
+
+### Backlog berikutnya
+- P1 Pengajuan Kredit (tahap 1 dari 9) — pintu masuk berkas kredit.
+- P1 Uji kirim payload CBS pada tombol Posting bila endpoint siap.
+- P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter level/modul audit trail.

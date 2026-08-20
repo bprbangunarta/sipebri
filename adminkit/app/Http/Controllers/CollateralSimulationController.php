@@ -106,6 +106,13 @@ class CollateralSimulationController extends Controller
     /** Kolom yang tak boleh null di basis data diberi nilai bawaan CBS. */
     private function withDefaults(array $data): array
     {
+        // Semua teks yang diketik pengguna disimpan HURUF BESAR (mengikuti CBS).
+        foreach (['collateral_id', 'file_number', 'document_number', 'ownership', 'description', 'owner_name', 'owner_address', 'appraiser_name', 'independent_appraiser_name'] as $key) {
+            if (filled($data[$key] ?? null)) {
+                $data[$key] = mb_strtoupper($data[$key]);
+            }
+        }
+
         foreach (['value_guarantee', 'value_adjustment', 'value_fair', 'value_njop', 'value_appraisal', 'value_independent'] as $key) {
             $data[$key] = (int) ($data[$key] ?? 0);
         }
@@ -132,7 +139,7 @@ class CollateralSimulationController extends Controller
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
             'ownership' => ['nullable', 'string', 'max:100'],
             'document_number' => ['required', 'string', 'max:100'],
-            'description' => ['nullable', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
             'owner_name' => ['required', 'string', 'max:100'],
             'owner_address' => ['required', 'string', 'max:255'],
             'owner_same_as_cif' => ['boolean'],
@@ -163,6 +170,7 @@ class CollateralSimulationController extends Controller
             'binding_type_code' => 'jenis pengikatan',
             'ppap_code' => 'metode hitung',
             'document_number' => 'no. dokumen',
+            'description' => 'keterangan agunan',
             'condition_code' => 'kondisi',
             'condition_date' => 'tgl kondisi',
             'insured' => 'diasuransikan',
@@ -223,6 +231,14 @@ class CollateralSimulationController extends Controller
             'binding_label' => $r->binding_type_code
                 ? BindingType::where('code', $r->binding_type_code)->value('name')
                 : null,
+            'condition_label' => $r->condition_code
+                ? CollateralCondition::where('code', $r->condition_code)->value('name')
+                : null,
+            'method_label' => $r->ppap_code
+                ? CollateralMethod::where('code', $r->ppap_code)->value('name')
+                : null,
+            'created_at' => $r->created_at?->translatedFormat('d M Y H:i'),
+            'updated_at' => $r->updated_at?->translatedFormat('d M Y H:i'),
             'payload' => $r->toCbsPayload(),
         ];
     }

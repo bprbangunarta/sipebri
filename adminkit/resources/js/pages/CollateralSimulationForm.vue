@@ -16,6 +16,8 @@ import Input from '@/components/ui/Input.vue';
 import Label from '@/components/ui/Label.vue';
 import NumberInput from '@/components/ui/NumberInput.vue';
 import { ACTION } from '@/constants/labels';
+import { all, max, min, required } from '@/lib/validators';
+import { useLiveValidation } from '@/composables/useLiveValidation';
 
 const props = defineProps({
     record: { type: Object, default: null },
@@ -62,13 +64,41 @@ const onRegion = (value) => {
     form.region_label = props.regionOptions.find((o) => o.value === value)?.label ?? '';
 };
 
+/* Validasi sisi frontend — cermin aturan controller. */
+const positive = (label) => (value) =>
+    value === '' || value === null || Number(value) <= 0 ? `Kolom ${label} wajib lebih dari 0.` : '';
+
+const schema = {
+    collateral_type_code: required('jenis agunan'),
+    document_number: all(required('no. dokumen'), max(100, 'No. Dokumen')),
+    owner_name: all(required('nama pemilik'), min(3, 'Nama Pemilik'), max(100, 'Nama Pemilik')),
+    owner_address: all(required('alamat agunan'), min(5, 'Alamat Agunan'), max(255, 'Alamat Agunan')),
+    region_code: required('lokasi agunan'),
+    description: all(required('keterangan agunan'), min(5, 'Keterangan Agunan'), max(255, 'Keterangan Agunan')),
+    ...(editing.value
+        ? {
+            condition_code: required('kondisi'),
+            condition_date: required('tgl kondisi'),
+            insured: required('diasuransikan'),
+            insurance_start_date: required('tgl asuransi'),
+            appraised_at: required('tgl taksasi'),
+            value_guarantee: positive('nilai jaminan'),
+            value_fair: positive('nilai pasar'),
+            value_appraisal: positive('nilai taksasi'),
+        }
+        : {}),
+};
+
+const check = useLiveValidation(form, schema);
+
 const back = () => router.visit('/collateral-simulation');
 
-const submit = () => {
-    const options = { preserveScroll: true };
-    if (editing.value) form.put(`/collateral-simulation/${props.record.id}`, options);
-    else form.post('/collateral-simulation', options);
-};
+const submit = () =>
+    check.submit(() => {
+        const options = { preserveScroll: true };
+        if (editing.value) form.put(`/collateral-simulation/${props.record.id}`, options);
+        else form.post('/collateral-simulation', options);
+    });
 </script>
 
 <template>
@@ -79,7 +109,7 @@ const submit = () => {
                 <CardHeader><CardTitle>Informasi Agunan</CardTitle></CardHeader>
                 <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-3">
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Jenis Agunan</Label>
+                        <Label>Jenis Agunan <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
                             v-model="form.collateral_type_code"
                             :options="props.collateralTypes"
@@ -100,24 +130,33 @@ const submit = () => {
                         />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
-                        <Label for="f-doc">No. Dokumen</Label>
-                        <Input id="f-doc" v-model="form.document_number" data-testid="collateral-form-document" />
+                        <Label for="f-doc">No. Dokumen <span class="text-destructive" aria-hidden="true">*</span></Label>
+                        <Input id="f-doc" v-model="form.document_number" data-testid="collateral-form-document"
+                            @blur="check.validate('document_number')" />
                         <p v-if="form.errors.document_number" class="text-xs font-medium text-destructive">
                             {{ form.errors.document_number }}
                         </p>
                     </div>
 
                     <div class="space-y-[var(--item-gap)]">
-                        <Label for="f-owner">Nama Pemilik</Label>
-                        <Input id="f-owner" v-model="form.owner_name" data-testid="collateral-form-owner" />
+                        <Label for="f-owner">Nama Pemilik <span class="text-destructive" aria-hidden="true">*</span></Label>
+                        <Input id="f-owner" v-model="form.owner_name" data-testid="collateral-form-owner"
+                            @blur="check.validate('owner_name')" />
+                        <p v-if="form.errors.owner_name" class="text-xs font-medium text-destructive">
+                            {{ form.errors.owner_name }}
+                        </p>
                     </div>
                     <div class="space-y-[var(--item-gap)] lg:col-span-2">
-                        <Label for="f-owner-address">Alamat Agunan</Label>
-                        <Input id="f-owner-address" v-model="form.owner_address" data-testid="collateral-form-owner-address" />
+                        <Label for="f-owner-address">Alamat Agunan <span class="text-destructive" aria-hidden="true">*</span></Label>
+                        <Input id="f-owner-address" v-model="form.owner_address" data-testid="collateral-form-owner-address"
+                            @blur="check.validate('owner_address')" />
+                        <p v-if="form.errors.owner_address" class="text-xs font-medium text-destructive">
+                            {{ form.errors.owner_address }}
+                        </p>
                     </div>
 
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Lokasi Agunan</Label>
+                        <Label>Lokasi Agunan <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
                             :model-value="form.region_code"
                             :options="props.regionOptions"
@@ -125,16 +164,22 @@ const submit = () => {
                             data-testid="collateral-form-region"
                             @update:model-value="onRegion"
                         />
+                        <p v-if="form.errors.region_code" class="text-xs font-medium text-destructive">
+                            {{ form.errors.region_code }}
+                        </p>
                     </div>
                     <div class="space-y-[var(--item-gap)] lg:col-span-2">
-                        <Label for="f-desc">Keterangan Agunan</Label>
+                        <Label for="f-desc">Keterangan Agunan <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Input
                             id="f-desc"
                             v-model="form.description"
                             maxlength="255"
-                            placeholder="(Opsional)"
                             data-testid="collateral-form-description"
+                            @blur="check.validate('description')"
                         />
+                        <p v-if="form.errors.description" class="text-xs font-medium text-destructive">
+                            {{ form.errors.description }}
+                        </p>
                     </div>
                 </CardContent>
                 <CardFooter v-if="!editing" class="justify-between">
@@ -151,7 +196,7 @@ const submit = () => {
                 <CardHeader><CardTitle>Kondisi &amp; Asuransi</CardTitle></CardHeader>
                 <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Kondisi</Label>
+                        <Label>Kondisi <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
                             v-model="form.condition_code"
                             :options="props.conditions"
@@ -163,7 +208,7 @@ const submit = () => {
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Tgl Kondisi</Label>
+                        <Label>Tgl Kondisi <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <DatePicker
                             v-model="form.condition_date"
                             placeholder="-- Pilih --"
@@ -174,7 +219,7 @@ const submit = () => {
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Diasuransikan</Label>
+                        <Label>Diasuransikan <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
                             v-model="form.insured"
                             :options="INSURED_OPTIONS"
@@ -186,7 +231,7 @@ const submit = () => {
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Tgl Asuransi</Label>
+                        <Label>Tgl Asuransi <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <DatePicker
                             v-model="form.insurance_start_date"
                             placeholder="-- Pilih --"
@@ -201,10 +246,16 @@ const submit = () => {
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-guarantee">Nilai Jaminan</Label>
                             <NumberInput id="f-guarantee" v-model="form.value_guarantee" data-testid="collateral-form-guarantee" />
+                            <p v-if="form.errors.value_guarantee" class="text-xs font-medium text-destructive">
+                                {{ form.errors.value_guarantee }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-fair">Nilai Pasar</Label>
                             <NumberInput id="f-fair" v-model="form.value_fair" data-testid="collateral-form-fair" />
+                            <p v-if="form.errors.value_fair" class="text-xs font-medium text-destructive">
+                                {{ form.errors.value_fair }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="f-njop">Nilai NJOP</Label>
@@ -229,9 +280,12 @@ const submit = () => {
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-appraisal">Nilai Taksasi</Label>
                         <NumberInput id="f-appraisal" v-model="form.value_appraisal" data-testid="collateral-form-appraisal" />
+                            <p v-if="form.errors.value_appraisal" class="text-xs font-medium text-destructive">
+                                {{ form.errors.value_appraisal }}
+                            </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Tgl Taksasi</Label>
+                        <Label>Tgl Taksasi <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <DatePicker
                             v-model="form.appraised_at"
                             placeholder="-- Pilih --"
