@@ -262,6 +262,13 @@ database/{migrations,seeders,factories}
 
 ---
 
+## Catatan (Jun 2026): PHP di pod suka reset ke 8.2
+`composer.json` sudah disetel `"config": { "platform-check": false }` dan autoload di-dump ulang,
+jadi aplikasi tetap jalan di **PHP 8.2 maupun 8.3** tanpa error `platform_check.php`.
+Bila `php: not found` (pod baru), pasang ulang: `apt-get install -y php8.2-cli php8.2-sqlite3
+php8.2-curl php8.2-xml php8.2-mbstring php8.2-zip php8.2-gd php8.2-bcmath php8.2-intl`
+lalu `sudo supervisorctl restart frontend`.
+
 ## Aturan format angka & responsif (wajib)
 - Detail lengkap: `/app/memory/ui_rules.md`.
 - Ringkas: setiap angka yang tampil memakai format Indonesia (`1.000`, `12,75%`); input bilangan

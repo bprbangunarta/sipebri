@@ -68,7 +68,7 @@ class CollateralSimulationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $record = CollateralSimulation::create($data);
+        $record = CollateralSimulation::create($this->withDefaults($data));
 
         ActivityLog::record("Menambah contoh agunan {$record->collateral_id}", self::LABEL, 'success', $record);
 
@@ -79,7 +79,7 @@ class CollateralSimulationController extends Controller
     public function update(Request $request, CollateralSimulation $collateralSimulation): RedirectResponse
     {
         $before = $collateralSimulation->getOriginal();
-        $collateralSimulation->update($this->validated($request, $collateralSimulation));
+        $collateralSimulation->update($this->withDefaults($this->validated($request, $collateralSimulation)));
 
         ActivityLog::record(
             "Memperbarui contoh agunan {$collateralSimulation->collateral_id}",
@@ -103,10 +103,25 @@ class CollateralSimulationController extends Controller
         return back()->with('success', "Contoh agunan {$id} dihapus.");
     }
 
+    /** Kolom yang tak boleh null di basis data diberi nilai bawaan CBS. */
+    private function withDefaults(array $data): array
+    {
+        foreach (['value_guarantee', 'value_adjustment', 'value_fair', 'value_njop', 'value_appraisal', 'value_independent'] as $key) {
+            $data[$key] = (int) ($data[$key] ?? 0);
+        }
+
+        return [
+            ...$data,
+            'paripasu' => (int) ($data['paripasu'] ?? 0),
+            'insured' => ($data['insured'] ?? '') ?: 'T',
+            'ppap_code' => ($data['ppap_code'] ?? '') ?: '1',
+        ];
+    }
+
     private function validated(Request $request, ?CollateralSimulation $current = null): array
     {
         return $request->validate([
-            'collateral_id' => ['required', 'string', 'max:50'],
+            'collateral_id' => ['nullable', 'string', 'max:50'],
             'paripasu' => ['nullable', 'integer', 'min:0', 'max:100'],
             'file_number' => ['nullable', 'string', 'max:50'],
             'auto_number' => ['boolean'],
@@ -133,8 +148,8 @@ class CollateralSimulationController extends Controller
             'independent_appraised_at' => ['nullable', 'date'],
             'condition_code' => ['nullable', 'string', 'exists:collateral_conditions,code'],
             'condition_date' => ['nullable', 'date'],
-            'insured' => ['required', 'in:Y,T'],
-            'ppap_code' => ['required', 'string', 'exists:collateral_methods,code'],
+            'insured' => ['nullable', 'in:Y,T'],
+            'ppap_code' => ['nullable', 'string', 'exists:collateral_methods,code'],
             'insurance_start_date' => ['nullable', 'date'],
         ], [], [
             'collateral_id' => 'agunan id',
@@ -160,6 +175,13 @@ class CollateralSimulationController extends Controller
             'methods' => CollateralMethod::orderBy('code')
                 ->get(['code', 'name'])
                 ->map(fn ($t) => ['value' => $t->code, 'label' => "{$t->code} : {$t->name}"])->all(),
+            'regionOptions' => Region::query()
+                ->select('code', 'regency')
+                ->distinct()
+                ->orderBy('code')
+                ->get()
+                ->map(fn (Region $r) => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"])
+                ->all(),
             'ownershipStatuses' => OwnershipStatus::orderBy('code')
                 ->get(['collateral_type_code', 'code', 'name'])
                 ->groupBy('collateral_type_code')

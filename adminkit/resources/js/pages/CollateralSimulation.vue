@@ -96,7 +96,7 @@ const copyPayload = () => navigator.clipboard?.writeText(payloadText.value);
                 </template>
 
                 <template #cell-collateral_id="{ row }">
-                    <span class="block whitespace-nowrap font-mono text-xs font-medium">{{ row.collateral_id }}</span>
+                    <span class="block whitespace-nowrap font-mono text-xs font-medium">{{ row.collateral_id ?? `#${row.id}` }}</span>
                     <span class="mt-0.5 block whitespace-normal text-xs text-muted-foreground md:hidden">
                         {{ row.type_label }}
                     </span>
@@ -152,7 +152,7 @@ const copyPayload = () => navigator.clipboard?.writeText(payloadText.value);
 
             <Dialog
                 :open="Boolean(payloadRow)"
-                :title="`Payload CBS — ${payloadRow?.collateral_id ?? ''}`"
+                :title="`Payload CBS — ${payloadRow?.collateral_id ?? `#${payloadRow?.id}`}`"
                 class="max-w-2xl"
                 @update:open="payloadRow = null"
             >
