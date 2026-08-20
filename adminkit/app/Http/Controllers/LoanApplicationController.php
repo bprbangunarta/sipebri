@@ -48,7 +48,7 @@ class LoanApplicationController extends Controller
         $status = (string) $request->input('status', '');
 
         $records = LoanApplication::query()
-            ->with(['product:id,code,name', 'office:id,code,name'])
+            ->with(['product:id,alias,name', 'office:id,alias,name'])
             ->when($search !== '', fn ($q) => $q->where(function ($w) use ($search) {
                 foreach (['application_code', 'full_name', 'nik', 'credit_account'] as $col) {
                     $w->orWhere($col, 'like', "%{$search}%");
@@ -87,7 +87,7 @@ class LoanApplicationController extends Controller
 
     public function show(LoanApplication $loanApplication): Response
     {
-        $loanApplication->load(['collaterals', 'product:id,code,name', 'office:id,code,name']);
+        $loanApplication->load(['collaterals', 'product:id,alias,name', 'office:id,alias,name']);
 
         return Inertia::render('LoanSimulationDetail', [
             'record' => $this->detail($loanApplication),
@@ -296,17 +296,17 @@ class LoanApplicationController extends Controller
         $byRoles = fn (array $roles) => User::query()
             ->whereHas('roles', fn ($q) => $q->whereIn('name', $roles))
             ->orderBy('name')
-            ->get(['id', 'name', 'role'])
-            ->map(fn (User $u) => ['value' => $u->id, 'label' => "{$u->name} — {$u->role}"])
+            ->get(['id', 'name'])
+            ->map(fn (User $u) => ['value' => $u->id, 'label' => $u->name])
             ->all();
 
         return [
             'statuses' => self::STATUSES,
             'usageTypes' => collect(self::USAGE_TYPES)->map(fn ($v) => ['value' => $v, 'label' => $v])->all(),
-            'offices' => Office::orderBy('code')->get(['id', 'code', 'name'])
-                ->map(fn ($o) => ['value' => $o->id, 'label' => "{$o->code} : {$o->name}"])->all(),
-            'products' => Product::orderBy('code')->get(['id', 'code', 'name'])
-                ->map(fn ($p) => ['value' => $p->id, 'label' => "{$p->code} : {$p->name}"])->all(),
+            'offices' => Office::orderBy('code')->get(['id', 'alias', 'name'])
+                ->map(fn ($o) => ['value' => $o->id, 'label' => "{$o->alias} : {$o->name}"])->all(),
+            'products' => Product::orderBy('code')->get(['id', 'alias', 'name'])
+                ->map(fn ($p) => ['value' => $p->id, 'label' => "{$p->alias} : {$p->name}"])->all(),
             'institutions' => Institution::orderBy('name')->get(['id', 'name'])
                 ->map(fn ($i) => ['value' => $i->id, 'label' => $i->name])->all(),
             'methods' => Method::orderBy('code')->get(['id', 'code', 'name'])
@@ -357,8 +357,8 @@ class LoanApplicationController extends Controller
                 'nik', 'full_name', 'requested_amount', 'requested_tenor', 'credit_account',
             ]),
             'application_date' => $r->application_date?->format('Y-m-d'),
-            'product_label' => $r->product ? "{$r->product->code} : {$r->product->name}" : null,
-            'office_label' => $r->office ? "{$r->office->code} : {$r->office->name}" : null,
+            'product_label' => $r->product ? "{$r->product->alias} : {$r->product->name}" : null,
+            'office_label' => $r->office ? "{$r->office->alias} : {$r->office->name}" : null,
         ];
     }
 }
