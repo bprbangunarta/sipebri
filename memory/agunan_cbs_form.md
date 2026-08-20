@@ -124,3 +124,18 @@ Belum ada di form (catatan hasil uji iterasi 39):
 - Input **Agunan ID** tidak ditampilkan di form, jadi aturan unique hanya berlaku dari sisi API.
 - Input **Penaksir** (`appraiser_name`) & **Penaksir Independen** (`independent_name`) belum ada di
   form, sehingga `penaksir.*.penaksir` pada payload selalu kosong kecuali diisi lewat seeder/API.
+
+## Keputusan user 21/06/2026 (identitas & penaksir)
+- `collateral_id` **dibiarkan kosong** saat input. Nilainya diisi/diperbarui **setelah posting ke CBS**
+  dari respons API. Karena itu tidak ada input Agunan ID di form dan tidak ada penomoran otomatis
+  dari SIPEBRI (auto `AGN-xxxxxx` sudah dihapus).
+- Kolom baru **`credit_account`** (string 30, nullable, unique) = nomor rekening kredit.
+  Alur: posting data kredit ke CBS → terima nomor rekening dari respons → update `credit_account`
+  pada semua agunan yang dipakai di pengajuan tersebut. Di rancangan skema diletakkan paling atas,
+  di atas `collateral_id`.
+- `appraiser_name` & `appraised_at` **diisi sistem** saat penyimpanan pada tahap analisa
+  (nama petugas yang login + tanggal hari ini). Input keduanya dihapus dari form; form hanya
+  menampilkan keterangan "diisi sistem" + jejak terakhir.
+- Kolom independen (`independent_value`, `independent_name`, `independent_at`) **tetap disimpan**
+  tetapi TIDAK dipakai — praktik di lapangan tidak memakai penilai pihak ketiga. Inputnya
+  dihilangkan dari form; payload CBS tetap mengirim `nilai.independen` = 0 dan `penaksir.independen` kosong.

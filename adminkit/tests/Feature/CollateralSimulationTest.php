@@ -84,18 +84,18 @@ class CollateralSimulationTest extends TestCase
         $this->assertContains('collateral_id', $unique);
     }
 
-    // --- Store: Agunan ID otomatis ---
-    public function test_store_generates_collateral_id_when_blank(): void
+    // --- Store: Agunan ID tetap kosong (diisi setelah posting CBS) ---
+    public function test_store_leaves_collateral_id_blank(): void
     {
         $this->refs();
-        CollateralSimulation::create($this->payload(['collateral_id' => 'AGN-EXISTING']));
 
         $response = $this->actingAs($this->actor())
             ->post('/collateral-simulation', $this->payload(['collateral_id' => '']));
 
         $response->assertRedirect(route('collateral-simulation.index'));
         $created = CollateralSimulation::latest('id')->first();
-        $this->assertSame('AGN-'.str_pad((string) $created->id, 6, '0', STR_PAD_LEFT), $created->collateral_id);
+        $this->assertNull($created->collateral_id);
+        $this->assertNull($created->credit_account);
         $this->assertSame('T', $created->insurance_code);
         $this->assertSame('1', (string) $created->ppap_code);
         $this->assertSame(0, $created->guarantee_value);
@@ -131,8 +131,9 @@ class CollateralSimulationTest extends TestCase
     {
         $this->refs();
         $record = CollateralSimulation::create($this->payload(['collateral_id' => 'AGN-000009']));
+        $actor = $this->actor();
 
-        $this->actingAs($this->actor())
+        $this->actingAs($actor)
             ->put("/collateral-simulation/{$record->id}", $this->payload([
                 'collateral_id' => 'AGN-000009',
                 'condition_code' => '9',
@@ -144,8 +145,6 @@ class CollateralSimulationTest extends TestCase
                 'njop_value' => 130000000,
                 'adjustment_value' => 5000000,
                 'appraisal_value' => 120000000,
-                'appraised_at' => '2026-07-03',
-                'appraiser_name' => 'penaksir uji',
                 'ppap_code' => '1',
             ]))
             ->assertRedirect(route('collateral-simulation.index'))
@@ -157,8 +156,9 @@ class CollateralSimulationTest extends TestCase
         $this->assertSame(130000000, $record->njop_value);
         $this->assertSame(5000000, $record->adjustment_value);
         $this->assertSame(120000000, $record->appraisal_value);
-        $this->assertSame('PENAKSIR UJI', $record->appraiser_name);
-        $this->assertSame('2026-07-03', $record->appraised_at->format('Y-m-d'));
+        // Penaksir & tgl taksasi dicatat sistem atas nama petugas yang menyimpan.
+        $this->assertSame(mb_strtoupper($actor->name), $record->appraiser_name);
+        $this->assertSame(now()->toDateString(), $record->appraised_at->format('Y-m-d'));
         $this->assertSame('2026-07-02', $record->insurance_date->format('Y-m-d'));
         $this->assertSame('Y', $record->insurance_code);
     }
@@ -170,7 +170,7 @@ class CollateralSimulationTest extends TestCase
 
         $this->actingAs($this->actor())
             ->put("/collateral-simulation/{$record->id}", $this->payload(['collateral_id' => 'AGN-000010']))
-            ->assertSessionHasErrors(['condition_code', 'condition_date', 'insurance_code', 'insurance_date', 'appraised_at']);
+            ->assertSessionHasErrors(['condition_code', 'condition_date', 'insurance_code', 'insurance_date']);
     }
 
     // --- Payload CBS ---

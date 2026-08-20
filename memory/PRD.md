@@ -485,3 +485,17 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 3. P1 Aktifkan tombol Posting payload ke endpoint CBS bila URL siap (+ log riwayat posting).
 4. P2 Diff Skema Migrasi belum membandingkan panjang kolom, komentar, dan relasi FK.
 5. P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter audit trail.
+
+## Selesai (2026-06-21 lanjutan, identitas agunan & penaksir otomatis)
+- Kolom baru `credit_account` (string 30, nullable, **unique**) — diisi otomatis dari respons posting
+  kredit ke CBS. Migration `2026_08_21_030000_add_credit_account_...`. Di rancangan Skema Migrasi
+  ditaruh paling atas (`SchemaDraftSeeder` punya daftar `lead`).
+- Penomoran otomatis `AGN-xxxxxx` **DIHAPUS**: `collateral_id` sengaja kosong sampai CBS mengembalikan
+  nilainya. Input Agunan ID tidak ada di form (memang tidak diinput manual).
+- `appraiser_name` + `appraised_at` kini **dicatat sistem** saat simpan pada tahap analisa
+  (nama user login + tanggal hari ini); inputnya dihapus dari form, diganti keterangan.
+- Input independen (`independent_value`/`independent_name`/`independent_at`) dihapus dari form
+  (kolom tetap ada di DB & payload) — tidak dipakai di lapangan.
+- Validasi `appraised_at` wajib pada mode ubah dihapus (kini otomatis).
+- Uji: `php artisan test` → 37 lulus (termasuk 9 tes agunan yang disesuaikan), screenshot form ubah
+  memperlihatkan keterangan Penaksir otomatis dan validasi kolom wajib tetap jalan.

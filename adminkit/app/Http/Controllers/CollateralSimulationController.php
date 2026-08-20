@@ -96,9 +96,6 @@ class CollateralSimulationController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
-        $data['collateral_id'] = filled($data['collateral_id'] ?? null)
-            ? $data['collateral_id']
-            : $this->nextCollateralId();
         $record = CollateralSimulation::create($this->withDefaults($data));
 
         ActivityLog::record("Menambah contoh agunan {$record->collateral_id}", self::LABEL, 'success', $record);
@@ -110,7 +107,13 @@ class CollateralSimulationController extends Controller
     public function update(Request $request, CollateralSimulation $collateralSimulation): RedirectResponse
     {
         $before = $collateralSimulation->getOriginal();
-        $collateralSimulation->update($this->withDefaults($this->validated($request, $collateralSimulation)));
+        $data = $this->withDefaults($this->validated($request, $collateralSimulation));
+
+        // Tahap analisa: penaksir & tanggal taksasi dicatat sistem atas nama petugas yang menyimpan.
+        $data['appraiser_name'] = mb_strtoupper((string) $request->user()->name);
+        $data['appraised_at'] = now()->toDateString();
+
+        $collateralSimulation->update($data);
 
         ActivityLog::record(
             "Memperbarui contoh agunan {$collateralSimulation->collateral_id}",
@@ -132,18 +135,6 @@ class CollateralSimulationController extends Controller
         ActivityLog::record("Menghapus contoh agunan {$id}", self::LABEL, 'warning');
 
         return back()->with('success', "Contoh agunan {$id} dihapus.");
-    }
-
-    /** Agunan ID diisi sistem bila pengguna membiarkannya kosong. */
-    private function nextCollateralId(): string
-    {
-        $next = CollateralSimulation::max('id') + 1;
-
-        while (CollateralSimulation::where('collateral_id', $id = 'AGN-'.str_pad((string) $next, 6, '0', STR_PAD_LEFT))->exists()) {
-            $next++;
-        }
-
-        return $id;
     }
 
     /** Kolom yang tak boleh null di basis data diberi nilai bawaan CBS. */
@@ -177,6 +168,10 @@ class CollateralSimulationController extends Controller
                 'nullable', 'string', 'max:50',
                 Rule::unique('collateral_simulations', 'collateral_id')->ignore($current?->id),
             ],
+            'credit_account' => [
+                'nullable', 'string', 'max:30',
+                Rule::unique('collateral_simulations', 'credit_account')->ignore($current?->id),
+            ],
             'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
             'document_number' => ['required', 'string', 'max:100'],
@@ -192,7 +187,7 @@ class CollateralSimulationController extends Controller
             'appraisal_value' => ['nullable', 'integer', 'min:0'],
             'independent_value' => ['nullable', 'integer', 'min:0'],
             'appraiser_name' => ['nullable', 'string', 'max:100'],
-            'appraised_at' => [...$onEdit, 'date'],
+            'appraised_at' => ['nullable', 'date'],
             'independent_name' => ['nullable', 'string', 'max:100'],
             'independent_at' => ['nullable', 'date'],
             'condition_code' => [...$onEdit, 'string', 'exists:collateral_conditions,code'],
@@ -202,6 +197,7 @@ class CollateralSimulationController extends Controller
             'insurance_date' => [...$onEdit, 'date'],
         ], [], [
             'collateral_id' => 'agunan id',
+            'credit_account' => 'no. rekening kredit',
             'collateral_type_code' => 'jenis agunan',
             'owner_name' => 'nama pemilik',
             'owner_address' => 'alamat agunan',
@@ -248,7 +244,7 @@ class CollateralSimulationController extends Controller
     {
         return [
             ...$r->only([
-                'id', 'collateral_id', 'collateral_type_code',
+                'id', 'credit_account', 'collateral_id', 'collateral_type_code',
                 'binding_type_code', 'securities_rank', 'rating_agency', 'document_number',
                 'description', 'owner_name', 'owner_address', 'region_code',
                 'region_label', 'guarantee_value', 'adjustment_value', 'fair_value', 'njop_value',

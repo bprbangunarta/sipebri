@@ -27,9 +27,14 @@ class SchemaDraftSeeder extends Seeder
         ],
     ];
 
-    /** Rancangan yang mengikuti tabel nyata. */
+    /** Rancangan yang mengikuti tabel nyata. `lead` = kolom yang ditaruh paling atas. */
     private const MIRRORED = [
-        ['name' => 'Agunan Kredit', 'table_name' => 'collateral_simulations', 'note' => 'Cerminan skema tabel agunan yang berjalan.'],
+        [
+            'name' => 'Agunan Kredit',
+            'table_name' => 'collateral_simulations',
+            'note' => 'Cerminan skema tabel agunan yang berjalan.',
+            'lead' => ['credit_account', 'collateral_id'],
+        ],
     ];
 
     public function run(): void
@@ -39,9 +44,16 @@ class SchemaDraftSeeder extends Seeder
                 continue;
             }
 
+            $lead = $item['lead'] ?? [];
+            unset($item['lead']);
+
             $draft = SchemaDraft::updateOrCreate(['table_name' => $item['table_name']], $item);
             $draft->columns()->delete();
             $draft->columns()->createMany(SchemaDesign::importFrom($item['table_name']));
+
+            foreach ($lead as $index => $name) {
+                $draft->columns()->where('name', $name)->update(['sort' => $index - count($lead)]);
+            }
         }
 
         foreach (self::PLANNED as $item) {

@@ -30,7 +30,6 @@ const props = defineProps({
 const editing = computed(() => Boolean(props.record));
 
 const form = useForm({
-    collateral_id: props.record?.collateral_id ?? '',
     collateral_type_code: props.record?.collateral_type_code ?? '',
     binding_type_code: props.record?.binding_type_code ?? '',
     document_number: props.record?.document_number ?? '',
@@ -48,9 +47,6 @@ const form = useForm({
     njop_value: props.record?.njop_value ?? '',
     adjustment_value: props.record?.adjustment_value ?? '',
     appraisal_value: props.record?.appraisal_value ?? 0,
-    appraised_at: props.record?.appraised_at ?? '',
-    independent_value: props.record?.independent_value ?? '',
-    independent_at: props.record?.independent_at ?? '',
     ppap_code: props.record?.ppap_code ?? '1',
 });
 
@@ -81,7 +77,6 @@ const schema = {
             condition_date: required('tgl kondisi'),
             insurance_code: required('diasuransikan'),
             insurance_date: required('tgl asuransi'),
-            appraised_at: required('tgl taksasi'),
             guarantee_value: positive('nilai jaminan'),
             fair_value: positive('nilai pasar'),
             appraisal_value: positive('nilai taksasi'),
@@ -284,33 +279,17 @@ const submit = () =>
                                 {{ form.errors.appraisal_value }}
                             </p>
                     </div>
-                    <div class="space-y-[var(--item-gap)]">
-                        <Label>Tgl Taksasi <span class="text-destructive" aria-hidden="true">*</span></Label>
-                        <DatePicker
-                            v-model="form.appraised_at"
-                            placeholder="-- Pilih --"
-                            data-testid="collateral-form-appraised-at"
-                        />
-                        <p v-if="form.errors.appraised_at" class="text-xs font-medium text-destructive">
-                            {{ form.errors.appraised_at }}
+                    <div class="space-y-[var(--item-gap)] sm:col-span-2">
+                        <Label>Penaksir</Label>
+                        <p
+                            class="flex h-8 items-center rounded-md border border-dashed px-3 text-xs text-muted-foreground"
+                            data-testid="collateral-form-appraiser-note"
+                        >
+                            Diisi sistem saat disimpan: nama petugas analis + tanggal hari ini.
+                            <span v-if="props.record?.appraiser_name" class="ml-1 font-medium text-foreground">
+                                Terakhir: {{ props.record.appraiser_name }} · {{ props.record.appraised_at }}
+                            </span>
                         </p>
-                    </div>
-                    <div class="space-y-[var(--item-gap)]">
-                        <Label for="f-independent">Nilai Apraisal</Label>
-                        <NumberInput
-                            id="f-independent"
-                            v-model="form.independent_value"
-                            placeholder="(Opsional)"
-                            data-testid="collateral-form-independent"
-                        />
-                    </div>
-                    <div class="space-y-[var(--item-gap)]">
-                        <Label>Tgl Apraisal</Label>
-                        <DatePicker
-                            v-model="form.independent_at"
-                            placeholder="(Opsional)"
-                            data-testid="collateral-form-independent-appraised-at"
-                        />
                     </div>
                 </CardContent>
                 <CardFooter class="justify-between">
