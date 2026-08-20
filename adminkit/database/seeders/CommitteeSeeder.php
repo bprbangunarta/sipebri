@@ -20,7 +20,7 @@ class CommitteeSeeder extends Seeder
     /** Produk yang memakai kewenangan plafon (alias produk). */
     private const PLAFON_PRODUCTS = [
         'KRU', 'KRM', 'PRK', 'KTO', 'KPS', 'KIH', 'KPJ', 'KRS',
-        'KPN', 'KIU', 'KTA', 'KPM', 'KPP', 'KRISPI',
+        'KPN', 'KIU', 'KTA', 'KPMI', 'KPP', 'KRISPI',
     ];
 
     /** Produk yang memakai hierarki komite tanpa batas plafon. */

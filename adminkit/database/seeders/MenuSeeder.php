@@ -29,6 +29,10 @@ class MenuSeeder extends Seeder
                 ['Kondisi Agunan', '/collateral-conditions', 'triangle-alert', 'collateral-conditions.view', []],
                 ['Metode Hitung', '/collateral-methods', 'calculator', 'collateral-methods.view', []],
             ]],
+            ['Simulasi', null, 'flask-conical', null, [
+                ['Agunan Kredit', '/collateral-simulation', 'shield-check', 'collateral-simulation.view', []],
+                ['Analisa Kredit', '/analysis-simulation', 'calculator', 'analysis-simulation.view', []],
+            ]],
         ],
         'admin' => [
             ['Kelola Perizinan', '/permissions', 'KeyRound', 'permissions.view', []],

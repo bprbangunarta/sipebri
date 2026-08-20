@@ -40,7 +40,7 @@ class SeederTest extends TestCase
         $this->assertSame(7, BindingType::count());
         $this->assertSame(6, CollateralCondition::count());
         $this->assertSame(4, CollateralMethod::count());
-        $this->assertSame(20, DB::table('menus')->count());
+        $this->assertSame(23, DB::table('menus')->count());
         $this->assertNotSame(0, Permission::count());
     }
 
@@ -103,7 +103,7 @@ class SeederTest extends TestCase
         $admin = User::where('username', 'superadmin')->firstOrFail();
         $menus = DB::table('menus')->whereNotNull('href')->get();
 
-        $this->assertSame(18, $menus->count());
+        $this->assertSame(20, $menus->count());
 
         foreach ($menus as $menu) {
             $this->actingAs($admin)->get($menu->href)

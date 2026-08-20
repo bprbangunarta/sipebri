@@ -36,6 +36,8 @@ const ROUTE_TRAILS = [
     [/^\/collateral-bindings$/, ['Agunan', 'Jenis Pengikatan']],
     [/^\/collateral-conditions$/, ['Agunan', 'Kondisi Agunan']],
     [/^\/collateral-methods$/, ['Agunan', 'Metode Hitung']],
+    [/^\/collateral-simulation$/, ['Simulasi', 'Agunan Kredit']],
+    [/^\/analysis-simulation$/, ['Simulasi', 'Analisa Kredit']],
     [/^\/object-storage$/, ['Object Storage']],
     [/^\/audit-trail$/, ['Audit Trail']],
     [/^\/audit-trail\/\d+$/, ['Audit Trail', 'Detail']],

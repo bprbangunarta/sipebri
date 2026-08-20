@@ -20,6 +20,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -197,6 +198,11 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('id')->middleware('permission:products.view')->name('products.show');
     Route::put('/products/{id}/parameters', [ProductController::class, 'updateParameter'])
         ->whereNumber('id')->middleware('permission:products.manage')->name('products.parameters');
+
+    Route::get('/collateral-simulation', [SimulationController::class, 'collateral'])
+        ->middleware('permission:collateral-simulation.view')->name('collateral-simulation.index');
+    Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
+        ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
 
     foreach ($references as $slug => $controller) {
         Route::get("/{$slug}", [$controller, 'index'])

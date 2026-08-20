@@ -24,7 +24,7 @@ class ProductSeeder extends Seeder
         ['12', 'KPN', 'KREDIT PEGAWAI NEGERI'],
         ['13', 'KIU', 'KREDIT IBADAH UMROH'],
         ['14', 'KTA', 'KREDIT TANPA AGUNAN'],
-        ['15', 'KPM', 'KREDIT PEKERJA MIGRAN INDONESIA'],
+        ['15', 'KPMI', 'KREDIT PEKERJA MIGRAN INDONESIA'],
         ['16', 'KPP', 'KREDIT PENSIUN PN (CHANNELING)'],
         ['17', 'KRISPI', 'KREDIT PASANG MINGGUAN'],
     ];
