@@ -8,7 +8,7 @@ import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
 import Combobox from '@/components/ui/Combobox.vue';
 import Dialog from '@/components/ui/Dialog.vue';
-import Input from '@/components/ui/Input.vue';
+import DigitsInput from '@/components/ui/DigitsInput.vue';
 import Label from '@/components/ui/Label.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
@@ -84,10 +84,6 @@ const openCreate = () => {
     createForm.reset();
     createForm.clearErrors();
     showCreate.value = true;
-};
-
-const onNik = (value) => {
-    createForm.nik = String(value ?? '').replace(/\D/g, '').slice(0, 16);
 };
 
 const submitCreate = () =>
@@ -201,14 +197,13 @@ const submitCreate = () =>
                     <Label for="c-nik" class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                         Nomor KTP <span class="text-destructive">*</span>
                     </Label>
-                    <Input
+                    <DigitsInput
                         id="c-nik"
-                        :model-value="createForm.nik"
-                        inputmode="numeric"
+                        v-model="createForm.nik"
+                        maxlength="16"
                         placeholder="16 angka"
                         class="font-mono tracking-wider"
                         data-testid="loan-create-nik"
-                        @update:model-value="onNik"
                         @keydown.enter.prevent="submitCreate"
                     />
                     <p v-if="createForm.errors.nik" class="text-xs font-medium text-destructive" data-testid="loan-create-error">

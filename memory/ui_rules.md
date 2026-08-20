@@ -43,3 +43,16 @@ Untuk tiap lebar, cek:
 - Dashboard = proses pemberian kredit (origination). JANGAN masukkan metrik monitoring
   (NPL, kolektibilitas) kecuali diminta.
 - Balas selalu dalam bahasa Indonesia.
+
+## Kolom angka (WAJIB, jangan pernah dilanggar lagi)
+User pernah sangat marah karena kolom **Nomor KTP menerima huruf**. Penyebab: memakai `<Input>`
+biasa dengan filter di handler halaman. `Input.vue` mengikat `:value`, jadi bila nilai hasil filter
+tidak berubah, DOM TIDAK ikut di-patch → huruf tetap terlihat di kolom.
+
+Aturan:
+- Uang/plafon/tenor → `NumberInput.vue` · Desimal/persen → `DecimalInput.vue`
+- **Angka murni tanpa pemisah ribuan (Nomor KTP, NPWP, telepon, kode angka) → `DigitsInput.vue`**
+  (`maxlength` opsional). JANGAN pakai `<Input>` + filter manual di halaman.
+- Setiap kali membuat kolom angka baru: uji dengan MENGETIK HURUF, lalu pastikan kolom benar-benar
+  kosong/menolak huruf pada tampilan (bukan hanya di state), lewat screenshot atau evaluasi
+  `input.value` di browser.

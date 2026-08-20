@@ -568,3 +568,14 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   SIPEBRI cuma butuh dua data itu. Endpoint `lookup` tetap ada untuk verifikasi.
 - Uji: `php artisan test` → 47 lulus (tes alur disesuaikan: store hanya menerima `nik`),
   screenshot: modal KTP tidak terdaftar menampilkan error, KTP terdaftar → berkas 00800004 terbuka.
+
+## Perbaikan (2026-06-21, kolom Nomor KTP menerima huruf) — BUG SAYA
+- Penyebab: modal memakai `<Input>` biasa dengan filter di handler halaman. `Input.vue` mengikat
+  `:value`, jadi ketika hasil filter tidak berubah nilainya, DOM tidak ikut di-patch → huruf tetap
+  terlihat di kolom (state bersih, tampilan tidak).
+- Perbaikan: komponen baru **`components/ui/DigitsInput.vue`** (angka murni, `maxlength`, sinkronisasi
+  DOM seperti `NumberInput`), dipakai untuk kolom Nomor KTP.
+- Aturan permanen ditambahkan ke `/app/memory/ui_rules.md`: uang → `NumberInput`, desimal →
+  `DecimalInput`, angka murni (KTP/NPWP/telepon) → `DigitsInput`; wajib diuji dengan MENGETIK HURUF.
+- Verifikasi browser: mengetik `jhjkjh` → kolom tetap kosong; `abc321301def120395x0001!!` →
+  hanya `3213011203950001` (terpotong 16 digit).
