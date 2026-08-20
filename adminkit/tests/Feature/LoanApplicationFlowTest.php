@@ -109,11 +109,8 @@ class LoanApplicationFlowTest extends TestCase
         $this->actingAs($user);
 
         $expectedCode = LoanApplication::nextCode();
-        $this->post('/loan-simulation', [
-            'nik' => '3213011203950001',
-            'requested_amount' => 30000000,
-            'requested_tenor' => 36,
-        ])->assertRedirect();
+        // Modal pengajuan baru hanya mengirim nomor KTP.
+        $this->post('/loan-simulation', ['nik' => '3213011203950001'])->assertRedirect();
 
         $record = LoanApplication::latest('id')->first();
         $this->assertSame($expectedCode, $record->application_code);
@@ -122,7 +119,7 @@ class LoanApplicationFlowTest extends TestCase
         $this->assertSame('YAYAT SUHAYAT', $record->full_name);
         $this->assertSame('CIF-000123', $record->cif_number);
         $this->assertSame('DIAJUKAN', $record->status);
-        $this->assertSame(30000000, $record->requested_amount);
+        $this->assertSame(0, $record->requested_amount);
 
         // show page renders with customer prop
         $this->get("/loan-simulation/{$record->id}")->assertOk();
@@ -272,7 +269,6 @@ class LoanApplicationFlowTest extends TestCase
         $this->actingAs($user);
 
         $this->get('/loan-simulation')->assertForbidden();
-        $this->get('/loan-simulation/create')->assertForbidden();
     }
 
     /** Regresi modul agunan. */

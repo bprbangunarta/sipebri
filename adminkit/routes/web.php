@@ -233,7 +233,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('permission:loan-simulation.manage')->scopeBindings()->group(function () {
-        Route::get('/loan-simulation/create', [LoanApplicationController::class, 'create'])->name('loan-simulation.create');
         Route::post('/loan-simulation', [LoanApplicationController::class, 'store'])->name('loan-simulation.store');
         Route::put('/loan-simulation/{loanApplication}', [LoanApplicationController::class, 'update'])->name('loan-simulation.update');
         Route::put('/loan-simulation/{loanApplication}/survey', [LoanApplicationController::class, 'updateSurvey'])->name('loan-simulation.survey');

@@ -558,3 +558,13 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   `data-testid` lama dipertahankan agar tes tetap jalan.
 - Uji: `yarn build` sukses; screenshot 1600px (3 tab) & **390px** → `scrollWidth === 390`
   (tanpa overflow horizontal) untuk halaman berkas maupun form tambah.
+
+## Selesai (2026-06-21, penyederhanaan pembukaan berkas)
+- Halaman `/loan-simulation/create` DIHAPUS (rute `create` juga). Tombol **Tambah** kini membuka
+  **modal berisi satu kolom Nomor KTP** → dicek ke sistem data nasabah; tidak terdaftar =
+  pesan error di modal, terdaftar = berkas dibuat dan langsung masuk halaman berkas.
+- Panel identitas debitur yang panjang DIHAPUS dari halaman berkas. Yang tampil hanya
+  **nama lengkap + nomor KTP** (di header berkas dan kartu Ringkasan) sesuai permintaan user:
+  SIPEBRI cuma butuh dua data itu. Endpoint `lookup` tetap ada untuk verifikasi.
+- Uji: `php artisan test` → 47 lulus (tes alur disesuaikan: store hanya menerima `nik`),
+  screenshot: modal KTP tidak terdaftar menampilkan error, KTP terdaftar → berkas 00800004 terbuka.

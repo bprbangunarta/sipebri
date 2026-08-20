@@ -1,12 +1,15 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { FileText, FolderOpen, Plus, Trash2 } from 'lucide-vue-next';
+import { FileText, FolderOpen, Loader2, Plus, Search, Trash2 } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
 import Combobox from '@/components/ui/Combobox.vue';
+import Dialog from '@/components/ui/Dialog.vue';
+import Input from '@/components/ui/Input.vue';
+import Label from '@/components/ui/Label.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
@@ -20,6 +23,7 @@ const props = defineProps({
     records: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
     statuses: { type: Array, default: () => [] },
+    sampleNiks: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -71,6 +75,26 @@ const confirmDelete = () =>
         preserveScroll: true,
         onFinish: () => (deleting.value = null),
     });
+
+/* Pengajuan baru: cukup nomor KTP, sisanya dilengkapi di halaman berkas. */
+const showCreate = ref(false);
+const createForm = useForm({ nik: '' });
+
+const openCreate = () => {
+    createForm.reset();
+    createForm.clearErrors();
+    showCreate.value = true;
+};
+
+const onNik = (value) => {
+    createForm.nik = String(value ?? '').replace(/\D/g, '').slice(0, 16);
+};
+
+const submitCreate = () =>
+    createForm.post('/loan-simulation', {
+        preserveScroll: true,
+        onSuccess: () => (showCreate.value = false),
+    });
 </script>
 
 <template>
@@ -104,7 +128,7 @@ const confirmDelete = () =>
                         v-if="canManage"
                         size="sm"
                         data-testid="loan-simulation-add"
-                        @click="router.visit('/loan-simulation/create')"
+                        @click="openCreate"
                     >
                         <Plus class="size-4" /> {{ ACTION.add }}
                     </Button>
@@ -171,6 +195,47 @@ const confirmDelete = () =>
                     </RowActions>
                 </template>
             </DataTableCard>
+
+            <Dialog :open="showCreate" title="Pengajuan Baru" @update:open="showCreate = $event">
+                <div class="form-dense space-y-[var(--item-gap)]">
+                    <Label for="c-nik" class="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                        Nomor KTP <span class="text-destructive">*</span>
+                    </Label>
+                    <Input
+                        id="c-nik"
+                        :model-value="createForm.nik"
+                        inputmode="numeric"
+                        placeholder="16 angka"
+                        class="font-mono tracking-wider"
+                        data-testid="loan-create-nik"
+                        @update:model-value="onNik"
+                        @keydown.enter.prevent="submitCreate"
+                    />
+                    <p v-if="createForm.errors.nik" class="text-xs font-medium text-destructive" data-testid="loan-create-error">
+                        {{ createForm.errors.nik }}
+                    </p>
+                    <p v-else class="text-xs text-muted-foreground">
+                        Nomor KTP diperiksa ke sistem data nasabah. Contoh (MOCK):
+                        <span class="font-mono">{{ props.sampleNiks.join(' · ') }}</span>
+                    </p>
+                </div>
+
+                <template #footer>
+                    <Button variant="outline" size="sm" data-testid="loan-create-cancel" @click="showCreate = false">
+                        {{ ACTION.cancel }}
+                    </Button>
+                    <Button
+                        size="sm"
+                        :disabled="createForm.processing"
+                        data-testid="loan-create-submit"
+                        @click="submitCreate"
+                    >
+                        <Loader2 v-if="createForm.processing" class="size-4 animate-spin" />
+                        <Search v-else class="size-4" />
+                        {{ createForm.processing ? 'Memeriksa...' : 'Cek & Lanjutkan' }}
+                    </Button>
+                </template>
+            </Dialog>
 
             <ConfirmDeleteDialog
                 :open="Boolean(deleting)"

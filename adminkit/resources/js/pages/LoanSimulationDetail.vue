@@ -6,7 +6,6 @@ import {
     Check,
     ClipboardCheck,
     FileSignature,
-    Info,
     Plus,
     Save,
     ShieldCheck,
@@ -29,7 +28,6 @@ import { rupiah } from '@/constants/committee';
 /** Berkas pengajuan: tahapan Pengajuan → Jaminan → Surveyor → Konfirmasi. */
 const props = defineProps({
     record: { type: Object, required: true },
-    customer: { type: Object, default: null },
     collaterals: { type: Array, default: () => [] },
     collateralOptions: { type: Array, default: () => [] },
     statuses: { type: Array, default: () => [] },
@@ -64,7 +62,7 @@ const STEPS = [
 ];
 
 const CHECK_LABELS = {
-    nasabah: 'Informasi Nasabah (dari sistem data nasabah)',
+    nasabah: 'Nomor KTP terverifikasi di sistem data nasabah',
     pengajuan: 'Informasi Pengajuan (produk, plafon, jangka waktu)',
     jaminan: 'Informasi Jaminan (minimal satu agunan)',
     surveyor: 'Informasi Surveyor (kantor & surveyor)',
@@ -124,22 +122,6 @@ const totalAppraisal = computed(() =>
 const allChecked = computed(() => Object.values(props.record.checklist ?? {}).every(Boolean));
 
 const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.check]) : allChecked.value);
-
-const identity = computed(() => [
-    { label: 'CIF', value: props.customer?.cif_number ?? 'Belum ada', mono: true },
-    { label: 'Jenis Kelamin', value: props.customer?.gender ?? '—' },
-    { label: 'Tempat Lahir', value: props.customer?.birth_place ?? '—' },
-    { label: 'Tanggal Lahir', value: props.customer?.birth_date ?? '—' },
-    { label: 'Status Kawin', value: props.customer?.marital_status ?? '—' },
-    { label: 'Telepon', value: props.customer?.phone ?? '—' },
-]);
-
-const livelihood = computed(() => [
-    { label: 'Pekerjaan', value: props.customer?.occupation ?? '—' },
-    { label: 'Tempat Kerja', value: props.customer?.employer_name ?? '—' },
-    { label: 'Penghasilan', value: rupiah(props.customer?.monthly_income ?? 0) },
-    { label: 'Pengeluaran', value: rupiah(props.customer?.monthly_expense ?? 0) },
-]);
 
 const summary = computed(() => [
     { label: 'Plafon Diajukan', value: rupiah(props.record.requested_amount) },
@@ -227,73 +209,17 @@ const summary = computed(() => [
             </div>
 
             <div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-12">
-                <!-- Info nasabah & ringkasan -->
+                <!-- Ringkasan berkas -->
                 <div class="space-y-4 xl:col-span-4">
-                    <Card>
-                        <CardContent class="space-y-3 p-4">
-                            <div class="flex items-center justify-between gap-2 border-b pb-2">
-                                <h2 class="text-sm font-semibold">Info Nasabah</h2>
-                                <span :class="LABEL">Sistem lain</span>
-                            </div>
-
-                            <template v-if="props.customer">
-                                <div data-testid="loan-detail-customer">
-                                    <p class="text-sm font-semibold">{{ props.customer.full_name }}</p>
-                                    <p class="font-mono text-xs text-muted-foreground">{{ props.record.nik }}</p>
-                                </div>
-
-                                <dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 border-t pt-2.5">
-                                    <div v-for="item in identity" :key="item.label" class="min-w-0">
-                                        <dt :class="LABEL">{{ item.label }}</dt>
-                                        <dd
-                                            class="break-words text-sm font-semibold leading-5"
-                                            :class="item.mono ? 'font-mono' : ''"
-                                        >
-                                            {{ item.value }}
-                                        </dd>
-                                    </div>
-                                </dl>
-
-                                <dl class="grid grid-cols-2 gap-x-4 gap-y-2.5 border-t pt-2.5">
-                                    <div v-for="item in livelihood" :key="item.label" class="min-w-0">
-                                        <dt :class="LABEL">{{ item.label }}</dt>
-                                        <dd class="break-words text-sm font-semibold leading-5">{{ item.value }}</dd>
-                                    </div>
-                                    <div class="col-span-2">
-                                        <dt :class="LABEL">Pendamping</dt>
-                                        <dd class="text-sm font-semibold leading-5">
-                                            {{ props.customer.companion
-                                                ? `${props.customer.companion.name} (${props.customer.companion.relation})`
-                                                : '—' }}
-                                        </dd>
-                                    </div>
-                                    <div class="col-span-2">
-                                        <dt :class="LABEL">Alamat</dt>
-                                        <dd class="break-words text-sm font-semibold leading-5">
-                                            {{ props.customer.address ?? '—' }}
-                                        </dd>
-                                    </div>
-                                </dl>
-
-                                <p class="flex items-start gap-2 rounded-md border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-                                    <Info class="mt-0.5 size-3.5 shrink-0" />
-                                    Sumber: sistem pengelola nasabah (MOCK). Tidak disimpan di SIPEBRI.
-                                </p>
-                            </template>
-                            <p
-                                v-else
-                                class="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-medium text-destructive"
-                                data-testid="loan-detail-customer-missing"
-                            >
-                                Nomor KTP {{ props.record.nik }} tidak ditemukan di sistem data nasabah.
-                            </p>
-                        </CardContent>
-                    </Card>
-
                     <Card>
                         <CardContent class="space-y-2.5 p-4">
                             <h2 class="border-b pb-2 text-sm font-semibold">Ringkasan Berkas</h2>
                             <dl class="grid grid-cols-2 gap-x-4 gap-y-2.5">
+                                <div class="col-span-2">
+                                    <dt :class="LABEL">Pemohon</dt>
+                                    <dd class="text-sm font-semibold leading-5">{{ props.record.full_name }}</dd>
+                                    <dd class="font-mono text-xs text-muted-foreground">{{ props.record.nik }}</dd>
+                                </div>
                                 <div v-for="item in summary" :key="item.label" class="min-w-0">
                                     <dt :class="LABEL">{{ item.label }}</dt>
                                     <dd class="break-words text-sm font-semibold leading-5">{{ item.value }}</dd>

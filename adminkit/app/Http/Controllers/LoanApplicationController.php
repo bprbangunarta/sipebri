@@ -62,13 +62,6 @@ class LoanApplicationController extends Controller
             ],
             'filters' => ['search' => $search, 'sort' => $sort, 'dir' => $dir, 'status' => $status],
             'statuses' => self::STATUSES,
-        ]);
-    }
-
-    public function create(): Response
-    {
-        return Inertia::render('LoanSimulationForm', [
-            'nextCode' => LoanApplication::nextCode(),
             'sampleNiks' => CustomerDirectory::sampleNiks(),
         ]);
     }
@@ -94,7 +87,6 @@ class LoanApplicationController extends Controller
 
         return Inertia::render('LoanSimulationDetail', [
             'record' => $this->detail($loanApplication),
-            'customer' => $this->customerCache ?? CustomerDirectory::find((string) $loanApplication->nik),
             'collaterals' => $loanApplication->collaterals
                 ->map(fn (CollateralSimulation $c) => [
                     ...$c->only(['id', 'collateral_id', 'collateral_type_code', 'owner_name', 'document_number', 'description']),
@@ -116,8 +108,6 @@ class LoanApplicationController extends Controller
     {
         $data = $request->validate([
             'nik' => ['required', 'string', 'digits:16'],
-            'requested_amount' => ['nullable', 'integer', 'min:0'],
-            'requested_tenor' => ['nullable', 'integer', 'min:0', 'max:600'],
         ], [
             'nik.digits' => 'Kolom nomor KTP harus 16 angka.',
         ], ['nik' => 'nomor ktp']);
@@ -137,8 +127,6 @@ class LoanApplicationController extends Controller
             'nik' => $data['nik'],
             'full_name' => $customer['full_name'],
             'cif_number' => $customer['cif_number'] ?? null,
-            'requested_amount' => (int) ($data['requested_amount'] ?? 0),
-            'requested_tenor' => (int) ($data['requested_tenor'] ?? 0),
             'created_by' => $request->user()->id,
         ]);
 
