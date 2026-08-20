@@ -65,3 +65,12 @@ Aturan:
   TIDAK ada peringatan `Failed to resolve component`.
 - Pola kartu form baku: `Card > CardHeader(CardTitle) + CardContent(grid field) + CardFooter(Batal/Simpan)`
   — persis seperti `CollateralSimulationForm.vue`.
+
+## Placeholder pada input UPPERCASE
+Kolom yang isinya dipaksa huruf besar WAJIB pakai `class="uppercase placeholder:normal-case"`,
+kalau tidak placeholder `(Opsional)` ikut jadi `(OPSIONAL)`.
+
+## Select bergantung (dependent select)
+Kolom yang pilihannya bergantung kolom lain (mis. Kategori bergantung Produk, seperti pada
+Simulasi Kewenangan Komite) WAJIB `:disabled` sampai kolom induknya dipilih, dengan placeholder
+penjelas (mis. "Pilih produk dahulu"), dan nilainya direset saat induk berubah.

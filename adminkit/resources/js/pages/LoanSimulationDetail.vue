@@ -195,7 +195,8 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             <Combobox
                                 v-model="form.committee_path_id"
                                 :options="categoryOptions"
-                                placeholder="-- Pilih --"
+                                :disabled="!form.product_id"
+                                :placeholder="form.product_id ? '-- Pilih --' : 'Pilih produk dahulu'"
                                 data-testid="loan-detail-category"
                             />
                             <p v-if="form.errors.committee_path_id" class="text-xs font-medium text-destructive">
@@ -277,7 +278,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                                 id="d-marketing"
                                 v-model="form.marketing"
                                 placeholder="(Opsional)"
-                                class="uppercase"
+                                class="uppercase placeholder:normal-case"
                                 data-testid="loan-detail-marketing"
                             />
                         </div>
@@ -449,21 +450,21 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="m-doc">No. Dokumen <span class="text-destructive">*</span></Label>
-                        <Input id="m-doc" v-model="newCollateral.document_number" class="uppercase" data-testid="collateral-modal-document" />
+                        <Input id="m-doc" v-model="newCollateral.document_number" class="uppercase placeholder:normal-case" data-testid="collateral-modal-document" />
                         <p v-if="newCollateral.errors.document_number" class="text-xs font-medium text-destructive">
                             {{ newCollateral.errors.document_number }}
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="m-owner">Nama Pemilik <span class="text-destructive">*</span></Label>
-                        <Input id="m-owner" v-model="newCollateral.owner_name" class="uppercase" data-testid="collateral-modal-owner" />
+                        <Input id="m-owner" v-model="newCollateral.owner_name" class="uppercase placeholder:normal-case" data-testid="collateral-modal-owner" />
                         <p v-if="newCollateral.errors.owner_name" class="text-xs font-medium text-destructive">
                             {{ newCollateral.errors.owner_name }}
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)] sm:col-span-2">
                         <Label for="m-address">Alamat Agunan <span class="text-destructive">*</span></Label>
-                        <Input id="m-address" v-model="newCollateral.owner_address" class="uppercase" data-testid="collateral-modal-address" />
+                        <Input id="m-address" v-model="newCollateral.owner_address" class="uppercase placeholder:normal-case" data-testid="collateral-modal-address" />
                         <p v-if="newCollateral.errors.owner_address" class="text-xs font-medium text-destructive">
                             {{ newCollateral.errors.owner_address }}
                         </p>
@@ -483,7 +484,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                     </div>
                     <div class="space-y-[var(--item-gap)] sm:col-span-2">
                         <Label for="m-desc">Keterangan Agunan <span class="text-destructive">*</span></Label>
-                        <Input id="m-desc" v-model="newCollateral.description" class="uppercase" data-testid="collateral-modal-description" />
+                        <Input id="m-desc" v-model="newCollateral.description" class="uppercase placeholder:normal-case" data-testid="collateral-modal-description" />
                         <p v-if="newCollateral.errors.description" class="text-xs font-medium text-destructive">
                             {{ newCollateral.errors.description }}
                         </p>

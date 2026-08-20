@@ -200,7 +200,7 @@ const copyOptions = computed(() => [
                         <Input
                             id="path-condition"
                             v-model="form.condition"
-                            class="uppercase"
+                            class="uppercase placeholder:normal-case"
                             placeholder="Kosongkan untuk Normal"
                             maxlength="30"
                             autocomplete="off"
