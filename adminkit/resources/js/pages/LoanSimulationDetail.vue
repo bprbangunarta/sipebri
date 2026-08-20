@@ -196,7 +196,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                                 v-model="form.committee_path_id"
                                 :options="categoryOptions"
                                 :disabled="!form.product_id"
-                                :placeholder="form.product_id ? '-- Pilih --' : 'Pilih produk dahulu'"
+                                placeholder="-- Pilih --"
                                 data-testid="loan-detail-category"
                             />
                             <p v-if="form.errors.committee_path_id" class="text-xs font-medium text-destructive">
