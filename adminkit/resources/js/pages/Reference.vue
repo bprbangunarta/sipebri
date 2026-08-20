@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { Database, Loader2, Pencil, Plus, Save, Trash2, X } from 'lucide-vue-next';
+import { Head, router, useForm, usePage } from '@inertiajs/vue3';
+import { Database, Loader2, Pencil, Plus, Save, SlidersHorizontal, Trash2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
@@ -197,6 +197,13 @@ const runBulkDelete = () => {
 
                 <template #cell-actions="{ row }">
                     <RowActions v-if="canManage" :testid="`${props.slug}-actions-${row.id}`">
+                        <DropdownMenuItem
+                            v-if="props.slug === 'products'"
+                            :data-testid="`${props.slug}-parameter-${row.id}`"
+                            @select="router.visit(`/products/${row.id}`)"
+                        >
+                            <SlidersHorizontal />Atur Parameter
+                        </DropdownMenuItem>
                         <DropdownMenuItem :data-testid="`${props.slug}-edit-${row.id}`" @select="openEdit(row)">
                             <Pencil />{{ ACTION.edit }}
                         </DropdownMenuItem>

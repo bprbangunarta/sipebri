@@ -263,6 +263,7 @@ database/{migrations,seeders,factories}
 | --- | --- |
 | `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `role` (cermin peranan Spatie), `office`, `alias`/`mso_code`/`collector_code` (unik), `password`, `avatar`, `last_login_at`, `deleted_at` (SoftDelete = Terarsip) |
 | `offices`, `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, pada `offices` & `products`), `name` |
+| `product_parameters` | parameter SK Direksi per produk: plafon & tenor min/maks, `interest_rate`/`provision_rate`/`admin_rate`/`rc_threshold` (persen), metode & pola cicilan yang diizinkan (JSON) + nilai bawaan, `collateral_required`, `decree`, `note` |
 | `committee_paths` | jalur komite: `product_id` (null = semua produk), `condition` (null = Normal), `mechanism` (`plafon`/`hierarki`), `is_active`, `note` |
 | `committee_tiers` | jenjang: `committee_path_id`, `sort`, `label`, `role`, `min_amount`, `max_amount`, `can_escalate`, `can_approve`, `can_cancel`, `can_reject` |
 | `roles`, `permissions`, `model_has_roles`, `role_has_permissions` | standar `spatie/laravel-permission`; nama izin memakai pola `entitas.aksi` |
@@ -296,13 +297,25 @@ Lima modul data master sederhana (`kode` + `nama`, sebagian dengan `alias`) berb
 |---|---|---|---|
 | Data Kantor | `/offices` | code (unik), alias (unik), name | `offices.view/manage` |
 | Data Instansi | `/institutions` | code (unik), name | `institutions.view/manage` |
-| Data Produk | `/products` | code (unik), alias (unik), name | `products.view/manage` |
+| Data Produk | `/products` | code (unik), alias (unik), name + **Parameter Produk** di `/products/{id}` | `products.view/manage` |
 | Sistem Cicilan | `/installments` | code (unik), name | `installments.view/manage` |
 | Sistem Bunga | `/methods` | code (unik), name | `methods.view/manage` |
 
 - Backend: `ReferenceController` (abstrak) menyediakan index/store/update/destroy/bulkDestroy + aturan validasi; turunannya hanya mendefinisikan `model()`, `slug()`, `label()`, dan `fields()`. Validasi lewat `Reference\StoreReferenceRequest` (mengambil aturan dari controller, `trim` semua nilai, `UPPERCASE` untuk kolom bertanda `uppercase`, `unique` hanya untuk kolom bertanda `unique`).
 - Frontend: satu halaman generik `pages/Reference.vue` (DataTableCard server-side + dialog tambah/ubah dinamis dari `fields`). Kolom bertanda `hide_below` disembunyikan di layar kecil dan nilainya tetap tampil sebagai baris ringkas di bawah kolom pertama (responsif tanpa penyesuaian tambahan).
 - **Penghapusan permanen** (tanpa arsip), tersedia per baris dan massal; semua aksi tercatat di Audit Trail.
+### Parameter Produk (SK Direksi)
+
+Setiap produk punya SK Direksi tersendiri. Parameternya diatur di **detail produk** (`/products/{id}`, aksi baris **Atur Parameter**) namun disimpan pada tabel `product_parameters` (1 baris per produk, `updateOrCreate`) supaya master produk tetap cermin core banking:
+
+- **Batas**: plafon minimal/maksimal, tenor minimal/maksimal (bulan).
+- **Bunga & biaya (persen)**: suku bunga, provisi, biaya admin — semuanya persen dari plafon.
+- **Kelayakan**: ambang **RC maksimal (%)** per produk.
+- **Metode bunga & pola cicilan**: daftar yang **diizinkan** (kosong = semua) + nilai **bawaan**; nilai bawaan wajib termasuk daftar yang diizinkan (divalidasi server).
+- **Ketentuan lain**: wajib agunan, nomor SK Direksi, catatan.
+
+Semua nilai bersifat **acuan** — petugas tetap dapat mengubahnya saat transaksi. Pengguna tanpa izin `products.manage` melihat formulir dalam keadaan nonaktif dan tanpa tombol Simpan (PUT juga ditolak 403).
+
 - Menambah modul referensi baru: buat migrasi + model, satu controller turunan (≈20 baris), satu entri di `Modules::MAP`, satu entri pada `$references` di `routes/web.php`, lalu tambahkan menunya di Menu Navigasi.
 
 ---
@@ -608,6 +621,8 @@ Nilai `'all'` dipakai sebagai sentinel filter "semua" karena `reka-ui` melarang 
 | PUT | `/appearance/{identity\|seo\|contact}` | Simpan per bagian |
 | POST/DELETE | `/appearance/asset/{key}` | Unggah/hapus aset merek |
 | GET | `/offices`, `/institutions`, `/products`, `/installments`, `/methods` | Data referensi (CRUD via dialog, hapus permanen) |
+| GET | `/products/{id}` | Detail produk: **Parameter Produk (SK Direksi)** |
+| PUT | `/products/{id}/parameters` | Simpan parameter produk (izin `products.manage`) |
 | POST/PUT/DELETE | `/{slug}`, `/{slug}/{id}`, `/{slug}/bulk` | Simpan, perbarui, hapus (per baris & massal) data referensi |
 | GET | `/committees`, `/committees/{path}` | Jalur komite kredit & pengelolaan jenjangnya |
 | GET | `/committees/export` | Unduh seluruh jalur + jenjang dalam satu Excel (untuk review) |

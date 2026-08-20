@@ -24,6 +24,7 @@ const ROUTE_TRAILS = [
     [/^\/roles\/\d+$/, ['Peranan', 'Detail']],
     [/^\/appearance$/, ['Penampilan']],
     [/^\/menus$/, ['Menu Sidebar']],
+    [/^\/products\/\d+$/, ['Referensi', 'Data Produk', 'Parameter']],
     [/^\/offices$/, ['Referensi', 'Data Kantor']],
     [/^\/institutions$/, ['Referensi', 'Data Instansi']],
     [/^\/products$/, ['Referensi', 'Data Produk']],

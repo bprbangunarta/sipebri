@@ -183,6 +183,11 @@ Route::middleware('auth')->group(function () {
         'methods' => MethodController::class,
     ];
 
+    Route::get('/products/{id}', [ProductController::class, 'show'])
+        ->whereNumber('id')->middleware('permission:products.view')->name('products.show');
+    Route::put('/products/{id}/parameters', [ProductController::class, 'updateParameter'])
+        ->whereNumber('id')->middleware('permission:products.manage')->name('products.parameters');
+
     foreach ($references as $slug => $controller) {
         Route::get("/{$slug}", [$controller, 'index'])
             ->middleware("permission:{$slug}.view")

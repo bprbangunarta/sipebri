@@ -1,0 +1,30 @@
+{
+  "summary": "Iterasi 36 — fitur Parameter Produk (SK Direksi) di /products/{id}. Backend: 24 pytest (halaman detail, simpan+persistensi, updateOrCreate 1 baris, validasi gte/persen/nilai bawaan, izin 403, regresi 11 halaman) semua LULUS. Frontend Playwright: navigasi 'Atur Parameter' dari /products (products-parameter-14), 4 kartu + semua data-testid ada, simpan → toast 'Parameter produk KRU disimpan.' dan seluruh nilai (termasuk daftar diizinkan & switch wajib agunan) persist setelah reload, filter dropdown bawaan sesuai daftar diizinkan (dan penuh 10 pilihan bila daftar dikosongkan), error inline param-max-amount-error / param-max-tenor-error / persen >100 tampil, responsif 390/768/1440 tanpa horizontal scroll (grid 1→2→4 kolom), view-only user (products.view saja) dapat melihat halaman tanpa tombol Simpan, PUT tanpa products.manage → 403. Tidak ada console error di 11 halaman regresi. Tidak ditemukan bug fungsional.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/products/{id} — Ketentuan Lain", "issues": ["Input Catatan memakai maxlength=255 sedangkan validasi server mengizinkan 1000 karakter (batas UI lebih ketat dari backend — selaraskan salah satu)"]},
+      {"screen": "/products/{id} — pengguna hanya products.view", "issues": ["Semua field masih dapat diedit (tidak disabled/readonly) meski tombol Simpan disembunyikan; berpotensi membingungkan (kosmetik, bukan celah keamanan karena PUT dibalas 403)"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_product_parameters.py", "/app/test_reports/pytest/param_results.xml"],
+  "action_items": [
+    "Opsional: samakan maxlength Catatan (255 vs validasi 1000)",
+    "Opsional: set field readonly/disabled untuk pengguna tanpa products.manage"
+  ],
+  "critical_code_review_comments": [
+    "StoreParameterRequest & ProductController sudah benar: gte, persen 0-100, exists, withValidator nilai bawaan, updateOrCreate([], ...) → tetap 1 baris per produk (dicek di DB: product_parameters total=1 untuk KRU setelah 4x simpan)",
+    "ProductParameter tidak mengembalikan kolom _id/relasi berat; show() memakai only() sehingga payload Inertia ringkas — baik",
+    "Catatan minor: ProductController::show hanya mengirim parameter?->only(...), sehingga bila baris belum ada, prop parameter = null dan form default '' — sudah ditangani di Vue"
+  ],
+  "updated_files": ["/app/backend/tests/test_product_parameters.py"],
+  "success_rate": { "backend": "100% (24/24)", "frontend": "100% (semua skenario yang diuji lulus)" },
+  "seed_data_creation": "Baris product_parameters untuk produk KRU (id 14) berisi nilai uji: plafon 1.000.000–500.000.000, tenor 3–60, bunga 1,5%, provisi 1%, admin 0,5%, RC 40%, metode diizinkan [46,47], pola [31,32], wajib agunan aktif, SK 'SK-777/DIR/2026', catatan 'Acuan UI test'. Data bawaan (7 kantor, 10 instansi, 17 produk, 8 cicilan, 10 bunga, 45 peranan, 1 akun) TIDAK diubah. User uji qa.param@test.local & qa.view@test.local + peranan 'TEST QA Viewer' sudah dihapus kembali.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "sa@bprbangunarta.co.id / SA@4dm1n (dari /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Suite regresi parameter produk: /app/backend/tests/test_product_parameters.py (jalankan dengan -n 0; login via form HTML + XSRF-TOKEN, header X-Inertia + X-Inertia-Version diambil dari data-page halaman login; validasi Laravel mengembalikan 303 redirect-back sehingga error dibaca dari props.errors halaman tujuan, bukan 422). Props index produk memakai key 'records.data'. Combobox memakai data-testid combobox-option-<id>. Untuk uji 403 buat user peranan Guest; untuk uji halaman view-only buat peranan sementara dengan izin products.view lalu hapus.",
+  "rca_of_the_issue": "Tidak ada isu fungsional. Dua kegagalan awal pada test suite adalah masalah harness (X-Inertia-Version kosong → 409, dan asumsi 422 padahal Inertia mengembalikan 303) dan sudah diperbaiki di file test."
+}
