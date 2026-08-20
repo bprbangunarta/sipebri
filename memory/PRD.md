@@ -541,3 +541,20 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   konfirmasi; juga dibersihkan cast kolom yang sudah dihapus, ditambah validasi
   `tenor_principal`/`tenor_interest` ≤ `requested_tenor`, dan konfirmasi ganda ditolak.
   Verifikasi ulang via screenshot: berkas 00800002 (ANALISA) tampil normal + "Sudah dikonfirmasi".
+
+## Selesai (2026-06-21, redesain UI Pengajuan Kredit)
+- User: "jelek banget tampilannya, redesin agar terlihat lebih prosesional" → `design_agent` dipanggil,
+  hasilnya tersimpan di `/app/design_guidelines.json` (tipografi, warna status, layout 12 kolom, stepper).
+- `LoanSimulationForm.vue`: alur linear 2 langkah dalam kartu terfokus (max-w-3xl) — "1 · Verifikasi
+  Nomor KTP" (input + tombol Cek KTP dengan state loading `Loader2` + alert error bergaya) dan
+  "2 · Permohonan Awal". Panel identitas jadi well `bg-muted/30` grid 2 kolom dengan hirarki
+  label uppercase 11px / nilai text-sm font-semibold.
+- `LoanSimulationDetail.vue`: header berkas (kode mono + badge status semantik per status) →
+  **stepper 4 langkah** (ikon centang bila lengkap, penanda "Lengkap/Belum lengkap", geser horizontal
+  di ponsel) → grid `xl:grid-cols-12` (Info Nasabah + Ringkasan 4 kolom, isi tahap 8 kolom).
+  Form dipecah jadi blok "Informasi Dasar" & "Parameter Kredit" berbingkai; tabel agunan bergaya
+  (header muted, tfoot total); checklist konfirmasi jadi daftar berbingkai dengan lingkaran status.
+- Semua kontrol tetap 32px, hanya CSS variable shadcn (tanpa warna baru selain aksen status),
+  `data-testid` lama dipertahankan agar tes tetap jalan.
+- Uji: `yarn build` sukses; screenshot 1600px (3 tab) & **390px** → `scrollWidth === 390`
+  (tanpa overflow horizontal) untuk halaman berkas maupun form tambah.

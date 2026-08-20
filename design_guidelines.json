@@ -1,117 +1,80 @@
 {
-  "theme_strategy": "The Architectural Split (Glass & Void)",
-  "concept": "Breaking the generic 'white card on gray background' SaaS mold. A high-contrast, split-screen layout prioritizing emotional elegance. The functional form sits in a clean, minimalist void, contrasted by a cinematic, architectural/abstract texture on the opposing side.",
   "typography": {
-    "brand_display_font": {
-      "name": "Playfair Display",
-      "import_instruction": "Add Google Font import for 'Playfair Display' (weights 400, 500, 600) to the main layout or app.css.",
-      "usage": "Use ONLY for the 'AdminKit' brand name and the hero tagline to create a 'Luxury/Editorial' contrast against the functional interface."
-    },
-    "body_font": {
-      "name": "Geist",
-      "usage": "Use for all inputs, labels, and standard text (already defined in the app)."
-    },
-    "hierarchy": {
-      "brand_logo": "text-2xl font-semibold tracking-tight font-serif",
-      "h1_tagline": "text-4xl lg:text-5xl font-medium tracking-tight font-serif leading-tight mb-2",
-      "subtitle": "text-sm text-muted-foreground",
-      "labels": "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-    }
+    "h1": "text-2xl font-bold tracking-tight text-foreground",
+    "h2": "text-lg font-semibold tracking-tight text-foreground",
+    "h3": "text-base font-medium text-foreground",
+    "label": "text-xs font-medium text-muted-foreground uppercase tracking-wider",
+    "value": "text-sm font-semibold text-foreground",
+    "body": "text-sm text-foreground",
+    "caption": "text-xs text-muted-foreground",
+    "mono": "font-mono text-sm tracking-tight"
   },
   "colors": {
-    "palette_rules": "Strict adherence to the existing monochrome compact UI (FlowDesk style). No new vibrant colors. Use pure contrast (black/white/zinc) using existing CSS variables.",
-    "tokens": {
-      "background": "hsl(var(--background))",
-      "foreground": "hsl(var(--foreground))",
-      "muted": "hsl(var(--muted))",
-      "border": "hsl(var(--border))",
-      "error": "hsl(var(--destructive))"
+    "background": "bg-background text-foreground",
+    "surface": "bg-card text-card-foreground border-border",
+    "muted_surface": "bg-muted/30 border-border/50",
+    "primary_action": "bg-primary text-primary-foreground hover:bg-primary/90",
+    "status": {
+      "diajukan": "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30",
+      "analisa": "bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30",
+      "komite": "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
+      "disetujui": "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+      "ditolak": "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30",
+      "dibatalkan": "bg-slate-500/15 text-slate-700 dark:text-slate-400 border-slate-500/30",
+      "realisasi": "bg-teal-500/15 text-teal-700 dark:text-teal-400 border-teal-500/30"
     }
+  },
+  "visual_enhancers": {
+    "borders": "border border-border/60 rounded-md",
+    "shadows": "shadow-sm",
+    "dense_spacing": "gap-3 p-4",
+    "dividers": "divide-y divide-border/50"
   },
   "layouts": {
-    "main_container": "min-h-screen w-full flex flex-col lg:flex-row bg-background text-foreground",
-    "left_panel": "w-full lg:w-[45%] xl:w-[40%] flex flex-col justify-center items-center p-8 lg:p-16 xl:p-24 relative z-10",
-    "form_container": "w-full max-w-[400px] flex flex-col gap-6",
-    "right_panel": "hidden lg:flex lg:w-[55%] xl:w-[60%] relative bg-zinc-950 overflow-hidden"
-  },
-  "components": {
-    "logo_area": {
-      "classes": "flex items-center gap-2 mb-12",
-      "icon": "Lucide Hexagon or Box (w-6 h-6)",
-      "text": "AdminKit"
+    "page_container": "max-w-7xl mx-auto p-4 md:p-6 w-full space-y-6",
+    "create_page": {
+      "wrapper": "max-w-3xl mx-auto mt-4 md:mt-8 space-y-6",
+      "card_section": "p-5 border border-border/60 bg-card rounded-xl shadow-sm",
+      "ktp_section": "flex flex-col md:flex-row gap-3 items-end",
+      "info_grid": "grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 bg-muted/30 p-4 rounded-lg border border-border/50",
+      "form_section": "grid grid-cols-1 sm:grid-cols-2 gap-4"
     },
-    "inputs": {
-      "credential_input": {
-        "label": "Kredensial (Email / Username / No. HP)",
-        "classes": "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm"
-      },
-      "password_input": {
-        "wrapper": "relative w-full",
-        "classes": "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all shadow-sm pr-10",
-        "toggle_button": "absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors",
-        "icons": "Lucide Eye / EyeOff"
-      }
-    },
-    "checkbox": {
-      "wrapper": "flex items-center space-x-2",
-      "label": "Ingat saya"
-    },
-    "button": {
-      "classes": "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-foreground text-background hover:bg-foreground/90 h-11 px-4 py-2 w-full shadow-md active:scale-[0.98]",
-      "loading_state": "Include Lucide Loader2 with 'animate-spin' class when submitting."
-    },
-    "alerts": {
-      "form_error": "bg-destructive/10 text-destructive border border-destructive/20 p-3 rounded-md text-sm flex items-start gap-2",
-      "field_error": "text-[0.8rem] font-medium text-destructive mt-1"
+    "detail_page": {
+      "header": "flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-border",
+      "stepper_container": "w-full py-4 overflow-x-auto hide-scrollbar flex items-center justify-between border-b border-border/40",
+      "main_grid": "grid grid-cols-1 xl:grid-cols-12 gap-6 items-start pt-4",
+      "left_sidebar": "xl:col-span-4 space-y-6",
+      "right_content": "xl:col-span-8 space-y-6",
+      "info_list_grid": "grid grid-cols-2 gap-y-4 gap-x-4",
+      "form_group": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 border border-border/40 rounded-lg bg-card"
     }
   },
-  "motion": {
-    "entrance": "Staggered fade-in for form elements. Use 'animate-in fade-in slide-in-from-bottom-4 duration-500'. Apply utility classes or @vueuse/motion if installed.",
-    "micro_interactions": "Inputs have subtle shadow expansion on focus. Button scales down 2% on active (active:scale-[0.98]). Image panel has a very slow scale effect on load."
-  },
-  "media": {
-    "strategy": "Render two distinct images based on the active theme (dark/light) to maintain emotional resonance.",
-    "dark_mode_image": {
-      "url": "https://images.unsplash.com/photo-1638376776402-9a4b75fe21bb?crop=entropy&cs=srgb&fm=jpg&w=1920",
-      "description": "Elegant abstract black and white wavy lines.",
-      "classes": "hidden dark:block object-cover w-full h-full opacity-90 animate-in fade-in duration-1000"
-    },
-    "light_mode_image": {
-      "url": "https://images.unsplash.com/photo-1496865534669-25ec2a3a0fd3?crop=entropy&cs=srgb&fm=jpg&w=1920",
-      "description": "Light, airy, elegant minimalist architecture.",
-      "classes": "block dark:hidden object-cover w-full h-full opacity-95 animate-in fade-in duration-1000"
-    },
-    "overlay": "Absolute inset-0 bg-black/10 dark:bg-black/40 pointer-events-none mix-blend-multiply dark:mix-blend-overlay"
-  },
-  "accessibility": {
-    "testing_attributes": {
-      "email_input": "data-testid=\"login-credential-input\"",
-      "password_input": "data-testid=\"login-password-input\"",
-      "password_toggle": "data-testid=\"login-password-toggle\"",
-      "remember_checkbox": "data-testid=\"login-remember-checkbox\"",
-      "submit_button": "data-testid=\"login-submit-button\"",
-      "form_error": "data-testid=\"login-form-error\""
-    },
-    "aria": "Use aria-invalid on inputs when errors exist. Use aria-describedby linking input to error message IDs."
+  "component_instructions": {
+    "inputs": "Must use FlowDesk standard: h-8, text-sm, px-3, py-1. Add 'form-dense' classes where applicable.",
+    "buttons": "Must use FlowDesk standard: h-8, text-sm. Primary for main actions, outline/ghost for secondary.",
+    "stepper": "Design a custom horizontal stepper using flexbox and lucide-vue-next icons. Active step gets primary color treatment, completed gets subtle success or primary outline, upcoming gets muted.",
+    "info_card": "Inside the left sidebar Card, use a `grid-cols-2` layout for Key-Value pairs. Stack them tightly: Label (text-xs uppercase) directly above Value (text-sm font-semibold).",
+    "status_badge": "Use px-2.5 py-0.5 rounded-full text-xs font-semibold border for prominent application statuses (DIAJUKAN, etc).",
+    "form_grouping": "Group related fields in `/loan-simulation/{id}` using inner containers with subtle borders (`border-border/40`) and soft background (`bg-muted/20`) to break up dense forms. Add an inner header to each group."
   },
   "instructions_to_main_agent": [
-    "Modify ONLY `/app/adminkit/resources/js/pages/auth/Login.vue`.",
-    "Use Inertia.js `useForm` for state management (kredensial, password, remember).",
-    "Implement the 'Kredensial' logic: one single input field bound to 'kredensial' in the form data, handling the fallback to email/username/phone on the backend (you only need to send the 'kredensial' payload).",
-    "Use `<script setup>` syntax for Vue 3.",
-    "Inject the Lucide icons: `Eye`, `EyeOff`, `Loader2`, `Hexagon`, `AlertCircle`.",
-    "Implement the password visibility toggle using a reactive ref.",
-    "Do NOT use external motion libraries unless already installed. Use Tailwind's built-in transition classes or `tailwindcss-animate`.",
-    "To handle Dark Mode gracefully, use the Tailwind `dark:` variant extensively on the form side, and use `dark:block hidden` vs `block dark:hidden` for the two provided Unsplash images on the right side.",
-    "Add a 'Tema Terang/Gelap' floating toggle ONLY if it doesn't exist globally; the prompt implies the toggle is already available in the app, but since this is an auth page, you may place a discrete toggle at the top right of the left panel if necessary.",
-    "DO NOT use `transparent` backgrounds over the image for the form. Keep the form strictly in the solid background panel (left side)."
+    "1. Redesign `/loan-simulation/create`: Build a focused, linear card flow. Top section for KTP Check (Input + Button side-by-side). Add a loading state for the Cek KTP button.",
+    "2. On `/loan-simulation/create`: If KTP is found, display the 'Info Nasabah' inside a read-only well (bg-muted/30) using a 2-column grid. Emphasize 'Data dari sistem lain' using a subtle info alert. Bottom section for Plafon & Jangka Waktu inputs.",
+    "3. Redesign `/loan-simulation/{id}` - Header: Create a prominent top header containing the Title (Kode Pengajuan with monospace font), Status Badge (using semantic colors defined in JSON), and primary global actions.",
+    "4. Redesign `/loan-simulation/{id}` - Stepper: Replace standard tabs with a visual horizontal stepper (Pengajuan -> Jaminan -> Surveyor -> Konfirmasi) placed right below the header. This gives a professional 'wizard' feel.",
+    "5. Redesign `/loan-simulation/{id}` - Layout Proportions: Update the grid to 12 columns. Left column (Info Nasabah) gets 4 cols (33.3%), Right column gets 8 cols (66.6%). This balances the page.",
+    "6. Redesign `/loan-simulation/{id}` - Left Column: Fix the 'long vertical list' issue by placing the info into a dense `grid-cols-2` block. Group logical data together (Identity vs Financials).",
+    "7. Redesign `/loan-simulation/{id}` - Right Column (Form Area): Do not leave the 15-field form as raw inputs. Segment them into visually distinct blocks (e.g., 'Informasi Dasar', 'Parameter Kredit') using bordered wrappers.",
+    "8. Ensure all typography enforces a strict hierarchy: labels must use the defined 'label' style (text-xs text-muted-foreground uppercase), values use 'value' (text-sm font-semibold text-foreground). Stop using text-xs for everything.",
+    "9. Maintain the 'compact UI' constraint: Ensure every Input, Select, and Button uses h-8. Do not inflate component sizes."
   ],
-  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
-    "You tend to converge toward generic outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
-    "Create depth through layered design elements with z-index hierarchy.",
-    "Use glass-morphism effects only where appropriate (not for primary text readability areas).",
-    "Do NOT apply universal transition (transition: all). Use specific transitions (transition-colors, transition-transform).",
-    "Every interaction needs micro-animations - hover states, focus rings.",
-    "All interactive elements MUST include a data-testid attribute in kebab-case."
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You MUST NOT apply universal transitions (e.g., transition: all). Add transitions for specific interactive elements like buttons and inputs.",
+    "You MUST NOT center align the app container. Do not disrupt the natural reading flow.",
+    "Prioritize using pre-existing components from shadcn-vue in /app/adminkit/resources/js/components/ui/.",
+    "All inputs, selects, DatePickers, NumberInputs, and buttons MUST strictly follow the 32px height constraint (h-8) to maintain the FlowDesk 'compact UI' concept.",
+    "DO NOT use completely transparent backgrounds for headers, overlays, or dropdown menus. Use solid bg-card or bg-background to prevent overlapping text.",
+    "Ensure high contrast and readability in both light and dark modes by sticking to shadcn CSS variables (bg-card, text-foreground, text-muted-foreground, etc.). Do NOT invent new hardcoded colors outside of status accents.",
+    "All interactive and key informational elements MUST include a 'data-testid' attribute (e.g., data-testid='cek-ktp-btn') for robust automated testing."
   ]
 }
