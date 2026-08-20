@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\Office;
 use App\Support\Rules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class StoreUserRequest extends FormRequest
             'email' => Rules::email($id),
             'phone' => Rules::phone($id),
             'role' => ['required', 'string', Rule::exists('roles', 'name')],
-            'office' => Rules::text(100),
+            'office' => ['nullable', 'string', Rule::in($this->allowedOffices())],
             'alias' => Rules::code(3, 'alias', $id),
             'mso_code' => Rules::code(4, 'mso_code', $id),
             'collector_code' => Rules::code(3, 'collector_code', $id),
@@ -55,5 +56,14 @@ class StoreUserRequest extends FormRequest
     public function messages(): array
     {
         return Rules::messages();
+    }
+
+    /** Nama kantor dari referensi Data Kantor + nilai lama pengguna agar tidak tertolak. */
+    private function allowedOffices(): array
+    {
+        $names = Office::orderBy('code')->pluck('name')->all();
+        $current = $this->route('user')?->office;
+
+        return filled($current) ? [...$names, $current] : $names;
     }
 }

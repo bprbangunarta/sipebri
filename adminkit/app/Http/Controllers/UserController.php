@@ -6,6 +6,7 @@ use App\Http\Requests\User\BulkUserRequest;
 use App\Http\Requests\User\ImportUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Models\ActivityLog;
+use App\Models\Office;
 use App\Models\User;
 use App\Support\Excel;
 use App\Support\Mailer;
@@ -75,6 +76,7 @@ class UserController extends Controller
         return Inertia::render('UserForm', [
             'user' => null,
             'roleOptions' => $this->roleOptions(),
+            'officeOptions' => $this->officeOptions(),
         ]);
     }
 
@@ -83,6 +85,7 @@ class UserController extends Controller
         return Inertia::render('UserForm', [
             'user' => $this->row($user),
             'roleOptions' => $this->roleOptions(),
+            'officeOptions' => $this->officeOptions($user->office),
         ]);
     }
 
@@ -158,13 +161,16 @@ class UserController extends Controller
     public function importTemplate(): StreamedResponse
     {
         $role = Role::orderBy('name')->value('name') ?? 'Super Admin';
+        $offices = Office::orderBy('code')->pluck('name');
+        $office1 = $offices->first() ?? '';
+        $office2 = $offices->skip(1)->first() ?? $office1;
 
         return Excel::download(
             'template-impor-pengguna.xlsx',
             self::IMPORT_HEADERS,
             [
-                ['Budi Santoso', 'budisantoso', 'budi@example.com', '081234567890', $role, 'Kantor Pusat', 'BDS', 'M001', 'K01', 'password'],
-                ['Siti Aminah', 'sitiaminah', 'siti@example.com', '081234567891', $role, 'Kantor Kas', '', '', '', ''],
+                ['Budi Santoso', 'budisantoso', 'budi@example.com', '081234567890', $role, $office1, 'BDS', 'M001', 'K01', 'password'],
+                ['Siti Aminah', 'sitiaminah', 'siti@example.com', '081234567891', $role, $office2, '', '', '', ''],
             ],
             'Pengguna',
         );
@@ -179,6 +185,13 @@ class UserController extends Controller
         $lines = Excel::rows($request->file('file')->getRealPath());
 
         $roles = Role::pluck('name')->all();
+        $offices = Office::get(['code', 'alias', 'name']);
+        // Kolom Kantor pada Excel boleh diisi kode, alias, atau nama — semua dipetakan ke nama resmi.
+        $officeMap = $offices->flatMap(fn (Office $o) => [
+            mb_strtolower($o->code) => $o->name,
+            mb_strtolower($o->alias) => $o->name,
+            mb_strtolower($o->name) => $o->name,
+        ])->all();
         $added = 0;
         $skipped = 0;
 
@@ -190,7 +203,7 @@ class UserController extends Controller
                 'email' => ($cols[2] ?? '') ?: null,
                 'phone' => ($cols[3] ?? '') ?: null,
                 'role' => ($cols[4] ?? '') ?: null,
-                'office' => ($cols[5] ?? '') ?: null,
+                'office' => $officeMap[mb_strtolower($cols[5] ?? '')] ?? (($cols[5] ?? '') ?: null),
                 'alias' => mb_strtoupper($cols[6] ?? '') ?: null,
                 'mso_code' => mb_strtoupper($cols[7] ?? '') ?: null,
                 'collector_code' => mb_strtoupper($cols[8] ?? '') ?: null,
@@ -207,7 +220,7 @@ class UserController extends Controller
                 'email' => Rules::email(),
                 'phone' => Rules::phone(),
                 'role' => ['required', 'string', Rule::in($roles)],
-                'office' => Rules::text(100),
+                'office' => ['nullable', 'string', Rule::in($offices->pluck('name')->all())],
                 'alias' => Rules::code(3, 'alias'),
                 'mso_code' => Rules::code(4, 'mso_code'),
                 'collector_code' => Rules::code(3, 'collector_code'),
@@ -454,5 +467,24 @@ class UserController extends Controller
     {
         return Role::orderBy('name')->pluck('name')
             ->map(fn ($n) => ['value' => $n, 'label' => $n])->all();
+    }
+
+    /**
+     * Pilihan kantor dari referensi Data Kantor. Nilai tersimpan berupa nama kantor.
+     * Nilai lama di luar referensi tetap disertakan agar tidak hilang saat disunting.
+     *
+     * @return array<int, array{value: string, label: string}>
+     */
+    private function officeOptions(?string $current = null): array
+    {
+        $options = Office::orderBy('code')->get(['alias', 'name'])
+            ->map(fn (Office $o) => ['value' => $o->name, 'label' => "{$o->alias} — {$o->name}"])
+            ->all();
+
+        if (filled($current) && ! collect($options)->contains('value', $current)) {
+            array_unshift($options, ['value' => $current, 'label' => "{$current} (di luar referensi)"]);
+        }
+
+        return $options;
     }
 }

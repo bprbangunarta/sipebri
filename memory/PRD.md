@@ -15,6 +15,7 @@ Klarifikasi user:
 - Laravel 12 (PHP 8.3.33) di `/app/adminkit`, SQLite (`database/database.sqlite`).
 - Catatan (Jun 2026): pod restart menghapus PHP lagi → pulihkan dengan `bash /app/memory/restore_php.sh` (repo Debian bawaan hanya punya php8.2; composer.lock butuh 8.3 → repo sury wajib).
 - Jun 2026: UI halaman Parameter Produk dirapikan — badge status parameter, sub-judul "Plafon & Tenor", daftar metode/cicilan jadi kotak scroll tinggi tetap (168px) sehingga kolom kiri-kanan sejajar, semua baris kontrol 32px.
+- Jun 2026: Field **Kantor** pada form pengguna kini dropdown (Combobox) dari referensi Data Kantor. Tetap disimpan sebagai teks nama kantor (keputusan user); validasi `Rule::in` nama kantor + nilai lama pengguna (mis. "Kantor Pusat") agar data legacy tak tertolak; impor Excel menerima kode/alias/nama kantor dan dipetakan ke nama resmi; template impor memakai nama kantor nyata.
 - Inertia.js 2 + Vue 3.5 + Tailwind 3.4 + Vite 6.4, primitive UI via `reka-ui`, ikon `lucide-vue-next`.
 - Referensi FlowDesk disimpan di `/app/reference/flowdesk-frontend` (docs + src + index.css).
 - Preview: supervisor `frontend` menjalankan `php artisan serve --port 3000` (script di `/app/frontend/package.json`). Aset di-build (`yarn build`) — jalankan ulang setelah mengubah JS/CSS.

@@ -22,6 +22,7 @@ import { useLiveValidation } from '@/composables/useLiveValidation';
 const props = defineProps({
     user: { type: Object, default: null },
     roleOptions: { type: Array, default: () => [] },
+    officeOptions: { type: Array, default: () => [] },
 });
 
 const editing = computed(() => Boolean(props.user));
@@ -46,7 +47,6 @@ const rules = {
     email: all(emailRule('Alamat Email'), max(150, 'Alamat Email')),
     phone: phone('Nomor HP'),
     role: required('peranan'),
-    office: max(100, 'Kantor'),
     alias: code(3, 'Alias'),
     mso_code: code(4, 'Kode MSO'),
     collector_code: code(3, 'Kode Kolektor'),
@@ -168,13 +168,13 @@ const back = () => router.visit('/users');
                         </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
-                        <Label for="f-office">Kantor</Label>
-                        <Input
-                            id="f-office"
+                        <Label>Kantor</Label>
+                        <Combobox
                             v-model="form.office"
-                            maxlength="100"
+                            :options="props.officeOptions"
+                            placeholder="Pilih Kantor"
+                            empty-text="Belum ada data kantor."
                             data-testid="user-form-office"
-                            @blur="check.validate('office')"
                         />
                         <p v-if="form.errors.office" class="text-xs font-medium text-destructive" data-testid="user-form-office-error">
                             {{ form.errors.office }}
