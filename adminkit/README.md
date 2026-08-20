@@ -182,7 +182,10 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 | `UserSeeder` | 22 akun: pemilik sistem `IT Support` / `superadmin` / `sa@bprbangunarta.co.id` (peranan Super Admin, kata sandi `SA@4dm1n`) + 21 akun pegawai uji lengkap dengan peranan, kantor, alias, kode MSO, dan kode kolektor (kata sandi awal `password`) |
 | `SettingSeeder` | Identitas merek SIPEBRI, SEO/OG, kontak, zona waktu, dan urutan 15 entitas pada matriks izin |
 | `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + grup `Agunan` (Jenis Agunan, Jenis Pengikatan, Kondisi Agunan, Metode Hitung) + grup `Simulasi` (Agunan Kredit, Analisa Kredit) + 7 menu Administrator |
-| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder`, `CollateralConditionSeeder`, `CollateralMethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan, 6 kondisi agunan, 4 metode hitung |
+| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder`, `CollateralConditionSeeder`, `CollateralMethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan, 7 kondisi agunan, 4 metode hitung |
+| `RegionSeeder` | 82.449 baris wilayah (kode dati2 → kabupaten → kecamatan → kelurahan + kode pos) dari `database/data/regions.csv.gz`; dilewati bila tabel sudah terisi |
+| `OwnershipStatusSeeder` | Status/bukti kepemilikan per jenis agunan (baru jenis `05`: 11 pilihan) |
+| `CollateralSimulationSeeder` | 2 contoh agunan sesuai form CBS (`0141990` jenis 14, `01.3.001419` jenis 05) |
 | `CommitteeSeeder` | 19 jalur komite kredit + 76 jenjang pemutus sesuai dokumen kebijakan |
 
 ```bash
@@ -266,6 +269,9 @@ database/{migrations,seeders,factories}
 | `users` | `name` (wajib), `username`/`email`/`phone` (opsional & unik), `role` (cermin peranan Spatie), `office`, `alias`/`mso_code`/`collector_code` (unik), `password`, `avatar`, `last_login_at`, `deleted_at` (SoftDelete = Terarsip) |
 | `offices`, `institutions`, `products`, `installments`, `methods` | data referensi: `code` (unik), `alias` (unik, pada `offices` & `products`), `name` |
 | `collateral_types`, `binding_types`, `collateral_conditions`, `collateral_methods` | referensi agunan (`code` unik + `name`) untuk rute `/collateral-types`, `/collateral-bindings`, `/collateral-conditions`, `/collateral-methods` |
+| `regions` | referensi wilayah: `code` (dati2, dikirim ke CBS), `regency`, `district`, `village`, `postal_code` |
+| `ownership_statuses` | status/bukti kepemilikan per jenis agunan: `collateral_type_code` + `code` + `name` |
+| `collateral_simulations` | contoh data agunan mengikuti form CBS (identitas, dokumen, pemilik, lokasi, nilai, kondisi, asuransi). **Tanpa perhitungan** — `toCbsPayload()` memetakan ke kontrak API CBS |
 | `product_parameters` | parameter SK Direksi per produk: plafon & tenor min/maks, `interest_rate`/`provision_rate`/`admin_rate`/`rc_threshold` (persen), metode & pola cicilan yang diizinkan (JSON) + nilai bawaan, `collateral_required`, `decree`, `note` |
 | `committee_paths` | jalur komite: `product_id` (null = semua produk), `condition` (null = Normal), `mechanism` (`plafon`/`hierarki`), `is_active`, `note` |
 | `committee_tiers` | jenjang: `committee_path_id`, `sort`, `label`, `role`, `min_amount`, `max_amount`, `can_escalate`, `can_approve`, `can_cancel`, `can_reject` |

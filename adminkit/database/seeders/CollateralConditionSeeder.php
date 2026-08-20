@@ -15,6 +15,7 @@ class CollateralConditionSeeder extends Seeder
         ['4', 'TDK DIKETAHUI KEBERADAANNYA'],
         ['5', 'TDK MEMILIKI NILAI EKONOMIS LAGI'],
         ['6', 'TDK DAPAT DIEKSEKUSI'],
+        ['9', 'TIDAK ADA MASALAH'],
     ];
 
     public function run(): void

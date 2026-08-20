@@ -28,7 +28,7 @@ class SettingSeeder extends Seeder
         'og_description' => 'Sistem pemberian kredit PT BPR Bangunarta: pengajuan, survey, analisa, hingga persetujuan komite.',
         'og_image' => null,
         'og_title' => 'SIPEBRI: Sistem Pemberian Kredit',
-        'permission_entity_order' => '["permissions","roles","users","appearance","menus","storage","activity","dashboard","profile","offices","institutions","products","installments","methods","committees","collateral-types","collateral-bindings","collateral-conditions","collateral-methods","collateral-simulation","analysis-simulation"]',
+        'permission_entity_order' => '["permissions","roles","users","appearance","menus","storage","activity","dashboard","profile","offices","institutions","products","installments","methods","committees","collateral-types","collateral-bindings","collateral-conditions","collateral-methods","collateral-simulation","analysis-simulation","regions"]',
         'search_indexable' => '0',
         'support_email' => 'info@bprbangunarta.co.id',
         'tagline' => 'Sistem Pemberian Kredit',

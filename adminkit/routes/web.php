@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BindingTypeController;
 use App\Http\Controllers\CollateralConditionController;
 use App\Http\Controllers\CollateralMethodController;
+use App\Http\Controllers\CollateralSimulationController;
 use App\Http\Controllers\CollateralTypeController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\UserController;
@@ -192,6 +194,7 @@ Route::middleware('auth')->group(function () {
         'collateral-bindings' => BindingTypeController::class,
         'collateral-conditions' => CollateralConditionController::class,
         'collateral-methods' => CollateralMethodController::class,
+        'regions' => RegionController::class,
     ];
 
     Route::get('/products/{id}', [ProductController::class, 'show'])
@@ -199,8 +202,25 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{id}/parameters', [ProductController::class, 'updateParameter'])
         ->whereNumber('id')->middleware('permission:products.manage')->name('products.parameters');
 
-    Route::get('/collateral-simulation', [SimulationController::class, 'collateral'])
+    Route::get('/regions/options', [RegionController::class, 'options'])
+        ->middleware('permission:regions.view')->name('regions.options');
+
+    Route::get('/collateral-simulation', [CollateralSimulationController::class, 'index'])
         ->middleware('permission:collateral-simulation.view')->name('collateral-simulation.index');
+
+    Route::middleware('permission:collateral-simulation.manage')->group(function () {
+        Route::get('/collateral-simulation/create', [CollateralSimulationController::class, 'create'])
+            ->name('collateral-simulation.create');
+        Route::post('/collateral-simulation', [CollateralSimulationController::class, 'store'])
+            ->name('collateral-simulation.store');
+        Route::get('/collateral-simulation/{collateralSimulation}/edit', [CollateralSimulationController::class, 'edit'])
+            ->name('collateral-simulation.edit');
+        Route::put('/collateral-simulation/{collateralSimulation}', [CollateralSimulationController::class, 'update'])
+            ->name('collateral-simulation.update');
+        Route::delete('/collateral-simulation/{collateralSimulation}', [CollateralSimulationController::class, 'destroy'])
+            ->name('collateral-simulation.destroy');
+    });
+
     Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
 

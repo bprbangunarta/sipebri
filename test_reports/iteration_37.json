@@ -1,0 +1,34 @@
+{
+  "summary": "Frontend-only E2E (preview URL, superadmin) untuk 3 fitur baru: Data Wilayah (/regions), Kondisi Agunan (/collateral-conditions), dan modul Contoh Agunan Kredit (/collateral-simulation). Semua skenario yang diminta LULUS: total 82.449 baris + kolom lengkap + pencarian 'Pamanukan' (82.449 -> 8 baris) + paginasi ke halaman 2 (1/8245 -> 2/8245); /collateral-conditions menampilkan 7 baris termasuk kode 9 TIDAK ADA MASALAH; daftar simulasi menampilkan 2 contoh seeded (01.3.001419 / 05 / KANA / Rp 73.740.000 dan 0141990 / 14 / YOYOH TOHAROH); dialog Payload CBS menampilkan JSON dengan SEMUA kunci yang dikontrakkan (no_rek, kepemilikan, keterangan, pemilik_nama, pemilik_alamat, lokasi, asuransi, startdate, peringkat_sb, pemeringkat_sb, jenis, jenis_pengikat, nilai{njop,jaminan,adjust,wajar,taksasi,independen}, penaksir{taksasi,independen}, ppap) - tidak ada kunci yang hilang; CRUD penuh (tambah UJI-001 -> ubah nama pemilik -> hapus dengan konfirmasi) berhasil dengan toast sukses; label nilai berubah 'Nilai Jaminan' -> 'Nilai Hak Tanggungan' saat pengikatan 01; Status/Bukti Kepemilikan = Combobox 11 opsi (PEKARANGAN/SAWAH/KEBUN-HUTAN/RUMAHTINGGAL/...) untuk jenis 05 dan berubah jadi input teks bebas untuk jenis 14; Peringkat SB & Pemeringkat DISABLED; wilayah bertahap Kabupaten->Kecamatan->Kelurahan mengisi Lokasi Agunan otomatis ('0121 - Kab. Subang — Pamanukan, Bongas'); tidak ada overflow horizontal di 390x844 (documentElement.scrollWidth == 390 di /collateral-simulation, /collateral-simulation/create, /regions) dan tidak ada console error.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "CollateralSimulation.vue (daftar, mobile 390px)", "issue": "Duplikasi label jenis agunan di mobile: sel 'Agunan ID' sudah menampilkan row.type_label di bawah ID (kelas md:hidden), tetapi kolom 'Jenis Agunan' TIDAK punya hideBelow sehingga tetap tampil di mobile -> teks jenis muncul dua kali per baris dan memperlebar tabel (tabel harus di-scroll horizontal di dalam kartu, doc scrollWidth tetap 390).", "selector": "[data-testid=\"collateral-simulation-table\"]", "priority": "LOW"},
+      {"component": "CollateralSimulationForm.vue (mode Ubah)", "issue": "Combobox Kabupaten/Kecamatan/Kelurahan tidak di-prefill dari record saat edit (tetap 'Pilih kabupaten' dst). region_code tetap tersimpan, tapi jika user menyentuh salah satu combobox, kode wilayah lama berisiko tertimpa/terlihat tidak konsisten.", "selector": "[data-testid=\"collateral-form-regency\"]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/collateral-simulation (daftar)", "issues": ["Format 'region_label' tidak konsisten: baris seeded '0121 · SUBANG, KAB.' vs baris hasil form '0121 · Kab. Subang — Pamanukan, Bongas' (label form jauh lebih panjang, berisiko terpotong di kolom Pemilik)."]},
+      {"screen": "/collateral-simulation/{id}/edit (record seeded 01.3.001419)", "issues": ["Field 'Status / Bukti Kepemilikan' kosong ('Pilih status kepemilikan') padahal jenis 05 punya referensi -> payload CBS mengirim kepemilikan: \"\". Kemungkinan seeder tidak mengisi kolom ownership."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Prefill combobox Kabupaten/Kecamatan/Kelurahan dari region_code saat mode Ubah (atau tampilkan nilai tersimpan agar tidak ambigu).",
+    "Tambahkan hideBelow: 'md' pada kolom collateral_type_code di CollateralSimulation.vue agar tidak duplikat dengan label di sel Agunan ID pada mobile.",
+    "Samakan format region_label antara seeder dan form (kode + kabupaten/kecamatan/kelurahan) agar tampilan daftar konsisten.",
+    "Isi kolom ownership pada CollateralSimulationSeeder untuk record jenis 05 agar payload CBS 'kepemilikan' tidak kosong."
+  ],
+  "critical_code_review_comments": [
+    "CollateralSimulationForm.vue: watch(village) hanya menimpa form.region_code bila opsi ditemukan; saat mode Ubah nilai lama tidak direfleksikan ke tiga combobox -> state form dan tampilan bisa divergen.",
+    "Combobox memakai data-testid `combobox-option-<value>` (bukan label) — dokumentasi agent-to-agent menyebut label; sesuaikan catatan untuk agent berikutnya."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "not tested (frontend only)", "frontend": "100% skenario yang diminta lulus (10/10); 2 temuan kosmetik/UX non-blocking" },
+  "seed_data_creation": "Membuat contoh agunan UJI-001 lalu menghapusnya kembali (data akhir kembali ke 2 baris seeded).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "superadmin / SA@4dm1n (dari /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Preview URL yang benar ada di /app/frontend/.env: https://inertia-admin-panel.preview.emergentagent.com (URL di review request sudah kedaluwarsa). Login: [data-testid=login-credential-input] + input[type=password] + [data-testid=login-submit-button]. Opsi Combobox memakai data-testid combobox-option-<VALUE>, pencarian di [data-testid=combobox-search]. DataTableCard menyediakan <testid>-total, -page, -next, -search. Aksi baris: collateral-simulation-actions-<id> lalu -payload-<id>/-edit-<id>/-delete-<id>; konfirmasi hapus = tombol role=button name 'Hapus'. Semua alur CRUD sudah diverifikasi bersih pada iterasi ini.",
+  "rca_of_the_issue": "Tidak ada kegagalan fungsional. Temuan MEDIUM (combobox wilayah tidak prefill saat edit) berakar pada CollateralSimulationForm.vue yang menyimpan regency/district/village sebagai ref lokal kosong dan hanya diisi lewat interaksi user, tanpa hydration dari record.region_code saat onMounted."
+}

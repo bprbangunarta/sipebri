@@ -33,7 +33,8 @@ class Modules
         'collateral-bindings' => ['label' => 'Jenis Pengikatan', 'abilities' => ['view', 'manage']],
         'collateral-conditions' => ['label' => 'Kondisi Agunan', 'abilities' => ['view', 'manage']],
         'collateral-methods' => ['label' => 'Metode Hitung', 'abilities' => ['view', 'manage']],
-        'collateral-simulation' => ['label' => 'Simulasi Agunan Kredit', 'abilities' => ['view']],
+        'collateral-simulation' => ['label' => 'Simulasi Agunan Kredit', 'abilities' => ['view', 'manage']],
+        'regions' => ['label' => 'Data Wilayah', 'abilities' => ['view', 'manage']],
         'analysis-simulation' => ['label' => 'Simulasi Analisa Kredit', 'abilities' => ['view']],
         'profile' => ['label' => 'Profil Pengguna', 'abilities' => ['view']],
     ];
