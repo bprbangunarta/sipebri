@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\BindingType;
+use App\Models\CollateralCondition;
+use App\Models\CollateralMethod;
 use App\Models\CollateralType;
 use App\Models\Installment;
 use App\Models\Institution;
@@ -36,7 +38,9 @@ class SeederTest extends TestCase
         $this->assertSame(10, Method::count());
         $this->assertSame(19, CollateralType::count());
         $this->assertSame(7, BindingType::count());
-        $this->assertSame(17, DB::table('menus')->count());
+        $this->assertSame(6, CollateralCondition::count());
+        $this->assertSame(4, CollateralMethod::count());
+        $this->assertSame(20, DB::table('menus')->count());
         $this->assertNotSame(0, Permission::count());
     }
 

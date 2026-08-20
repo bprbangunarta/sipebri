@@ -30,7 +30,9 @@ class Modules
         'methods' => ['label' => 'Sistem Bunga', 'abilities' => ['view', 'manage']],
         'committees' => ['label' => 'Komite Kredit', 'abilities' => ['view', 'manage']],
         'collateral-types' => ['label' => 'Jenis Agunan', 'abilities' => ['view', 'manage']],
-        'binding-types' => ['label' => 'Jenis Pengikatan', 'abilities' => ['view', 'manage']],
+        'collateral-binding' => ['label' => 'Jenis Pengikatan', 'abilities' => ['view', 'manage']],
+        'collateral-conditions' => ['label' => 'Kondisi Agunan', 'abilities' => ['view', 'manage']],
+        'collateral-methods' => ['label' => 'Metode Hitung', 'abilities' => ['view', 'manage']],
         'profile' => ['label' => 'Profil Pengguna', 'abilities' => ['view']],
     ];
 

@@ -181,8 +181,8 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 | `RoleSeeder` | `Super Admin` (selalu sinkron dengan SELURUH izin) + `Guest` + 43 peranan struktur organisasi (tanpa izin) |
 | `UserSeeder` | 22 akun: pemilik sistem `IT Support` / `superadmin` / `sa@bprbangunarta.co.id` (peranan Super Admin, kata sandi `SA@4dm1n`) + 21 akun pegawai uji lengkap dengan peranan, kantor, alias, kode MSO, dan kode kolektor (kata sandi awal `password`) |
 | `SettingSeeder` | Identitas merek SIPEBRI, SEO/OG, kontak, zona waktu, dan urutan 15 entitas pada matriks izin |
-| `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit, Jenis Agunan, Jenis Pengikatan) + 7 menu Administrator |
-| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan |
+| `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + grup `Agunan` (Jenis Agunan, Jenis Pengikatan, Kondisi Agunan, Metode Hitung) + 7 menu Administrator |
+| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder`, `CollateralConditionSeeder`, `CollateralMethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan, 6 kondisi agunan, 4 metode hitung |
 | `CommitteeSeeder` | 19 jalur komite kredit + 76 jenjang pemutus sesuai dokumen kebijakan |
 
 ```bash

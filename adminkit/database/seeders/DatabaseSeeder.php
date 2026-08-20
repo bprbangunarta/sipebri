@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             MethodSeeder::class,
             CollateralTypeSeeder::class,
             BindingTypeSeeder::class,
+            CollateralConditionSeeder::class,
+            CollateralMethodSeeder::class,
             CommitteeSeeder::class,
         ]);
     }

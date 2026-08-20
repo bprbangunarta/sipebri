@@ -22,8 +22,12 @@ class MenuSeeder extends Seeder
                 ['Sistem Cicilan', '/installments', 'calendar-clock', 'installments.view', []],
                 ['Sistem Bunga', '/methods', 'badge-percent', 'methods.view', []],
                 ['Komite Kredit', '/committees', 'gavel', 'committees.view', []],
+            ]],
+            ['Agunan', null, 'shield-check', null, [
                 ['Jenis Agunan', '/collateral-types', 'landmark', 'collateral-types.view', []],
-                ['Jenis Pengikatan', '/binding-types', 'file-signature', 'binding-types.view', []],
+                ['Jenis Pengikatan', '/collateral-binding', 'file-signature', 'collateral-binding.view', []],
+                ['Kondisi Agunan', '/collateral-conditions', 'triangle-alert', 'collateral-conditions.view', []],
+                ['Metode Hitung', '/collateral-methods', 'calculator', 'collateral-methods.view', []],
             ]],
         ],
         'admin' => [
