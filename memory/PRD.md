@@ -446,3 +446,9 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - P1 Pengajuan Kredit (tahap 1 dari 9) — pintu masuk berkas kredit.
 - P1 Uji kirim payload CBS pada tombol Posting bila endpoint siap.
 - P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter level/modul audit trail.
+
+### Revisi (2026-06-21, Detail jadi halaman bergaya developer)
+- Dialog detail dihapus → menjadi **halaman** `GET /collateral-simulation/{id}` (`pages/CollateralSimulationDetail.vue`, breadcrumb Simulasi › Agunan Kredit › Detail, izin `collateral-simulation.view`).
+- Aksi baris **Payload dihapus**; isinya dipindah ke tab pada halaman detail. Menu aksi sekarang: Ubah → Detail → Hapus.
+- Halaman detail bergaya inspeksi developer: tab **Database** (nama kolom asli tabel + tipe, nullable, default, nilai mentah dari `Schema::getColumns()` + `getAttributes()`, pencarian kolom/nilai, badge "n/35 kolom terisi") dan tab **Payload CBS** (JSON + Salin + Posting).
+- Uji: `yarn build` + Pint bersih, screenshot kedua tab terverifikasi.

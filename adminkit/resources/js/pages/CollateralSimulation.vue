@@ -1,22 +1,19 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
-import { Code2, Copy, Eye, Pencil, Plus, Send, ShieldCheck, Trash2, X } from 'lucide-vue-next';
+import { Eye, Pencil, Plus, ShieldCheck, Trash2 } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
-import Dialog from '@/components/ui/Dialog.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
-import CollateralDetailDialog from '@/components/composite/CollateralDetailDialog.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
 import RowActions from '@/components/composite/RowActions.vue';
 import { ACTION } from '@/constants/labels';
 import { rupiah } from '@/constants/committee';
 import { useServerTable } from '@/composables/useServerTable';
-import { notify } from '@/composables/useToast';
 
 const props = defineProps({
     records: { type: Object, required: true },
@@ -56,14 +53,6 @@ const confirmDelete = () =>
         preserveScroll: true,
         onFinish: () => (deleting.value = null),
     });
-
-const detailRow = ref(null);
-const payloadRow = ref(null);
-const payloadText = computed(() => (payloadRow.value ? JSON.stringify(payloadRow.value.payload, null, 2) : ''));
-const copyPayload = () => navigator.clipboard?.writeText(payloadText.value);
-
-// Pengiriman ke core banking belum diaktifkan; nanti diawali pemeriksaan kolom wajib.
-const postPayload = () => notify.info('Posting ke core banking belum diaktifkan.');
 </script>
 
 <template>
@@ -139,15 +128,9 @@ const postPayload = () => notify.info('Posting ke core banking belum diaktifkan.
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             :data-testid="`collateral-simulation-detail-${row.id}`"
-                            @select="detailRow = row"
+                            @select="router.visit(`/collateral-simulation/${row.id}`)"
                         >
                             <Eye />Detail
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            :data-testid="`collateral-simulation-payload-${row.id}`"
-                            @select="payloadRow = row"
-                        >
-                            <Code2 />Payload
                         </DropdownMenuItem>
                         <template v-if="canManage">
                             <DropdownMenuSeparator />
@@ -162,43 +145,6 @@ const postPayload = () => notify.info('Posting ke core banking belum diaktifkan.
                     </RowActions>
                 </template>
             </DataTableCard>
-
-            <CollateralDetailDialog
-                :open="Boolean(detailRow)"
-                :row="detailRow"
-                @update:open="detailRow = null"
-            />
-
-            <Dialog
-                :open="Boolean(payloadRow)"
-                title="Payload CBS"
-                class="max-w-2xl"
-                @update:open="payloadRow = null"
-            >
-                <p class="mb-2 text-xs text-muted-foreground">
-                    Bentuk data yang dikirim ke core banking. SIPEBRI tidak menghitung apa pun.
-                </p>
-                <pre
-                    class="thin-scroll max-h-[55vh] overflow-auto rounded-md border bg-muted/40 p-3 text-xs leading-relaxed"
-                    data-testid="collateral-simulation-payload"
-                >{{ payloadText }}</pre>
-
-                <template #footer>
-                    <div class="flex flex-1 flex-wrap items-center justify-between gap-2">
-                        <Button variant="outline" size="sm" data-testid="collateral-simulation-payload-cancel" @click="payloadRow = null">
-                            <X class="size-4" /> {{ ACTION.cancel }}
-                        </Button>
-                        <div class="flex items-center gap-2">
-                            <Button variant="outline" size="sm" data-testid="collateral-simulation-payload-copy" @click="copyPayload">
-                                <Copy class="size-4" /> Salin
-                            </Button>
-                            <Button size="sm" data-testid="collateral-simulation-payload-post" @click="postPayload">
-                                <Send class="size-4" /> Posting
-                            </Button>
-                        </div>
-                    </div>
-                </template>
-            </Dialog>
 
             <ConfirmDeleteDialog
                 :open="Boolean(deleting)"

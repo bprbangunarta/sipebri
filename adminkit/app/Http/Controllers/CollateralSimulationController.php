@@ -13,6 +13,7 @@ use App\Models\Region;
 use App\Support\TableQuery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -46,6 +47,33 @@ class CollateralSimulationController extends Controller
                 'meta' => TableQuery::meta($records),
             ],
             'filters' => ['search' => $search, 'sort' => $sort, 'dir' => $dir],
+        ]);
+    }
+
+    public function show(CollateralSimulation $collateralSimulation): Response
+    {
+        // Halaman ini untuk developer: menampilkan kolom mentah tabel + payload CBS.
+        $values = $collateralSimulation->getAttributes();
+
+        $columns = collect(Schema::getColumns($collateralSimulation->getTable()))
+            ->map(fn (array $c) => [
+                'name' => $c['name'],
+                'type' => $c['type'],
+                'nullable' => (bool) $c['nullable'],
+                'default' => $c['default'],
+                'value' => $values[$c['name']] ?? null,
+            ])
+            ->all();
+
+        return Inertia::render('CollateralSimulationDetail', [
+            'record' => [
+                'id' => $collateralSimulation->id,
+                'collateral_id' => $collateralSimulation->collateral_id,
+                'table' => $collateralSimulation->getTable(),
+            ],
+            'columns' => $columns,
+            'payload' => $collateralSimulation->toCbsPayload(),
+            'canManage' => (bool) request()->user()?->can('collateral-simulation.manage'),
         ]);
     }
 

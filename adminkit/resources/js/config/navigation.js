@@ -39,6 +39,7 @@ const ROUTE_TRAILS = [
     [/^\/collateral-simulation$/, ['Simulasi', 'Agunan Kredit']],
     [/^\/collateral-simulation\/create$/, ['Simulasi', 'Agunan Kredit', 'Tambah']],
     [/^\/collateral-simulation\/\d+\/edit$/, ['Simulasi', 'Agunan Kredit', 'Ubah']],
+    [/^\/collateral-simulation\/\d+$/, ['Simulasi', 'Agunan Kredit', 'Detail']],
     [/^\/regions$/, ['Referensi', 'Data Wilayah']],
     [/^\/analysis-simulation$/, ['Simulasi', 'Analisa Kredit']],
     [/^\/object-storage$/, ['Object Storage']],

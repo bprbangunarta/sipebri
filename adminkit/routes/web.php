@@ -221,6 +221,9 @@ Route::middleware('auth')->group(function () {
             ->name('collateral-simulation.destroy');
     });
 
+    Route::get('/collateral-simulation/{collateralSimulation}', [CollateralSimulationController::class, 'show'])
+        ->middleware('permission:collateral-simulation.view')->name('collateral-simulation.show');
+
     Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
 
