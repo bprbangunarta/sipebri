@@ -331,15 +331,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
             </form>
 
             <Card data-testid="loan-detail-collaterals">
-                <CardHeader class="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
-                    <CardTitle>Data Agunan</CardTitle>
-                    <span class="text-xs text-muted-foreground">
-                        Total taksasi
-                        <span class="ml-1 text-sm font-semibold tabular-nums text-foreground">
-                            {{ rupiah(totalAppraisal) }}
-                        </span>
-                    </span>
-                </CardHeader>
+                <CardHeader><CardTitle>Data Agunan</CardTitle></CardHeader>
                 <CardContent class="form-dense space-y-3">
                     <div v-if="props.canManage" class="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <Combobox
@@ -414,6 +406,18 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                                     </td>
                                 </tr>
                             </tbody>
+                            <tfoot class="border-t bg-muted/40">
+                                <tr>
+                                    <td class="px-3 py-2 text-[11px] font-semibold uppercase tracking-wider" colspan="2">
+                                        Total Taksasi
+                                    </td>
+                                    <td class="hidden md:table-cell" />
+                                    <td class="whitespace-nowrap px-3 py-2 text-right text-sm font-semibold tabular-nums">
+                                        {{ rupiah(totalAppraisal) }}
+                                    </td>
+                                    <td />
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </CardContent>

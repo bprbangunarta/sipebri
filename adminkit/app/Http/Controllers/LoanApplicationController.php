@@ -36,7 +36,7 @@ class LoanApplicationController extends Controller
 
     public const STATUSES = ['DRAFT', 'DIAJUKAN', 'ANALISA', 'KOMITE', 'DISETUJUI', 'DITOLAK', 'DIBATALKAN', 'REALISASI'];
 
-    public const USAGE_TYPES = ['KONSUMTIF', 'PRODUKTIF', 'INVESTASI'];
+    public const USAGE_TYPES = ['KONSUMTIF', 'MODAL USAHA', 'INVESTASI', 'LAINNYA'];
 
     private ?array $customerCache = null;
 
