@@ -24,6 +24,7 @@ const props = defineProps({
     users: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
     roleOptions: { type: Array, default: () => [] },
+    officeOptions: { type: Array, default: () => [] },
 });
 
 const page = usePage();
@@ -52,6 +53,7 @@ const { query, loading, reload, onSearch, onSort, onPage, onPerPage, onFilter, s
         dir: props.filters.dir ?? 'asc',
         status: props.filters.status || 'aktif',
         role: props.filters.role || 'all',
+        office: props.filters.office || 'all',
         page: props.users.meta.page ?? 1,
         per_page: props.users.meta.per_page ?? 10,
     },
@@ -70,6 +72,12 @@ const roleFilterOptions = computed(() => [
     ...props.roleOptions,
 ]);
 
+// Opsi filter kantor mengikuti referensi Data Kantor (dinamis).
+const officeFilterOptions = computed(() => [
+    { value: 'all', label: 'Semua Kantor' },
+    ...props.officeOptions,
+]);
+
 const sendWelcomeEmail = (row) =>
     router.post(`/users/${row.id}/welcome-email`, {}, { preserveScroll: true, preserveState: true });
 
@@ -82,6 +90,7 @@ const exportUrl = computed(() => {
     if (query.search) params.set('search', query.search);
     if (query.status) params.set('status', query.status);
     if (query.role && query.role !== 'all') params.set('role', query.role);
+    if (query.office && query.office !== 'all') params.set('office', query.office);
 
     return `/users/export?${params.toString()}`;
 });
@@ -192,6 +201,14 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                         class="w-[150px]"
                         data-testid="users-filter-role"
                         @update:model-value="onFilter('role', $event)"
+                    />
+                    <Combobox
+                        :model-value="query.office"
+                        :options="officeFilterOptions"
+                        placeholder="Semua Kantor"
+                        class="w-[150px]"
+                        data-testid="users-filter-office"
+                        @update:model-value="onFilter('office', $event)"
                     />
                     <Combobox
                         :model-value="query.status"

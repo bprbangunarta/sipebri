@@ -49,8 +49,9 @@ class UserController extends Controller
         $dir = TableQuery::direction($request);
         $status = TableQuery::filter($request, 'status');
         $role = TableQuery::filter($request, 'role');
+        $office = TableQuery::filter($request, 'office');
 
-        $users = $this->baseQuery($search, $status, $role)
+        $users = $this->baseQuery($search, $status, $role, $office)
             ->orderBy($sort, $dir)
             ->paginate(TableQuery::perPage($request))
             ->withQueryString();
@@ -66,8 +67,10 @@ class UserController extends Controller
                 'dir' => $dir,
                 'status' => $status,
                 'role' => $role,
+                'office' => $office,
             ],
             'roleOptions' => $this->roleOptions(),
+            'officeOptions' => $this->officeFilterOptions(),
         ]);
     }
 
@@ -272,6 +275,7 @@ class UserController extends Controller
             TableQuery::search($request),
             TableQuery::filter($request, 'status'),
             TableQuery::filter($request, 'role'),
+            TableQuery::filter($request, 'office'),
         )
             ->orderBy('name')
             ->cursor()
@@ -424,7 +428,7 @@ class UserController extends Controller
     }
 
     /** Filter dasar dipakai daftar maupun ekspor. status: aktif | terarsip | semua. */
-    private function baseQuery(string $search, string $status, string $role): Builder
+    private function baseQuery(string $search, string $status, string $role, string $office = ''): Builder
     {
         return User::query()
             ->when($status === 'terarsip', fn ($q) => $q->onlyTrashed())
@@ -439,7 +443,8 @@ class UserController extends Controller
                 ->orWhere('mso_code', 'like', "%{$search}%")
                 ->orWhere('collector_code', 'like', "%{$search}%")
             ))
-            ->when($role !== '', fn ($q) => $q->where('role', $role));
+            ->when($role !== '', fn ($q) => $q->where('role', $role))
+            ->when($office !== '', fn ($q) => $q->where('office', $office));
     }
 
     private function row(User $u): array
@@ -486,5 +491,20 @@ class UserController extends Controller
         }
 
         return $options;
+    }
+
+    /**
+     * Opsi filter kantor: referensi Data Kantor + nilai kantor lain yang masih terpakai pengguna.
+     *
+     * @return array<int, array{value: string, label: string}>
+     */
+    private function officeFilterOptions(): array
+    {
+        $names = Office::orderBy('code')->pluck('name');
+        $extras = User::withTrashed()->whereNotNull('office')->distinct()->pluck('office')
+            ->reject(fn ($n) => $names->contains($n));
+
+        return $names->concat($extras->sort()->values())
+            ->map(fn ($n) => ['value' => $n, 'label' => $n])->all();
     }
 }
