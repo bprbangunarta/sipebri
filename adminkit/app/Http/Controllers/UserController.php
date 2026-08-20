@@ -110,8 +110,6 @@ class UserController extends Controller
             ActivityLog::snapshotOf($user),
         );
 
-        Mailer::welcome($user, $data['password']);
-
         Notify::toPermission(
             permission: 'users.view',
             title: 'Pengguna baru terdaftar',
