@@ -20,8 +20,15 @@ class StoreReferenceRequest extends FormRequest
     {
         $controller = $this->controller();
         $uppercase = $controller->uppercaseFields();
+        $booleans = $controller->booleanFields();
 
         foreach (array_keys($controller->rules()) as $field) {
+            if (in_array($field, $booleans, true)) {
+                $this->merge([$field => (int) $this->boolean($field)]);
+
+                continue;
+            }
+
             if (! $this->filled($field)) {
                 continue;
             }

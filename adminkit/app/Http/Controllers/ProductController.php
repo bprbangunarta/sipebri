@@ -34,6 +34,7 @@ class ProductController extends ReferenceController
             ['key' => 'code', 'label' => 'Kode', 'uppercase' => true, 'unique' => true],
             ['key' => 'alias', 'label' => 'Alias', 'uppercase' => true, 'unique' => true, 'hide_below' => 'sm'],
             ['key' => 'name', 'label' => 'Nama'],
+            ['key' => 'is_active', 'label' => 'Status', 'type' => 'boolean'],
         ];
     }
 

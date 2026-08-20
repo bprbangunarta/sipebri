@@ -132,7 +132,6 @@ class LoanApplicationController extends Controller
             'nik' => $data['nik'],
             'full_name' => $customer['full_name'],
             'cif_number' => $customer['cif_number'] ?? null,
-            'created_by' => $request->user()->id,
         ]);
 
         ActivityLog::record("Menambah pengajuan {$record->application_code}", self::LABEL, 'success', $record);
@@ -257,11 +256,7 @@ class LoanApplicationController extends Controller
             return back()->with('error', 'Lengkapi data pengajuan dan agunan sebelum diajukan.');
         }
 
-        $loanApplication->update([
-            'status' => 'DIAJUKAN',
-            'confirmed_at' => now(),
-            'confirmed_by' => $request->user()->id,
-        ]);
+        $loanApplication->update(['status' => 'DIAJUKAN']);
 
         ActivityLog::record("Mengajukan berkas {$loanApplication->application_code}", self::LABEL, 'success', $loanApplication);
 
@@ -306,10 +301,10 @@ class LoanApplicationController extends Controller
             'usageTypes' => collect(self::USAGE_TYPES)->map(fn ($v) => ['value' => $v, 'label' => $v])->all(),
             'offices' => Office::orderBy('code')->get(['id', 'alias', 'name'])
                 ->map(fn ($o) => ['value' => $o->id, 'label' => "{$o->alias} : {$o->name}"])->all(),
-            'products' => Product::orderBy('code')->get(['id', 'alias', 'name'])
+            'products' => Product::where('is_active', true)->orderBy('code')->get(['id', 'alias', 'name'])
                 ->map(fn ($p) => ['value' => $p->id, 'label' => "{$p->alias} : {$p->name}"])->all(),
-            'institutions' => Institution::orderBy('name')->get(['id', 'name'])
-                ->map(fn ($i) => ['value' => $i->id, 'label' => $i->name])->all(),
+            'institutions' => Institution::orderBy('code')->get(['id', 'code', 'name'])
+                ->map(fn ($i) => ['value' => $i->id, 'label' => "{$i->code} : {$i->name}"])->all(),
             'methods' => Method::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($m) => ['value' => $m->id, 'label' => "{$m->code} : {$m->name}"])->all(),
             'installments' => Installment::orderBy('code')->get(['id', 'code', 'name'])
@@ -356,7 +351,6 @@ class LoanApplicationController extends Controller
                 'institution_id', 'marketing', 'committee_path_id', 'usage_type', 'method_id',
                 'installment_id', 'interest_rate', 'cif_number', 'supervisor_id',
             ]),
-            'confirmed_at' => $r->confirmed_at?->translatedFormat('d M Y H:i'),
             'checklist' => $this->checklist($r),
         ];
     }

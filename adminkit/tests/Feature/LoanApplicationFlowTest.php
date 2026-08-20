@@ -70,8 +70,11 @@ class LoanApplicationFlowTest extends TestCase
         foreach ($removed as $col) {
             $this->assertFalse(Schema::hasColumn('loan_applications', $col), "kolom {$col} masih ada");
         }
+        foreach (['confirmed_at', 'confirmed_by'] as $col) {
+            $this->assertFalse(Schema::hasColumn('loan_applications', $col), "kolom {$col} masih ada");
+        }
         foreach (['institution_id', 'tenor_principal', 'tenor_interest', 'usage_type', 'note',
-            'supervisor_id', 'surveyor_id', 'confirmed_at', 'confirmed_by'] as $col) {
+            'supervisor_id', 'surveyor_id', 'created_by', 'updated_by', 'deleted_by'] as $col) {
             $this->assertTrue(Schema::hasColumn('loan_applications', $col), "kolom {$col} belum ada");
         }
     }
@@ -121,7 +124,7 @@ class LoanApplicationFlowTest extends TestCase
         $record = LoanApplication::latest('id')->first();
         $this->assertSame($expectedCode, $record->application_code);
         $this->assertSame(8, strlen($record->application_code));
-        $this->assertGreaterThanOrEqual('00800001', $record->application_code);
+        $this->assertGreaterThanOrEqual('00700001', $record->application_code);
         $this->assertSame('YAYAT SUHAYAT', $record->full_name);
         $this->assertSame('CIF-000123', $record->cif_number);
         $this->assertSame('DRAFT', $record->status);
@@ -192,8 +195,8 @@ class LoanApplicationFlowTest extends TestCase
         $this->post("/loan-simulation/{$record->id}/confirm")->assertSessionHas('success');
         $record->refresh();
         $this->assertSame('DIAJUKAN', $record->status);
-        $this->assertNotNull($record->confirmed_at);
-        $this->assertSame($user->id, $record->confirmed_by);
+        $this->assertSame($user->name, $record->created_by);
+        $this->assertSame($user->name, $record->updated_by);
 
         // Filter status pada daftar
         $this->get('/loan-simulation?status=DIAJUKAN')->assertOk();
@@ -208,7 +211,7 @@ class LoanApplicationFlowTest extends TestCase
         $this->assertSoftDeleted('loan_applications', ['id' => $record->id]);
     }
 
-    /** BUG: confirmed_at tidak ada di $casts → halaman berkas 500 setelah dikonfirmasi. */
+    /** Halaman berkas tetap terbuka setelah berkas diajukan. */
     public function test_show_after_confirm_does_not_crash(): void
     {
         $user = $this->superadmin();
@@ -219,8 +222,6 @@ class LoanApplicationFlowTest extends TestCase
             'product_id' => Product::first()->id,
             'office_id' => Office::first()->id,
             'status' => 'ANALISA',
-            'confirmed_at' => now(),
-            'confirmed_by' => $user->id,
         ])->save();
         $record->collaterals()->syncWithoutDetaching([$this->makeCollateral()->id]);
 

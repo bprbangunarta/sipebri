@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TracksAuthor;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Contoh data agunan. Tidak ada perhitungan di sini — nilai disimpan apa adanya
@@ -10,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CollateralSimulation extends Model
 {
+    use SoftDeletes, TracksAuthor;
+
     protected $guarded = ['id'];
 
     protected $casts = [

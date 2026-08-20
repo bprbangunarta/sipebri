@@ -45,16 +45,21 @@ abstract class ReferenceController extends Controller
     public function index(Request $request): Response
     {
         $keys = collect($this->fields())->pluck('key')->all();
+        $textKeys = collect($this->fields())->where('type', '!=', 'boolean')->pluck('key')->all();
+        $flag = collect($this->fields())->firstWhere('type', 'boolean')['key'] ?? null;
         $search = TableQuery::search($request);
         $sort = TableQuery::sort($request, $keys, $keys[0]);
         $dir = TableQuery::direction($request);
+        $status = (string) $request->input('status', '');
 
         $records = $this->model()::query()
-            ->when($search !== '', fn ($q) => $q->where(function ($w) use ($keys, $search) {
-                foreach ($keys as $key) {
+            ->when($search !== '', fn ($q) => $q->where(function ($w) use ($textKeys, $search) {
+                foreach ($textKeys as $key) {
                     $w->orWhere($key, 'like', "%{$search}%");
                 }
             }))
+            ->when($flag && in_array($status, ['active', 'inactive'], true),
+                fn ($q) => $q->where($flag, $status === 'active' ? 1 : 0))
             ->orderBy($sort, $dir)
             ->paginate(TableQuery::perPage($request))
             ->withQueryString();
@@ -70,7 +75,8 @@ abstract class ReferenceController extends Controller
                     ->all(),
                 'meta' => TableQuery::meta($records),
             ],
-            'filters' => ['search' => $search, 'sort' => $sort, 'dir' => $dir],
+            'filters' => ['search' => $search, 'sort' => $sort, 'dir' => $dir, 'status' => $status],
+            'hasStatus' => (bool) $flag,
         ]);
     }
 
@@ -146,7 +152,7 @@ abstract class ReferenceController extends Controller
 
         return collect($this->fields())
             ->mapWithKeys(fn (array $field) => [
-                $field['key'] => [
+                $field['key'] => ($field['type'] ?? '') === 'boolean' ? ['boolean'] : [
                     'required', 'string', 'max:255',
                     ...($field['unique'] ?? false ? [Rule::unique($table, $field['key'])->ignore($id)] : []),
                 ],
@@ -165,6 +171,12 @@ abstract class ReferenceController extends Controller
         return collect($this->fields())
             ->mapWithKeys(fn (array $f) => [$f['key'] => mb_strtolower($f['label'])])
             ->all();
+    }
+
+    /** Kolom bertipe boolean; nilainya selalu disimpan sebagai 0/1. */
+    public function booleanFields(): array
+    {
+        return collect($this->fields())->where('type', 'boolean')->pluck('key')->all();
     }
 
     /** Kolom yang nilainya selalu disimpan dalam huruf besar. */

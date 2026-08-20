@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\TracksAuthor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,10 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /** Berkas pengajuan kredit: tahap pendaftaran sampai keputusan komite. */
 class LoanApplication extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, TracksAuthor;
 
-    /** Nomor berkas dimulai dari 00800001 agar tidak bentrok dengan sistem lama. */
-    public const CODE_START = 800000;
+    /** Nomor berkas dimulai dari 00700001 agar tidak bentrok dengan sistem lama. */
+    public const CODE_START = 700000;
 
     protected $guarded = ['id'];
 
@@ -36,11 +37,10 @@ class LoanApplication extends Model
         'approved_amount' => 'integer',
         'approved_tenor' => 'integer',
         'approved_rate' => 'decimal:2',
-        'confirmed_at' => 'datetime',
         'disbursed_at' => 'date:Y-m-d',
     ];
 
-    /** Kode berkas berikutnya, format 8 digit (00800001, 00800002, ...). */
+    /** Kode berkas berikutnya, format 8 digit (00700001, 00700002, ...). */
     public static function nextCode(): string
     {
         $last = (int) static::withTrashed()->max('application_code');

@@ -5,7 +5,10 @@ import { Database, Loader2, Pencil, Plus, Save, SlidersHorizontal, Trash2, X } f
 
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
+import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
+import Combobox from '@/components/ui/Combobox.vue';
+import Switch from '@/components/ui/Switch.vue';
 import Dialog from '@/components/ui/Dialog.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
@@ -27,6 +30,7 @@ const props = defineProps({
     fields: { type: Array, required: true },
     records: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
+    hasStatus: { type: Boolean, default: false },
 });
 
 const page = usePage();
@@ -41,10 +45,21 @@ const columns = computed(() => [
     { key: 'actions', label: '', align: 'right', width: '48px', sortable: false },
 ]);
 
-const firstKey = computed(() => props.fields[0].key);
+const isFlag = (field) => field.type === 'boolean';
+const textFields = computed(() => props.fields.filter((f) => !isFlag(f)));
+const statusKey = computed(() => props.fields.find(isFlag)?.key ?? null);
+const statusSlot = computed(() => `cell-${statusKey.value ?? '__none'}`);
+
+const firstKey = computed(() => textFields.value[0].key);
 const firstSlot = computed(() => `cell-${firstKey.value}`);
-const lastKey = computed(() => props.fields[props.fields.length - 1].key);
+const lastKey = computed(() => textFields.value[textFields.value.length - 1].key);
 const lastSlot = computed(() => `cell-${lastKey.value}`);
+
+const statusOptions = [
+    { value: '', label: 'Semua status' },
+    { value: 'active', label: 'Aktif' },
+    { value: 'inactive', label: 'Nonaktif' },
+];
 
 // Nilai kolom yang disembunyikan pada layar kecil tetap terlihat sebagai baris ringkas.
 const hiddenSummary = (row) =>
@@ -54,27 +69,28 @@ const hiddenSummary = (row) =>
         .filter(Boolean)
         .join(' · ');
 
-const { query, loading, reload, onSearch, onSort, onPage, onPerPage, sortState } = useServerTable({
+const { query, loading, reload, onSearch, onSort, onPage, onPerPage, onFilter, sortState } = useServerTable({
     url: `/${props.slug}`,
     only: ['records', 'filters'],
     initial: {
         search: props.filters.search ?? '',
         sort: props.filters.sort ?? props.fields[0].key,
         dir: props.filters.dir ?? 'asc',
+        status: props.filters.status ?? '',
         page: props.records.meta.page ?? 1,
         per_page: props.records.meta.per_page ?? 10,
     },
 });
 
 /* ── Formulir tambah/ubah ────────────────────────────────────────────── */
-const blank = () => Object.fromEntries(props.fields.map((field) => [field.key, '']));
+const blank = () => Object.fromEntries(props.fields.map((field) => [field.key, isFlag(field) ? true : '']));
 
 const dialogOpen = ref(false);
 const editing = ref(null);
 const form = useForm(blank());
 
 const rules = Object.fromEntries(
-    props.fields.map((field) => [
+    textFields.value.map((field) => [
         field.key,
         all(required(field.label.toLowerCase()), max(255, field.label)),
     ]),
@@ -92,7 +108,11 @@ const openCreate = () => {
 const openEdit = (row) => {
     editing.value = row;
     form.clearErrors();
-    form.defaults(Object.fromEntries(props.fields.map((f) => [f.key, row[f.key] ?? ''])));
+    form.defaults(
+        Object.fromEntries(
+            props.fields.map((f) => [f.key, isFlag(f) ? Boolean(row[f.key]) : (row[f.key] ?? '')]),
+        ),
+    );
     form.reset();
     dialogOpen.value = true;
 };
@@ -158,6 +178,17 @@ const runBulkDelete = () => {
                 @update:per-page="onPerPage"
                 @refresh="reload()"
             >
+                <template v-if="props.hasStatus" #filters>
+                    <Combobox
+                        :model-value="query.status"
+                        :options="statusOptions"
+                        placeholder="Semua status"
+                        class="w-full sm:w-[160px]"
+                        :data-testid="`${props.slug}-status-filter`"
+                        @update:model-value="onFilter('status', $event)"
+                    />
+                </template>
+
                 <template #bulk-actions>
                     <Button
                         variant="destructive"
@@ -195,6 +226,16 @@ const runBulkDelete = () => {
                     <span class="block max-w-[45vw] truncate sm:max-w-none">{{ row[lastKey] }}</span>
                 </template>
 
+                <template v-if="statusKey" #[statusSlot]="{ row }">
+                    <Badge
+                        :variant="row[statusKey] ? 'secondary' : 'destructive'"
+                        class="font-medium"
+                        :data-testid="`${props.slug}-status-${row.id}`"
+                    >
+                        {{ row[statusKey] ? 'Aktif' : 'Nonaktif' }}
+                    </Badge>
+                </template>
+
                 <template #cell-actions="{ row }">
                     <RowActions v-if="canManage" :testid="`${props.slug}-actions-${row.id}`">
                         <DropdownMenuItem
@@ -230,7 +271,7 @@ const runBulkDelete = () => {
                     novalidate
                     @submit.prevent="submit"
                 >
-                    <div v-for="field in props.fields" :key="field.key" class="space-y-[var(--item-gap)]">
+                    <div v-for="field in textFields" :key="field.key" class="space-y-[var(--item-gap)]">
                         <Label :for="`ref-${field.key}`">{{ field.label }}</Label>
                         <Input
                             :id="`ref-${field.key}`"
@@ -249,6 +290,14 @@ const runBulkDelete = () => {
                             {{ form.errors[field.key] }}
                         </p>
                     </div>
+
+                    <label v-if="statusKey" class="flex items-center justify-between gap-3 pt-1">
+                        <span class="text-sm">Aktif</span>
+                        <Switch
+                            v-model="form[statusKey]"
+                            :data-testid="`${props.slug}-form-${statusKey}`"
+                        />
+                    </label>
                 </form>
 
                 <template #footer>

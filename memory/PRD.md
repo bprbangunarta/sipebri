@@ -596,3 +596,31 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - Uji: `php artisan test` → 47 lulus (tes alur diperbarui), screenshot halaman + modal, konsol bersih.
 - Catatan lingkungan: pod restart membuat supervisor `frontend` FATAL (`php: not found` saat boot) →
   cukup `sudo supervisorctl restart frontend`.
+
+## Selesai (2026-06-22, status produk, filter komite, kolom audit, seri nomor berkas)
+- **Data Produk**: kolom `is_active` (badge Aktif/Nonaktif di tabel, toggle "Aktif" di form,
+  filter status di toolbar — `data-testid=products-status-filter`). `Reference.vue` +
+  `ReferenceController` kini mendukung field `type => 'boolean'` secara generik (kolom teks & flag
+  dipisah agar slot tabel tidak bentrok).
+- Dropdown **Produk** pada berkas Pengajuan Kredit hanya memuat produk aktif; label `ALIAS : NAMA`.
+  Dropdown **Resort / Instansi** memakai format `KODE : NAMA`.
+- **Komite Kredit**: filter status (Semua/Aktif/Nonaktif) sisi klien — `committees-status-filter`.
+- **Kolom audit standar** (`app/Models/Concerns/TracksAuthor.php`): `created_by` / `updated_by` /
+  `deleted_by` bertipe string berisi **nama lengkap pengguna** (fallback `SISTEM`), diterapkan pada
+  `loan_applications` dan `collateral_simulations` (+ `softDeletes` untuk agunan).
+  Kolom `confirmed_by` / `confirmed_at` DIHAPUS — pengajuan cukup mengubah status DRAFT → DIAJUKAN.
+- **Seri nomor berkas** dipindah dari `008xxxxx` ke **`007xxxxx`** (angka 8 mirip 0);
+  `LoanApplication::CODE_START = 700000` + migrasi renumber data lama.
+- **BUG SQLite (temuan testing agent)**: boolean `false` yang dibinding PDO tersimpan sebagai teks
+  kosong sehingga filter Nonaktif kosong. Diperbaiki: `StoreReferenceRequest` menormalkan flag ke
+  `0/1`, query filter memakai integer, plus migrasi normalisasi `products`/`committee_paths`/`menus`.
+- Impor kolom di **Skema Migrasi** sekarang ikut menyetel flag `with_id` / `with_timestamps` /
+  `with_soft_deletes` sesuai tabel nyata.
+- Uji: `php artisan test` → 47 lulus; testing agent iterasi 41 (7/8 lulus, 1 bug HIGH sudah dibereskan
+  dan diverifikasi ulang lewat browser: filter Nonaktif menampilkan 3 produk).
+
+### Backlog terbuka (dari iterasi 41)
+- P1: putuskan apakah kartu **Data Pengajuan** harus read-only setelah status DIAJUKAN
+  (saat ini masih bisa diedit & agunan masih bisa dilepas).
+- P2: cegah/peringatkan hapus agunan yang masih terlekat pada berkas non-DRAFT.
+- P3: baris tabel Data Agunan belum row-clickable (tidak konsisten dengan Komite Kredit).

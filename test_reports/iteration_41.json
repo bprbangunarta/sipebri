@@ -1,0 +1,65 @@
+{
+  "summary": "Frontend-only UI/integration testing (Playwright, desktop 1920x1080) of SIPEBRI adminkit for the new product status feature, committee status filter, 'kode : nama' institution dropdown, audit columns + soft deletes, and regression of Pengajuan Kredit / Agunan / Skema Migrasi. Logged in with superadmin/SA@4dm1n. 7 of 8 requested scenarios pass. One real defect found: the server-side status filter on Data Produk returns 0 rows for 'Nonaktif' because false is persisted as an empty string in SQLite (PDO PARAM_BOOL), so `where(is_active, false)` never matches.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "GET /products?status=inactive (ReferenceController::index)",
+        "issue": "Filter 'Nonaktif' returns 0 rows although KRM/PRK/KPN are Nonaktif and are shown by the badge under 'Semua status'. Root cause: is_active for false rows is stored as text '' (Eloquent boolean cast -> PDO::PARAM_BOOL false -> '' in SQLite), and the query binds boolean false, so `is_active = ''`/`= 0` matches nothing. status=active and status='' work correctly.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "PUT/POST /products (ReferenceController::store/update)",
+        "issue": "Saving a product with the Aktif toggle OFF persists is_active as text '' instead of 0 (verified: typeof(is_active)='text'). Same latent problem for committee_paths.is_active when a path is deactivated. Recommend storing integers (cast/mutator) and normalizing existing rows: UPDATE products SET is_active = 0 WHERE typeof(is_active) <> 'integer'."
+      },
+      {
+        "endpoint": "GET /loan-simulation/{id}",
+        "issue": "Soft-deleting a collateral that is attached to a submitted (DIAJUKAN) berkas silently removes the row from Data Agunan, leaving the submitted file with 0 agunan and no warning. Pivot row remains. Data-integrity/business rule to confirm."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "LoanSimulationDetail",
+        "issue": "After status becomes DIAJUKAN the 'Data Pengajuan' form stays fully editable (Simpan enabled) and collateral detach/add buttons remain active. Verify whether editing after submission is intended.",
+        "selector": "[data-testid=\"loan-detail-save\"], [data-testid=\"loan-detail-collateral-new\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "CollateralSimulation list",
+        "issue": "Table row click does not navigate to the collateral detail page (URL unchanged); detail is only reachable through the row action menu ('Detail'). Committees rows are row-clickable, so behaviour is inconsistent.",
+        "selector": "table tbody tr (/collateral-simulation)",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [
+      {
+        "flow": "Data Produk status filter",
+        "issue": "Selecting 'Nonaktif' navigates to ?status=inactive and renders an empty table (server returns no rows) - see backend critical issue.",
+        "affected_selectors": ["[data-testid=\"products-status-filter\"]", "[data-testid^=\"products-status-\"]"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_41.json"],
+  "action_items": [
+    "Fix Nonaktif filter: bind integers in ReferenceController::index (`->where($flag, $status === 'active' ? 1 : 0)`) AND persist is_active as int (avoid PDO bool binding on SQLite).",
+    "Add a data-normalisation migration for existing rows where typeof(is_active) is not integer (products, committee_paths, menus).",
+    "Decide/implement whether Data Pengajuan should be read-only once status is DIAJUKAN.",
+    "Optional: block or warn when soft-deleting a collateral still attached to a non-DRAFT berkas; make collateral list rows clickable for consistency."
+  ],
+  "critical_code_review_comments": [
+    "ReferenceController::index uses `where($flag, $status === 'active')` — passing a PHP bool leads to PDO::PARAM_BOOL binding; on SQLite false is stored/compared as '' which breaks equality. Always bind 0/1.",
+    "Committees status filter is client-side over the full (non-paginated) props.paths payload while Products filters server-side; acceptable today (19 rows) but will not scale — consider unifying."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend-only request)", "frontend": "88% (7/8 scenarios pass)"},
+  "seed_data_creation": "Created and then deleted product 99/TESTQA. Created loan application 00800007 (id 7, NIK 3213011203950001, status DIAJUKAN) and collateral #5 (TEST QA OWNER, soft-deleted during delete test). Committee path 19 was toggled Nonaktif then reverted to Aktif.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "superadmin / SA@4dm1n (from /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Verified passing: product STATUS badges Aktif/Nonaktif; products-status-filter Aktif + Semua status (server-side, URL param status); products-form-is_active toggle on create (OFF -> Nonaktif) and on edit (Nonaktif -> Aktif); inactive products (KRM/PRK/KPN/TESTQA) absent from loan-detail-product dropdown which shows 14 active options formatted 'ALIAS : NAMA'; loan-detail-institution options formatted 'KODE : NAMA'; committees-status-filter (client-side) correctly isolates a Nonaktif path; full Pengajuan flow (modal NIK -> Simpan -> Tambah agunan via modal -> Ajukan) ends with status DIAJUKAN, no 500, detail page stays open; audit columns created_by/updated_by contain 'IT Support'; /collateral-simulation list loads, soft delete removes the row with success toast; /schema-drafts 'Impor dari tabel' for collateral_simulations works (30 kolom + id + timestamps + softDeletes) and Diff shows Baru:0 Berubah:0 Dihapus:0 Sama:30 (deleted_at not flagged). Combobox options are exposed as [data-testid=\"combobox-option-{value}\"] inside a popover portal (not role=option) — use that selector. Note all pre-existing collateral_simulations rows (ids 1,2,4) are soft-deleted, so loan-detail-collateral-select is empty; create new agunan via the modal.",
+  "rca_of_the_issue": "Products 'Nonaktif' filter: Product casts is_active to boolean; when a record is saved with false, Laravel binds the value with PDO::PARAM_BOOL and the SQLite driver stores an empty string (typeof(is_active)='text'), confirmed by `select distinct is_active, typeof(is_active) from products` -> {1:integer, '':text}. ReferenceController::index then runs `where('is_active', false)` which compares against '' / 0 and matches no row, so the filtered list is empty. Fix by binding integers in the query and by persisting 0/1 (plus a one-off UPDATE to normalise the four existing '' rows)."
+}

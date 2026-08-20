@@ -132,6 +132,11 @@ class SchemaDraftController extends Controller
 
         $schemaDraft->columns()->delete();
         $schemaDraft->columns()->createMany(SchemaDesign::importFrom($schemaDraft->table_name));
+        $schemaDraft->update([
+            'with_id' => Schema::hasColumn($schemaDraft->table_name, 'id'),
+            'with_timestamps' => Schema::hasColumn($schemaDraft->table_name, 'created_at'),
+            'with_soft_deletes' => Schema::hasColumn($schemaDraft->table_name, 'deleted_at'),
+        ]);
 
         return back()->with('success', "Kolom diimpor dari tabel {$schemaDraft->table_name}.");
     }

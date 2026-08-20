@@ -226,6 +226,7 @@ class CollateralSimulationTest extends TestCase
             ['name' => 'Agunan'],
         );
         $draft->columns()->delete();
+        $draft->update(['with_soft_deletes' => true]);
         foreach (SchemaDesign::importFrom('collateral_simulations') as $column) {
             $draft->columns()->create($column);
         }

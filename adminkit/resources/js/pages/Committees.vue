@@ -97,6 +97,18 @@ const copyOptions = computed(() => [
     { value: '', label: 'Tidak menyalin' },
     ...props.pathOptions,
 ]);
+
+const statusFilter = ref('');
+const statusOptions = [
+    { value: '', label: 'Semua status' },
+    { value: 'active', label: 'Aktif' },
+    { value: 'inactive', label: 'Nonaktif' },
+];
+const visiblePaths = computed(() =>
+    statusFilter.value === ''
+        ? props.paths
+        : props.paths.filter((row) => Boolean(row.is_active) === (statusFilter.value === 'active')),
+);
 </script>
 
 <template>
@@ -107,7 +119,7 @@ const copyOptions = computed(() => [
                 :title="pageTitle"
                 testid="committees"
                 :columns="columns"
-                :rows="props.paths"
+                :rows="visiblePaths"
                 :empty-icon="Gavel"
                 empty-title="Belum ada jalur komite"
                 empty-description="Buat jalur per produk (atau lintas produk untuk kondisi seperti RELOAN), lalu susun jenjang kewenangannya."
@@ -125,6 +137,16 @@ const copyOptions = computed(() => [
                     <Button v-if="canManage" size="sm" data-testid="committees-add" @click="openCreate">
                         <Plus class="size-4" /> {{ ACTION.add }}
                     </Button>
+                </template>
+
+                <template #filters>
+                    <Combobox
+                        v-model="statusFilter"
+                        :options="statusOptions"
+                        placeholder="Semua status"
+                        class="w-full sm:w-[160px]"
+                        data-testid="committees-status-filter"
+                    />
                 </template>
 
                 <template #cell-product_label="{ row }">
