@@ -101,12 +101,10 @@ const submit = () => {
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-doc">No. Dokumen</Label>
-                        <Input
-                            id="f-doc"
-                            v-model="form.document_number"
-                            placeholder="(Opsional)"
-                            data-testid="collateral-form-document"
-                        />
+                        <Input id="f-doc" v-model="form.document_number" data-testid="collateral-form-document" />
+                        <p v-if="form.errors.document_number" class="text-xs font-medium text-destructive">
+                            {{ form.errors.document_number }}
+                        </p>
                     </div>
 
                     <div class="space-y-[var(--item-gap)]">
@@ -139,9 +137,17 @@ const submit = () => {
                         />
                     </div>
                 </CardContent>
+                <CardFooter v-if="!editing" class="justify-between">
+                    <Button variant="outline" size="sm" type="button" data-testid="collateral-form-cancel" @click="back">
+                        <X class="size-4" /> {{ ACTION.cancel }}
+                    </Button>
+                    <Button size="sm" type="submit" :disabled="form.processing" data-testid="collateral-form-save">
+                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
+                    </Button>
+                </CardFooter>
             </Card>
 
-            <Card>
+            <Card v-if="editing">
                 <CardHeader><CardTitle>Kondisi &amp; Asuransi</CardTitle></CardHeader>
                 <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
                     <div class="space-y-[var(--item-gap)]">
@@ -149,34 +155,46 @@ const submit = () => {
                         <Combobox
                             v-model="form.condition_code"
                             :options="props.conditions"
-                            placeholder="(Opsional)"
+                            placeholder="-- Pilih --"
                             data-testid="collateral-form-condition"
                         />
+                        <p v-if="form.errors.condition_code" class="text-xs font-medium text-destructive">
+                            {{ form.errors.condition_code }}
+                        </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label>Tgl Kondisi</Label>
                         <DatePicker
                             v-model="form.condition_date"
-                            placeholder="(Opsional)"
+                            placeholder="-- Pilih --"
                             data-testid="collateral-form-condition-date"
                         />
+                        <p v-if="form.errors.condition_date" class="text-xs font-medium text-destructive">
+                            {{ form.errors.condition_date }}
+                        </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label>Diasuransikan</Label>
                         <Combobox
                             v-model="form.insured"
                             :options="INSURED_OPTIONS"
-                            placeholder="(Opsional)"
+                            placeholder="-- Pilih --"
                             data-testid="collateral-form-insured"
                         />
+                        <p v-if="form.errors.insured" class="text-xs font-medium text-destructive">
+                            {{ form.errors.insured }}
+                        </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label>Tgl Asuransi</Label>
                         <DatePicker
                             v-model="form.insurance_start_date"
-                            placeholder="(Opsional)"
+                            placeholder="-- Pilih --"
                             data-testid="collateral-form-insurance-start"
                         />
+                        <p v-if="form.errors.insurance_start_date" class="text-xs font-medium text-destructive">
+                            {{ form.errors.insurance_start_date }}
+                        </p>
                     </div>
 
                     <div class="grid gap-[var(--field-gap)] sm:col-span-2 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-4">
@@ -216,9 +234,12 @@ const submit = () => {
                         <Label>Tgl Taksasi</Label>
                         <DatePicker
                             v-model="form.appraised_at"
-                            placeholder="(Opsional)"
+                            placeholder="-- Pilih --"
                             data-testid="collateral-form-appraised-at"
                         />
+                        <p v-if="form.errors.appraised_at" class="text-xs font-medium text-destructive">
+                            {{ form.errors.appraised_at }}
+                        </p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="f-independent">Nilai Apraisal</Label>

@@ -120,6 +120,9 @@ class CollateralSimulationController extends Controller
 
     private function validated(Request $request, ?CollateralSimulation $current = null): array
     {
+        // Saat menyunting (tahap analisa) kondisi, asuransi, dan taksasi wajib diisi.
+        $onEdit = $current ? ['required'] : ['nullable'];
+
         return $request->validate([
             'collateral_id' => ['nullable', 'string', 'max:50'],
             'paripasu' => ['nullable', 'integer', 'min:0', 'max:100'],
@@ -128,7 +131,7 @@ class CollateralSimulationController extends Controller
             'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
             'ownership' => ['nullable', 'string', 'max:100'],
-            'document_number' => ['nullable', 'string', 'max:100'],
+            'document_number' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string', 'max:255'],
             'owner_name' => ['required', 'string', 'max:100'],
             'owner_address' => ['required', 'string', 'max:255'],
@@ -143,14 +146,14 @@ class CollateralSimulationController extends Controller
             'value_appraisal' => ['nullable', 'integer', 'min:0'],
             'value_independent' => ['nullable', 'integer', 'min:0'],
             'appraiser_name' => ['nullable', 'string', 'max:100'],
-            'appraised_at' => ['nullable', 'date'],
+            'appraised_at' => [...$onEdit, 'date'],
             'independent_appraiser_name' => ['nullable', 'string', 'max:100'],
             'independent_appraised_at' => ['nullable', 'date'],
-            'condition_code' => ['nullable', 'string', 'exists:collateral_conditions,code'],
-            'condition_date' => ['nullable', 'date'],
-            'insured' => ['nullable', 'in:Y,T'],
+            'condition_code' => [...$onEdit, 'string', 'exists:collateral_conditions,code'],
+            'condition_date' => [...$onEdit, 'date'],
+            'insured' => [...$onEdit, 'in:Y,T'],
             'ppap_code' => ['nullable', 'string', 'exists:collateral_methods,code'],
-            'insurance_start_date' => ['nullable', 'date'],
+            'insurance_start_date' => [...$onEdit, 'date'],
         ], [], [
             'collateral_id' => 'agunan id',
             'collateral_type_code' => 'jenis agunan',
@@ -159,6 +162,12 @@ class CollateralSimulationController extends Controller
             'region_code' => 'lokasi agunan',
             'binding_type_code' => 'jenis pengikatan',
             'ppap_code' => 'metode hitung',
+            'document_number' => 'no. dokumen',
+            'condition_code' => 'kondisi',
+            'condition_date' => 'tgl kondisi',
+            'insured' => 'diasuransikan',
+            'insurance_start_date' => 'tgl asuransi',
+            'appraised_at' => 'tgl taksasi',
         ]);
     }
 
