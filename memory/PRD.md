@@ -624,3 +624,16 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   (saat ini masih bisa diedit & agunan masih bisa dilepas).
 - P2: cegah/peringatkan hapus agunan yang masih terlekat pada berkas non-DRAFT.
 - P3: baris tabel Data Agunan belum row-clickable (tidak konsisten dengan Komite Kredit).
+
+## Selesai (2026-06-22, bersih-bersih data Simulasi & sinkronisasi seeder)
+- **Semua data pada grup menu Simulasi dihapus**: `loan_applications`, `loan_application_collaterals`,
+  `loan_approvals`, `collateral_simulations` → 0 baris. Nomor berkas berikutnya kembali `00700001`.
+- **Seeder disinkronkan dengan data terakhir aplikasi**:
+  - `ProductSeeder` kini menyimpan kolom `is_active` per produk (14 aktif; **KRM, PRK, KPN nonaktif**)
+    dan nama `KRISPI` diperbaiki menjadi `KREDIT PASAR MINGGUAN`.
+  - `CollateralSimulationSeeder` **dihapus** (tidak lagi menanam 2 contoh agunan) dan dilepas dari
+    `DatabaseSeeder`; `SeederTest` kini memastikan `collateral_simulations` & `loan_applications` = 0.
+  - `SchemaDraftSeeder`: rancangan **Agunan Kredit** ditandai `with_soft_deletes` agar diff bersih.
+- Dokumentasi diperbarui: `/app/memory/pengajuan_kredit.md` (seri kode 007xxxxx, kolom audit
+  `created_by`/`updated_by`/`deleted_by`, penghapusan `confirmed_at`/`confirmed_by`).
+- Uji: `php artisan db:seed` sukses (idempoten) + `php artisan test` → **47 lulus**.

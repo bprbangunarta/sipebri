@@ -4,9 +4,10 @@ Dibuat 21/06/2026. Menu: **Simulasi → Pengajuan Kredit** (`/loan-simulation`),
 izin `loan-simulation.view` / `loan-simulation.manage`.
 
 ## Kode pengajuan
-`application_code` — 8 digit, unik, **wajib**, dibuat sistem berurutan mulai **00800001**
-(sistem lama berhenti di `00360623`, jadi blok 008xxxxx dipakai agar tidak bentrok).
-Lihat `LoanApplication::nextCode()` (`CODE_START = 800000`, memperhitungkan data terarsip).
+`application_code` — 8 digit, unik, **wajib**, dibuat sistem berurutan mulai **00700001**
+(sistem lama berhenti di `00360623`; blok 007xxxxx dipakai agar tidak bentrok — sebelumnya
+008xxxxx, dipindah 22/06/2026 karena angka 8 terlalu mirip 0).
+Lihat `LoanApplication::nextCode()` (`CODE_START = 700000`, memperhitungkan data terarsip).
 
 ## Kolom wajib
 `application_code` (otomatis), `nik` (angka 8–20 digit), `full_name`. Sisanya opsional supaya
@@ -21,8 +22,13 @@ berkas bisa dibuka cepat lalu dilengkapi pada tahap berikutnya.
   `tenor_interest` (JW Bunga), `usage_type` (KONSUMTIF/PRODUKTIF/INVESTASI), `method_id`,
   `installment_id`, `interest_rate`, `provision_rate`, `admin_rate`, `institution_id`
   (resort/instansi — opsional, hanya untuk pengelompokan), `purpose`, `note`, `collateral_note`.
-- **Penugasan & konfirmasi**: `supervisor_id` (Kasi Analis), `surveyor_id`, `confirmed_at`, `confirmed_by`.
+- **Penugasan**: `supervisor_id` (Kasi Analis), `surveyor_id`.
   Pilihan Kasi Analis/Surveyor diambil dari pengguna SIPEBRI sesuai peranan.
+  Kolom `confirmed_at` / `confirmed_by` sudah **dihapus** (22/06/2026) — pengajuan cukup
+  ditandai perubahan status DRAFT → DIAJUKAN, dan jejak pelakunya ada di `updated_by`.
+- **Kolom audit** (konvensi standar): `created_by` (wajib), `updated_by`, `deleted_by` —
+  bertipe string berisi **nama lengkap pengguna**, diisi otomatis oleh trait
+  `App\Models\Concerns\TracksAuthor` (fallback `SISTEM`), plus `softDeletes`.
 - **Analisa (rangka)**: `analyst_id`, `analyzed_at`, `analysis_note`, `rc_ratio`,
   `repayment_capacity`, `recommended_amount`, `recommended_tenor`.
   Metode analisa berbeda per produk → modul analisa dibuat terpisah menyusul.

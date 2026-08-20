@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
             CollateralMethodSeeder::class,
             RegionSeeder::class,
             OwnershipStatusSeeder::class,
-            CollateralSimulationSeeder::class,
             SchemaDraftSeeder::class,
             CommitteeSeeder::class,
         ]);

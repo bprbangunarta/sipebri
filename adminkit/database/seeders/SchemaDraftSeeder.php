@@ -23,6 +23,7 @@ class SchemaDraftSeeder extends Seeder
             'name' => 'Agunan Kredit',
             'table_name' => 'collateral_simulations',
             'note' => 'Cerminan skema tabel agunan yang berjalan.',
+            'with_soft_deletes' => true,
             'lead' => ['credit_account', 'collateral_id'],
         ],
         [
