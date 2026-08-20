@@ -123,14 +123,6 @@ const allChecked = computed(() => Object.values(props.record.checklist ?? {}).ev
 
 const stepDone = (step) => (step.check ? Boolean(props.record.checklist?.[step.check]) : allChecked.value);
 
-const summary = computed(() => [
-    { label: 'Plafon Diajukan', value: rupiah(props.record.requested_amount) },
-    { label: 'Jangka Waktu', value: props.record.requested_tenor ? `${props.record.requested_tenor} bulan` : '—' },
-    { label: 'Produk', value: props.record.product_label ?? '—' },
-    { label: 'Total Taksasi', value: rupiah(totalAppraisal.value) },
-    { label: 'Kantor', value: props.record.office_label ?? '—' },
-    { label: 'Dikonfirmasi', value: props.record.confirmed_at ?? 'Belum' },
-]);
 </script>
 
 <template>
@@ -208,29 +200,8 @@ const summary = computed(() => [
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-12">
-                <!-- Ringkasan berkas -->
-                <div class="space-y-4 xl:col-span-4">
-                    <Card>
-                        <CardContent class="space-y-2.5 p-4">
-                            <h2 class="border-b pb-2 text-sm font-semibold">Ringkasan Berkas</h2>
-                            <dl class="grid grid-cols-2 gap-x-4 gap-y-2.5">
-                                <div class="col-span-2">
-                                    <dt :class="LABEL">Pemohon</dt>
-                                    <dd class="text-sm font-semibold leading-5">{{ props.record.full_name }}</dd>
-                                    <dd class="font-mono text-xs text-muted-foreground">{{ props.record.nik }}</dd>
-                                </div>
-                                <div v-for="item in summary" :key="item.label" class="min-w-0">
-                                    <dt :class="LABEL">{{ item.label }}</dt>
-                                    <dd class="break-words text-sm font-semibold leading-5">{{ item.value }}</dd>
-                                </div>
-                            </dl>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                <!-- Isi tahapan -->
-                <Card class="xl:col-span-8">
+            <!-- Isi tahapan -->
+            <Card>
                     <CardContent class="p-4">
                         <!-- Tahap 1: Data Pengajuan -->
                         <form
@@ -608,8 +579,7 @@ const summary = computed(() => [
                             </div>
                         </div>
                     </CardContent>
-                </Card>
-            </div>
+            </Card>
         </div>
     </AppLayout>
 </template>
