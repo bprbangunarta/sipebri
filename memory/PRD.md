@@ -808,3 +808,15 @@ User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
 - Uji: `php artisan test` → **65 lulus** (3 tes baru: KTA tanpa survei, survei ulang naik ke Kasi
   Analis, pembatalan pengajuan), `yarn ui:check` OK, build bersih, verifikasi browser sebagai
   Kasi Analis & Staff Analis.
+
+## Selesai (2026-06-23, peta lokasi survei)
+- `components/composite/SurveyMap.vue` (baru): **Leaflet + OpenStreetMap tanpa API key**
+  (paket `leaflet` ditambahkan lewat yarn). Penanda bernomor untuk setiap foto survei, popup berisi
+  thumbnail foto + koordinat, tampilan otomatis `fitBounds` (1 titik → zoom 17).
+- Tampil pada kartu **Hasil Survei** di `/survey-simulation/{id}` (draf maupun yang sudah terkunci),
+  di atas kolom catatan. Tautan koordinat per foto tetap ada.
+- Sumber tile dapat dialihkan ke server peta internal lewat env **`VITE_MAP_TILE_URL`**; bila tile
+  gagal dimuat muncul peringatan kuning namun penanda & koordinat tetap akurat.
+- Uji: verifikasi browser — 3 foto → 3 penanda bernomor di peta OSM (jalan terbaca), popup thumbnail
+  berfungsi; `yarn ui:check` OK, build bersih, `php artisan test` → 65 lulus.
+  Data uji dibersihkan (foto draf dihapus, berkas 00700003 kembali DIAJUKAN).

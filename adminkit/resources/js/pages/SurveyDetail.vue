@@ -5,6 +5,7 @@ import { ArrowLeft, Camera, Images, Loader2, MapPin, Send, Trash2 } from 'lucide
 import { notify } from '@/composables/useToast';
 
 import FormActions from '@/components/composite/FormActions.vue';
+import SurveyMap from '@/components/composite/SurveyMap.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -294,6 +295,11 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                     <p v-else class="rounded-md border border-dashed p-6 text-center text-sm text-muted-foreground">
                         Belum ada foto lokasi. Minimal satu foto wajib diunggah.
                     </p>
+
+                    <div v-if="props.photos.length" class="space-y-[var(--item-gap)]">
+                        <Label>Peta Lokasi Survei</Label>
+                        <SurveyMap :points="props.photos" testid="survey-map" />
+                    </div>
 
                     <div v-if="!locked" class="space-y-[var(--item-gap)]">
                         <Label for="survey-note">Catatan Hasil Survei</Label>

@@ -58,6 +58,10 @@ Menu `/survey-simulation` (`SurveyController`), izin `survey-simulation.view|man
   pelaku, waktu), foto ditautkan ke survei, status berkas menjadi **SURVEY** dan **terkunci**
   (tidak bisa tambah/hapus foto atau simpan ulang).
 - **Batal & Minta Jadwal Ulang** memakai endpoint pembatalan penjadwalan (alasan wajib).
+- **Peta lokasi survei**: `components/composite/SurveyMap.vue` (Leaflet + OpenStreetMap, **tanpa API
+  key**). Penanda bernomor per foto, popup berisi thumbnail + koordinat, otomatis `fitBounds`.
+  Sumber tile bisa dialihkan ke server internal lewat env **`VITE_MAP_TILE_URL`**; bila tile gagal
+  dimuat muncul peringatan tetapi penanda & koordinat tetap tampil.
 - **Konsep draf**: foto & catatan berstatus draf (badge **Draf**) — foto bisa ditambah **dan dihapus**
   (tombol berlabel *Hapus*) sampai tombol **Simpan & Ajukan** ditekan. Setelah itu terkunci.
 - Tabel: `loan_surveys`, `loan_survey_photos` (lat/long desimal 10,7 + `source` KAMERA/GALERI).
