@@ -211,9 +211,9 @@ class LoanApplicationFlowTest extends TestCase
             'committee_path_id' => $path->id,
             'requested_amount' => 30000000,
             'requested_tenor' => 36,
-            'method_id' => Method::firstOrFail()->id,
-            'installment_id' => Installment::firstOrFail()->id,
-            'interest_rate' => 1.5,
+            'method_id' => $product->parameter->allowed_method_ids[0],
+            'installment_id' => $product->parameter->allowed_installment_ids[0],
+            'interest_rate' => $product->parameter->interest_rate,
             'usage_type' => 'KONSUMTIF',
             'office_id' => $office->id,
             'supervisor_id' => $supervisor->id,
@@ -298,6 +298,56 @@ class LoanApplicationFlowTest extends TestCase
 
         $this->assertTrue($codes->contains($mine->application_code));
         $this->assertFalse($codes->contains($other->application_code));
+    }
+
+    /** Plafon, jangka waktu, sistem bunga & cicilan dibatasi parameter produk. */
+    public function test_update_enforces_product_parameter_limits(): void
+    {
+        $user = $this->superadmin();
+        $this->actingAs($user);
+        $this->post('/loan-simulation', ['nik' => '3213011203950001']);
+        $record = LoanApplication::latest('id')->first();
+
+        $product = Product::where('alias', 'KTA')->firstOrFail();
+        $param = $product->parameter;
+
+        $payload = fn (array $override = []) => array_merge([
+            'application_date' => now()->toDateString(),
+            'product_id' => $product->id,
+            'committee_path_id' => CommitteePath::firstOrFail()->id,
+            'requested_amount' => $param->min_amount,
+            'requested_tenor' => $param->min_tenor,
+            'method_id' => $param->allowed_method_ids[0],
+            'installment_id' => $param->allowed_installment_ids[0],
+            'interest_rate' => $param->interest_rate,
+            'usage_type' => 'KONSUMTIF',
+            'office_id' => Office::firstOrFail()->id,
+            'supervisor_id' => $user->id,
+        ], $override);
+
+        // Sesuai parameter → tersimpan.
+        $this->put("/loan-simulation/{$record->id}", $payload())->assertSessionHasNoErrors();
+        $this->assertSame((int) $param->min_amount, $record->refresh()->requested_amount);
+
+        // Plafon di bawah/di atas batas ditolak.
+        $this->put("/loan-simulation/{$record->id}", $payload(['requested_amount' => $param->min_amount - 1]))
+            ->assertSessionHasErrors('requested_amount');
+        $this->put("/loan-simulation/{$record->id}", $payload(['requested_amount' => $param->max_amount + 1]))
+            ->assertSessionHasErrors('requested_amount');
+
+        // Jangka waktu di luar batas ditolak.
+        $this->put("/loan-simulation/{$record->id}", $payload(['requested_tenor' => $param->max_tenor + 1]))
+            ->assertSessionHasErrors('requested_tenor');
+
+        // Sistem bunga / cicilan di luar daftar izin ditolak.
+        $badMethod = Method::whereNotIn('id', $param->allowed_method_ids)->firstOrFail()->id;
+        $badInstallment = Installment::whereNotIn('id', $param->allowed_installment_ids)->firstOrFail()->id;
+        $this->put("/loan-simulation/{$record->id}", $payload(['method_id' => $badMethod]))
+            ->assertSessionHasErrors('method_id');
+        $this->put("/loan-simulation/{$record->id}", $payload(['installment_id' => $badInstallment]))
+            ->assertSessionHasErrors('installment_id');
+
+        $this->assertSame((int) $param->min_amount, $record->refresh()->requested_amount);
     }
 
     /** Agunan hanya wajib bila parameter produk menyatakan demikian. */

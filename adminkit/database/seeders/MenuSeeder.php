@@ -19,10 +19,10 @@ class MenuSeeder extends Seeder
                 ['Data Kantor', '/offices', 'building', 'offices.view', []],
                 ['Data Instansi', '/institutions', 'building-2', 'institutions.view', []],
                 ['Data Produk', '/products', 'box', 'products.view', []],
+                ['Data Wilayah', '/regions', 'map-pin', 'regions.view', []],
                 ['Sistem Cicilan', '/installments', 'calendar-clock', 'installments.view', []],
                 ['Sistem Bunga', '/methods', 'badge-percent', 'methods.view', []],
                 ['Komite Kredit', '/committees', 'gavel', 'committees.view', []],
-                ['Data Wilayah', '/regions', 'map-pin', 'regions.view', []],
             ]],
             ['Agunan', null, 'shield-check', null, [
                 ['Jenis Agunan', '/collateral-types', 'landmark', 'collateral-types.view', []],
@@ -43,10 +43,10 @@ class MenuSeeder extends Seeder
             ['Kelola Perizinan', '/permissions', 'KeyRound', 'permissions.view', []],
             ['Kelola Peranan', '/roles', 'ShieldCheck', 'roles.view', []],
             ['Kelola Pengguna', '/users', 'UsersRound', 'users.view', []],
+            ['Skema Migrasi', '/schema-drafts', 'Table2', 'schema-drafts.view', []],
             ['Penampilan UI', '/appearance', 'Palette', 'appearance.view', []],
             ['Menu Navigasi', '/menus', 'ListTree', 'menus.view', []],
             ['Object Storage', '/object-storage', 'Database', 'storage.view', []],
-            ['Skema Migrasi', '/schema-drafts', 'Table2', 'schema-drafts.view', []],
             ['Audit Trail Log', '/audit-trail', 'ScrollText', 'activity.view', []],
         ],
     ];

@@ -45,6 +45,11 @@ class SeederTest extends TestCase
         $this->assertSame(0, DB::table('collateral_simulations')->count());
         $this->assertSame(0, DB::table('loan_applications')->count());
         $this->assertSame(29, DB::table('menus')->count());
+        $this->assertSame(
+            DB::table('products')->count(),
+            DB::table('product_parameters')->count(),
+            'setiap produk wajib punya parameter',
+        );
         $this->assertNotSame(0, Permission::count());
     }
 

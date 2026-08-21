@@ -755,3 +755,23 @@ User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
 - Uji: `yarn ui:check` OK (44 berkas), `yarn build` bersih, `php artisan test` → **61 lulus**,
   dan pemeriksaan overflow di **390/768/1024/1440** untuk Penjadwalan/Pengajuan/Pengguna/Komite:
   semuanya `scrollWidth === innerWidth` (tidak ada geser horizontal).
+
+## Selesai (2026-06-23, parameter produk ditegakkan + seeder disinkronkan)
+- **Parameter produk lengkap** (17/17 produk diisi user di aplikasi) kini **ditegakkan** pada form
+  Pengajuan Kredit, bukan hanya jadi acuan:
+  - Validasi backend `LoanApplicationController::update()` menolak plafon di luar
+    `min_amount`–`max_amount`, jangka waktu di luar `min_tenor`–`max_tenor`, serta sistem bunga /
+    sistem cicilan di luar `allowed_method_ids` / `allowed_installment_ids`.
+    Pesan galat menyebut angkanya (mis. "Plafon maksimal Rp10.000.000 sesuai parameter produk.").
+  - Form menampilkan batas di bawah kolom: "Batas produk: Rp2.000.000 – Rp10.000.000" dan
+    "Batas produk: 3 – 10 bulan" (`loan-detail-amount-range`, `loan-detail-tenor-range`), berubah
+    merah saat nilai di luar batas. Pilihan sistem bunga/cicilan & suku bunga tetap ikut parameter.
+- **`ProductParameterSeeder` (baru)** — cerminan 17 parameter produk dari aplikasi, idempoten,
+  didaftarkan di `DatabaseSeeder` setelah `ProductSeeder`.
+- **`MenuSeeder` disesuaikan** dengan urutan menu terbaru buatan user (Referensi: Data Wilayah naik
+  sebelum Sistem Cicilan; Admin: Skema Migrasi naik sebelum Penampilan UI). Data simulasi TIDAK
+  diseed (tetap kosong sesuai permintaan).
+- `SeederTest` kini memastikan jumlah `product_parameters` = jumlah `products`.
+- Uji: `php artisan test` → **62 lulus** (tes baru `update_enforces_product_parameter_limits`),
+  `yarn ui:check` OK, build bersih, dan verifikasi browser: berkas KTA menampilkan batas
+  Rp2.000.000–Rp10.000.000 serta 3–10 bulan.

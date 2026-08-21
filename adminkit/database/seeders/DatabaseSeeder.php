@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             OfficeSeeder::class,
             InstitutionSeeder::class,
             ProductSeeder::class,
+            ProductParameterSeeder::class,
             InstallmentSeeder::class,
             MethodSeeder::class,
             CollateralTypeSeeder::class,

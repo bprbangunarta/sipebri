@@ -187,21 +187,37 @@ class LoanApplicationController extends Controller
 
         $before = $loanApplication->getOriginal();
 
+        $parameter = ProductParameter::where('product_id', (int) $request->input('product_id'))->first();
+
         $data = $request->validate([
             'application_date' => ['required', 'date'],
             'product_id' => ['required', 'integer', 'exists:products,id'],
             'committee_path_id' => ['required', 'integer', 'exists:committee_paths,id'],
-            'requested_amount' => ['required', 'integer', 'min:1'],
-            'requested_tenor' => ['required', 'integer', 'min:1', 'max:600'],
-            'method_id' => ['required', 'integer', 'exists:methods,id'],
-            'installment_id' => ['required', 'integer', 'exists:installments,id'],
+            'requested_amount' => array_merge(
+                ['required', 'integer', 'min:1'],
+                $parameter ? ['min:'.max(1, (int) $parameter->min_amount), 'max:'.(int) $parameter->max_amount] : [],
+            ),
+            'requested_tenor' => array_merge(
+                ['required', 'integer', 'min:1', 'max:600'],
+                $parameter ? ['min:'.max(1, (int) $parameter->min_tenor), 'max:'.(int) $parameter->max_tenor] : [],
+            ),
+            'method_id' => array_merge(
+                ['required', 'integer', 'exists:methods,id'],
+                $parameter && $parameter->allowed_method_ids
+                    ? [Rule::in((array) $parameter->allowed_method_ids)] : [],
+            ),
+            'installment_id' => array_merge(
+                ['required', 'integer', 'exists:installments,id'],
+                $parameter && $parameter->allowed_installment_ids
+                    ? [Rule::in((array) $parameter->allowed_installment_ids)] : [],
+            ),
             'interest_rate' => ['required', 'numeric', 'min:0', 'max:100'],
             'usage_type' => ['required', Rule::in(self::USAGE_TYPES)],
             'office_id' => ['required', 'integer', 'exists:offices,id'],
             'supervisor_id' => ['required', 'integer', 'exists:users,id'],
             'institution_id' => ['nullable', 'integer', 'exists:institutions,id'],
             'marketing' => ['nullable', 'string', 'max:100'],
-        ], [], [
+        ], $this->parameterMessages($parameter), [
             'product_id' => 'produk',
             'committee_path_id' => 'kategori',
             'requested_amount' => 'plafon',
@@ -366,8 +382,26 @@ class LoanApplicationController extends Controller
         ];
     }
 
-    /** Agunan wajib bila parameter produk (SK Direksi) menyatakan demikian. */
-    private function collateralRequired(LoanApplication $r): bool
+    /** Pesan galat yang menyebut angka parameter produk secara jelas. */
+    private function parameterMessages(?ProductParameter $p): array
+    {
+        if (! $p) {
+            return [];
+        }
+
+        $rp = fn ($value) => 'Rp'.number_format((float) $value, 0, ',', '.');
+
+        return [
+            'requested_amount.min' => "Plafon minimal {$rp($p->min_amount)} sesuai parameter produk.",
+            'requested_amount.max' => "Plafon maksimal {$rp($p->max_amount)} sesuai parameter produk.",
+            'requested_tenor.min' => "Jangka waktu minimal {$p->min_tenor} bulan sesuai parameter produk.",
+            'requested_tenor.max' => "Jangka waktu maksimal {$p->max_tenor} bulan sesuai parameter produk.",
+            'method_id.in' => 'Sistem bunga tidak diizinkan pada parameter produk ini.',
+            'installment_id.in' => 'Sistem cicilan tidak diizinkan pada parameter produk ini.',
+        ];
+    }
+
+    /** Agunan wajib bila parameter produk (SK Direksi) menyatakan demikian. */    private function collateralRequired(LoanApplication $r): bool
     {
         if (! $r->product_id) {
             return false;
@@ -420,6 +454,11 @@ class LoanApplicationController extends Controller
                     'interest_rate' => $p->interest_rate,
                     'provision_rate' => $p->provision_rate,
                     'admin_rate' => $p->admin_rate,
+                    'min_amount' => (int) $p->min_amount,
+                    'max_amount' => (int) $p->max_amount,
+                    'min_tenor' => (int) $p->min_tenor,
+                    'max_tenor' => (int) $p->max_tenor,
+                    'collateral_required' => (bool) $p->collateral_required,
                 ]),
             'categoryMap' => CommitteePath::where('is_active', true)
                 ->orderBy('condition')

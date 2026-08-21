@@ -85,6 +85,22 @@ const filterByIds = (options, ids) =>
     ids?.length ? options.filter((o) => ids.map(Number).includes(Number(o.value))) : options;
 
 const methodOptions = computed(() => filterByIds(props.methods, parameter.value?.method_ids));
+
+const between = (value, min, max) => Number(value) > 0 && (Number(value) < min || Number(value) > max);
+
+const amountRange = computed(() =>
+    parameter.value ? `Batas produk: ${rupiah(parameter.value.min_amount)} – ${rupiah(parameter.value.max_amount)}` : '',
+);
+const amountOutOfRange = computed(() =>
+    Boolean(parameter.value) &&
+    between(form.requested_amount, parameter.value.min_amount, parameter.value.max_amount),
+);
+const tenorRange = computed(() =>
+    parameter.value ? `Batas produk: ${parameter.value.min_tenor} – ${parameter.value.max_tenor} bulan` : '',
+);
+const tenorOutOfRange = computed(() =>
+    Boolean(parameter.value) && between(form.requested_tenor, parameter.value.min_tenor, parameter.value.max_tenor),
+);
 const installmentOptions = computed(() => filterByIds(props.installments, parameter.value?.installment_ids));
 
 const pick = (options, preferred) => {
@@ -256,12 +272,28 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             <p v-if="form.errors.requested_amount" class="text-xs font-medium text-destructive">
                                 {{ form.errors.requested_amount }}
                             </p>
+                            <p
+                                v-else-if="amountRange"
+                                class="text-xs"
+                                :class="amountOutOfRange ? 'font-medium text-destructive' : 'text-muted-foreground'"
+                                data-testid="loan-detail-amount-range"
+                            >
+                                {{ amountRange }}
+                            </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
                             <Label for="d-tenor">JK Kredit (bln) <span class="text-destructive">*</span></Label>
                             <NumberInput id="d-tenor" v-model="form.requested_tenor" data-testid="loan-detail-tenor" />
                             <p v-if="form.errors.requested_tenor" class="text-xs font-medium text-destructive">
                                 {{ form.errors.requested_tenor }}
+                            </p>
+                            <p
+                                v-else-if="tenorRange"
+                                class="text-xs"
+                                :class="tenorOutOfRange ? 'font-medium text-destructive' : 'text-muted-foreground'"
+                                data-testid="loan-detail-tenor-range"
+                            >
+                                {{ tenorRange }}
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">
