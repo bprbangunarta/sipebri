@@ -210,7 +210,7 @@ const submitCreate = () =>
                         {{ createForm.errors.nik }}
                     </p>
                     <p v-else class="text-xs text-muted-foreground">
-                        Nomor KTP diperiksa ke sistem data nasabah. Contoh (MOCK):
+                        Nomor KTP diperiksa ke sistem data nasabah (Codex). Contoh:
                         <span class="font-mono">{{ props.sampleNiks.join(' · ') }}</span>
                     </p>
                 </div>

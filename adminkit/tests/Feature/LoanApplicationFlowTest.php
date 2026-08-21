@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
@@ -20,12 +21,56 @@ use Tests\TestCase;
 /**
  * Pengajuan Kredit — alur tahap 1: lookup KTP, store, tab pengajuan, jaminan,
  * surveyor, konfirmasi, otorisasi, dan bentuk tabel loan_applications.
+ * API Codex (data nasabah) dipalsukan dengan Http::fake.
  */
 class LoanApplicationFlowTest extends TestCase
 {
     use RefreshDatabase;
 
     protected bool $seed = true;
+
+    /** NIK yang dianggap terdaftar di Codex beserta nama & CIF-nya. */
+    private const KNOWN = [
+        '3213011203950001' => ['YAYAT SUHAYAT', '01.1.000123'],
+        '3213012509880007' => ['KANA SUTISNA', '01.1.000456'],
+    ];
+
+    /** Diaktifkan tes tertentu untuk mensimulasikan Codex sedang mati. */
+    private bool $codexDown = false;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Http::preventStrayRequests();
+        Http::fake([
+            '*/oauth/token' => Http::response(['access_token' => 'fake-token', 'expires_in' => 3600]),
+            '*/api/customers/*' => function ($request) {
+                if ($this->codexDown) {
+                    return Http::response('boom', 500);
+                }
+
+                $nik = basename(parse_url($request->url(), PHP_URL_PATH));
+
+                if (! isset(self::KNOWN[$nik])) {
+                    return Http::response(['success' => false], 404);
+                }
+
+                [$name, $cif] = self::KNOWN[$nik];
+
+                return Http::response(['success' => true, 'data' => [
+                    'nomor_ktp' => $nik,
+                    'nomor_cif' => $cif,
+                    'nama_lengkap' => $name,
+                    'jenis_kelamin' => 'L',
+                    'marital_status' => '2',
+                    'alamat_ktp' => 'SUBANG',
+                    'kode_dati2' => '0121',
+                    'penghasilan' => '84000000',
+                ]]);
+            },
+        ]);
+    }
 
     private function superadmin(): User
     {
@@ -90,7 +135,23 @@ class LoanApplicationFlowTest extends TestCase
         $hit = $this->getJson('/loan-simulation/lookup?nik=3213011203950001');
         $hit->assertOk()->assertJson(['found' => true]);
         $this->assertSame('YAYAT SUHAYAT', $hit->json('customer.full_name'));
-        $this->assertSame('CIF-000123', $hit->json('customer.cif_number'));
+        $this->assertSame('01.1.000123', $hit->json('customer.cif_number'));
+    }
+
+    /** Codex mati → pesan ramah, berkas tidak dibuat. */
+    public function test_lookup_reports_api_failure(): void
+    {
+        $this->actingAs($this->superadmin());
+
+        $this->codexDown = true;
+
+        $response = $this->getJson('/loan-simulation/lookup?nik=3213011203950001');
+        $response->assertStatus(503)->assertJson(['found' => false]);
+        $this->assertStringContainsString('tidak dapat dihubungi', $response->json('message'));
+
+        $this->post('/loan-simulation', ['nik' => '3213011203950001'])
+            ->assertSessionHasErrors('nik');
+        $this->assertSame(0, LoanApplication::count());
     }
 
     public function test_store_rejects_unregistered_nik(): void
@@ -126,7 +187,7 @@ class LoanApplicationFlowTest extends TestCase
         $this->assertSame(8, strlen($record->application_code));
         $this->assertGreaterThanOrEqual('00700001', $record->application_code);
         $this->assertSame('YAYAT SUHAYAT', $record->full_name);
-        $this->assertSame('CIF-000123', $record->cif_number);
+        $this->assertSame('01.1.000123', $record->cif_number);
         $this->assertSame('DRAFT', $record->status);
         $this->assertSame(0, $record->requested_amount);
 

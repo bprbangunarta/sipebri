@@ -25,10 +25,11 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 /**
  * Pengajuan Kredit — tahap 1 dari 9.
- * Data pemohon TIDAK disimpan: identitas diambil dari API sistem nasabah (CustomerDirectory)
+ * Data pemohon TIDAK disimpan: identitas diambil dari API sistem nasabah (Codex)
  * memakai nomor KTP. Berkas hanya menyimpan nik, nama, dan nomor CIF.
  */
 class LoanApplicationController extends Controller
@@ -71,11 +72,22 @@ class LoanApplicationController extends Controller
         ]);
     }
 
-    /** Identitas nasabah dari sistem lain (MOCK sampai endpoint API siap). */
+    /** Identitas nasabah dari sistem lain (API Codex). */
     public function lookup(Request $request): JsonResponse
     {
         $nik = (string) $request->query('nik', '');
-        $customer = CustomerDirectory::find($nik);
+
+        try {
+            $customer = CustomerDirectory::find($nik);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'found' => false,
+                'customer' => null,
+                'message' => 'Sistem data nasabah sedang tidak dapat dihubungi. Coba lagi beberapa saat.',
+            ], 503);
+        }
 
         return response()->json([
             'found' => (bool) $customer,
@@ -117,7 +129,15 @@ class LoanApplicationController extends Controller
             'nik.digits' => 'Kolom nomor KTP harus 16 angka.',
         ], ['nik' => 'nomor ktp']);
 
-        $customer = CustomerDirectory::find($data['nik']);
+        try {
+            $customer = CustomerDirectory::find($data['nik']);
+        } catch (Throwable $e) {
+            report($e);
+
+            throw ValidationException::withMessages([
+                'nik' => 'Sistem data nasabah sedang tidak dapat dihubungi. Coba lagi beberapa saat.',
+            ]);
+        }
 
         if (! $customer) {
             throw ValidationException::withMessages([
@@ -276,8 +296,13 @@ class LoanApplicationController extends Controller
     /** Kelengkapan tiap tahap untuk kartu konfirmasi. */
     private function checklist(LoanApplication $r): array
     {
-        // Satu panggilan per request; nanti diganti HTTP ke sistem nasabah.
-        $this->customerCache ??= CustomerDirectory::find((string) $r->nik);
+        // Satu panggilan per request ke API Codex.
+        try {
+            $this->customerCache ??= CustomerDirectory::find((string) $r->nik);
+        } catch (Throwable $e) {
+            report($e);
+            $this->customerCache = null;
+        }
 
         return [
             'nasabah' => (bool) $this->customerCache,

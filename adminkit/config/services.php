@@ -28,6 +28,23 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Codex — sistem data nasabah BPR Bangunarta
+    |--------------------------------------------------------------------------
+    | OAuth2 client_credentials, token di-cache sampai mendekati kedaluwarsa.
+    */
+
+    'codex' => [
+        'base_url' => env('CODEX_BASE_URL'),
+        'client_id' => env('CODEX_CLIENT_ID'),
+        'client_secret' => env('CODEX_CLIENT_SECRET'),
+        'timeout' => (float) env('CODEX_TIMEOUT', 10),
+        'connect_timeout' => (float) env('CODEX_CONNECT_TIMEOUT', 5),
+        'token_skew' => (int) env('CODEX_TOKEN_SKEW', 300),
+        'sample_niks' => array_filter(explode(',', (string) env('CODEX_SAMPLE_NIKS', ''))),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

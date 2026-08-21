@@ -650,3 +650,17 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   aplikasi diakses lewat browser (filter Produk Nonaktif = 3 baris, Skema Migrasi 4 rancangan,
   diff Agunan Kredit bersih 0 beda). `.env` dikembalikan ke SQLite untuk preview; `php artisan test`
   → 47 lulus. Catatan lengkap di `/app/memory/env_notes.md`.
+
+## Selesai (2026-06-22, API nasabah Codex diaktifkan — tidak lagi MOCK)
+- `app/Services/CodexClient.php` (baru): OAuth2 `client_credentials` ke
+  `https://codex.bprbangunarta.co.id`, token di-cache sampai mendekati kedaluwarsa,
+  401 → refresh sekali, 404 → nasabah tidak terdaftar, retry hanya untuk kegagalan koneksi.
+  Kredensial di `.env` (`CODEX_BASE_URL`, `CODEX_CLIENT_ID`, `CODEX_CLIENT_SECRET`,
+  `CODEX_SAMPLE_NIKS`) + blok `codex` pada `config/services.php`.
+- `app/Support/CustomerDirectory.php` sekarang memanggil API nyata dan memetakan kolom Codex
+  (nomor_cif, nama_lengkap, jenis_kelamin, marital_status, alamat_ktp, dll) ke bentuk SIPEBRI.
+- Penanganan galat: lookup → HTTP 503 + pesan "sistem data nasabah tidak dapat dihubungi",
+  store → error validasi pada kolom `nik` (berkas tidak dibuat), checklist → tahap nasabah `false`.
+- Uji: `php artisan test` → **48 lulus** (tes baru `lookup_reports_api_failure`, seluruh alur
+  memakai `Http::fake`). Verifikasi nyata lewat UI: NIK `3213070701980004` → **ZULFADLI RIZAL**,
+  CIF `01.1.038586`, berkas `00700002` terbentuk. Detail: `/app/memory/integrasi_codex.md`.
