@@ -637,3 +637,16 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - Dokumentasi diperbarui: `/app/memory/pengajuan_kredit.md` (seri kode 007xxxxx, kolom audit
   `created_by`/`updated_by`/`deleted_by`, penghapusan `confirmed_at`/`confirmed_by`).
 - Uji: `php artisan db:seed` sukses (idempoten) + `php artisan test` → **47 lulus**.
+
+## Perbaikan (2026-06-22, `migrate:fresh --seed` gagal di MySQL) — BUG SAYA
+- Penyebab: SQL khas SQLite dan nilai negatif pada kolom unsigned.
+  1. `2026_08_21_090000_normalize_boolean_flags`: `typeof()` tidak ada di MySQL → migrasi kini hanya
+     berjalan bila driver `sqlite`.
+  2. `2026_08_21_100000_renumber_loan_application_codes`: `'007' || substr(...)` (concat SQLite) berarti
+     OR di MySQL → diganti update per baris dengan `substr()` PHP.
+  3. `SchemaDraftSeeder`: menulis `sort` negatif ke kolom `unsignedInteger` → error 1264 di MySQL.
+     Urutan kolom utama kini ditulis ulang dengan angka positif 0..n.
+- Verifikasi NYATA di MariaDB 10.11 (`stg_sipebri`): `php artisan migrate:fresh --seed` lulus penuh,
+  aplikasi diakses lewat browser (filter Produk Nonaktif = 3 baris, Skema Migrasi 4 rancangan,
+  diff Agunan Kredit bersih 0 beda). `.env` dikembalikan ke SQLite untuk preview; `php artisan test`
+  → 47 lulus. Catatan lengkap di `/app/memory/env_notes.md`.

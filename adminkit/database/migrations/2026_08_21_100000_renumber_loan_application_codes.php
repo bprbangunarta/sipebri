@@ -8,19 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::table('loan_applications')
-            ->where('application_code', 'like', '008%')
-            ->update([
-                'application_code' => DB::raw("'007' || substr(application_code, 4)"),
-            ]);
+        $this->renumber('008', '007');
     }
 
     public function down(): void
     {
+        $this->renumber('007', '008');
+    }
+
+    /** Dilakukan per baris agar portabel di SQLite maupun MySQL. */
+    private function renumber(string $from, string $to): void
+    {
         DB::table('loan_applications')
-            ->where('application_code', 'like', '007%')
-            ->update([
-                'application_code' => DB::raw("'008' || substr(application_code, 4)"),
-            ]);
+            ->where('application_code', 'like', "{$from}%")
+            ->select('id', 'application_code')
+            ->orderBy('id')
+            ->chunk(200, function ($rows) use ($from, $to) {
+                foreach ($rows as $row) {
+                    DB::table('loan_applications')->where('id', $row->id)->update([
+                        'application_code' => $to.substr($row->application_code, strlen($from)),
+                    ]);
+                }
+            });
     }
 };

@@ -59,8 +59,14 @@ class SchemaDraftSeeder extends Seeder
             $draft->columns()->delete();
             $draft->columns()->createMany(SchemaDesign::importFrom($item['table_name']));
 
-            foreach ($lead as $index => $name) {
-                $draft->columns()->where('name', $name)->update(['sort' => $index - count($lead)]);
+            // Urutkan ulang dengan angka positif (kolom `sort` unsigned di MySQL).
+            $ids = $draft->columns()->orderBy('sort')->pluck('id', 'name');
+            $order = collect($lead)->filter(fn (string $name) => $ids->has($name))
+                ->merge($ids->keys()->reject(fn (string $name) => in_array($name, $lead, true)))
+                ->values();
+
+            foreach ($order as $index => $name) {
+                $draft->columns()->where('name', $name)->update(['sort' => $index]);
             }
         }
 
