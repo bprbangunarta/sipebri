@@ -68,7 +68,7 @@ const submit = () =>
                             v-model="form.credential"
                             type="text"
                             autocomplete="username"
-                            placeholder="Email, Nama Pengguna atau Nomor HP"
+                            placeholder="Email, Username atau Nomor HP"
                             data-testid="login-credential-input"
                             @blur="check.validate('credential')"
                         />
@@ -82,7 +82,7 @@ const submit = () =>
                         <PasswordInput
                             id="password"
                             v-model="form.password"
-                            placeholder="*****************************"
+                            placeholder="***********************************"
                             testid="login-password-input"
                         />
                         <p v-if="form.errors.password" class="text-xs font-medium text-destructive">

@@ -775,3 +775,14 @@ User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
 - Uji: `php artisan test` → **62 lulus** (tes baru `update_enforces_product_parameter_limits`),
   `yarn ui:check` OK, build bersih, dan verifikasi browser: berkas KTA menampilkan batas
   Rp2.000.000–Rp10.000.000 serta 3–10 bulan.
+
+## Dokumentasi diperbarui (2026-06-23)
+- `adminkit/README.md`: bagian baru **Alur Proses Kredit** (tabel 5 tahap + status + tabel terkait),
+  **Integrasi API Codex**, **Tombol aksi form (`FormActions`)**, **`yarn ui:check`**, dan
+  **Menjalankan di lokal (SQLite atau MySQL)** — termasuk 4 rambu penting untuk uji lokal
+  (kredensial Codex, koordinat wajib HTTPS/localhost, portabilitas migrasi MySQL, wajib
+  `ui:check` + `build` + `test` sebelum commit). Daftar seeder & menu ikut diperbarui
+  (`ProductParameterSeeder`, `SchemaDraftSeeder`, 29 menu, data simulasi tidak diseed).
+- `/app/memory/test_credentials.md`: izin bawaan Kasi Analis & Staff Analis + akun uji alur kredit.
+- Catatan domain lain tetap: `alur_kredit.md`, `integrasi_codex.md`, `ui_rules.md`,
+  `env_notes.md`, `sinkronisasi_staging.md`, `pengajuan_kredit.md`, `skema_migrasi.md`.

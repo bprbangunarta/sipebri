@@ -17,6 +17,8 @@ Starter kit panel admin **compact UI** yang kini dipakai sebagai fondasi **SIPEB
 - [Perintah Harian](#perintah-harian)
 - [Struktur Proyek](#struktur-proyek)
 - [Skema Basis Data](#skema-basis-data)
+- [Alur Proses Kredit](#alur-proses-kredit)
+- [Integrasi API Codex (Data Nasabah)](#integrasi-api-codex-data-nasabah)
 - [Modul Komite Kredit](#modul-komite-kredit)
 - [Modul Data Referensi](#modul-data-referensi)
 - [Ekspor & Impor Excel](#ekspor--impor-excel)
@@ -178,14 +180,15 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 | Seeder | Isi |
 |---|---|
 | `PermissionSeeder` | izin (`view`/`manage` per entitas) diturunkan dari `App\Support\Modules::MAP` |
-| `RoleSeeder` | `Super Admin` (selalu sinkron dengan SELURUH izin) + `Guest` + 43 peranan struktur organisasi (tanpa izin) |
+| `RoleSeeder` | `Super Admin` (selalu sinkron dengan SELURUH izin) + `Guest` + 43 peranan struktur organisasi. `Kasi Analis` (penjadwalan) dan `Staff Analis` (survei + analisa) sudah diberi izin bawaan; peranan yang **sudah** punya izin tidak ditimpa |
 | `UserSeeder` | 22 akun: pemilik sistem `IT Support` / `superadmin` / `sa@bprbangunarta.co.id` (peranan Super Admin, kata sandi `SA@4dm1n`) + 21 akun pegawai uji lengkap dengan peranan, kantor, alias, kode MSO, dan kode kolektor (kata sandi awal `password`) |
 | `SettingSeeder` | Identitas merek SIPEBRI, SEO/OG, kontak, zona waktu, dan urutan 15 entitas pada matriks izin |
-| `MenuSeeder` | Menu sidebar: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga, Komite Kredit) + grup `Agunan` (Jenis Agunan, Jenis Pengikatan, Kondisi Agunan, Metode Hitung) + grup `Simulasi` (Agunan Kredit, Analisa Kredit) + 7 menu Administrator |
+| `MenuSeeder` | 29 menu: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Data Wilayah, Sistem Cicilan, Sistem Bunga, Komite Kredit) + grup `Agunan` (Jenis Agunan, Jenis Pengikatan, Kondisi Agunan, Metode Hitung) + grup `Simulasi` (Agunan, Pengajuan, Penjadwalan, Survei, Analisa, Persetujuan) + 8 menu Administrator |
 | `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder`, `CollateralConditionSeeder`, `CollateralMethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan, 7 kondisi agunan, 4 metode hitung |
 | `RegionSeeder` | 82.449 baris wilayah (kode dati2 → kabupaten → kecamatan → kelurahan + kode pos) dari `database/data/regions.csv.gz`; dilewati bila tabel sudah terisi |
 | `OwnershipStatusSeeder` | Status/bukti kepemilikan per jenis agunan (baru jenis `05`: 11 pilihan) |
-| `CollateralSimulationSeeder` | 2 contoh agunan sesuai form CBS (`0141990` jenis 14, `01.3.001419` jenis 05) |
+| `ProductParameterSeeder` | parameter SK Direksi untuk **17 produk**: plafon & tenor min/maks, suku bunga, provisi, admin, ambang RC, sistem bunga & cicilan yang diizinkan, wajib agunan |
+| `SchemaDraftSeeder` | 4 rancangan Skema Migrasi yang mencerminkan tabel nyata |
 | `CommitteeSeeder` | 19 jalur komite kredit + 76 jenjang pemutus sesuai dokumen kebijakan |
 
 ```bash
@@ -199,7 +202,35 @@ php artisan migrate:fresh --seed --force     # instalasi bersih
 - Akun **terarsip** (soft delete) akan **dipulihkan** oleh `UserSeeder`, dan peranan selalu disinkronkan ulang (satu peranan per pengguna).
 - Kantor pengguna disimpan sebagai **nama kantor** dan divalidasi terhadap `OfficeSeeder`; satu-satunya pengecualian yang disengaja adalah `superadmin` yang berkantor di **Kantor Pusat** (belum menjadi data kantor operasional).
 - **Izin peranan tambahan tidak ditimpa** bila peranan sudah punya izin — aman diubah dari modul Peranan.
-- Ingin cetakan baru? Salin data yang sudah Anda atur di aplikasi ke konstanta di seeder terkait (`ROLES`, `USERS`, `SETTINGS`, `MENUS`).
+- **Data simulasi TIDAK diseed**: `loan_applications`, `loan_schedules`, `loan_surveys`,
+  `loan_survey_photos`, dan `collateral_simulations` sengaja dibiarkan **kosong** pada instalasi baru.
+- Ingin cetakan baru? Salin data yang sudah Anda atur di aplikasi ke konstanta di seeder terkait
+  (`ROLES`, `USERS`, `SETTINGS`, `MENUS`, `PRODUCTS`, `PARAMETERS`).
+
+### Menjalankan di lokal (SQLite atau MySQL)
+
+```bash
+cp .env.example .env && php artisan key:generate
+# SQLite (bawaan)
+touch database/database.sqlite            # DB_CONNECTION=sqlite
+# MySQL/MariaDB
+#   DB_CONNECTION=mysql, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+
+composer install && yarn install
+php artisan migrate:fresh --seed --force
+yarn build                                # atau `yarn dev` untuk HMR
+php artisan serve                         # http://127.0.0.1:8000
+```
+
+Yang perlu diperhatikan saat uji di lokal:
+
+1. Isi kredensial **API Codex** di `.env` (`CODEX_BASE_URL`, `CODEX_CLIENT_ID`, `CODEX_CLIENT_SECRET`),
+   jika tidak, modal No. KTP akan menjawab "sistem data nasabah tidak dapat dihubungi".
+2. Unggah foto survei butuh **koordinat browser** → jalankan di `http://localhost` (diizinkan) atau HTTPS.
+   Alamat IP LAN tanpa HTTPS akan ditolak browser.
+3. `php artisan migrate:fresh --seed` sudah diuji di **SQLite dan MariaDB 10.11**. Jangan menambahkan
+   SQL khas SQLite (`typeof`, `PRAGMA`, `||`) pada migrasi/seeder — lihat `/app/memory/env_notes.md`.
+4. Sebelum commit perubahan UI: `yarn ui:check && yarn build && php artisan test`.
 
 ---
 
@@ -208,6 +239,7 @@ php artisan migrate:fresh --seed --force     # instalasi bersih
 ```bash
 yarn dev                 # Vite dev server (HMR)
 yarn build               # kompilasi aset produksi — WAJIB setelah mengubah .vue/.css bila tidak memakai yarn dev
+yarn ui:check            # WAJIB sebelum menyatakan pekerjaan UI selesai (penjaga konsistensi UI)
 php artisan migrate      # migrasi
 php artisan db:seed      # seeding ulang (idempoten, atau --class=NamaSeeder)
 php artisan cache:clear  # WAJIB setelah mengubah tabel settings langsung dari DB (branding di-cache)
@@ -272,7 +304,20 @@ lalu `sudo supervisorctl restart frontend`.
 ## Aturan placeholder kolom form (wajib)
 - Kolom **tidak wajib** → placeholder `(Opsional)` (termasuk selectbox & date picker).
 - Kolom **wajib** → tanpa placeholder; selectbox memakai `-- Pilih --`.
+- Filter toolbar memakai `Semua …`, kolom pencarian `Cari…`, kata sandi `Minimal 8 karakter`.
 - Angka opsional yang dikirim ke CBS tetap tersimpan `0` bila dikosongkan.
+
+## Tombol aksi form (wajib) — `FormActions`
+Pasangan tombol **Batal / aksi utama** HANYA lewat `resources/js/components/composite/FormActions.vue`
+(Batal pojok kiri + ikon X, aksi utama pojok kanan + ikon + status memuat). Berlaku untuk
+`CardFooter` maupun slot `#footer` Dialog; footer satu tombol memakai `:cancel="false"`.
+Dilarang menulis pasangan tombol ini manual per halaman.
+
+## `yarn ui:check` (penjaga konsistensi UI)
+`scripts/ui-check.mjs` menolak: placeholder di luar daftar putih, `<Input type="date|number">`
+(harus `DatePicker` / `NumberInput` / `DecimalInput` / `DigitsInput`), footer tanpa `FormActions`,
+footer yang menimpa perataan, ukuran tombol tidak baku, serta komponen/ikon yang dipakai template
+tetapi lupa di-import. Jalankan bersama `yarn build` + uji lebar **390/768/1024/1440**.
 
 ## Aturan format angka & responsif (wajib)
 - Detail lengkap: `/app/memory/ui_rules.md`.
@@ -300,6 +345,41 @@ lalu `sudo supervisorctl restart frontend`.
 | `telescope_entries`, `telescope_entries_tags`, `telescope_monitoring` | penyimpanan Laravel Telescope |
 
 ---
+
+## Alur Proses Kredit
+
+Status berkas (tidak boleh menambah status baru tanpa dibahas):
+`DRAFT → DIAJUKAN → PENJADWALAN → SURVEY → ANALISA → KOMITE → DISETUJUI/DITOLAK → REALISASI`
+(+ `DIBATALKAN`). Rincian & keputusan bisnis: `/app/memory/alur_kredit.md`.
+
+| Tahap | Menu | Status masuk → keluar | Inti aturan |
+| --- | --- | --- | --- |
+| 1. Pengajuan | `/loan-simulation` | `DRAFT` → `DIAJUKAN` | Identitas pemohon **hanya** dari API Codex (No. KTP); plafon/tenor/sistem bunga/cicilan dibatasi **parameter produk**; agunan wajib mengikuti `collateral_required`. Setelah **Ajukan**, berkas **terkunci** (tidak bisa diubah/dihapus/lepas agunan). Daftar hanya menampilkan berkas milik pembuatnya. |
+| 2. Penjadwalan | `/scheduling-simulation` | `DIAJUKAN` → `PENJADWALAN` | Kasi Analis menetapkan tanggal survei (≥ hari ini) + staff analis. Filter cakupan **Berkas saya / Semua Kasi Analis**. Batas 3 kali hanya **peringatan**. Semua jadwal/jadwal ulang/pembatalan tercatat di `loan_schedules` (**append-only**, tidak pernah dihapus). |
+| 3. Survei | `/survey-simulation` | `PENJADWALAN` → `SURVEY` | Daftar **hanya jadwal hari ini** milik staff analis yang ditugaskan. Wajib **1–5 foto lokasi** dengan **koordinat** yang diambil sistem saat foto dipilih (disimpan ke object storage). Setelah disimpan, hasil **terkunci**. Tombol **Batal & Minta Jadwal Ulang** (alasan wajib) mengembalikan berkas ke `DIAJUKAN`. |
+| 4. Analisa | `/analysis-simulation` | `SURVEY` → `ANALISA` | **Belum dibangun** (placeholder). Rencana: v1 mengikuti sistem lama (sama untuk semua produk), v2 per produk. |
+| 5. Persetujuan | `/approval-simulation` | `ANALISA` → `KOMITE` → keputusan | **Belum dibangun** (placeholder). Disaring sesuai peranan & kewenangan komite. |
+
+Tabel terkait: `loan_applications` (+ kolom audit `created_by`/`updated_by`/`deleted_by` berisi **nama
+pengguna**), `loan_application_collaterals`, `loan_schedules`, `loan_surveys`, `loan_survey_photos`.
+Notifikasi lonceng dikirim ke pihak yang punya tugas (kasi analis saat ada pengajuan baru / permintaan
+jadwal ulang, staff analis saat mendapat penugasan survei).
+
+> **Wajib HTTPS**: pengambilan koordinat oleh browser (`navigator.geolocation`) hanya berjalan di
+> HTTPS atau `localhost`. Di staging/produksi tanpa HTTPS, foto survei tidak bisa diunggah.
+
+## Integrasi API Codex (Data Nasabah)
+
+SIPEBRI **tidak menyimpan** identitas pemohon; hanya `nik`, `full_name`, dan `cif_number`.
+
+- `app/Services/CodexClient.php` — OAuth2 `client_credentials`, token di-cache sampai mendekati
+  kedaluwarsa (`codex:access-token`), 401 → ambil token baru sekali, 404 → nasabah belum terdaftar.
+- `app/Support/CustomerDirectory.php` — memetakan kolom Codex ke bentuk SIPEBRI (payload asli tetap
+  dibawa pada kunci `raw`).
+- Konfigurasi `.env`: `CODEX_BASE_URL`, `CODEX_CLIENT_ID`, `CODEX_CLIENT_SECRET`, `CODEX_SAMPLE_NIKS`
+  (opsional: `CODEX_TIMEOUT`, `CODEX_CONNECT_TIMEOUT`, `CODEX_TOKEN_SKEW`).
+- Bila Codex tak dapat dihubungi: lookup → HTTP 503 + pesan ramah, simpan berkas → galat validasi
+  pada kolom `nik` (berkas tidak dibuat). Uji memakai `Http::fake` — lihat `LoanApplicationFlowTest`.
 
 ## Modul Komite Kredit
 
