@@ -693,3 +693,24 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   informasi yang tampil di tabel.
 - Verifikasi kueri: "KREDIT TANPA", "FLATE", "5000000", "DRAFT", "2026-08-21", "ZULFADLI",
   "ANUITAS", "36", "KPS", "00700004" semuanya mengembalikan berkas yang benar.
+
+## Selesai (2026-06-22, Tahap A alur kredit: Penjadwalan Survei)
+Alur lengkap didokumentasikan di **`/app/memory/alur_kredit.md`** (status, histori, notifikasi).
+- Status berkas ditambah `PENJADWALAN` & `SURVEY` (tidak ada status lain yang dibuat).
+- **Berkas terkunci setelah DIAJUKAN**: update/hapus/lekat-lepas agunan ditolak backend, dan di UI
+  kartu Data Pengajuan meredup + badge **Terkunci**, tombol Simpan/Tambah/Lepas agunan hilang.
+- Menu **Penjadwalan** (`/scheduling-simulation`) + `SchedulingController`: daftar berkas DIAJUKAN/
+  PENJADWALAN, filter cakupan **Berkas saya / Semua Kasi Analis**, filter status, pencarian luas,
+  modal jadwal (tanggal survei ≥ hari ini, staff analis, catatan), dan dialog **Histori**.
+- Tabel histori **`loan_schedules`** append-only (JADWAL / JADWAL ULANG / BATAL) + kolom
+  `survey_date` pada `loan_applications`. Batas **3 kali**; pembatalan oleh Staff Analis wajib
+  alasan → kembali DIAJUKAN, bila batas habis → kembali **DRAFT**.
+- Notifikasi lonceng: pengajuan baru → semua Kasi Analis; penugasan survei → staff analis;
+  permintaan penjadwalan ulang → Kasi Analis.
+- Izin baru `scheduling-simulation.*`, `survey-simulation.*`, `approval-simulation.*`,
+  `analysis-simulation.manage`; `RoleSeeder` mengisi izin Kasi Analis & Staff Analis (hanya bila
+  peranan tersebut belum punya izin). Menu Simulasi disinkronkan dengan menu buatan user.
+- Halaman **Survei** dan **Persetujuan** dibuat placeholder "Segera hadir" supaya menu tidak mati.
+- Uji: `tests/Feature/LoanSchedulingTest.php` (6 tes) + suite penuh → **56 lulus**. Verifikasi
+  browser sebagai **Kasi Analis (Dede Doni)**: berkas 00700004 dijadwalkan 23 Agt 2026 ke
+  **Ahmad Fauzi**, status PENJADWALAN, histori "JADWAL #1" tampil, notifikasi masuk ke Ahmad Fauzi.

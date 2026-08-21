@@ -35,8 +35,11 @@ class Modules
         'collateral-methods' => ['label' => 'Metode Hitung', 'abilities' => ['view', 'manage']],
         'collateral-simulation' => ['label' => 'Simulasi Agunan Kredit', 'abilities' => ['view', 'manage']],
         'regions' => ['label' => 'Data Wilayah', 'abilities' => ['view', 'manage']],
-        'analysis-simulation' => ['label' => 'Simulasi Analisa Kredit', 'abilities' => ['view']],
+        'analysis-simulation' => ['label' => 'Analisa Kredit', 'abilities' => ['view', 'manage']],
         'loan-simulation' => ['label' => 'Pengajuan Kredit', 'abilities' => ['view', 'manage']],
+        'scheduling-simulation' => ['label' => 'Penjadwalan Survei', 'abilities' => ['view', 'manage']],
+        'survey-simulation' => ['label' => 'Survei Kredit', 'abilities' => ['view', 'manage']],
+        'approval-simulation' => ['label' => 'Persetujuan Komite', 'abilities' => ['view', 'manage']],
         'schema-drafts' => ['label' => 'Skema Migrasi', 'abilities' => ['view', 'manage']],
         'profile' => ['label' => 'Profil Pengguna', 'abilities' => ['view']],
     ];

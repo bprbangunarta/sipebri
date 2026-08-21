@@ -17,4 +17,14 @@ class SimulationController extends Controller
     {
         return Inertia::render('AnalysisSimulation');
     }
+
+    public function survey(): Response
+    {
+        return Inertia::render('SurveySimulation');
+    }
+
+    public function approval(): Response
+    {
+        return Inertia::render('ApprovalSimulation');
+    }
 }

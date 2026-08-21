@@ -39,9 +39,14 @@ const props = defineProps({
     canManage: { type: Boolean, default: false },
 });
 
+/** Berkas hanya bisa diubah selama masih DRAFT. */
+const editable = computed(() => props.canManage && props.record.status === 'DRAFT');
+
 const STATUS_TONE = {
     DRAFT: 'border-slate-500/30 bg-slate-500/15 text-slate-700 dark:text-slate-300',
     DIAJUKAN: 'border-blue-500/30 bg-blue-500/15 text-blue-700 dark:text-blue-400',
+    PENJADWALAN: 'border-indigo-500/30 bg-indigo-500/15 text-indigo-700 dark:text-indigo-400',
+    SURVEY: 'border-cyan-500/30 bg-cyan-500/15 text-cyan-700 dark:text-cyan-400',
     ANALISA: 'border-purple-500/30 bg-purple-500/15 text-purple-700 dark:text-purple-400',
     KOMITE: 'border-amber-500/30 bg-amber-500/15 text-amber-700 dark:text-amber-400',
     DISETUJUI: 'border-emerald-500/30 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400',
@@ -199,8 +204,23 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
 
             <form class="form-dense" novalidate @submit.prevent="save">
                 <Card>
-                    <CardHeader><CardTitle>Data Pengajuan</CardTitle></CardHeader>
-                    <CardContent class="grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4">
+                    <CardHeader class="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
+                        <CardTitle>Data Pengajuan</CardTitle>
+                        <Badge
+                            v-if="!editable"
+                            variant="secondary"
+                            class="font-medium"
+                            data-testid="loan-detail-locked"
+                        >
+                            Terkunci
+                        </Badge>
+                    </CardHeader>
+                    <CardContent
+                        :class="[
+                            'grid gap-[var(--field-gap)] sm:grid-cols-2 lg:grid-cols-4',
+                            !editable && 'pointer-events-none opacity-60',
+                        ]"
+                    >
                         <div class="space-y-[var(--item-gap)]">
                             <Label>Produk <span class="text-destructive">*</span></Label>
                             <Combobox
@@ -343,7 +363,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             <X class="size-4" /> Batal
                         </Button>
                         <Button
-                            v-if="props.canManage"
+                            v-if="editable"
                             size="sm"
                             type="submit"
                             :disabled="form.processing"
@@ -367,7 +387,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                     </Badge>
                 </CardHeader>
                 <CardContent class="form-dense space-y-3">
-                    <div v-if="props.canManage" class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <div v-if="editable" class="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <Combobox
                             v-model="attachForm.collateral_simulation_id"
                             :options="props.collateralOptions"
@@ -428,7 +448,7 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                                     </td>
                                     <td class="px-3 py-2 text-right">
                                         <Button
-                                            v-if="props.canManage"
+                                            v-if="editable"
                                             variant="ghost"
                                             size="icon"
                                             class="text-destructive transition-colors hover:text-destructive"

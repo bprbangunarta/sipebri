@@ -252,6 +252,10 @@ class LoanApplicationFlowTest extends TestCase
         ])->assertSessionHasNoErrors();
         $this->assertSame(2, $record->collaterals()->count());
 
+        // Lepas agunan (masih DRAFT)
+        $this->delete("/loan-simulation/{$record->id}/collaterals/{$collateral->id}")->assertSessionHasNoErrors();
+        $this->assertSame(1, $record->collaterals()->count());
+
         // Ajukan
         $this->post("/loan-simulation/{$record->id}/confirm")->assertSessionHas('success');
         $record->refresh();
@@ -263,11 +267,11 @@ class LoanApplicationFlowTest extends TestCase
         $this->get('/loan-simulation?status=DIAJUKAN')->assertOk();
         $this->get('/loan-simulation?search='.$record->application_code)->assertOk();
 
-        // Lepas agunan
-        $this->delete("/loan-simulation/{$record->id}/collaterals/{$collateral->id}")->assertSessionHasNoErrors();
-        $this->assertSame(1, $record->collaterals()->count());
+        // Berkas yang sudah diajukan tidak bisa dihapus
+        $this->delete("/loan-simulation/{$record->id}")->assertSessionHas('error');
 
-        // Hapus (arsip)
+        // Hapus (arsip) hanya saat DRAFT
+        $record->forceFill(['status' => 'DRAFT'])->save();
         $this->delete("/loan-simulation/{$record->id}")->assertRedirect('/loan-simulation');
         $this->assertSoftDeleted('loan_applications', ['id' => $record->id]);
     }

@@ -31,9 +31,12 @@ class MenuSeeder extends Seeder
                 ['Metode Hitung', '/collateral-methods', 'calculator', 'collateral-methods.view', []],
             ]],
             ['Simulasi', null, 'flask-conical', null, [
-                ['Pengajuan Kredit', '/loan-simulation', 'file-text', 'loan-simulation.view', []],
-                ['Agunan Kredit', '/collateral-simulation', 'shield-check', 'collateral-simulation.view', []],
-                ['Analisa Kredit', '/analysis-simulation', 'calculator', 'analysis-simulation.view', []],
+                ['Agunan', '/collateral-simulation', 'shield-check', 'collateral-simulation.view', []],
+                ['Pengajuan', '/loan-simulation', 'file-text', 'loan-simulation.view', []],
+                ['Penjadwalan', '/scheduling-simulation', 'calendar-check', 'scheduling-simulation.view', []],
+                ['Survei', '/survey-simulation', 'map-pinned', 'survey-simulation.view', []],
+                ['Analisa', '/analysis-simulation', 'calculator', 'analysis-simulation.view', []],
+                ['Persetujuan', '/approval-simulation', 'gavel', 'approval-simulation.view', []],
             ]],
         ],
         'admin' => [

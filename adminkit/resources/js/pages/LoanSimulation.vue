@@ -67,6 +67,8 @@ const productFilterOptions = computed(() => [
 
 const STATUS_TONE = {
     DIAJUKAN: 'secondary',
+    PENJADWALAN: 'default',
+    SURVEY: 'default',
     ANALISA: 'secondary',
     KOMITE: 'secondary',
     DISETUJUI: 'default',

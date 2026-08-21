@@ -23,6 +23,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SchemaDraftController;
 use App\Http\Controllers\SimulationController;
 use App\Http\Controllers\UserController;
@@ -264,6 +265,23 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
+
+    Route::get('/survey-simulation', [SimulationController::class, 'survey'])
+        ->middleware('permission:survey-simulation.view')->name('survey-simulation.index');
+
+    Route::get('/approval-simulation', [SimulationController::class, 'approval'])
+        ->middleware('permission:approval-simulation.view')->name('approval-simulation.index');
+
+    Route::get('/scheduling-simulation', [SchedulingController::class, 'index'])
+        ->middleware('permission:scheduling-simulation.view')->name('scheduling-simulation.index');
+
+    Route::middleware('permission:scheduling-simulation.manage')->group(function () {
+        Route::post('/scheduling-simulation/{loanApplication}', [SchedulingController::class, 'store'])
+            ->name('scheduling-simulation.store');
+    });
+
+    Route::post('/scheduling-simulation/{loanApplication}/cancel', [SchedulingController::class, 'cancel'])
+        ->middleware('permission:survey-simulation.manage')->name('scheduling-simulation.cancel');
 
     foreach ($references as $slug => $controller) {
         Route::get("/{$slug}", [$controller, 'index'])

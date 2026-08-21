@@ -38,6 +38,7 @@ class LoanApplication extends Model
         'approved_tenor' => 'integer',
         'approved_rate' => 'decimal:2',
         'disbursed_at' => 'date:Y-m-d',
+        'survey_date' => 'date:Y-m-d',
     ];
 
     /** Kode berkas berikutnya, format 8 digit (00700001, 00700002, ...). */
@@ -61,6 +62,21 @@ class LoanApplication extends Model
     public function method(): BelongsTo
     {
         return $this->belongsTo(Method::class);
+    }
+
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(LoanSchedule::class)->orderBy('id');
+    }
+
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    public function surveyor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'surveyor_id');
     }
 
     public function collaterals(): BelongsToMany

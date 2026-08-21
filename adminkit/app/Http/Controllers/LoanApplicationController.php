@@ -17,6 +17,7 @@ use App\Models\ProductParameter;
 use App\Models\Region;
 use App\Models\User;
 use App\Support\CustomerDirectory;
+use App\Support\Notify;
 use App\Support\TableQuery;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -36,7 +37,7 @@ class LoanApplicationController extends Controller
 {
     private const LABEL = 'Pengajuan Kredit';
 
-    public const STATUSES = ['DRAFT', 'DIAJUKAN', 'ANALISA', 'KOMITE', 'DISETUJUI', 'DITOLAK', 'DIBATALKAN', 'REALISASI'];
+    public const STATUSES = ['DRAFT', 'DIAJUKAN', 'PENJADWALAN', 'SURVEY', 'ANALISA', 'KOMITE', 'DISETUJUI', 'DITOLAK', 'DIBATALKAN', 'REALISASI'];
 
     public const USAGE_TYPES = ['KONSUMTIF', 'MODAL USAHA', 'INVESTASI', 'LAINNYA'];
 
@@ -180,6 +181,10 @@ class LoanApplicationController extends Controller
     /** Tahap "Data Pengajuan". */
     public function update(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
+        if ($locked = $this->locked($loanApplication)) {
+            return $locked;
+        }
+
         $before = $loanApplication->getOriginal();
 
         $data = $request->validate([
@@ -228,6 +233,10 @@ class LoanApplicationController extends Controller
 
     public function attachCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
+        if ($locked = $this->locked($loanApplication)) {
+            return $locked;
+        }
+
         $data = $request->validate([
             'collateral_simulation_id' => ['required', 'integer', 'exists:collateral_simulations,id'],
         ], [], ['collateral_simulation_id' => 'agunan']);
@@ -240,6 +249,10 @@ class LoanApplicationController extends Controller
     /** Agunan baru dibuat langsung dari berkas lalu otomatis dilekatkan. */
     public function storeCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
+        if ($locked = $this->locked($loanApplication)) {
+            return $locked;
+        }
+
         $data = $request->validate([
             'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
@@ -277,6 +290,10 @@ class LoanApplicationController extends Controller
 
     public function detachCollateral(LoanApplication $loanApplication, CollateralSimulation $collateral): RedirectResponse
     {
+        if ($locked = $this->locked($loanApplication)) {
+            return $locked;
+        }
+
         $loanApplication->collaterals()->detach($collateral->id);
 
         return back()->with('success', 'Agunan dilepas dari berkas.');
@@ -297,11 +314,31 @@ class LoanApplicationController extends Controller
 
         ActivityLog::record("Mengajukan berkas {$loanApplication->application_code}", self::LABEL, 'success', $loanApplication);
 
+        Notify::toPermission(
+            'scheduling-simulation.manage',
+            'Pengajuan baru menunggu penjadwalan',
+            self::LABEL,
+            "Berkas {$loanApplication->application_code} ({$loanApplication->full_name}) siap dijadwalkan survei.",
+            '/scheduling-simulation',
+        );
+
         return back()->with('success', 'Berkas diajukan.');
+    }
+
+    /** Berkas hanya bisa diubah selama masih DRAFT. */
+    private function locked(LoanApplication $r): ?RedirectResponse
+    {
+        return $r->status === 'DRAFT'
+            ? null
+            : back()->with('error', "Berkas berstatus {$r->status} tidak dapat diubah lagi.");
     }
 
     public function destroy(LoanApplication $loanApplication): RedirectResponse
     {
+        if ($locked = $this->locked($loanApplication)) {
+            return $locked;
+        }
+
         $code = $loanApplication->application_code;
         $loanApplication->delete();
 
