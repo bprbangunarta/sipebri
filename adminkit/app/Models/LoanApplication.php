@@ -79,6 +79,11 @@ class LoanApplication extends Model
         return $this->belongsTo(User::class, 'surveyor_id');
     }
 
+    public function photos(): HasMany
+    {
+        return $this->hasMany(LoanSurveyPhoto::class)->orderBy('id');
+    }
+
     public function collaterals(): BelongsToMany
     {
         return $this->belongsToMany(

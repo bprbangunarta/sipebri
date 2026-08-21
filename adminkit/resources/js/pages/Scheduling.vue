@@ -161,8 +161,13 @@ const ACTION_TONE = {
                     <Badge :variant="row.status === 'PENJADWALAN' ? 'default' : 'secondary'" class="font-medium">
                         {{ row.status }}
                     </Badge>
-                    <span class="mt-0.5 block whitespace-nowrap text-xs text-muted-foreground">
+                    <span
+                        class="mt-0.5 block whitespace-nowrap text-xs"
+                        :class="row.over_limit ? 'font-medium text-destructive' : 'text-muted-foreground'"
+                        :data-testid="`scheduling-count-${row.id}`"
+                    >
                         Jadwal {{ row.schedule_count }}/{{ props.maxSchedules }}
+                        <template v-if="row.over_limit">· lewat batas</template>
                     </span>
                 </template>
 
@@ -179,7 +184,6 @@ const ACTION_TONE = {
                         </Button>
                         <Button
                             size="sm"
-                            :disabled="!row.can_schedule"
                             :data-testid="`scheduling-set-${row.id}`"
                             @click="openSchedule(row)"
                         >
@@ -237,9 +241,16 @@ const ACTION_TONE = {
                         </p>
                     </div>
 
-                    <p class="text-xs text-muted-foreground">
-                        Penjadwalan tercatat sebagai histori dan dibatasi
-                        {{ props.maxSchedules }} kali per berkas.
+                    <p
+                        v-if="scheduling?.over_limit"
+                        class="rounded-md border border-destructive/40 bg-destructive/10 p-2 text-xs font-medium text-destructive"
+                        data-testid="scheduling-over-limit-warning"
+                    >
+                        Berkas ini sudah dijadwalkan {{ scheduling.schedule_count }} kali (batas wajar
+                        {{ props.maxSchedules }} kali). Penjadwalan masih boleh dilanjutkan, mohon ditinjau.
+                    </p>
+                    <p v-else class="text-xs text-muted-foreground">
+                        Penjadwalan tercatat sebagai histori. Batas wajar {{ props.maxSchedules }} kali per berkas.
                     </p>
                 </form>
 

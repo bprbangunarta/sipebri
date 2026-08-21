@@ -20,19 +20,30 @@ Menu **Penjadwalan** (`/scheduling-simulation`), izin `scheduling-simulation.vie
 - Histori di tabel **`loan_schedules`** — APPEND ONLY (tidak ada `updated_at`, tidak pernah dihapus):
   `sequence`, `action` (JADWAL / JADWAL ULANG / BATAL), `survey_date`, `surveyor_id`,
   `surveyor_name` (snapshot), `note`, `reason`, `created_by`, `created_at`.
-- **Batas 3 kali** (`LoanSchedule::MAX_SCHEDULES`). Pembatalan oleh Staff Analis
-  (`POST /scheduling-simulation/{id}/cancel`, izin `survey-simulation.manage`) wajib **alasan**:
-  status kembali **DIAJUKAN**; bila jadwal sudah 3 kali → kembali ke **DRAFT** (petugas pengaju bisa
-  mengubah/menghapus, atau kasi analis membatalkan berkas).
+- **Batas 3 kali hanya PERINGATAN** (`LoanSchedule::MAX_SCHEDULES`) — dikonfirmasi kasi analis
+  22/06/2026: penjadwalan ulang boleh lebih dari 3 kali. Di daftar muncul "Jadwal n/3 · lewat batas"
+  merah dan modal jadwal memberi peringatan; notifikasi ke kasi analis bertanda `warning`.
+  Pembatalan oleh Staff Analis (`POST /scheduling-simulation/{id}/cancel`, izin
+  `survey-simulation.manage`) wajib **alasan** → status selalu kembali **DIAJUKAN**.
 - Notifikasi: staff analis dapat penugasan; kasi analis dapat permintaan penjadwalan ulang.
 
-## 3. Survei (BELUM — tahap berikutnya)
-Menu `/survey-simulation` masih placeholder. Rencana: menampilkan berkas PENJADWALAN milik staff
-analis yang bersangkutan **dan tanggal survei = hari berjalan**. Aksi hanya **Ubah** dan **Batal**.
-Wajib **minimal 1 foto lokasi** (kamera diutamakan, boleh galeri bila kamera gagal) dan sistem
-mengambil **koordinat (lat/long)** saat pengambilan foto → dasar peta lokasi survei.
-Simpan hasil → status **SURVEY**. Foto disimpan di object storage (S3), bukan base64.
-Catatan: geolokasi browser hanya jalan di **HTTPS**.
+## 3. Survei (SELESAI — 22/06/2026)
+Menu `/survey-simulation` (`SurveyController`), izin `survey-simulation.view|manage`.
+- Daftar **hanya jadwal HARI INI** milik staff analis yang ditugaskan (persis spek). Jadwal terlewat
+  hilang dari daftar — itu risiko yang disepakati: staff analis harus **Batal + minta jadwal ulang**.
+- Lembar survei (`SurveyDetail.vue`) hanya bisa dibuka oleh `surveyor_id` yang bersangkutan (selain
+  itu 404). Bagian read-only: Data Pengajuan ringkas + alamat/HP pemohon dari Codex + Data Agunan.
+- Foto: **1–5** (`LoanSurveyPhoto::MAX_PHOTOS`), tombol **Ambil Foto** (`capture=environment`) dan
+  **Dari Galeri**. Koordinat diambil `navigator.geolocation` tepat saat foto dipilih dan **wajib**
+  (server memvalidasi `latitude`/`longitude`); izin lokasi ditolak → foto tidak diunggah.
+  Setiap foto diunggah satu-satu (`POST .../photos`) agar payload kecil, disimpan lewat
+  `FileStorage::store()` ke folder `survei/{kode berkas}` pada disk aktif (S3).
+- **Simpan Hasil Survei** (min 1 foto) → baris `loan_surveys` (catatan, koordinat foto pertama,
+  pelaku, waktu), foto ditautkan ke survei, status berkas menjadi **SURVEY** dan **terkunci**
+  (tidak bisa tambah/hapus foto atau simpan ulang).
+- **Batal & Minta Jadwal Ulang** memakai endpoint pembatalan penjadwalan (alasan wajib).
+- Tabel: `loan_surveys`, `loan_survey_photos` (lat/long desimal 10,7 + `source` KAMERA/GALERI).
+- CATATAN PENTING: geolokasi browser hanya jalan di **HTTPS** — pastikan staging/produksi HTTPS.
 
 ## 4. Analisa (BELUM)
 Menu `/analysis-simulation`. Menampilkan berkas SURVEY milik staff analis. Form dibahas bertahap.

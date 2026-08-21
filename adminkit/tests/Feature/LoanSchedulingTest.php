@@ -130,7 +130,7 @@ class LoanSchedulingTest extends TestCase
         $this->assertTrue(Notification::where('user_id', $kasi->id)->exists());
     }
 
-    public function test_batas_tiga_kali_penjadwalan_mengembalikan_berkas_ke_draft(): void
+    public function test_penjadwalan_boleh_lebih_dari_tiga_kali_dengan_peringatan(): void
     {
         $kasi = $this->kasi();
         $staff = $this->staff();
@@ -148,14 +148,21 @@ class LoanSchedulingTest extends TestCase
         }
 
         $record->refresh();
-        $this->assertSame('DRAFT', $record->status);
+        $this->assertSame('DIAJUKAN', $record->status);
         $this->assertSame(6, $record->schedules()->count());
 
-        // Sudah 3 kali → tidak boleh dijadwalkan lagi.
+        // Sudah 3 kali → masih boleh dijadwalkan, hanya ditandai lewat batas.
         $this->actingAs($kasi)->post("/scheduling-simulation/{$record->id}", [
             'survey_date' => now()->addDays(9)->toDateString(),
             'surveyor_id' => $staff->id,
-        ])->assertSessionHas('error');
+        ])->assertSessionHas('success');
+
+        $this->assertSame('PENJADWALAN', $record->refresh()->status);
+        $this->assertSame(4, $record->schedules()->where('action', '!=', 'BATAL')->count());
+
+        $row = collect($this->get('/scheduling-simulation')->viewData('page')['props']['records']['data'])
+            ->firstWhere('application_code', $record->application_code);
+        $this->assertTrue($row['over_limit']);
     }
 
     public function test_berkas_diajukan_tidak_bisa_diubah_lagi(): void

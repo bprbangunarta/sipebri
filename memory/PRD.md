@@ -714,3 +714,20 @@ Alur lengkap didokumentasikan di **`/app/memory/alur_kredit.md`** (status, histo
 - Uji: `tests/Feature/LoanSchedulingTest.php` (6 tes) + suite penuh → **56 lulus**. Verifikasi
   browser sebagai **Kasi Analis (Dede Doni)**: berkas 00700004 dijadwalkan 23 Agt 2026 ke
   **Ahmad Fauzi**, status PENJADWALAN, histori "JADWAL #1" tampil, notifikasi masuk ke Ahmad Fauzi.
+
+## Selesai (2026-06-22, Tahap B alur kredit: Survei + revisi batas penjadwalan)
+- **Revisi aturan** (konfirmasi kasi analis): penjadwalan ulang **tidak dibatasi**, batas 3 kali kini
+  hanya **peringatan** (daftar: "Jadwal n/3 · lewat batas" merah; modal jadwal memberi peringatan;
+  notifikasi bertanda warning). Pembatalan selalu mengembalikan berkas ke **DIAJUKAN** (bukan DRAFT).
+- **Menu Survei** (`/survey-simulation`, `SurveyController`): daftar **hanya jadwal hari ini** milik
+  staff analis yang ditugaskan; lembar survei read-only berisi Data Pengajuan ringkas + alamat/HP
+  pemohon dari Codex + Data Agunan.
+- Foto lokasi **1–5**, tombol Ambil Foto (kamera) & Dari Galeri, **koordinat wajib** diambil sistem
+  saat foto dipilih (divalidasi server), diunggah satu-per-satu ke object storage
+  (`survei/{kode berkas}`). Simpan → `loan_surveys` + status **SURVEY** dan **terkunci**.
+- Tombol **Batal & Minta Jadwal Ulang** (alasan wajib) memakai endpoint pembatalan penjadwalan.
+- Tabel baru: `loan_surveys`, `loan_survey_photos`. Breadcrumb 4 menu baru ditambahkan.
+- Uji: `tests/Feature/LoanSurveyTest.php` (5 tes) + suite penuh → **61 lulus**. E2E browser sebagai
+  **Ahmad Fauzi (Staff Analis)**: berkas 00700004 difoto (koordinat -6.571235, 107.760123 tersimpan),
+  catatan diisi, status berubah menjadi **SURVEY** dan hasil terkunci.
+- PERHATIAN: koordinat (geolocation) hanya bisa diambil browser di **HTTPS**.

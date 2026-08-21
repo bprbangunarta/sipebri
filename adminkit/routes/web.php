@@ -26,6 +26,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SchemaDraftController;
 use App\Http\Controllers\SimulationController;
+use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -266,8 +267,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
 
-    Route::get('/survey-simulation', [SimulationController::class, 'survey'])
+    Route::get('/survey-simulation', [SurveyController::class, 'index'])
         ->middleware('permission:survey-simulation.view')->name('survey-simulation.index');
+
+    Route::middleware('permission:survey-simulation.manage')->scopeBindings()->group(function () {
+        Route::get('/survey-simulation/{loanApplication}', [SurveyController::class, 'show'])
+            ->name('survey-simulation.show');
+        Route::post('/survey-simulation/{loanApplication}/photos', [SurveyController::class, 'storePhoto'])
+            ->name('survey-simulation.photos.store');
+        Route::delete('/survey-simulation/{loanApplication}/photos/{photo}', [SurveyController::class, 'destroyPhoto'])
+            ->name('survey-simulation.photos.destroy');
+        Route::post('/survey-simulation/{loanApplication}', [SurveyController::class, 'store'])
+            ->name('survey-simulation.store');
+    });
 
     Route::get('/approval-simulation', [SimulationController::class, 'approval'])
         ->middleware('permission:approval-simulation.view')->name('approval-simulation.index');

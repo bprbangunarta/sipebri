@@ -17,7 +17,7 @@ class LoanSchedule extends Model
 
     public const ACTION_CANCEL = 'BATAL';
 
-    /** Batas penjadwalan (jadwal pertama + jadwal ulang). */
+    /** Batas penjadwalan yang disarankan; melebihi ini hanya memunculkan peringatan. */
     public const MAX_SCHEDULES = 3;
 
     public const UPDATED_AT = null;

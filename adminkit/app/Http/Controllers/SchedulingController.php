@@ -76,10 +76,6 @@ class SchedulingController extends Controller
 
         $done = $this->scheduleCount($loanApplication);
 
-        if ($done >= LoanSchedule::MAX_SCHEDULES) {
-            return back()->with('error', 'Batas penjadwalan '.LoanSchedule::MAX_SCHEDULES.' kali sudah tercapai.');
-        }
-
         $data = $request->validate([
             'survey_date' => ['required', 'date', 'after_or_equal:today'],
             'surveyor_id' => ['required', 'integer', Rule::in(collect($this->surveyors())->pluck('value')->all())],
@@ -154,10 +150,10 @@ class SchedulingController extends Controller
             'created_by' => $request->user()->name,
         ]);
 
-        $exhausted = $done >= LoanSchedule::MAX_SCHEDULES;
+        $exceeded = $done >= LoanSchedule::MAX_SCHEDULES;
 
         $loanApplication->update([
-            'status' => $exhausted ? 'DRAFT' : 'DIAJUKAN',
+            'status' => 'DIAJUKAN',
             'surveyor_id' => null,
             'survey_date' => null,
         ]);
@@ -171,15 +167,16 @@ class SchedulingController extends Controller
 
         Notify::toPermission(
             'scheduling-simulation.manage',
-            $exhausted ? 'Penjadwalan mentok batas' : 'Permintaan penjadwalan ulang',
+            $exceeded ? 'Penjadwalan ulang melebihi batas' : 'Permintaan penjadwalan ulang',
             self::LABEL,
-            "Berkas {$loanApplication->application_code}: {$data['reason']}",
+            "Berkas {$loanApplication->application_code}: {$data['reason']}"
+                .($exceeded ? ' (sudah '.$done.' kali dijadwalkan)' : ''),
             '/scheduling-simulation',
-            $exhausted ? 'warning' : 'info',
+            $exceeded ? 'warning' : 'info',
         );
 
-        return back()->with('success', $exhausted
-            ? 'Batas penjadwalan habis, berkas dikembalikan ke DRAFT.'
+        return back()->with('success', $exceeded
+            ? 'Jadwal dibatalkan. Berkas sudah dijadwalkan '.$done.' kali — mohon ditinjau.'
             : 'Jadwal dibatalkan, berkas menunggu penjadwalan ulang.');
     }
 
@@ -223,7 +220,7 @@ class SchedulingController extends Controller
             'requested_amount' => $r->requested_amount,
             'requested_tenor' => $r->requested_tenor,
             'schedule_count' => $done,
-            'can_schedule' => $done < LoanSchedule::MAX_SCHEDULES,
+            'over_limit' => $done >= LoanSchedule::MAX_SCHEDULES,
             'history' => $r->schedules()->orderByDesc('id')->get()->map(fn (LoanSchedule $s) => [
                 'id' => $s->id,
                 'sequence' => $s->sequence,
