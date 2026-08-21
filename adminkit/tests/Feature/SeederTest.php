@@ -42,8 +42,9 @@ class SeederTest extends TestCase
         $this->assertSame(4, CollateralMethod::count());
         $this->assertSame(82449, DB::table('regions')->count());
         $this->assertSame(11, DB::table('ownership_statuses')->count());
-        $this->assertSame(0, DB::table('collateral_simulations')->count());
-        $this->assertSame(0, DB::table('loan_applications')->count());
+        $this->assertSame(3, DB::table('collateral_simulations')->count());
+        $this->assertSame(5, DB::table('loan_applications')->count());
+        $this->assertSame(2, DB::table('loan_applications')->where('status', 'SURVEY')->count());
         $this->assertSame(29, DB::table('menus')->count());
         $this->assertSame(
             DB::table('products')->count(),

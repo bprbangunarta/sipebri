@@ -151,7 +151,7 @@ class LoanApplicationFlowTest extends TestCase
 
         $this->post('/loan-simulation', ['nik' => '3213011203950001'])
             ->assertSessionHasErrors('nik');
-        $this->assertSame(0, LoanApplication::count());
+        $this->assertSame(0, LoanApplication::where('nik', '3213011203950001')->count());
     }
 
     public function test_store_rejects_unregistered_nik(): void

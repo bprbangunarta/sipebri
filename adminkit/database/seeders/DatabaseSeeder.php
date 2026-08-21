@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             OwnershipStatusSeeder::class,
             SchemaDraftSeeder::class,
             CommitteeSeeder::class,
+            LoanApplicationSeeder::class,
         ]);
     }
 }
