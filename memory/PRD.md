@@ -820,3 +820,23 @@ User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
 - Uji: verifikasi browser — 3 foto → 3 penanda bernomor di peta OSM (jalan terbaca), popup thumbnail
   berfungsi; `yarn ui:check` OK, build bersih, `php artisan test` → 65 lulus.
   Data uji dibersihkan (foto draf dihapus, berkas 00700003 kembali DIAJUKAN).
+
+## Selesai (2026-06-23, daftar Analisa Kredit aktif)
+- `AnalysisController` (baru) + `AnalysisSimulation.vue` (ditulis ulang dari placeholder):
+  daftar berkas berstatus **SURVEY** milik petugas yang ditugaskan (`surveyor_id`), lengkap dengan
+  pencarian, urutan, paginasi, badge jumlah survei, dan baris bisa diklik.
+- `AnalysisDetail.vue` (baru): kartu Data Pengajuan read-only + catatan hasil survei, kartu
+  **Form Analisa** masih placeholder "Segera hadir". Hanya petugas yang ditugaskan boleh membuka
+  (selain itu 404). Breadcrumb "Simulasi > Analisa Kredit > Lembar Analisa" ditambahkan.
+- `SimulationController::analysis()` dihapus; rute `/analysis-simulation` kini ke `AnalysisController`.
+- Uji: tes baru `daftar_analisa_hanya_berkas_survey_milik_petugas` + suite penuh → **66 lulus**,
+  `yarn ui:check` OK, build bersih, verifikasi browser sebagai Ahmad Fauzi (berkas 00700004 tampil,
+  detail terbuka dengan hasil survei "LOKASI SESUAI, USAHA AKTIF").
+- CATATAN: pernah gagal 500 karena `use App\Http\Controllers\AnalysisController;` belum ada di
+  `routes/web.php` — selalu verifikasi import setelah menambah controller baru.
+
+## Selesai (2026-06-21, kerangka Lembar Analisa Kredit)
+- Halaman `/analysis-simulation/{id}` (`AnalysisDetail.vue`) tidak lagi placeholder tunggal: kini **kerangka 8 bagian** sesuai daftar user, isi tiap bagian masih KOSONG (dibahas satu per satu).
+- Bagian & sub-bagian di `resources/js/constants/analysis.js`: 1) Analisa Usaha (Perdagangan/Pertanian/Jasa/Lainnya) 2) Analisa Keuangan 3) Analisa Kepemilikan 4) Analisa Agunan (Kendaraan/Tanah/Lainnya) 5) Analisa 5C (Character/Capacity/Capital/Collateral/Condition) 6) Analisa Kualitatif (Karakter/Usaha/SWOT/Lainnya) 7) Memorandum (Kebutuhan/Usulan) 8) Administrasi.
+- UI/UX: komponen baru `components/composite/AnalysisSectionNav.vue` — daftar bagian bernomor + ikon, **vertikal sticky di desktop**, gulir horizontal di mobile; panel kanan berisi judul bagian, badge "Belum diisi", segmented tab sub-bagian, area kosong bergaris putus-putus, plus navigasi **Sebelumnya / Selanjutnya** + indikator "Bagian n dari 8" (di luar CardFooter agar tetap patuh aturan FormActions).
+- Belum ada perubahan backend/DB (belum ada kolom yang disimpan). `node scripts/ui-check.mjs` OK (47 berkas), `php artisan test` 66 lolos.

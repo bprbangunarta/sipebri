@@ -13,11 +13,6 @@ class SimulationController extends Controller
         return Inertia::render('CollateralSimulation');
     }
 
-    public function analysis(): Response
-    {
-        return Inertia::render('AnalysisSimulation');
-    }
-
     public function approval(): Response
     {
         return Inertia::render('ApprovalSimulation');

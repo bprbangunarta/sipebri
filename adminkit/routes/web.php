@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\AppearanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\BindingTypeController;
@@ -264,8 +265,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/schema-drafts/{schemaDraft}/columns/{column}', [SchemaDraftController::class, 'destroyColumn'])->name('schema-drafts.columns.destroy');
     });
 
-    Route::get('/analysis-simulation', [SimulationController::class, 'analysis'])
+    Route::get('/analysis-simulation', [AnalysisController::class, 'index'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
+
+    Route::get('/analysis-simulation/{loanApplication}', [AnalysisController::class, 'show'])
+        ->middleware('permission:analysis-simulation.manage')->name('analysis-simulation.show');
 
     Route::get('/survey-simulation', [SurveyController::class, 'index'])
         ->middleware('permission:survey-simulation.view')->name('survey-simulation.index');

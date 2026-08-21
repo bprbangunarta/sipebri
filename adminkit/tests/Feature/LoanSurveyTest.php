@@ -134,6 +134,29 @@ class LoanSurveyTest extends TestCase
         $this->assertSame(1, LoanSurveyPhoto::where('loan_application_id', $record->id)->count());
     }
 
+    /** Halaman Analisa memuat berkas SURVEY milik petugas yang ditugaskan. */
+    public function test_daftar_analisa_hanya_berkas_survey_milik_petugas(): void
+    {
+        $staff = $this->staff();
+        $other = User::role('Staff Analis')->where('id', '!=', $staff->id)->firstOrFail();
+
+        $mine = $this->scheduled();
+        $mine->forceFill(['status' => 'SURVEY'])->save();
+        $theirs = $this->scheduled(null, $other);
+        $theirs->forceFill(['status' => 'SURVEY'])->save();
+        $notYet = $this->scheduled();
+
+        $codes = collect($this->actingAs($staff)->get('/analysis-simulation')
+            ->viewData('page')['props']['records']['data'])->pluck('application_code');
+
+        $this->assertTrue($codes->contains($mine->application_code));
+        $this->assertFalse($codes->contains($theirs->application_code));
+        $this->assertFalse($codes->contains($notYet->application_code));
+
+        $this->get("/analysis-simulation/{$mine->id}")->assertOk();
+        $this->get("/analysis-simulation/{$theirs->id}")->assertNotFound();
+    }
+
     public function test_batas_lima_foto(): void
     {
         $record = $this->scheduled();

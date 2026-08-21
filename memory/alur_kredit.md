@@ -67,9 +67,17 @@ Menu `/survey-simulation` (`SurveyController`), izin `survey-simulation.view|man
 - Tabel: `loan_surveys`, `loan_survey_photos` (lat/long desimal 10,7 + `source` KAMERA/GALERI).
 - CATATAN PENTING: geolokasi browser hanya jalan di **HTTPS** — pastikan staging/produksi HTTPS.
 
-## 4. Analisa (BELUM)
-Menu `/analysis-simulation`. Menampilkan berkas SURVEY milik staff analis. Form dibahas bertahap.
-Rencana user: **v1 mengikuti sistem lama (sama untuk semua produk)**, v2 per produk.
+## 4. Analisa (DAFTAR SUDAH AKTIF — form masih placeholder, 23/06/2026)
+Menu `/analysis-simulation` (`AnalysisController`), izin `analysis-simulation.view|manage`.
+- **Daftar** menampilkan berkas berstatus **SURVEY** dengan `surveyor_id` = pengguna yang login
+  (termasuk berkas KTA yang melewati survei). Kolom: kode+tanggal, pemohon+NIK, produk+kasi analis,
+  plafon+jangka, badge jumlah survei (`nx survei` / `Tanpa survei`). Pencarian mencakup kode, nama,
+  NIK, plafon, jangka, dan produk.
+- **Detail** `/analysis-simulation/{id}` (`AnalysisDetail.vue`) hanya bisa dibuka petugas yang
+  ditugaskan (selain itu 404): kartu **Data Pengajuan** read-only (produk, plafon/jangka, suku bunga,
+  penggunaan, kantor, kasi analis, catatan hasil survei + pelaku & waktu) dan kartu **Form Analisa**
+  masih **placeholder "Segera hadir"**.
+- Rencana user: **v1 mengikuti sistem lama (sama untuk semua produk)**, v2 per produk.
 
 ## 5. Persetujuan Komite (BELUM)
 Menu `/approval-simulation`. Berkas selesai analisa, disaring sesuai peranan & kewenangan komite.
