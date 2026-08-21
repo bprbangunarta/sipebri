@@ -26,6 +26,22 @@ Menu **Penjadwalan** (`/scheduling-simulation`), izin `scheduling-simulation.vie
   Pembatalan oleh Staff Analis (`POST /scheduling-simulation/{id}/cancel`, izin
   `survey-simulation.manage`) wajib **alasan** → status selalu kembali **DIAJUKAN**.
 - Notifikasi: staff analis dapat penugasan; kasi analis dapat permintaan penjadwalan ulang.
+- **Berkas berstatus SURVEY juga tampil** di penjadwalan, untuk **SURVEI ULANG** bila hasil survei
+  dinilai kurang untuk analisa. Survei ulang TIDAK menghitung apa pun — hanya opini kelayakan dan
+  gerbang agar berkas bisa dianalisa.
+- **Tangga surveyor** (`SchedulingController::LADDER`, ditentukan dari jumlah baris `loan_surveys`):
+  survei ke-1 **Staff Analis** → ke-2 **Kasi Analis** → ke-3 **Kabag Analis** → ke-4 **Direktur
+  Bisnis** → ke-5 **Direktur Utama** (mentok di puncak). Daftar surveyor pada modal otomatis
+  menyaring peranan tahap tersebut; aksi tercatat `SURVEI ULANG`.
+  *Catatan lanjutan*: batas tangga per plafon (mis. 500jt cukup sampai Kabag) belum diterapkan —
+  rencananya memakai jenjang plafon komite kredit produk.
+- **Produk KTA (khusus)**: daftar surveyor = pengguna berperan **Kepala Kantor Kas / Customer
+  Service / Teller** di **kantor yang sama** dengan berkas, dan **survei lapangan dilewati** —
+  begitu jadwal disimpan status langsung **SURVEY** sehingga bisa langsung dianalisa (nasabah datang
+  sendiri ke kantor). Persetujuan tetap lewat komite.
+- **Aksi baris** memakai action item (⋯): *Jadwalkan / Jadwalkan Ulang / Jadwalkan Survei Ulang*,
+  *Riwayat*, dan — bila jadwal sudah ≥ 3 kali — **Batalkan Pengajuan** (wajib alasan,
+  `POST /scheduling-simulation/{id}/void`) → status **DIBATALKAN**, histori aksi `BATAL PENGAJUAN`.
 
 ## 3. Survei (SELESAI — 22/06/2026)
 Menu `/survey-simulation` (`SurveyController`), izin `survey-simulation.view|manage`.
@@ -42,6 +58,8 @@ Menu `/survey-simulation` (`SurveyController`), izin `survey-simulation.view|man
   pelaku, waktu), foto ditautkan ke survei, status berkas menjadi **SURVEY** dan **terkunci**
   (tidak bisa tambah/hapus foto atau simpan ulang).
 - **Batal & Minta Jadwal Ulang** memakai endpoint pembatalan penjadwalan (alasan wajib).
+- **Konsep draf**: foto & catatan berstatus draf (badge **Draf**) — foto bisa ditambah **dan dihapus**
+  (tombol berlabel *Hapus*) sampai tombol **Simpan & Ajukan** ditekan. Setelah itu terkunci.
 - Tabel: `loan_surveys`, `loan_survey_photos` (lat/long desimal 10,7 + `source` KAMERA/GALERI).
 - CATATAN PENTING: geolokasi browser hanya jalan di **HTTPS** — pastikan staging/produksi HTTPS.
 

@@ -202,9 +202,14 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
             <Card data-testid="survey-result">
                 <CardHeader class="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
                     <CardTitle>Hasil Survei</CardTitle>
-                    <Badge variant="secondary" class="font-medium">
-                        {{ props.photos.length }}/{{ props.maxPhotos }} foto
-                    </Badge>
+                    <div class="flex items-center gap-2">
+                        <Badge v-if="!locked" variant="secondary" class="font-medium" data-testid="survey-draft-badge">
+                            Draf
+                        </Badge>
+                        <Badge variant="secondary" class="font-medium">
+                            {{ props.photos.length }}/{{ props.maxPhotos }} foto
+                        </Badge>
+                    </div>
                 </CardHeader>
                 <CardContent class="form-dense space-y-3">
                     <div v-if="!locked" class="flex flex-wrap items-center gap-2">
@@ -228,6 +233,8 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                         </Button>
                         <span class="text-xs text-muted-foreground">
                             Koordinat lokasi diambil otomatis saat foto dipilih — izin lokasi harus diaktifkan.
+                            Foto &amp; catatan masih berstatus draf: bisa ditambah atau dihapus sampai Anda menekan
+                            Simpan &amp; Ajukan.
                         </span>
                         <input
                             ref="cameraInput"
@@ -273,13 +280,13 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                                 </div>
                                 <Button
                                     v-if="!locked && !photo.saved"
-                                    variant="ghost"
-                                    size="icon"
-                                    class="text-destructive hover:text-destructive"
+                                    variant="outline"
+                                    size="sm"
+                                    class="shrink-0 text-destructive hover:text-destructive"
                                     :data-testid="`survey-photo-delete-${photo.id}`"
                                     @click="removePhoto(photo.id)"
                                 >
-                                    <Trash2 class="size-3.5" />
+                                    <Trash2 class="size-4" /> Hapus
                                 </Button>
                             </div>
                         </div>
@@ -316,6 +323,9 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                         cancel-testid="survey-cancel"
                         cancel-label="Batal & Minta Jadwal Ulang"
                         submit-testid="survey-save"
+                        submit-label="Simpan & Ajukan"
+                        submit-busy-label="Menyimpan…"
+                        :submit-icon="Send"
                         :processing="saveForm.processing"
                         :disabled="!props.photos.length"
                         @cancel="showCancel = true"

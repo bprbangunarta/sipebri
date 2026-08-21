@@ -786,3 +786,25 @@ User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
 - `/app/memory/test_credentials.md`: izin bawaan Kasi Analis & Staff Analis + akun uji alur kredit.
 - Catatan domain lain tetap: `alur_kredit.md`, `integrasi_codex.md`, `ui_rules.md`,
   `env_notes.md`, `sinkronisasi_staging.md`, `pengajuan_kredit.md`, `skema_migrasi.md`.
+
+## Selesai (2026-06-23, revisi hasil pengujian user: penjadwalan & survei)
+- **Penjadwalan kini juga menampilkan berkas berstatus SURVEY** untuk **survei ulang**.
+  Tangga surveyor (rekomendasi yang disetujui): survei ke-1 Staff Analis → ke-2 Kasi Analis →
+  ke-3 Kabag Analis → ke-4 Direktur Bisnis → ke-5 Direktur Utama, ditentukan dari jumlah
+  `loan_surveys`; daftar surveyor pada modal otomatis menyaring peranan tahap tersebut dan aksi
+  tercatat `SURVEI ULANG`. Tidak ada perhitungan — hanya opini kelayakan sebagai gerbang analisa.
+  BELUM: pembatasan tangga berdasarkan plafon (rencana: pakai jenjang plafon komite produk).
+- **Modal**: judul jadi "Penjadwalan Survey", kolom "Staff Analis" → **"Nama Surveyor"**,
+  ditambah keterangan kewenangan tahap ini.
+- **Produk KTA**: surveyor = Kepala Kantor Kas / Customer Service / Teller **di kantor yang sama**
+  dengan berkas, dan **survei lapangan dilewati** (jadwal disimpan → status langsung SURVEY,
+  notifikasi mengarah ke Analisa). Persetujuan tetap lewat komite.
+- **Aksi baris jadi action item (⋯)**: Jadwalkan / Jadwalkan Ulang / Jadwalkan Survei Ulang,
+  Riwayat, dan **Batalkan Pengajuan** (muncul bila jadwal ≥ 3 kali, wajib alasan) → status
+  DIBATALKAN, histori `BATAL PENGAJUAN`, notifikasi ke pemegang `loan-simulation.manage`.
+- **Survei**: konsep draf ditegaskan (badge **Draf**, tombol **Simpan & Ajukan**) dan tombol hapus
+  foto dibuat jelas berlabel **Hapus** (fungsinya sudah bekerja — diverifikasi di browser:
+  unggah → 1 foto, hapus → 0 foto).
+- Uji: `php artisan test` → **65 lulus** (3 tes baru: KTA tanpa survei, survei ulang naik ke Kasi
+  Analis, pembatalan pengajuan), `yarn ui:check` OK, build bersih, verifikasi browser sebagai
+  Kasi Analis & Staff Analis.

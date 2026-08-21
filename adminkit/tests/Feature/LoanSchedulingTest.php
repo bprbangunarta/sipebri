@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\CommitteePath;
 use App\Models\LoanApplication;
 use App\Models\LoanSchedule;
+use App\Models\LoanSurvey;
 use App\Models\Notification;
 use App\Models\Office;
 use App\Models\Product;
@@ -163,6 +164,98 @@ class LoanSchedulingTest extends TestCase
         $row = collect($this->get('/scheduling-simulation')->viewData('page')['props']['records']['data'])
             ->firstWhere('application_code', $record->application_code);
         $this->assertTrue($row['over_limit']);
+    }
+
+    /** Produk KTA: surveyor dari peranan kantor & survei lapangan dilewati. */
+    public function test_produk_kta_dijadwalkan_tanpa_survei_lapangan(): void
+    {
+        $kasi = $this->kasi();
+        $office = Office::where('name', 'Subang')->firstOrFail();
+        $record = $this->submitted($kasi);
+        $record->forceFill([
+            'product_id' => Product::where('alias', 'KTA')->firstOrFail()->id,
+            'office_id' => $office->id,
+        ])->save();
+
+        $row = collect($this->actingAs($kasi)->get('/scheduling-simulation')
+            ->viewData('page')['props']['records']['data'])
+            ->firstWhere('application_code', $record->application_code);
+
+        $this->assertTrue($row['walk_in']);
+        $petugas = User::whereIn('id', collect($row['surveyor_options'])->pluck('value'))->get();
+        $this->assertTrue($petugas->isNotEmpty());
+        foreach ($petugas as $user) {
+            $this->assertSame($office->name, $user->office);
+            $this->assertTrue($user->hasAnyRole(['Kepala Kantor Kas', 'Customer Service', 'Teller']));
+        }
+
+        // Staff Analis justru ditolak untuk produk KTA.
+        $this->post("/scheduling-simulation/{$record->id}", [
+            'survey_date' => now()->addDay()->toDateString(),
+            'surveyor_id' => $this->staff()->id,
+        ])->assertSessionHasErrors('surveyor_id');
+
+        $this->post("/scheduling-simulation/{$record->id}", [
+            'survey_date' => now()->addDay()->toDateString(),
+            'surveyor_id' => $petugas->first()->id,
+        ])->assertSessionHas('success');
+
+        $this->assertSame('SURVEY', $record->refresh()->status);
+    }
+
+    /** Survei ulang naik ke pejabat yang lebih tinggi dan tercatat sebagai SURVEI ULANG. */
+    public function test_survei_ulang_naik_ke_kasi_analis(): void
+    {
+        $kasi = $this->kasi();
+        $record = $this->submitted($kasi);
+        $record->forceFill(['status' => 'SURVEY'])->save();
+        LoanSurvey::create([
+            'loan_application_id' => $record->id,
+            'surveyor_id' => $this->staff()->id,
+            'surveyor_name' => $this->staff()->name,
+            'created_by' => $this->staff()->name,
+        ]);
+
+        $row = collect($this->actingAs($kasi)->get('/scheduling-simulation')
+            ->viewData('page')['props']['records']['data'])
+            ->firstWhere('application_code', $record->application_code);
+
+        $this->assertTrue($row['resurvey']);
+        $this->assertSame('Kasi Analis', $row['surveyor_role']);
+
+        $this->post("/scheduling-simulation/{$record->id}", [
+            'survey_date' => now()->addDay()->toDateString(),
+            'surveyor_id' => $this->staff()->id,
+        ])->assertSessionHasErrors('surveyor_id');
+
+        $this->post("/scheduling-simulation/{$record->id}", [
+            'survey_date' => now()->addDay()->toDateString(),
+            'surveyor_id' => $kasi->id,
+        ])->assertSessionHas('success');
+
+        $record->refresh();
+        $this->assertSame('PENJADWALAN', $record->status);
+        $this->assertSame(LoanSchedule::ACTION_RESURVEY, $record->schedules()->get()->last()->action);
+    }
+
+    /** Pengajuan bisa dibatalkan dengan alasan, histori tetap utuh. */
+    public function test_pengajuan_bisa_dibatalkan_dengan_alasan(): void
+    {
+        $kasi = $this->kasi();
+        $record = $this->submitted($kasi);
+        $this->actingAs($kasi);
+
+        $this->post("/scheduling-simulation/{$record->id}/void", [])
+            ->assertSessionHasErrors('reason');
+
+        $this->post("/scheduling-simulation/{$record->id}/void", ['reason' => 'Nasabah mundur'])
+            ->assertSessionHas('success');
+
+        $record->refresh();
+        $this->assertSame('DIBATALKAN', $record->status);
+        $last = $record->schedules()->get()->last();
+        $this->assertSame(LoanSchedule::ACTION_VOID, $last->action);
+        $this->assertSame('Nasabah mundur', $last->reason);
     }
 
     public function test_berkas_diajukan_tidak_bisa_diubah_lagi(): void

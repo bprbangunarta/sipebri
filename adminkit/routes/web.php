@@ -290,6 +290,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:scheduling-simulation.manage')->group(function () {
         Route::post('/scheduling-simulation/{loanApplication}', [SchedulingController::class, 'store'])
             ->name('scheduling-simulation.store');
+        Route::post('/scheduling-simulation/{loanApplication}/void', [SchedulingController::class, 'void'])
+            ->name('scheduling-simulation.void');
     });
 
     Route::post('/scheduling-simulation/{loanApplication}/cancel', [SchedulingController::class, 'cancel'])

@@ -17,6 +17,10 @@ class LoanSchedule extends Model
 
     public const ACTION_CANCEL = 'BATAL';
 
+    public const ACTION_RESURVEY = 'SURVEI ULANG';
+
+    public const ACTION_VOID = 'BATAL PENGAJUAN';
+
     /** Batas penjadwalan yang disarankan; melebihi ini hanya memunculkan peringatan. */
     public const MAX_SCHEDULES = 3;
 

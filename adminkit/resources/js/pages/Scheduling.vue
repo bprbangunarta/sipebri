@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { CalendarCheck, CalendarClock, History, Loader2, Save, X } from 'lucide-vue-next';
+import { Ban, CalendarCheck, CalendarClock, History, Send } from 'lucide-vue-next';
 import { Head, useForm } from '@inertiajs/vue3';
 
 import FormActions from '@/components/composite/FormActions.vue';
@@ -13,6 +13,8 @@ import Dialog from '@/components/ui/Dialog.vue';
 import Input from '@/components/ui/Input.vue';
 import Label from '@/components/ui/Label.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
+import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
+import RowActions from '@/components/composite/RowActions.vue';
 import { ACTION } from '@/constants/labels';
 import { rupiah } from '@/constants/committee';
 import { useServerTable } from '@/composables/useServerTable';
@@ -21,7 +23,6 @@ const props = defineProps({
     records: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
     statuses: { type: Array, default: () => [] },
-    surveyorOptions: { type: Array, default: () => [] },
     maxSchedules: { type: Number, default: 3 },
 });
 
@@ -74,13 +75,29 @@ const openSchedule = (row) => {
     scheduling.value = row;
 };
 
+const surveyorOptions = computed(() => scheduling.value?.surveyor_options ?? []);
+
 const submit = () =>
     form.post(`/scheduling-simulation/${scheduling.value.id}`, {
         preserveScroll: true,
         onSuccess: () => (scheduling.value = null),
     });
 
+const scheduleLabel = (row) => {
+    if (row.resurvey) return 'Jadwalkan Survei Ulang';
+
+    return row.status === 'PENJADWALAN' ? 'Jadwalkan Ulang' : 'Jadwalkan';
+};
+
 const history = ref(null);
+
+const voiding = ref(null);
+const voidForm = useForm({ reason: '' });
+const submitVoid = () =>
+    voidForm.post(`/scheduling-simulation/${voiding.value.id}/void`, {
+        preserveScroll: true,
+        onSuccess: () => (voiding.value = null),
+    });
 
 const ACTION_TONE = {
     JADWAL: 'secondary',
@@ -174,31 +191,29 @@ const ACTION_TONE = {
                 </template>
 
                 <template #cell-actions="{ row }">
-                    <div class="flex items-center justify-end gap-1">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            title="Histori penjadwalan"
-                            :data-testid="`scheduling-history-${row.id}`"
-                            @click="history = row"
-                        >
-                            <History class="size-4" />
-                        </Button>
-                        <Button
-                            size="sm"
-                            :data-testid="`scheduling-set-${row.id}`"
-                            @click="openSchedule(row)"
-                        >
+                    <RowActions :testid="`scheduling-actions-${row.id}`">
+                        <DropdownMenuItem :data-testid="`scheduling-set-${row.id}`" @click="openSchedule(row)">
                             <CalendarCheck class="size-4" />
-                            {{ row.status === 'PENJADWALAN' ? 'Jadwal Ulang' : 'Jadwalkan' }}
-                        </Button>
-                    </div>
+                            {{ scheduleLabel(row) }}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem :data-testid="`scheduling-history-${row.id}`" @click="history = row">
+                            <History class="size-4" /> Riwayat
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            v-if="row.over_limit"
+                            class="text-destructive"
+                            :data-testid="`scheduling-void-${row.id}`"
+                            @click="voiding = row"
+                        >
+                            <Ban class="size-4" /> Batalkan Pengajuan
+                        </DropdownMenuItem>
+                    </RowActions>
                 </template>
             </DataTableCard>
 
             <Dialog
                 :open="Boolean(scheduling)"
-                :title="`Jadwal Survei ${scheduling?.application_code ?? ''}`"
+                :title="`Penjadwalan Survey ${scheduling?.application_code ?? ''}`"
                 @update:open="scheduling = null"
             >
                 <form class="form-dense space-y-3" @submit.prevent="submit">
@@ -215,15 +230,19 @@ const ACTION_TONE = {
                     </div>
 
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Staff Analis <span class="text-destructive" aria-hidden="true">*</span></Label>
+                        <Label>Nama Surveyor <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
                             v-model="form.surveyor_id"
-                            :options="props.surveyorOptions"
+                            :options="surveyorOptions"
                             placeholder="-- Pilih --"
                             data-testid="scheduling-surveyor"
                         />
                         <p v-if="form.errors.surveyor_id" class="text-xs font-medium text-destructive">
                             {{ form.errors.surveyor_id }}
+                        </p>
+                        <p v-else class="text-xs text-muted-foreground" data-testid="scheduling-surveyor-role">
+                            Kewenangan tahap ini: {{ scheduling?.surveyor_role }}
+                            <template v-if="scheduling?.walk_in"> — kantor {{ scheduling?.office_label }}</template>
                         </p>
                     </div>
 
@@ -241,6 +260,23 @@ const ACTION_TONE = {
                         </p>
                     </div>
 
+                    <p
+                        v-if="scheduling?.walk_in"
+                        class="rounded-md border bg-muted/40 p-2 text-xs"
+                        data-testid="scheduling-walkin-note"
+                    >
+                        Produk KTA: nasabah datang sendiri ke kantor, jadi survei lapangan dilewati —
+                        berkas langsung siap dianalisa setelah jadwal disimpan.
+                    </p>
+                    <p
+                        v-else-if="scheduling?.resurvey"
+                        class="rounded-md border bg-muted/40 p-2 text-xs"
+                        data-testid="scheduling-resurvey-note"
+                    >
+                        Survei ke-{{ (scheduling?.survey_count ?? 0) + 1 }}: hasil survei sebelumnya dinilai
+                        kurang, jadi survei ulang dilakukan pejabat yang lebih tinggi. Tidak ada perhitungan —
+                        hanya opini kelayakan sebagai gerbang menuju analisa.
+                    </p>
                     <p
                         v-if="scheduling?.over_limit"
                         class="rounded-md border border-destructive/40 bg-destructive/10 p-2 text-xs font-medium text-destructive"
@@ -261,6 +297,39 @@ const ACTION_TONE = {
                         :processing="form.processing"
                         @cancel="scheduling = null"
                         @submit="submit"
+                    />
+                </template>
+            </Dialog>
+
+            <Dialog
+                :open="Boolean(voiding)"
+                :title="`Batalkan Pengajuan ${voiding?.application_code ?? ''}`"
+                @update:open="voiding = null"
+            >
+                <div class="form-dense space-y-[var(--item-gap)]">
+                    <Label for="void-reason">
+                        Alasan Pembatalan <span class="text-destructive" aria-hidden="true">*</span>
+                    </Label>
+                    <Input id="void-reason" v-model="voidForm.reason" maxlength="255" data-testid="scheduling-void-reason" />
+                    <p v-if="voidForm.errors.reason" class="text-xs font-medium text-destructive">
+                        {{ voidForm.errors.reason }}
+                    </p>
+                    <p v-else class="text-xs text-muted-foreground">
+                        Berkas menjadi DIBATALKAN. Seluruh riwayat penjadwalan tetap tersimpan.
+                    </p>
+                </div>
+
+                <template #footer>
+                    <FormActions
+                        cancel-testid="scheduling-void-close"
+                        submit-testid="scheduling-void-submit"
+                        submit-variant="destructive"
+                        submit-label="Batalkan Pengajuan"
+                        submit-busy-label="Membatalkan…"
+                        :submit-icon="Ban"
+                        :processing="voidForm.processing"
+                        @cancel="voiding = null"
+                        @submit="submitVoid"
                     />
                 </template>
             </Dialog>
