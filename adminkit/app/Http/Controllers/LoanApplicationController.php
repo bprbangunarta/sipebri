@@ -308,8 +308,18 @@ class LoanApplicationController extends Controller
             'nasabah' => (bool) $this->customerCache,
             'pengajuan' => (bool) $r->product_id && (bool) $r->committee_path_id && (bool) $r->office_id
                 && (bool) $r->supervisor_id && $r->requested_amount > 0 && $r->requested_tenor > 0,
-            'jaminan' => $r->collaterals()->exists(),
+            'jaminan' => ! $this->collateralRequired($r) || $r->collaterals()->exists(),
         ];
+    }
+
+    /** Agunan wajib bila parameter produk (SK Direksi) menyatakan demikian. */
+    private function collateralRequired(LoanApplication $r): bool
+    {
+        if (! $r->product_id) {
+            return false;
+        }
+
+        return (bool) ProductParameter::where('product_id', $r->product_id)->value('collateral_required');
     }
 
     private function references(): array
@@ -377,6 +387,7 @@ class LoanApplicationController extends Controller
                 'installment_id', 'interest_rate', 'cif_number', 'supervisor_id',
             ]),
             'checklist' => $this->checklist($r),
+            'collateral_required' => $this->collateralRequired($r),
         ];
     }
 

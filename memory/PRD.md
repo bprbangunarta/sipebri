@@ -664,3 +664,14 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - Uji: `php artisan test` → **48 lulus** (tes baru `lookup_reports_api_failure`, seluruh alur
   memakai `Http::fake`). Verifikasi nyata lewat UI: NIK `3213070701980004` → **ZULFADLI RIZAL**,
   CIF `01.1.038586`, berkas `00700002` terbentuk. Detail: `/app/memory/integrasi_codex.md`.
+
+## Perbaikan (2026-06-22, tombol Ajukan mengabaikan parameter "Agunan Wajib") — BUG SAYA
+- Penyebab: `LoanApplicationController::checklist()` selalu mensyaratkan minimal satu agunan,
+  padahal parameter produk punya `collateral_required`. Produk seperti **KTA (Kredit Tanpa Agunan)**
+  jadi tidak bisa diajukan.
+- Perbaikan: checklist `jaminan` = `! collateral_required || ada agunan`, dibaca dari
+  `product_parameters.collateral_required`. Kartu **Data Agunan** kini menampilkan badge
+  **Wajib / Tidak wajib** (`data-testid=loan-detail-collateral-requirement`).
+- Uji: tes baru `test_confirm_follows_product_collateral_requirement` (tanpa agunan → sukses bila
+  tidak wajib, ditolak bila wajib). `php artisan test` → **49 lulus**. Verifikasi browser pada berkas
+  `00700003` (produk KTA): tombol **Ajukan** aktif, badge "Tidak wajib" tampil.

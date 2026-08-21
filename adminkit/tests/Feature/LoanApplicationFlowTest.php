@@ -272,6 +272,36 @@ class LoanApplicationFlowTest extends TestCase
         $this->assertSoftDeleted('loan_applications', ['id' => $record->id]);
     }
 
+    /** Agunan hanya wajib bila parameter produk menyatakan demikian. */
+    public function test_confirm_follows_product_collateral_requirement(): void
+    {
+        $user = $this->superadmin();
+        $this->actingAs($user);
+        $this->post('/loan-simulation', ['nik' => '3213011203950001']);
+        $record = LoanApplication::latest('id')->first();
+
+        $product = Product::first();
+        $product->parameter()->updateOrCreate([], ['collateral_required' => false]);
+        $record->forceFill([
+            'product_id' => $product->id,
+            'committee_path_id' => CommitteePath::firstOrFail()->id,
+            'office_id' => Office::firstOrFail()->id,
+            'supervisor_id' => $user->id,
+            'requested_amount' => 5_000_000,
+            'requested_tenor' => 10,
+        ])->save();
+
+        // Tanpa agunan → tetap boleh diajukan.
+        $this->post("/loan-simulation/{$record->id}/confirm")->assertSessionHas('success');
+        $this->assertSame('DIAJUKAN', $record->refresh()->status);
+
+        // Produk yang mewajibkan agunan → ditolak.
+        $product->parameter()->updateOrCreate([], ['collateral_required' => true]);
+        $record->forceFill(['status' => 'DRAFT'])->save();
+        $this->post("/loan-simulation/{$record->id}/confirm")->assertSessionHas('error');
+        $this->assertSame('DRAFT', $record->refresh()->status);
+    }
+
     /** Halaman berkas tetap terbuka setelah berkas diajukan. */
     public function test_show_after_confirm_does_not_crash(): void
     {

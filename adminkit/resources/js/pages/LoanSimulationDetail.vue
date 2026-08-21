@@ -4,6 +4,7 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, FileInput, Plus, Save, Send, ShieldCheck, Trash2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
+import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
 import Card from '@/components/ui/Card.vue';
 import CardContent from '@/components/ui/CardContent.vue';
@@ -355,7 +356,16 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
             </form>
 
             <Card data-testid="loan-detail-collaterals">
-                <CardHeader><CardTitle>Data Agunan</CardTitle></CardHeader>
+                <CardHeader class="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
+                    <CardTitle>Data Agunan</CardTitle>
+                    <Badge
+                        :variant="props.record.collateral_required ? 'destructive' : 'secondary'"
+                        class="font-medium"
+                        data-testid="loan-detail-collateral-requirement"
+                    >
+                        {{ props.record.collateral_required ? 'Wajib' : 'Tidak wajib' }}
+                    </Badge>
+                </CardHeader>
                 <CardContent class="form-dense space-y-3">
                     <div v-if="props.canManage" class="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <Combobox
