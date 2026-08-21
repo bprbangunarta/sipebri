@@ -4,6 +4,9 @@ import { Head, router } from '@inertiajs/vue3';
 import { ArrowLeft, ChevronLeft, ChevronRight, PencilRuler } from 'lucide-vue-next';
 
 import AnalysisSectionNav from '@/components/composite/AnalysisSectionNav.vue';
+import BusinessList from '@/components/composite/analysis/BusinessList.vue';
+import FinanceForm from '@/components/composite/analysis/FinanceForm.vue';
+import OwnershipForm from '@/components/composite/analysis/OwnershipForm.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -16,6 +19,9 @@ import { rupiah } from '@/constants/committee';
 
 const props = defineProps({
     record: { type: Object, required: true },
+    businesses: { type: Array, default: () => [] },
+    sheet: { type: Object, required: true },
+    options: { type: Object, required: true },
 });
 
 const activeKey = ref(ANALYSIS_SECTIONS[0].key);
@@ -30,6 +36,16 @@ const select = (key) => {
     activeKey.value = key;
 };
 const step = (delta) => select(ANALYSIS_SECTIONS[index.value + delta].key);
+
+/** Sub-bagian Analisa Usaha = tipe usaha pada tabel `analysis_businesses`. */
+const businessType = computed(() => (sub.value ?? '').toUpperCase());
+const typeBusinesses = computed(() => props.businesses.filter((b) => b.type === businessType.value));
+
+const filled = computed(() => ({
+    usaha: props.businesses.length > 0,
+    keuangan: props.sheet.metrics.household_cost > 0 || props.sheet.obligations.length > 0,
+    kepemilikan: !!props.sheet.asset_house || props.sheet.assets.length > 0,
+}));
 </script>
 
 <template>
@@ -111,8 +127,12 @@ const step = (delta) => select(ANALYSIS_SECTIONS[index.value + delta].key);
                     <Card data-testid="analysis-section-panel">
                         <CardHeader class="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
                             <CardTitle>{{ section.label }}</CardTitle>
-                            <Badge variant="secondary" class="font-medium" data-testid="analysis-section-state">
-                                Belum diisi
+                            <Badge
+                                :variant="filled[activeKey] ? 'default' : 'secondary'"
+                                class="font-medium"
+                                data-testid="analysis-section-state"
+                            >
+                                {{ filled[activeKey] ? 'Sudah diisi' : 'Belum diisi' }}
                             </Badge>
                         </CardHeader>
                         <CardContent class="space-y-3">
@@ -138,7 +158,30 @@ const step = (delta) => select(ANALYSIS_SECTIONS[index.value + delta].key);
                                 </button>
                             </div>
 
+                            <BusinessList
+                                v-if="activeKey === 'usaha'"
+                                :key="businessType"
+                                :application-id="props.record.id"
+                                :type="businessType"
+                                :type-label="subLabel"
+                                :businesses="typeBusinesses"
+                            />
+
+                            <FinanceForm
+                                v-else-if="activeKey === 'keuangan'"
+                                :application-id="props.record.id"
+                                :sheet="props.sheet"
+                            />
+
+                            <OwnershipForm
+                                v-else-if="activeKey === 'kepemilikan'"
+                                :application-id="props.record.id"
+                                :sheet="props.sheet"
+                                :assets="props.options.assets"
+                            />
+
                             <div
+                                v-else
                                 class="flex min-h-[260px] flex-col items-center justify-center gap-2 rounded-md border border-dashed p-6 text-center"
                                 data-testid="analysis-section-empty"
                             >

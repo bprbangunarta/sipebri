@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /** Berkas pengajuan kredit: tahap pendaftaran sampai keputusan komite. */
@@ -82,6 +83,16 @@ class LoanApplication extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(LoanSurveyPhoto::class)->orderBy('id');
+    }
+
+    public function businesses(): HasMany
+    {
+        return $this->hasMany(AnalysisBusiness::class)->orderBy('id');
+    }
+
+    public function analysisSheet(): HasOne
+    {
+        return $this->hasOne(AnalysisSheet::class);
     }
 
     public function collaterals(): BelongsToMany

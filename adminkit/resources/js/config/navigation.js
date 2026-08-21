@@ -46,6 +46,10 @@ const ROUTE_TRAILS = [
     [/^\/regions$/, ['Referensi', 'Data Wilayah']],
     [/^\/analysis-simulation$/, ['Simulasi', 'Analisa Kredit']],
     [/^\/analysis-simulation\/\d+$/, ['Simulasi', 'Analisa Kredit', 'Lembar Analisa']],
+    [
+        /^\/analysis-simulation\/\d+\/businesses\/\d+$/,
+        ['Simulasi', 'Analisa Kredit', 'Lembar Analisa', 'Analisa Usaha'],
+    ],
     [/^\/scheduling-simulation$/, ['Simulasi', 'Penjadwalan Survei']],
     [/^\/survey-simulation$/, ['Simulasi', 'Survei Kredit']],
     [/^\/survey-simulation\/\d+$/, ['Simulasi', 'Survei Kredit', 'Lembar Survei']],

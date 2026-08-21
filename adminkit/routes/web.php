@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AnalysisBusinessController;
 use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\AppearanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -268,8 +269,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/analysis-simulation', [AnalysisController::class, 'index'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
 
-    Route::get('/analysis-simulation/{loanApplication}', [AnalysisController::class, 'show'])
-        ->middleware('permission:analysis-simulation.manage')->name('analysis-simulation.show');
+    Route::middleware('permission:analysis-simulation.manage')->scopeBindings()->group(function () {
+        Route::get('/analysis-simulation/{loanApplication}', [AnalysisController::class, 'show'])
+            ->name('analysis-simulation.show');
+        Route::put('/analysis-simulation/{loanApplication}/finance', [AnalysisController::class, 'updateFinance'])
+            ->name('analysis-simulation.finance');
+        Route::put('/analysis-simulation/{loanApplication}/ownership', [AnalysisController::class, 'updateOwnership'])
+            ->name('analysis-simulation.ownership');
+        Route::post('/analysis-simulation/{loanApplication}/businesses', [AnalysisBusinessController::class, 'store'])
+            ->name('analysis-simulation.businesses.store');
+        Route::get('/analysis-simulation/{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'show'])
+            ->name('analysis-simulation.businesses.show');
+        Route::put('/analysis-simulation/{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'update'])
+            ->name('analysis-simulation.businesses.update');
+        Route::delete('/analysis-simulation/{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'destroy'])
+            ->name('analysis-simulation.businesses.destroy');
+    });
 
     Route::get('/survey-simulation', [SurveyController::class, 'index'])
         ->middleware('permission:survey-simulation.view')->name('survey-simulation.index');

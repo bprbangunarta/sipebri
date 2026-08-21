@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnalysisBusiness;
+use App\Models\AnalysisSheet;
+use App\Models\AnalysisSheetItem;
 use App\Models\LoanApplication;
 use App\Models\LoanSurvey;
 use App\Support\TableQuery;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -13,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Analisa Kredit — tahap 4 dari alur kredit.
  * Menampilkan berkas berstatus SURVEY milik petugas yang ditugaskan.
- * Form analisa belum dibangun (halaman detail masih placeholder).
+ * Lembar analisa berisi 8 bagian; Analisa Usaha dikelola AnalysisBusinessController.
  */
 class AnalysisController extends Controller
 {
@@ -49,16 +55,125 @@ class AnalysisController extends Controller
         ]);
     }
 
-    /** Lembar analisa — masih placeholder sampai formnya dibahas. */
+    /** Lembar analisa berkas. */
     public function show(Request $request, LoanApplication $loanApplication): Response
     {
-        if ($loanApplication->surveyor_id !== $request->user()->id) {
-            throw new NotFoundHttpException('Berkas ini bukan penugasan Anda.');
-        }
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $businesses = AnalysisBusiness::where('loan_application_id', $loanApplication->id)
+            ->orderBy('id')
+            ->get(['id', 'type', 'code', 'name', 'revenue', 'expense', 'net_profit', 'monthly_income'])
+            ->map(fn (AnalysisBusiness $b) => [
+                'id' => $b->id,
+                'type' => $b->type,
+                'code' => $b->code,
+                'name' => $b->name,
+                'revenue' => (int) $b->revenue,
+                'expense' => (int) $b->expense,
+                'net_profit' => (int) $b->net_profit,
+                'monthly_income' => (int) $b->monthly_income,
+            ])
+            ->all();
 
         return Inertia::render('AnalysisDetail', [
             'record' => $this->row($loanApplication),
+            'businesses' => $businesses,
+            'sheet' => $this->sheetPayload($this->sheet($loanApplication)),
+            'options' => [
+                'assets' => AnalysisSheet::ASSETS,
+            ],
         ]);
+    }
+
+    /** Analisa Keuangan: biaya rumah tangga + kewajiban lain. */
+    public function updateFinance(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $money = ['nullable', 'integer', 'min:0', 'max:999999999999'];
+
+        $data = $request->validate(array_merge(
+            array_fill_keys(AnalysisSheet::HOUSEHOLD, $money),
+            [
+                'items' => ['nullable', 'array', 'max:20'],
+                'items.*.name' => ['required', 'string', 'max:150'],
+                'items.*.amount' => $money,
+            ],
+        ), [], ['items.*.name' => 'nama kewajiban', 'items.*.amount' => 'nominal kewajiban']);
+
+        $sheet = $this->sheet($loanApplication);
+        $sheet->fill(collect($data)->except('items')->map(fn ($v) => $v ?? 0)->all())->save();
+
+        $this->syncItems($sheet, 'OBLIGATION', $data['items'] ?? []);
+
+        return back()->with('success', 'Analisa keuangan disimpan.');
+    }
+
+    /** Analisa Kepemilikan: harta pemohon. */
+    public function updateOwnership(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $rules = collect(AnalysisSheet::ASSETS)
+            ->map(fn (array $options) => ['nullable', Rule::in($options)])
+            ->all();
+
+        $data = $request->validate(array_merge($rules, [
+            'items' => ['nullable', 'array', 'max:20'],
+            'items.*.name' => ['required', 'string', 'max:150'],
+        ]), [], ['items.*.name' => 'nama harta']);
+
+        $sheet = $this->sheet($loanApplication);
+        $sheet->fill(collect($data)->except('items')->all())->save();
+
+        $this->syncItems($sheet, 'ASSET', $data['items'] ?? []);
+
+        return back()->with('success', 'Analisa kepemilikan disimpan.');
+    }
+
+    private function sheet(LoanApplication $r): AnalysisSheet
+    {
+        return AnalysisSheet::firstOrCreate(['loan_application_id' => $r->id]);
+    }
+
+    private function syncItems(AnalysisSheet $sheet, string $group, array $items): void
+    {
+        AnalysisSheetItem::where('analysis_sheet_id', $sheet->id)->where('group', $group)->delete();
+
+        foreach (array_values($items) as $sort => $item) {
+            AnalysisSheetItem::create([
+                'analysis_sheet_id' => $sheet->id,
+                'group' => $group,
+                'name' => Str::upper($item['name']),
+                'amount' => $item['amount'] ?? 0,
+                'sort' => $sort,
+            ]);
+        }
+    }
+
+    private function sheetPayload(AnalysisSheet $sheet): array
+    {
+        $sheet->load('items');
+
+        return [
+            ...$sheet->only([...AnalysisSheet::HOUSEHOLD, ...array_keys(AnalysisSheet::ASSETS)]),
+            'obligations' => $sheet->items->where('group', 'OBLIGATION')
+                ->map(fn (AnalysisSheetItem $i) => ['name' => $i->name, 'amount' => (int) $i->amount])
+                ->values()->all(),
+            'assets' => $sheet->items->where('group', 'ASSET')
+                ->map(fn (AnalysisSheetItem $i) => ['name' => $i->name])
+                ->values()->all(),
+            'metrics' => $sheet->metrics(),
+            'updated_at' => $sheet->updated_at?->translatedFormat('d M Y H:i'),
+            'updated_by' => $sheet->updated_by ?? $sheet->created_by,
+        ];
+    }
+
+    private function authorizeAnalyst(Request $request, LoanApplication $r): void
+    {
+        if ($r->surveyor_id !== $request->user()->id) {
+            throw new NotFoundHttpException('Berkas ini bukan penugasan Anda.');
+        }
     }
 
     private function row(LoanApplication $r): array

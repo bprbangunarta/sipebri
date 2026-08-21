@@ -1,0 +1,54 @@
+{
+  "summary": "Full backend (PHPUnit/Feature) + frontend (Playwright, desktop 1920x1080, dark mode, mobile 390px) testing of the new Analisa Kredit module (Analisa Usaha 4 tipe, Analisa Keuangan, Analisa Kepemilikan) in /app/adminkit. Added 10 new feature tests (tests/Feature/AnalysisModuleExtraTest.php) covering Jasa/Lainnya metrics, per-group item sync, ownership persistence, delete, validation and authorization; full suite now 81 passed / 1 failed (the single failure is a real minor defect, see backend_issues.minor). E2E as Staff Analis 350010923 on berkas 11: created Perdagangan/Pertanian/Jasa/Lainnya usaha with auto codes (AUPG00002/AUP00001/AUJ00002/AUL00001), verified every calculated field matches the legacy examples (margin 40,63% -> omset 492.205, laba bulanan 4.266.150, hasil bersih 3.816.150; panen 65x650k = 42.250.000, biaya 14.878.571, pendapatan perbulan 2.728.572; jasa 5jt-1jt = 4jt; lainnya 8jt-2jt-300rb+500rb = 6.200.000), persistence after reload, income/expense rows not overwriting each other, Analisa Keuangan aggregation per tipe (total 41.387.579 -> keuangan perbulan 39.067.579), Analisa Kepemilikan (all 8 combobox + Harta Lain persist), badge 'Belum diisi' -> 'Sudah diisi', delete usaha (redirect back + row removed), 404 for a berkas that is not the analyst's assignment and for a non-existent business id, dark mode and 390px mobile with no horizontal overflow. All test data created during the run was cleaned up.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "PUT /analysis-simulation/{app}/businesses/{business}",
+        "issue": "AnalysisBusinessController::update() maps every field with `$value ?? 0`, so clearing a nullable *string* select stores the literal '0': sending business_length=null persists '0' (test test_business_length_null_is_not_stored_as_zero fails). Same risk for economy_sector, plant_type, business_kind and address. Apply the `?? 0` default only to numeric columns (money/area/qty) and keep null for enum/text columns; the stored '0' is not a member of LENGTHS so the Combobox will render nothing while the DB holds junk."
+      },
+      {
+        "endpoint": "AnalysisSheet::metrics() (Bagian 2 Analisa Keuangan)",
+        "issue": "Pendapatan Usaha sums AnalysisBusiness.net_profit for ALL types, but for PERTANIAN net_profit is the profit of a full 6-month harvest cycle (Rp 27.696.429 in the test), while the sheet presents a PER MONTH capability (Keuangan Perbulan). Verified in UI: kartu 'Usaha Pertanian' showed Rp 27.371.429 and Keuangan Perbulan Rp 39.067.579, i.e. farm income is counted ~6x too high. The per-month figure (farmMetrics()['monthly_income']) is already computed but never used by the sheet. Please confirm against the legacy form."
+      },
+      {
+        "endpoint": "PUT businesses (PERTANIAN)",
+        "issue": "Field 'AMBIL 70%' (take_portion) is validated, saved and rendered but is not used in any formula (neither farmMetrics() nor analysisMath.js). Either wire it into the calculation or mark it informational."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Analisa Usaha - detail usaha (header)",
+        "issues": [
+          "Badge 'Hasil Bersih' in the page header only reflects the server value, so right after typing (before Simpan) it still shows Rp 0 while the card already shows the live result - slightly confusing but consistent after save."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/adminkit/tests/Feature/AnalysisModuleExtraTest.php",
+    "/app/adminkit/tests/Feature/AnalysisBusinessTest.php"
+  ],
+  "action_items": [
+    "Fix the `?? 0` default in AnalysisBusinessController::update() so nullable enum/text fields (business_length, economy_sector, plant_type, business_kind, address) stay null instead of '0'.",
+    "Decide/confirm how PERTANIAN income enters Bagian 2 (net per harvest cycle vs monthly_income) - current sheet total overstates monthly capability.",
+    "Wire 'AMBIL 70%' (take_portion) into the farm calculation or clearly mark it as informational."
+  ],
+  "critical_code_review_comments": [
+    "AnalysisBusinessController::update() deletes items only for the submitted `groups` and re-creates all `items` - correct and verified, but there is no guard that every submitted item's group is contained in `groups`; a payload with an item outside `groups` would duplicate rows. Add a validation rule items.*.group in groups.",
+    "AnalysisBusiness::metrics() builds a `$sum` closure that is only used by otherMetrics() - minor dead code for the other three branches.",
+    "All money/derived fields are read-only FieldStat components and computed in analysisMath.js mirroring the backend; both matched exactly on every scenario tested (no drift found)."
+  ],
+  "updated_files": ["/app/adminkit/tests/Feature/AnalysisModuleExtraTest.php"],
+  "success_rate": {"backend": "98% (81/82 tests; single failure is the documented '0' default defect)", "frontend": "100% of the 11 requested scenarios passed"},
+  "seed_data_creation": "Created and then deleted usaha AUPG00002 (QA TOKO SEMBAKO JAYA), AUP00001 (QA SAWAH PADI), AUJ00002 (QA JASA ANGKUTAN, deleted through the UI), AUL00001 (QA KONVEKSI JAYA) plus the analysis_sheets row for berkas 11. Berkas 11 is back to its original state (only AUPG00001 WARUNG KLONTONGAN, no sheet).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "Staff Analis 350010923 / password (berkas 11). /app/memory/test_credentials.md present and accurate.",
+  "context_for_next_testing_agent": "Analisa module sections 1-3 are fully functional; sections 4-8 still render the 'Kolom bagian ini belum dibuat' placeholder (analysis-section-empty). Useful testids: analysis-section-<key>, analysis-sub-<tipe>, business-add/business-name/business-add-submit, business-tabs-<tab>, trade-*/farm-*/service-*/other-*, finance-*, ownership-*, ItemRows use <testid>-<col>-<index> and <testid>-add. Money inputs are NumberInput (click + Ctrl+A + type digits, Indonesian formatting); Combobox options use data-testid=combobox-option-<VALUE>. Berkas 11 = surveyor Ahmad Fauzi (user 9), berkas 10 belongs to user 15 and correctly returns 404 for others.",
+  "rca_of_the_issue": "'0' defect: in update(), `collect($data)->except(['items','groups'])->map(fn($v,$k) => in_array($k,['name','address']) ? Str::upper($v) : ($v ?? 0))` coerces every non-name/address null to integer 0, including enum string columns. Reproduce: PUT businesses/{id} with business_length=null -> DB column contains '0'. Farm income issue: AnalysisSheet::metrics() uses SUM(net_profit) grouped by type without normalising the PERTANIAN 6-month cycle to a monthly figure."
+}
