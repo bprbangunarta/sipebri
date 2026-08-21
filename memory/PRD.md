@@ -685,3 +685,11 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
   Tes baru `test_index_only_shows_own_applications`.
 - Uji: `php artisan test` → **50 lulus**, verifikasi browser (2 berkas milik IT Support tampil,
   sistem bunga FLATE/ANUITAS terlihat, dropdown filter produk berisi 17 produk).
+
+## Perbaikan (2026-06-22, pencarian daftar Pengajuan Kredit belum menjangkau semua kolom)
+- Sebelumnya hanya mencari `application_code`, `full_name`, `nik`, `credit_account`.
+- Sekarang juga mencari: tanggal pengajuan, status, plafon, jangka waktu, **nama/alias produk**
+  (`orWhereHas('product')`), dan **kode/nama sistem bunga** (`orWhereHas('method')`) — semua
+  informasi yang tampil di tabel.
+- Verifikasi kueri: "KREDIT TANPA", "FLATE", "5000000", "DRAFT", "2026-08-21", "ZULFADLI",
+  "ANUITAS", "36", "KPS", "00700004" semuanya mengembalikan berkas yang benar.

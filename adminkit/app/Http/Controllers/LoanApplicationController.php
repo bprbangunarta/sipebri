@@ -54,9 +54,18 @@ class LoanApplicationController extends Controller
             ->with(['product:id,alias,name', 'office:id,alias,name', 'method:id,code,name'])
             ->where('created_by', $request->user()->name)
             ->when($search !== '', fn ($q) => $q->where(function ($w) use ($search) {
-                foreach (['application_code', 'full_name', 'nik', 'credit_account'] as $col) {
+                foreach (['application_code', 'full_name', 'nik', 'credit_account',
+                    'application_date', 'status', 'requested_amount', 'requested_tenor'] as $col) {
                     $w->orWhere($col, 'like', "%{$search}%");
                 }
+
+                $w->orWhereHas('product', fn ($p) => $p
+                    ->where('alias', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%"));
+
+                $w->orWhereHas('method', fn ($m) => $m
+                    ->where('code', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%"));
             }))
             ->when(in_array($status, self::STATUSES, true), fn ($q) => $q->where('status', $status))
             ->when($productId > 0, fn ($q) => $q->where('product_id', $productId))
