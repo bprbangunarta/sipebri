@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Save, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Button from '@/components/ui/Button.vue';
 import Card from '@/components/ui/Card.vue';
@@ -178,12 +179,13 @@ const submit = () =>
                     </div>
                 </CardContent>
                 <CardFooter v-if="!editing" class="justify-between">
-                    <Button variant="outline" size="sm" type="button" data-testid="collateral-form-cancel" @click="back">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button size="sm" type="submit" :disabled="form.processing" data-testid="collateral-form-save">
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="collateral-form-cancel"
+                        submit-testid="collateral-form-save"
+                        submit-type="submit"
+                        :processing="form.processing"
+                        @cancel="back"
+                    />
                 </CardFooter>
             </Card>
 
@@ -293,12 +295,13 @@ const submit = () =>
                     </div>
                 </CardContent>
                 <CardFooter class="justify-between">
-                    <Button variant="outline" size="sm" type="button" data-testid="collateral-form-cancel" @click="back">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button size="sm" type="submit" :disabled="form.processing" data-testid="collateral-form-save">
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="collateral-form-cancel"
+                        submit-testid="collateral-form-save"
+                        submit-type="submit"
+                        :processing="form.processing"
+                        @cancel="back"
+                    />
                 </CardFooter>
             </Card>
         </form>

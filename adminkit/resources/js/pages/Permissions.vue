@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { Download, KeyRound, Lock, Pencil, Plus, Save, Trash2, Wand2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
 import Badge from '@/components/ui/Badge.vue';
@@ -291,18 +292,14 @@ const pageTitle = computed(() => menuLabelOf('/permissions', 'Perizinan'));
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="permission-form-cancel" @click="dialogOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="submit"
+                    <FormActions
+                        cancel-testid="permission-form-cancel"
+                        submit-testid="permission-form-save"
+                        submit-type="submit"
                         form="permission-form"
-                        :disabled="form.processing"
-                        data-testid="permission-form-save"
-                    >
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        :processing="form.processing"
+                        @cancel="dialogOpen = false"
+                    />
                 </template>
             </Dialog>
 
@@ -315,7 +312,7 @@ const pageTitle = computed(() => menuLabelOf('/permissions', 'Perizinan'));
                             id="g-entity"
                             v-model="generator.entity"
                             class="font-mono"
-                            placeholder="projects"
+                            
                             maxlength="40"
                             data-testid="generator-entity"
                         />
@@ -350,17 +347,15 @@ const pageTitle = computed(() => menuLabelOf('/permissions', 'Perizinan'));
                 </div>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="generator-cancel" @click="generatorOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="generator.processing"
-                        data-testid="generator-submit"
-                        @click="submitGenerator"
-                    >
-                        <Wand2 class="size-4" /> Buat Izin
-                    </Button>
+                    <FormActions
+                        cancel-testid="generator-cancel"
+                        submit-testid="generator-submit"
+                        submit-label="Buat Izin"
+                        :submit-icon="Wand2"
+                        :processing="generator.processing"
+                        @cancel="generatorOpen = false"
+                        @submit="submitGenerator"
+                    />
                 </template>
             </Dialog>
 

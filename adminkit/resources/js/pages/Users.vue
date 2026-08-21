@@ -4,6 +4,7 @@ import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { ArchiveRestore, Download, FileDown, KeyRound, Loader2, MailCheck, Pencil, Plus, Save, Trash2, Upload, Users2, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
+import FormActions from '@/components/composite/FormActions.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -242,7 +243,7 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                     <Combobox
                         :model-value="query.status"
                         :options="statusOptions"
-                        placeholder="Status"
+                        placeholder="Semua status"
                         class="w-[140px]"
                         data-testid="users-filter-status"
                         @update:model-value="onFilter('status', $event)"
@@ -406,29 +407,29 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                 </div>
 
                 <template #footer>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        as="a"
-                        href="/users/import/template"
-                        class="mr-auto"
-                        data-testid="user-import-template"
+                    <FormActions
+                        cancel-testid="user-import-cancel"
+                        submit-testid="user-import-submit"
+                        :submit-label="ACTION.import"
+                        submit-busy-label="Mengimpor…"
+                        :submit-icon="Upload"
+                        :processing="importForm.processing"
+                        :disabled="!importForm.file"
+                        @cancel="importOpen = false"
+                        @submit="submitImport"
                     >
-                        <FileDown class="size-4" /> Template
-                    </Button>
-                    <Button variant="outline" size="sm" data-testid="user-import-cancel" @click="importOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="!importForm.file || importForm.processing"
-                        data-testid="user-import-submit"
-                        @click="submitImport"
-                    >
-                        <Loader2 v-if="importForm.processing" class="size-4 animate-spin" />
-                        <Upload v-else class="size-4" />
-                        {{ ACTION.import }}
-                    </Button>
+                        <template #start>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                as="a"
+                                href="/users/import/template"
+                                data-testid="user-import-template"
+                            >
+                                <FileDown class="size-4" /> Template
+                            </Button>
+                        </template>
+                    </FormActions>
                 </template>
             </Dialog>
 
@@ -464,19 +465,14 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                 </div>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="user-password-cancel" @click="passwordTarget = null">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="!passwordForm.password || passwordForm.processing"
-                        data-testid="user-password-submit"
-                        @click="submitPassword"
-                    >
-                        <Loader2 v-if="passwordForm.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        {{ passwordForm.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="user-password-cancel"
+                        submit-testid="user-password-submit"
+                        :processing="passwordForm.processing"
+                        :disabled="!passwordForm.password"
+                        @cancel="passwordTarget = null"
+                        @submit="submitPassword"
+                    />
                 </template>
             </Dialog>
 
@@ -494,19 +490,16 @@ const pageTitle = computed(() => menuLabelOf('/users', 'Pengguna'));
                 </p>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="users-welcome-email-cancel" @click="emailTarget = null">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="emailForm.processing"
-                        data-testid="users-welcome-email-confirm"
-                        @click="sendWelcomeEmail"
-                    >
-                        <Loader2 v-if="emailForm.processing" class="size-4 animate-spin" />
-                        <MailCheck v-else class="size-4" />
-                        {{ emailForm.processing ? 'Mengirim...' : 'Kirim' }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="users-welcome-email-cancel"
+                        submit-testid="users-welcome-email-confirm"
+                        submit-label="Kirim"
+                        submit-busy-label="Mengirim…"
+                        :submit-icon="MailCheck"
+                        :processing="emailForm.processing"
+                        @cancel="emailTarget = null"
+                        @submit="sendWelcomeEmail"
+                    />
                 </template>
             </Dialog>
 

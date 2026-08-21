@@ -1,5 +1,6 @@
 <script setup>
 import { Trash2, X } from 'lucide-vue-next';
+import FormActions from '@/components/composite/FormActions.vue';
 import Button from '@/components/ui/Button.vue';
 import Dialog from '@/components/ui/Dialog.vue';
 import { ACTION } from '@/constants/labels';
@@ -27,18 +28,16 @@ const emit = defineEmits(['update:open', 'confirm']);
         </p>
 
         <template #footer>
-            <Button variant="outline" size="sm" data-testid="confirm-delete-cancel" @click="emit('update:open', false)">
-                <X class="size-4" /> {{ ACTION.cancel }}
-            </Button>
-            <Button
-                variant="destructive"
-                size="sm"
-                :disabled="props.processing"
-                data-testid="confirm-delete-submit"
-                @click="emit('confirm')"
-            >
-                <Trash2 class="size-4" /> {{ props.confirmLabel || ACTION.delete }}
-            </Button>
+            <FormActions
+                cancel-testid="confirm-delete-cancel"
+                submit-testid="confirm-delete-submit"
+                submit-variant="destructive"
+                :submit-icon="Trash2"
+                :submit-label="props.confirmLabel || ACTION.delete"
+                :processing="props.processing"
+                @cancel="emit('update:open', false)"
+                @submit="emit('confirm')"
+            />
         </template>
     </Dialog>
 </template>

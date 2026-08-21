@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { Database, Loader2, Pencil, Plus, Save, SlidersHorizontal, Trash2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
 import Badge from '@/components/ui/Badge.vue';
@@ -301,25 +302,14 @@ const runBulkDelete = () => {
                 </form>
 
                 <template #footer>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        :data-testid="`${props.slug}-form-cancel`"
-                        @click="dialogOpen = false"
-                    >
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="submit"
+                    <FormActions
+                        :cancel-testid="`${props.slug}-form-cancel`"
+                        :submit-testid="`${props.slug}-form-save`"
+                        submit-type="submit"
                         form="reference-form"
-                        :disabled="form.processing"
-                        :data-testid="`${props.slug}-form-save`"
-                    >
-                        <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        :processing="form.processing"
+                        @cancel="dialogOpen = false"
+                    />
                 </template>
             </Dialog>
 

@@ -731,3 +731,27 @@ Alur lengkap didokumentasikan di **`/app/memory/alur_kredit.md`** (status, histo
   **Ahmad Fauzi (Staff Analis)**: berkas 00700004 difoto (koordinat -6.571235, 107.760123 tersimpan),
   catatan diisi, status berubah menjadi **SURVEY** dan hasil terkunci.
 - PERHATIAN: koordinat (geolocation) hanya bisa diambil browser di **HTTPS**.
+
+## Selesai (2026-06-22, akar masalah konsistensi UI ditutup permanen) — HUTANG SAYA
+User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
+- **`components/composite/FormActions.vue` (baru)** = satu-satunya sumber pasangan tombol
+  Batal/aksi utama (Batal pojok kiri + ikon X, aksi utama pojok kanan + ikon, status memuat,
+  label dari `ACTION`). Mendukung `:cancel="false"`, `:submit="false"`, `submit-variant="destructive"`,
+  slot `#start` untuk teks bantuan/tombol tambahan.
+- **Semua 26 footer** di seluruh halaman & komponen (Users, UserForm, Roles, Permissions, Menus,
+  ObjectStorage, Reference, Committees, CommitteeDetail, ProductDetail, RoleDetail, Profile,
+  Appearance, AuditTrail, SchemaDrafts, SchemaDraftDetail, LoanSimulation, LoanSimulationDetail,
+  CollateralSimulationForm, Scheduling, SurveyDetail, ConfirmDeleteDialog, CommitteeSimulator,
+  ComponentGallery) dialihkan ke `FormActions` — tidak ada lagi tombol footer manual.
+- **Placeholder diseragamkan** di seluruh halaman ke daftar putih:
+  `-- Pilih --` (wajib), `(Opsional)`, `Semua …` (filter), `Cari…`, `Minimal 8 karakter`.
+- **`yarn ui:check` (`scripts/ui-check.mjs`, baru)** menolak: placeholder tidak baku,
+  `<Input type="date|number">`, footer tanpa `FormActions`, footer yang menimpa perataan,
+  ukuran tombol tidak baku, dan **komponen/ikon dipakai template tapi lupa di-import**
+  (aturan terakhir langsung menangkap 1 kerusakan nyata di `SurveyDetail.vue`).
+- `ui_rules.md` diberi **ATURAN NOL**: dilarang menulis UI dari nol, wajib `yarn ui:check` +
+  uji 4 lebar sebelum menyatakan selesai.
+- Perbaikan bawaan: tanggal survei memakai `DatePicker` (bukan `<Input type="date">`).
+- Uji: `yarn ui:check` OK (44 berkas), `yarn build` bersih, `php artisan test` → **61 lulus**,
+  dan pemeriksaan overflow di **390/768/1024/1440** untuk Penjadwalan/Pengajuan/Pengguna/Komite:
+  semuanya `scrollWidth === innerWidth` (tidak ada geser horizontal).

@@ -1,9 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { ArrowLeft, Camera, Images, Loader2, MapPin, Save, Trash2, X } from 'lucide-vue-next';
+import { ArrowLeft, Camera, Images, Loader2, MapPin, Send, Trash2 } from 'lucide-vue-next';
 import { notify } from '@/composables/useToast';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -294,7 +295,7 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                             v-model="saveForm.note"
                             rows="3"
                             maxlength="500"
-                            placeholder="Kondisi lokasi, temuan lapangan, dan hal lain yang perlu diketahui analis."
+                            placeholder="(Opsional)"
                             data-testid="survey-note"
                         />
                         <p v-if="saveForm.errors.note" class="text-xs font-medium text-destructive">
@@ -310,18 +311,16 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                         </p>
                     </div>
                 </CardContent>
-                <CardFooter v-if="!locked" class="flex flex-wrap justify-end gap-2">
-                    <Button variant="outline" size="sm" data-testid="survey-cancel" @click="showCancel = true">
-                        <X class="size-4" /> Batal & Minta Jadwal Ulang
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="saveForm.processing || !props.photos.length"
-                        data-testid="survey-save"
-                        @click="submit"
-                    >
-                        <Save class="size-4" /> {{ saveForm.processing ? 'Menyimpan...' : 'Simpan Hasil Survei' }}
-                    </Button>
+                <CardFooter v-if="!locked">
+                    <FormActions
+                        cancel-testid="survey-cancel"
+                        cancel-label="Batal & Minta Jadwal Ulang"
+                        submit-testid="survey-save"
+                        :processing="saveForm.processing"
+                        :disabled="!props.photos.length"
+                        @cancel="showCancel = true"
+                        @submit="submit"
+                    />
                 </CardFooter>
             </Card>
 
@@ -332,7 +331,7 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                         id="survey-reason"
                         v-model="cancelForm.reason"
                         maxlength="255"
-                        placeholder="Mis. nasabah tidak di tempat"
+                        
                         data-testid="survey-cancel-reason"
                     />
                     <p v-if="cancelForm.errors.reason" class="text-xs font-medium text-destructive">
@@ -344,18 +343,16 @@ const mapUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
                 </div>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="survey-cancel-close" @click="showCancel = false">
-                        {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="cancelForm.processing"
-                        data-testid="survey-cancel-submit"
-                        @click="submitCancel"
-                    >
-                        <Loader2 v-if="cancelForm.processing" class="size-4 animate-spin" />
-                        Kirim Permintaan
-                    </Button>
+                    <FormActions
+                        cancel-testid="survey-cancel-close"
+                        submit-testid="survey-cancel-submit"
+                        submit-label="Kirim Permintaan"
+                        submit-busy-label="Mengirim…"
+                        :submit-icon="Send"
+                        :processing="cancelForm.processing"
+                        @cancel="showCancel = false"
+                        @submit="submitCancel"
+                    />
                 </template>
             </Dialog>
         </div>

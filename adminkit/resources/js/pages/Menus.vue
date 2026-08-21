@@ -14,6 +14,7 @@ import {
     X,
 } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -329,7 +330,7 @@ const destroy = () => {
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="menu-href">Alamat (Kosongkan Untuk Grup)</Label>
-                        <Input id="menu-href" v-model="form.href" placeholder="/users" data-testid="menu-form-href" />
+                        <Input id="menu-href" v-model="form.href"  data-testid="menu-form-href" />
                         <p v-if="form.errors.href" class="text-xs font-medium text-destructive">
                             {{ form.errors.href }}
                         </p>
@@ -347,7 +348,7 @@ const destroy = () => {
                                 <Input
                                     id="menu-icon"
                                     v-model="form.icon"
-                                    placeholder="house-wifi"
+                                    
                                     autocapitalize="off"
                                     autocomplete="off"
                                     spellcheck="false"
@@ -381,14 +382,13 @@ const destroy = () => {
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="menu-form-cancel" @click="dialogOpen = false">
-                        <X class="size-4" /> Batal
-                    </Button>
-                    <Button size="sm" :disabled="form.processing" data-testid="menu-form-save" @click="submit">
-                        <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        Simpan
-                    </Button>
+                    <FormActions
+                        cancel-testid="menu-form-cancel"
+                        submit-testid="menu-form-save"
+                        :processing="form.processing"
+                        @cancel="dialogOpen = false"
+                        @submit="submit"
+                    />
                 </template>
             </Dialog>
 

@@ -12,6 +12,7 @@ import {
     TriangleAlert,
 } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import Alert from '@/components/ui/Alert.vue';
 import AlertDescription from '@/components/ui/AlertDescription.vue';
 import AlertTitle from '@/components/ui/AlertTitle.vue';
@@ -187,11 +188,11 @@ const runLoading = () => {
                 <CardContent class="space-y-3">
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="gallery-text">Input Teks</Label>
-                        <Input id="gallery-text" v-model="text" placeholder="Nama lengkap" />
+                        <Input id="gallery-text" v-model="text" placeholder="(Opsional)" />
                     </div>
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="gallery-invalid">Input Bermasalah</Label>
-                        <Input id="gallery-invalid" model-value="" placeholder="Wajib diisi" aria-invalid="true" />
+                        <Input id="gallery-invalid" model-value=""  aria-invalid="true" />
                         <p class="text-xs font-medium text-destructive">Kolom ini wajib diisi.</p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
@@ -322,16 +323,15 @@ const runLoading = () => {
                             seluruh modul.
                         </p>
                         <template #footer>
-                            <Button variant="outline" size="sm" @click="dialogOpen = false">Batal</Button>
-                            <Button
-                                size="sm"
-                                @click="
+                            <FormActions
+                                cancel-testid="gallery-dialog-cancel"
+                                submit-testid="gallery-dialog-save"
+                                @cancel="dialogOpen = false"
+                                @submit="
                                     dialogOpen = false;
                                     notify.success('Contoh dialog dikonfirmasi.');
                                 "
-                            >
-                                <Save class="size-4" /> Simpan
-                            </Button>
+                            />
                         </template>
                     </Dialog>
 

@@ -18,6 +18,7 @@ import {
     X,
 } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -300,7 +301,7 @@ const slugOf = (path) => path.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
                         <Input
                             id="storage-folder"
                             v-model="uploadForm.folder"
-                            placeholder="uploads"
+                            
                             data-testid="storage-upload-folder"
                         />
                         <p v-if="uploadForm.errors.folder" class="text-xs font-medium text-destructive">
@@ -327,19 +328,17 @@ const slugOf = (path) => path.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
                     </div>
                 </div>
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="storage-upload-cancel" @click="uploadOpen = false">
-                        <X class="size-4" /> Batal
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="uploadForm.processing || !uploadForm.files.length"
-                        data-testid="storage-upload-submit"
-                        @click="submitUpload"
-                    >
-                        <Loader2 v-if="uploadForm.processing" class="size-4 animate-spin" />
-                        <Upload v-else class="size-4" />
-                        Unggah
-                    </Button>
+                    <FormActions
+                        cancel-testid="storage-upload-cancel"
+                        submit-testid="storage-upload-submit"
+                        submit-label="Unggah"
+                        submit-busy-label="Mengunggah…"
+                        :submit-icon="Upload"
+                        :processing="uploadForm.processing"
+                        :disabled="!uploadForm.files.length"
+                        @cancel="uploadOpen = false"
+                        @submit="submitUpload"
+                    />
                 </template>
             </Dialog>
 
@@ -357,19 +356,13 @@ const slugOf = (path) => path.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
                     </p>
                 </div>
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="storage-rename-cancel" @click="renameOpen = false">
-                        <X class="size-4" /> Batal
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="renameForm.processing"
-                        data-testid="storage-rename-submit"
-                        @click="submitRename"
-                    >
-                        <Loader2 v-if="renameForm.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        Simpan
-                    </Button>
+                    <FormActions
+                        cancel-testid="storage-rename-cancel"
+                        submit-testid="storage-rename-submit"
+                        :processing="renameForm.processing"
+                        @cancel="renameOpen = false"
+                        @submit="submitRename"
+                    />
                 </template>
             </Dialog>
 

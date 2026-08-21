@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Database, Pencil, Plus, Save, Table2, Trash2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -143,7 +144,7 @@ const dialogTitle = computed(() => (editing.value ? 'Ubah Rancangan' : 'Rancanga
                 <form class="form-dense space-y-[var(--field-gap)]" novalidate @submit.prevent="submit">
                     <div class="space-y-[var(--item-gap)]">
                         <Label for="d-name">Nama Rancangan <span class="text-destructive">*</span></Label>
-                        <Input id="d-name" v-model="form.name" placeholder="Berkas Pengajuan" data-testid="schema-draft-name" />
+                        <Input id="d-name" v-model="form.name"  data-testid="schema-draft-name" />
                         <p v-if="form.errors.name" class="text-xs font-medium text-destructive">{{ form.errors.name }}</p>
                     </div>
                     <div class="space-y-[var(--item-gap)]">
@@ -152,7 +153,7 @@ const dialogTitle = computed(() => (editing.value ? 'Ubah Rancangan' : 'Rancanga
                             id="d-table"
                             v-model="form.table_name"
                             class="font-mono"
-                            placeholder="credit_applications"
+                            
                             data-testid="schema-draft-table"
                         />
                         <p class="text-xs text-muted-foreground">huruf kecil, angka, garis bawah — jamak, mis. `credit_applications`</p>
@@ -179,12 +180,13 @@ const dialogTitle = computed(() => (editing.value ? 'Ubah Rancangan' : 'Rancanga
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="schema-draft-cancel" @click="showForm = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button size="sm" :disabled="form.processing" data-testid="schema-draft-save" @click="submit">
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="schema-draft-cancel"
+                        submit-testid="schema-draft-save"
+                        :processing="form.processing"
+                        @cancel="showForm = false"
+                        @submit="submit"
+                    />
                 </template>
             </Dialog>
 

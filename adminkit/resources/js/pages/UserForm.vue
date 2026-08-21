@@ -4,6 +4,7 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, Save, X } from 'lucide-vue-next';
 
 import AppLayout from '@/components/layout/AppLayout.vue';
+import FormActions from '@/components/composite/FormActions.vue';
 import Button from '@/components/ui/Button.vue';
 import Card from '@/components/ui/Card.vue';
 import CardContent from '@/components/ui/CardContent.vue';
@@ -160,7 +161,7 @@ const back = () => router.visit('/users');
                         <Combobox
                             v-model="form.role"
                             :options="props.roleOptions"
-                            placeholder="Pilih Peranan"
+                            placeholder="-- Pilih --"
                             data-testid="user-form-role"
                         />
                         <p v-if="form.errors.role" class="text-xs font-medium text-destructive" data-testid="user-form-role-error">
@@ -172,7 +173,7 @@ const back = () => router.visit('/users');
                         <Combobox
                             v-model="form.office"
                             :options="props.officeOptions"
-                            placeholder="Pilih Kantor"
+                            placeholder="-- Pilih --"
                             empty-text="Belum ada data kantor."
                             data-testid="user-form-office"
                         />
@@ -187,7 +188,7 @@ const back = () => router.visit('/users');
                             v-model="form.alias"
                             maxlength="3"
                             class="uppercase placeholder:normal-case"
-                            placeholder="3 karakter"
+                            
                             data-testid="user-form-alias"
                             @blur="check.validate('alias')"
                         />
@@ -202,7 +203,7 @@ const back = () => router.visit('/users');
                             v-model="form.mso_code"
                             maxlength="4"
                             class="uppercase placeholder:normal-case"
-                            placeholder="4 karakter"
+                            
                             data-testid="user-form-mso-code"
                             @blur="check.validate('mso_code')"
                         />
@@ -217,7 +218,7 @@ const back = () => router.visit('/users');
                             v-model="form.collector_code"
                             maxlength="3"
                             class="uppercase placeholder:normal-case"
-                            placeholder="3 karakter"
+                            
                             data-testid="user-form-collector-code"
                             @blur="check.validate('collector_code')"
                         />
@@ -249,13 +250,14 @@ const back = () => router.visit('/users');
                         </p>
                     </div>
                 </CardContent>
-                <CardFooter class="justify-between">
-                    <Button variant="outline" size="sm" type="button" data-testid="user-form-cancel" @click="back">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button size="sm" type="submit" :disabled="form.processing" data-testid="user-form-save">
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                <CardFooter>
+                    <FormActions
+                        cancel-testid="user-form-cancel"
+                        submit-testid="user-form-save"
+                        submit-type="submit"
+                        :processing="form.processing"
+                        @cancel="back"
+                    />
                 </CardFooter>
             </Card>
         </form>

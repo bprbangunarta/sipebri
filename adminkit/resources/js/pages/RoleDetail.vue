@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, GripVertical, Lock, Save } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -211,18 +212,20 @@ const save = () => form.put(`/roles/${props.role.id}/permissions`, { preserveScr
                         Tidak ada izin yang cocok dengan pencarian.
                     </p>
                 </CardContent>
-                <CardFooter class="justify-between">
-                    <span class="text-xs text-muted-foreground" data-testid="role-permissions-count">
-                        {{ form.permissions.length }} izin dipilih
-                    </span>
-                    <Button
-                        size="sm"
-                        :disabled="props.role.locked || form.processing"
-                        data-testid="role-permissions-save"
-                        @click="save"
+                <CardFooter>
+                    <FormActions
+                        :cancel="false"
+                        submit-testid="role-permissions-save"
+                        :processing="form.processing"
+                        :disabled="props.role.locked"
+                        @submit="save"
                     >
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        <template #start>
+                            <span class="text-xs text-muted-foreground" data-testid="role-permissions-count">
+                                {{ form.permissions.length }} izin dipilih
+                            </span>
+                        </template>
+                    </FormActions>
                 </CardFooter>
             </Card>
         </div>

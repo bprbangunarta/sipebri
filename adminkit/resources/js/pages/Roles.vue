@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { Eye, FileDown, Loader2, Lock, Pencil, Plus, Save, ShieldCheck, Trash2, Upload, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
 import Button from '@/components/ui/Button.vue';
@@ -241,7 +242,7 @@ const pageTitle = computed(() => menuLabelOf('/roles', 'Peranan'));
                         <Combobox
                             v-model="form.copy_from"
                             :options="copyOptions"
-                            placeholder="Tanpa Salinan"
+                            placeholder="(Opsional)"
                             search-placeholder="Cari peranan…"
                             data-testid="role-form-copy-from"
                         />
@@ -255,18 +256,14 @@ const pageTitle = computed(() => menuLabelOf('/roles', 'Peranan'));
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="role-form-cancel" @click="dialogOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="submit"
+                    <FormActions
+                        cancel-testid="role-form-cancel"
+                        submit-testid="role-form-save"
+                        submit-type="submit"
                         form="role-form"
-                        :disabled="form.processing"
-                        data-testid="role-form-save"
-                    >
-                        <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        :processing="form.processing"
+                        @cancel="dialogOpen = false"
+                    />
                 </template>
             </Dialog>
 
@@ -298,29 +295,29 @@ const pageTitle = computed(() => menuLabelOf('/roles', 'Peranan'));
                 </div>
 
                 <template #footer>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        as="a"
-                        href="/roles/import/template"
-                        class="mr-auto"
-                        data-testid="role-import-template"
+                    <FormActions
+                        cancel-testid="role-import-cancel"
+                        submit-testid="role-import-submit"
+                        :submit-label="ACTION.import"
+                        submit-busy-label="Mengimpor…"
+                        :submit-icon="Upload"
+                        :processing="importForm.processing"
+                        :disabled="!importForm.file"
+                        @cancel="importOpen = false"
+                        @submit="submitImport"
                     >
-                        <FileDown class="size-4" /> Template
-                    </Button>
-                    <Button variant="outline" size="sm" data-testid="role-import-cancel" @click="importOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="!importForm.file || importForm.processing"
-                        data-testid="role-import-submit"
-                        @click="submitImport"
-                    >
-                        <Loader2 v-if="importForm.processing" class="size-4 animate-spin" />
-                        <Upload v-else class="size-4" />
-                        {{ ACTION.import }}
-                    </Button>
+                        <template #start>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                as="a"
+                                href="/roles/import/template"
+                                data-testid="role-import-template"
+                            >
+                                <FileDown class="size-4" /> Template
+                            </Button>
+                        </template>
+                    </FormActions>
                 </template>
             </Dialog>
 

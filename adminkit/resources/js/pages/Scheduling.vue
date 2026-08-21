@@ -1,12 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { CalendarCheck, CalendarClock, History, Loader2 } from 'lucide-vue-next';
+import { CalendarCheck, CalendarClock, History, Loader2, Save, X } from 'lucide-vue-next';
 import { Head, useForm } from '@inertiajs/vue3';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
 import Combobox from '@/components/ui/Combobox.vue';
+import DatePicker from '@/components/ui/DatePicker.vue';
 import Dialog from '@/components/ui/Dialog.vue';
 import Input from '@/components/ui/Input.vue';
 import Label from '@/components/ui/Label.vue';
@@ -114,7 +116,7 @@ const ACTION_TONE = {
                     <Combobox
                         :model-value="query.scope"
                         :options="scopeOptions"
-                        placeholder="Berkas saya"
+                        placeholder="Semua cakupan"
                         class="w-full sm:w-[190px]"
                         data-testid="scheduling-scope-filter"
                         @update:model-value="onFilter('scope', $event)"
@@ -201,12 +203,10 @@ const ACTION_TONE = {
             >
                 <form class="form-dense space-y-3" @submit.prevent="submit">
                     <div class="space-y-[var(--item-gap)]">
-                        <Label for="s-date">Tanggal Survei <span class="text-destructive">*</span></Label>
-                        <Input
-                            id="s-date"
+                        <Label>Tanggal Survei <span class="text-destructive" aria-hidden="true">*</span></Label>
+                        <DatePicker
                             v-model="form.survey_date"
-                            type="date"
-                            :min="today"
+                            placeholder="-- Pilih --"
                             data-testid="scheduling-date"
                         />
                         <p v-if="form.errors.survey_date" class="text-xs font-medium text-destructive">
@@ -215,11 +215,11 @@ const ACTION_TONE = {
                     </div>
 
                     <div class="space-y-[var(--item-gap)]">
-                        <Label>Staff Analis <span class="text-destructive">*</span></Label>
+                        <Label>Staff Analis <span class="text-destructive" aria-hidden="true">*</span></Label>
                         <Combobox
                             v-model="form.surveyor_id"
                             :options="props.surveyorOptions"
-                            placeholder="Pilih staff analis"
+                            placeholder="-- Pilih --"
                             data-testid="scheduling-surveyor"
                         />
                         <p v-if="form.errors.surveyor_id" class="text-xs font-medium text-destructive">
@@ -233,7 +233,7 @@ const ACTION_TONE = {
                             id="s-note"
                             v-model="form.note"
                             maxlength="255"
-                            placeholder="Opsional"
+                            placeholder="(Opsional)"
                             data-testid="scheduling-note"
                         />
                         <p v-if="form.errors.note" class="text-xs font-medium text-destructive">
@@ -255,14 +255,13 @@ const ACTION_TONE = {
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="scheduling-cancel" @click="scheduling = null">
-                        {{ ACTION.cancel }}
-                    </Button>
-                    <Button size="sm" :disabled="form.processing" data-testid="scheduling-submit" @click="submit">
-                        <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <CalendarCheck v-else class="size-4" />
-                        {{ ACTION.save }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="scheduling-cancel"
+                        submit-testid="scheduling-submit"
+                        :processing="form.processing"
+                        @cancel="scheduling = null"
+                        @submit="submit"
+                    />
                 </template>
             </Dialog>
 
@@ -296,9 +295,13 @@ const ACTION_TONE = {
                 </p>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="scheduling-history-close" @click="history = null">
-                        {{ ACTION.close }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="scheduling-history-close"
+                        :cancel-label="ACTION.close"
+                        submit-testid="scheduling-history-noop"
+                        :submit="false"
+                        @cancel="history = null"
+                    />
                 </template>
             </Dialog>
         </div>

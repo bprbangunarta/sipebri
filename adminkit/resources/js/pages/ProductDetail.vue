@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, Loader2, Save } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -215,7 +216,7 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                             <Combobox
                                 v-model="form.default_method_id"
                                 :options="asOptions(methodChoices)"
-                                placeholder="Pilih metode"
+                                placeholder="-- Pilih --"
                                 data-testid="param-default-method"
                             />
                             <p v-if="form.errors.default_method_id" class="text-xs font-medium text-destructive" data-testid="param-default-method-error">
@@ -258,7 +259,7 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                             <Combobox
                                 v-model="form.default_installment_id"
                                 :options="asOptions(installmentChoices)"
-                                placeholder="Pilih pola cicilan"
+                                placeholder="-- Pilih --"
                                 data-testid="param-default-installment"
                             />
                             <p v-if="form.errors.default_installment_id" class="text-xs font-medium text-destructive">
@@ -285,21 +286,20 @@ const submit = () => form.put(`/products/${props.product.id}/parameters`, { pres
                         <Switch v-model="form.collateral_required" data-testid="param-collateral" />
                     </label>
                 </CardContent>
-                <CardFooter class="justify-between">
-                    <p class="text-xs text-muted-foreground">
-                        Nilai di atas hanya acuan — petugas tetap dapat mengubahnya saat transaksi.
-                    </p>
-                    <Button
-                        v-if="canManage"
-                        size="sm"
-                        type="submit"
-                        :disabled="form.processing"
-                        data-testid="param-save"
+                <CardFooter>
+                    <FormActions
+                        :cancel="false"
+                        submit-testid="param-save"
+                        submit-type="submit"
+                        :submit="canManage"
+                        :processing="form.processing"
                     >
-                        <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        <template #start>
+                            <p class="text-xs text-muted-foreground">
+                                Nilai di atas hanya acuan — petugas tetap dapat mengubahnya saat transaksi.
+                            </p>
+                        </template>
+                    </FormActions>
                 </CardFooter>
             </Card>
             </fieldset>

@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { Save } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Button from '@/components/ui/Button.vue';
 import Card from '@/components/ui/Card.vue';
@@ -160,10 +161,13 @@ const previewHost = computed(() => {
                             />
                         </div>
                     </CardContent>
-                    <CardFooter class="justify-end">
-                        <Button size="sm" type="submit" :disabled="identity.processing" data-testid="identity-save">
-                            <Save class="size-4" /> {{ identity.processing ? ACTION.saving : ACTION.save }}
-                        </Button>
+                    <CardFooter>
+                        <FormActions
+                            :cancel="false"
+                            submit-testid="identity-save"
+                            submit-type="submit"
+                            :processing="identity.processing"
+                        />
                     </CardFooter>
                 </form>
             </Card>
@@ -217,7 +221,7 @@ const previewHost = computed(() => {
                                 <Input
                                     id="canonical_url"
                                     v-model="seo.canonical_url"
-                                    placeholder="https://"
+                                    placeholder="(Opsional)"
                                     maxlength="200"
                                     data-testid="canonical-url-input"
                                     @blur="seoCheck.validate('canonical_url')"
@@ -267,10 +271,13 @@ const previewHost = computed(() => {
                             </div>
                         </div>
                     </CardContent>
-                    <CardFooter class="justify-end">
-                        <Button size="sm" type="submit" :disabled="seo.processing" data-testid="seo-save">
-                            <Save class="size-4" /> {{ seo.processing ? ACTION.saving : ACTION.save }}
-                        </Button>
+                    <CardFooter>
+                        <FormActions
+                            :cancel="false"
+                            submit-testid="seo-save"
+                            submit-type="submit"
+                            :processing="seo.processing"
+                        />
                     </CardFooter>
                 </form>
             </Card>
@@ -307,10 +314,13 @@ const previewHost = computed(() => {
                             />
                         </div>
                     </CardContent>
-                    <CardFooter class="justify-end">
-                        <Button size="sm" type="submit" :disabled="contact.processing" data-testid="contact-save">
-                            <Save class="size-4" /> {{ contact.processing ? ACTION.saving : ACTION.save }}
-                        </Button>
+                    <CardFooter>
+                        <FormActions
+                            :cancel="false"
+                            submit-testid="contact-save"
+                            submit-type="submit"
+                            :processing="contact.processing"
+                        />
                     </CardFooter>
                 </form>
             </Card>

@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, ChevronDown, ChevronUp, Layers, Loader2, Pencil, Plus, Save, Trash2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -273,7 +274,7 @@ const confirmDelete = () =>
                                 id="tier-label"
                                 v-model="form.label"
                                 maxlength="50"
-                                placeholder="Komite I"
+                                
                                 autocomplete="off"
                                 data-testid="tiers-form-label"
                             />
@@ -286,7 +287,7 @@ const confirmDelete = () =>
                             <Combobox
                                 v-model="form.role"
                                 :options="props.roleOptions"
-                                placeholder="Pilih Peranan"
+                                placeholder="-- Pilih --"
                                 data-testid="tiers-form-role"
                             />
                             <p v-if="form.errors.role" class="text-xs font-medium text-destructive" data-testid="tiers-form-role-error">
@@ -301,7 +302,7 @@ const confirmDelete = () =>
                             <NumberInput
                                 id="tier-min"
                                 v-model="form.min_amount"
-                                placeholder="0"
+                                
                                 data-testid="tiers-form-min"
                             />
                             <p class="text-xs text-muted-foreground">{{ rupiah(form.min_amount || null) }}</p>
@@ -314,7 +315,7 @@ const confirmDelete = () =>
                             <NumberInput
                                 id="tier-max"
                                 v-model="form.max_amount"
-                                placeholder="Kosongkan = tanpa batas"
+                                placeholder="(Opsional)"
                                 data-testid="tiers-form-max"
                             />
                             <p class="text-xs text-muted-foreground">{{ rupiah(form.max_amount || null) }}</p>
@@ -338,20 +339,14 @@ const confirmDelete = () =>
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="tiers-form-cancel" @click="dialogOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="submit"
+                    <FormActions
+                        cancel-testid="tiers-form-cancel"
+                        submit-testid="tiers-form-save"
+                        submit-type="submit"
                         form="tier-form"
-                        :disabled="form.processing"
-                        data-testid="tiers-form-save"
-                    >
-                        <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        :processing="form.processing"
+                        @cancel="dialogOpen = false"
+                    />
                 </template>
             </Dialog>
 

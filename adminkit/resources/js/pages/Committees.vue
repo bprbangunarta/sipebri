@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { Download, Gavel, Loader2, Pencil, Play, Plus, Save, Scale, Trash2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
 import Badge from '@/components/ui/Badge.vue';
@@ -223,7 +224,7 @@ const visiblePaths = computed(() =>
                             id="path-condition"
                             v-model="form.condition"
                             class="uppercase placeholder:normal-case"
-                            placeholder="Kosongkan untuk Normal"
+                            placeholder="(Opsional)"
                             maxlength="30"
                             autocomplete="off"
                             data-testid="committees-form-condition"
@@ -248,7 +249,7 @@ const visiblePaths = computed(() =>
                         <Combobox
                             v-model="form.copy_from"
                             :options="copyOptions"
-                            placeholder="Tidak menyalin"
+                            placeholder="(Opsional)"
                             data-testid="committees-form-copy"
                         />
                     </div>
@@ -269,20 +270,14 @@ const visiblePaths = computed(() =>
                 </form>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="committees-form-cancel" @click="dialogOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="submit"
+                    <FormActions
+                        cancel-testid="committees-form-cancel"
+                        submit-testid="committees-form-save"
+                        submit-type="submit"
                         form="path-form"
-                        :disabled="form.processing"
-                        data-testid="committees-form-save"
-                    >
-                        <Loader2 v-if="form.processing" class="size-4 animate-spin" />
-                        <Save v-else class="size-4" />
-                        {{ form.processing ? ACTION.saving : ACTION.save }}
-                    </Button>
+                        :processing="form.processing"
+                        @cancel="dialogOpen = false"
+                    />
                 </template>
             </Dialog>
 

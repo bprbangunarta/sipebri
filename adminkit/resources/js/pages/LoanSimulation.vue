@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { FileText, FolderOpen, Loader2, Plus, Search, Trash2 } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -221,7 +222,7 @@ const submitCreate = () =>
                         id="c-nik"
                         v-model="createForm.nik"
                         maxlength="16"
-                        placeholder="16 angka"
+                        
                         class="font-mono tracking-wider"
                         data-testid="loan-create-nik"
                         @keydown.enter.prevent="submitCreate"
@@ -236,19 +237,16 @@ const submitCreate = () =>
                 </div>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="loan-create-cancel" @click="showCreate = false">
-                        {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="createForm.processing"
-                        data-testid="loan-create-submit"
-                        @click="submitCreate"
-                    >
-                        <Loader2 v-if="createForm.processing" class="size-4 animate-spin" />
-                        <Search v-else class="size-4" />
-                        {{ createForm.processing ? 'Memeriksa...' : 'Cek & Lanjutkan' }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="loan-create-cancel"
+                        submit-testid="loan-create-submit"
+                        submit-label="Cek & Lanjutkan"
+                        submit-busy-label="Memeriksa…"
+                        :submit-icon="Search"
+                        :processing="createForm.processing"
+                        @cancel="showCreate = false"
+                        @submit="submitCreate"
+                    />
                 </template>
             </Dialog>
 

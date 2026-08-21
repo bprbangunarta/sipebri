@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import { Download, ScrollText, Trash2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import { menuLabelOf } from '@/composables/useMenuLabel';
 import Badge from '@/components/ui/Badge.vue';
@@ -114,14 +115,14 @@ const pageTitle = computed(() => menuLabelOf('/audit-trail', 'Audit Trail'));
                 <template #filters>
                     <DatePicker
                         :model-value="query.date_from"
-                        placeholder="Dari Tanggal"
+                        placeholder="(Opsional)"
                         class="w-[150px]"
                         data-testid="activity-date-from"
                         @update:model-value="onFilter('date_from', $event)"
                     />
                     <DatePicker
                         :model-value="query.date_to"
-                        placeholder="Sampai Tanggal"
+                        placeholder="(Opsional)"
                         class="w-[150px]"
                         data-testid="activity-date-to"
                         @update:model-value="onFilter('date_to', $event)"
@@ -199,18 +200,17 @@ const pageTitle = computed(() => menuLabelOf('/audit-trail', 'Audit Trail'));
                 </div>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="purge-cancel" @click="purgeOpen = false">
-                        <X class="size-4" /> {{ ACTION.cancel }}
-                    </Button>
-                    <Button
-                        variant="destructive"
-                        size="sm"
-                        :disabled="purgeForm.processing || !purgeForm.date_from || !purgeForm.date_to"
-                        data-testid="purge-submit"
-                        @click="purge"
-                    >
-                        <Trash2 class="size-4" /> {{ purgeForm.processing ? ACTION.saving : ACTION.delete }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="purge-cancel"
+                        submit-testid="purge-submit"
+                        submit-variant="destructive"
+                        :submit-icon="Trash2"
+                        :submit-label="ACTION.delete"
+                        :processing="purgeForm.processing"
+                        :disabled="!purgeForm.date_from || !purgeForm.date_to"
+                        @cancel="purgeOpen = false"
+                        @submit="purge"
+                    />
                 </template>
             </Dialog>
         </div>

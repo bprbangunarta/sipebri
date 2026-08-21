@@ -16,6 +16,7 @@ import {
     X,
 } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -377,7 +378,7 @@ const copyCode = () => {
                 </div>
                 <div class="space-y-[var(--item-gap)]">
                     <Label for="c-length">Panjang / Presisi</Label>
-                    <Input id="c-length" v-model="form.length" placeholder="100 atau 15, 2" data-testid="schema-column-length" />
+                    <Input id="c-length" v-model="form.length" placeholder="(Opsional)" data-testid="schema-column-length" />
                 </div>
                 <div class="space-y-[var(--item-gap)]">
                     <Label for="c-default">Nilai Bawaan</Label>
@@ -388,7 +389,7 @@ const copyCode = () => {
                     <Combobox
                         v-model="form.foreign_table"
                         :options="tableChoices"
-                        placeholder="-- Pilih tabel --"
+                        placeholder="-- Pilih --"
                         data-testid="schema-column-foreign"
                     />
                 </div>
@@ -413,12 +414,13 @@ const copyCode = () => {
             </form>
 
             <template #footer>
-                <Button variant="outline" size="sm" data-testid="schema-column-cancel" @click="showForm = false">
-                    <X class="size-4" /> {{ ACTION.cancel }}
-                </Button>
-                <Button size="sm" :disabled="form.processing" data-testid="schema-column-save" @click="submit">
-                    <Save class="size-4" /> {{ form.processing ? ACTION.saving : ACTION.save }}
-                </Button>
+                <FormActions
+                    cancel-testid="schema-column-cancel"
+                    submit-testid="schema-column-save"
+                    :processing="form.processing"
+                    @cancel="showForm = false"
+                    @submit="submit"
+                />
             </template>
         </Dialog>
 

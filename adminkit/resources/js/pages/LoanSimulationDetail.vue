@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, FileInput, Plus, Save, Send, ShieldCheck, Trash2, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -352,25 +353,15 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             </p>
                         </div>
                     </CardContent>
-                    <CardFooter class="justify-between">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            type="button"
-                            data-testid="loan-detail-cancel"
-                            @click="router.visit('/loan-simulation')"
-                        >
-                            <X class="size-4" /> Batal
-                        </Button>
-                        <Button
-                            v-if="editable"
-                            size="sm"
-                            type="submit"
-                            :disabled="form.processing"
-                            data-testid="loan-detail-save"
-                        >
-                            <Save class="size-4" /> {{ form.processing ? 'Menyimpan...' : 'Simpan' }}
-                        </Button>
+                    <CardFooter>
+                        <FormActions
+                            cancel-testid="loan-detail-cancel"
+                            submit-testid="loan-detail-save"
+                            submit-type="submit"
+                            :submit="editable"
+                            :processing="form.processing"
+                            @cancel="router.visit('/loan-simulation')"
+                        />
                     </CardFooter>
                 </Card>
             </form>
@@ -550,17 +541,13 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                 </div>
 
                 <template #footer>
-                    <Button variant="outline" size="sm" data-testid="collateral-modal-cancel" @click="showCollateralForm = false">
-                        <X class="size-4" /> Batal
-                    </Button>
-                    <Button
-                        size="sm"
-                        :disabled="newCollateral.processing"
-                        data-testid="collateral-modal-save"
-                        @click="saveCollateral"
-                    >
-                        <Save class="size-4" /> {{ newCollateral.processing ? 'Menyimpan...' : 'Simpan' }}
-                    </Button>
+                    <FormActions
+                        cancel-testid="collateral-modal-cancel"
+                        submit-testid="collateral-modal-save"
+                        :processing="newCollateral.processing"
+                        @cancel="showCollateralForm = false"
+                        @submit="saveCollateral"
+                    />
                 </template>
             </Dialog>
         </div>

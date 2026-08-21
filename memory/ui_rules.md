@@ -1,5 +1,22 @@
 # Aturan WAJIB sebelum menyatakan UI selesai (SIPEBRI/AdminKit)
 
+## ATURAN NOL: JANGAN MENULIS UI DARI NOL
+User pernah sangat marah (22/06/2026) karena tiap halaman punya gaya sendiri: tombol tidak dipojok
+kiri–kanan, ada yang berikon ada yang tidak, placeholder seenaknya, tampilan berantakan di beberapa
+perangkat. Penyebabnya SAYA menulis halaman baru dari nol, bukan memakai komponen yang ada.
+
+1. Halaman/dialog baru WAJIB disalin dari rujukan: form → `pages/CollateralSimulationForm.vue`,
+   daftar + dialog → `pages/Committees.vue`, daftar server-side → `pages/LoanSimulation.vue`.
+2. Pasangan tombol **Batal / aksi utama** HANYA lewat `components/composite/FormActions.vue`.
+   Dilarang menulis `<Button>Batal</Button>` + `<Button>Simpan</Button>` manual di halaman.
+   Footer satu tombol pun memakai `FormActions` dengan `:cancel="false"`.
+   Jangan menimpa perataan footer (`justify-end` dsb) — FormActions sudah mengatur kiri–kanan.
+3. **WAJIB jalankan `yarn ui:check`** (skrip `scripts/ui-check.mjs`) sebelum bilang selesai.
+   Skrip menolak: placeholder tidak baku, `<Input type="date|number">`, footer tanpa `FormActions`,
+   ukuran tombol tidak baku, dan komponen/ikon yang dipakai template tapi lupa di-import.
+4. Setelah `yarn build`, WAJIB uji 4 lebar (390/768/1024/1440) dan pastikan
+   `document.documentElement.scrollWidth === window.innerWidth` untuk setiap halaman yang disentuh.
+
 User berulang kali mengeluh soal responsivitas. JANGAN pernah menyelesaikan pekerjaan UI
 tanpa langkah di bawah ini.
 
@@ -15,6 +32,9 @@ Untuk tiap lebar, cek:
    disembunyikan di ponsel (`hidden sm:inline`).
 
 ## Placeholder kolom form (WAJIB, berlaku untuk semua form sekarang & nanti)
+Daftar putih satu-satunya (ditegakkan `yarn ui:check`): `-- Pilih --`, `(Opsional)`,
+`Semua …` (filter toolbar), `Cari…` (kolom pencarian), `Minimal 8 karakter` (kata sandi),
+`Pilih produk dahulu` (select bergantung). Selain itu = pelanggaran.
 - Kolom **TIDAK WAJIB** → placeholder **`(Opsional)`**, termasuk selectbox/combobox dan date picker.
 - Kolom **WAJIB** → **tanpa placeholder**; khusus selectbox/combobox placeholder-nya **`-- Pilih --`**.
 - Kolom angka opsional yang dikirim ke CBS (mis. NJOP, Adjusment): placeholder `(Opsional)`,

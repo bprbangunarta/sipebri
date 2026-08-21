@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { Loader2, Save, Trash2, Upload } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Avatar from '@/components/ui/Avatar.vue';
 import UploadProgress from '@/components/composite/UploadProgress.vue';
@@ -278,10 +279,13 @@ const removeAvatar = () => avatarForm.delete('/profile/avatar', { preserveScroll
                             Kantor, alias, kode MSO, dan kode kolektor hanya dapat diubah oleh pengelola pengguna.
                         </p>
                     </CardContent>
-                    <CardFooter class="justify-end">
-                        <Button size="sm" type="submit" :disabled="profile.processing" data-testid="profile-save">
-                            <Save class="size-4" /> {{ profile.processing ? ACTION.saving : ACTION.save }}
-                        </Button>
+                    <CardFooter>
+                        <FormActions
+                            :cancel="false"
+                            submit-testid="profile-save"
+                            submit-type="submit"
+                            :processing="profile.processing"
+                        />
                     </CardFooter>
                 </form>
             </Card>
@@ -331,15 +335,13 @@ const removeAvatar = () => avatarForm.delete('/profile/avatar', { preserveScroll
                             </p>
                         </div>
                     </CardContent>
-                    <CardFooter class="justify-end">
-                        <Button
-                            size="sm"
-                            type="submit"
-                            :disabled="password.processing"
-                            data-testid="profile-password-save"
-                        >
-                            <Save class="size-4" /> {{ password.processing ? ACTION.saving : ACTION.save }}
-                        </Button>
+                    <CardFooter>
+                        <FormActions
+                            :cancel="false"
+                            submit-testid="profile-password-save"
+                            submit-type="submit"
+                            :processing="password.processing"
+                        />
                     </CardFooter>
                 </form>
             </Card>

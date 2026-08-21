@@ -2,6 +2,8 @@
 import { computed, ref, watch } from 'vue';
 import { AlertTriangle, Gavel, Loader2, Play, Scale, X } from 'lucide-vue-next';
 
+import FormActions from '@/components/composite/FormActions.vue';
+import { ACTION } from '@/constants/labels';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
 import Combobox from '@/components/ui/Combobox.vue';
@@ -107,7 +109,7 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
                     <Combobox
                         v-model="productId"
                         :options="products"
-                        placeholder="Pilih Produk"
+                        placeholder="-- Pilih --"
                         data-testid="simulate-product"
                     />
                 </div>
@@ -117,7 +119,7 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
                         v-model="condition"
                         :options="conditions"
                         :disabled="!productId"
-                        placeholder="Pilih Produk dahulu"
+                        placeholder="Pilih produk dahulu"
                         data-testid="simulate-condition"
                     />
                 </div>
@@ -126,7 +128,7 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
                     <NumberInput
                         id="simulate-amount"
                         v-model="amount"
-                        placeholder="150000000"
+                        
                         data-testid="simulate-amount"
                     />
                     <p class="text-xs text-muted-foreground">{{ rupiah(amount || null) }}</p>
@@ -199,14 +201,19 @@ const canRun = computed(() => Boolean(productId.value) && amount.value !== '' &&
         </div>
 
         <template #footer>
-            <Button variant="outline" size="sm" data-testid="simulate-close" @click="close">
-                <X class="size-4" /> Tutup
-            </Button>
-            <Button size="sm" type="submit" form="simulate-form" :disabled="!canRun" data-testid="simulate-run">
-                <Loader2 v-if="loading" class="size-4 animate-spin" />
-                <Play v-else class="size-4" />
-                {{ loading ? 'Menghitung…' : 'Jalankan Simulasi' }}
-            </Button>
+            <FormActions
+                cancel-testid="simulate-close"
+                :cancel-label="ACTION.close"
+                submit-testid="simulate-run"
+                submit-label="Jalankan Simulasi"
+                submit-busy-label="Menghitung…"
+                :submit-icon="Play"
+                submit-type="submit"
+                form="simulate-form"
+                :processing="loading"
+                :disabled="!canRun"
+                @cancel="close"
+            />
         </template>
     </Dialog>
 </template>
