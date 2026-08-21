@@ -272,6 +272,30 @@ class LoanApplicationFlowTest extends TestCase
         $this->assertSoftDeleted('loan_applications', ['id' => $record->id]);
     }
 
+    /** Daftar hanya menampilkan berkas milik pembuatnya. */
+    public function test_index_only_shows_own_applications(): void
+    {
+        $user = $this->superadmin();
+        $this->actingAs($user);
+        $this->post('/loan-simulation', ['nik' => '3213011203950001']);
+        $mine = LoanApplication::latest('id')->first();
+
+        $other = LoanApplication::create([
+            'application_code' => LoanApplication::nextCode(),
+            'application_date' => now()->toDateString(),
+            'status' => 'DRAFT',
+            'nik' => '3213012509880007',
+            'full_name' => 'KANA SUTISNA',
+            'created_by' => 'ORANG LAIN',
+        ]);
+
+        $codes = collect($this->get('/loan-simulation')->viewData('page')['props']['records']['data'])
+            ->pluck('application_code');
+
+        $this->assertTrue($codes->contains($mine->application_code));
+        $this->assertFalse($codes->contains($other->application_code));
+    }
+
     /** Agunan hanya wajib bila parameter produk menyatakan demikian. */
     public function test_confirm_follows_product_collateral_requirement(): void
     {

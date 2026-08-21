@@ -48,15 +48,18 @@ class LoanApplicationController extends Controller
         $sort = TableQuery::sort($request, ['application_code', 'application_date', 'full_name', 'requested_amount', 'status'], 'application_code');
         $dir = TableQuery::direction($request);
         $status = (string) $request->input('status', '');
+        $productId = (int) $request->input('product_id', 0);
 
         $records = LoanApplication::query()
-            ->with(['product:id,alias,name', 'office:id,alias,name'])
+            ->with(['product:id,alias,name', 'office:id,alias,name', 'method:id,code,name'])
+            ->where('created_by', $request->user()->name)
             ->when($search !== '', fn ($q) => $q->where(function ($w) use ($search) {
                 foreach (['application_code', 'full_name', 'nik', 'credit_account'] as $col) {
                     $w->orWhere($col, 'like', "%{$search}%");
                 }
             }))
             ->when(in_array($status, self::STATUSES, true), fn ($q) => $q->where('status', $status))
+            ->when($productId > 0, fn ($q) => $q->where('product_id', $productId))
             ->orderBy($sort, $dir)
             ->paginate(TableQuery::perPage($request))
             ->withQueryString();
@@ -66,8 +69,13 @@ class LoanApplicationController extends Controller
                 'data' => collect($records->items())->map(fn (LoanApplication $r) => $this->row($r))->all(),
                 'meta' => TableQuery::meta($records),
             ],
-            'filters' => ['search' => $search, 'sort' => $sort, 'dir' => $dir, 'status' => $status],
+            'filters' => [
+                'search' => $search, 'sort' => $sort, 'dir' => $dir,
+                'status' => $status, 'product_id' => $productId ?: '',
+            ],
             'statuses' => self::STATUSES,
+            'productOptions' => Product::orderBy('code')->get(['id', 'alias', 'name'])
+                ->map(fn (Product $p) => ['value' => $p->id, 'label' => "{$p->alias} : {$p->name}"])->all(),
             'sampleNiks' => CustomerDirectory::sampleNiks(),
         ]);
     }
@@ -400,6 +408,7 @@ class LoanApplicationController extends Controller
             ]),
             'application_date' => $r->application_date?->format('Y-m-d'),
             'product_label' => $r->product ? "{$r->product->alias} : {$r->product->name}" : null,
+            'method_label' => $r->method ? "{$r->method->code} : {$r->method->name}" : null,
             'office_label' => $r->office ? "{$r->office->alias} : {$r->office->name}" : null,
         ];
     }

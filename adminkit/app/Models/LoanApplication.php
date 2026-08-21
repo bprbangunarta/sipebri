@@ -58,6 +58,11 @@ class LoanApplication extends Model
         return $this->belongsTo(Office::class);
     }
 
+    public function method(): BelongsTo
+    {
+        return $this->belongsTo(Method::class);
+    }
+
     public function collaterals(): BelongsToMany
     {
         return $this->belongsToMany(

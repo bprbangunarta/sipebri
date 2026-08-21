@@ -675,3 +675,13 @@ Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dal
 - Uji: tes baru `test_confirm_follows_product_collateral_requirement` (tanpa agunan → sukses bila
   tidak wajib, ditolak bila wajib). `php artisan test` → **49 lulus**. Verifikasi browser pada berkas
   `00700003` (produk KTA): tombol **Ajukan** aktif, badge "Tidak wajib" tampil.
+
+## Selesai (2026-06-22, daftar Pengajuan Kredit: sistem bunga, filter produk, milik sendiri)
+- Kolom **Produk** kini menampilkan **Sistem Bunga** di baris kedua (`KODE : NAMA`), seragam dengan
+  kolom lain — relasi baru `LoanApplication::method()`, kolom `method_label` pada baris tabel.
+- Toolbar daftar mendapat **filter Produk** (`loan-simulation-product-filter`, param `product_id`),
+  bersebelahan dengan filter status.
+- Daftar hanya menampilkan berkas **milik pembuatnya** (`where created_by = nama pengguna`).
+  Tes baru `test_index_only_shows_own_applications`.
+- Uji: `php artisan test` → **50 lulus**, verifikasi browser (2 berkas milik IT Support tampil,
+  sistem bunga FLATE/ANUITAS terlihat, dropdown filter produk berisi 17 produk).

@@ -23,6 +23,7 @@ const props = defineProps({
     records: { type: Object, required: true },
     filters: { type: Object, default: () => ({}) },
     statuses: { type: Array, default: () => [] },
+    productOptions: { type: Array, default: () => [] },
     sampleNiks: { type: Array, default: () => [] },
 });
 
@@ -48,6 +49,7 @@ const { query, loading, reload, onSearch, onSort, onPage, onPerPage, onFilter, s
         sort: props.filters.sort ?? 'application_code',
         dir: props.filters.dir ?? 'asc',
         status: props.filters.status ?? '',
+        product_id: props.filters.product_id ?? '',
         page: props.records.meta.page ?? 1,
         per_page: props.records.meta.per_page ?? 10,
     },
@@ -56,6 +58,11 @@ const { query, loading, reload, onSearch, onSort, onPage, onPerPage, onFilter, s
 const statusOptions = computed(() => [
     { value: '', label: 'Semua status' },
     ...props.statuses.map((s) => ({ value: s, label: s })),
+]);
+
+const productFilterOptions = computed(() => [
+    { value: '', label: 'Semua produk' },
+    ...props.productOptions,
 ]);
 
 const STATUS_TONE = {
@@ -132,6 +139,14 @@ const submitCreate = () =>
 
                 <template #filters>
                     <Combobox
+                        :model-value="query.product_id"
+                        :options="productFilterOptions"
+                        placeholder="Semua produk"
+                        class="w-full sm:w-[240px]"
+                        data-testid="loan-simulation-product-filter"
+                        @update:model-value="onFilter('product_id', $event)"
+                    />
+                    <Combobox
                         :model-value="query.status"
                         :options="statusOptions"
                         placeholder="Semua status"
@@ -154,7 +169,10 @@ const submitCreate = () =>
                 </template>
 
                 <template #cell-product_label="{ row }">
-                    <span class="whitespace-normal">{{ row.product_label ?? '—' }}</span>
+                    <span class="block whitespace-normal">{{ row.product_label ?? '—' }}</span>
+                    <span class="mt-0.5 block whitespace-normal text-xs text-muted-foreground">
+                        {{ row.method_label ?? '—' }}
+                    </span>
                 </template>
 
                 <template #cell-requested_amount="{ row }">
