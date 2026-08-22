@@ -96,7 +96,7 @@ export const farmMetrics = (form, application = {}) => {
         net_profit: net,
         principal_installment: principal,
         other_bank_loan: num(form.cost_other_bank),
-        monthly_income: Math.floor((net + num(form.addition_result) - principal) / HARVEST_MONTHS),
+        monthly_income: Math.floor((net - principal) / HARVEST_MONTHS) + num(form.addition_result),
     };
 };
 

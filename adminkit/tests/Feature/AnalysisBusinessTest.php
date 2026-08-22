@@ -175,6 +175,13 @@ class AnalysisBusinessTest extends TestCase
         $this->assertSame(25_021_075, $business->net_profit);
         $this->assertSame(14_000_000, $metrics['principal_installment']);
         $this->assertSame(1_836_845, $metrics['monthly_income']);
+
+        // Penambahan hasil usaha ditambahkan SETELAH pembagian 6 bulan.
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/businesses/{$business->id}", [
+            'addition_result' => 12_000_000,
+        ])->assertRedirect();
+
+        $this->assertSame(13_836_845, $business->refresh()->metrics()['monthly_income']);
     }
 
     public function test_finance_sheet_sums_business_net_profit(): void

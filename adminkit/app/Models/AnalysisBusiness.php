@@ -151,8 +151,8 @@ class AnalysisBusiness extends Model
     /**
      * Pertanian (angsuran musiman, mengikuti sistem lama):
      * pinjaman bank lain SUDAH termasuk pos biaya, angsuran pokok = plafon ÷ jangka
-     * waktu × 6 bulan, pendapatan per bulan = (hasil bersih + penambahan − angsuran
-     * pokok) ÷ 6 dibulatkan ke bawah.
+     * waktu × 6 bulan, pendapatan per bulan = floor((hasil bersih − angsuran pokok) ÷ 6)
+     * lalu DITAMBAH penambahan hasil usaha (penambahan sudah berupa nilai per bulan).
      */
     private function farmMetrics(): array
     {
@@ -166,7 +166,7 @@ class AnalysisBusiness extends Model
             ? (int) round((int) $application->requested_amount / $tenor * self::HARVEST_MONTHS)
             : 0;
 
-        $monthly = (int) floor(($net + (int) $this->addition_result - $principal) / self::HARVEST_MONTHS);
+        $monthly = (int) floor(($net - $principal) / self::HARVEST_MONTHS) + (int) $this->addition_result;
 
         return [
             'total_area' => (int) $this->area_own + (int) $this->area_rent + (int) $this->area_pawn,

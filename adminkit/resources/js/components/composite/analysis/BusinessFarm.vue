@@ -191,8 +191,9 @@ const submit = () => form.put(props.url, { preserveScroll: true });
                     <p class="text-xs text-muted-foreground">
                         Angsuran pokok = plafon {{ rupiah(props.application.requested_amount) }} ÷
                         {{ props.application.requested_tenor }} bulan × {{ HARVEST_MONTHS }} bulan musiman.
-                        Pendapatan per bulan = (hasil bersih + penambahan − angsuran pokok) ÷
-                        {{ HARVEST_MONTHS }}. Pinjaman bank lain sudah masuk pos biaya, jadi tidak dikurangi lagi.
+                        Pendapatan per bulan = (hasil bersih − angsuran pokok) ÷ {{ HARVEST_MONTHS }},
+                        lalu ditambah penambahan hasil usaha (nilai per bulan). Pinjaman bank lain sudah masuk
+                        pos biaya, jadi tidak dikurangi lagi.
                     </p>
                 </CardContent>
             </Card>

@@ -875,3 +875,10 @@ Usaha Pertanian 1.836.845 (pendapatan per bulan) + Usaha Jasa 3.900.000 (4.500.0
 = Pendapatan Usaha **5.736.845**; Biaya Rumah Tangga **2.900.000** (7 pos); Kewajiban Lainnya **1.574.638**
 (REKAP SLIK 1.374.638 + PAJAK KENDARAAN 200.000); **Keuangan Perbulan 1.262.207** — semuanya identik
 dengan tangkapan layar sistem lama. `php artisan test` 84 lolos.
+
+## Perbaikan (2026-06-22, penambahan hasil usaha pertanian)
+User menemukan: mengisi Penambahan Hasil Usaha 12.000.000 di sistem lama membuat Pendapatan Perbulan
+1.836.845 → **13.836.845**, artinya penambahan ditambahkan **SETELAH** pembagian 6 bulan (sesuai kode lama
+`$tot = laba_perbulan + penambahan`). Rumus dikoreksi di backend & cermin JS:
+`pendapatan_perbulan = floor((hasil bersih − angsuran pokok) ÷ 6) + penambahan`.
+Tes regresi ditambahkan (penambahan 12 jt → 13.836.845). `php artisan test` 84 lolos.
