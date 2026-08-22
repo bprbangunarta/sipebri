@@ -16,7 +16,7 @@ class AnalysisBusiness extends Model
 {
     use TracksAuthor;
 
-    /** Lama satu siklus tanam–panen (bulan) untuk membagi hasil bersih pertanian. */
+    /** Lama siklus setoran bawaan (bulan) bila sistem cicilan berkas tidak jelas. */
     public const HARVEST_MONTHS = 6;
 
     public const TYPES = ['PERDAGANGAN', 'PERTANIAN', 'JASA', 'LAINNYA'];
@@ -149,10 +149,11 @@ class AnalysisBusiness extends Model
     }
 
     /**
-     * Pertanian (angsuran musiman, mengikuti sistem lama):
-     * pinjaman bank lain SUDAH termasuk pos biaya, angsuran pokok = plafon ÷ jangka
-     * waktu × 6 bulan, pendapatan per bulan = floor((hasil bersih − angsuran pokok) ÷ 6)
-     * lalu DITAMBAH penambahan hasil usaha (penambahan sudah berupa nilai per bulan).
+     * Pertanian. Pinjaman bank lain SUDAH termasuk pos biaya. Periode setoran
+     * diambil dari sistem cicilan berkas (MUSIMAN = 6 bulan, BULANAN = 1,
+     * NON ANGSURAN = sepanjang jangka waktu):
+     * setoran pokok = plafon ÷ (jangka waktu ÷ periode),
+     * pendapatan per bulan = floor((hasil bersih − setoran pokok) ÷ periode) + penambahan.
      */
     private function farmMetrics(): array
     {
@@ -162,23 +163,40 @@ class AnalysisBusiness extends Model
 
         $application = $this->application;
         $tenor = (int) ($application?->requested_tenor ?? 0);
-        $principal = $tenor > 0
-            ? (int) round((int) $application->requested_amount / $tenor * self::HARVEST_MONTHS)
-            : 0;
+        $period = $this->installmentPeriod($tenor);
+        $terms = $period > 0 ? $tenor / $period : 0;
 
-        $monthly = (int) floor(($net - $principal) / self::HARVEST_MONTHS) + (int) $this->addition_result;
+        $principal = $terms > 0 ? (int) round((int) $application->requested_amount / $terms) : 0;
+        $afterPrincipal = $net - $principal;
+        $monthly = $period > 0
+            ? (int) floor($afterPrincipal / $period) + (int) $this->addition_result
+            : 0;
 
         return [
             'total_area' => (int) $this->area_own + (int) $this->area_rent + (int) $this->area_pawn,
             'harvest_income' => $harvestIncome,
             'total_cost' => $totalCost,
+            'installment_period' => $period,
             'principal_installment' => $principal,
+            'after_principal' => $afterPrincipal,
             'other_bank_loan' => (int) $this->cost_other_bank,
             'monthly_income' => $monthly,
             'revenue' => $harvestIncome,
             'expense' => $totalCost,
             'net_profit' => $net,
         ];
+    }
+
+    /** Kelipatan bulan setoran; 0 pada sistem cicilan non angsuran → sepanjang jangka waktu. */
+    private function installmentPeriod(int $tenor): int
+    {
+        $period = $this->application?->installment?->period_months;
+
+        if ($period === null) {
+            return self::HARVEST_MONTHS;
+        }
+
+        return $period > 0 ? $period : $tenor;
     }
 
     private function serviceMetrics(): array

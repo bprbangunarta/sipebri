@@ -103,6 +103,17 @@ const tenorOutOfRange = computed(() =>
 );
 const installmentOptions = computed(() => filterByIds(props.installments, parameter.value?.installment_ids));
 
+/** Jangka waktu sebaiknya kelipatan periode cicilan (mis. MUSIMAN = 6 bulan). */
+const installmentPeriod = computed(
+    () => props.installments.find((i) => Number(i.value) === Number(form.installment_id))?.period_months ?? 0,
+);
+const tenorNotMultiple = computed(
+    () =>
+        installmentPeriod.value > 1 &&
+        Number(form.requested_tenor) > 0 &&
+        Number(form.requested_tenor) % installmentPeriod.value !== 0,
+);
+
 const pick = (options, preferred) => {
     if (options.some((o) => Number(o.value) === Number(preferred))) return preferred;
 
@@ -320,6 +331,18 @@ const ready = computed(() => Object.values(props.record.checklist ?? {}).every(B
                             />
                             <p v-if="form.errors.installment_id" class="text-xs font-medium text-destructive">
                                 {{ form.errors.installment_id }}
+                            </p>
+                            <p
+                                v-else-if="installmentPeriod > 1"
+                                class="text-xs"
+                                :class="tenorNotMultiple ? 'font-medium text-amber-600' : 'text-muted-foreground'"
+                                data-testid="loan-detail-installment-period"
+                            >
+                                {{
+                                    tenorNotMultiple
+                                        ? `Jangka waktu ${form.requested_tenor} bulan bukan kelipatan ${installmentPeriod} bulan.`
+                                        : `Setoran tiap ${installmentPeriod} bulan.`
+                                }}
                             </p>
                         </div>
                         <div class="space-y-[var(--item-gap)]">

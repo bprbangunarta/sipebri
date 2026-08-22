@@ -68,6 +68,8 @@ class AnalysisBusinessController extends Controller
                 'status' => $loanApplication->status,
                 'requested_amount' => (int) $loanApplication->requested_amount,
                 'requested_tenor' => (int) $loanApplication->requested_tenor,
+                'installment_label' => $loanApplication->installment?->name,
+                'installment_period' => (int) ($loanApplication->installment?->period_months ?? 0),
                 'product_label' => $loanApplication->product
                     ? "{$loanApplication->product->alias} : {$loanApplication->product->name}"
                     : null,
@@ -152,7 +154,7 @@ class AnalysisBusinessController extends Controller
                 'daily_purchase', 'cost_of_goods', ...AnalysisBusiness::TRADE_COSTS,
                 'economy_sector', 'plant_type', 'area_own', 'area_rent', 'area_pawn',
                 'harvest_kw', 'price_per_kw', ...AnalysisBusiness::FARM_COSTS,
-                'take_portion', 'addition_result', 'other_bank_loan', 'principal_installment',
+                'addition_result', 'other_bank_loan', 'principal_installment',
                 'service_income', 'vehicle_tax', 'other_expense',
                 'business_kind', 'projection_addition',
                 'revenue', 'expense', 'net_profit', 'monthly_income',
@@ -206,7 +208,6 @@ class AnalysisBusinessController extends Controller
                     'area_pawn' => $money,
                     'harvest_kw' => ['sometimes', 'nullable', 'numeric', 'min:0', 'max:99999999'],
                     'price_per_kw' => $money,
-                    'take_portion' => $money,
                     'addition_result' => $money,
                     'other_bank_loan' => $money,
                     'principal_installment' => $money,

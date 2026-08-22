@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\AnalysisBusiness;
 use App\Models\CommitteePath;
+use App\Models\Installment;
 use App\Models\LoanApplication;
 use App\Models\Office;
 use App\Models\Product;
@@ -281,6 +282,50 @@ class AnalysisBusinessTest extends TestCase
         $this->assertSame(2_900_000, $metrics['household_cost']);
         $this->assertSame(1_574_638, $metrics['obligation_cost']);
         $this->assertSame(1_262_207, $metrics['monthly_balance']);
+    }
+
+    /** Periode setoran mengikuti kelipatan sistem cicilan berkas. */
+    public function test_farm_uses_installment_period_of_application(): void
+    {
+        $app = $this->surveyed();
+        $app->update([
+            'requested_amount' => 28_000_000,
+            'requested_tenor' => 12,
+            'installment_id' => Installment::where('name', 'MUSIMAN')->value('id'),
+        ]);
+
+        $business = AnalysisBusiness::create([
+            'loan_application_id' => $app->id,
+            'type' => 'PERTANIAN',
+            'code' => AnalysisBusiness::nextCode('PERTANIAN'),
+            'name' => 'PERTANIAN PADI',
+            'harvest_kw' => 165,
+            'price_per_kw' => 680_000,
+            'cost_land' => 7_268_486,
+            'cost_seed' => 644_252,
+            'cost_harvest' => 10_341_073,
+            'cost_fertilizer' => 5_434_845,
+            'cost_pesticide' => 1_684_967,
+            'cost_tax' => 3_303_857,
+            'cost_village' => 1_651_929,
+            'cost_labor' => 4_724_516,
+            'cost_other_bank' => 52_125_000,
+        ]);
+
+        // MUSIMAN: setoran tiap 6 bulan → 2 kali setor.
+        $metrics = $business->metrics();
+        $this->assertSame(6, $metrics['installment_period']);
+        $this->assertSame(14_000_000, $metrics['principal_installment']);
+        $this->assertSame(11_021_075, $metrics['after_principal']);
+        $this->assertSame(1_836_845, $metrics['monthly_income']);
+
+        // BULANAN: setoran tiap bulan → 12 kali setor, tanpa pembagian 6 lagi.
+        $app->update(['installment_id' => Installment::where('name', 'BULANAN')->value('id')]);
+        $metrics = $business->refresh()->metrics();
+
+        $this->assertSame(1, $metrics['installment_period']);
+        $this->assertSame(2_333_333, $metrics['principal_installment']);
+        $this->assertSame(22_687_742, $metrics['monthly_income']);
     }
 
     public function test_ownership_rejects_unknown_option(): void

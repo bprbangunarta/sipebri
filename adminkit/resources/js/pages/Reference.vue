@@ -14,6 +14,7 @@ import Dialog from '@/components/ui/Dialog.vue';
 import DropdownMenuItem from '@/components/ui/DropdownMenuItem.vue';
 import DropdownMenuSeparator from '@/components/ui/DropdownMenuSeparator.vue';
 import Input from '@/components/ui/Input.vue';
+import NumberInput from '@/components/ui/NumberInput.vue';
 import Label from '@/components/ui/Label.vue';
 import ConfirmDeleteDialog from '@/components/composite/ConfirmDeleteDialog.vue';
 import DataTableCard from '@/components/composite/DataTableCard.vue';
@@ -47,7 +48,9 @@ const columns = computed(() => [
 ]);
 
 const isFlag = (field) => field.type === 'boolean';
-const textFields = computed(() => props.fields.filter((f) => !isFlag(f)));
+const isNumber = (field) => field.type === 'number';
+const textFields = computed(() => props.fields.filter((f) => !isFlag(f) && !isNumber(f)));
+const numberFields = computed(() => props.fields.filter(isNumber));
 const statusKey = computed(() => props.fields.find(isFlag)?.key ?? null);
 const statusSlot = computed(() => `cell-${statusKey.value ?? '__none'}`);
 
@@ -84,7 +87,8 @@ const { query, loading, reload, onSearch, onSort, onPage, onPerPage, onFilter, s
 });
 
 /* ── Formulir tambah/ubah ────────────────────────────────────────────── */
-const blank = () => Object.fromEntries(props.fields.map((field) => [field.key, isFlag(field) ? true : '']));
+const blank = () =>
+    Object.fromEntries(props.fields.map((field) => [field.key, isFlag(field) ? true : isNumber(field) ? 0 : '']));
 
 const dialogOpen = ref(false);
 const editing = ref(null);
@@ -111,7 +115,10 @@ const openEdit = (row) => {
     form.clearErrors();
     form.defaults(
         Object.fromEntries(
-            props.fields.map((f) => [f.key, isFlag(f) ? Boolean(row[f.key]) : (row[f.key] ?? '')]),
+            props.fields.map((f) => [
+                f.key,
+                isFlag(f) ? Boolean(row[f.key]) : isNumber(f) ? (row[f.key] ?? 0) : (row[f.key] ?? ''),
+            ]),
         ),
     );
     form.reset();
@@ -290,6 +297,24 @@ const runBulkDelete = () => {
                         >
                             {{ form.errors[field.key] }}
                         </p>
+                    </div>
+
+                    <div v-for="field in numberFields" :key="field.key" class="space-y-[var(--item-gap)]">
+                        <Label :for="`ref-${field.key}`">{{ field.label }}</Label>
+                        <NumberInput
+                            :id="`ref-${field.key}`"
+                            v-model="form[field.key]"
+                            class="text-right tabular-nums"
+                            :data-testid="`${props.slug}-form-${field.key}`"
+                        />
+                        <p
+                            v-if="form.errors[field.key]"
+                            class="text-xs font-medium text-destructive"
+                            :data-testid="`${props.slug}-form-${field.key}-error`"
+                        >
+                            {{ form.errors[field.key] }}
+                        </p>
+                        <p v-else-if="field.hint" class="text-xs text-muted-foreground">{{ field.hint }}</p>
                     </div>
 
                     <label v-if="statusKey" class="flex items-center justify-between gap-3 pt-1">

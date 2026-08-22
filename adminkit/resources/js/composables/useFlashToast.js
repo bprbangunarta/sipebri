@@ -9,6 +9,7 @@ export function useFlashToast() {
     const emit = (flash) => {
         if (flash?.success) notify.success(flash.success);
         if (flash?.error) notify.error(flash.error);
+        if (flash?.warning) notify.warning(flash.warning);
     };
 
     emit(page.props.flash);

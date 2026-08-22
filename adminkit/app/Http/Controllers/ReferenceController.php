@@ -45,7 +45,9 @@ abstract class ReferenceController extends Controller
     public function index(Request $request): Response
     {
         $keys = collect($this->fields())->pluck('key')->all();
-        $textKeys = collect($this->fields())->where('type', '!=', 'boolean')->pluck('key')->all();
+        $textKeys = collect($this->fields())
+            ->whereNotIn('type', ['boolean', 'number'])
+            ->pluck('key')->all();
         $flag = collect($this->fields())->firstWhere('type', 'boolean')['key'] ?? null;
         $search = TableQuery::search($request);
         $sort = TableQuery::sort($request, $keys, $keys[0]);
@@ -152,10 +154,14 @@ abstract class ReferenceController extends Controller
 
         return collect($this->fields())
             ->mapWithKeys(fn (array $field) => [
-                $field['key'] => ($field['type'] ?? '') === 'boolean' ? ['boolean'] : [
-                    'required', 'string', 'max:255',
-                    ...($field['unique'] ?? false ? [Rule::unique($table, $field['key'])->ignore($id)] : []),
-                ],
+                $field['key'] => match ($field['type'] ?? '') {
+                    'boolean' => ['boolean'],
+                    'number' => ['required', 'integer', 'min:0', 'max:'.($field['max'] ?? 999)],
+                    default => [
+                        'required', 'string', 'max:255',
+                        ...($field['unique'] ?? false ? [Rule::unique($table, $field['key'])->ignore($id)] : []),
+                    ],
+                },
             ])
             ->all();
     }
@@ -177,6 +183,12 @@ abstract class ReferenceController extends Controller
     public function booleanFields(): array
     {
         return collect($this->fields())->where('type', 'boolean')->pluck('key')->all();
+    }
+
+    /** Kolom bertipe angka; nilainya selalu disimpan sebagai bilangan bulat. */
+    public function numberFields(): array
+    {
+        return collect($this->fields())->where('type', 'number')->pluck('key')->all();
     }
 
     /** Kolom yang nilainya selalu disimpan dalam huruf besar. */

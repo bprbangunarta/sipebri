@@ -65,6 +65,11 @@ class LoanApplication extends Model
         return $this->belongsTo(Method::class);
     }
 
+    public function installment(): BelongsTo
+    {
+        return $this->belongsTo(Installment::class);
+    }
+
     public function schedules(): HasMany
     {
         return $this->hasMany(LoanSchedule::class)->orderBy('id');

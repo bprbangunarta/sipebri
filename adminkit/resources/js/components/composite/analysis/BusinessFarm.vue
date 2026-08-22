@@ -16,7 +16,7 @@ import Label from '@/components/ui/Label.vue';
 import NumberInput from '@/components/ui/NumberInput.vue';
 import Textarea from '@/components/ui/Textarea.vue';
 import { rupiah } from '@/constants/committee';
-import { farmMetrics, FARM_COSTS, HARVEST_MONTHS } from '@/constants/analysisMath';
+import { farmMetrics, FARM_COSTS } from '@/constants/analysisMath';
 
 /** Usaha pertanian — satu lembar: informasi lahan, biaya tanam, ringkasan keuangan. */
 const props = defineProps({
@@ -47,6 +47,11 @@ const form = useForm({
 });
 
 const live = computed(() => farmMetrics(form, props.application));
+const terms = computed(() =>
+    live.value.installment_period > 0
+        ? Math.round((props.application.requested_tenor / live.value.installment_period) * 100) / 100
+        : 0,
+);
 const angka = (value) => new Intl.NumberFormat('id-ID').format(value ?? 0);
 
 const opts = (list) => list.map((v) => ({ value: v, label: v }));
@@ -156,14 +161,13 @@ const submit = () => form.put(props.url, { preserveScroll: true });
                         testid="farm-addition"
                         :error="form.errors.addition_result"
                     />
-                    <FieldStat label="Ambil 70%" :value="rupiah(props.business.take_portion)" />
                     <FieldStat
                         label="Pinjaman Bank Lain"
                         :value="rupiah(live.other_bank_loan)"
                         testid="farm-other-bank"
                     />
                     <FieldStat
-                        label="Angsuran Pokok"
+                        label="Setoran Pokok"
                         :value="rupiah(live.principal_installment)"
                         testid="farm-installment"
                     />
@@ -183,17 +187,24 @@ const submit = () => form.put(props.url, { preserveScroll: true });
                     />
                     <FieldStat label="Hasil Bersih Usaha" :value="rupiah(live.net_profit)" testid="farm-net-profit" />
                     <FieldStat
+                        label="Pendapatan Setelah Pokok"
+                        :value="rupiah(live.after_principal)"
+                        testid="farm-after-principal"
+                    />
+                    <FieldStat
                         label="Pendapatan Perbulan"
                         :value="rupiah(live.monthly_income)"
                         strong
                         testid="farm-monthly"
                     />
                     <p class="text-xs text-muted-foreground">
-                        Angsuran pokok = plafon {{ rupiah(props.application.requested_amount) }} ÷
-                        {{ props.application.requested_tenor }} bulan × {{ HARVEST_MONTHS }} bulan musiman.
-                        Pendapatan per bulan = (hasil bersih − angsuran pokok) ÷ {{ HARVEST_MONTHS }},
-                        lalu ditambah penambahan hasil usaha (nilai per bulan). Pinjaman bank lain sudah masuk
-                        pos biaya, jadi tidak dikurangi lagi.
+                        Sistem cicilan {{ props.application.installment_label ?? '—' }}: setoran tiap
+                        {{ live.installment_period }} bulan, jadi
+                        {{ props.application.requested_tenor }} ÷ {{ live.installment_period }} = {{ terms }}
+                        kali setor. Setoran pokok = plafon
+                        {{ rupiah(props.application.requested_amount) }} ÷ jumlah setoran. Pendapatan per bulan =
+                        (hasil bersih − setoran pokok) ÷ {{ live.installment_period }} + penambahan hasil usaha.
+                        Pinjaman bank lain sudah masuk pos biaya, jadi tidak dikurangi lagi.
                     </p>
                 </CardContent>
             </Card>

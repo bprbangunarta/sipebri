@@ -244,7 +244,28 @@ class LoanApplicationController extends Controller
             ActivityLog::diffOf($loanApplication, $before),
         );
 
-        return back()->with('success', 'Data pengajuan disimpan.');
+        $warning = $this->tenorWarning($loanApplication);
+
+        return back()->with('success', 'Data pengajuan disimpan.')
+            ->with('warning', $warning);
+    }
+
+    /**
+     * Jangka waktu sebaiknya kelipatan periode sistem cicilan (mis. MUSIMAN = 6 bulan)
+     * supaya setoran pokok pada analisa tidak jatuh pada pecahan periode.
+     * Sementara hanya peringatan, belum menolak simpan.
+     */
+    private function tenorWarning(LoanApplication $record): ?string
+    {
+        $period = (int) ($record->installment?->period_months ?? 0);
+        $tenor = (int) $record->requested_tenor;
+
+        if ($period < 2 || $tenor < 1 || $tenor % $period === 0) {
+            return null;
+        }
+
+        return "Jangka waktu {$tenor} bulan bukan kelipatan {$period} bulan sesuai sistem cicilan "
+            .($record->installment?->name ?? '').'. Perhitungan setoran pokok pada analisa bisa tidak bulat.';
     }
 
     public function attachCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
@@ -430,8 +451,12 @@ class LoanApplicationController extends Controller
                 ->map(fn ($i) => ['value' => $i->id, 'label' => "{$i->code} : {$i->name}"])->all(),
             'methods' => Method::orderBy('code')->get(['id', 'code', 'name'])
                 ->map(fn ($m) => ['value' => $m->id, 'label' => "{$m->code} : {$m->name}"])->all(),
-            'installments' => Installment::orderBy('code')->get(['id', 'code', 'name'])
-                ->map(fn ($i) => ['value' => $i->id, 'label' => "{$i->code} : {$i->name}"])->all(),
+            'installments' => Installment::orderBy('code')->get(['id', 'code', 'name', 'period_months'])
+                ->map(fn ($i) => [
+                    'value' => $i->id,
+                    'label' => "{$i->code} : {$i->name}",
+                    'period_months' => $i->period_months,
+                ])->all(),
             'supervisors' => $byRoles(['Kasi Analis']),
             'collateralTypes' => CollateralType::orderBy('code')->get(['code', 'name'])
                 ->map(fn ($t) => ['value' => $t->code, 'label' => "{$t->code} : {$t->name}"])->all(),

@@ -80,23 +80,33 @@ export const tradeMetrics = (form, goods) => {
     };
 };
 
-/** `application` dibutuhkan karena angsuran pokok berasal dari plafon & jangka waktu. */
+/**
+ * `application` dibutuhkan karena setoran pokok berasal dari plafon, jangka waktu
+ * dan kelipatan sistem cicilan berkas (0 = non angsuran → sepanjang jangka waktu).
+ */
 export const farmMetrics = (form, application = {}) => {
     const harvestIncome = Math.round(num(form.harvest_kw) * num(form.price_per_kw));
     const totalCost = FARM_COSTS.reduce((t, c) => t + num(form[c.key]), 0);
     const net = harvestIncome - totalCost;
 
     const tenor = num(application.requested_tenor);
-    const principal = tenor > 0 ? Math.round((num(application.requested_amount) / tenor) * HARVEST_MONTHS) : 0;
+    const configured = num(application.installment_period);
+    const period = configured > 0 ? configured : tenor || HARVEST_MONTHS;
+    const terms = period > 0 ? tenor / period : 0;
+
+    const principal = terms > 0 ? Math.round(num(application.requested_amount) / terms) : 0;
+    const afterPrincipal = net - principal;
 
     return {
         total_area: num(form.area_own) + num(form.area_rent) + num(form.area_pawn),
         harvest_income: harvestIncome,
         total_cost: totalCost,
         net_profit: net,
+        installment_period: period,
         principal_installment: principal,
+        after_principal: afterPrincipal,
         other_bank_loan: num(form.cost_other_bank),
-        monthly_income: Math.floor((net - principal) / HARVEST_MONTHS) + num(form.addition_result),
+        monthly_income: Math.floor(afterPrincipal / period) + num(form.addition_result),
     };
 };
 
