@@ -11,10 +11,8 @@ Status per 22 Juni 2026. Riwayat pekerjaan: `CHANGELOG.md`. Ruang lingkup & arsi
 - **Uji banding pertanian PERPADIAN**: berkas contoh `00700007` (KBT · PERPADIAN · MUSIMAN · 45 jt / 12 bln).
 
 ## P1 — melengkapi alur
-- **Ajukan ke komite**: perubahan status ANALISA → KOMITE + notifikasi setelah lembar analisa lengkap.
 - **Ringkasan kelayakan**: kartu kemampuan angsuran & RC di atas lembar analisa.
 - **Berita Acara Pemeriksaan (BA) agunan**: cetak/PDF dari data Analisa Agunan.
-- **Ajukan ke komite**: perubahan status berkas dari ANALISA → KOMITE beserta notifikasi.
 
 ## P2 — modul & penyempurnaan
 - **Persetujuan Komite Kredit**: keputusan per jenjang mengikuti jalur komite & parameter produk.

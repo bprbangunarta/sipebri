@@ -908,3 +908,18 @@ Sumber: blade sistem lama yang dilampirkan user (`analisa_5c.zip`, `analisa_kual
   `ui:check` OK (63 berkas). Diverifikasi lewat UI: kedelapan bagian tampil dan simpan administrasi berhasil.
   **Testing agent tidak dijalankan** atas permintaan user (hemat poin) — pengujian menyeluruh dilakukan user
   di lokal. Seluruh data percobaan analisa sudah dihapus lagi agar basis data bersih.
+
+## Selesai (2026-06-22, Ajukan ke Komite)
+- Tombol **Ajukan ke Komite** di kepala Lembar Analisa (`analysis-submit`) + dialog konfirmasi berisi
+  daftar centang kedelapan bagian. Endpoint `POST /analysis-simulation/{berkas}/submit`.
+- **Syarat wajib** sebelum boleh diajukan: minimal satu usaha pada Analisa Usaha, biaya rumah tangga pada
+  Analisa Keuangan, Analisa 5C sudah dinilai, dan usulan plafon pada Memorandum. Bila belum lengkap:
+  tombol dinonaktifkan, ada pita peringatan kuning berisi daftar kekurangan (`analysis-gaps`), dan
+  permintaan langsung ditolak dari server dengan pesan yang menyebut bagian yang kurang.
+- Setelah diajukan: status berkas `SURVEY`/`ANALISA` → **`KOMITE`**, kolom baru
+  `loan_applications.analysis_submitted_at` & `analysis_submitted_by` terisi, audit trail dicatat, dan
+  **notifikasi** dikirim ke Kasi Analis pengusul (`supervisor_id`) serta seluruh pengguna berizin
+  `committees.view`. Berkas otomatis hilang dari daftar analisa; pengajuan kedua ditolak.
+- Uji: `php artisan test` **91 lolos** (tes baru menguji penolakan saat belum lengkap, perpindahan status,
+  notifikasi ke Kasi Analis, dan larangan mengajukan dua kali) + diverifikasi lewat UI (pita peringatan
+  tampil dan tombol nonaktif pada berkas yang belum lengkap). Basis data tetap bersih.

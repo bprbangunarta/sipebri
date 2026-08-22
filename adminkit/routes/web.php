@@ -286,6 +286,8 @@ Route::middleware('auth')->group(function () {
             ->name('analysis-simulation.memorandum');
         Route::put('/analysis-simulation/{loanApplication}/administration', [AnalysisController::class, 'updateAdministration'])
             ->name('analysis-simulation.administration');
+        Route::post('/analysis-simulation/{loanApplication}/submit', [AnalysisController::class, 'submit'])
+            ->name('analysis-simulation.submit');
         Route::post('/analysis-simulation/{loanApplication}/businesses', [AnalysisBusinessController::class, 'store'])
             ->name('analysis-simulation.businesses.store');
         Route::get('/analysis-simulation/{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'show'])

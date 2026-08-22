@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\AnalysisAdministration;
 use App\Models\AnalysisBusiness;
 use App\Models\AnalysisCollateral;
@@ -12,6 +13,7 @@ use App\Models\AnalysisSheet;
 use App\Models\AnalysisSheetItem;
 use App\Models\LoanApplication;
 use App\Models\LoanSurvey;
+use App\Support\Notify;
 use App\Support\TableQuery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +30,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class AnalysisController extends Controller
 {
+    private const LABEL = 'Analisa Kredit';
+
     public function index(Request $request): Response
     {
         $search = TableQuery::search($request);
@@ -89,6 +93,11 @@ class AnalysisController extends Controller
             'collaterals' => $this->collateralPayload($loanApplication),
             'memorandum' => $this->memorandumPayload($loanApplication),
             'administration' => $this->administrationPayload($loanApplication),
+            'submission' => [
+                'gaps' => $this->submissionGaps($loanApplication),
+                'submitted_at' => $loanApplication->analysis_submitted_at?->translatedFormat('d M Y H:i'),
+                'submitted_by' => $loanApplication->analysis_submitted_by,
+            ],
             'options' => [
                 'assets' => AnalysisSheet::ASSETS,
                 'qualitativeChoices' => AnalysisQualitative::CHOICES,
@@ -286,6 +295,84 @@ class AnalysisController extends Controller
         $record->fill($data)->save();
 
         return back()->with('success', 'Administrasi disimpan.');
+    }
+
+    /** Ajukan lembar analisa ke komite kredit. */
+    public function submit(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        if (! in_array($loanApplication->status, ['SURVEY', 'ANALISA'], true)) {
+            return back()->with('error', 'Berkas ini tidak berada pada tahap analisa.');
+        }
+
+        $missing = $this->submissionGaps($loanApplication);
+
+        if ($missing) {
+            return back()->with('error', 'Lengkapi dulu: '.implode(', ', $missing).'.');
+        }
+
+        $loanApplication->update([
+            'status' => 'KOMITE',
+            'analysis_submitted_at' => now(),
+            'analysis_submitted_by' => $request->user()->name,
+        ]);
+
+        ActivityLog::record(
+            "Mengajukan berkas {$loanApplication->application_code} ke komite kredit",
+            self::LABEL,
+            'success',
+            $loanApplication,
+        );
+
+        if ($loanApplication->supervisor) {
+            Notify::toUser(
+                $loanApplication->supervisor,
+                'Berkas siap diputus komite',
+                self::LABEL,
+                "Lembar analisa berkas {$loanApplication->application_code} ({$loanApplication->full_name}) sudah diajukan ke komite kredit.",
+                '/analysis-simulation',
+            );
+        }
+
+        Notify::toPermission(
+            'committees.view',
+            'Berkas masuk komite kredit',
+            self::LABEL,
+            "Berkas {$loanApplication->application_code} - {$loanApplication->full_name} menunggu keputusan komite.",
+            '/analysis-simulation',
+        );
+
+        return redirect()->route('analysis-simulation.index')
+            ->with('success', "Berkas {$loanApplication->application_code} diajukan ke komite kredit.");
+    }
+
+    /** Bagian wajib sebelum berkas boleh diajukan ke komite. */
+    private function submissionGaps(LoanApplication $r): array
+    {
+        $sheet = $this->sheet($r);
+        $memorandum = AnalysisMemorandum::firstOrNew(['loan_application_id' => $r->id]);
+        $fiveC = AnalysisFiveC::firstOrNew(['loan_application_id' => $r->id]);
+
+        $missing = [];
+
+        if (AnalysisBusiness::where('loan_application_id', $r->id)->count() === 0) {
+            $missing[] = 'Analisa Usaha (minimal satu usaha)';
+        }
+
+        if ($sheet->metrics()['household_cost'] <= 0) {
+            $missing[] = 'Analisa Keuangan (biaya rumah tangga)';
+        }
+
+        if ($fiveC->metrics()['grade'] === null) {
+            $missing[] = 'Analisa 5C';
+        }
+
+        if ((int) $memorandum->usulan_plafond <= 0) {
+            $missing[] = 'Memorandum (usulan plafon)';
+        }
+
+        return $missing;
     }
 
     private function collateralPayload(LoanApplication $r): array

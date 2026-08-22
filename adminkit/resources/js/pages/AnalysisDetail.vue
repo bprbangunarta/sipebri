@@ -1,8 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { Head, router } from '@inertiajs/vue3';
-import { ArrowLeft, ChevronLeft, ChevronRight, PencilRuler } from 'lucide-vue-next';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, PencilRuler, SendHorizontal } from 'lucide-vue-next';
 
+import ConfirmDialogBase from '@/components/ui/Dialog.vue';
+import FormActions from '@/components/composite/FormActions.vue';
 import AnalysisSectionNav from '@/components/composite/AnalysisSectionNav.vue';
 import BusinessList from '@/components/composite/analysis/BusinessList.vue';
 import FinanceForm from '@/components/composite/analysis/FinanceForm.vue';
@@ -31,6 +33,7 @@ const props = defineProps({
     collaterals: { type: Array, default: () => [] },
     memorandum: { type: Object, required: true },
     administration: { type: Object, required: true },
+    submission: { type: Object, required: true },
     options: { type: Object, required: true },
 });
 
@@ -46,6 +49,16 @@ const select = (key) => {
     activeKey.value = key;
 };
 const step = (delta) => select(ANALYSIS_SECTIONS[index.value + delta].key);
+
+/** Pengajuan ke komite hanya boleh saat seluruh bagian wajib sudah terisi. */
+const showSubmit = ref(false);
+const submitForm = useForm({});
+const canSubmit = computed(() => props.submission.gaps.length === 0 && props.record.status !== 'KOMITE');
+
+const submitToCommittee = () =>
+    submitForm.post(`/analysis-simulation/${props.record.id}/submit`, {
+        onFinish: () => (showSubmit.value = false),
+    });
 
 /** Sub-bagian Analisa Usaha = tipe usaha pada tabel `analysis_businesses`. */
 const businessType = computed(() => (sub.value ?? '').toUpperCase());
@@ -84,9 +97,23 @@ const filled = computed(() => ({
                         </p>
                     </div>
                 </div>
-                <Badge variant="default" class="font-medium" data-testid="analysis-status">
-                    {{ props.record.status }}
-                </Badge>
+                <div class="flex flex-wrap items-center gap-2">
+                    <Badge variant="default" class="font-medium" data-testid="analysis-status">
+                        {{ props.record.status }}
+                    </Badge>
+                    <Button
+                        v-if="props.record.status !== 'KOMITE'"
+                        size="sm"
+                        :disabled="!canSubmit"
+                        data-testid="analysis-submit"
+                        @click="showSubmit = true"
+                    >
+                        <SendHorizontal class="size-4" /> Ajukan ke Komite
+                    </Button>
+                    <span v-else class="text-xs text-muted-foreground" data-testid="analysis-submitted-info">
+                        Diajukan {{ props.submission.submitted_at }} oleh {{ props.submission.submitted_by }}
+                    </span>
+                </div>
             </div>
 
             <Card>
@@ -128,6 +155,14 @@ const filled = computed(() => ({
                     </div>
                 </CardContent>
             </Card>
+
+            <div
+                v-if="props.submission.gaps.length && props.record.status !== 'KOMITE'"
+                class="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400"
+                data-testid="analysis-gaps"
+            >
+                Belum bisa diajukan ke komite — lengkapi: {{ props.submission.gaps.join(', ') }}.
+            </div>
 
             <div class="grid gap-4 lg:grid-cols-[15rem_minmax(0,1fr)]">
                 <div class="lg:sticky lg:top-20 lg:self-start">
@@ -270,6 +305,41 @@ const filled = computed(() => ({
                     </div>
                 </div>
             </div>
+
+            <ConfirmDialogBase
+                :open="showSubmit"
+                title="Ajukan ke Komite Kredit?"
+                @update:open="showSubmit = $event"
+            >
+                <div class="space-y-2 text-sm">
+                    <p>
+                        Berkas <span class="font-mono font-semibold">{{ props.record.application_code }}</span>
+                        akan berpindah ke tahap komite dan lembar analisa tidak lagi muncul di daftar analisa Anda.
+                    </p>
+                    <div class="space-y-1 rounded-md border bg-muted/40 p-3">
+                        <p v-for="section in ANALYSIS_SECTIONS" :key="section.key" class="flex items-center gap-2">
+                            <CheckCircle2
+                                class="size-4"
+                                :class="filled[section.key] ? 'text-primary' : 'text-muted-foreground/40'"
+                            />
+                            <span :class="filled[section.key] ? '' : 'text-muted-foreground'">
+                                {{ section.label }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <template #footer>
+                    <FormActions
+                        cancel-testid="analysis-submit-cancel"
+                        submit-testid="analysis-submit-confirm"
+                        submit-label="Ajukan"
+                        :processing="submitForm.processing"
+                        @cancel="showSubmit = false"
+                        @submit="submitToCommittee"
+                    />
+                </template>
+            </ConfirmDialogBase>
         </div>
     </AppLayout>
 </template>

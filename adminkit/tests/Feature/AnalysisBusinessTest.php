@@ -456,6 +456,55 @@ class AnalysisBusinessTest extends TestCase
         ])->assertSessionHasErrors('rows.0.collateral_simulation_id');
     }
 
+    public function test_submit_to_committee_requires_completed_sections(): void
+    {
+        $app = $this->surveyed();
+
+        // Bagian wajib belum lengkap → ditolak dengan pesan.
+        $this->actingAs($this->staff())
+            ->post("/analysis-simulation/{$app->id}/submit")
+            ->assertSessionHas('error');
+
+        $this->assertSame('SURVEY', $app->refresh()->status);
+
+        AnalysisBusiness::create([
+            'loan_application_id' => $app->id,
+            'type' => 'JASA',
+            'code' => AnalysisBusiness::nextCode('JASA'),
+            'name' => 'KARYAWAN PABRIK',
+            'service_income' => 4_000_000,
+            'net_profit' => 4_000_000,
+            'monthly_income' => 4_000_000,
+        ]);
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/finance", [
+            'cost_staple' => 1_000_000,
+        ])->assertRedirect();
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/five-c", [
+            'gaya_hidup' => 3,
+        ])->assertRedirect();
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/memorandum", [
+            'usulan_plafond' => 25_000_000,
+        ])->assertRedirect();
+
+        $this->actingAs($this->staff())
+            ->post("/analysis-simulation/{$app->id}/submit")
+            ->assertRedirect(route('analysis-simulation.index'));
+
+        $app->refresh();
+
+        $this->assertSame('KOMITE', $app->status);
+        $this->assertNotNull($app->analysis_submitted_at);
+        $this->assertDatabaseHas('notifications', ['user_id' => $app->supervisor_id]);
+
+        // Tidak bisa diajukan dua kali.
+        $this->actingAs($this->staff())
+            ->post("/analysis-simulation/{$app->id}/submit")
+            ->assertSessionHas('error');
+    }
+
     public function test_ownership_rejects_unknown_option(): void
     {
         $app = $this->surveyed();

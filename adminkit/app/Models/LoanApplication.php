@@ -30,6 +30,7 @@ class LoanApplication extends Model
         'provision_rate' => 'decimal:2',
         'admin_rate' => 'decimal:2',
         'analyzed_at' => 'datetime',
+        'analysis_submitted_at' => 'datetime',
         'rc_ratio' => 'decimal:2',
         'repayment_capacity' => 'integer',
         'recommended_amount' => 'integer',
