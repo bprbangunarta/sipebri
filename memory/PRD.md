@@ -867,3 +867,11 @@ Sumber: 6 PDF form sistem lama yang dilampirkan user (Usaha Perdagangan/Pertania
 - Kolom yang kini **read-only** mengikuti sistem lama: Total Luas Tanah, Biaya Amortisasi, Ambil 70% (rumusnya masih menunggu isi `PerhitunganMetodeController::musiman()/perpadian()`), Pinjaman Bank Lain (cermin pos biaya), Angsuran Pokok, dan seluruh angka ringkasan. Satu-satunya input di kartu keuangan: Penambahan Hasil Usaha.
 - Payload halaman detail usaha kini membawa plafon & jangka waktu berkas (dipakai rumus + ditampilkan di catatan).
 - Uji: `tests/Feature/AnalysisBusinessTest::test_farm_matches_legacy_karim_example` (angka contoh KARIM) + test pertanian lama diperbarui; `php artisan test` **83 lolos**, `ui:check` OK, diverifikasi lewat UI (berkas 00700004 plafon 30jt/36bln → angsuran pokok 5jt, pendapatan perbulan 3.336.845).
+
+## Verifikasi (2026-06-22, Analisa Keuangan cocok 100% dengan sistem lama)
+Contoh KARIM (pertanian AUP00564 + jasa AUJ18556, plafon 28 jt / 12 bulan) direplikasi sebagai tes regresi
+`AnalysisBusinessTest::test_finance_sheet_matches_legacy_karim_example`:
+Usaha Pertanian 1.836.845 (pendapatan per bulan) + Usaha Jasa 3.900.000 (4.500.000 − pajak 600.000)
+= Pendapatan Usaha **5.736.845**; Biaya Rumah Tangga **2.900.000** (7 pos); Kewajiban Lainnya **1.574.638**
+(REKAP SLIK 1.374.638 + PAJAK KENDARAAN 200.000); **Keuangan Perbulan 1.262.207** — semuanya identik
+dengan tangkapan layar sistem lama. `php artisan test` 84 lolos.

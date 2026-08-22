@@ -209,6 +209,73 @@ class AnalysisBusinessTest extends TestCase
         $this->assertDatabaseHas('analysis_sheet_items', ['group' => 'OBLIGATION', 'name' => 'KOPERASI']);
     }
 
+    /**
+     * Contoh nyata sistem lama (KARIM): pertanian (pendapatan perbulan 1.836.845)
+     * + jasa mobil angkutan (hasil bersih 3.900.000) → Keuangan Perbulan 1.262.207.
+     */
+    public function test_finance_sheet_matches_legacy_karim_example(): void
+    {
+        $app = $this->surveyed();
+        $app->update(['requested_amount' => 28_000_000, 'requested_tenor' => 12]);
+
+        $farm = AnalysisBusiness::create([
+            'loan_application_id' => $app->id,
+            'type' => 'PERTANIAN',
+            'code' => AnalysisBusiness::nextCode('PERTANIAN'),
+            'name' => 'PERTANIAN PADI',
+            'harvest_kw' => 165,
+            'price_per_kw' => 680_000,
+            'cost_land' => 7_268_486,
+            'cost_seed' => 644_252,
+            'cost_harvest' => 10_341_073,
+            'cost_fertilizer' => 5_434_845,
+            'cost_pesticide' => 1_684_967,
+            'cost_tax' => 3_303_857,
+            'cost_village' => 1_651_929,
+            'cost_labor' => 4_724_516,
+            'cost_other_bank' => 52_125_000,
+        ]);
+        $farm->recalculate();
+        $farm->save();
+
+        $service = AnalysisBusiness::create([
+            'loan_application_id' => $app->id,
+            'type' => 'JASA',
+            'code' => AnalysisBusiness::nextCode('JASA'),
+            'name' => 'JASA MOBIL ANGKUTAN',
+            'service_income' => 4_500_000,
+            'vehicle_tax' => 600_000,
+        ]);
+        $service->recalculate();
+        $service->save();
+
+        $this->assertSame(1_836_845, (int) $farm->monthly_income);
+        $this->assertSame(3_900_000, (int) $service->monthly_income);
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/finance", [
+            'cost_staple' => 1_300_000,
+            'cost_education' => 300_000,
+            'cost_children' => 200_000,
+            'cost_cigarette' => 250_000,
+            'cost_health' => 300_000,
+            'cost_gatel' => 500_000,
+            'cost_social' => 50_000,
+            'items' => [
+                ['name' => 'REKAP SLIK', 'amount' => 1_374_638],
+                ['name' => 'PAJAK KENDARAAN', 'amount' => 200_000],
+            ],
+        ])->assertRedirect();
+
+        $metrics = $app->analysisSheet->refresh()->metrics();
+
+        $this->assertSame(1_836_845, $metrics['farm_income']);
+        $this->assertSame(3_900_000, $metrics['service_income']);
+        $this->assertSame(5_736_845, $metrics['business_income']);
+        $this->assertSame(2_900_000, $metrics['household_cost']);
+        $this->assertSame(1_574_638, $metrics['obligation_cost']);
+        $this->assertSame(1_262_207, $metrics['monthly_balance']);
+    }
+
     public function test_ownership_rejects_unknown_option(): void
     {
         $app = $this->surveyed();
