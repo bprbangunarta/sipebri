@@ -22,6 +22,7 @@ const props = defineProps({
     url: { type: String, required: true },
     business: { type: Object, required: true },
     options: { type: Object, required: true },
+    application: { type: Object, required: true },
 });
 
 const form = useForm({

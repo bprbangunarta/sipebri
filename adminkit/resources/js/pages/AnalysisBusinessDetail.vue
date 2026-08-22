@@ -61,6 +61,7 @@ const back = () => router.visit(`/analysis-simulation/${props.application.id}`);
                 :url="url"
                 :business="props.business"
                 :options="props.options"
+                :application="props.application"
             />
 
             <p v-if="props.business.updated_at" class="text-xs text-muted-foreground">

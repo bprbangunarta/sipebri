@@ -80,20 +80,23 @@ export const tradeMetrics = (form, goods) => {
     };
 };
 
-export const farmMetrics = (form) => {
+/** `application` dibutuhkan karena angsuran pokok berasal dari plafon & jangka waktu. */
+export const farmMetrics = (form, application = {}) => {
     const harvestIncome = Math.round(num(form.harvest_kw) * num(form.price_per_kw));
     const totalCost = FARM_COSTS.reduce((t, c) => t + num(form[c.key]), 0);
     const net = harvestIncome - totalCost;
+
+    const tenor = num(application.requested_tenor);
+    const principal = tenor > 0 ? Math.round((num(application.requested_amount) / tenor) * HARVEST_MONTHS) : 0;
 
     return {
         total_area: num(form.area_own) + num(form.area_rent) + num(form.area_pawn),
         harvest_income: harvestIncome,
         total_cost: totalCost,
         net_profit: net,
-        monthly_income: Math.round(
-            (net + num(form.addition_result) - num(form.principal_installment) - num(form.other_bank_loan)) /
-                HARVEST_MONTHS,
-        ),
+        principal_installment: principal,
+        other_bank_loan: num(form.cost_other_bank),
+        monthly_income: Math.floor((net + num(form.addition_result) - principal) / HARVEST_MONTHS),
     };
 };
 

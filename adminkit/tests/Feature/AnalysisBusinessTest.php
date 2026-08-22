@@ -122,7 +122,6 @@ class AnalysisBusinessTest extends TestCase
             'cost_harvest' => 4_471_429,
             'cost_tax' => 1_428_571,
             'cost_village' => 714_286,
-            'principal_installment' => 11_000_000,
         ])->assertRedirect();
 
         $metrics = $business->refresh()->metrics();
@@ -131,9 +130,51 @@ class AnalysisBusinessTest extends TestCase
         $this->assertSame(42_250_000, $metrics['harvest_income']);
         $this->assertSame(15_157_142, $metrics['total_cost']);
         $this->assertSame(27_092_858, $business->net_profit);
-        $this->assertSame(2_682_143, $metrics['monthly_income']);
+        // Angsuran pokok otomatis: plafon 30jt ÷ 36 bln × 6 bln = 5jt.
+        $this->assertSame(5_000_000, $metrics['principal_installment']);
+        $this->assertSame(3_682_143, $metrics['monthly_income']);
         // Kontribusi pertanian ke Analisa Keuangan dihitung PER BULAN.
-        $this->assertSame(2_682_143, (int) $business->monthly_income);
+        $this->assertSame(3_682_143, (int) $business->monthly_income);
+    }
+
+    /** Contoh nyata sistem lama: KARIM, KBT FLAT, plafon 28 jt / 12 bulan (AUP00564). */
+    public function test_farm_matches_legacy_karim_example(): void
+    {
+        $app = $this->surveyed();
+        $app->update(['requested_amount' => 28_000_000, 'requested_tenor' => 12]);
+
+        $business = AnalysisBusiness::create([
+            'loan_application_id' => $app->id,
+            'type' => 'PERTANIAN',
+            'code' => AnalysisBusiness::nextCode('PERTANIAN'),
+            'name' => 'PERTANIAN PADI',
+        ]);
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/businesses/{$business->id}", [
+            'area_own' => 5_627,
+            'area_rent' => 0,
+            'area_pawn' => 17_500,
+            'harvest_kw' => 165,
+            'price_per_kw' => 680_000,
+            'cost_land' => 7_268_486,
+            'cost_seed' => 644_252,
+            'cost_harvest' => 10_341_073,
+            'cost_fertilizer' => 5_434_845,
+            'cost_pesticide' => 1_684_967,
+            'cost_tax' => 3_303_857,
+            'cost_village' => 1_651_929,
+            'cost_labor' => 4_724_516,
+            'cost_other_bank' => 52_125_000,
+        ])->assertRedirect();
+
+        $metrics = $business->refresh()->metrics();
+
+        $this->assertSame(23_127, $metrics['total_area']);
+        $this->assertSame(112_200_000, $metrics['harvest_income']);
+        $this->assertSame(87_178_925, $metrics['total_cost']);
+        $this->assertSame(25_021_075, $business->net_profit);
+        $this->assertSame(14_000_000, $metrics['principal_installment']);
+        $this->assertSame(1_836_845, $metrics['monthly_income']);
     }
 
     public function test_finance_sheet_sums_business_net_profit(): void

@@ -66,6 +66,11 @@ class AnalysisBusinessController extends Controller
                 'full_name' => $loanApplication->full_name,
                 'nik' => $loanApplication->nik,
                 'status' => $loanApplication->status,
+                'requested_amount' => (int) $loanApplication->requested_amount,
+                'requested_tenor' => (int) $loanApplication->requested_tenor,
+                'product_label' => $loanApplication->product
+                    ? "{$loanApplication->product->alias} : {$loanApplication->product->name}"
+                    : null,
             ],
             'business' => $this->payload($business),
             'options' => [

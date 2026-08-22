@@ -148,21 +148,32 @@ class AnalysisBusiness extends Model
         ];
     }
 
+    /**
+     * Pertanian (angsuran musiman, mengikuti sistem lama):
+     * pinjaman bank lain SUDAH termasuk pos biaya, angsuran pokok = plafon ÷ jangka
+     * waktu × 6 bulan, pendapatan per bulan = (hasil bersih + penambahan − angsuran
+     * pokok) ÷ 6 dibulatkan ke bawah.
+     */
     private function farmMetrics(): array
     {
         $harvestIncome = (int) round($this->harvest_kw * $this->price_per_kw);
         $totalCost = collect(self::FARM_COSTS)->sum(fn ($c) => (int) $this->{$c});
         $net = $harvestIncome - $totalCost;
 
-        $monthly = (int) round(
-            ($net + (int) $this->addition_result - (int) $this->principal_installment - (int) $this->other_bank_loan)
-            / self::HARVEST_MONTHS
-        );
+        $application = $this->application;
+        $tenor = (int) ($application?->requested_tenor ?? 0);
+        $principal = $tenor > 0
+            ? (int) round((int) $application->requested_amount / $tenor * self::HARVEST_MONTHS)
+            : 0;
+
+        $monthly = (int) floor(($net + (int) $this->addition_result - $principal) / self::HARVEST_MONTHS);
 
         return [
             'total_area' => (int) $this->area_own + (int) $this->area_rent + (int) $this->area_pawn,
             'harvest_income' => $harvestIncome,
             'total_cost' => $totalCost,
+            'principal_installment' => $principal,
+            'other_bank_loan' => (int) $this->cost_other_bank,
             'monthly_income' => $monthly,
             'revenue' => $harvestIncome,
             'expense' => $totalCost,
