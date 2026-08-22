@@ -1,0 +1,58 @@
+{
+  "summary": "Frontend-only E2E re-test of the new SINGLE-SHEET (tanpa tab) Analisa Usaha detail pages as Staff Analis 350010923 on berkas 11 (00700004). Verified for all 4 tipe usaha that the detail page has NO tabs (0 elements matching business-tabs-*), that one 'Simpan Semua' click persists identitas + baris rincian + keuangan, and that the sticky 'Ringkasan Perhitungan' matches the backend after reload. PERDAGANGAN (AUPG00002): identitas (lama usaha 1 TAHUN via Combobox, alamat), 3 baris Barang Dagang (10k/14k/10, 20k/25k/5, 5k/7k/20) -> per-row Laba/% (Rp4.000/40%, Rp5.000/25%, Rp2.000/40%), totals Beli 35.000 / Jual 46.000 / Laba 11.000 / Margin 31,43%, keuangan (belanja 350.000, pokok 350.000, transportasi 10.000, gatel 5.000) -> Omset 460.005, Laba harian 110.005, Biaya harian 15.000, Laba bulanan 3.300.150, Biaya bulanan 450.000, Hasil bersih 2.850.150; all values identical after reload and header badge became 'Tersimpan Rp 2.850.150'. JASA (AUJ00002): 4.500.000 - 600.000 = 3.900.000 exactly as requested, persisted after reload, and 'Kembalikan' restored the last saved value. LAINNYA (AUL00001): 2 baris MATERIAL (10x50.000, 5x20.000 -> Rp 600.000), 2 baris INCOME (8.000.000), 2 baris EXPENSE (1.500.000), proyeksi 250.000 -> Hasil 6.150.000; ONE 'Simpan Semua' saved all three groups and after reload none of the groups was wiped (2/2/2 rows with correct names+nominal). PERTANIAN (AUP00001): 65 x 650.000 = 42.250.000, biaya 6.000.000, hasil bersih 36.250.000, setoran pokok, pendapatan setelah pokok 35.416.667 and 'Kembalikan' works. Bagian 2 Analisa Keuangan aggregated per tipe (2.850.150 + 3.900.000 + 35.416.667 + 6.150.000 = 48.316.817) and Keuangan Perbulan = 48.316.817 - 2.000.000 (rumah tangga) - 1.000.000 (kewajiban) = 45.316.817, persisted after reload with badge 'Sudah diisi'. Dark mode renders correctly; no console errors in any run. Two real defects found (see below): 'Kembalikan' does not restore the row tables on the LAINNYA sheet, and horizontal overflow at 390px on the PERDAGANGAN/LAINNYA sheets. All test data (4 usaha + analysis_sheets row) was deleted afterwards; berkas 11 is back to only AUPG00001 with no sheet.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "AnalysisSheet::metrics() / farmMetrics()",
+        "issue": "Helper text under Bagian 2 says 'khusus pertanian dipakai pendapatan per bulan (hasil satu siklus panen dibagi 6 bulan)', but farmMetrics divides after_principal by the installment period (1 for sistem cicilan BULANAN), so the whole 6-month harvest net is counted as ONE month: hasil bersih 36.250.000 -> Pendapatan Perbulan 35.416.667, which then dominates Keuangan Perbulan (48.316.817). Either divide by HARVEST_MONTHS as the text claims or fix the text."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "BusinessOther.vue - tombol 'Kembalikan'",
+        "issue": "form.reset() only resets the useForm scalars; materials/incomes/expenses are plain refs outside the form, so edited/added/deleted rows are NOT restored. Reproduced: renamed income row 0 to 'DIUBAH' + changed Proyeksi to 999.999, clicked Kembalikan -> Proyeksi correctly back to 250.000 but the row still reads 'DIUBAH'. Keep the three arrays inside useForm (like BusinessTrade does) or re-seed them from props.business.items in the cancel handler.",
+        "selector": "[data-testid=\"other-reset\"], [data-testid=\"other-income-rows-name-0\"]",
+        "priority": "HIGH"
+      },
+      {
+        "component": "BusinessTrade.vue / BusinessOther.vue - layout 390px",
+        "issue": "Horizontal overflow at mobile width. document.scrollWidth stays 390 but the inner scroller (div.flex-1.overflow-y-auto) scrolls 108px: the left column measures 491px (trade) / 403px (other) inside a 358px track, so labels and the left edge of inputs are cut off after any scroll-into-view. Root cause: the wrapper grid only sets columns at xl, so at mobile the implicit column is sized by the ItemRows table's fixed th widths (150px/150px/110px) - the column div has no min-w-0/grid-cols-1. Service and Farm sheets (no ItemRows) measure exactly 390px and are fine. Suggested fix: add min-w-0 (or grid-cols-1) to the left column div in BusinessTrade.vue and BusinessOther.vue so the table's own overflow-x-auto handles the scroll.",
+        "selector": "[data-testid=\"trade-goods-rows\"], [data-testid=\"other-material-rows\"]",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Detail usaha (header)",
+        "issues": ["Badge 'Tersimpan Rp 0' stays at 0 until the first save while the Ringkasan card already shows the live figure (same as iteration 42, cosmetic)."]
+      },
+      {
+        "screen": "Bagian 2 Analisa Keuangan (helper text)",
+        "issues": ["Note about pertanian ('dibagi 6 bulan') does not match the actual per-month formula (dibagi periode cicilan)."]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Make 'Kembalikan' on the LAINNYA sheet restore MATERIAL/INCOME/EXPENSE rows (move the arrays into useForm or reset them from props.business.items).",
+    "Fix the 390px horizontal overflow on the PERDAGANGAN and LAINNYA sheets (min-w-0 / grid-cols-1 on the left column so ItemRows scrolls inside its own overflow-x-auto wrapper).",
+    "Align the pertanian per-month figure with the helper text (divide by 6 harvest months) or reword the note in FinanceForm/BusinessFarm."
+  ],
+  "critical_code_review_comments": [
+    "BusinessOther keeps three row arrays outside useForm and only merges them into form.items in submit(); this makes form.isDirty and form.reset() blind to row edits (the Kembalikan defect) - consider useForm({items_material, items_income, items_expense}) or a computed merge.",
+    "ItemRows sets fixed th widths (150px/110px/190px). Any sheet embedding it must give the flex/grid parent min-w-0, otherwise the parent track grows to the table's min-content width (current mobile overflow).",
+    "FormActions submit is disabled only on !form.name; every other field is optional, so an empty sheet can be saved silently - acceptable but worth confirming with the business rules."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested (frontend-only request)", "frontend": "6 of 8 requested scenarios fully pass; 1 partial (Kembalikan works on trade/service/farm, fails for rows on lainnya) and 1 fail (mobile 390px overflow on trade/lainnya)"},
+  "seed_data_creation": "Created and then deleted via UI: AUPG00002 QA TOKO SATU LEMBAR (id 11), AUJ00002 QA JASA ANGKUT (id 12), AUL00001 QA KONVEKSI QA (id 13), AUP00001 QA SAWAH QA (id 14); analysis_sheets id 4 (berkas 11) plus its items removed with tinker. Berkas 11 is back to its original state (only AUPG00001, no sheet).",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "Staff Analis 350010923 / password (berkas 11 = 00700004). /app/memory/test_credentials.md present and accurate.",
+  "context_for_next_testing_agent": "Single-sheet UI verified. Useful testids: analysis-sub-{perdagangan|pertanian|jasa|lainnya}, business-add/business-name/business-add-submit/business-delete-{id}, trade-*/service-*/other-*/farm-* with save = <prefix>-save and reset = <prefix>-reset, ItemRows = <testid>-<col>-<index>, <testid>-add, <testid>-remove-<index> (trade-goods-rows, other-material-rows, other-income-rows, other-expense-rows, finance-obligation). Money inputs are NumberInput: click + Ctrl+A + type digits. Combobox options: combobox-option-<VALUE>. Note: page.wait_for_load_state('networkidle') on this app can hang - use wait_until='domcontentloaded' plus wait_for_selector. Remaining checks after the two fixes: rerun the LAINNYA Kembalikan case and the 390px layout measurement (inner scroller div.flex-1.overflow-y-auto scrollWidth must equal 390).",
+  "rca_of_the_issue": "Kembalikan (lainnya): materials/incomes/expenses are ref() arrays created from props.business.items and only merged into form.items at submit time, so useForm's reset() has no snapshot of them -> row edits survive the reset. Mobile overflow: the sheet wrapper uses 'grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]'; the minmax(0,1fr) min-width guard only applies from xl up, so at 390px the auto-sized single column expands to the ItemRows table's min-content width (491px on trade) and the app shell's overflow-y-auto container starts scrolling horizontally."
+}

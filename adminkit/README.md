@@ -184,12 +184,14 @@ TELESCOPE_ALLOWED_EMAILS=email@anda.com
 | `UserSeeder` | 22 akun: pemilik sistem `IT Support` / `superadmin` / `sa@bprbangunarta.co.id` (peranan Super Admin, kata sandi `SA@4dm1n`) + 21 akun pegawai uji lengkap dengan peranan, kantor, alias, kode MSO, dan kode kolektor (kata sandi awal `password`) |
 | `SettingSeeder` | Identitas merek SIPEBRI, SEO/OG, kontak, zona waktu, dan urutan 15 entitas pada matriks izin |
 | `MenuSeeder` | 29 menu: `Dashboard` + grup `Referensi` (Data Kantor, Data Instansi, Data Produk, Data Wilayah, Sistem Cicilan, Sistem Bunga, Komite Kredit) + grup `Agunan` (Jenis Agunan, Jenis Pengikatan, Kondisi Agunan, Metode Hitung) + grup `Simulasi` (Agunan, Pengajuan, Penjadwalan, Survei, Analisa, Persetujuan) + 8 menu Administrator |
-| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `InstallmentSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder`, `CollateralConditionSeeder`, `CollateralMethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan, 7 kondisi agunan, 4 metode hitung |
+| `InstallmentSeeder` | 8 pola cicilan + **kelipatan jangka waktu** (HARIAN/MINGGUAN/BULANAN 1, TRIWULANAN 3, SEMESTERAN 6, TAHUNAN 12, MUSIMAN 6, NON ANGSURAN 0) |
+| `OfficeSeeder`, `InstitutionSeeder`, `ProductSeeder`, `MethodSeeder`, `CollateralTypeSeeder`, `BindingTypeSeeder`, `CollateralConditionSeeder`, `CollateralMethodSeeder` | Data referensi mengikuti core banking: 7 kantor, 10 instansi, 17 produk kredit, 8 pola cicilan, 10 metode bunga, 19 jenis agunan, 7 jenis pengikatan, 7 kondisi agunan, 4 metode hitung |
 | `RegionSeeder` | 82.449 baris wilayah (kode dati2 → kabupaten → kecamatan → kelurahan + kode pos) dari `database/data/regions.csv.gz`; dilewati bila tabel sudah terisi |
 | `OwnershipStatusSeeder` | Status/bukti kepemilikan per jenis agunan (baru jenis `05`: 11 pilihan) |
 | `ProductParameterSeeder` | parameter SK Direksi untuk **17 produk**: plafon & tenor min/maks, suku bunga, provisi, admin, ambang RC, sistem bunga & cicilan yang diizinkan, wajib agunan |
 | `SchemaDraftSeeder` | 4 rancangan Skema Migrasi yang mencerminkan tabel nyata |
 | `CommitteeSeeder` | 19 jalur komite kredit + 76 jenjang pemutus sesuai dokumen kebijakan |
+| `LoanApplicationSeeder` | 5 berkas contoh untuk menguji alur kredit: `00700003` & `00700004` berstatus `SURVEY` (siap dipakai menguji Analisa; `00700004` lengkap dengan jadwal, hasil survei, foto, dan agunan) serta 3 berkas `DRAFT` (`00700005` KTA, `00700006` KPS, `00700007` KBT PERPADIAN) beserta 3 agunan. Relasi memakai kunci alami (alias produk, kode kantor/cicilan, username) dan **idempoten** — kode berkas yang sudah ada tidak ditimpa |
 
 ```bash
 php artisan db:seed                          # semua seeder (idempoten)
@@ -357,7 +359,7 @@ Status berkas (tidak boleh menambah status baru tanpa dibahas):
 | 1. Pengajuan | `/loan-simulation` | `DRAFT` → `DIAJUKAN` | Identitas pemohon **hanya** dari API Codex (No. KTP); plafon/tenor/sistem bunga/cicilan dibatasi **parameter produk**; agunan wajib mengikuti `collateral_required`. Setelah **Ajukan**, berkas **terkunci** (tidak bisa diubah/dihapus/lepas agunan). Daftar hanya menampilkan berkas milik pembuatnya. |
 | 2. Penjadwalan | `/scheduling-simulation` | `DIAJUKAN` → `PENJADWALAN` | Kasi Analis menetapkan tanggal survei (≥ hari ini) + staff analis. Filter cakupan **Berkas saya / Semua Kasi Analis**. Batas 3 kali hanya **peringatan**. Semua jadwal/jadwal ulang/pembatalan tercatat di `loan_schedules` (**append-only**, tidak pernah dihapus). |
 | 3. Survei | `/survey-simulation` | `PENJADWALAN` → `SURVEY` | Daftar **hanya jadwal hari ini** milik staff analis yang ditugaskan. Wajib **1–5 foto lokasi** dengan **koordinat** yang diambil sistem saat foto dipilih (disimpan ke object storage). Setelah disimpan, hasil **terkunci**. Tombol **Batal & Minta Jadwal Ulang** (alasan wajib) mengembalikan berkas ke `DIAJUKAN`. |
-| 4. Analisa | `/analysis-simulation` | `SURVEY` → `ANALISA` | **Belum dibangun** (placeholder). Rencana: v1 mengikuti sistem lama (sama untuk semua produk), v2 per produk. |
+| 4. Analisa | `/analysis-simulation` | `SURVEY` → `ANALISA` | Lembar analisa **8 bagian** (navigasi bernomor, sticky). Sudah jalan: **1 Analisa Usaha** (4 tipe usaha, tiap usaha punya lembar sendiri di `/analysis-simulation/{berkas}/businesses/{usaha}` — kode usaha otomatis AUPG/AUP/AUJ/AUL, seluruh angka dihitung sistem), **2 Analisa Keuangan** (biaya rumah tangga + kewajiban; pendapatan usaha = jumlah kontribusi per bulan tiap usaha), **3 Analisa Kepemilikan** (8 harta + harta lain). Bagian 4–8 (Agunan, 5C, Kualitatif, Memorandum, Administrasi) masih placeholder. |
 | 5. Persetujuan | `/approval-simulation` | `ANALISA` → `KOMITE` → keputusan | **Belum dibangun** (placeholder). Disaring sesuai peranan & kewenangan komite. |
 
 Tabel terkait: `loan_applications` (+ kolom audit `created_by`/`updated_by`/`deleted_by` berisi **nama
@@ -396,6 +398,40 @@ Kemudahan: saat membuat jalur baru tersedia **Salin Jenjang Dari** jalur lain (s
 
 ---
 
+## Modul Analisa Kredit
+
+Lembar analisa satu berkas dibuka di `/analysis-simulation/{berkas}` (khusus **Staff Analis** yang
+ditugaskan) dan terdiri dari 8 bagian bernomor. Semua kolom hasil hitung **tidak pernah diinput** —
+rumusnya ada di backend (`AnalysisBusiness::metrics()`, `AnalysisSheet::metrics()`) dan dicerminkan di
+`resources/js/constants/analysisMath.js` supaya angka berubah langsung saat analis mengetik.
+
+| Bagian | Status | Isi |
+| --- | --- | --- |
+| 1. Analisa Usaha | ✅ | Sub-tab per tipe usaha (Perdagangan/Pertanian/Jasa/Lainnya) + daftar usaha; tiap usaha punya **satu lembar penuh** (tanpa tab) di `/analysis-simulation/{berkas}/businesses/{usaha}` dengan kartu form di kiri dan **Ringkasan Perhitungan** sticky + tombol **Simpan Semua** di kanan |
+| 2. Analisa Keuangan | ✅ | 7 pos biaya rumah tangga + baris kewajiban; Pendapatan Usaha = jumlah kontribusi **per bulan** semua usaha; Keuangan Perbulan = pendapatan − biaya rumah tangga − kewajiban |
+| 3. Analisa Kepemilikan | ✅ | 8 harta (rumah, mobil, motor, komputer, mesin cuci, televisi, kursi tamu, lemari panjang) + daftar harta lain |
+| 4–8 | ⏳ | Analisa Agunan, Analisa 5C, Analisa Kualitatif, Memorandum, Administrasi (masih placeholder) |
+
+**Kode usaha otomatis**: `AUPG` (perdagangan), `AUP` (pertanian), `AUJ` (jasa), `AUL` (lainnya) + 5 digit.
+
+**Rumus tiap tipe usaha** (diverifikasi dengan angka contoh sistem lama, dikunci oleh
+`tests/Feature/AnalysisBusinessTest.php`):
+
+- **Perdagangan** — `%` per barang & margin total = **laba ÷ harga beli** (dibulatkan 2 desimal);
+  Omset Harian = Belanja Harian × (1 + margin); Laba Bersih Harian = Omset − Pokok Penjualan;
+  Laba/Biaya Bulanan = harian × 30; Hasil Bersih = Laba Bulanan − Biaya Bulanan + Proyeksi Penambahan.
+- **Pertanian** — Pendapatan Panen = kwintal × harga; Pengeluaran = 12 pos biaya (**termasuk Pinjaman Bank
+  Lain**); periode setoran diambil dari **kelipatan sistem cicilan berkas** (MUSIMAN 6, BULANAN 1,
+  NON ANGSURAN = sepanjang jangka waktu); Setoran Pokok = plafon ÷ (jangka waktu ÷ periode);
+  Pendapatan Per Bulan = ⌊(Hasil Bersih − Setoran Pokok) ÷ periode⌋ **+ Penambahan Hasil Usaha**.
+- **Jasa** — Hasil Bersih = Pendapatan Usaha − (Pajak Kendaraan + Pengeluaran Lainnya).
+- **Lainnya** — Bahan Baku = jumlah × harga; Hasil Bersih = Pendapatan Usaha − Biaya Operasional −
+  Biaya Bahan Baku + Proyeksi Penambahan.
+
+Tabel: `analysis_businesses` (+ `monthly_income` = kontribusi per bulan), `analysis_business_items`
+(satu tabel, kolom `group`: `GOODS`/`MATERIAL`/`INCOME`/`EXPENSE`), `analysis_sheets`,
+`analysis_sheet_items` (`OBLIGATION`/`ASSET`).
+
 ## Modul Data Referensi
 
 Lima modul data master sederhana (`kode` + `nama`, sebagian dengan `alias`) berbagi **satu** basis kode:
@@ -405,10 +441,10 @@ Lima modul data master sederhana (`kode` + `nama`, sebagian dengan `alias`) berb
 | Data Kantor | `/offices` | code (unik), alias (unik), name | `offices.view/manage` |
 | Data Instansi | `/institutions` | code (unik), name | `institutions.view/manage` |
 | Data Produk | `/products` | code (unik), alias (unik), name + **Parameter Produk** di `/products/{id}` | `products.view/manage` |
-| Sistem Cicilan | `/installments` | code (unik), name | `installments.view/manage` |
+| Sistem Cicilan | `/installments` | code (unik), name, **period_months** (Kelipatan Jangka Waktu, bulan; 0 = non angsuran) | `installments.view/manage` |
 | Sistem Bunga | `/methods` | code (unik), name | `methods.view/manage` |
 
-- Backend: `ReferenceController` (abstrak) menyediakan index/store/update/destroy/bulkDestroy + aturan validasi; turunannya hanya mendefinisikan `model()`, `slug()`, `label()`, dan `fields()`. Validasi lewat `Reference\StoreReferenceRequest` (mengambil aturan dari controller, `trim` semua nilai, `UPPERCASE` untuk kolom bertanda `uppercase`, `unique` hanya untuk kolom bertanda `unique`).
+- Backend: `ReferenceController` (abstrak) menyediakan index/store/update/destroy/bulkDestroy + aturan validasi; turunannya hanya mendefinisikan `model()`, `slug()`, `label()`, dan `fields()`. Validasi lewat `Reference\StoreReferenceRequest` (mengambil aturan dari controller, `trim` semua nilai, `UPPERCASE` untuk kolom bertanda `uppercase`, `unique` hanya untuk kolom bertanda `unique`). Tipe kolom yang didukung: teks (bawaan), `boolean` (Switch aktif/nonaktif) dan `number` (bilangan bulat `min:0`/`max` sesuai definisi, input rata kanan, `hint` opsional di bawah kolom).
 - Frontend: satu halaman generik `pages/Reference.vue` (DataTableCard server-side + dialog tambah/ubah dinamis dari `fields`). Kolom bertanda `hide_below` disembunyikan di layar kecil dan nilainya tetap tampil sebagai baris ringkas di bawah kolom pertama (responsif tanpa penyesuaian tambahan).
 - **Penghapusan permanen** (tanpa arsip), tersedia per baris dan massal; semua aksi tercatat di Audit Trail.
 ### Parameter Produk (SK Direksi)

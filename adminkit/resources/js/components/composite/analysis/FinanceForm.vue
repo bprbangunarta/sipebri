@@ -84,7 +84,8 @@ const submit = () => form.put(`/analysis-simulation/${props.applicationId}/finan
 
             <p class="text-xs text-muted-foreground">
                 Pendapatan usaha diambil otomatis dari kontribusi per bulan setiap usaha pada bagian Analisa
-                Usaha — khusus pertanian dipakai pendapatan per bulan (hasil satu siklus panen dibagi 6 bulan).
+                Usaha — khusus pertanian dipakai pendapatan per bulan, yaitu hasil bersih panen dikurangi setoran
+                pokok lalu dibagi periode sistem cicilan berkas (MUSIMAN = 6 bulan).
             </p>
         </CardContent>
         <CardFooter>

@@ -60,7 +60,7 @@ const submit = () => form.put(props.url, { preserveScroll: true });
 
 <template>
     <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <div class="space-y-4">
+        <div class="min-w-0 space-y-4">
             <Card data-testid="farm-info">
                 <CardHeader><CardTitle>Informasi Usaha</CardTitle></CardHeader>
                 <CardContent class="form-dense grid gap-3 sm:grid-cols-2">

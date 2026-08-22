@@ -1,0 +1,878 @@
+# CHANGELOG — SIPEBRI / AdminKit
+
+Riwayat pekerjaan per tanggal. Bagian statis (problem statement, arsitektur) ada di `PRD.md`,
+daftar pekerjaan berikutnya di `ROADMAP.md`.
+
+## Selesai (2026-06-14)
+- Token desain 2 lapis (light+dark) port 1:1 dari `index.css` FlowDesk, termasuk `--st-*`, `--pr-*`, `--chart-*`, density compact, `.tbl-density`, `.form-dense`, `.state-chip`, `.thin-scroll`.
+- Primitive Vue: Button, Card(+Header/Title/Description/Content/Footer), Input, Label, Badge, Separator, Skeleton, Progress, Alert, Table set, Avatar, Checkbox, Switch, Select, Dialog, DropdownMenu set, Tooltip set.
+- Sistem Sidebar (provide/inject, kuncup ke ikon, sheet mobile, rail, tooltip saat kuncup, state di localStorage).
+- Shell: `AppLayout` (header 65px + breadcrumb + lonceng + ModeToggle), `AppSidebar` (area switcher Member/Administrator, grup "Umum", footer dropdown Profil/Keluar), `AuthLayout` split-screen.
+- Composite: DataTableCard (cari/urut/paginasi + slot sel), RowActions, StateChip, EmptyState, MiniBarChart, HBarChart (token-only).
+- Halaman: **Dashboard** (5 KPI, Pengguna Terbaru + Aktivitas + Penyimpanan tinggi terkunci, Tren Mingguan, Aktivitas per Modul, Sebaran Peranan), **Login** (statis), **Profil** (statis).
+- Dark/light/system toggle berfungsi (verifikasi via screenshot).
+- README berisi aturan desain yang dikunci.
+- Uji frontend (testing agent iterasi 1): 100% lolos, tanpa error console di light & dark.
+
+## Selesai (2026-06-14, lanjutan)
+- **Halaman Profil** dibangun ulang mengikuti screenshot referensi: kartu "Informasi Diri"
+  (avatar + Unggah Foto di kiri, nama + badge peran di kanan, divider, grid 2 kolom
+  Nama/Email/Telepon/Kantor, footer Simpan) dan kartu "Ubah Kata Sandi"
+  (Kata Sandi Saat Ini di kolom kiri, lalu Kata Sandi Baru + Konfirmasi, footer Simpan).
+- Composite baru `PasswordInput.vue` (toggle mata Eye/EyeOff).
+- `config/adminkit.php` demo_user: Zulfadli Rizal · Super Admin · telepon · kantor.
+
+## Backlog
+- P0: persetujuan UI dashboard dari user.
+- P1: autentikasi nyata (JWT/session Laravel) + migrasi & seeder SQLite; menu Kelola Pengguna.
+- P1: Kelola Peranan + matriks hak akses (komponen sudah ada di riwayat, perlu dibuat ulang).
+- P2: Kelola Aplikasi, Log Aktivitas, Kelola Keamanan, Kelola Database.
+- P2: toast helper (judul baku Sukses/Gagal/Peringatan/Info), ConfirmDeleteDialog, EditableCard.
+- P2: skrip design-guard versi Vue.
+
+## Catatan
+Seluruh data pada fase ini **DUMMY/MOCKED** (`app/Support/DemoData.php`). Belum ada autentikasi nyata: `/login` hanya redirect ke dashboard.
+
+## Selesai (2026-06-14, autentikasi nyata)
+- **spatie/laravel-permission ^6.25** terpasang; role tunggal **"Super Admin"** (enum `App\Enums\RoleName`).
+- Migrasi tambahan pada `users`: `username` (unik), `phone`, `office`, `avatar`, `is_active`, `last_login_at`.
+- **Auth session guard Laravel** (bukan JWT): `LoginRequest` (Form Request) mendeteksi kredensial email/username/telepon, cek `is_active`, rate limit 5 percobaan per kredensial+IP, `session()->regenerate()`, `redirect()->intended()`; `AuthenticatedSessionController` untuk create/store/destroy.
+- Rute dipisah grup middleware `guest` dan `auth`; `throttle:20,1` pada POST /login.
+- `HandleInertiaRequests` membagikan `auth.user` lengkap dengan `role`, `roles`, `permissions`, `is_admin`; `flash` sebagai lazy prop.
+- Seeder idempoten: Zulfadli Rizal / zulfame / zulfadlirizal@gmail.com / 082320099971 / Pamanukan, kata sandi `password`, role Super Admin.
+- **Halaman Login didesain ulang** (di luar design system FlowDesk, sesuai permintaan): layout split "Architectural Split", font display **Playfair Display**, panel kanan berisi **ilustrasi SVG line-art monokrom** (`components/auth/AuthIllustration.vue`) — TANPA gambar raster, animasi float CSS scoped `.auth-*` + `prefers-reduced-motion`.
+- **Toast** terpusat: `composables/useToast.js` (judul baku Sukses/Gagal/Peringatan/Info, aksen kiri bertoken) + `components/ui/Toaster.vue` + `composables/useFlashToast.js` (flash server → toast).
+- **Composable `useTheme`** menggantikan logika tema di dalam `ModeToggle.vue`.
+- **Lazy load halaman** (glob non-eager): bundle awal 479 KB → 273 KB.
+- **Laravel Pint** (`pint.json`) dijalankan dan bersih.
+- Uji iterasi 2: **12/12 lolos** (`/app/test_reports/iteration_2.json`), tanpa error console. Panduan uji auth: `/app/auth_testing.md`.
+
+## Backlog (diperbarui)
+- P1: Kelola Pengguna (CRUD + assign role) memakai `DataTableCard` **mode server-side** (paginasi/filter/sort dari API + debounce).
+- P1: Simpan Profil & ubah kata sandi ke database (Form Request + Action + toast).
+- P1: Permission granular per modul + Policy/Gate, sidebar menyaring menu berdasarkan permission.
+- P2: Halaman Kelola Peranan + matriks hak akses, Log Aktivitas (audit log), Kelola Aplikasi.
+- P2: `ConfirmDeleteDialog`, unggah avatar (object storage), lupa kata sandi.
+- P2: ESLint + Prettier, Pest feature test untuk auth, PHPStan/Larastan.
+
+## Revisi (2026-06-14, atas permintaan user)
+- **Font dikembalikan ke Geist saja** — `Playfair Display` dan `fontFamily.display` dihapus dari `tailwind.config.js` & `app.css`. Satu font untuk seluruh aplikasi.
+- **Halaman Login dikembalikan ke design system FlowDesk**: `AuthLayout` split-screen (panel brand `bg-primary` + grid dekoratif + 3 highlight + copyright) dan `Card` (header judul "Masuk", isi `.form-dense`, footer tombol `Masuk` lebar penuh berikon `LogIn`).
+- Desain "Architectural Split" beserta `components/auth/AuthIllustration.vue` dan utilitas `.auth-*` **DIHAPUS** (tidak dipakai lagi).
+- Error login tampil sebagai `Alert variant="destructive"` (`data-testid="login-form-error"`), kata sandi memakai composite `PasswordInput` (`data-testid="login-password-input"` + `-toggle`).
+- Diverifikasi ulang: login via username/email/telepon, error kata sandi salah, toggle kata sandi, `body` font = Geist.
+
+## Selesai (2026-06-14, Kelola Pengguna + Profil + Hak Akses)
+### Kelola Pengguna (server-side)
+- `UserController@index` — pencarian (name/username/email/phone/office), filter status, pengurutan whitelist, `paginate()->withQueryString()`, `with('roles:id,name')` (anti N+1).
+- `store`/`update`/`destroy` + `StoreUserRequest` (unik username/email `ignore(id)`, `min:8`, kata sandi opsional saat ubah), proteksi hapus akun sendiri.
+- `DataTableCard` kini **dua mode**: CLIENT (default) & **SERVER** (`server` + `meta`/`search`/`sort` + emits `update:search|sort|page|perPage`), termasuk skeleton saat `loading`.
+- `pages/Users.vue`: debounce 350 ms, `router.get(..., { only: ['users','filters'], preserveState, preserveScroll, replace })`, dialog tambah/ubah (satu form), `ConfirmDeleteDialog`, filter status.
+- Seeder menambah 24 pengguna contoh via `UserFactory` (locale id_ID) agar paginasi & pencarian dapat dicoba.
+
+### Profil tersimpan ke database
+- `ProfileController@update` (`UpdateProfileRequest`) & `@updatePassword` (`UpdatePasswordRequest`, aturan `current_password` + `confirmed` + `Password::min(8)`), flash → toast.
+- `pages/Profile.vue` memakai `useForm` dengan error per field; nama di sidebar ikut berubah setelah simpan.
+
+### Hak akses menu
+- Izin: `dashboard.view`, `users.view`, `users.manage`, `profile.view` — semuanya dimiliki role Super Admin.
+- Middleware alias spatie (`role`, `permission`, `role_or_permission`) didaftarkan di `bootstrap/app.php`; setiap rute dilindungi `permission:*` → **otorisasi ditegakkan di backend (403)**, bukan hanya disembunyikan.
+- `navigation.js` memberi `perm` per item; `AppSidebar` menyaring memakai `auth.user.permissions`. Item "Kelola Pengguna" berada di area **Administrator**.
+
+### Hasil uji iterasi 3 (`/app/test_reports/iteration_3.json`)
+- Backend 100% (CRUD, profil, kata sandi, gate 403). Frontend awalnya ~85% karena 3 bug — **semuanya sudah diperbaiki & diverifikasi ulang**:
+  1. `Select.vue` tidak meneruskan atribut (SelectRoot tanpa DOM node) → `inheritAttrs: false` + `v-bind="$attrs"` pada `SelectTrigger`.
+  2. `SelectItem` dengan value `''` dilarang reka-ui → sentinel `'all'` di UI, dipetakan ke `''` saat query (filter status kini bisa direset; error konsol hilang).
+  3. Tabrakan `data-testid="users-page"` → wrapper halaman menjadi `users-page-view`.
+
+## Selesai (2026-06-15, Penyimpanan + Combobox + DatePicker + urutan menu)
+- **Urutan menu area Administrator** sesuai permintaan: Kelola Peranan → Kelola Pengguna → Penampilan → Penyimpanan → Log Aktivitas.
+- **Halaman Penyimpanan** (`/storage-settings`, izin `storage.view`/`storage.manage`): driver aktif (local/s3), endpoint, access key, secret (write-only, tidak pernah dikirim balik), region, bucket, path-style toggle, URL publik opsional, dan tombol **Uji Koneksi** (tulis+hapus berkas uji) — terverifikasi BERHASIL ke `https://nos.wjv-1.neo.id` bucket `bpr-assets`.
+- Nilai default S3 diisi lewat **seeder** (`Setting::firstOrCreate`, idempoten) sesuai kredensial yang diberikan user.
+- `App\Support\FileStorage` — satu pintu unggahan; **avatar & aset merek kini benar-benar tersimpan ke object storage** saat driver `s3` (terverifikasi: avatar tersimpan di `bpr-assets/avatars/...` dan dapat diakses publik HTTP 200). Paket `league/flysystem-aws-s3-v3` ditambahkan.
+- **Combobox** (`components/ui/Combobox.vue`) — select DENGAN pencarian (Popover + filter + ikon centang), API sama dengan Select lama. `Select.vue` DIHAPUS; seluruh pemakaian (DataTableCard page-size, filter status pengguna, peranan di dialog, filter modul log, Penampilan) sudah memakai Combobox.
+- **DatePicker** (`components/ui/DatePicker.vue`) — kalender compact tanpa dependensi (Senin awal pekan, Hari ini/Bersihkan, nilai `YYYY-MM-DD`). Komponen siap pakai; belum ada field tanggal di halaman yang ada, jadi belum dipasang di mana pun.
+
+## Selesai (2026-06-15, rename menu + hapus deskripsi kartu + audit kode)
+- **Nama & urutan menu**: Penampilan → Penyimpanan → Peranan → Pengguna → Log Aktivitas (breadcrumb, judul `Head`, dan judul kartu ikut disesuaikan; "Profil Pengguna" → "Profil").
+- **Semua deskripsi di header kartu DIHAPUS** (`CardDescription` tidak dipakai lagi di seluruh halaman) termasuk deskripsi di header dialog. Prop `description` pada `DataTableCard` dan `Dialog` ikut dihapus agar tidak ada kode mati.
+- Uji iterasi 5 (Penyimpanan/Combobox/S3): **100% backend & frontend**.
+
+### Audit kode terhadap prinsip yang diminta
+Diterapkan:
+- **DRY** — `App\Support\TableQuery` (parsing query + meta paginasi) dipakai UserController & ActivityLogController; composable `useServerTable` (debounce/urut/paginasi/filter) dipakai halaman Pengguna & Log Aktivitas; `App\Support\FileStorage` satu pintu unggahan; `Modules` satu sumber izin; `Branding` satu sumber branding; `constants/labels.js` satu leksikon aksi.
+- **KISS & YAGNI** — menghapus `Select.vue`, prop `description` yang tak terpakai, `@tanstack/vue-table` & `vue-sonner` yang tidak dipakai; Combobox & DatePicker dibuat sendiri (Popover + logika kecil) alih-alih menambah dependensi berat; tanpa Pinia dan tanpa TypeScript karena belum dibutuhkan.
+- **SOLID & Separation of Concerns** — validasi di Form Request, otorisasi di middleware/permission, transformasi data di controller, logika UI di composable, primitive UI murni presentasional; `RoleController::syncMatrix` memakai transaksi DB.
+- **Composition over Inheritance** — Vue: `<script setup>` + composables + slot (`cell-<key>`, `header-action`, `filters`); PHP: kelas pembantu di `app/Support` alih-alih hierarki warisan.
+- **High Cohesion, Low Coupling** — `DataTableCard` tidak tahu sumber datanya (mode client/server via props+emits); halaman tidak tahu cara request dilakukan (useServerTable).
+- **Clean Architecture secukupnya** — hanya lapisan `app/Support` yang tipis; TANPA repository/service ceremony.
+
+Sengaja TIDAK diterapkan (dengan alasan):
+- **Feature-based folder di frontend** — tetap berbasis tipe (`pages`/`components`/`composables`) agar setia pada referensi FlowDesk; baru relevan bila modul mencapai puluhan.
+- **TypeScript & Pinia** — lihat keputusan sebelumnya (kesetiaan ke FlowDesk; belum ada state lintas halaman).
+
+Backlog kualitas: Pest feature test (auth, CRUD, otorisasi), ESLint + Prettier, PHPStan/Larastan.
+
+## Selesai (2026-06-15, filter tanggal log + hapus log + badge solid)
+- **Filter rentang tanggal** di Log Aktivitas memakai `DatePicker` (Dari/Sampai tanggal, `whereDate` inklusif di server) + tombol "Semua tanggal" untuk mereset.
+- **Hapus log berdasarkan rentang tanggal**: tombol "Hapus Log" → dialog berisi dua DatePicker + ringkasan rentang; validasi `after_or_equal`; penghapusan itu sendiri ikut tercatat sebagai log (level danger). Izin baru **`activity.manage`** (rute `DELETE /activity`), sudah disinkron ke role Super Admin lewat seeder.
+- **Badge lebih solid**: `.state-chip` kini isian penuh `hsl(var(--chip))` dengan teks kontras `hsl(var(--background))`; varian `secondary` pada `Badge` menjadi solid (`bg-foreground/85 text-background`), varian lembut lama tetap tersedia sebagai `muted`.
+- Terverifikasi di tema terang & gelap tanpa error console.
+
+## Selesai (2026-06-15, matriks hak akses + generator izin + CSV ekspor/impor)
+- **Matriks hak akses** (`RoleDetail.vue` + `RoleController::matrix()/syncPermissions()`, `PUT /roles/{role}/permissions`): izin dikelompokkan per entitas (prefix sebelum titik), toggle per entitas & global, pencarian izin, penghitung terpilih. Super Admin read-only (kontrol disabled + 403 server). Diff izin lama→baru tercatat di audit trail + notifikasi `roles.view`.
+- **Generator izin standar** (`POST /permissions/generate`, `GeneratePermissionRequest::ABILITIES` = view, view_any, create, update, delete, delete_any): entitas divalidasi huruf kecil, izin yang sudah ada dilewati.
+- **Ekspor CSV** mengikuti filter aktif: `/users/export`, `/permissions/export`, `/audit-trail/export` memakai `App\Support\Csv` (streaming + BOM UTF-8); URL dibangun dari state `useServerTable` di frontend (tombol `Button as="a"`).
+- **Impor pengguna** (`POST /users/import`, `ImportUserRequest`): kolom `name,username,email,phone,role,password`, validasi per baris memakai `Rules`, baris invalid dilewati, kata sandi kosong → `Str::password(12)`.
+- Uji iterasi 21: backend 40/40, frontend 100%. Testing agent menemukan & memperbaiki satu bug: `Rule::in()` dipakai tanpa `use Illuminate\Validation\Rule;` di `UserController::import()`.
+
+## Selesai (2026-06-15, modul Perizinan)
+- Modul baru **Perizinan** (`permissions.view` / `permissions.manage`) ditambahkan ke `Modules::MAP` dan di-seed ke Super Admin; menu sidebar diletakkan **tepat di atas Peranan**, breadcrumb + ADMIN_ROUTES diperbarui.
+- Halaman `/permissions` (`Permissions.vue`): tabel server-side (cari, sortir nama/guard, filter Entitas dinamis, paginasi), checkbox + hapus massal, dialog Tambah/Ubah dengan validasi format `entitas.aksi` (cermin di UI & `StorePermissionRequest`).
+- **Izin inti terkunci**: nama yang ada di `Modules::permissions()` tidak bisa diubah/dihapus (ikon kunci, menu aksi disembunyikan, server menolak 403, hapus massal melewatinya).
+- Audit trail + notifikasi bertarget (`permissions.view`) untuk setiap perubahan izin.
+- Uji iterasi 20: backend 24/24 dan frontend 100%.
+- **Backlog dari referensi UI user (Filament Shield)**: halaman detail peranan akan memakai matriks per entitas dengan aksi View / View Any / Create / Update / Delete / Delete Any, toggle "select all" per entitas dan global, plus kolom Guard — dibangun di atas modul Perizinan ini.
+
+## Selesai (2026-06-15, notifikasi nyata + aksi massal + presisi dialog)
+### Notifikasi (sebelumnya 100% DUMMY hardcoded)
+- Tabel `notifications` (satu baris per penerima) + model `Notification`, helper `App\Support\Notify::toPermission()/toUser()`.
+- **Tepat sasaran**: hanya pengguna AKTIF yang lulus `$user->can($permission)` menerima; **pelaku aksi tidak menerima notifikasi atas aksinya sendiri**. Daftar & jumlah belum dibaca dibagikan lewat `HandleInertiaRequests` selalu dari `Auth::user()`.
+- Endpoint `POST /notifications/{id}/read` (403 bila bukan milik pengguna) dan `POST /notifications/read-all`; tombol **Tandai** kini benar-benar menyimpan `read_at` (persisten setelah reload). Klik item menandai dibaca lalu membuka URL tujuan.
+- Pemicu: pengguna dibuat/dihapus & hapus massal (`users.view`), peranan dibuat/dihapus & hapus massal (`roles.view`), percobaan masuk gagal (`activity.view`).
+
+### Aksi massal (checkbox)
+- `DataTableCard`: prop `selectable` + `selected` + emit `update:selected`, checkbox header (halaman aktif saja) & per baris, bar aksi massal dengan slot `#bulk-actions`.
+- Pengguna: `POST /users/bulk` (`delete`/`activate`/`deactivate`) — akun sendiri otomatis dilewati. Peranan: `POST /roles/bulk-destroy` — Super Admin & peranan yang masih dipakai dilewati. Keduanya lewat Form Request (`BulkUserRequest`, `BulkRoleRequest`), tercatat di audit trail (termasuk jumlah dilewati) dan mengirim notifikasi bertarget.
+
+### Presisi header dialog
+- `ui/Dialog.vue`: `items-center`, wrapper `space-y-1` dihapus, judul `leading-6`, tombol tutup kotak `grid size-7 place-items-center` (`data-testid=dialog-close`). Δ pusat vertikal judul vs tombol = 0px pada 11 dialog.
+- Judul & label sisa dibuat Title Case: `Hapus Log Audit?`, `Hapus Data?`, `Tanggal Awal`, `Tanggal Akhir`.
+- Uji iterasi 18 (backend 80/80, frontend 100%) dan iterasi 19 (frontend 100% presisi).
+
+## Selesai (2026-06-15, sidebar collapse + responsif tablet/mobile + README)
+- **Bug fatal 1 — sidebar collapse cacat**: brand mark & avatar hilang saat mode ikon karena elemen non-svg tidak punya `shrink-0` (aturan shadcn hanya memberi `shrink-0` pada `svg`) dan tombol `size=lg` menyusut ke 32px. Fix di `AppSidebar.vue`: `shrink-0` pada `BrandMark`/`Avatar` + `group-data-[collapsible=icon]:hidden` pada blok teks & `ChevronsUpDown` (header dan footer).
+- **Bug fatal 2 — layout tablet/mobile**: `DataTableCard` kini mendukung `hideBelow: 'sm'|'md'|'lg'|'xl'` (kelas literal `HIDE_BELOW`, bukan dinamis, agar tidak dibuang purge). Dipakai di Pengguna (username `lg`, email `md`, phone `xl`, peranan `sm`) dan Audit Trail (pelaku `md`, modul `sm`); nama pengguna truncate di mobile. Blok identitas Profil menumpuk di mobile; ringkasan AuditDetail 1 kolom di layar kecil.
+- `APP_LOCALE=id` + `Carbon::setLocale()` di `AppServiceProvider` → waktu relatif berbahasa Indonesia.
+- **README.md lengkap** ditulis (instalasi, struktur, STANDAR VALIDASI wajib, hak akses, audit trail, branding, S3, design system, tabel server-side, daftar rute, deployment, troubleshooting).
+- Uji iterasi 17 (frontend 100%): brand mark 32×32 tetap tampil pada keadaan expanded & collapsed (desktop + tablet), tidak ada horizontal overflow pada 390px & 768px di seluruh halaman, kolom tabel muncul/tersembunyi sesuai breakpoint, waktu relatif Indonesia, tanpa error console.
+
+## Selesai (2026-06-15, Audit Trail + bug "kosong tetap kosong")
+### Bug: nilai yang dikosongkan kembali ke default
+- RCA: middleware `ConvertEmptyStringsToNull` mengubah `''` → `null`, lalu `Branding` menimpa `null` dengan `DEFAULTS`.
+- Fix: `Setting::putMany()` menyimpan `''` untuk kunci non-aset (`allowNull: true` khusus aset), `Branding::merged()` memakai default HANYA untuk kunci yang belum pernah diatur, dan fallback turunan `footer_text`/`meta_title` dihapus. Kosong = tetap kosong (Penampilan & Penyimpanan sudah diuji).
+
+### Log Aktivitas → AUDIT TRAIL (rute `/audit-trail`)
+- Menu/judul/breadcrumb `Audit Trail`; halaman daftar `AuditTrail.vue`, halaman **detail tersendiri** `AuditDetail.vue` di `/audit-trail/{id}` (dialog dihapus karena data bisa panjang) — berorientasi pengembang: Ringkasan (ID, waktu, ISO 8601, relatif, modul, level+kode, pelaku, email, ID pengguna, objek, kelas objek), tabel **Perubahan Data** lebar penuh (kolom/sebelum/sesudah, monospace, header sticky, max-h 420px + scroll), kartu Kesalahan/Konteks, kartu Teknis, dan **Payload Mentah (JSON)** + tombol Salin.
+- Migrasi `2026_08_15_050000_extend_activity_logs_for_audit`: `changes`, `context` (JSON), `method`, `url`, `status_code`, `user_agent`.
+- `ActivityLog::record($action, $module, $level, $subject, $changes, $context, $statusCode)` merekam konteks permintaan otomatis. `diffOf($model, $before)` — **`$before` WAJIB `$model->getOriginal()` sebelum `save()`** (bug ini pernah terjadi: old==new). `snapshotOf($model, $deleted)` untuk create/delete. Kolom rahasia (`password`, `s3_secret`, `s3_key`, dll) disamarkan `••••••` via `ActivityLog::MASKED`.
+- `Setting::putMany()` mengembalikan diff setelan → dipakai Penampilan & Penyimpanan.
+- Pencatatan kegagalan otomatis di `bootstrap/app.php` lewat **`$exceptions->render()`** (bukan `report()`, karena turunan HttpException diabaikan Laravel): 403 → 'Akses ditolak', ≥500 → 'Kegagalan sistem'. `ValidationException` (422) dan 404 sengaja TIDAK dicatat agar tidak bising. Login gagal & lockout dicatat dari `LoginRequest` (level Gagal/Peringatan, status 422/429).
+- Uji iterasi 12–16: backend 70/70 dan frontend 100% (diff nyata terverifikasi lewat UI, kata sandi tersamarkan, 403/500 tercatat, 422/404 tidak).
+
+### Catatan operasional
+- Branding user sering tereset oleh data uji: nilai benar → `app_name='CODEX'`, `tagline='Core Data Exchange'`, `brand_initials='</>'`, `meta_title='CODEX: Core Data Exchange'` (lalu `php artisan cache:clear`).
+
+## Selesai (2026-06-15, Title Case + revisi Peranan/Pengguna/Penampilan)
+- **Title Case** untuk seluruh label, judul kartu, judul dialog, placeholder filter (mis. `Nama Pengguna`, `Kata Sandi`, `Akun Aktif`, `Tambah Pengguna`, `Semua Status`, `Driver Aktif`, `Dari Tanggal`, `Semua Modul`, `Hapus Pengguna?`).
+- **Peranan**: card & fungsi `Matriks Hak Akses` DIHAPUS (rute `PUT /roles/matrix`, `SyncMatrixRequest`, kolom Jumlah Izin) — akan dibangun ulang lewat halaman detail. Dialog hanya kolom `Nama Peranan` (tanpa placeholder). Aksi baris: **Detail (ikon mata)** → `GET /roles/{role}` (halaman `RoleDetail.vue`, placeholder), Ubah, lalu `DropdownMenuSeparator` di atas Hapus.
+- **Pengguna**: label mengikuti halaman Profil; kolom `Login Terakhir` dipindah menjadi field read-only `Terakhir Login` di dialog; avatar di depan nama dihapus; Peranan tanpa badge & dapat disortir (`sort=role` via subquery roles); Status dapat disortir (`sort=is_active`) dengan badge Aktif=`secondary` (abu) dan Nonaktif=`destructive` (merah); separator di atas Hapus.
+- **Wajib vs opsional**: hanya `name`, `role`, `password` wajib. `username` & `email` menjadi **nullable unik**, `phone` **nullable + UNIK** (migrasi `2026_08_15_040000_relax_user_identity_columns`).
+- **Penampilan**: uploader `Logo (Latar Terang)`, `Logo (Latar Gelap)`, `Favicon` di card Identitas; card `SEO & Metadata` dan `Open Graph` **digabung** (Meta Title menggantikan OG Title, OG Description memakai Meta Description, toggle `Visibilitas`, kartu pratinjau tetap) — rute `PUT /appearance/og` dihapus.
+- **Bug gambar rusak diperbaiki**: nilai aset kini disimpan berawalan disk (`local:branding/x.png` / `s3:...`) di `FileStorage`, plus komponen `BrandMark.vue` & `AssetUploader` jatuh ke inisial/ikon bila berkas gagal dimuat.
+- Uji iterasi 10: backend 38/38 dan frontend 100% lolos.
+
+## Selesai (2026-06-15, standar validasi + revisi 4 halaman sesuai referensi)
+### Standar validasi (global, WAJIB dipakai untuk form baru)
+- `app/Support/Rules.php` = SATU sumber aturan per tipe kolom: `personName()`, `username($ignoreId)`, `email($ignoreId)`, `phone()` (regex `^\+?[0-9]{9,15}$`), `password()`, `text($max)`, `url()`, `slug()`, `path()`, `date()` + `messages()` (pesan Indonesia).
+- SETIAP form punya Form Request: `Profile/UpdateProfileRequest|UpdatePasswordRequest|UpdateAvatarRequest`, `User/StoreUserRequest`, `Role/StoreRoleRequest|SyncMatrixRequest`, `Appearance/UpdateIdentityRequest|UpdateSeoRequest|UpdateOgRequest|UpdateContactRequest|UploadAssetRequest`, `StorageSetting/UpdateStorageRequest`, `ActivityLog/DestroyRangeRequest`. Tidak ada lagi `$request->validate()` inline di controller.
+- Frontend: `resources/js/lib/validators.js` (cermin aturan backend) + `composables/useLiveValidation.js` (validasi saat blur & sebelum submit, pesan ditulis ke `form.errors`) + `components/ui/PhoneInput.vue` (menolak non-digit, boleh 1 tanda `+`, maks 15 digit). `PasswordInput` meneruskan event `blur`.
+
+### Perubahan halaman (mengikuti gambar referensi user)
+- **Login**: judul kartu `Autentikasi`; footer konten hanya "Butuh bantuan? {email dukungan}" (baris copyright dihapus); validasi cepat kolom kredensial & kata sandi.
+- **Profil**: judul/breadcrumb `Profil Pengguna`; label `Nama Lengkap`, `Nama Pengguna`, `Alamat Email`, `Nomor HP`; kolom **Kantor dihapus**.
+- **Penampilan**: card **Aset Merek DIHAPUS** (logo terang/gelap, thumbnail, warna merek) — favicon dipindah ke card `Identitas Aplikasi`; kolom Perusahaan/Zona Waktu/Bahasa/Format Tanggal/URL Aplikasi dihapus; card SEO, Open Graph, Kontak & Footer tetap. Rute per bagian: `PUT /appearance/{identity,seo,og,contact}`.
+- **Penyimpanan**: urutan kolom Driver aktif | Endpoint · Bucket | **Path (baru)** · Access Key ID | Secret · Region | URL Publik. `s3_path` dipakai `FileStorage` sebagai prefix folder di S3.
+- **Kolom `office` dihapus di semua tempat** termasuk kolom DB (migrasi `2026_08_15_030000_drop_office_from_users_table`), tabel & dialog Pengguna, seeder/factory, share Inertia.
+- Uji iterasi 8: backend 26/26 lolos (validasi telepon huruf ditolak, username huruf besar ditolak, path/endpoint/URL, dll). Iterasi 9: frontend 100% (validasi blur + toast).
+
+## Revisi (2026-06-15, Badge dikembalikan ke shadcn/ui asli)
+Atas permintaan user: **semua style badge kustom DIHAPUS**.
+- `Badge.vue` = cva shadcn/ui asli (`default`, `secondary`, `destructive`, `outline`); hanya padding disesuaikan compact (`px-2 py-0.5 text-xs`). Tidak ada palet warna, tidak ada variant `chip`/`muted`.
+- `app.css`: token `--bdg-*` dan class `.bdg-solid/.bdg-light/.bdg-outline/.bdg-c-*` serta `.state-chip` **dihapus**.
+- `StateChip.vue` memetakan token status `--st-*` → variant shadcn (done/progress→`default`, pending→`outline`, draft/cancelled/archived→`secondary`, overdue→`destructive`). `ActivityLog::LEVEL_CHIPS` kembali ke token `--st-*`.
+- Uji iterasi 7 (frontend 100%): kontras WCAG jauh di atas AA di kedua tema, tidak ada sisa class lama di DOM, tanpa error console.
+- Catatan dari tester: rute dashboard adalah `/` (tidak ada `/dashboard`).
+
+## Perbaikan (2026-06-15, kontras teks chip status/level)
+- **Bug**: pada tema terang, badge LEVEL/STATUS (StateChip) berlatar warna solid tapi teksnya gelap → hampir tak terbaca. RCA: class komponen `.state-chip` kalah spesifisitas dengan utility `text-foreground` dari `Badge variant="outline"` (layer utilities selalu menang atas layer components).
+- **Fix**: `Badge` mendapat variant `chip` (`bg-[hsl(var(--chip))] text-[hsl(var(--background))]`, semua utility → deterministik); `StateChip` memakai `variant="chip"`; blok CSS `.state-chip` dihapus (tak ada kode mati).
+- Terverifikasi testing agent (iterasi 6, frontend 100%): terang `Info` teks putih di atas biru, gelap `Info` teks gelap di atas biru muda; halaman Pengguna ikut benar; tanpa error console.
+
+## Selesai (2026-06-15, palet Badge ala referensi Tabler)
+- `Badge.vue` kini punya **dua mode**: (1) semantik lama (`default`/`secondary`/`destructive`/`muted`/`outline`) — pemakaian existing TIDAK berubah; (2) **palet** lewat prop `color` (blue, azure, indigo, purple, pink, red, orange, yellow, lime, green, teal, cyan, dark, light) dengan gaya `variant="solid|light|outline"`.
+- Token palet `--bdg-*` ditambahkan di `app.css` untuk light & dark, plus kelas komponen `.bdg-solid` / `.bdg-light` / `.bdg-outline` (hue via `--bdg`) dan pengecualian kontras `.bdg-c-dark` / `.bdg-c-light`.
+- Dukungan ikon: container `gap-1` + `[&>svg]:size-3` (cukup `<Star />` di dalam Badge).
+- Catatan penting: nama kelas `bdg-c-*` HARUS literal di JS (map `neutralInkMap`), karena kelas dinamis dibuang oleh purge Tailwind (bug ini sudah terjadi & diperbaiki).
+- Verifikasi: warna terhitung benar di kedua tema, halaman Pengguna (badge peran/status) tetap normal.
+
+## Selesai (2026-06-15, semua Ekspor/Impor pindah ke XLSX)
+- Lingkungan: pod restart membuat PHP hilang lagi → dipasang ulang (lihat `/app/memory/env_notes.md`). **Composer kini terpasang** di `/usr/local/bin/composer`.
+- Paket baru `phpoffice/phpspreadsheet ^5.9`; `app/Support/Csv.php` **DIHAPUS**, diganti `app/Support/Excel.php`:
+  `download($filename, $headers, $rows, $sheetTitle)` (header tebal + fill, freeze `A2`, auto-filter, auto width, nilai teks ditulis eksplisit agar `081...` tidak jadi angka), `rows($path)` (baca .xlsx/.xls, baris kosong dibuang), `filename($prefix)` → `.xlsx`.
+- Ekspor `.xlsx`: `/users/export`, `/permissions/export`, `/audit-trail/export` (tetap mengikuti filter aktif). Audit trail mencatat "(Excel)".
+- Impor `.xlsx`/`.xls`: `/users/import` (kolom sesuai template) & `/roles/import` (nama peranan di kolom pertama). `mimes:xlsx,xls` di `ImportUserRequest` (maks 2 MB) & `ImportRoleRequest` (maks 1 MB) — CSV kini ditolak.
+- **Template contoh** baru: `GET /users/import/template`, `GET /roles/import/template` (berisi 2 baris teladan). Dialog impor punya tombol **Template** (kiri, `mr-auto`) dan deskripsinya tidak lagi menyebut daftar kolom.
+- Uji: `tests/Feature/ExcelIoTest.php` — 4 lolos (5 unduhan menghasilkan xlsx terbaca, impor pengguna & peranan dari xlsx, berkas CSV ditolak). Screenshot dialog Impor Pengguna diverifikasi.
+
+## Selesai (2026-06-15, halaman error bertema + fix 419 di iframe preview)
+- **Halaman error senada design system**: `resources/js/pages/Error.vue` (header brand + ModeToggle, chip ikon + kode status, judul besar, deskripsi, tombol Kembali Ke Dasbor/Masuk + Muat Ulang, meta Alamat & Kode Referensi, email dukungan). Katalog status: 401, 403, 404, 419, 429, 500, 503.
+- Dirender lewat `$exceptions->respond()` di `bootstrap/app.php` (dilewati untuk permintaan JSON; 5xx tetap memakai halaman debug Laravel saat `APP_DEBUG=true`) + `Route::fallback()` di `routes/web.php` agar 404 melewati grup `web` sehingga sesi & prop Inertia (branding, auth) tersedia.
+- **Bug**: `AuthenticationException` (belum masuk) sebelumnya tercatat sebagai "Kegagalan sistem" level danger di audit trail → kini diabaikan.
+- **Bug 419 di panel Preview (iframe)**: cookie sesi `SameSite=Lax` diblokir pada konteks lintas situs → token CSRF hilang. Fix: `SESSION_SAME_SITE=none` + `SESSION_SECURE_COOKIE=true` di `.env`. Diverifikasi login berhasil dari dalam iframe lintas domain.
+- Uji: `tests/Feature/ErrorPageTest.php` 3 lolos (404 & 403 → komponen Inertia `Error`, permintaan JSON tetap JSON) + screenshot terang/gelap.
+
+## Selesai (2026-06-16, sidebar diringkas + modul Penyimpanan dihapus + urutan entitas dapat digeser)
+- **Menu Profil dihapus** dari sidebar (area Member hanya Dashboard); halaman `/profile` tetap ada & diakses lewat dropdown footer sidebar.
+- **Modul Penyimpanan DIHAPUS total**: `StorageController`, `Requests/StorageSetting/`, `pages/Storage.vue`, rute `/storage-settings*`, izin `storage.view|manage` (dihapus lewat seeder), dan setelan `s3_*`/`storage_driver` di tabel `settings`. `App\Support\FileStorage` kini **100% dari .env**: `FILESYSTEM_DISK`, `AWS_*` + tambahan `AWS_ENDPOINT`, `AWS_URL`, `AWS_PATH` (dipakai sebagai `root` disk s3 di `config/filesystems.php`).
+- **Urutan menu Administrator**: Perizinan → Peranan → Pengguna → **Penampilan** → Audit Trail.
+- **Kartu entitas pada matriks hak akses dapat digeser** (HTML5 drag & drop, tanpa dependensi baru; ikon `GripVertical`, ring saat drop). Urutan disimpan global di `settings.permission_entity_order` lewat `PUT /roles/entity-order` (`SaveEntityOrderRequest`, izin `roles.manage`) dan dipakai `RoleController::matrix()`; entitas baru menyusul di belakang. Diverifikasi: urutan tetap setelah reload.
+- **BUG LOGIN diperbaiki**: `LoginRequest::authenticate()` sebelumnya menebak kolom dari format masukan, sehingga **username numerik** (`309011221`) dianggap nomor telepon → selalu gagal. Sekarang pengguna dicari sekaligus pada `email`/`username`/`phone`, lalu `Auth::attempt(['id' => ...])`.
+- Kredensial seeder saat ini: username `309011221`, kata sandi `1` (lihat `/app/memory/test_credentials.md`) — `php artisan db:seed` MENIMPA kata sandi.
+- Catatan: `tests/Feature/ExampleTest.php` (bawaan Laravel) gagal karena `/` butuh sesi — bukan regresi.
+
+## Selesai (2026-06-16, Laravel Telescope + Laravel Lang)
+- **Composer dipindah ke `/app/bin/composer`** (symlink ke `/usr/local/bin`) karena `/usr/local` hilang tiap pod restart.
+- **laravel/telescope ^5.22** di `/telescope`: middleware `['web','auth',Authorize::class]`, gate `viewTelescope` hanya untuk email di `TELESCOPE_ALLOWED_EMAILS` (`.env` = zulfadlirizal@gmail.com), `authorization()` di-override agar gate berlaku juga saat `APP_ENV=local`.
+  - **Jebakan penting**: Telescope 5 membawa `laravel/sentinel` yang menyisipkan `SentinelMiddleware:telescope` dan mengembalikan **401** ketika `APP_ENV=local` diakses lewat reverse proxy publik (pod preview). Fix: `TelescopeServiceProvider::boot()` mendaftarkan ulang `Route::middlewareGroup('telescope', config('telescope.middleware'))` tanpa Sentinel.
+  - Terverifikasi: tamu → 302 /login, email diizinkan → UI Telescope 200, pengguna lain → 403 halaman error bertema.
+- **laravel-lang/common ^6.8** + `php artisan lang:add id` → `lang/id/*` & `lang/id.json`; `APP_LOCALE=id` membuat pesan validasi bawaan berbahasa Indonesia. Pesan kustom (`Rules::messages()`, `messages()` tiap Form Request, halaman Login) TIDAK diubah dan tetap menang. Terverifikasi lewat Validator: unique → "Surel sudah ada sebelumnya.", in → "Peran yang dipilih tidak valid.", sedangkan phone.regex tetap pesan kustom.
+
+## Selesai (2026-06-16, dokumentasi diperbarui)
+- README dirapikan: blok Fitur "Manajemen Pengguna"/"Perizinan" yang duplikat & rusak diperbaiki; ditambah halaman error bertema, struktur sidebar baru (Profil tidak lagi jadi menu), drag & drop urutan entitas matriks, tabel Telescope di skema DB, rute `PUT /roles/entity-order` + `/telescope` + `Route::fallback`, env penting (`SESSION_SAME_SITE`, `FILESYSTEM_DISK`, `TELESCOPE_*`), perintah uji (`ExcelIoTest`, `ErrorPageTest`), dan 4 entri baru Pemecahan Masalah.
+- **Berkas contoh env bernama `env.example` (tanpa titik, sengaja, agar ter-push ke GitHub) — JANGAN dihapus/ubah nama.** Disinkronkan dengan kunci baru: `SESSION_SAME_SITE`, `SESSION_SECURE_COOKIE`, `AWS_ENDPOINT`, `AWS_URL`, `AWS_PATH`, `TELESCOPE_ENABLED`, `TELESCOPE_ALLOWED_EMAILS`. Perintah di README kini `cp env.example .env`.
+
+## Selesai (2026-06-16, Salin Hak Akses saat membuat peranan)
+- Dialog **Tambah Peranan** kini punya Combobox opsional **Salin Hak Akses Dari** (`data-testid=role-form-copy-from`) berisi daftar peranan + jumlah izinnya, plus teks bantuan dinamis (`role-form-copy-hint`). Hanya muncul saat membuat (tidak pada Ubah).
+- Backend: `StoreRoleRequest` menerima `copy_from` (`nullable|integer|exists:roles,id`); `RoleController::store()` menyalin `syncPermissions()` dari peranan sumber, mencatat konteks audit (`hak_akses_disalin_dari`, `jumlah_izin`), dan flash sukses menyebut jumlah izin + nama sumber.
+- Terverifikasi end-to-end: menyalin dari Super Admin → 12 izin tersalin (dikonfirmasi di halaman detail peranan baru). Peranan uji dibersihkan.
+
+## Selesai (2026-06-16, seeder = snapshot data saat ini)
+- `database/seeders/DatabaseSeeder.php` ditulis ulang sebagai **cetakan data produksi saat ini**, tanpa data contoh/factory:
+  - 12 izin dari `Modules::permissions()`; peranan `Super Admin` (semua izin) & `Guest` (`dashboard.view`, `profile.view`).
+  - 1 pengguna: Super Admin / username `jkv` / `studio@jkv.co.id` / `082320099971`, hash kata sandi disimpan **apa adanya** (`$2y$12$7zX...`, kata sandi saat ini `1`) supaya seeding ulang tak mengubah kredensial. `syncRoles(['Super Admin'])`.
+  - 24 setelan (branding + SEO + `permission_entity_order`) sebagai konstanta `SETTINGS`.
+- Uji: `DB_DATABASE=/tmp/seedtest.sqlite php artisan migrate:fresh --seed --force` → users=1, roles=2, perms=12, settings=24, logs=0, password `1` cocok. DB asli tidak disentuh.
+- **PERINGATAN terbuka**: `.env` `TELESCOPE_ALLOWED_EMAILS=zulfadlirizal@gmail.com`, sedangkan email Super Admin kini `studio@jkv.co.id` → `/telescope` akan 403 sampai nilai env diperbarui (menunggu keputusan user).
+- **Resolved**: `TELESCOPE_ALLOWED_EMAILS` diubah ke `studio@jkv.co.id` (email Super Admin baru); `/telescope` terverifikasi 200 setelah login `jkv` / `1`. `env.example` & README ikut disesuaikan.
+
+## Selesai (2026-06-16, Dashboard data nyata + Galeri Komponen)
+- **`app/Http/Controllers/DashboardController.php` baru** (menggantikan closure + `App\Support\DemoData` yang DIHAPUS). Semua widget kini data nyata: KPI (pengguna aktif/nonaktif, peranan, izin + jumlah entitas, aktivitas 7 hari + level danger/warning, notifikasi belum dibaca), Pengguna Terbaru (kelengkapan profil dari username/email/phone/avatar), Aktivitas Terakhir (activity_logs), Tren 7 hari (pengguna baru vs aktivitas), Aktivitas per Modul, **Sebaran Peranan** (`roleDistribution`, sebelumnya hardcode), Penyimpanan nyata (ukuran berkas disk public, ukuran file SQLite, disk server).
+- **`resources/js/components/composite/ComponentGallery.vue` baru** — showcase interaktif SEMUA komponen: tombol (5 varian + icon + status muat), 4 toast, Badge 4 varian, StateChip 6 status, Avatar, Tooltip, Input + state error, PasswordInput, PhoneInput, Textarea, Combobox, DatePicker, Checkbox, Switch, Alert (2 varian), Progress (+/−10), Skeleton, Dialog, ConfirmDeleteDialog, DropdownMenu, Tabel + RowActions, EmptyState (6 varian dipilih via Combobox).
+- Dashboard juga: tombol Segarkan/Pengguna Baru/Lihat Semua kini benar-benar berfungsi, EmptyState saat daftar kosong, tinggi kartu daftar `lg:h-[26rem]`.
+- Uji: testing agent iterasi 22 → **100% lulus, 0 bug, 0 console error**, termasuk regresi 5 halaman lain, dark mode, dan mobile 390x844 tanpa overflow (`/app/test_reports/iteration_22.json`).
+
+## Selesai (2026-06-16, manajemen notifikasi + Dashboard dirapikan)
+- **Lonceng notifikasi**: tombol **Tandai Semua** (label diperjelas, `POST /notifications/read-all` sudah ada) + **penyaring Semua / Belum Dibaca** (`notifications-filter-all` / `notifications-filter-unread`, badge jumlah belum dibaca). `HandleInertiaRequests` kini membagikan `items` DAN `unread_items` (10 terbaru, lazy closure) via helper `mapNotifications()`; teks kosong kontekstual.
+- **BUG diperbaiki**: `DashboardController` KPI notifikasi memakai kolom `is_read` yang tidak ada → diganti `whereNull('read_at')` (tabel `notifications` memakai `read_at`).
+- **Dashboard dirapikan atas permintaan user** ("hapus saja konten itu", rekomendasi diikuti): kartu **Pengguna Terbaru dihapus** (nyaris kosong dengan 1 pengguna) beserta prop `recentUsers` & method controllernya. Aktivitas Terakhir kini 2 kolom (tombol Segarkan/Pengguna Baru dipindah ke sana, `max-h-80` scroll) dan Penyimpanan 1 kolom, tinggi mengikuti isi (tanpa tinggi terkunci).
+- Terverifikasi via screenshot: filter Semua/Belum Dibaca, Tandai Semua → hitungan 0 + "Semua notifikasi sudah dibaca.", KPI notifikasi menampilkan angka benar. Notifikasi uji buatan sudah dihapus.
+
+## Selesai (2026-06-18, deteksi jaringan + halaman pemeliharaan + redesain halaman error)
+- **Deteksi jaringan**: `resources/js/composables/useNetworkStatus.js` (event `online`/`offline` + hook Inertia `exception`/`success`) & `components/layout/OfflineBanner.vue` (banner destructive di bawah header + tombol Coba Lagi) dipasang di `AppLayout`. Toast: "Koneksi terputus…" / "Koneksi kembali normal." Terverifikasi memakai `context.set_offline()`.
+- **Halaman pemeliharaan** `resources/views/errors/503.blade.php` — mandiri (tanpa Vite/DB/sesi), mode gelap via `prefers-color-scheme`, kisi latar + panel 503 + bilah progres animasi + daftar langkah, auto-refresh sesuai `--retry`. Branding & `retryAfter` (dibaca dari `storage/framework/down`) diinjeksi lewat `View::composer('errors::503')` di `AppServiceProvider`.
+  - **Akar masalah "masih default Laravel" saat `php artisan down`**: hook `respond()` melewatkan SEMUA status >= 500 ketika `APP_DEBUG=true`. Sekarang: bypass debug hanya untuk 500, dan **503 dikeluarkan dari daftar Inertia** agar memakai Blade mandiri.
+- **Redesain `pages/Error.vue`** (401/403/404/419/429/500): layout 2 kolom, chip status dengan titik ping, judul & deskripsi khusus per status + baris `hint`, tombol aksi, meta (alamat/kode referensi/waktu), panel kode status dengan angka mono besar + arsir diagonal + animasi bertahap, kartu **Pintasan Cepat** (Dashboard/Pengguna/Peranan/Perizinan/Audit Trail) untuk pengguna terautentikasi, footer `HTTP <status>`.
+- Uji: `ErrorPageTest` 3/3 lolos; screenshot 404 tamu & login, mode terang/gelap, halaman 503 terang/gelap/mobile (overflow 0). Aplikasi sudah `php artisan up` kembali.
+
+## Selesai (2026-06-18, Menu Builder + konsistensi ukuran kontrol)
+- **Modul Menu Sidebar** (`/menus`): tabel `menus` (parent_id, area, label, href, icon, permission, sort, is_active), `App\Models\Menu` (`tree()`, `treeFor()` filter izin + buang grup kosong, MAX_DEPTH=3), `MenuController` (index/store/update/destroy/reorder), 3 FormRequest, izin baru `menus.view|menus.manage` (entitas `menus` di Modules::MAP). Sidebar dirender dari prop Inertia `menu` lewat komponen rekursif `MenuNode.vue`; `navigation.js` kini hanya menyimpan `AREA_META` + breadcrumb. Seeder menambah menu bawaan + contoh **Level 1 → Level 2 → Level 3** di Member Area.
+- Builder: geser baris untuk urutan + tombol indent/outdent untuk tingkat, dialog CRUD (label, area, induk, alamat, ikon, izin, aktif). Daftar reaktif terhadap props (perbaikan temuan iterasi 23).
+- **BUG USER: ukuran kontrol tidak konsisten** — Combobox memakai `--ctl-h-sm` (28px, text-xs) sedangkan Input `--ctl-h` (32px, text-sm), dan input file mentah lebih tinggi. Fix: Combobox → `--ctl-h`/text-sm/px-3; komponen baru `ui/FileInput.vue` (32px, expose `clear()`) dipakai di dialog impor Pengguna & Peranan; `Button` size `sm` → `--ctl-h`; override `h-[var(--ctl-h-sm)]`/`text-xs` di DataTableCard (search, paginasi) & DatePicker AuditTrail dihapus. Token `--ctl-h-sm` kini tidak dipakai lagi di komponen kontrol.
+- Uji: iterasi 23 (Menu Builder, semua alur lulus) & **iterasi 24 (verifikasi ukuran: semua kontrol form & tombol = 32px, 0 bug, regresi filter/pilih berkas/menu reaktif/mobile lulus)**.
+- **Catatan akun**: kata sandi akun pemilik (`jkv` / studio@jkv.co.id) sudah diganti sendiri oleh user → tidak diketahui agen. Dibuat akun uji **qatest / qatest123 (Super Admin, qa@example.com)** untuk pengujian; user boleh menghapusnya kapan saja lewat menu Pengguna.
+
+## Selesai (2026-06-18, bug "login harus langsung ke dashboard")
+- Akar masalah: (1) `AuthenticatedSessionController@store` memakai `redirect()->intended()` → bila tamu sebelumnya membuka halaman terproteksi (/menus, /users, /telescope), setelah masuk ia dibawa ke sana; (2) `AppSidebar.onMounted` memulihkan area dari `localStorage` sehingga sidebar bisa menampilkan area Administrator padahal halaman dashboard ada di Member Area.
+- Fix: `session()->forget('url.intended')` + `redirect()->route('dashboard')`; `onMounted` memakai `areaIdOf(pathname)` (route menang atas localStorage; `watch(pathname)` tetap menyesuaikan area saat navigasi).
+- Uji: testing agent iterasi 25 → **7/7 skenario lulus, 0 bug** (sesi bersih, skenario intended URL untuk 3 path, skenario localStorage 'admin', toast sambutan, regresi navigasi/refresh /users, logout).
+- Catatan lingkungan: PHP hilang lagi setelah pod restart → dibuat skrip pemulihan **`/app/memory/restore_php.sh`** (pasang PHP 8.3 + symlink composer dari `/app/bin/composer` + restart supervisor).
+
+## Selesai (2026-06-18/19, Object Storage + Surel + progres unggah + konsistensi UI)
+- **Modul Object Storage** (`/object-storage`, izin `storage.view|storage.manage`): `ObjectStorageController` (index+filter folder/pencarian, unggah banyak berkas semua jenis media maks 10x50MB, ganti nama/move, hapus massal), 3 FormRequest, `FileStorage::storeReadable()` (slug nama asli + akhiran acak). `FILESYSTEM_DISK=s3` (S3-compatible Neo NOS, bucket `bpr-assets`, prefix `adminkit`) — avatar profil & aset merek kini otomatis ke object storage; URL publik terverifikasi 200. UI memakai **DataTableCard standar** (kolom Berkas/Jenis/Folder/Ukuran/Diubah + RowActions), blok meta Driver/Bucket/Prefix/Total DIHAPUS atas permintaan user.
+- **Service surel**: `App\Support\Mailer` (try/catch + audit modul 'Surel'), `App\Mail\WelcomeMail`, template `resources/views/emails/layout.blade.php` (kop merek, isi, kaki, preheader — dasar untuk template berikutnya) + `emails/welcome.blade.php`. Dikirim otomatis saat pengguna dibuat & manual lewat aksi baris `users-welcome-email-<id>` (`POST /users/{user}/welcome-email`). `.env`: MAIL_MAILER=smtp, MAIL_SCHEME=smtp (bukan `tls` — skema tidak didukung Symfony Mailer).
+- **Progres unggah**: komponen `composite/UploadProgress.vue` dipakai di Object Storage, avatar Profil, AssetUploader (Penampilan), serta impor Excel Pengguna & Peranan.
+- **Konsistensi UI**: judul kartu + tab + breadcrumb kini mengikuti label menu (`composables/useMenuLabel.js`, dipakai AppLayout & 5 halaman); `Label` global 13px; kartu identitas Profil didesain ulang (`profile-identity`).
+- **Bug penting**: dialog Ganti Nama tak menampilkan galat & tombol loading terus → butuh `preserveState: true` (tanpa itu komponen remount & error bag hilang) + aturan `bail` supaya regex tidak memicu 2 panggilan S3. Catatan: operasi Object Storage butuh 3-10 detik (dev server single-thread + latensi S3) — jangan simpulkan gagal terlalu cepat.
+- **php.ini**: `upload_max_filesize`/`post_max_size` = 64M lewat `/etc/php/8.3/cli/conf.d/99-adminkit.ini` (sudah masuk `/app/memory/restore_php.sh`).
+- Uji: iterasi 26-30. **Iterasi 30: 100% lulus, 0 bug.**
+
+## Selesai (2026-06-19, ATURAN BAKU label formulir)
+- User menyetujui gaya label hasil eksperimen di halaman Profil → dijadikan **aturan baku global**.
+- Token baru di `resources/css/app.css`: `--label-size: 0.75rem` (12px), `--label-tracking: 0.06em`, `--label-weight: 500`.
+- `components/ui/Label.vue` kini membawa gaya wajib: `block uppercase leading-none text-foreground` + ketiga token di atas. Semua halaman/dialog otomatis ikut (Pengguna, Peranan, Perizinan, Audit Trail, Penampilan, Menu Sidebar, Object Storage, Profil, Login, Galeri Komponen).
+- Override lokal dibersihkan: 7 label di `pages/Profile.vue`, `pages/RoleDetail.vue` ("Pilih Semua"), 2 label di `pages/auth/Login.vue`; `<label>` mentah di `ComponentGallery.vue` diganti komponen `Label`.
+- Pengecualian tunggal: teks pendamping checkbox berbentuk kalimat ("Ingat saya", "Kirim ringkasan mingguan") memakai `normal-case tracking-normal font-normal`.
+- Dokumentasi README diperbarui (bagian **UI** + daftar token desain). Verifikasi via screenshot: Login, Profil, dialog Tambah Pengguna, Penampilan — konsisten 12px uppercase.
+
+## Selesai (2026-06-19, seeder modular + env.example)
+- **Seeder dipecah per domain** (`database/seeders/`): `PermissionSeeder` (16 izin dari `Modules::MAP`), `RoleSeeder` (Super Admin sinkron semua izin + Guest + 43 peranan struktur organisasi BPR), `UserSeeder` (IT Support / superadmin / sa@bprbangunarta.co.id, Super Admin), `SettingSeeder` (branding CODEX + SEO/OG + kontak), `MenuSeeder` (Dashboard + 7 menu Administrator dengan label baru: Kelola Perizinan/Peranan/Pengguna, Penampilan UI, Menu Navigasi, Object Storage, Audit Trail Log). `DatabaseSeeder` hanya memanggil kelima seeder.
+- Sifat: idempoten; **kata sandi hanya disetel saat akun dibuat** (`firstOrNew`) dan **izin peranan tidak ditimpa** bila sudah ada → seeding ulang tidak merusak data hidup. Diuji: `db:seed` pada DB aktif (data utuh, kata sandi valid) + `migrate:fresh --seed` pada DB sementara (1 user/45 peranan/16 izin/8 menu/24 setelan, login Super Admin valid).
+- **env.example**: blok SMTP (MAIL_SCHEME=smtp catatan penting, host/port) dan blok S3 (region/endpoint/bucket/AWS_PATH + `FILESYSTEM_DISK=s3`) ditambahkan dengan **nilai rahasia dikosongkan** agar aman dipush ke GitHub.
+- `TELESCOPE_ALLOWED_EMAILS` di `.env` diperbarui ke `sa@bprbangunarta.co.id` (akun lama sudah dihapus user). README bagian Seeder ditulis ulang; `/app/memory/test_credentials.md` diperbarui.
+- Catatan lingkungan: pod restart menghapus PHP lagi → dipulihkan dengan `/app/memory/restore_php.sh` (recurrence ke-4).
+
+## Selesai (2026-06-19, skema users baru + CRUD pengguna berbasis halaman)
+Persiapan sistem baru (branch baru), berdasarkan migrasi `users` yang diubah user:
+- **Skema users**: name, username(unik), email(unik, nullable), email_verified_at, **phone(16, unik — dikembalikan atas permintaan user)**, **role** (denormalisasi nama peranan Spatie, diisi otomatis lewat `User::setRoleName()`), **office**, **alias(3, unik)**, **mso_code(4, unik)**, **collector_code(3, unik)**, avatar, password, remember_token, last_login_at, timestamps, **softDeletes**. `is_active` DIHAPUS → status memakai SoftDelete (Aktif / Terarsip).
+- Migrasi lama `2026_08_15_030000_drop_office_from_users_table` & `2026_08_15_040000_relax_user_identity_columns` DIHAPUS (migrasi dasar jadi sumber kebenaran). DB sudah `migrate:fresh --seed`.
+- **Kelola Pengguna**: Tambah/Ubah kini **halaman** `/users/create` & `/users/{id}/edit` (`pages/UserForm.vue`, 3 kartu: identitas, Penempatan & Kode, Keamanan) — bukan modal lagi. Filter status Aktif/Terarsip/Semua, aksi baris Arsipkan/Pulihkan/Hapus Permanen, aksi massal ketiganya (akun sendiri selalu dilewati, hapus permanen hanya untuk yang terarsip). Ekspor XLSX 11 kolom, template impor 10 kolom. Kode pegawai otomatis HURUF BESAR (`Rules::code()` + validator `code()` di frontend).
+- Pengguna terarsip **tidak dapat login** (soft delete otomatis tersaring guard). `Notify`, Dashboard KPI ("N aktif · M terarsip"), factory, dan `UserSeeder` disesuaikan.
+- **Profil**: Kantor, Alias, Kode MSO, Kode Kolektor tampil read-only (hanya pengelola pengguna yang bisa mengubah); nama/username/email/telepon tetap bisa diedit.
+- Konvensi UI baru didokumentasikan: footer dengan tepat dua tombol memakai `justify-between` (Batal kiri, Simpan kanan) — diperbaiki di `UserForm.vue`; `DataTableCard` kini meneruskan `emptyDescription` ke `EmptyState`.
+- **Uji**: testing agent iterasi 31 → 26 tes backend lulus + seluruh alur frontend lulus. Bug HIGH yang ditemukan (aksi massal Hapus Permanen bisa menghapus pengguna aktif) SUDAH DIPERBAIKI dengan guard `trashed()`.
+- Sisa temuan minor (belum dikerjakan): aturan unik belum `withoutTrashed()` (pengguna terarsip masih memegang email/username/kode), email sambutan dikirim sinkron (~5s saat simpan), Combobox belum ber-`role="option"`.
+
+## Selesai (2026-06-19, ikon menu bebas seluruh koleksi Lucide)
+- `resources/js/lib/menuIcons.js` ditulis ulang: whitelist 23 ikon dihapus, kini nama ikon di kolom `menus.icon` diselesaikan dinamis ke SELURUH koleksi Lucide (~1.600 ikon) via `import.meta.glob('/node_modules/lucide-vue-next/dist/esm/icons/*.js')` + `defineAsyncComponent` (chunk per ikon, dimuat saat dipakai). Menerima kebab-case (`house-wifi`) & PascalCase (`HouseWifi`), toleran prefiks `Lucide`/sufiks `Icon`, alias lama (`Users2`→`users-round`), fallback `Folder`.
+- Form Menu Navigasi: Combobox ikon diganti **input teks bebas** + pratinjau ikon di kirinya; nama tak dikenal → pesan "Ikon tidak ditemukan di Lucide." (tanpa teks bantuan lain, sesuai permintaan user). `isKnownIcon()` diekspor untuk validasi live. Backend sudah menerima string bebas (maks 40) — tidak diubah.
+- `MenuSeeder` + data DB: ikon `Users2` diubah ke `UsersRound`. Biaya bundel: chunk AppLayout naik ~270KB mentah (~71KB gzip) karena peta impor ikon; tiap ikon hanya ~0,5KB saat diambil.
+- Diverifikasi via screenshot: pratinjau `house-wifi` tampil, `ikon-ngawur` memunculkan galat + fallback Folder, ikon sidebar & daftar menu normal.
+
+## Selesai (2026-06-19, 4 modul CRUD data referensi)
+Permintaan user: Data Instansi, Data Produk, Sistem Cicilan, Sistem Bunga. Pilihan user: hapus permanen (tanpa soft delete), tanpa ekspor/impor, panjang kolom tidak ketat (max 255), Tambah/Ubah lewat dialog.
+- Migrasi `2026_06_19_000000_create_reference_tables`: `institutions`(code unik, name), `products`(code unik, alias unik, name), `installments`, `methods`. Model: Institution/Product/Installment/Method.
+- **Pola DRY**: `ReferenceController` abstrak (index/store/update/destroy/bulkDestroy + rules/attributeNames/uppercaseFields/table) + 4 turunan tipis; `Reference\StoreReferenceRequest` (ambil aturan dari controller, trim semua field, UPPERCASE untuk `code`/`alias`, `unique` hanya untuk kolom bertanda) & `BulkReferenceRequest` (`exists` per tabel); rute di-loop dari array `$references` di `routes/web.php`; satu halaman Vue generik `pages/Reference.vue`.
+- Izin baru di `Modules::MAP`: institutions/products/installments/methods (view+manage) → Super Admin otomatis dapat semua; permission kolom menu Referensi diisi. Breadcrumb ditambahkan di `config/navigation.js`. `MenuSeeder` kini memuat grup Referensi + 4 anak.
+- **Perbaikan dari uji iterasi 32**: (a) HIGH — `rules()` sebelumnya memaksa `name` unik → kini unik hanya untuk kolom bertanda `unique`; (b) trim untuk semua kolom; (c) `ids.*` divalidasi `exists` per tabel; (d) matriks Kelola Peranan kini memakai label Bahasa Indonesia dari `Modules::MAP` + aksi `Lihat`/`Kelola` (`RoleController::matrix()` + `RoleDetail.vue`); (e) audit hapus data referensi pakai level `warning` agar tidak tampil sebagai "Gagal".
+- **Uji**: testing agent iterasi 32 (37 tes backend + alur Playwright keempat modul). Setelah perbaikan, pytest `/app/backend/tests/test_reference_modules.py` → **37/37 lulus**; screenshot dialog Data Produk & matriks peranan sesuai.
+
+## Selesai (2026-06-19, modul Komite Kredit + seeder data referensi)
+Konteks: aplikasi disiapkan menjadi **SIPEBRI** (sistem pemberian kredit BPR Bangunarta). Diskusi & keputusan desain ada di `/app/memory/sipebri_discussion.md`.
+- **Modul Komite Kredit** (`/committees`, izin `committees.view/manage`), struktur induk–anak yang disetujui user:
+  `committee_paths` (produk atau lintas produk + kondisi/kategori + mekanisme `plafon`/`hierarki` + aktif + catatan) dan
+  `committee_tiers` (urutan, nama jenjang, **peranan pemutus** (bukan user), batas plafon min/max, keputusan diizinkan: Naik Komite/Disetujui/Dibatalkan/Ditolak).
+- Fitur: daftar client-side (cari/urut/paginasi), dialog tambah/ubah jalur + **Salin Jenjang Dari** jalur lain, halaman detail untuk mengelola jenjang (tambah/ubah/hapus + tombol naik/turun urutan), hapus jalur cascade, semua tercatat di Audit Trail.
+- **CommitteeSeeder**: 17 jalur / 111 jenjang sesuai 3 dokumen kebijakan user (12 produk umum + KBT PERPADIAN = plafon; KUP, KKO, KBT PERLELEAN, dan kategori RELOAN lintas produk = hierarki).
+- **ProductSeeder / InstallmentSeeder / MethodSeeder** dibuat dari data yang user isi (mengikuti core banking): 17 produk, 8 pola cicilan, 10 metode bunga → instalasi bersih kini punya data referensi.
+- **Perbaikan dari uji iterasi 33**: (a) HIGH — menu aksi baris tidak bisa dibuka pada tabel `row-clickable` (klik menyebar ke baris) → `DataTableCard` kini `stopPropagation` pada sel `actions` (berlaku semua tabel); (b) HIGH — rute jenjang tidak ter-scope sehingga jenjang milik jalur lain bisa diubah/dihapus → ditambah `scopeBindings()`; (c) duplikat jalur "Normal" lolos validasi → keunikan produk+kondisi diperiksa di `withValidator`; (d) dialog jenjang tidak lagi memilih peranan pertama secara otomatis.
+- **Uji**: testing agent iterasi 33 (36 tes backend + Playwright) → setelah perbaikan ditambah `tests/Feature/CommitteeRulesTest.php` (6 tes) dan `php artisan test` **14 tes lulus** (stub `ExampleTest` bawaan Laravel dihapus). Pytest lama 99 lulus (4 error hanya karena user uji Guest sudah dibersihkan).
+- Backlog SIPEBRI berikutnya: modul **Parameter Produk** (plafon min/maks, jangka waktu, bunga/provisi/admin default, ambang RC) lalu alur pengajuan → penjadwalan → survey → analisa → persetujuan komite → notifikasi → akad → pencairan → posting CBS.
+
+### Penyesuaian (2026-06-19, jenjang komite = hanya pemutus)
+- Baris jenjang "Pengusul" (Staff Analis, Customer Service, Kepala Kantor Kas) DIHAPUS dari seluruh jalur komite (43 baris) — disepakati bersama user: mengajukan/meneruskan berkas bukan keputusan komite, aksesnya nanti diatur lewat izin modul Pengajuan Kredit (`credits.*`).
+- Jenjang kini: jalur plafon = Kasi Analis → Komite I (Kabag) → Komite II (Dir. Bisnis) → Komite III (Dir. Utama); jalur hierarki = Kasi → Komite I → Komite II → Komite III (hanya Komite III memutus). Total 17 jalur / 68 jenjang. `CommitteeSeeder` + README diperbarui; `php artisan test` 14 lulus; diverifikasi lewat screenshot.
+
+### Tambahan (2026-06-19, ekspor aturan komite)
+- Tombol **Ekspor** di halaman Komite Kredit (`GET /committees/export`, izin `committees.view`) mengunduh SATU berkas `.xlsx` berisi seluruh jalur + jenjangnya (satu baris per jenjang: Kode/Nama Produk, Kondisi, Mekanisme, Status, Urutan, Nama Jenjang, Peranan Pemutus, Plafon Min/Maks, Keputusan Diizinkan, Catatan) supaya review bisa sekaligus tanpa membuka detail satu per satu. Tercatat di Audit Trail.
+- Uji: `tests/Feature/CommitteeRulesTest::test_committee_export_returns_xlsx` (7 tes lulus) + unduhan nyata di browser (`komite-kredit-YYYYMMDD-HHmm.xlsx`).
+
+### Tambahan (2026-06-19, jalur komite KPP & KRISPI)
+- Produk **KPP** (Kredit Pensiun PN Channeling) dan **KRISPI** (Kredit Pasar Mingguan) ditambahkan ke jalur **Kewenangan Plafon (jalur umum)** — masing-masing 4 jenjang (Kasi ≤35 jt → Komite I ≤100 jt → Komite II ≤300 jt → Komite III >300 jt). `CommitteeSeeder::PLAFON_PRODUCTS` kini 14 produk. Total data: **19 jalur / 76 jenjang**. Tes fitur diperbarui (7 lulus) dan README disesuaikan.
+
+## Checkpoint proyek (2026-06-19) — dokumentasi & seeder disegarkan
+Atas permintaan user, pekerjaan disimpan sampai titik ini.
+- **Seeder disinkronkan dengan data hidup**: `SettingSeeder` (branding SIPEBRI: app_name SIPEBRI, tagline "Sistem Pemberian Kredit", canonical sipebri.bprbangunarta.co.id, footer & support email BPR Bangunarta, company "PT BPR Bangunarta", OG diselaraskan ke SIPEBRI, thumbnail lama era CODEX dikosongkan), `MenuSeeder` (ikon terkini: chart-pie, library-big, building-2, box, calendar-clock, badge-percent, gavel), `UserSeeder` (nomor HP 081200000001), `CommitteeSeeder` (14 produk plafon termasuk KPP & KRISPI → 19 jalur / 76 jenjang), plus Product/Installment/MethodSeeder.
+- **Verifikasi**: `php artisan db:seed` idempoten pada DB hidup, dan `migrate:fresh --seed` pada DB sementara menghasilkan 1 user / 45 peranan / 26 izin / 14 menu / 24 setelan / 17 produk / 8 cicilan / 10 bunga / 19 jalur / 76 jenjang. `php artisan test` → **15 tes lulus**.
+- **README dirapikan**: judul & pengantar menjadi SIPEBRI + status pengembangan, daftar isi menambahkan Modul Komite Kredit & Modul Data Referensi, bagian Fitur diperbarui (Manajemen Pengguna dengan halaman tambah/ubah + arsip, blok duplikat dibuang, aksi massal terkini), tabel Rute mencakup rute pengguna baru, data referensi, komite kredit + ekspornya, Struktur Proyek & bagian Pengujian disegarkan.
+- `/app/memory/test_credentials.md` diperbarui (nomor HP + catatan pengguna terarsip tidak bisa login).
+- **Catatan untuk sesi berikutnya**: lanjutan SIPEBRI ada di `/app/memory/sipebri_discussion.md` (daftar pertanyaan kebijakan yang masih menunggu jawaban user + rencana modul Parameter Produk dan alur berkas kredit).
+
+## Selesai (2026-06-19, Simulasi Kewenangan Komite)
+- **`App\Support\Committee::resolve($productId, $condition, $amount)`**: resolver aturan komite yang menentukan jalur yang cocok (prioritas: kondisi/kategori → jalur produk → jalur lintas produk, hanya jalur aktif & punya jenjang), lalu menyusun rantai keputusan: `decider` (Pemutus), `escalate` (Naik Komite), `blocked`, `not_needed`. Jalur hierarki → pemutus = jenjang terakhir yang boleh memutus. Menyertakan jumlah pengguna per peranan dan **peringatan**: tidak ada pemutus, peranan pemutus tanpa pengguna, celah & tumpang tindih rentang plafon.
+- Endpoint `GET /committees/simulate` (izin `committees.view`, JSON) + dialog **Simulasi** (`components/composite/CommitteeSimulator.vue`) di header halaman Komite Kredit: pilih produk (wajib), kondisi (daftar dari data: Normal/PERPADIAN/PERLELEAN/RELOAN), plafon (format Rupiah otomatis) → hasil langsung, tanpa menyimpan data dan **tanpa perlu membuat akun uji per peranan** (kewenangan berbasis peranan).
+- Resolver ini nanti dipakai langsung oleh alur pengajuan kredit sehingga aturan komite tidak ditulis dua kali.
+- **Uji**: 3 tes baru (`simulation finds plafon decider` → KRU 150 jt = Direktur Bisnis; `condition over product path` → RELOAN mengesampingkan jalur plafon, pemutus Direktur Utama; `warns when amount has no decider` → plafon Rp 500). `php artisan test` → **18 lulus**. Diverifikasi lewat screenshot: rantai keputusan + peringatan "belum ada pengguna aktif dengan peranan Direktur Bisnis" tampil benar. README diperbarui.
+
+### Penyesuaian (2026-06-19, kondisi mengikuti produk)
+- Masalah yang dilaporkan user: pada simulasi, produk KRU masih bisa dipasangkan dengan kondisi PERLELEAN (hasilnya "benar secara hitungan" karena resolver menurunkannya ke jalur Normal) — berisiko membiasakan kombinasi yang bukan peruntukannya saat nanti mengisi pengajuan.
+- Perbaikan: (1) dropdown **Kondisi/Kategori** pada simulator sekarang diisi dari `conditionMap` per produk (kondisi milik produk + kondisi lintas produk seperti RELOAN) dan nonaktif sebelum produk dipilih; kondisi otomatis direset saat produk berganti. (2) `App\Support\Committee::path()` **tidak lagi menurunkan** kombinasi tak terdaftar ke jalur Normal — mengembalikan `found: false` dengan pesan "Kondisi/kategori X bukan peruntukan produk ini". Aturan ini berlaku juga nanti untuk alur pengajuan karena resolver yang sama dipakai.
+- Uji: tes baru `simulation rejects condition that does not belong to product`; `php artisan test --filter=CommitteeRulesTest` → 11 lulus. Screenshot: KRU → Normal + RELOAN; KBT → PERLELEAN + PERPADIAN + RELOAN (tanpa Normal, sesuai data).
+
+## Selesai (2026-06-19, modul Data Kantor + sinkronisasi seeder & dokumentasi)
+- **Modul Data Kantor** (`/offices`, izin `offices.view/manage`): CRUD (dialog) memakai pola `ReferenceController` yang sudah responsif — kolom `code` (unik), `alias` (unik, disembunyikan di layar kecil dan tampil sebagai baris ringkas), `name`; hapus permanen per baris & massal. Menu "Data Kantor" ditambahkan ke grup Referensi (ikon `building`), breadcrumb ditambahkan.
+- **Seeder data**: `OfficeSeeder` (7 kantor: PMK Pamanukan, CGK Jalancagak, SBG Subang, SKM Sukamandi, PGD Pagaden, KJT Kalijati, PSK Pusakajaya) dan `InstitutionSeeder` (10 instansi CBS yang diisi user) dibuat & dipanggil `DatabaseSeeder`.
+- **Sinkronisasi seeder dengan data hidup**: satu-satunya perubahan user yang belum tercermin adalah urutan entitas matriks izin → `SettingSeeder.permission_entity_order` diperbarui ke 15 entitas sesuai urutan yang user susun. Data lain (kantor, instansi, produk, cicilan, bunga, menu, pengguna, 19 jalur/76 jenjang komite) sudah identik dengan seeder.
+- **Perbaikan temuan kosmetik iterasi 34**: `ConfirmDeleteDialog` punya prop `confirmLabel` (dialog arsip pengguna kini bertombol "Arsipkan"); `CommitteePath::title()/conditionLabel()` membuat kondisi tampil Capitalize pada toast & audit; kolom Level pada Audit Trail disembunyikan di layar kecil.
+- **Uji**: iterasi 34 (audit responsivitas 16 halaman di 5 viewport — lulus, tanpa overflow) dan **iterasi 35 (0 bug**: 32 tes backend + CRUD /offices penuh + responsivitas 3 viewport + 18 halaman di 390px). `php artisan test` → 19 lulus, Pint bersih. Instalasi bersih menghasilkan: 1 akun, 45 peranan, 28 izin, 15 menu, 24 setelan, 7 kantor, 10 instansi, 17 produk, 8 cicilan, 10 bunga, 19 jalur, 76 jenjang.
+
+## Selesai (2026-06-20, Parameter Produk / SK Direksi)
+Keputusan user: parameter **per produk** (bukan per kantor), provisi & admin dalam **persen dari plafon**, **ambang RC per produk**, semua nilai hanya **acuan** (petugas boleh mengubah saat transaksi), dan **disimpan di detail produk**.
+- Tabel baru `product_parameters` (1 baris per produk, FK cascade): plafon min/maks, tenor min/maks, `interest_rate`/`provision_rate`/`admin_rate`/`rc_threshold` (persen), `allowed_method_ids` & `allowed_installment_ids` (JSON) + `default_method_id`/`default_installment_id`, `collateral_required`, `decree` (nomor SK), `note`. Master `products` tetap bersih (cermin CBS).
+- UI: halaman `/products/{id}` (`pages/ProductDetail.vue`, 4 kartu) diakses lewat aksi baris **Atur Parameter** di /products. Dropdown nilai bawaan hanya berisi pilihan yang dicentang; `StoreParameterRequest` memvalidasi `gte` plafon/tenor, persen 0–100, dan nilai bawaan harus termasuk daftar yang diizinkan. Aktivitas tercatat di Audit Trail (modul Data Produk).
+- **Uji**: testing agent iterasi 36 → 24 tes backend + seluruh alur frontend LULUS, 0 bug fungsional; responsif di 390/768/1440 tanpa overflow. Dua catatan kosmetik ditutup: maxlength catatan diselaraskan (255) dan formulir kini **disabled** untuk pengguna tanpa `products.manage`.
+- Catatan: nilai parameter belum diisi user (kecuali data uji KRU dari testing agent) sehingga **belum dibuat seeder-nya**; setelah user mengisi SK per produk, buat `ProductParameterSeeder`.
+- README diperbarui (bagian Parameter Produk, rute, skema DB). PHP CLI sempat hilang lagi karena pod restart (recurrence ke-5) → dipulihkan dengan `/app/memory/restore_php.sh`.
+
+## Selesai (2026-06-21, Detail Agunan Kredit)
+- Validasi ketat frontend form Agunan (sesi sebelumnya): `NumberInput`/`DecimalInput` menolak keystroke non-angka, `useLiveValidation` menampilkan pesan error per kolom sinkron dengan controller, kolom wajib bertanda bintang merah, semua teks otomatis UPPERCASE.
+- **Aksi baris baru "Detail" (ikon mata)** di /collateral-simulation, diletakkan tepat di bawah "Ubah". Membuka dialog `components/composite/CollateralDetailDialog.vue` yang menampilkan **seluruh kolom tabel `collateral_simulations`** dalam grid ringkas 6 kelompok: Identitas, Pemilik & Lokasi, Nilai Agunan, Penaksir, Kondisi/Asuransi/PPAP, Rekam Jejak. Kolom kosong tampil "—" agar mudah dievaluasi mana yang perlu dihapus/ditambah.
+- Controller `row()` menambah `condition_label`, `method_label`, `created_at`, `updated_at`.
+- Uji: `yarn build` sukses + screenshot (menu aksi & dialog detail) terverifikasi.
+
+### Backlog berikutnya
+- P1 Pengajuan Kredit (tahap 1 dari 9) — pintu masuk berkas kredit.
+- P1 Uji kirim payload CBS pada tombol Posting bila endpoint siap.
+- P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter level/modul audit trail.
+
+### Revisi (2026-06-21, Detail jadi halaman bergaya developer)
+- Dialog detail dihapus → menjadi **halaman** `GET /collateral-simulation/{id}` (`pages/CollateralSimulationDetail.vue`, breadcrumb Simulasi › Agunan Kredit › Detail, izin `collateral-simulation.view`).
+- Aksi baris **Payload dihapus**; isinya dipindah ke tab pada halaman detail. Menu aksi sekarang: Ubah → Detail → Hapus.
+- Halaman detail bergaya inspeksi developer: tab **Database** (nama kolom asli tabel + tipe, nullable, default, nilai mentah dari `Schema::getColumns()` + `getAttributes()`, pencarian kolom/nilai, badge "n/35 kolom terisi") dan tab **Payload CBS** (JSON + Salin + Posting).
+- Uji: `yarn build` + Pint bersih, screenshot kedua tab terverifikasi.
+
+## Selesai (2026-06-21, modul Skema Migrasi + pembersihan kolom agunan)
+- **6 kolom dihapus** dari `collateral_simulations` (`paripasu`, `file_number`, `auto_number`, `ownership`, `owner_same_as_cif`, `region_id`) via migration `2026_08_21_000000_...`. Validasi, `withDefaults()`, `row()`, seeder, dan `toCbsPayload()` disesuaikan — key `no_rek` & `kepemilikan` tetap ada di payload CBS tapi selalu string kosong.
+- **Modul baru "Skema Migrasi"** (area Admin, `/schema-drafts`, izin `schema-drafts.view/manage`) — alat developer untuk merancang tabel SEBELUM migration dibuat. Tabel `schema_drafts` (name, table_name unik, note, flag with_id/with_timestamps/with_soft_deletes) & `schema_draft_columns` (sort, name, type, length, nullable, default, unique, index, foreign_table, comment).
+- Halaman rancangan `/schema-drafts/{id}` bertab: **Kolom** (drag untuk urutkan + tambah/ubah/hapus), **Diff** (baru/berubah/dihapus/sama terhadap `Schema::getColumns()` nyata), **Migration** (pratinjau kode `Schema::create`/`Schema::table`, tombol Salin). Tombol **Impor dari tabel** mengisi rancangan dari tabel yang sudah ada. Modul TIDAK menulis file migration dan TIDAK menjalankan migration (keputusan user).
+- Data awal: rancangan `collateral_simulations` (hasil impor) dan `credit_applications` (rangka Pengajuan Kredit).
+- **Uji**: testing agent iterasi 38 → backend 30/31, frontend 100% (drag persist, diff, migration preview, 403 tanpa izin, responsif 390/768). Satu temuan (route binding kolom tidak ter-scope) sudah diperbaiki dengan `->scopeBindings()` + tes regresi `tests/Feature/SchemaDraftScopeTest.php`. `php artisan test` → 28 lulus.
+
+## Selesai (2026-06-21, rancangan skema agunan diterapkan)
+- User menyusun rancangan tabel `collateral_simulations` di modul Skema Migrasi; agent menerapkannya:
+  migration `2026_08_21_020000_rename_collateral_simulation_columns.php` → 10 kolom di-`renameColumn`
+  (`insured`→`insurance_code`, `insurance_start_date`→`insurance_date`, `value_*`→`*_value`,
+  `independent_appraiser_name`→`independent_name`, `independent_appraised_at`→`independent_at`),
+  `collateral_id` jadi **unique** + terisi otomatis `AGN-000001` bila kosong (anti-tabrakan),
+  `ppap_code` default `1`. Data lama utuh. Struktur payload CBS tidak berubah.
+- Seluruh kode ikut nama baru: model, controller, `CollateralSimulationForm.vue`, tabel index, detail.
+- **Diff Skema Migrasi diperluas**: kini juga membandingkan default, unique, dan index
+  (sebelumnya hanya tipe & nullable). `importFrom()` ikut mengambil flag unique/index.
+- Seeder: `CollateralSimulationSeeder` pakai nama kolom baru + `region_label` diseragamkan
+  (`0121 : Kab. Subang`); **`SchemaDraftSeeder` baru** (rancangan `collateral_simulations` dicerminkan
+  dari skema nyata + rangka `credit_applications`), didaftarkan di `DatabaseSeeder`.
+- Dokumentasi: `/app/memory/skema_migrasi.md` (baru) & bagian nama kolom baru di `/app/memory/agunan_cbs_form.md`.
+- **Uji**: testing agent iterasi 39 (frontend + backend) lulus — data lama utuh, auto Agunan ID,
+  tab Database hanya nama kolom baru, payload CBS sesuai kontrak, diff 26 kolom "Sama",
+  responsif 390/768px. `php artisan test` → 37 lulus.
+
+### Backlog (P1 → P3)
+1. P1 **Pengajuan Kredit** tahap 1 dari 9 (rancangan `credit_applications` sudah tersedia di Skema Migrasi).
+2. P1 Form agunan: tampilkan input **Agunan ID** (opsional) + **Penaksir**/**Penaksir Independen**
+   (`appraiser_name`, `independent_name`) — sekarang `penaksir.*` di payload selalu kosong.
+3. P1 Aktifkan tombol Posting payload ke endpoint CBS bila URL siap (+ log riwayat posting).
+4. P2 Diff Skema Migrasi belum membandingkan panjang kolom, komentar, dan relasi FK.
+5. P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter audit trail.
+
+## Selesai (2026-06-21 lanjutan, identitas agunan & penaksir otomatis)
+- Kolom baru `credit_account` (string 30, nullable, **unique**) — diisi otomatis dari respons posting
+  kredit ke CBS. Migration `2026_08_21_030000_add_credit_account_...`. Di rancangan Skema Migrasi
+  ditaruh paling atas (`SchemaDraftSeeder` punya daftar `lead`).
+- Penomoran otomatis `AGN-xxxxxx` **DIHAPUS**: `collateral_id` sengaja kosong sampai CBS mengembalikan
+  nilainya. Input Agunan ID tidak ada di form (memang tidak diinput manual).
+- `appraiser_name` + `appraised_at` kini **dicatat sistem** saat simpan pada tahap analisa
+  (nama user login + tanggal hari ini); inputnya dihapus dari form, diganti keterangan.
+- Input independen (`independent_value`/`independent_name`/`independent_at`) dihapus dari form
+  (kolom tetap ada di DB & payload) — tidak dipakai di lapangan.
+- Validasi `appraised_at` wajib pada mode ubah dihapus (kini otomatis).
+- Uji: `php artisan test` → 37 lulus (termasuk 9 tes agunan yang disesuaikan), screenshot form ubah
+  memperlihatkan keterangan Penaksir otomatis dan validasi kolom wajib tetap jalan.
+
+## Selesai (2026-06-21, modul Pengajuan Kredit + rancangan DB sampai persetujuan)
+- Migration `2026_08_21_040000_create_loan_applications_tables.php`: **`loan_applications`**
+  (identitas berkas, data pemohon, permohonan, rangka analisa, persetujuan komite, realisasi
+  `credit_account`, softDeletes), **`loan_application_collaterals`** (berkas ↔ agunan),
+  **`loan_approvals`** (jejak keputusan berjenjang mengikuti `committee_tiers`).
+- Kode pengajuan `application_code`: 8 digit unik, otomatis mulai **00800001** (sistem lama berakhir
+  00360623). Kolom wajib sesuai permintaan user: kode pengajuan, `nik` (angka saja), `full_name`.
+- Modul: `LoanApplicationController` + `LoanSimulation.vue` (daftar, cari, filter status, hapus)
+  dan `LoanSimulationForm.vue` (3 kartu: Berkas, Data Pemohon, Permohonan) di `/loan-simulation`.
+  Izin `loan-simulation.view/manage`, menu "Pengajuan Kredit" masuk MenuSeeder (grup Simulasi, paling atas).
+- `SchemaDraftSeeder` mencerminkan 3 tabel baru ke modul Skema Migrasi agar user bisa meninjau
+  (draft `credit_applications` lama dihapus, diganti `loan_applications`).
+- Dokumentasi: `/app/memory/pengajuan_kredit.md`.
+- Uji: `php artisan test` → 37 lulus; uji UI (screenshot) — NIK huruf ditolak validasi frontend,
+  simpan berhasil menghasilkan kode `00800001`, daftar & toast sukses tampil normal.
+
+### Backlog terbaru (P1 → P3)
+1. P1 Modul **analisa kredit per produk** (RC/kelayakan) → isi `analyst_id`, `analyzed_at`, `rc_ratio`.
+2. P1 UI **relasi berkas ↔ agunan** + alur **keputusan komite** (tabel sudah siap).
+3. P1 Posting ke CBS: kirim data kredit → simpan `credit_account` ke berkas & agunan terkait.
+4. P2 Master **nasabah/CIF** (kini data pemohon direkam per berkas).
+5. P2 Diff Skema Migrasi belum membandingkan panjang kolom, komentar, dan relasi FK.
+6. P2 Simulasi angsuran & RC di komite simulator; P2 halaman penuh notifikasi; P3 filter audit trail.
+
+## Selesai (2026-06-21 lanjutan, Pengajuan Kredit tanpa data pemohon)
+- Keputusan user: **SIPEBRI tidak menyimpan data pemohon**. Migration `2026_08_21_050000` menghapus
+  19 kolom identitas dari `loan_applications` (sisa `nik`, `full_name`, `cif_number`) dan menambah
+  `institution_id` (resort/instansi), `tenor_principal`, `tenor_interest`, `usage_type`, `note`,
+  `supervisor_id`, `surveyor_id`, `confirmed_at`, `confirmed_by`. Kategori pengajuan tidak dipakai
+  (jalur komite ditentukan produk + Komite Kredit).
+- `App\Support\CustomerDirectory` — **MOCK** API sistem nasabah (3 KTP contoh) + endpoint
+  `GET /loan-simulation/lookup?nik=`. KTP tidak terdaftar → pengajuan diblokir (frontend & backend).
+- Form tambah ringkas (No. KTP + Cek KTP + plafon + jangka waktu) → berkas dibuka sebagai halaman
+  tab: Data Pengajuan → Data Jaminan (lekat/lepas agunan + total taksasi) → Data Surveyor
+  (kantor, Kasi Analis, Surveyor dari pengguna SIPEBRI sesuai peranan) → Konfirmasi (checklist 4 baris,
+  status jadi ANALISA, tidak bisa dikonfirmasi dua kali).
+- Uji: testing agent iterasi 40 — backend 47/47 setelah perbaikan, frontend seluruh alur lulus.
+  Bug KRITIS yang ditemukan & diperbaiki: cast `confirmed_at` hilang → halaman berkas 500 setelah
+  konfirmasi; juga dibersihkan cast kolom yang sudah dihapus, ditambah validasi
+  `tenor_principal`/`tenor_interest` ≤ `requested_tenor`, dan konfirmasi ganda ditolak.
+  Verifikasi ulang via screenshot: berkas 00800002 (ANALISA) tampil normal + "Sudah dikonfirmasi".
+
+## Selesai (2026-06-21, redesain UI Pengajuan Kredit)
+- User: "jelek banget tampilannya, redesin agar terlihat lebih prosesional" → `design_agent` dipanggil,
+  hasilnya tersimpan di `/app/design_guidelines.json` (tipografi, warna status, layout 12 kolom, stepper).
+- `LoanSimulationForm.vue`: alur linear 2 langkah dalam kartu terfokus (max-w-3xl) — "1 · Verifikasi
+  Nomor KTP" (input + tombol Cek KTP dengan state loading `Loader2` + alert error bergaya) dan
+  "2 · Permohonan Awal". Panel identitas jadi well `bg-muted/30` grid 2 kolom dengan hirarki
+  label uppercase 11px / nilai text-sm font-semibold.
+- `LoanSimulationDetail.vue`: header berkas (kode mono + badge status semantik per status) →
+  **stepper 4 langkah** (ikon centang bila lengkap, penanda "Lengkap/Belum lengkap", geser horizontal
+  di ponsel) → grid `xl:grid-cols-12` (Info Nasabah + Ringkasan 4 kolom, isi tahap 8 kolom).
+  Form dipecah jadi blok "Informasi Dasar" & "Parameter Kredit" berbingkai; tabel agunan bergaya
+  (header muted, tfoot total); checklist konfirmasi jadi daftar berbingkai dengan lingkaran status.
+- Semua kontrol tetap 32px, hanya CSS variable shadcn (tanpa warna baru selain aksen status),
+  `data-testid` lama dipertahankan agar tes tetap jalan.
+- Uji: `yarn build` sukses; screenshot 1600px (3 tab) & **390px** → `scrollWidth === 390`
+  (tanpa overflow horizontal) untuk halaman berkas maupun form tambah.
+
+## Selesai (2026-06-21, penyederhanaan pembukaan berkas)
+- Halaman `/loan-simulation/create` DIHAPUS (rute `create` juga). Tombol **Tambah** kini membuka
+  **modal berisi satu kolom Nomor KTP** → dicek ke sistem data nasabah; tidak terdaftar =
+  pesan error di modal, terdaftar = berkas dibuat dan langsung masuk halaman berkas.
+- Panel identitas debitur yang panjang DIHAPUS dari halaman berkas. Yang tampil hanya
+  **nama lengkap + nomor KTP** (di header berkas dan kartu Ringkasan) sesuai permintaan user:
+  SIPEBRI cuma butuh dua data itu. Endpoint `lookup` tetap ada untuk verifikasi.
+- Uji: `php artisan test` → 47 lulus (tes alur disesuaikan: store hanya menerima `nik`),
+  screenshot: modal KTP tidak terdaftar menampilkan error, KTP terdaftar → berkas 00800004 terbuka.
+
+## Perbaikan (2026-06-21, kolom Nomor KTP menerima huruf) — BUG SAYA
+- Penyebab: modal memakai `<Input>` biasa dengan filter di handler halaman. `Input.vue` mengikat
+  `:value`, jadi ketika hasil filter tidak berubah nilainya, DOM tidak ikut di-patch → huruf tetap
+  terlihat di kolom (state bersih, tampilan tidak).
+- Perbaikan: komponen baru **`components/ui/DigitsInput.vue`** (angka murni, `maxlength`, sinkronisasi
+  DOM seperti `NumberInput`), dipakai untuk kolom Nomor KTP.
+- Aturan permanen ditambahkan ke `/app/memory/ui_rules.md`: uang → `NumberInput`, desimal →
+  `DecimalInput`, angka murni (KTP/NPWP/telepon) → `DigitsInput`; wajib diuji dengan MENGETIK HURUF.
+- Verifikasi browser: mengetik `jhjkjh` → kolom tetap kosong; `abc321301def120395x0001!!` →
+  hanya `3213011203950001` (terpotong 16 digit).
+
+## Selesai (2026-06-21, berkas pengajuan mengikuti referensi sistem lama)
+- Tab **Data Surveyor** & **Konfirmasi** dihapus. Halaman berkas kini 2 kartu saja:
+  **Data Pengajuan** (Produk*, Kategori*, Plafon*, JK Kredit*, Sistem Bunga*, Sistem Cicilan*,
+  Suku Bunga*, Penggunaan*, Resort/Instansi, Marketing, Wilayah/Kantor*, Kasi Analis* — footer
+  Batal/Simpan) dan **Data Agunan** (pilih agunan + Lekatkan + Tambah).
+- **Kategori** = jalur komite aktif milik produk terpilih (`committee_paths.condition`), sama seperti
+  modal Simulasi Kewenangan Komite; berubah otomatis saat produk diganti. **Kasi Analis** hanya
+  pengguna aktif (tidak terarsip) dengan peranan Kasi Analis.
+- Status awal berkas = **DRAFT**; tombol **Ajukan** di header (aktif bila data pengajuan & agunan
+  lengkap) mengubah status ke DIAJUKAN. Kolom baru `marketing`.
+- Tombol **Tambah** pada Data Agunan membuka **modal** (Jenis Agunan*, Jenis Pengikatan, No. Dokumen*,
+  Nama Pemilik*, Alamat Agunan*, Lokasi Agunan*, Keterangan Agunan*) → agunan dibuat dan langsung
+  dilekatkan (`POST /loan-simulation/{id}/collaterals/new`), tidak lagi pindah halaman.
+- Uji: `php artisan test` → 47 lulus (tes alur diperbarui), screenshot halaman + modal, konsol bersih.
+- Catatan lingkungan: pod restart membuat supervisor `frontend` FATAL (`php: not found` saat boot) →
+  cukup `sudo supervisorctl restart frontend`.
+
+## Selesai (2026-06-22, status produk, filter komite, kolom audit, seri nomor berkas)
+- **Data Produk**: kolom `is_active` (badge Aktif/Nonaktif di tabel, toggle "Aktif" di form,
+  filter status di toolbar — `data-testid=products-status-filter`). `Reference.vue` +
+  `ReferenceController` kini mendukung field `type => 'boolean'` secara generik (kolom teks & flag
+  dipisah agar slot tabel tidak bentrok).
+- Dropdown **Produk** pada berkas Pengajuan Kredit hanya memuat produk aktif; label `ALIAS : NAMA`.
+  Dropdown **Resort / Instansi** memakai format `KODE : NAMA`.
+- **Komite Kredit**: filter status (Semua/Aktif/Nonaktif) sisi klien — `committees-status-filter`.
+- **Kolom audit standar** (`app/Models/Concerns/TracksAuthor.php`): `created_by` / `updated_by` /
+  `deleted_by` bertipe string berisi **nama lengkap pengguna** (fallback `SISTEM`), diterapkan pada
+  `loan_applications` dan `collateral_simulations` (+ `softDeletes` untuk agunan).
+  Kolom `confirmed_by` / `confirmed_at` DIHAPUS — pengajuan cukup mengubah status DRAFT → DIAJUKAN.
+- **Seri nomor berkas** dipindah dari `008xxxxx` ke **`007xxxxx`** (angka 8 mirip 0);
+  `LoanApplication::CODE_START = 700000` + migrasi renumber data lama.
+- **BUG SQLite (temuan testing agent)**: boolean `false` yang dibinding PDO tersimpan sebagai teks
+  kosong sehingga filter Nonaktif kosong. Diperbaiki: `StoreReferenceRequest` menormalkan flag ke
+  `0/1`, query filter memakai integer, plus migrasi normalisasi `products`/`committee_paths`/`menus`.
+- Impor kolom di **Skema Migrasi** sekarang ikut menyetel flag `with_id` / `with_timestamps` /
+  `with_soft_deletes` sesuai tabel nyata.
+- Uji: `php artisan test` → 47 lulus; testing agent iterasi 41 (7/8 lulus, 1 bug HIGH sudah dibereskan
+  dan diverifikasi ulang lewat browser: filter Nonaktif menampilkan 3 produk).
+
+### Backlog terbuka (dari iterasi 41)
+- P1: putuskan apakah kartu **Data Pengajuan** harus read-only setelah status DIAJUKAN
+  (saat ini masih bisa diedit & agunan masih bisa dilepas).
+- P2: cegah/peringatkan hapus agunan yang masih terlekat pada berkas non-DRAFT.
+- P3: baris tabel Data Agunan belum row-clickable (tidak konsisten dengan Komite Kredit).
+
+## Selesai (2026-06-22, bersih-bersih data Simulasi & sinkronisasi seeder)
+- **Semua data pada grup menu Simulasi dihapus**: `loan_applications`, `loan_application_collaterals`,
+  `loan_approvals`, `collateral_simulations` → 0 baris. Nomor berkas berikutnya kembali `00700001`.
+- **Seeder disinkronkan dengan data terakhir aplikasi**:
+  - `ProductSeeder` kini menyimpan kolom `is_active` per produk (14 aktif; **KRM, PRK, KPN nonaktif**)
+    dan nama `KRISPI` diperbaiki menjadi `KREDIT PASAR MINGGUAN`.
+  - `CollateralSimulationSeeder` **dihapus** (tidak lagi menanam 2 contoh agunan) dan dilepas dari
+    `DatabaseSeeder`; `SeederTest` kini memastikan `collateral_simulations` & `loan_applications` = 0.
+  - `SchemaDraftSeeder`: rancangan **Agunan Kredit** ditandai `with_soft_deletes` agar diff bersih.
+- Dokumentasi diperbarui: `/app/memory/pengajuan_kredit.md` (seri kode 007xxxxx, kolom audit
+  `created_by`/`updated_by`/`deleted_by`, penghapusan `confirmed_at`/`confirmed_by`).
+- Uji: `php artisan db:seed` sukses (idempoten) + `php artisan test` → **47 lulus**.
+
+## Perbaikan (2026-06-22, `migrate:fresh --seed` gagal di MySQL) — BUG SAYA
+- Penyebab: SQL khas SQLite dan nilai negatif pada kolom unsigned.
+  1. `2026_08_21_090000_normalize_boolean_flags`: `typeof()` tidak ada di MySQL → migrasi kini hanya
+     berjalan bila driver `sqlite`.
+  2. `2026_08_21_100000_renumber_loan_application_codes`: `'007' || substr(...)` (concat SQLite) berarti
+     OR di MySQL → diganti update per baris dengan `substr()` PHP.
+  3. `SchemaDraftSeeder`: menulis `sort` negatif ke kolom `unsignedInteger` → error 1264 di MySQL.
+     Urutan kolom utama kini ditulis ulang dengan angka positif 0..n.
+- Verifikasi NYATA di MariaDB 10.11 (`stg_sipebri`): `php artisan migrate:fresh --seed` lulus penuh,
+  aplikasi diakses lewat browser (filter Produk Nonaktif = 3 baris, Skema Migrasi 4 rancangan,
+  diff Agunan Kredit bersih 0 beda). `.env` dikembalikan ke SQLite untuk preview; `php artisan test`
+  → 47 lulus. Catatan lengkap di `/app/memory/env_notes.md`.
+
+## Selesai (2026-06-22, API nasabah Codex diaktifkan — tidak lagi MOCK)
+- `app/Services/CodexClient.php` (baru): OAuth2 `client_credentials` ke
+  `https://codex.bprbangunarta.co.id`, token di-cache sampai mendekati kedaluwarsa,
+  401 → refresh sekali, 404 → nasabah tidak terdaftar, retry hanya untuk kegagalan koneksi.
+  Kredensial di `.env` (`CODEX_BASE_URL`, `CODEX_CLIENT_ID`, `CODEX_CLIENT_SECRET`,
+  `CODEX_SAMPLE_NIKS`) + blok `codex` pada `config/services.php`.
+- `app/Support/CustomerDirectory.php` sekarang memanggil API nyata dan memetakan kolom Codex
+  (nomor_cif, nama_lengkap, jenis_kelamin, marital_status, alamat_ktp, dll) ke bentuk SIPEBRI.
+- Penanganan galat: lookup → HTTP 503 + pesan "sistem data nasabah tidak dapat dihubungi",
+  store → error validasi pada kolom `nik` (berkas tidak dibuat), checklist → tahap nasabah `false`.
+- Uji: `php artisan test` → **48 lulus** (tes baru `lookup_reports_api_failure`, seluruh alur
+  memakai `Http::fake`). Verifikasi nyata lewat UI: NIK `3213070701980004` → **ZULFADLI RIZAL**,
+  CIF `01.1.038586`, berkas `00700002` terbentuk. Detail: `/app/memory/integrasi_codex.md`.
+
+## Perbaikan (2026-06-22, tombol Ajukan mengabaikan parameter "Agunan Wajib") — BUG SAYA
+- Penyebab: `LoanApplicationController::checklist()` selalu mensyaratkan minimal satu agunan,
+  padahal parameter produk punya `collateral_required`. Produk seperti **KTA (Kredit Tanpa Agunan)**
+  jadi tidak bisa diajukan.
+- Perbaikan: checklist `jaminan` = `! collateral_required || ada agunan`, dibaca dari
+  `product_parameters.collateral_required`. Kartu **Data Agunan** kini menampilkan badge
+  **Wajib / Tidak wajib** (`data-testid=loan-detail-collateral-requirement`).
+- Uji: tes baru `test_confirm_follows_product_collateral_requirement` (tanpa agunan → sukses bila
+  tidak wajib, ditolak bila wajib). `php artisan test` → **49 lulus**. Verifikasi browser pada berkas
+  `00700003` (produk KTA): tombol **Ajukan** aktif, badge "Tidak wajib" tampil.
+
+## Selesai (2026-06-22, daftar Pengajuan Kredit: sistem bunga, filter produk, milik sendiri)
+- Kolom **Produk** kini menampilkan **Sistem Bunga** di baris kedua (`KODE : NAMA`), seragam dengan
+  kolom lain — relasi baru `LoanApplication::method()`, kolom `method_label` pada baris tabel.
+- Toolbar daftar mendapat **filter Produk** (`loan-simulation-product-filter`, param `product_id`),
+  bersebelahan dengan filter status.
+- Daftar hanya menampilkan berkas **milik pembuatnya** (`where created_by = nama pengguna`).
+  Tes baru `test_index_only_shows_own_applications`.
+- Uji: `php artisan test` → **50 lulus**, verifikasi browser (2 berkas milik IT Support tampil,
+  sistem bunga FLATE/ANUITAS terlihat, dropdown filter produk berisi 17 produk).
+
+## Perbaikan (2026-06-22, pencarian daftar Pengajuan Kredit belum menjangkau semua kolom)
+- Sebelumnya hanya mencari `application_code`, `full_name`, `nik`, `credit_account`.
+- Sekarang juga mencari: tanggal pengajuan, status, plafon, jangka waktu, **nama/alias produk**
+  (`orWhereHas('product')`), dan **kode/nama sistem bunga** (`orWhereHas('method')`) — semua
+  informasi yang tampil di tabel.
+- Verifikasi kueri: "KREDIT TANPA", "FLATE", "5000000", "DRAFT", "2026-08-21", "ZULFADLI",
+  "ANUITAS", "36", "KPS", "00700004" semuanya mengembalikan berkas yang benar.
+
+## Selesai (2026-06-22, Tahap A alur kredit: Penjadwalan Survei)
+Alur lengkap didokumentasikan di **`/app/memory/alur_kredit.md`** (status, histori, notifikasi).
+- Status berkas ditambah `PENJADWALAN` & `SURVEY` (tidak ada status lain yang dibuat).
+- **Berkas terkunci setelah DIAJUKAN**: update/hapus/lekat-lepas agunan ditolak backend, dan di UI
+  kartu Data Pengajuan meredup + badge **Terkunci**, tombol Simpan/Tambah/Lepas agunan hilang.
+- Menu **Penjadwalan** (`/scheduling-simulation`) + `SchedulingController`: daftar berkas DIAJUKAN/
+  PENJADWALAN, filter cakupan **Berkas saya / Semua Kasi Analis**, filter status, pencarian luas,
+  modal jadwal (tanggal survei ≥ hari ini, staff analis, catatan), dan dialog **Histori**.
+- Tabel histori **`loan_schedules`** append-only (JADWAL / JADWAL ULANG / BATAL) + kolom
+  `survey_date` pada `loan_applications`. Batas **3 kali**; pembatalan oleh Staff Analis wajib
+  alasan → kembali DIAJUKAN, bila batas habis → kembali **DRAFT**.
+- Notifikasi lonceng: pengajuan baru → semua Kasi Analis; penugasan survei → staff analis;
+  permintaan penjadwalan ulang → Kasi Analis.
+- Izin baru `scheduling-simulation.*`, `survey-simulation.*`, `approval-simulation.*`,
+  `analysis-simulation.manage`; `RoleSeeder` mengisi izin Kasi Analis & Staff Analis (hanya bila
+  peranan tersebut belum punya izin). Menu Simulasi disinkronkan dengan menu buatan user.
+- Halaman **Survei** dan **Persetujuan** dibuat placeholder "Segera hadir" supaya menu tidak mati.
+- Uji: `tests/Feature/LoanSchedulingTest.php` (6 tes) + suite penuh → **56 lulus**. Verifikasi
+  browser sebagai **Kasi Analis (Dede Doni)**: berkas 00700004 dijadwalkan 23 Agt 2026 ke
+  **Ahmad Fauzi**, status PENJADWALAN, histori "JADWAL #1" tampil, notifikasi masuk ke Ahmad Fauzi.
+
+## Selesai (2026-06-22, Tahap B alur kredit: Survei + revisi batas penjadwalan)
+- **Revisi aturan** (konfirmasi kasi analis): penjadwalan ulang **tidak dibatasi**, batas 3 kali kini
+  hanya **peringatan** (daftar: "Jadwal n/3 · lewat batas" merah; modal jadwal memberi peringatan;
+  notifikasi bertanda warning). Pembatalan selalu mengembalikan berkas ke **DIAJUKAN** (bukan DRAFT).
+- **Menu Survei** (`/survey-simulation`, `SurveyController`): daftar **hanya jadwal hari ini** milik
+  staff analis yang ditugaskan; lembar survei read-only berisi Data Pengajuan ringkas + alamat/HP
+  pemohon dari Codex + Data Agunan.
+- Foto lokasi **1–5**, tombol Ambil Foto (kamera) & Dari Galeri, **koordinat wajib** diambil sistem
+  saat foto dipilih (divalidasi server), diunggah satu-per-satu ke object storage
+  (`survei/{kode berkas}`). Simpan → `loan_surveys` + status **SURVEY** dan **terkunci**.
+- Tombol **Batal & Minta Jadwal Ulang** (alasan wajib) memakai endpoint pembatalan penjadwalan.
+- Tabel baru: `loan_surveys`, `loan_survey_photos`. Breadcrumb 4 menu baru ditambahkan.
+- Uji: `tests/Feature/LoanSurveyTest.php` (5 tes) + suite penuh → **61 lulus**. E2E browser sebagai
+  **Ahmad Fauzi (Staff Analis)**: berkas 00700004 difoto (koordinat -6.571235, 107.760123 tersimpan),
+  catatan diisi, status berubah menjadi **SURVEY** dan hasil terkunci.
+- PERHATIAN: koordinat (geolocation) hanya bisa diambil browser di **HTTPS**.
+
+## Selesai (2026-06-22, akar masalah konsistensi UI ditutup permanen) — HUTANG SAYA
+User marah (berulang): komponen tidak reusable, tiap halaman bergaya sendiri.
+- **`components/composite/FormActions.vue` (baru)** = satu-satunya sumber pasangan tombol
+  Batal/aksi utama (Batal pojok kiri + ikon X, aksi utama pojok kanan + ikon, status memuat,
+  label dari `ACTION`). Mendukung `:cancel="false"`, `:submit="false"`, `submit-variant="destructive"`,
+  slot `#start` untuk teks bantuan/tombol tambahan.
+- **Semua 26 footer** di seluruh halaman & komponen (Users, UserForm, Roles, Permissions, Menus,
+  ObjectStorage, Reference, Committees, CommitteeDetail, ProductDetail, RoleDetail, Profile,
+  Appearance, AuditTrail, SchemaDrafts, SchemaDraftDetail, LoanSimulation, LoanSimulationDetail,
+  CollateralSimulationForm, Scheduling, SurveyDetail, ConfirmDeleteDialog, CommitteeSimulator,
+  ComponentGallery) dialihkan ke `FormActions` — tidak ada lagi tombol footer manual.
+- **Placeholder diseragamkan** di seluruh halaman ke daftar putih:
+  `-- Pilih --` (wajib), `(Opsional)`, `Semua …` (filter), `Cari…`, `Minimal 8 karakter`.
+- **`yarn ui:check` (`scripts/ui-check.mjs`, baru)** menolak: placeholder tidak baku,
+  `<Input type="date|number">`, footer tanpa `FormActions`, footer yang menimpa perataan,
+  ukuran tombol tidak baku, dan **komponen/ikon dipakai template tapi lupa di-import**
+  (aturan terakhir langsung menangkap 1 kerusakan nyata di `SurveyDetail.vue`).
+- `ui_rules.md` diberi **ATURAN NOL**: dilarang menulis UI dari nol, wajib `yarn ui:check` +
+  uji 4 lebar sebelum menyatakan selesai.
+- Perbaikan bawaan: tanggal survei memakai `DatePicker` (bukan `<Input type="date">`).
+- Uji: `yarn ui:check` OK (44 berkas), `yarn build` bersih, `php artisan test` → **61 lulus**,
+  dan pemeriksaan overflow di **390/768/1024/1440** untuk Penjadwalan/Pengajuan/Pengguna/Komite:
+  semuanya `scrollWidth === innerWidth` (tidak ada geser horizontal).
+
+## Selesai (2026-06-23, parameter produk ditegakkan + seeder disinkronkan)
+- **Parameter produk lengkap** (17/17 produk diisi user di aplikasi) kini **ditegakkan** pada form
+  Pengajuan Kredit, bukan hanya jadi acuan:
+  - Validasi backend `LoanApplicationController::update()` menolak plafon di luar
+    `min_amount`–`max_amount`, jangka waktu di luar `min_tenor`–`max_tenor`, serta sistem bunga /
+    sistem cicilan di luar `allowed_method_ids` / `allowed_installment_ids`.
+    Pesan galat menyebut angkanya (mis. "Plafon maksimal Rp10.000.000 sesuai parameter produk.").
+  - Form menampilkan batas di bawah kolom: "Batas produk: Rp2.000.000 – Rp10.000.000" dan
+    "Batas produk: 3 – 10 bulan" (`loan-detail-amount-range`, `loan-detail-tenor-range`), berubah
+    merah saat nilai di luar batas. Pilihan sistem bunga/cicilan & suku bunga tetap ikut parameter.
+- **`ProductParameterSeeder` (baru)** — cerminan 17 parameter produk dari aplikasi, idempoten,
+  didaftarkan di `DatabaseSeeder` setelah `ProductSeeder`.
+- **`MenuSeeder` disesuaikan** dengan urutan menu terbaru buatan user (Referensi: Data Wilayah naik
+  sebelum Sistem Cicilan; Admin: Skema Migrasi naik sebelum Penampilan UI). Data simulasi TIDAK
+  diseed (tetap kosong sesuai permintaan).
+- `SeederTest` kini memastikan jumlah `product_parameters` = jumlah `products`.
+- Uji: `php artisan test` → **62 lulus** (tes baru `update_enforces_product_parameter_limits`),
+  `yarn ui:check` OK, build bersih, dan verifikasi browser: berkas KTA menampilkan batas
+  Rp2.000.000–Rp10.000.000 serta 3–10 bulan.
+
+## Dokumentasi diperbarui (2026-06-23)
+- `adminkit/README.md`: bagian baru **Alur Proses Kredit** (tabel 5 tahap + status + tabel terkait),
+  **Integrasi API Codex**, **Tombol aksi form (`FormActions`)**, **`yarn ui:check`**, dan
+  **Menjalankan di lokal (SQLite atau MySQL)** — termasuk 4 rambu penting untuk uji lokal
+  (kredensial Codex, koordinat wajib HTTPS/localhost, portabilitas migrasi MySQL, wajib
+  `ui:check` + `build` + `test` sebelum commit). Daftar seeder & menu ikut diperbarui
+  (`ProductParameterSeeder`, `SchemaDraftSeeder`, 29 menu, data simulasi tidak diseed).
+- `/app/memory/test_credentials.md`: izin bawaan Kasi Analis & Staff Analis + akun uji alur kredit.
+- Catatan domain lain tetap: `alur_kredit.md`, `integrasi_codex.md`, `ui_rules.md`,
+  `env_notes.md`, `sinkronisasi_staging.md`, `pengajuan_kredit.md`, `skema_migrasi.md`.
+
+## Selesai (2026-06-23, revisi hasil pengujian user: penjadwalan & survei)
+- **Penjadwalan kini juga menampilkan berkas berstatus SURVEY** untuk **survei ulang**.
+  Tangga surveyor (rekomendasi yang disetujui): survei ke-1 Staff Analis → ke-2 Kasi Analis →
+  ke-3 Kabag Analis → ke-4 Direktur Bisnis → ke-5 Direktur Utama, ditentukan dari jumlah
+  `loan_surveys`; daftar surveyor pada modal otomatis menyaring peranan tahap tersebut dan aksi
+  tercatat `SURVEI ULANG`. Tidak ada perhitungan — hanya opini kelayakan sebagai gerbang analisa.
+  BELUM: pembatasan tangga berdasarkan plafon (rencana: pakai jenjang plafon komite produk).
+- **Modal**: judul jadi "Penjadwalan Survey", kolom "Staff Analis" → **"Nama Surveyor"**,
+  ditambah keterangan kewenangan tahap ini.
+- **Produk KTA**: surveyor = Kepala Kantor Kas / Customer Service / Teller **di kantor yang sama**
+  dengan berkas, dan **survei lapangan dilewati** (jadwal disimpan → status langsung SURVEY,
+  notifikasi mengarah ke Analisa). Persetujuan tetap lewat komite.
+- **Aksi baris jadi action item (⋯)**: Jadwalkan / Jadwalkan Ulang / Jadwalkan Survei Ulang,
+  Riwayat, dan **Batalkan Pengajuan** (muncul bila jadwal ≥ 3 kali, wajib alasan) → status
+  DIBATALKAN, histori `BATAL PENGAJUAN`, notifikasi ke pemegang `loan-simulation.manage`.
+- **Survei**: konsep draf ditegaskan (badge **Draf**, tombol **Simpan & Ajukan**) dan tombol hapus
+  foto dibuat jelas berlabel **Hapus** (fungsinya sudah bekerja — diverifikasi di browser:
+  unggah → 1 foto, hapus → 0 foto).
+- Uji: `php artisan test` → **65 lulus** (3 tes baru: KTA tanpa survei, survei ulang naik ke Kasi
+  Analis, pembatalan pengajuan), `yarn ui:check` OK, build bersih, verifikasi browser sebagai
+  Kasi Analis & Staff Analis.
+
+## Selesai (2026-06-23, peta lokasi survei)
+- `components/composite/SurveyMap.vue` (baru): **Leaflet + OpenStreetMap tanpa API key**
+  (paket `leaflet` ditambahkan lewat yarn). Penanda bernomor untuk setiap foto survei, popup berisi
+  thumbnail foto + koordinat, tampilan otomatis `fitBounds` (1 titik → zoom 17).
+- Tampil pada kartu **Hasil Survei** di `/survey-simulation/{id}` (draf maupun yang sudah terkunci),
+  di atas kolom catatan. Tautan koordinat per foto tetap ada.
+- Sumber tile dapat dialihkan ke server peta internal lewat env **`VITE_MAP_TILE_URL`**; bila tile
+  gagal dimuat muncul peringatan kuning namun penanda & koordinat tetap akurat.
+- Uji: verifikasi browser — 3 foto → 3 penanda bernomor di peta OSM (jalan terbaca), popup thumbnail
+  berfungsi; `yarn ui:check` OK, build bersih, `php artisan test` → 65 lulus.
+  Data uji dibersihkan (foto draf dihapus, berkas 00700003 kembali DIAJUKAN).
+
+## Selesai (2026-06-23, daftar Analisa Kredit aktif)
+- `AnalysisController` (baru) + `AnalysisSimulation.vue` (ditulis ulang dari placeholder):
+  daftar berkas berstatus **SURVEY** milik petugas yang ditugaskan (`surveyor_id`), lengkap dengan
+  pencarian, urutan, paginasi, badge jumlah survei, dan baris bisa diklik.
+- `AnalysisDetail.vue` (baru): kartu Data Pengajuan read-only + catatan hasil survei, kartu
+  **Form Analisa** masih placeholder "Segera hadir". Hanya petugas yang ditugaskan boleh membuka
+  (selain itu 404). Breadcrumb "Simulasi > Analisa Kredit > Lembar Analisa" ditambahkan.
+- `SimulationController::analysis()` dihapus; rute `/analysis-simulation` kini ke `AnalysisController`.
+- Uji: tes baru `daftar_analisa_hanya_berkas_survey_milik_petugas` + suite penuh → **66 lulus**,
+  `yarn ui:check` OK, build bersih, verifikasi browser sebagai Ahmad Fauzi (berkas 00700004 tampil,
+  detail terbuka dengan hasil survei "LOKASI SESUAI, USAHA AKTIF").
+- CATATAN: pernah gagal 500 karena `use App\Http\Controllers\AnalysisController;` belum ada di
+  `routes/web.php` — selalu verifikasi import setelah menambah controller baru.
+
+## Selesai (2026-06-21, kerangka Lembar Analisa Kredit)
+- Halaman `/analysis-simulation/{id}` (`AnalysisDetail.vue`) tidak lagi placeholder tunggal: kini **kerangka 8 bagian** sesuai daftar user, isi tiap bagian masih KOSONG (dibahas satu per satu).
+- Bagian & sub-bagian di `resources/js/constants/analysis.js`: 1) Analisa Usaha (Perdagangan/Pertanian/Jasa/Lainnya) 2) Analisa Keuangan 3) Analisa Kepemilikan 4) Analisa Agunan (Kendaraan/Tanah/Lainnya) 5) Analisa 5C (Character/Capacity/Capital/Collateral/Condition) 6) Analisa Kualitatif (Karakter/Usaha/SWOT/Lainnya) 7) Memorandum (Kebutuhan/Usulan) 8) Administrasi.
+- UI/UX: komponen baru `components/composite/AnalysisSectionNav.vue` — daftar bagian bernomor + ikon, **vertikal sticky di desktop**, gulir horizontal di mobile; panel kanan berisi judul bagian, badge "Belum diisi", segmented tab sub-bagian, area kosong bergaris putus-putus, plus navigasi **Sebelumnya / Selanjutnya** + indikator "Bagian n dari 8" (di luar CardFooter agar tetap patuh aturan FormActions).
+- Belum ada perubahan backend/DB (belum ada kolom yang disimpan). `node scripts/ui-check.mjs` OK (47 berkas), `php artisan test` 66 lolos.
+
+## Selesai (2026-06-21, Analisa Usaha + Analisa Keuangan + Analisa Kepemilikan)
+Sumber: 6 PDF form sistem lama yang dilampirkan user (Usaha Perdagangan/Pertanian/Jasa/Lainnya, Analisa Keuangan, Analisa Kepemilikan).
+- **DB baru**: `analysis_businesses` (satu tabel untuk 4 tipe usaha + kolom hasil hitung `revenue`/`expense`/`net_profit`/`monthly_income`), `analysis_business_items` (satu tabel 4 kegunaan lewat kolom `group`: GOODS/MATERIAL/INCOME/EXPENSE), `analysis_sheets` (biaya rumah tangga + 8 kolom harta, 1 baris per berkas) dan `analysis_sheet_items` (OBLIGATION/ASSET).
+- **Kode usaha otomatis**: AUPG/AUP/AUJ/AUL + 5 digit (`AnalysisBusiness::nextCode()`); nama/alamat/pilihan disimpan HURUF BESAR, kolom pilihan boleh null (tidak lagi jadi '0').
+- **Rumus (diverifikasi ulang dengan angka contoh sistem lama, ada di `tests/Feature/AnalysisBusinessTest.php`)**:
+  - Perdagangan: `%` per barang & total = **laba ÷ harga beli** (markup) dibulatkan 2 desimal; Omset Harian = Belanja Harian × (1+margin); Laba Bersih Harian = Omset − Pokok Penjualan; Laba/Biaya Bulanan = ×30; Hasil Bersih = Laba Bulanan − Biaya Bulanan + Proyeksi. (350.000 & 36,09% → 476.315 / 3.789.450 / 450.000 / 3.339.450 ✓)
+  - Pertanian: Pendapatan Panen = kwintal × harga; Pengeluaran = 12 pos biaya; Pendapatan Perbulan = (hasil bersih + penambahan − angsuran pokok − pinjaman bank lain) ÷ **6 bulan** siklus panen (65×650.000 → 42.250.000 − 15.157.142 = 27.092.858 → 2.682.143 ✓). Kolom **"Ambil 70%" hanya catatan**, tidak masuk perhitungan.
+  - Jasa: Total Penghasilan − (Pajak Kendaraan + Pengeluaran Lainnya).
+  - Lainnya: Bahan Baku = jumlah × harga; Hasil Bersih = Pendapatan − Biaya Operasional − Biaya Bahan Baku + Proyeksi.
+  - Analisa Keuangan: Biaya Rumah Tangga = 7 pos; Kewajiban Lainnya = baris kewajiban; **Pendapatan Usaha = SUM(`monthly_income`) per tipe** (pertanian memakai angka per bulan, bukan per siklus panen); Keuangan Perbulan = Pendapatan Usaha − Biaya Rumah Tangga − Kewajiban Lainnya (contoh 3.339.450 − 2.070.000 = 1.269.450 ✓).
+- **UI**: bagian 1 memakai sub-tab tipe usaha + tabel daftar usaha (Tambah/Buka/Hapus) → halaman detail `/analysis-simulation/{app}/businesses/{business}` dengan tab per tipe. Komponen baru di `resources/js/components/composite/analysis/`: `BusinessList`, `BusinessTrade`, `BusinessFarm`, `BusinessService`, `BusinessOther`, `BusinessTabs`, `ItemRows` (baris bisa diedit langsung + total), `FieldMoney` (awalan Rp, rata kanan), `FieldStat` (read-only hasil hitung), `FinanceForm`, `OwnershipForm`. Rumus dicerminkan di `resources/js/constants/analysisMath.js` agar angka hidup saat mengetik. Badge bagian berubah "Belum diisi" → "Sudah diisi".
+- **Uji**: `php artisan test` **82 lolos** (`AnalysisBusinessTest` 6 + `AnalysisModuleExtraTest` 10 dari testing agent), `node scripts/ui-check.mjs` OK (59 berkas), testing agent iterasi 42: frontend 11/11 skenario lolos (dark mode + mobile 390px tanpa overflow). Semua temuan minor sudah diperbaiki: default '0' pada kolom pilihan, pertanian dihitung per bulan, `items.*.group` wajib ada di `groups`.
+- Catatan: bagian 4–8 (Agunan, 5C, Kualitatif, Memorandum, Administrasi) masih placeholder. User akan mengirim data uji 3–4 produk berbeda untuk membandingkan hasil dengan sistem lama.
+
+## Selesai (2026-06-21, LoanApplicationSeeder — berkas contoh masuk seeder)
+- Seeder baru `database/seeders/LoanApplicationSeeder.php` (dipanggil `DatabaseSeeder` setelah `CommitteeSeeder`) berisi **5 berkas pengajuan contoh**: `00700003` (KTA, SURVEY, tanpa survei lapangan), `00700004` (KPS, SURVEY, lengkap dengan 1 jadwal + hasil survei + 1 foto S3 + agunan Jamsostek) dan 3 berkas DRAFT `00700005` (KTA), `00700006` (KPS + agunan Jamsostek), `00700007` (KBT PERPADIAN + agunan sertifikat tanah). Dua berkas berstatus SURVEY siap dipakai menguji **Analisa Kredit** (surveyor: `287010620` dan `350010923`).
+- 3 agunan (`collateral_simulations`) ikut diseed dan ditautkan lewat pivot `loan_application_collaterals`.
+- Relasi memakai **kunci alami** (alias produk, kode kantor/metode/cicilan/instansi, username, kondisi jalur komite) sehingga tetap benar pada instalasi baru; idempoten — berkas dengan kode yang sudah ada tidak ditimpa; `application_date`/`survey_date` memakai tanggal hari ini.
+- `SeederTest` diperbarui (3 agunan, 5 berkas, 2 berstatus SURVEY); `LoanApplicationFlowTest` memakai hitungan per NIK. `php artisan test` **82 lolos**; `migrate:fresh --seed` pada DB sementara menghasilkan 5 berkas tanpa relasi kosong.
+
+## Selesai (2026-06-22, Usaha Pertanian: satu lembar + rumus disamakan dengan sistem lama)
+- **UI digabung tanpa tab** (permintaan user): kolom kiri kartu Informasi Usaha → Biaya Pertanian → Analisa Keuangan, kolom kanan kartu **Ringkasan Perhitungan** yang sticky beserta tombol **Simpan Semua** (satu `useForm` untuk seluruh lembar). Komponen `BusinessFarm.vue`.
+- **Rumus dikoreksi memakai contoh nyata sistem lama** (KARIM · KBT FLAT · plafon 28.000.000 / 12 bulan, AUP00564): pendapatan panen 165 kw × 680.000 = 112.200.000; pengeluaran = 12 pos biaya **termasuk Pinjaman Bank Lain** = 87.178.925; hasil bersih 25.021.075; **Angsuran Pokok = plafon ÷ jangka waktu × 6 bulan** = 14.000.000 (dulu diinput manual, kini otomatis); **Pendapatan Perbulan = floor((hasil bersih + penambahan − angsuran pokok) ÷ 6)** = 1.836.845 ✓ persis sama. Pinjaman bank lain TIDAK dikurangi dua kali.
+- Kolom yang kini **read-only** mengikuti sistem lama: Total Luas Tanah, Biaya Amortisasi, Ambil 70% (rumusnya masih menunggu isi `PerhitunganMetodeController::musiman()/perpadian()`), Pinjaman Bank Lain (cermin pos biaya), Angsuran Pokok, dan seluruh angka ringkasan. Satu-satunya input di kartu keuangan: Penambahan Hasil Usaha.
+- Payload halaman detail usaha kini membawa plafon & jangka waktu berkas (dipakai rumus + ditampilkan di catatan).
+- Uji: `tests/Feature/AnalysisBusinessTest::test_farm_matches_legacy_karim_example` (angka contoh KARIM) + test pertanian lama diperbarui; `php artisan test` **83 lolos**, `ui:check` OK, diverifikasi lewat UI (berkas 00700004 plafon 30jt/36bln → angsuran pokok 5jt, pendapatan perbulan 3.336.845).
+
+## Verifikasi (2026-06-22, Analisa Keuangan cocok 100% dengan sistem lama)
+Contoh KARIM (pertanian AUP00564 + jasa AUJ18556, plafon 28 jt / 12 bulan) direplikasi sebagai tes regresi
+`AnalysisBusinessTest::test_finance_sheet_matches_legacy_karim_example`:
+Usaha Pertanian 1.836.845 (pendapatan per bulan) + Usaha Jasa 3.900.000 (4.500.000 − pajak 600.000)
+= Pendapatan Usaha **5.736.845**; Biaya Rumah Tangga **2.900.000** (7 pos); Kewajiban Lainnya **1.574.638**
+(REKAP SLIK 1.374.638 + PAJAK KENDARAAN 200.000); **Keuangan Perbulan 1.262.207** — semuanya identik
+dengan tangkapan layar sistem lama. `php artisan test` 84 lolos.
+
+## Perbaikan (2026-06-22, penambahan hasil usaha pertanian)
+User menemukan: mengisi Penambahan Hasil Usaha 12.000.000 di sistem lama membuat Pendapatan Perbulan
+1.836.845 → **13.836.845**, artinya penambahan ditambahkan **SETELAH** pembagian 6 bulan (sesuai kode lama
+`$tot = laba_perbulan + penambahan`). Rumus dikoreksi di backend & cermin JS:
+`pendapatan_perbulan = floor((hasil bersih − angsuran pokok) ÷ 6) + penambahan`.
+Tes regresi ditambahkan (penambahan 12 jt → 13.836.845). `php artisan test` 84 lolos.
+
+## Selesai (2026-06-22, Kelipatan Jangka Waktu pada Sistem Cicilan)
+- Master **Sistem Cicilan** (`installments`) dapat kolom baru **`period_months` — "Kelipatan Jangka Waktu (Bulan)"**: HARIAN 1 · MINGGUAN 1 · BULANAN 1 · TRIWULANAN 3 · SEMESTERAN 6 · TAHUNAN 12 · MUSIMAN 6 · NON ANGSURAN 0 (0 = pokok dibayar sekali → periode = jangka waktu).
+- Kerangka referensi generik (`ReferenceController` + `pages/Reference.vue`) kini mendukung **tipe kolom `number`** (validasi integer min/max, input NumberInput rata kanan, hint di bawah kolom) — dipakai `InstallmentController::fields()`.
+- **Form Pengajuan Kredit**: peringatan (bukan penolakan, sesuai keputusan user) bila jangka waktu bukan kelipatan periode cicilan — inline berwarna kuning di bawah Sistem Cicilan (`loan-detail-installment-period`) + flash toast **warning** dari server saat simpan. Middleware Inertia & `useFlashToast` kini mendukung kunci flash `warning`. Rencana lanjut: naikkan jadi validasi keras setelah simulasi final.
+- **Analisa Pertanian**: pembagi 6 tidak lagi tetap — periode diambil dari sistem cicilan berkas. Setoran pokok = plafon ÷ (jangka waktu ÷ periode); pendapatan per bulan = floor((hasil bersih − setoran pokok) ÷ periode) + penambahan. Kolom **"Ambil 70%" dihapus** (mati di sistem lama: dihitung tapi tak pernah dipakai/disimpan) dan diganti angka jelas **"Pendapatan Setelah Pokok"** = hasil bersih − setoran pokok di kartu Ringkasan; label "Angsuran Pokok" → **"Setoran Pokok"**; catatan perhitungan menyebut nama cicilan & jumlah kali setor.
+- Uji: `php artisan test` **85 lolos** (tes baru: periode MUSIMAN 6 → 14.000.000 & 1.836.845; BULANAN 1 → setoran 2.333.333). Diverifikasi via UI: daftar Sistem Cicilan menampilkan kolom baru, dan berkas 00700007 (KBT PERPADIAN, MUSIMAN) menampilkan "Setoran tiap 6 bulan" lalu berubah jadi peringatan saat jangka waktu diubah ke 10 bulan.
+
+## Selesai (2026-06-22, lembar usaha satu halaman + dokumentasi + reset data)
+- **Perdagangan, Jasa, Lainnya** kini satu lembar tanpa tab (mengikuti pola pertanian): kartu form di kolom
+  kiri, kartu **Ringkasan Perhitungan** sticky + tombol **Simpan Semua** di kolom kanan; komponen
+  `BusinessTabs.vue` dihapus. Satu kali simpan mengirim identitas + seluruh baris rincian + keuangan.
+- Temuan testing agent (iterasi 43) diperbaiki: (1) "Kembalikan" pada usaha Lainnya kini juga memulihkan
+  baris MATERIAL/INCOME/EXPENSE — ketiga larik dipindah ke dalam `useForm` dan digabung lewat
+  `form.transform()` saat kirim; (2) `min-w-0` ditambahkan pada kolom kiri semua lembar agar tabel rincian
+  menggulir di dalam wadahnya sendiri (perbaikan overflow 390px, hanya terverifikasi lewat kode karena
+  peralatan tangkapan layar memaksa lebar 1920); (3) teks bantuan Analisa Keuangan disamakan dengan rumus
+  sebenarnya (dibagi periode sistem cicilan, bukan selalu 6 bulan).
+- **Dokumentasi**: `PRD.md` dipecah — bagian statis tetap di `PRD.md`, riwayat pindah ke `CHANGELOG.md`,
+  daftar pekerjaan berikutnya ke `ROADMAP.md`. `README.md` proyek dapat bagian baru **Modul Analisa Kredit**
+  (status 8 bagian + seluruh rumus), kolom `period_months` pada Sistem Cicilan, dukungan tipe kolom `number`
+  di kerangka referensi, dan baris `LoanApplicationSeeder` pada tabel seeder.
+- **Data simulasi dibersihkan**: `php artisan migrate:fresh --seed` dijalankan sehingga basis data hanya
+  berisi data seeder — 5 berkas contoh (2 `SURVEY`, 3 `DRAFT`), 3 agunan, 1 jadwal, 1 survei, **0 usaha
+  analisa, 0 lembar analisa**, audit trail & notifikasi kosong, 22 akun pengguna. `php artisan test`
+  85 lolos; login Staff Analis diverifikasi setelah reset.
