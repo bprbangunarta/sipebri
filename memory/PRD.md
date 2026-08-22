@@ -49,4 +49,7 @@ Alur kredit: **Pengajuan → Penjadwalan → Survei → Analisa → Persetujuan 
 - **Analisa** (8 bagian): 1 Analisa Usaha (Perdagangan/Pertanian/Jasa/Lainnya) · 2 Analisa Keuangan ·
   3 Analisa Kepemilikan · 4 Analisa Agunan · 5 Analisa 5C · 6 Analisa Kualitatif · 7 Memorandum ·
   8 Administrasi. Bagian 1–3 sudah jadi; bagian 4–8 masih placeholder.
-- **Komite**: jalur & jenjang pemutus per produk (sudah ada aturannya, modul keputusan belum dibangun).
+- **Komite**: jalur & jenjang pemutus per produk. **Modul keputusan selesai 22/06/2026**: berkas status
+  `KOMITE` diputus berjenjang (TERUSKAN → naik komite; DISETUJUI/DITOLAK/DIBATALKAN = keputusan akhir),
+  dialog "Persetujuan Komite" (Max Plafon, Metode RPS, biaya, suku bunga, RC, usulan plafon, jangka, catatan),
+  kartu Catatan Komite per jenjang, izin `approval-simulation.manage` untuk Kasi/Kabag Analis & Direksi.

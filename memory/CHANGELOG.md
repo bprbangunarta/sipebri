@@ -923,3 +923,48 @@ Sumber: blade sistem lama yang dilampirkan user (`analisa_5c.zip`, `analisa_kual
 - Uji: `php artisan test` **91 lolos** (tes baru menguji penolakan saat belum lengkap, perpindahan status,
   notifikasi ke Kasi Analis, dan larangan mengajukan dua kali) + diverifikasi lewat UI (pita peringatan
   tampil dan tombol nonaktif pada berkas yang belum lengkap). Basis data tetap bersih.
+
+## Selesai (2026-06-22, menu Persetujuan Komite diaktifkan)
+- `ApprovalController` baru: **daftar berkas berstatus `KOMITE`** di `/approval-simulation` (pencarian +
+  urut + halaman server-side) dengan kolom Kode Pengajuan · Pemohon · Produk & Jalur Komite · Plafon
+  diajukan · **Usulan Analis** (dari memorandum) · Diajukan oleh/waktu · tombol Buka.
+- Halaman `/approval-simulation/{berkas}` (`ApprovalDetail.vue`): ringkasan berkas (produk, jalur komite,
+  kantor, plafon & jangka diajukan vs usulan analis, Kasi Analis, waktu pengajuan), **tabel jenjang pemutus**
+  dari `committee_tiers` (level, pemutus, batas plafon, kewenangan setuju/tolak/teruskan), dan **placeholder
+  form keputusan** ("Segera hadir"). Berkas yang belum berstatus KOMITE menghasilkan 404.
+- Rute placeholder lama `SimulationController::approval()` dihapus (rute itu membayangi rute baru — penyebab
+  daftar sempat kosong).
+- Izin `approval-simulation.view` ditambahkan pada `RoleSeeder` untuk Kasi Analis, Kabag Analis, Direktur
+  Utama, Direktur Bisnis, Direktur Kepatuhan (instalasi baru langsung dapat; basis data lama perlu diberi
+  izin lewat menu Peran — pada pod ini sudah diberikan). Breadcrumb Persetujuan & Keputusan Komite ditambah.
+- Uji: `php artisan test` **92 lolos** (tes baru: daftar memuat berkas yang sudah diajukan, detail dapat
+  dibuka, berkas non-KOMITE 404), `ui:check` OK (64 berkas), dicek lewat UI dengan akun Kasi Analis.
+  Testing agent tidak dijalankan sesuai permintaan user.
+
+## Selesai (2026-06-22, form Keputusan Komite — modul Persetujuan lengkap)
+- **Dialog "Persetujuan Komite"** (`components/composite/ApprovalDecisionDialog.vue`) mengikuti sistem lama:
+  Max Plafon (read-only) · Metode RPS · Biaya Provisi (%) · Biaya Admin (%) · Suku Bunga (%) · RC (read-only,
+  bergerak langsung) · Keputusan Komite · Usulan Plafon · Jangka (Bulan) · Catatan Komite, plus peringatan merah
+  "Untuk keputusan TOLAK / BATAL, isi Usulan Plafon sesuai nominal permohonan".
+- **Alur berjenjang**: jenjang yang menunggu = level TERUSKAN terakhir + 1. Pilihan keputusan diturunkan dari
+  `committee_tiers` (`can_escalate/approve/reject/cancel`); **DISETUJUI hanya muncul bila usulan plafon ≤ batas
+  plafon jenjang**, sehingga Kasi wajib TERUSKAN untuk nominal di atas kewenangannya. Hanya pengguna dengan
+  peranan jenjang tersebut (atau Super Admin) yang bisa memutus — lainnya melihat pita info "Berkas menunggu
+  keputusan …" tanpa tombol.
+- **Keputusan akhir** mengubah status berkas ke `DISETUJUI` / `DITOLAK` / `DIBATALKAN` + mengisi
+  `approved_amount/tenor/rate`, `decided_at/by`, `decision_note`, `rc_ratio`; TERUSKAN membiarkan status `KOMITE`
+  dan memberi tahu jenjang berikutnya. Semua tercatat di Audit Trail + notifikasi (Kasi Analis & Staff Analis).
+- **Catatan Komite** (kartu baru) meniru modal lama: blok Staff Analis (usulan, metode, provisi/admin/bunga, RC,
+  catatan) lalu satu blok per jenjang; jenjang tanpa keputusan menampilkan "TIDAK ADA CATATAN". Tabel Jenjang
+  Pemutus kini punya kolom Keputusan (badge + pemutus + waktu) dan Usulan · RC.
+- **Rumus (perlu verifikasi user)**: `Max Plafon` = (keuangan per bulan × ambang RC produk) dikapitalisasi
+  memakai metode bunga (anuitas/efektif → anuitas; lainnya → flat) dan jangka waktu usulan; `RC` =
+  usulan plafon ÷ Max Plafon × 100 (cocok dengan contoh sistem lama: 50 jt ÷ 91.021.567 = 54,93%).
+  Cermin JS di `constants/committee.js` (`maxPlafon()`, `rcRatio()`) agar RC hidup di layar.
+- Migrasi `2026_08_24_000000_add_decision_details_to_loan_approvals`: `method_id`, `max_amount`, `amount`,
+  `tenor`, `interest_rate`, `provision_rate`, `admin_rate`, `rc_ratio`. Izin baru `approval-simulation.manage`
+  diberikan ke Kasi Analis, Kabag Analis, Direktur Bisnis, Direktur Utama (RoleSeeder, aditif).
+- Uji: `php artisan test` **96 lolos** (4 tes baru `ApprovalDecisionTest`), `ui:check` OK (65 berkas),
+  uji UI nyata: Kasi Analis TERUSKAN → jenjang pindah ke Komite I (Kabag Analis); responsif 390/768/1024/1440
+  tanpa overflow. Data uji dibersihkan kembali (berkas 1 kembali ke SURVEY, `loan_approvals` kosong).
+  Testing agent TIDAK dijalankan sesuai permintaan user.

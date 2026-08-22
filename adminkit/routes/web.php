@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AnalysisBusinessController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\AppearanceController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -269,6 +270,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/analysis-simulation', [AnalysisController::class, 'index'])
         ->middleware('permission:analysis-simulation.view')->name('analysis-simulation.index');
 
+    Route::get('/approval-simulation', [ApprovalController::class, 'index'])
+        ->middleware('permission:approval-simulation.view')->name('approval-simulation.index');
+    Route::get('/approval-simulation/{loanApplication}', [ApprovalController::class, 'show'])
+        ->middleware('permission:approval-simulation.view')->name('approval-simulation.show');
+    Route::post('/approval-simulation/{loanApplication}/decision', [ApprovalController::class, 'decide'])
+        ->middleware('permission:approval-simulation.manage')->name('approval-simulation.decide');
+
     Route::middleware('permission:analysis-simulation.manage')->scopeBindings()->group(function () {
         Route::get('/analysis-simulation/{loanApplication}', [AnalysisController::class, 'show'])
             ->name('analysis-simulation.show');
@@ -312,8 +320,6 @@ Route::middleware('auth')->group(function () {
             ->name('survey-simulation.store');
     });
 
-    Route::get('/approval-simulation', [SimulationController::class, 'approval'])
-        ->middleware('permission:approval-simulation.view')->name('approval-simulation.index');
 
     Route::get('/scheduling-simulation', [SchedulingController::class, 'index'])
         ->middleware('permission:scheduling-simulation.view')->name('scheduling-simulation.index');

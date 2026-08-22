@@ -45,6 +45,8 @@ const ROUTE_TRAILS = [
     [/^\/loan-simulation\/\d+$/, ['Simulasi', 'Pengajuan Kredit', 'Berkas']],
     [/^\/regions$/, ['Referensi', 'Data Wilayah']],
     [/^\/analysis-simulation$/, ['Simulasi', 'Analisa Kredit']],
+    [/^\/approval-simulation$/, ['Simulasi', 'Persetujuan']],
+    [/^\/approval-simulation\/\d+$/, ['Simulasi', 'Persetujuan', 'Keputusan Komite']],
     [/^\/analysis-simulation\/\d+$/, ['Simulasi', 'Analisa Kredit', 'Lembar Analisa']],
     [
         /^\/analysis-simulation\/\d+\/businesses\/\d+$/,

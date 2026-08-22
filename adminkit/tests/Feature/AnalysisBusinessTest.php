@@ -505,6 +505,30 @@ class AnalysisBusinessTest extends TestCase
             ->assertSessionHas('error');
     }
 
+    public function test_committee_approval_list_shows_submitted_files(): void
+    {
+        $app = $this->surveyed();
+        $app->update([
+            'status' => 'KOMITE',
+            'analysis_submitted_at' => now(),
+            'analysis_submitted_by' => 'Yolanda Ismi Sopandi',
+        ]);
+
+        $kasi = User::role('Kasi Analis')->firstOrFail();
+
+        $this->actingAs($kasi)->get('/approval-simulation')
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->component('ApprovalSimulation')
+                ->where('records.data.0.application_code', $app->application_code));
+
+        $this->actingAs($kasi)->get("/approval-simulation/{$app->id}")->assertOk();
+
+        // Berkas yang belum diajukan tidak boleh dibuka di halaman keputusan.
+        $draft = $this->surveyed();
+        $this->actingAs($kasi)->get("/approval-simulation/{$draft->id}")->assertNotFound();
+    }
+
     public function test_ownership_rejects_unknown_option(): void
     {
         $app = $this->surveyed();

@@ -18,10 +18,10 @@ class RoleSeeder extends Seeder
     private const ROLES = [
         'Guest' => [],
         'Dewan Komisaris' => [],
-        'Direktur Utama' => [],
-        'Direktur Bisnis' => [],
-        'Direktur Kepatuhan' => [],
-        'Kabag Analis' => [],
+        'Direktur Utama' => ['dashboard.view', 'profile.view', 'approval-simulation.view', 'approval-simulation.manage'],
+        'Direktur Bisnis' => ['dashboard.view', 'profile.view', 'approval-simulation.view', 'approval-simulation.manage'],
+        'Direktur Kepatuhan' => ['dashboard.view', 'profile.view', 'approval-simulation.view'],
+        'Kabag Analis' => ['dashboard.view', 'profile.view', 'approval-simulation.view', 'approval-simulation.manage'],
         'Kabag Audit Intern' => [],
         'Kabag Kepatuhan' => [],
         'Kabag Kredit' => [],
@@ -34,6 +34,7 @@ class RoleSeeder extends Seeder
             'dashboard.view', 'profile.view',
             'loan-simulation.view',
             'scheduling-simulation.view', 'scheduling-simulation.manage',
+            'approval-simulation.view',
         ],
         'Kasi Frontliner' => [],
         'Kasi Keuangan dan Akuntansi' => [],
@@ -71,6 +72,9 @@ class RoleSeeder extends Seeder
         'Satpam' => [],
     ];
 
+    /** Peranan yang menjadi jenjang pemutus komite (lihat CommitteeSeeder). */
+    private const COMMITTEE_ROLES = ['Kasi Analis', 'Kabag Analis', 'Direktur Bisnis', 'Direktur Utama'];
+
     public function run(): void
     {
         Role::findOrCreate(RoleName::SuperAdmin->value, 'web')
@@ -84,6 +88,12 @@ class RoleSeeder extends Seeder
             if ($permissions !== [] && $role->permissions->isEmpty()) {
                 $role->syncPermissions($permissions);
             }
+        }
+
+        // Pemutus komite wajib bisa menyimpan keputusan (izin baru, ditambahkan
+        // tanpa menimpa izin lain yang mungkin sudah diatur manual).
+        foreach (self::COMMITTEE_ROLES as $name) {
+            Role::findOrCreate($name, 'web')->givePermissionTo('approval-simulation.manage');
         }
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();

@@ -8,6 +8,8 @@ Status per 22 Juni 2026. Riwayat pekerjaan: `CHANGELOG.md`. Ruang lingkup & arsi
   karena `analisa5c.js` sistem lama tidak tersedia — perlu dicocokkan dengan hasil sistem lama.
 - **Proses APHT & Biaya Fiducia** (Administrasi) dan **Max Plafond** (Memorandum): di sistem lama read-only
   tanpa rumus yang diketahui; sementara diisi manual / memakai taksasi agunan.
+- **Rumus Max Plafon (Persetujuan Komite)**: sementara = (keuangan per bulan × ambang RC produk)
+  dikapitalisasi metode bunga & jangka usulan; RC = usulan ÷ Max Plafon. Perlu dicocokkan dengan CBS lama.
 - **Uji banding pertanian PERPADIAN**: berkas contoh `00700007` (KBT · PERPADIAN · MUSIMAN · 45 jt / 12 bln).
 
 ## P1 — melengkapi alur
@@ -15,7 +17,8 @@ Status per 22 Juni 2026. Riwayat pekerjaan: `CHANGELOG.md`. Ruang lingkup & arsi
 - **Berita Acara Pemeriksaan (BA) agunan**: cetak/PDF dari data Analisa Agunan.
 
 ## P2 — modul & penyempurnaan
-- **Persetujuan Komite Kredit**: keputusan per jenjang mengikuti jalur komite & parameter produk.
+- ~~**Persetujuan Komite Kredit**~~ **SELESAI 22/06/2026**: keputusan berjenjang (teruskan/setuju/tolak/batal),
+  dialog mengikuti sistem lama, catatan per jenjang. **Perlu uji banding user**: rumus Max Plafon & RC.
 - **Simulasi angsuran**: kalkulator angsuran & RC di simulator komite.
 - **Peta survei di berkas pengajuan**: tampilkan `SurveyMap.vue` pada detail berkas untuk komite.
 - **Validasi keras jangka waktu**: peringatan kelipatan sistem cicilan dinaikkan menjadi penolakan simpan

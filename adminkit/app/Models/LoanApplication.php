@@ -71,6 +71,11 @@ class LoanApplication extends Model
         return $this->belongsTo(Installment::class);
     }
 
+    public function committeePath(): BelongsTo
+    {
+        return $this->belongsTo(CommitteePath::class, 'committee_path_id');
+    }
+
     public function schedules(): HasMany
     {
         return $this->hasMany(LoanSchedule::class)->orderBy('id');
