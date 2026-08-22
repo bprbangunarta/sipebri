@@ -6,7 +6,12 @@ import { ArrowLeft, ChevronLeft, ChevronRight, PencilRuler } from 'lucide-vue-ne
 import AnalysisSectionNav from '@/components/composite/AnalysisSectionNav.vue';
 import BusinessList from '@/components/composite/analysis/BusinessList.vue';
 import FinanceForm from '@/components/composite/analysis/FinanceForm.vue';
+import AdministrationForm from '@/components/composite/analysis/AdministrationForm.vue';
+import CollateralAnalysisForm from '@/components/composite/analysis/CollateralAnalysisForm.vue';
+import FiveCForm from '@/components/composite/analysis/FiveCForm.vue';
+import MemorandumForm from '@/components/composite/analysis/MemorandumForm.vue';
 import OwnershipForm from '@/components/composite/analysis/OwnershipForm.vue';
+import QualitativeForm from '@/components/composite/analysis/QualitativeForm.vue';
 import AppLayout from '@/components/layout/AppLayout.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
@@ -21,6 +26,11 @@ const props = defineProps({
     record: { type: Object, required: true },
     businesses: { type: Array, default: () => [] },
     sheet: { type: Object, required: true },
+    fiveC: { type: Object, required: true },
+    qualitative: { type: Object, required: true },
+    collaterals: { type: Array, default: () => [] },
+    memorandum: { type: Object, required: true },
+    administration: { type: Object, required: true },
     options: { type: Object, required: true },
 });
 
@@ -45,6 +55,11 @@ const filled = computed(() => ({
     usaha: props.businesses.length > 0,
     keuangan: props.sheet.metrics.household_cost > 0 || props.sheet.obligations.length > 0,
     kepemilikan: !!props.sheet.asset_house || props.sheet.assets.length > 0,
+    'lima-c': props.fiveC.metrics.grade !== null,
+    kualitatif: !!props.qualitative.bi_checking || !!props.qualitative.catatan,
+    agunan: props.collaterals.some((c) => c.appraisal_value > 0 || c.lokasi),
+    memorandum: !!props.memorandum.usulan_plafond,
+    administrasi: props.administration.total > 0,
 }));
 </script>
 
@@ -178,6 +193,39 @@ const filled = computed(() => ({
                                 :application-id="props.record.id"
                                 :sheet="props.sheet"
                                 :assets="props.options.assets"
+                            />
+
+                            <FiveCForm
+                                v-else-if="activeKey === 'lima-c'"
+                                :application-id="props.record.id"
+                                :five-c="props.fiveC"
+                            />
+
+                            <QualitativeForm
+                                v-else-if="activeKey === 'kualitatif'"
+                                :application-id="props.record.id"
+                                :qualitative="props.qualitative"
+                                :choices="props.options.qualitativeChoices"
+                            />
+
+                            <CollateralAnalysisForm
+                                v-else-if="activeKey === 'agunan'"
+                                :application-id="props.record.id"
+                                :collaterals="props.collaterals"
+                                :kinds="props.options.collateralKinds"
+                            />
+
+                            <MemorandumForm
+                                v-else-if="activeKey === 'memorandum'"
+                                :application-id="props.record.id"
+                                :memorandum="props.memorandum"
+                                :bindings="props.options.bindings"
+                            />
+
+                            <AdministrationForm
+                                v-else-if="activeKey === 'administrasi'"
+                                :application-id="props.record.id"
+                                :administration="props.administration"
                             />
 
                             <div

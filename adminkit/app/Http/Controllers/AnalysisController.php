@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnalysisAdministration;
 use App\Models\AnalysisBusiness;
+use App\Models\AnalysisCollateral;
+use App\Models\AnalysisFiveC;
+use App\Models\AnalysisMemorandum;
+use App\Models\AnalysisQualitative;
 use App\Models\AnalysisSheet;
 use App\Models\AnalysisSheetItem;
 use App\Models\LoanApplication;
@@ -79,8 +84,16 @@ class AnalysisController extends Controller
             'record' => $this->row($loanApplication),
             'businesses' => $businesses,
             'sheet' => $this->sheetPayload($this->sheet($loanApplication)),
+            'fiveC' => $this->fiveCPayload($loanApplication),
+            'qualitative' => $this->qualitativePayload($loanApplication),
+            'collaterals' => $this->collateralPayload($loanApplication),
+            'memorandum' => $this->memorandumPayload($loanApplication),
+            'administration' => $this->administrationPayload($loanApplication),
             'options' => [
                 'assets' => AnalysisSheet::ASSETS,
+                'qualitativeChoices' => AnalysisQualitative::CHOICES,
+                'collateralKinds' => AnalysisCollateral::KINDS,
+                'bindings' => AnalysisMemorandum::BINDINGS,
             ],
         ]);
     }
@@ -129,6 +142,235 @@ class AnalysisController extends Controller
         $this->syncItems($sheet, 'ASSET', $data['items'] ?? []);
 
         return back()->with('success', 'Analisa kepemilikan disimpan.');
+    }
+
+    /** Analisa 5C — hanya skor; kolom evaluasi dihitung sistem. */
+    public function updateFiveC(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $rules = [];
+
+        foreach (AnalysisFiveC::ASPECTS as $aspects) {
+            foreach ($aspects as $column => $scale) {
+                $rules[$column] = ['nullable', 'integer', 'min:0', "max:{$scale}"];
+            }
+        }
+
+        $data = $request->validate($rules);
+
+        $record = AnalysisFiveC::firstOrCreate(['loan_application_id' => $loanApplication->id]);
+        $record->fill($data)->save();
+
+        return back()->with('success', 'Analisa 5C disimpan.');
+    }
+
+    /** Analisa Kualitatif. */
+    public function updateQualitative(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $rules = [];
+
+        foreach (AnalysisQualitative::SCORES as $column => $scale) {
+            $rules[$column] = ['nullable', 'integer', 'min:1', "max:{$scale}"];
+        }
+
+        foreach (AnalysisQualitative::CHOICES as $column => $choices) {
+            $rules[$column] = ['nullable', Rule::in($choices)];
+        }
+
+        foreach (AnalysisQualitative::TEXTS as $column) {
+            $rules[$column] = ['nullable', 'string', 'max:255'];
+        }
+
+        foreach (AnalysisQualitative::NOTES as $column) {
+            $rules[$column] = ['nullable', 'string', 'max:2000'];
+        }
+
+        $data = collect($request->validate($rules))
+            ->map(fn ($value, $key) => is_string($value) ? Str::upper($value) : $value)
+            ->all();
+
+        $record = AnalysisQualitative::firstOrCreate(['loan_application_id' => $loanApplication->id]);
+        $record->fill($data)->save();
+
+        return back()->with('success', 'Analisa kualitatif disimpan.');
+    }
+
+    /** Bagian 4 — berita acara pemeriksaan tiap agunan berkas. */
+    public function updateCollaterals(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $ids = $loanApplication->collaterals()->pluck('collateral_simulations.id')->all();
+
+        $data = $request->validate([
+            'rows' => ['required', 'array'],
+            'rows.*.collateral_simulation_id' => ['required', Rule::in($ids)],
+            'rows.*.kind' => ['required', Rule::in(AnalysisCollateral::KINDS)],
+            'rows.*.merek' => ['nullable', 'string', 'max:100'],
+            'rows.*.tipe_kendaraan' => ['nullable', 'string', 'max:100'],
+            'rows.*.tahun' => ['nullable', 'digits:4'],
+            'rows.*.no_rangka' => ['nullable', 'string', 'max:50'],
+            'rows.*.no_mesin' => ['nullable', 'string', 'max:50'],
+            'rows.*.no_polisi' => ['nullable', 'string', 'max:20'],
+            'rows.*.warna' => ['nullable', 'string', 'max:50'],
+            'rows.*.luas' => ['nullable', 'integer', 'min:0', 'max:99999999'],
+            'rows.*.lokasi' => ['nullable', 'string', 'max:255'],
+            'rows.*.market_value' => ['nullable', 'integer', 'min:0', 'max:999999999999'],
+            'rows.*.appraisal_value' => ['nullable', 'integer', 'min:0', 'max:999999999999'],
+            'rows.*.catatan' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        foreach ($data['rows'] as $row) {
+            $values = collect($row)->except('collateral_simulation_id')
+                ->map(fn ($value, $key) => is_string($value) ? Str::upper($value) : ($value ?? 0))
+                ->all();
+
+            AnalysisCollateral::updateOrCreate(
+                [
+                    'loan_application_id' => $loanApplication->id,
+                    'collateral_simulation_id' => $row['collateral_simulation_id'],
+                ],
+                $values,
+            );
+        }
+
+        return back()->with('success', 'Analisa agunan disimpan.');
+    }
+
+    /** Bagian 7 — memorandum: kebutuhan dana & usulan fasilitas. */
+    public function updateMemorandum(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $money = ['nullable', 'integer', 'min:0', 'max:999999999999'];
+        $rules = array_merge(
+            array_fill_keys(AnalysisMemorandum::NEEDS, $money),
+            array_fill_keys(
+                array_map(fn ($c) => "ket_{$c}", AnalysisMemorandum::NEEDS),
+                ['nullable', 'string', 'max:255'],
+            ),
+            array_fill_keys(AnalysisMemorandum::RATES, ['nullable', 'numeric', 'min:0', 'max:100']),
+            [
+                'usulan_plafond' => $money,
+                'jangka_waktu' => ['nullable', 'integer', 'min:0', 'max:600'],
+                'sebelum_realisasi' => ['nullable', 'string', 'max:255'],
+                'syarat_tambahan' => ['nullable', 'string', 'max:255'],
+                'pengikatan' => ['nullable', Rule::in(AnalysisMemorandum::BINDINGS)],
+            ],
+        );
+
+        $data = collect($request->validate($rules))
+            ->map(fn ($value, $key) => is_string($value) ? Str::upper($value) : ($value ?? 0))
+            ->all();
+
+        $record = AnalysisMemorandum::firstOrCreate(['loan_application_id' => $loanApplication->id]);
+        $record->fill($data)->save();
+
+        return back()->with('success', 'Memorandum disimpan.');
+    }
+
+    /** Bagian 8 — administrasi: rincian biaya. */
+    public function updateAdministration(Request $request, LoanApplication $loanApplication): RedirectResponse
+    {
+        $this->authorizeAnalyst($request, $loanApplication);
+
+        $data = collect($request->validate(array_fill_keys(
+            AnalysisAdministration::FEES,
+            ['nullable', 'integer', 'min:0', 'max:999999999999'],
+        )))->map(fn ($value) => $value ?? 0)->all();
+
+        $record = AnalysisAdministration::firstOrCreate(['loan_application_id' => $loanApplication->id]);
+        $record->fill($data)->save();
+
+        return back()->with('success', 'Administrasi disimpan.');
+    }
+
+    private function collateralPayload(LoanApplication $r): array
+    {
+        $checks = AnalysisCollateral::where('loan_application_id', $r->id)
+            ->get()->keyBy('collateral_simulation_id');
+
+        return $r->collaterals->map(function ($collateral) use ($checks) {
+            $check = $checks->get($collateral->id);
+
+            return [
+                'collateral_simulation_id' => $collateral->id,
+                'label' => $collateral->description,
+                'document_number' => $collateral->document_number,
+                'owner_name' => $collateral->owner_name,
+                'cbs_appraisal' => (int) $collateral->appraisal_value,
+                'kind' => $check?->kind ?? 'LAINNYA',
+                'merek' => $check?->merek ?? '',
+                'tipe_kendaraan' => $check?->tipe_kendaraan ?? '',
+                'tahun' => $check?->tahun ?? '',
+                'no_rangka' => $check?->no_rangka ?? '',
+                'no_mesin' => $check?->no_mesin ?? '',
+                'no_polisi' => $check?->no_polisi ?? '',
+                'warna' => $check?->warna ?? '',
+                'luas' => (int) ($check?->luas ?? 0),
+                'lokasi' => $check?->lokasi ?? '',
+                'market_value' => (int) ($check?->market_value ?? 0),
+                'appraisal_value' => (int) ($check?->appraisal_value ?? $collateral->appraisal_value),
+                'catatan' => $check?->catatan ?? '',
+            ];
+        })->values()->all();
+    }
+
+    private function memorandumPayload(LoanApplication $r): array
+    {
+        $record = AnalysisMemorandum::firstOrNew(['loan_application_id' => $r->id]);
+        $columns = [
+            ...AnalysisMemorandum::NEEDS,
+            ...array_map(fn ($c) => "ket_{$c}", AnalysisMemorandum::NEEDS),
+            ...AnalysisMemorandum::RATES,
+            'usulan_plafond', 'jangka_waktu', 'sebelum_realisasi', 'syarat_tambahan', 'pengikatan',
+        ];
+
+        return [
+            ...collect($columns)->mapWithKeys(fn ($c) => [$c => $record->{$c} ?? ($record->exists ? null : 0)])->all(),
+            'requested_amount' => (int) $r->requested_amount,
+            'requested_tenor' => (int) $r->requested_tenor,
+            'taksasi' => (int) $r->collaterals()->sum('appraisal_value'),
+            'monthly_balance' => $this->sheet($r)->metrics()['monthly_balance'],
+            'updated_at' => $record->updated_at?->translatedFormat('d M Y H:i'),
+        ];
+    }
+
+    private function administrationPayload(LoanApplication $r): array
+    {
+        $record = AnalysisAdministration::firstOrNew(['loan_application_id' => $r->id]);
+
+        return [
+            ...collect(AnalysisAdministration::FEES)->mapWithKeys(fn ($c) => [$c => (int) $record->{$c}])->all(),
+            'total' => $record->total(),
+            'updated_at' => $record->updated_at?->translatedFormat('d M Y H:i'),
+        ];
+    }
+
+    private function fiveCPayload(LoanApplication $r): array
+    {
+        $record = AnalysisFiveC::firstOrNew(['loan_application_id' => $r->id]);
+        $columns = collect(AnalysisFiveC::ASPECTS)->flatMap(fn ($a) => array_keys($a))->all();
+
+        return [
+            ...collect($columns)->mapWithKeys(fn ($c) => [$c => $record->{$c}])->all(),
+            'metrics' => $record->metrics(),
+            'taksasi' => (int) $r->collaterals()->sum('appraisal_value'),
+            'updated_at' => $record->updated_at?->translatedFormat('d M Y H:i'),
+        ];
+    }
+
+    private function qualitativePayload(LoanApplication $r): array
+    {
+        $record = AnalysisQualitative::firstOrNew(['loan_application_id' => $r->id]);
+
+        return [
+            ...collect(AnalysisQualitative::columns())->mapWithKeys(fn ($c) => [$c => $record->{$c}])->all(),
+            'updated_at' => $record->updated_at?->translatedFormat('d M Y H:i'),
+        ];
     }
 
     private function sheet(LoanApplication $r): AnalysisSheet

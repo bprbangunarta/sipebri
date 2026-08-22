@@ -2,17 +2,18 @@
 
 Status per 22 Juni 2026. Riwayat pekerjaan: `CHANGELOG.md`. Ruang lingkup & arsitektur: `PRD.md`.
 
-## P0 — menunggu spesifikasi user
-- **Analisa Agunan (bagian 4)**: form agunan Kendaraan / Tanah / Lainnya. Menunggu form sistem lama.
-- **Uji banding pertanian PERPADIAN**: berkas contoh `00700007` (KBT · PERPADIAN · MUSIMAN · 45 jt / 12 bln)
-  dipakai membandingkan hasil dengan sistem lama.
+## P0 — perlu konfirmasi / uji user
+- **Uji lokal seluruh lembar analisa** (bagian 1–8) lalu bandingkan dengan sistem lama.
+- **Rumus evaluasi 5C**: saat ini memakai persentase skor (≥80 BAIK · ≥60 CUKUP BAIK · sisanya KURANG BAIK)
+  karena `analisa5c.js` sistem lama tidak tersedia — perlu dicocokkan dengan hasil sistem lama.
+- **Proses APHT & Biaya Fiducia** (Administrasi) dan **Max Plafond** (Memorandum): di sistem lama read-only
+  tanpa rumus yang diketahui; sementara diisi manual / memakai taksasi agunan.
+- **Uji banding pertanian PERPADIAN**: berkas contoh `00700007` (KBT · PERPADIAN · MUSIMAN · 45 jt / 12 bln).
 
-## P1 — analisa lanjutan
-- **Analisa 5C (bagian 5)**: Character, Capacity, Capital, Collateral, Condition.
-- **Analisa Kualitatif (bagian 6)**: Karakter, Usaha, SWOT, Lainnya.
-- **Memorandum (bagian 7)**: Kebutuhan & Usulan.
-- **Administrasi (bagian 8)**.
+## P1 — melengkapi alur
+- **Ajukan ke komite**: perubahan status ANALISA → KOMITE + notifikasi setelah lembar analisa lengkap.
 - **Ringkasan kelayakan**: kartu kemampuan angsuran & RC di atas lembar analisa.
+- **Berita Acara Pemeriksaan (BA) agunan**: cetak/PDF dari data Analisa Agunan.
 - **Ajukan ke komite**: perubahan status berkas dari ANALISA → KOMITE beserta notifikasi.
 
 ## P2 — modul & penyempurnaan

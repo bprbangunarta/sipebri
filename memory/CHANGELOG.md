@@ -876,3 +876,35 @@ Tes regresi ditambahkan (penambahan 12 jt → 13.836.845). `php artisan test` 84
   berisi data seeder — 5 berkas contoh (2 `SURVEY`, 3 `DRAFT`), 3 agunan, 1 jadwal, 1 survei, **0 usaha
   analisa, 0 lembar analisa**, audit trail & notifikasi kosong, 22 akun pengguna. `php artisan test`
   85 lolos; login Staff Analis diverifikasi setelah reset.
+
+## Selesai (2026-06-22, bagian 4–8 lembar analisa: Agunan, 5C, Kualitatif, Memorandum, Administrasi)
+Sumber: blade sistem lama yang dilampirkan user (`analisa_5c.zip`, `analisa_kualitatif.zip`, `jaminan.zip`,
+`memorandum.zip`, `administrasi.zip`). Semua bagian dibuat **satu lembar penuh tanpa tab** sesuai permintaan.
+- **Bagian 5 Analisa 5C** (`analysis_five_c`): 28 aspek berskor (Character 7 · Capacity 8 · Capital 1 ·
+  Collateral 9 · Condition 3) dengan pilihan sesuai sistem lama. **Evaluasi dihitung sistem**: persentase skor
+  terhadap skala maksimum aspek yang sudah dinilai, predikat ≥80% BAIK · ≥60% CUKUP BAIK · sisanya KURANG BAIK
+  (rumus JS `analisa5c.js` sistem lama tidak tersedia — aturan ini asumsi kita, perlu konfirmasi user).
+  Kartu Collateral menampilkan **Permohonan Taksasi Agunan** (jumlah taksasi agunan berkas, read-only).
+- **Bagian 6 Analisa Kualitatif** (`analysis_qualitative`): Karakter (SLIK, pihak berwajib, hubungan tetangga,
+  pengalaman TKI + keterangan, waktu di rumah pemohon/pendamping, info masyarakat, 3 baris kewajiban pihak
+  lain + keterangan + status), Usaha (bahan baku, proses olah, market, pembayaran, faktor pendukung/pengurang,
+  trade checking), SWOT, dan Lainnya (catatan, trade checking usaha). Nilai teks disimpan huruf besar.
+- **Bagian 4 Analisa Agunan** (`analysis_collaterals`): satu kartu per agunan berkas (identitas agunan &
+  taksasi CBS read-only) + data berita acara pemeriksaan: jenis pemeriksaan (KENDARAAN/TANAH/LAINNYA),
+  kolom kendaraan (merek, tipe, tahun, no rangka/mesin/polisi, warna) atau luas tanah, lokasi, nilai pasar,
+  nilai taksasi, catatan. Data yang dikirim ke CBS tetap `collateral_simulations`; tabel ini hanya tambahan.
+  Validasi memastikan agunan yang diperiksa memang milik berkas tersebut.
+- **Bagian 7 Memorandum** (`analysis_memorandums`): kebutuhan dana 5 pos + keterangan (jumlah dihitung
+  sistem), usulan plafon, jangka waktu, biaya admin/bunga/provisi/penalti (%), syarat sebelum realisasi,
+  syarat tambahan, pengikatan; panel read-only berisi plafon diajukan, taksasi agunan dan **Keuangan Perbulan**
+  dari Analisa Keuangan. Sandi Lapbul diabaikan sesuai catatan user.
+- **Bagian 8 Administrasi** (`analysis_administrations`): 16 pos biaya dikelompokkan (Biaya Kredit ·
+  Asuransi Jiwa · Agunan & Pengikatan) + Total Biaya Administrasi yang dihitung sistem. Proses APHT dan Biaya
+  Fiducia dibuat dapat diisi analis (di sistem lama read-only tanpa rumus yang diketahui).
+- Navigasi bagian: sub-tab dihapus untuk 5C, Kualitatif, Agunan dan Memorandum (satu lembar penuh); badge
+  "Belum diisi/Sudah diisi" kini juga membaca keempat bagian baru.
+- Uji: `php artisan test` **90 lolos** (4 tes baru: skor & evaluasi 5C, penolakan skor di atas skala,
+  kualitatif huruf besar + validasi status, memorandum & administrasi, agunan milik berkas lain ditolak);
+  `ui:check` OK (63 berkas). Diverifikasi lewat UI: kedelapan bagian tampil dan simpan administrasi berhasil.
+  **Testing agent tidak dijalankan** atas permintaan user (hemat poin) — pengujian menyeluruh dilakukan user
+  di lokal. Seluruh data percobaan analisa sudah dihapus lagi agar basis data bersih.

@@ -276,6 +276,16 @@ Route::middleware('auth')->group(function () {
             ->name('analysis-simulation.finance');
         Route::put('/analysis-simulation/{loanApplication}/ownership', [AnalysisController::class, 'updateOwnership'])
             ->name('analysis-simulation.ownership');
+        Route::put('/analysis-simulation/{loanApplication}/five-c', [AnalysisController::class, 'updateFiveC'])
+            ->name('analysis-simulation.five-c');
+        Route::put('/analysis-simulation/{loanApplication}/qualitative', [AnalysisController::class, 'updateQualitative'])
+            ->name('analysis-simulation.qualitative');
+        Route::put('/analysis-simulation/{loanApplication}/collaterals', [AnalysisController::class, 'updateCollaterals'])
+            ->name('analysis-simulation.collaterals');
+        Route::put('/analysis-simulation/{loanApplication}/memorandum', [AnalysisController::class, 'updateMemorandum'])
+            ->name('analysis-simulation.memorandum');
+        Route::put('/analysis-simulation/{loanApplication}/administration', [AnalysisController::class, 'updateAdministration'])
+            ->name('analysis-simulation.administration');
         Route::post('/analysis-simulation/{loanApplication}/businesses', [AnalysisBusinessController::class, 'store'])
             ->name('analysis-simulation.businesses.store');
         Route::get('/analysis-simulation/{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'show'])

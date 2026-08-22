@@ -410,7 +410,11 @@ rumusnya ada di backend (`AnalysisBusiness::metrics()`, `AnalysisSheet::metrics(
 | 1. Analisa Usaha | ✅ | Sub-tab per tipe usaha (Perdagangan/Pertanian/Jasa/Lainnya) + daftar usaha; tiap usaha punya **satu lembar penuh** (tanpa tab) di `/analysis-simulation/{berkas}/businesses/{usaha}` dengan kartu form di kiri dan **Ringkasan Perhitungan** sticky + tombol **Simpan Semua** di kanan |
 | 2. Analisa Keuangan | ✅ | 7 pos biaya rumah tangga + baris kewajiban; Pendapatan Usaha = jumlah kontribusi **per bulan** semua usaha; Keuangan Perbulan = pendapatan − biaya rumah tangga − kewajiban |
 | 3. Analisa Kepemilikan | ✅ | 8 harta (rumah, mobil, motor, komputer, mesin cuci, televisi, kursi tamu, lemari panjang) + daftar harta lain |
-| 4–8 | ⏳ | Analisa Agunan, Analisa 5C, Analisa Kualitatif, Memorandum, Administrasi (masih placeholder) |
+| 4. Analisa Agunan | ✅ | Satu kartu per agunan berkas (identitas & taksasi CBS read-only) + berita acara pemeriksaan: jenis pemeriksaan (Kendaraan/Tanah/Lainnya), data kendaraan atau luas tanah, lokasi, nilai pasar, nilai taksasi, catatan. Data yang dikirim ke CBS tetap `collateral_simulations` |
+| 5. Analisa 5C | ✅ | 28 aspek berskor (Character 7 · Capacity 8 · Capital 1 · Collateral 9 · Condition 3); evaluasi dihitung sistem: persentase skor terhadap skala maksimum, ≥80% BAIK · ≥60% CUKUP BAIK · sisanya KURANG BAIK |
+| 6. Analisa Kualitatif | ✅ | Karakter (SLIK, pihak berwajib, hubungan tetangga, pengalaman TKI, waktu di rumah, info masyarakat, 3 kewajiban pihak lain), Usaha, SWOT, catatan tambahan |
+| 7. Memorandum | ✅ | Kebutuhan dana 5 pos + keterangan (jumlah otomatis), usulan plafon, jangka waktu, biaya admin/bunga/provisi/penalti, syarat sebelum realisasi & tambahan, pengikatan; panel read-only: plafon diajukan, taksasi agunan, keuangan per bulan |
+| 8. Administrasi | ✅ | 16 pos biaya (Biaya Kredit · Asuransi Jiwa · Agunan & Pengikatan) + total biaya otomatis |
 
 **Kode usaha otomatis**: `AUPG` (perdagangan), `AUP` (pertanian), `AUJ` (jasa), `AUL` (lainnya) + 5 digit.
 
@@ -428,9 +432,12 @@ rumusnya ada di backend (`AnalysisBusiness::metrics()`, `AnalysisSheet::metrics(
 - **Lainnya** — Bahan Baku = jumlah × harga; Hasil Bersih = Pendapatan Usaha − Biaya Operasional −
   Biaya Bahan Baku + Proyeksi Penambahan.
 
+Bagian 2–8 memakai satu lembar penuh tanpa tab dengan tombol **Simpan Semua** di bilah bawah yang menempel.
+
 Tabel: `analysis_businesses` (+ `monthly_income` = kontribusi per bulan), `analysis_business_items`
 (satu tabel, kolom `group`: `GOODS`/`MATERIAL`/`INCOME`/`EXPENSE`), `analysis_sheets`,
-`analysis_sheet_items` (`OBLIGATION`/`ASSET`).
+`analysis_sheet_items` (`OBLIGATION`/`ASSET`), `analysis_collaterals`, `analysis_five_c`,
+`analysis_qualitative`, `analysis_memorandums`, `analysis_administrations`.
 
 ## Modul Data Referensi
 

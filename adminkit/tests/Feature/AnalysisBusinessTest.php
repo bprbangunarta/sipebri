@@ -2,7 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\AnalysisAdministration;
 use App\Models\AnalysisBusiness;
+use App\Models\AnalysisFiveC;
+use App\Models\AnalysisMemorandum;
+use App\Models\CollateralSimulation;
 use App\Models\CommitteePath;
 use App\Models\Installment;
 use App\Models\LoanApplication;
@@ -326,6 +330,130 @@ class AnalysisBusinessTest extends TestCase
         $this->assertSame(1, $metrics['installment_period']);
         $this->assertSame(2_333_333, $metrics['principal_installment']);
         $this->assertSame(22_687_742, $metrics['monthly_income']);
+    }
+
+    public function test_five_c_scores_are_saved_and_evaluated(): void
+    {
+        $app = $this->surveyed();
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/five-c", [
+            'gaya_hidup' => 3,
+            'pengendalian_emosi' => 3,
+            'perbuatan_tercela' => 2,
+            'kondisi_alam' => 5,
+            'persaingan_usaha' => 3,
+            'regulasi_pemerintah' => 4,
+        ])->assertRedirect();
+
+        $metrics = AnalysisFiveC::firstOrFail()->metrics();
+
+        // Character: 8 dari 9 → 88,89% BAIK. Condition: 12 dari 12 → 100% BAIK.
+        $this->assertSame(88.89, $metrics['groups']['character']['percent']);
+        $this->assertSame('BAIK', $metrics['groups']['character']['grade']);
+        $this->assertSame(100.0, $metrics['groups']['condition']['percent']);
+        $this->assertNull($metrics['groups']['capital']['grade']);
+        $this->assertSame('BAIK', $metrics['grade']);
+    }
+
+    public function test_five_c_rejects_score_above_scale(): void
+    {
+        $app = $this->surveyed();
+
+        $this->actingAs($this->staff())
+            ->put("/analysis-simulation/{$app->id}/five-c", ['gaya_hidup' => 5])
+            ->assertSessionHasErrors('gaya_hidup');
+    }
+
+    public function test_qualitative_is_saved_uppercase_and_validated(): void
+    {
+        $app = $this->surveyed();
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/qualitative", [
+            'bi_checking' => 4,
+            'hubungan_tetangga' => 'BAIK',
+            'kewajiban1' => 'BPR',
+            'status1' => 'LANCAR',
+            'ket_kewajiban1' => 'angsuran motor',
+            'kekuatan' => 'lokasi usaha strategis',
+            'catatan' => 'usaha layak dibiayai',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('analysis_qualitative', [
+            'loan_application_id' => $app->id,
+            'bi_checking' => 4,
+            'ket_kewajiban1' => 'ANGSURAN MOTOR',
+            'kekuatan' => 'LOKASI USAHA STRATEGIS',
+        ]);
+
+        $this->actingAs($this->staff())
+            ->put("/analysis-simulation/{$app->id}/qualitative", ['status1' => 'HAMPIR MACET'])
+            ->assertSessionHasErrors('status1');
+    }
+
+    public function test_memorandum_and_administration_are_saved(): void
+    {
+        $app = $this->surveyed();
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/memorandum", [
+            'modal_kerja' => 20_000_000,
+            'investasi' => 10_000_000,
+            'ket_modal_kerja' => 'tambah stok barang',
+            'usulan_plafond' => 30_000_000,
+            'jangka_waktu' => 36,
+            's_bunga' => 1.5,
+            'pengikatan' => 'NOTARIIL',
+        ])->assertRedirect();
+
+        $memo = AnalysisMemorandum::firstOrFail();
+        $this->assertSame(30_000_000, $memo->totalNeed());
+        $this->assertSame('TAMBAH STOK BARANG', $memo->ket_modal_kerja);
+
+        $this->actingAs($this->staff())
+            ->put("/analysis-simulation/{$app->id}/memorandum", ['pengikatan' => 'SALAH'])
+            ->assertSessionHasErrors('pengikatan');
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/administration", [
+            'administrasi' => 150_000,
+            'provisi' => 300_000,
+            'materai' => 20_000,
+        ])->assertRedirect();
+
+        $this->assertSame(470_000, AnalysisAdministration::firstOrFail()->total());
+    }
+
+    public function test_collateral_check_only_accepts_collateral_of_the_application(): void
+    {
+        $app = $this->surveyed();
+        $collateral = CollateralSimulation::create([
+            'document_number' => '99887766',
+            'collateral_type_code' => '05',
+            'description' => 'SERTIFIKAT TANAH UJI',
+            'owner_name' => 'YAYAT SUHAYAT',
+            'created_by' => 'IT Support',
+        ]);
+        $app->collaterals()->sync([$collateral->id]);
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/collaterals", [
+            'rows' => [[
+                'collateral_simulation_id' => $collateral->id,
+                'kind' => 'TANAH',
+                'luas' => 5_711,
+                'lokasi' => 'arjasari patrol indramayu',
+                'appraisal_value' => 60_000_000,
+            ]],
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('analysis_collaterals', [
+            'loan_application_id' => $app->id,
+            'kind' => 'TANAH',
+            'luas' => 5_711,
+            'lokasi' => 'ARJASARI PATROL INDRAMAYU',
+            'appraisal_value' => 60_000_000,
+        ]);
+
+        $this->actingAs($this->staff())->put("/analysis-simulation/{$app->id}/collaterals", [
+            'rows' => [['collateral_simulation_id' => 999, 'kind' => 'TANAH']],
+        ])->assertSessionHasErrors('rows.0.collateral_simulation_id');
     }
 
     public function test_ownership_rejects_unknown_option(): void
