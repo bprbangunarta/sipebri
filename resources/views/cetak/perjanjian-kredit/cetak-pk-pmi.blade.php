@@ -172,7 +172,7 @@
                                 <td colspan="3" style="text-align: justify;">
                                     MOHAMAD MUKSIN dalam hal ini bertindak dalam jabatannya selaku Direktur Utama
                                     berdasarkan Anggaran
-                                    Dasar Perseroan Terbatas Bank Perkreditan Rakyat Pamanukan Bangunarta beserta
+                                    Dasar Perseroan Terbatas Bank Perekonomian Rakyat Bangunarta beserta
                                     perubahan-perubahannya
                                     dan yang terakhir termaktub dalam Akta Penegasan Pernyataan Keputusan Rapat
                                     Perseroan Terbatas “PT.

@@ -180,7 +180,7 @@
                                     Utama
                                     @endif
                                     berdasarkan Anggaran
-                                    Dasar Perseroan Terbatas Bank Perkreditan Rakyat Pamanukan Bangunarta beserta
+                                    Dasar Perseroan Terbatas Bank Perekonomian Rakyat Bangunarta beserta
                                     perubahan-perubahannya
                                     dan yang terakhir termaktub dalam Akta Penegasan Pernyataan Keputusan Rapat
                                     Perseroan Terbatas “PT.
