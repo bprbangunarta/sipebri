@@ -1,3 +1,11 @@
+﻿# SIPEBRI — Sistem Pemberian Kredit
+
+Dokumentasi **identifikasi sistem existing (AS-IS)** tersedia di **[docs/README.md](docs/README.md)**.
+
+Versi **1.0** (16 September 2026) menutup paket existing. Paket ini **tidak membahas perubahan sistem**. Bagian di bawah adalah README bawaan Laravel, bukan panduan operasional SIPEBRI.
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

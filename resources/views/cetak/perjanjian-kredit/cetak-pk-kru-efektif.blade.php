@@ -176,14 +176,14 @@
                                     perubahan-perubahannya
                                     dan yang terakhir termaktub dalam Akta Penegasan Pernyataan Keputusan Rapat
                                     Perseroan Terbatas “PT.
-                                    Bank Perekonomian Rakyat Bangunarta” tanggal 30-10-2023 ( tiga puluh oktober dua
-                                    ribu dua puluh tiga
-                                    ) nomor 58, yang dibuat dihadapan NANA SAPTUNAH ZUHRI, S.H., M.Kn, Notaris
-                                    Kabupaten Subang, yang
-                                    telah mendapat persetujuan Menteri Hukum dan Hak Asasi Manusia Republik
-                                    Indonesia tanggal 31-10-2023
-                                    ( tiga puluh satu oktober dua ribu dua puluh tiga ) nomor: AHU-AH.01.09.0179704
-                                    Tahun 2023,
+                                    Bank Perekonomian Rakyat Bangunarta” tanggal 03-06-2026 ( tiga juni dua
+                                    ribu dua puluh enam
+                                    ) nomor 01, yang dibuat dihadapan NANA SAPTUNAH ZUHRI, S.H., M.Kn, Notaris Kabupaten
+                                    Subang, yang
+                                    telah mendapat persetujuan Kementrian Hukum Republik Indonesia
+                                    tanggal 08-06-2026
+                                    ( delapan juni dua ribu dua puluh enam ) nomor: AHU-AH.01.03.0160462
+                                    Tahun 2026,
                                     karenanya untuk dan atas nama serta sah mewakili Perseroan Terbatas Bank
                                     Perekonomian Rakyat
                                     Bangunarta berkantor pusat di Pamanukan, dengan alamat di Jl. Haji Iksan No. 89,
