@@ -153,7 +153,8 @@
                 <td>:</td>
                 <td>
                     <font class="text-hg" style="text-transform: capitalize;">
-                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran) . ' ' . 'Rupiah' }}</font>
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran) . ' ' . 'Rupiah' }}
+                    </font>
                 </td>
             </tr>
         </table>
@@ -245,9 +246,9 @@
                 Dengan ini memberi kuasa kepada PT. Bank Mandiri (Persero) untuk melakukan pemblokiran dan autodebet
                 rekening saya dengan nomor rek <b>{{ $data->no_rekening }}</b> atas nama {{ $data->nama_nasabah }} ke
                 no rekening @if (Auth::user()->kantor_kode == 'PGD')
-                    ......................................
+                ......................................
                 @else
-                    <b>1730062262226</b>
+                <b>1730062262226</b>
                 @endif atas nama PT. BPR Bangunarta.
             </p>
 

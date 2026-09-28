@@ -137,9 +137,13 @@
                 <td style="width: 2%;">:</td>
                 <td>
                     @if (Auth::user()->kantor_kode == 'PGD')
-                        Setiap tanggal 10 (Sepuluh)
+                    Setiap tanggal 10 (Sepuluh)
+                    @elseif ($data->resort_kode == '004') <!-- PT. HYUN DONG INDONESIA -->
+                    Setiap tanggal 10 (Sepuluh)
+                    @elseif ($data->resort_kode == '023') <!-- PT. HANDSOME -->
+                    Setiap tanggal 7 (Tujuh)
                     @else
-                        Setiap tanggal 7 (Tujuh)
+                    Setiap tanggal 7 (Tujuh)
                     @endif
                 </td>
             </tr>
@@ -158,7 +162,8 @@
                 <td>:</td>
                 <td>
                     <font class="text-hg" style="text-transform: capitalize;">
-                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran) . ' ' . 'Rupiah' }} </font>
+                        {{ Riskihajar\Terbilang\Facades\Terbilang::make($data->angsuran) . ' ' . 'Rupiah' }}
+                    </font>
                 </td>
             </tr>
         </table>
@@ -250,9 +255,9 @@
                 Dengan ini memberi kuasa kepada PT. Bank Mandiri (Persero) untuk melakukan pemblokiran dan autodebet
                 rekening saya dengan nomor rek <b>{{ $data->no_rekening }}</b> atas nama {{ $data->nama_nasabah }} ke
                 no rekening @if (Auth::user()->kantor_kode == 'PGD')
-                    ......................................
+                ......................................
                 @else
-                    <b>1730062262226</b>
+                <b>1730062262226</b>
                 @endif atas nama PT. BPR Bangunarta.
             </p>
 

@@ -773,6 +773,7 @@ class CetakController extends Controller
                     'data_pengajuan.plafon',
                     'data_pengajuan.suku_bunga',
                     'data_pengajuan.metode_rps',
+                    'data_pengajuan.resort_kode',
                     'data_spk.updated_at',
                 )
                 ->where('data_pengajuan.kode_pengajuan', $enc)
