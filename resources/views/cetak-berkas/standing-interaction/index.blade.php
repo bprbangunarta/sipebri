@@ -41,6 +41,7 @@
                                     <th class="text-center" width="35%">ALAMAT</th>
                                     <th class="text-center" width="5%">WIL</th>
                                     <th class="text-center" width="8%">PLAFON</th>
+                                    <th class="text-center">RESORT</th>
                                     @if (Auth::user()->kantor_kode == 'KJT' || Auth::user()->kantor_kode == 'KJT')
                                     <th class="text-center" width="5%">PMK</th>
                                     <th class="text-center" width="5%">WNY</th>
@@ -68,6 +69,9 @@
                                     </td>
                                     <td class="text-right" style="vertical-align: middle;">
                                         {{ number_format($item->plafon, 0, ',', '.') }}
+                                    </td>
+                                    <td style="vertical-align: middle;">
+                                        {{ $item->resort_kode }}
                                     </td>
                                     @if (Auth::user()->kantor_kode == 'KJT')
                                     <td class="text-center" style="vertical-align: middle;">
