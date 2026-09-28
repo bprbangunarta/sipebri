@@ -44,7 +44,7 @@
                                     <th class="text-center">RESORT</th>
                                     @if (Auth::user()->kantor_kode == 'KJT' || Auth::user()->kantor_kode == 'KJT')
                                     <th class="text-center" width="5%">PMK</th>
-                                    <th class="text-center" width="5%">WNY</th>
+                                    <!-- <th class="text-center" width="5%">WNY</th> -->
                                     @endif
                                 </tr>
                             </thead>
@@ -80,12 +80,12 @@
                                             <i class="fa fa-print"></i>
                                         </a>
                                     </td>
-                                    <td class="text-center" style="vertical-align: middle;">
+                                    <!-- <td class="text-center" style="vertical-align: middle;">
                                         <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
                                             target="_blank" class="btn-circle btn-sm bg-blue">
                                             <i class="fa fa-print"></i>
                                         </a>
-                                    </td>
+                                    </td> -->
                                     @elseif(Auth::user()->kantor_kode == 'PGD')
                                     <td class="text-center" style="vertical-align: middle;">
                                         <a href="{{ route('cetak.data.standing.interaction', ['pengajuan' => $item->kd_pengajuan]) }}"
@@ -93,12 +93,12 @@
                                             <i class="fa fa-print"></i>
                                         </a>
                                     </td>
-                                    <td class="text-center" style="vertical-align: middle;">
+                                    <!-- <td class="text-center" style="vertical-align: middle;">
                                         <a href="{{ route('cetak.data.standing.interaction.wanayasa', ['pengajuan' => $item->kd_pengajuan]) }}"
                                             target="_blank" class="btn-circle btn-sm bg-blue">
                                             <i class="fa fa-print"></i>
                                         </a>
-                                    </td>
+                                    </td> -->
                                     @endif
                                 </tr>
 
