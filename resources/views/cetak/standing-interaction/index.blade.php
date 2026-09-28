@@ -138,9 +138,9 @@
                 <td>
                     @if (Auth::user()->kantor_kode == 'PGD')
                     Setiap tanggal 10 (Sepuluh)
-                    @elseif ($data->resort_kode == '004') <!-- PT. HYUN DONG INDONESIA -->
+                    @elseif ($data->resort_kode == '004' || $data->resort_kode == '091') <!-- PT. HYUN DONG INDONESIA -->
                     Setiap tanggal 10 (Sepuluh)
-                    @elseif ($data->resort_kode == '023') <!-- PT. HANDSOME -->
+                    @elseif ($data->resort_kode == '023' || $data->resort_kode == '080' || $data->resort_kode == '127') <!-- PT. HANDSOME -->
                     Setiap tanggal 7 (Tujuh)
                     @else
                     Setiap tanggal 7 (Tujuh)
