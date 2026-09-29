@@ -272,25 +272,61 @@ class RSCCetakController extends Controller
 
             $jasa = RSC::jasa_rsc($enc_rsc, $data->status_rsc);
             $lain = RSC::lain_rsc($enc_rsc, $data->status_rsc);
+            // if (count($lain) != 0) {
+            //     foreach ($lain as $key => $item) {
+            //         $pendapatanlain = DB::table('rsc_pendapatan_lain')->where('usaha_kode', $item->kode_usaha)->get();
+            //         $pengeluaranlain = DB::table('rsc_pengeluaran_lain')->where('usaha_kode', $item->kode_usaha)->get();
+            //         $bahanbaku = DB::table('rsc_bahan_baku_lain')->where('usaha_kode', $item->kode_usaha)->get();
+
+            //         $total_bahan = [];
+            //         foreach ($bahanbaku as $items) {
+            //             $total_bahan[] = $items->total;
+            //         }
+            //         $item->total_bahan = array_sum($total_bahan);
+
+            //         $total_pengeluaran = [];
+            //         foreach ($pengeluaranlain as $items) {
+            //             $total_pengeluaran[] = $items->nominal;
+            //         }
+            //         $item->total_pengeluaran = $item->pengeluaran + $item->total_bahan;
+            //     }
+            //     // dd($bahanbaku);
+            // }
+
             if (count($lain) != 0) {
-                foreach ($lain as $key => $item) {
-                    $pendapatanlain = DB::table('rsc_pendapatan_lain')->where('usaha_kode', $item->kode_usaha)->get();
-                    $pengeluaranlain = DB::table('rsc_pengeluaran_lain')->where('usaha_kode', $item->kode_usaha)->get();
-                    $bahanbaku = DB::table('rsc_bahan_baku_lain')->where('usaha_kode', $item->kode_usaha)->get();
+                foreach ($lain as $item) {
+                    // =========================
+                    // PENDAPATAN LAIN
+                    // =========================
+                    $item->pendapatan_lain = DB::table('rsc_pendapatan_lain')
+                        ->where('usaha_kode', $item->kode_usaha)
+                        ->get();
 
-                    $total_bahan = [];
-                    foreach ($bahanbaku as $items) {
-                        $total_bahan[] = $items->total;
-                    }
-                    $item->total_bahan = array_sum($total_bahan);
+                    // =========================
+                    // PENGELUARAN LAIN
+                    // =========================
+                    $item->pengeluaran_lain = DB::table('rsc_pengeluaran_lain')
+                        ->where('usaha_kode', $item->kode_usaha)
+                        ->get();
 
-                    $total_pengeluaran = [];
-                    foreach ($pengeluaranlain as $items) {
-                        $total_pengeluaran[] = $items->nominal;
-                    }
-                    $item->total_pengeluaran = $item->pengeluaran + $item->total_bahan;
+                    // =========================
+                    // BAHAN BAKU
+                    // =========================
+                    $item->bahan_baku = DB::table('rsc_bahan_baku_lain')
+                        ->where('usaha_kode', $item->kode_usaha)
+                        ->get();
+
+                    // =========================
+                    // TOTAL BAHAN BAKU
+                    // =========================
+                    $item->total_bahan = $item->bahan_baku->sum('total');
+
+                    // =========================
+                    // TOTAL PENGELUARAN
+                    // =========================
+                    $item->total_pengeluaran =
+                        $item->pengeluaran + $item->total_bahan;
                 }
-                // dd($bahanbaku);
             }
 
             // Kemampuan keuangan
