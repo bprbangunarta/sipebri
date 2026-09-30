@@ -29,6 +29,7 @@ class SurveyController extends Controller
 
         $loans = LoanApplication::query()
             ->with(['product:id,alias,name', 'supervisor:id,name'])
+            ->withCount(['photos as survey_photos_count' => fn ($q) => $q->whereNull('loan_survey_id')->whereNull('collateral_id')])
             ->where('status', LoanStatus::Scheduling)
             ->where('surveyor_id', $request->user()->id)
             ->whereDate('survey_date', now()->toDateString())
@@ -44,6 +45,10 @@ class SurveyController extends Controller
                 ...$l->only(['id', 'application_code', 'full_name', 'nik', 'requested_amount', 'requested_tenor']),
                 'product_label' => $l->product ? "{$l->product->alias} : {$l->product->name}" : null,
                 'supervisor_name' => $l->supervisor?->name,
+                // Progress of the two things a survey needs, so the list shows what is left without opening each file.
+                'has_location' => $l->survey_latitude !== null,
+                'located_at' => $l->survey_located_at?->format('d M Y H:i'),
+                'survey_photos' => (int) $l->getAttribute('survey_photos_count'),
             ]),
             'filters' => ['search' => $search],
             'today' => now()->toDateString(),

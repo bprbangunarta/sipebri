@@ -178,3 +178,20 @@ it('allows five photos for the survey location and five for each collateral', fu
     $stranger = Collateral::create(['collateral_type_code' => '05']);
     $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('x.jpg'), 'collateral_id' => $stranger->id])->assertNotFound();
 });
+
+it('shows on the survey list what each file still needs, so the location can be marked from there', function () {
+    Storage::fake('public');
+    [$analyst, $loan] = surveyFile();
+    $this->actingAs($analyst);
+
+    $this->get(route('surveys.index'))->assertInertia(fn (Assert $page) => $page
+        ->where('loans.0.has_location', false)->where('loans.0.located_at', null)->where('loans.0.survey_photos', 0));
+
+    $this->post(route('surveys.locations.store', $loan), ['target' => 'survey', 'latitude' => -6.46, 'longitude' => 107.8, 'source' => 'gps']);
+    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('s.jpg')]);
+    // A collateral photo is not a photo of the survey location.
+    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('c.jpg'), 'collateral_id' => $loan->collaterals()->firstOrFail()->id]);
+
+    $this->get(route('surveys.index'))->assertInertia(fn (Assert $page) => $page
+        ->where('loans.0.has_location', true)->where('loans.0.survey_photos', 1)->whereType('loans.0.located_at', 'string'));
+});

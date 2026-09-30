@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useMemo, useRef, useState } from 'react';
-import { toast } from 'sonner';
 import { LocationMap } from '@/components/location-map';
 import type { MapPin as Pin } from '@/components/location-map';
 import { Button } from '@/components/ui/button';
@@ -25,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Badge, Card, PageHeader } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
 import { formatDate, rupiah } from '@/lib/format';
+import { markPosition } from '@/lib/geolocation';
 
 type Photo = {
     id: number;
@@ -90,9 +90,6 @@ type Props = {
     maxPhotos: number;
 };
 
-/** A fix worse than this still gets saved, with a warning to retry in the open. */
-const WEAK_GPS_METERS = 100;
-
 const SOURCES: Record<string, string> = {
     gps: 'GPS',
     paste: 'Pasted',
@@ -127,42 +124,6 @@ function Detail({ label, children }: { label: string; children: ReactNode }) {
             <dd className="text-sm font-medium">{children || '–'}</dd>
         </div>
     );
-}
-
-/** Reads the phone's position; the browser only allows this on HTTPS or localhost. */
-function currentPosition(): Promise<GeolocationPosition> {
-    return new Promise((resolve, reject) => {
-        if (!window.isSecureContext) {
-            reject(
-                new Error(
-                    'Location needs a secure connection. Open the app through https:// (or localhost), not a plain http:// address.',
-                ),
-            );
-
-            return;
-        }
-
-        if (!navigator.geolocation) {
-            reject(new Error('This device cannot provide a location.'));
-
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            resolve,
-            (error) =>
-                reject(
-                    new Error(
-                        error.code === error.PERMISSION_DENIED
-                            ? 'Location access is blocked. Allow it for this site in the browser settings and try again.'
-                            : error.code === error.TIMEOUT
-                              ? 'Getting your location took too long. Move to an open area and try again.'
-                              : 'Your location is unavailable. Turn on location services (GPS) and try again.',
-                    ),
-                ),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
-        );
-    });
 }
 
 export default function SurveyShow({
@@ -215,39 +176,7 @@ export default function SurveyShow({
     /** On site: store the phone's GPS position for a place with one tap. */
     const mark = async (place: Place) => {
         setMarking(place.key);
-
-        try {
-            const position = await currentPosition();
-            const accuracy = Math.round(position.coords.accuracy);
-
-            if (accuracy > WEAK_GPS_METERS) {
-                toast.warning(
-                    `Weak GPS signal (about ±${accuracy} m). The position is saved; mark it again in the open for a better fix.`,
-                );
-            }
-
-            router.post(
-                `/surveys/${loan.id}/locations`,
-                {
-                    ...payload(place),
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    source: 'gps',
-                    accuracy,
-                },
-                {
-                    preserveScroll: true,
-                    onFinish: () => setMarking(null),
-                },
-            );
-        } catch (e) {
-            toast.error(
-                e instanceof Error
-                    ? e.message
-                    : 'Unable to read your location.',
-            );
-            setMarking(null);
-        }
+        await markPosition(loan.id, payload(place), () => setMarking(null));
     };
 
     const ask = (place: Place) =>
