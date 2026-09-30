@@ -47,7 +47,8 @@ it('gives no address, and never fails, when the service is off, broken, slow or 
     'connection failure' => [fn () => Http::fake(['geo.test/*' => fn () => throw new ConnectionException('timeout')])],
     'more than one request per second' => [function () {
         Http::fake(['geo.test/*' => Http::response(['display_name' => 'A'])]);
-        RateLimiter::hit('reverse-geocoder', 1);
+        // A long window: the service's own limit is one second, which a slow test run could let expire before the check.
+        RateLimiter::hit('reverse-geocoder', 120);
     }],
 ]);
 
