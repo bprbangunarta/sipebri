@@ -17,9 +17,24 @@ class RoleController extends Controller
 {
     public function index(Request $request): Response
     {
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'sort' => ['nullable', 'in:name,users_count,permissions_count'],
+            'direction' => ['nullable', 'in:asc,desc'],
+            'per_page' => ['nullable', 'integer'],
+        ]);
+        $sort = $filters['sort'] ?? 'name';
+        $direction = $filters['direction'] ?? 'asc';
+
+        $roles = Role::query()->withCount(['users', 'permissions'])
+            ->when($filters['search'] ?? null, fn ($q, string $term) => $q->where('name', 'like', '%'.addcslashes($term, '%_\\').'%'))
+            ->orderBy($sort, $direction)->orderBy('name')
+            ->paginate(in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25)
+            ->withQueryString();
+
         return Inertia::render('roles/index', [
-            'roles' => Role::query()->withCount(['users', 'permissions'])->orderBy('name')->get()
-                ->map(fn (Role $r): array => ['id' => $r->id, 'name' => $r->name, 'users_count' => $r->users_count, 'permissions_count' => $r->permissions_count, 'locked' => $r->name === RoleName::SuperAdmin->value]),
+            'roles' => $roles->through(fn (Role $r): array => ['id' => $r->id, 'name' => $r->name, 'users_count' => $r->users_count, 'permissions_count' => $r->permissions_count, 'locked' => $r->name === RoleName::SuperAdmin->value]),
+            'filters' => ['search' => $filters['search'] ?? '', 'sort' => $sort, 'direction' => $direction, 'per_page' => $roles->perPage()],
             'canManage' => true,
         ]);
     }

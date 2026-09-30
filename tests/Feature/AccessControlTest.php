@@ -103,3 +103,23 @@ it('lists inactive users too and filters them by status', function () {
     expect(collect($names([]))->firstWhere('name', 'Inactive Person'))->toMatchArray(['active' => false]);
     $this->get(route('users.index', ['status' => 'bogus']))->assertSessionHasErrors('status');
 });
+
+it('lists roles as a searchable, sortable, paginated table', function () {
+    $this->actingAs(superAdmin());
+
+    $this->get(route('roles.index', ['per_page' => 10]))->assertInertia(fn (Assert $page) => $page
+        ->component('roles/index')
+        ->has('roles.data', 10)
+        ->where('roles.total', 46)
+        ->where('filters.sort', 'name'));
+
+    $this->get(route('roles.index', ['search' => 'Teller']))->assertInertia(fn (Assert $page) => $page
+        ->has('roles.data', 1)
+        ->where('roles.data.0.name', 'Teller'));
+
+    $this->get(route('roles.index', ['sort' => 'permissions_count', 'direction' => 'desc']))->assertInertia(fn (Assert $page) => $page
+        ->where('roles.data.0.name', 'Super Admin')
+        ->where('roles.data.0.locked', true));
+
+    $this->get(route('roles.index', ['sort' => 'password']))->assertSessionHasErrors('sort');
+});
