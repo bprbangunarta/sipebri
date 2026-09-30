@@ -85,3 +85,11 @@ it('renders every table through the shared DataTable component', function () {
 
     expect($offenders)->toBe([]);
 });
+
+it('keeps the test suite away from real external storage', function () {
+    $phpunit = (string) file_get_contents(base_path('phpunit.xml'));
+
+    expect($phpunit)->toContain('<env name="ATTACHMENTS_DISK" value="public"/>')
+        ->and($phpunit)->toContain('<env name="AWS_BUCKET" value=""/>')
+        ->and(config('filesystems.attachments'))->toBe('public');
+});

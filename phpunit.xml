@@ -23,6 +23,12 @@
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
         <env name="CACHE_STORE" value="array"/>
+        <!-- Tests must never touch the real bucket: attachments stay on a local (faked) disk. -->
+        <env name="ATTACHMENTS_DISK" value="public"/>
+        <env name="AWS_ACCESS_KEY_ID" value=""/>
+        <env name="AWS_SECRET_ACCESS_KEY" value=""/>
+        <env name="AWS_BUCKET" value=""/>
+        <env name="AWS_ENDPOINT" value=""/>
         <env name="CODEX_ENDPOINT" value=""/>
         <env name="CODEX_TOKEN" value=""/>
         <env name="CODEX_ID" value=""/>
