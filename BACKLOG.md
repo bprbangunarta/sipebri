@@ -65,6 +65,15 @@ Terakhir diperbarui: 2026-09-30.
 - Dashboard HRIS belum tahu peran/izin (tampil sama untuk semua yang punya `dashboard.view`).
 - Ekspor/impor Excel (ada di SIPEBRI) belum dibawa.
 
+## Saran peningkatan (belum dikerjakan, keputusan ada di user)
+
+- **Layanan email (OTP).** Kuota pengirim diurus user; ini hanya catatan saran:
+  - Kuota SMTP Gmail/Workspace terbatas (sekitar 500–2.000 penerima/hari dan bisa berubah), dan login ikut gagal bila akun diblokir atau password aplikasinya dicabut. Untuk produksi pertimbangkan layanan email transaksional (SES, Postmark, Mailgun) atau relay resmi.
+  - Pasang SPF, DKIM, dan DMARC untuk `bprbangunarta.co.id` supaya email OTP tidak masuk spam atau ditolak.
+  - Pengiriman kini sinkron dengan timeout 10 detik dan batas 6 kode/jam/orang. Bila volume tumbuh, pindahkan ke antrean (perlu worker yang selalu hidup) dan tambahkan mailer cadangan (`failover`) yang tidak membuka celah keamanan.
+  - Ganti password SMTP yang pernah terlihat di komentar `.env`.
+- **Audit akses baca.** Saat ini hanya halaman detail data sensitif yang dicatat (pengajuan, jaminan, survei, cek nasabah). Halaman daftar (list) sengaja belum dicatat karena volumenya besar. Bila OJK/auditor meminta jejak baca untuk daftar juga, tambahkan pencatatan ringkas (siapa, halaman, filter, jumlah baris), sebaiknya dengan sampling atau ringkasan per sesi agar tabel tidak membengkak, dan perhatikan retensi 5 tahun.
+
 ## Dibatalkan
 
 - ❌ HRIS Round 2 (absensi, cuti, payroll, audit log, impor/ekspor karyawan, peran HR/Manager/Employee): dibersihkan atas permintaan user. Cadangan DB pra-modul-kredit ada di scratchpad sesi (`database.before-credit.sqlite`).
