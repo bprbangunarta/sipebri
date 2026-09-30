@@ -60,4 +60,4 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 ## Header halaman (PageHeader)
 
 - Keterangan di header tidak mengulang data yang sudah tampil di isi halaman (mis. nama pemohon di halaman survey; ada di bagian Applicant). Cukup informasi pendamping yang pendek.
-- Susunan `PageHeader` (teks kiri, aksi kanan; aksi turun ke bawah teks bila tidak muat) sudah disepakati; jangan diubah tanpa diminta.
+- Susunan `PageHeader` (teks kiri, aksi kanan, rata tengah vertikal; aksi turun ke bawah teks bila tidak muat) sudah disepakati; jangan diubah tanpa diminta. Semua baris "teks + aksi" lain (header blok, header dialog, baris pengaturan) memakai pola yang sama: `flex flex-wrap items-center justify-between gap-2`, teks `min-w-0`, aksi di kelompok `flex items-center`.

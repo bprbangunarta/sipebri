@@ -486,8 +486,8 @@ function PlaceBlock({
 
     return (
         <div className="rounded-md border border-line">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2 sm:flex-nowrap">
-                <div className="min-w-0 basis-full sm:flex-1 sm:basis-0">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
+                <div className="min-w-0">
                     <p className="flex flex-wrap items-center gap-1.5 text-sm font-medium">
                         {place.label}
                         {required ? (
@@ -501,7 +501,7 @@ function PlaceBlock({
                     )}
                 </div>
                 {!locked && (
-                    <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5">
                         <Button
                             size="sm"
                             variant="outline"

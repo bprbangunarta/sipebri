@@ -28,8 +28,8 @@ export function Modal({
             <D.Portal>
                 <D.Overlay className={overlay} />
                 <D.Content className={wide ? content.replace('max-w-sm', 'max-w-2xl') : content}>
-                    <div className="flex items-center justify-between border-b border-line px-4 py-3">
-                        <div>
+                    <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+                        <div className="min-w-0">
                             <D.Title className="text-sm font-semibold">
                                 {title}
                             </D.Title>
