@@ -40,12 +40,18 @@ use Illuminate\Support\Carbon;
  * @property string $insurance_code
  * @property Carbon|null $insurance_date
  * @property string $ppap_code
+ * @property string|null $latitude
+ * @property string|null $longitude
+ * @property string|null $location_source how the position was set: paste, map or photo
+ * @property Carbon|null $located_at
+ * @property string|null $located_by
  */
 #[Fillable([
     'cbs_id', 'credit_account', 'collateral_type_code', 'binding_type_code', 'document_number', 'description', 'owner_name',
     'owner_address', 'region_code', 'region_label', 'guarantee_value', 'adjustment_value', 'fair_value', 'njop_value',
     'appraisal_value', 'independent_value', 'appraiser_name', 'appraised_at', 'independent_name', 'independent_at',
     'condition_code', 'condition_date', 'insurance_code', 'insurance_date', 'ppap_code', 'created_by',
+    'latitude', 'longitude', 'location_source', 'located_at', 'located_by',
 ])]
 class Collateral extends Model
 {
@@ -63,6 +69,7 @@ class Collateral extends Model
             'guarantee_value' => 'integer', 'adjustment_value' => 'integer', 'fair_value' => 'integer', 'njop_value' => 'integer',
             'appraisal_value' => 'integer', 'independent_value' => 'integer',
             'appraised_at' => 'date', 'independent_at' => 'date', 'condition_date' => 'date', 'insurance_date' => 'date',
+            'latitude' => 'decimal:7', 'longitude' => 'decimal:7', 'located_at' => 'datetime',
         ];
     }
 

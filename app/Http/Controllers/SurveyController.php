@@ -8,7 +8,9 @@ use App\Models\LoanApplication;
 use App\Models\LoanSurvey;
 use App\Models\LoanSurveyPhoto;
 use App\Support\CustomerDirectory;
+use App\Support\LocationTargets;
 use App\Support\Notify;
+use App\Support\PhotoExif;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -68,10 +70,11 @@ class SurveyController extends Controller
                 'locked' => $loan->status !== LoanStatus::Scheduling,
             ],
             'customer' => $this->customer($loan),
-            'collaterals' => $loan->collaterals->map(fn ($c): array => $c->only(['id', 'cbs_id', 'owner_name', 'description', 'appraisal_value'])),
+            'locations' => LocationTargets::for($loan, $this->customer($loan)['address'] ?? null),
             'photos' => $loan->photos->map(fn (LoanSurveyPhoto $p): array => [
-                'id' => $p->id, 'url' => $p->url(), 'latitude' => (float) $p->latitude, 'longitude' => (float) $p->longitude,
-                'source' => $p->source, 'saved' => $p->loan_survey_id !== null, 'created_at' => $p->created_at?->format('d M Y H:i'),
+                'id' => $p->id, 'url' => $p->url(), 'collateral_id' => $p->collateral_id, 'latitude' => $p->latitude === null ? null : (float) $p->latitude,
+                'longitude' => $p->longitude === null ? null : (float) $p->longitude, 'taken_at' => $p->taken_at?->format('d M Y H:i'),
+                'saved' => $p->loan_survey_id !== null, 'created_at' => $p->created_at?->format('d M Y H:i'),
             ]),
             'survey' => $survey ? [
                 'note' => $survey->note, 'latitude' => $survey->latitude, 'longitude' => $survey->longitude,
@@ -81,7 +84,10 @@ class SurveyController extends Controller
         ]);
     }
 
-    /** Upload one location photo together with its coordinates. */
+    /**
+     * Upload one survey photo. Its coordinates and time are kept only when the file still carries them (chat apps strip
+     * them); the position of a target is set separately, see SurveyLocationController.
+     */
     public function storePhoto(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         $this->authorizeSurveyor($request, $loanApplication);
@@ -90,28 +96,33 @@ class SurveyController extends Controller
             return back()->with('error', 'The survey result is locked.');
         }
 
-        $max = (int) config('credit.max_survey_photos');
-
-        if ($loanApplication->photos()->whereNull('loan_survey_id')->count() >= $max) {
-            return back()->with('error', "A survey can have at most {$max} photos.");
-        }
-
         $data = $request->validate([
             'photo' => ['required', 'image', 'max:8192'],
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
-            'source' => ['nullable', 'in:camera,gallery'],
+            'collateral_id' => ['nullable', 'integer'],
         ], [], ['photo' => 'photo']);
 
+        // A photo belongs to the survey location (no collateral) or to one collateral of the file.
+        $collateralId = isset($data['collateral_id']) ? $loanApplication->collaterals()->whereKey((int) $data['collateral_id'])->firstOrFail()->id : null;
+        $max = (int) config('credit.max_survey_photos');
+
+        if ($loanApplication->photos()->whereNull('loan_survey_id')->where('collateral_id', $collateralId)->count() >= $max) {
+            return back()->with('error', "At most {$max} photos for each place.");
+        }
+
+        $file = $request->file('photo');
+        $exif = PhotoExif::read($file->getRealPath());
+
         $loanApplication->photos()->create([
-            'path' => LoanSurveyPhoto::disk()->putFile('surveys/'.$loanApplication->application_code, $request->file('photo')),
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-            'source' => $data['source'] ?? 'camera',
+            'collateral_id' => $collateralId,
+            'path' => LoanSurveyPhoto::disk()->putFile('surveys/'.$loanApplication->application_code, $file),
+            'latitude' => $exif['latitude'],
+            'longitude' => $exif['longitude'],
+            'taken_at' => $exif['taken_at'],
+            'source' => 'upload',
             'created_by' => $request->user()->name,
         ]);
 
-        return back()->with('success', 'Location photo saved.');
+        return back()->with('success', 'Photo saved.');
     }
 
     public function destroyPhoto(Request $request, LoanApplication $loanApplication, LoanSurveyPhoto $photo): RedirectResponse
@@ -139,8 +150,13 @@ class SurveyController extends Controller
 
         $photos = $loanApplication->photos()->whereNull('loan_survey_id')->get();
 
-        if ($photos->isEmpty()) {
-            return back()->with('error', 'Upload at least one location photo before saving.');
+        // The survey location is mandatory: its position and at least one photo. Collateral positions and photos are optional.
+        if ($loanApplication->survey_latitude === null) {
+            return back()->with('error', 'Mark the survey location before saving.');
+        }
+
+        if ($photos->whereNull('collateral_id')->isEmpty()) {
+            return back()->with('error', 'Upload at least one photo of the survey location before saving.');
         }
 
         $data = $request->validate(['note' => ['nullable', 'string', 'max:500']], [], ['note' => 'survey note']);
@@ -152,15 +168,20 @@ class SurveyController extends Controller
             'surveyor_name' => $request->user()->name,
             'survey_date' => $loanApplication->survey_date,
             'note' => $data['note'] ?? null,
-            'latitude' => $photos->first()->latitude,
-            'longitude' => $photos->first()->longitude,
+            'latitude' => $loanApplication->survey_latitude,
+            'longitude' => $loanApplication->survey_longitude,
+            'location_source' => $loanApplication->survey_source,
             'created_by' => $request->user()->name,
         ]);
 
         LoanSurveyPhoto::query()->whereIn('id', $photos->modelKeys())->update(['loan_survey_id' => $survey->id]);
         // The bulk update above raises no model events, so the link between the photos and the survey is recorded here.
         Audit::record('surveys.photos_linked', 'surveys', 'photos_linked', $survey, new: ['photo_ids' => $photos->modelKeys()], context: ['loan_application_id' => $loanApplication->id]);
-        $loanApplication->update(['status' => LoanStatus::Survey]);
+        // The position now lives on the survey record; the file's working copy is cleared for a possible re-survey.
+        $loanApplication->update([
+            'status' => LoanStatus::Survey,
+            'survey_latitude' => null, 'survey_longitude' => null, 'survey_source' => null, 'survey_located_at' => null, 'survey_located_by' => null,
+        ]);
 
         Notify::toUser($request->user(), 'File ready for analysis', 'Survey', "Survey of file {$loanApplication->application_code} is done; it now appears under Analysis.", '/analysis');
 

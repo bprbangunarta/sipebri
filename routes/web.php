@@ -18,6 +18,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\SurveyLocationController;
 use App\Http\Controllers\UserController;
 use App\Support\Navigation;
 use Illuminate\Http\Request;
@@ -95,6 +96,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:surveys.manage')->scopeBindings()->group(function () {
         Route::get('surveys/{loanApplication}', [SurveyController::class, 'show'])->name('surveys.show');
         Route::post('surveys/{loanApplication}/photos', [SurveyController::class, 'storePhoto'])->name('surveys.photos.store');
+        Route::post('surveys/{loanApplication}/locations', [SurveyLocationController::class, 'store'])->name('surveys.locations.store');
+        Route::delete('surveys/{loanApplication}/locations', [SurveyLocationController::class, 'destroy'])->name('surveys.locations.destroy');
         Route::delete('surveys/{loanApplication}/photos/{photo}', [SurveyController::class, 'destroyPhoto'])->name('surveys.photos.destroy');
         Route::post('surveys/{loanApplication}', [SurveyController::class, 'store'])->name('surveys.store');
     });

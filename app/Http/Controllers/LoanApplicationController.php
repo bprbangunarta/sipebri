@@ -20,6 +20,7 @@ use App\Models\Region;
 use App\Models\User;
 use App\Support\CustomerDirectory;
 use App\Support\LendingLimit;
+use App\Support\LocationTargets;
 use App\Support\Notify;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -140,6 +141,7 @@ class LoanApplicationController extends Controller
             ],
             'collaterals' => $loan->collaterals->map(fn (Collateral $c): array => [...$c->only(['id', 'cbs_id', 'collateral_type_code', 'owner_name', 'document_number', 'description']), 'appraisal_value' => $c->appraisal_value]),
             'collateralOptions' => $this->collateralOptions(),
+            'locations' => LocationTargets::for($loan),
             'editable' => $request->user()->can('modify', $loan),
             'references' => $this->references(),
         ]);

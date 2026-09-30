@@ -17,13 +17,15 @@ use Illuminate\Support\Facades\Storage;
  * @property int $loan_application_id
  * @property int|null $loan_survey_id
  * @property string $path
- * @property string $latitude
- * @property string $longitude
+ * @property int|null $collateral_id null = a photo of the survey location
+ * @property string|null $latitude only when the photo still carried its GPS data
+ * @property string|null $longitude
+ * @property Carbon|null $taken_at
  * @property string $source
  * @property string $created_by
  * @property Carbon|null $created_at
  */
-#[Fillable(['loan_application_id', 'loan_survey_id', 'path', 'latitude', 'longitude', 'source', 'created_by'])]
+#[Fillable(['loan_application_id', 'loan_survey_id', 'collateral_id', 'path', 'latitude', 'longitude', 'taken_at', 'source', 'created_by'])]
 class LoanSurveyPhoto extends Model
 {
     use Auditable;
@@ -32,7 +34,7 @@ class LoanSurveyPhoto extends Model
 
     protected function casts(): array
     {
-        return ['latitude' => 'decimal:7', 'longitude' => 'decimal:7'];
+        return ['latitude' => 'decimal:7', 'longitude' => 'decimal:7', 'taken_at' => 'datetime'];
     }
 
     /**

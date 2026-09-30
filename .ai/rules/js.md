@@ -47,3 +47,8 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 ## DatePicker
 
 - Kalender tanpa nilai terbuka di bulan berjalan (atau bulan terdekat dalam rentang bila hari ini di luar rentang), bukan di bulan terakhir rentang. Rentang lebar tidak boleh membuat kalender terbuka jauh di masa depan: memilih tanggal dari sana memberi tahun yang salah tanpa disadari.
+
+## Lokasi dan peta
+
+- Koordinat survei tidak pernah diambil dari perangkat yang mengunggah foto (survei diisi di kantor; foto datang lewat WhatsApp). Sumbernya: tombol "Tandai lokasi" di lapangan, tempel koordinat/tautan, klik peta, atau GPS foto bila ada. Jangan menambah `navigator.geolocation` di alur unggah.
+- Peta selalu lewat `components/location-map.tsx` (Leaflet dimuat malasan); tampilan baca-saja lewat `components/locations-panel.tsx`.

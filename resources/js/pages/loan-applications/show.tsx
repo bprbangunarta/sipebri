@@ -17,6 +17,8 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { LocationsPanel } from '@/components/locations-panel';
+import type { LocationPlace } from '@/components/locations-panel';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, Card, PageHeader } from '@/components/ui/misc';
@@ -83,6 +85,7 @@ type Props = {
     loan: Loan;
     collaterals: CollateralRow[];
     collateralOptions: Option[];
+    locations: LocationPlace[];
     editable: boolean;
     references: {
         usageTypes: Option[];
@@ -270,6 +273,7 @@ export default function LoanApplicationShow({
     loan,
     collaterals,
     collateralOptions,
+    locations,
     editable,
     references: refs,
 }: Props) {
@@ -784,6 +788,15 @@ export default function LoanApplicationShow({
                         }}
                     />
                 </Step>
+
+                {locations.some((p) => p.location) && (
+                    <Card>
+                        <h2 className="border-b border-line px-3 py-2 text-sm font-semibold">
+                            Locations
+                        </h2>
+                        <LocationsPanel places={locations} />
+                    </Card>
+                )}
 
                 {loan.status === 'draft' && (
                     <Card className="p-3">

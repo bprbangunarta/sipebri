@@ -38,6 +38,11 @@ use Illuminate\Support\Carbon;
  * @property int|null $surveyor_id
  * @property Carbon|null $survey_date
  * @property int|null $created_by
+ * @property string|null $survey_latitude
+ * @property string|null $survey_longitude
+ * @property string|null $survey_source how the position was set: paste, map or photo
+ * @property Carbon|null $survey_located_at
+ * @property string|null $survey_located_by
  * @property-read Product|null $product
  * @property-read Office|null $office
  * @property-read Method|null $method
@@ -48,6 +53,7 @@ use Illuminate\Support\Carbon;
     'application_code', 'application_date', 'status', 'nik', 'full_name', 'cif_number', 'office_id', 'product_id', 'institution_id',
     'committee_path_id', 'marketing', 'usage_type', 'requested_amount', 'requested_tenor', 'method_id', 'installment_id',
     'interest_rate', 'note', 'supervisor_id', 'surveyor_id', 'survey_date', 'created_by',
+    'survey_latitude', 'survey_longitude', 'survey_source', 'survey_located_at', 'survey_located_by',
 ])]
 class LoanApplication extends Model
 {
@@ -68,6 +74,9 @@ class LoanApplication extends Model
             'requested_tenor' => 'integer',
             'interest_rate' => 'decimal:2',
             'survey_date' => 'date',
+            'survey_latitude' => 'decimal:7',
+            'survey_longitude' => 'decimal:7',
+            'survey_located_at' => 'datetime',
         ];
     }
 

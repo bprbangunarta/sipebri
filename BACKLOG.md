@@ -78,6 +78,7 @@ Terakhir diperbarui: 2026-09-30.
     - Kolom SK Direksi (`decree`) kosong di semua produk.
     - KRS: di staging sistem cicilan bawaan kosong (yang diizinkan hanya Bulanan); di seeder kita bawaan = Bulanan.
 - **BMPK.** Saat ini satu angka tetap per pemberian kredit (Rp 2 miliar awal, bisa diubah Super Admin). Bila aturan baru butuh perhitungan penuh (berdasarkan modal, total paparan per peminjam atau kelompok terkait), perlu dimodelkan di tahap analisa; riwayat perubahan angka sudah ada di audit log.
+- **Lokasi survei: sinyal lemah di lapangan.** Tombol "Tandai lokasi" perlu koneksi untuk menyimpan; antrean offline (simpan di ponsel lalu kirim saat sinyal kembali) belum ada. Peta memakai ubin OpenStreetMap publik; untuk volume besar pertimbangkan penyedia ubin sendiri.
 - **Audit akses baca.** Saat ini hanya halaman detail data sensitif yang dicatat (pengajuan, jaminan, survei, cek nasabah). Halaman daftar (list) sengaja belum dicatat karena volumenya besar. Bila OJK/auditor meminta jejak baca untuk daftar juga, tambahkan pencatatan ringkas (siapa, halaman, filter, jumlah baris), sebaiknya dengan sampling atau ringkasan per sesi agar tabel tidak membengkak, dan perhatikan retensi 5 tahun.
 
 ## Dibatalkan

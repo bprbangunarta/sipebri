@@ -100,7 +100,7 @@ it('skips the field survey for the walk-in product', function () {
     expect($loan->fresh()->status)->toBe(LoanStatus::Survey);
 });
 
-it('runs a survey: today only, photos with coordinates, then locks', function () {
+it('runs a survey: today only, photos without needing coordinates, then locks', function () {
     Storage::fake('public');
     $analyst = roleUser('Staff Analis & Appraisal');
     $loan = submittedLoan(roleUser('Kepala Seksi Analis'));
@@ -112,21 +112,21 @@ it('runs a survey: today only, photos with coordinates, then locks', function ()
     $this->actingAs(roleUser('Staff Analis & Appraisal'))->get(route('surveys.show', $loan))->assertForbidden();
     $this->actingAs($analyst);
 
-    $this->post(route('surveys.store', $loan), ['note' => 'ok'])->assertSessionHas('error'); // no photo yet
-    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('a.jpg'), 'latitude' => 999, 'longitude' => 0])->assertSessionHasErrors('latitude');
-    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->create('a.pdf', 10), 'latitude' => -6.2, 'longitude' => 106.8])->assertSessionHasErrors('photo');
+    $this->post(route('surveys.store', $loan), ['note' => 'ok'])->assertSessionHas('error'); // no location, no photo yet
+    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->create('a.pdf', 10)])->assertSessionHasErrors('photo');
 
     foreach (range(1, 5) as $i) {
-        $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image("p{$i}.jpg"), 'latitude' => -6.2, 'longitude' => 106.8])->assertSessionHasNoErrors();
+        $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image("p{$i}.jpg")])->assertSessionHasNoErrors();
     }
-    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('p6.jpg'), 'latitude' => -6.2, 'longitude' => 106.8])->assertSessionHas('error');
+    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('p6.jpg')])->assertSessionHas('error');
     expect($loan->photos()->count())->toBe(5);
 
+    $this->post(route('surveys.locations.store', $loan), ['target' => 'survey', 'latitude' => -6.46, 'longitude' => 107.8, 'source' => 'gps']);
     $this->post(route('surveys.store', $loan), ['note' => 'looks fine'])->assertSessionHas('success');
     $loan->refresh();
     expect($loan->status)->toBe(LoanStatus::Survey)->and(LoanSurvey::count())->toBe(1)->and($loan->photos()->whereNull('loan_survey_id')->count())->toBe(0);
 
-    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('late.jpg'), 'latitude' => 1, 'longitude' => 1])->assertSessionHas('error');
+    $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('late.jpg')])->assertSessionHas('error');
     $this->delete(route('surveys.photos.destroy', [$loan, $loan->photos()->first()]))->assertSessionHas('error');
     $this->post(route('surveys.store', $loan), [])->assertSessionHas('error');
     Storage::disk('public')->assertExists($loan->photos()->first()->path);
