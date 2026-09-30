@@ -39,7 +39,7 @@ return [
     | Codex. Two uses share one endpoint and one set of credentials:
     |  - sign-in: the login form is checked against POST {endpoint}/api/web-auth (bearer CODEX_TOKEN);
     |  - customer master: applicant identity is looked up by national ID (OAuth client_credentials with CODEX_ID / CODEX_SECRET).
-    | When CODEX_ENDPOINT is empty the customer lookup falls back to employee records for local use.
+    | Without CODEX_ENDPOINT the lookup fails visibly (it never guesses).
     */
     'codex' => [
         'endpoint' => env('CODEX_ENDPOINT'),

@@ -23,7 +23,7 @@ php artisan migrate && php artisan db:seed     # aman diulang (idempotent); DB: 
 composer run dev                               # atau: php artisan serve --port=8010 + npm run build
 ```
 
-Port 8000 dipakai proyek `vue` di mesin ini, jadi dev server memakai **8010**. Cookie sesi diberi nama sendiri (`SESSION_COOKIE=hris_react_session`) agar tidak bentrok antar proyek di `localhost`.
+Port 8000 dipakai proyek `vue` di mesin ini, jadi dev server memakai **8010**. Cookie sesi diberi nama sendiri (`SESSION_COOKIE=sipebri_session`) agar tidak bentrok antar proyek di `localhost`.
 **Login lewat Codex** (`POST {CODEX_ENDPOINT}/api/web-auth`, bearer `CODEX_TOKEN`); tidak ada lagi login lokal email/password dan akun demo. Kredensial di `.env`: `CODEX_ENDPOINT`, `CODEX_TOKEN`, `CODEX_ID`, `CODEX_SECRET`, `CODEX_VERIFY`. Super Admin adalah peran Codex biasa (nama peran `Super Admin`), tidak ada konfigurasi khusus. `UserSeeder` (bukan production) mengisi 28 orang starter (semua peran, 7 kantor, 1 non-aktif) meniru hasil sinkron Codex; tidak ada password lokal. Test memakai SQLite memori, bukan MySQL. Nama indeks MySQL maks 64 karakter: beri nama eksplisit pada indeks panjang. Test tidak pernah memanggil Codex asli (`phpunit.xml` mengosongkan variabelnya, `Http::fake`).
 
 ## Arsitektur singkat
