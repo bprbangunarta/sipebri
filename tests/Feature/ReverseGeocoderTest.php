@@ -100,3 +100,16 @@ it('shows the address on the survey page and the file page', function () {
 it('keeps the test suite from calling the real geocoder', function () {
     expect(file_get_contents(base_path('phpunit.xml')))->toContain('<env name="REVERSE_GEOCODING" value="false"/>');
 });
+
+it('fills in the addresses that are missing, and leaves the ones that exist', function () {
+    [$analyst, $loan, $collateral] = surveyFile();
+    $collateral->update(['latitude' => -6.4, 'longitude' => 107.8, 'location_source' => 'paste']);
+    $loan->update(['survey_latitude' => -6.5, 'survey_longitude' => 107.9, 'survey_source' => 'gps', 'survey_address' => 'Kept']);
+    Http::fake(['geo.test/*' => Http::response(['display_name' => 'Desa E, Indonesia'])]);
+
+    $this->artisan('locations:geocode', ['--dry-run' => true])->assertSuccessful();
+    expect($collateral->fresh()->location_address)->toBeNull();
+
+    $this->artisan('locations:geocode')->assertSuccessful();
+    expect($collateral->fresh()->location_address)->toBe('Desa E')->and($loan->fresh()->survey_address)->toBe('Kept');
+});
