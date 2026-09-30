@@ -42,3 +42,4 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 
 - Jangan memotong identitas di dalam daftar pilihan. Daftar boleh lebih lebar dari kolomnya dan membungkus baris; kolom yang menampung pilihan panjang (jenis agunan, pengikatan, wilayah) dibuat selebar baris form, dan dialognya `wide`.
 - Untuk pilihan yang mirip satu sama lain (mis. agunan), isi `description` pada opsi: label = identitas singkat, `description` = pembeda (nomor dokumen, jenis, nilai, alamat lengkap). `description` ikut dicari. Teks terpilih di kolom yang terpotong tetap punya tooltip (`title`).
+- Combobox di dalam dialog: kunci gulir dialog memblokir roda/sentuh pada konten yang di-portal, jadi `Combobox` menahan `wheel`/`touchmove` di kontennya; navigasi keyboard wajib menggulir opsi aktif ke area terlihat (`scrollIntoView`). Periksa keduanya bila membuat dropdown baru di dalam `Modal`.

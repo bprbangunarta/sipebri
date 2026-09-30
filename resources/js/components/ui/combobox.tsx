@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { controlClass } from '@/components/ui/input';
@@ -40,6 +40,7 @@ export function Combobox({
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [active, setActive] = useState(0);
+    const list = useRef<HTMLUListElement>(null);
 
     const selected = options.find((o) => String(o.value) === String(value ?? ''));
     const filtered = useMemo(
@@ -51,6 +52,13 @@ export function Combobox({
             ),
         [options, query],
     );
+
+    // Keyboard navigation must keep the highlighted option in view.
+    useEffect(() => {
+        if (open) {
+            (list.current?.children[active] as HTMLElement | undefined)?.scrollIntoView({ block: 'nearest' });
+        }
+    }, [active, open, filtered]);
 
     const choose = (option: Option) => {
         onChange(String(option.value));
@@ -109,6 +117,9 @@ export function Combobox({
             </div>
             <PopoverContent
                 className="w-max max-w-[min(36rem,calc(100vw-2rem))] min-w-(--radix-popover-trigger-width) p-1"
+                // Inside a dialog the page scroll lock swallows wheel/touch scrolling of portaled content; keep it for the list.
+                onWheel={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
                 onOpenAutoFocus={(e) => {
                     if (!searchable) {
                         return;
@@ -129,7 +140,7 @@ export function Combobox({
                         className="mb-1 h-7 w-full rounded border border-line px-2 text-sm focus:border-primary focus:outline-none"
                     />
                 )}
-                <ul role="listbox" className="max-h-56 overflow-auto" onKeyDown={onKeyDown} tabIndex={-1}>
+                <ul ref={list} role="listbox" className="max-h-56 overflow-auto overscroll-contain" onKeyDown={onKeyDown} tabIndex={-1}>
                     {filtered.length === 0 && (
                         <li className="px-2 py-2 text-center text-xs text-muted">
                             No results found
