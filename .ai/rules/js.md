@@ -56,3 +56,8 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 ## Penjajaran baris judul + aksi
 
 - Baris yang berisi blok teks (judul, keterangan) di kiri dan tombol/aksi di kanan memakai `items-center`: aksi rata tengah secara vertikal terhadap seluruh blok teks, bukan menempel ke baris pertama. `items-start justify-between` hanya untuk daftar pilihan yang ikon kecilnya harus sejajar dengan baris teks pertama (opsi `Combobox`). `ArchitectureTest` memeriksa ini.
+
+## Header halaman (PageHeader)
+
+- Keterangan di header tidak mengulang data yang sudah tampil di isi halaman (mis. nama pemohon di halaman survey; ada di bagian Applicant). Cukup informasi pendamping yang pendek.
+- `PageHeader` sudah aman untuk teks panjang: di layar lebar teks membungkus di sebelah aksi (aksi tetap di kanan, rata tengah), di layar sempit teks penuh lalu aksi di bawahnya. Jangan membuat header sendiri.

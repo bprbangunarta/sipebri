@@ -219,7 +219,7 @@ export default function SurveyShow({
             <Head title={`Survey ${loan.application_code}`} />
             <PageHeader
                 title={`Survey ${loan.application_code}`}
-                description={`${loan.full_name} · scheduled ${formatDate(loan.survey_date)}`}
+                description={`Scheduled ${formatDate(loan.survey_date)}`}
                 actions={
                     <>
                         {loan.locked && (
