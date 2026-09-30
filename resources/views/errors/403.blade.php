@@ -1,0 +1,1 @@
+@extends('errors.layout', ['code' => 403, 'title' => 'Access denied', 'description' => 'Your role is not allowed to open this page. If you think this is a mistake, ask your administrator to grant the access.', 'reload' => false])
