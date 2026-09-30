@@ -13,6 +13,8 @@ use App\Models\Office;
 use App\Models\OwnershipStatus;
 use App\Models\Product;
 use App\Models\ProductParameter;
+use App\Models\Setting;
+use App\Support\LendingLimit;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -137,6 +139,9 @@ class CreditReferenceSeeder extends Seeder
                 OwnershipStatus::updateOrCreate(['collateral_type_code' => $type, 'code' => str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT)], ['name' => $name]);
             }
         }
+
+        // Only created when missing: a value a Super Admin changed later is never reset by a re-seed or deploy.
+        Setting::firstOrCreate(['key' => LendingLimit::KEY], ['value' => (string) LendingLimit::DEFAULT_BMPK]);
 
         $this->parameters();
         $this->regions();

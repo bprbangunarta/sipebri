@@ -104,6 +104,7 @@ class Navigation
                     self::reference('Produk', 'dot', 'products'),
                     self::reference('Bunga', 'dot', 'methods'),
                     self::reference('Angsuran', 'dot', 'installments'),
+                    ['label' => 'BMPK', 'icon' => 'dot', 'route' => 'bmpk.show', 'role' => RoleName::SuperAdmin->value],
                 ]],
                 ['label' => 'Data Agunan', 'icon' => 'landmark', 'children' => [
                     self::reference('Jenis', 'dot', 'collateral-types'),

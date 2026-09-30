@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
+use App\Http\Controllers\BmpkController;
 use App\Http\Controllers\CollateralController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\DashboardController;
@@ -102,6 +103,8 @@ Route::middleware('auth')->group(function () {
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).
     Route::middleware('role:'.RoleName::SuperAdmin->value)->group(function () {
+        Route::get('master-data/bmpk', [BmpkController::class, 'show'])->name('bmpk.show');
+        Route::put('master-data/bmpk', [BmpkController::class, 'update'])->name('bmpk.update');
         Route::get('master-data/products/{product}/parameters', [ProductParameterController::class, 'show'])->name('products.parameters');
         Route::put('master-data/products/{product}/parameters', [ProductParameterController::class, 'update'])->name('products.parameters.update');
 

@@ -19,6 +19,7 @@ use App\Models\ProductParameter;
 use App\Models\Region;
 use App\Models\User;
 use App\Support\CustomerDirectory;
+use App\Support\LendingLimit;
 use App\Support\Notify;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -151,12 +152,15 @@ class LoanApplicationController extends Controller
         $this->authorize('modify', $loanApplication);
 
         $parameter = ProductParameter::where('product_id', (int) $request->input('product_id'))->first();
+        $bmpk = LendingLimit::bmpk();
+        $productMax = $parameter?->max_amount ? (int) $parameter->max_amount : null;
+        $ceiling = $this->amountCeiling($productMax, $bmpk);
 
         $data = $request->validate([
             'application_date' => ['required', 'date'],
             'product_id' => ['required', 'integer', Rule::exists('products', 'id')->where('is_active', true)],
             'committee_path_id' => ['required', 'integer', Rule::exists('committee_paths', 'id')->where('is_active', true)],
-            'requested_amount' => ['required', 'integer', 'min:'.max(1, (int) $parameter?->min_amount), ...($parameter?->max_amount ? ['max:'.$parameter->max_amount] : [])],
+            'requested_amount' => ['required', 'integer', 'min:'.max(1, (int) $parameter?->min_amount), ...($ceiling ? ['max:'.$ceiling] : [])],
             'requested_tenor' => ['required', 'integer', 'min:'.max(1, (int) $parameter?->min_tenor), 'max:'.($parameter?->max_tenor ?: 600)],
             'method_id' => ['required', 'integer', 'exists:methods,id', ...($parameter?->allowed_method_ids ? [Rule::in($parameter->allowed_method_ids)] : [])],
             'installment_id' => ['required', 'integer', 'exists:installments,id', ...($parameter?->allowed_installment_ids ? [Rule::in($parameter->allowed_installment_ids)] : [])],
@@ -167,7 +171,7 @@ class LoanApplicationController extends Controller
             'institution_id' => ['nullable', 'integer', 'exists:institutions,id'],
             'marketing' => ['nullable', 'string', 'max:100'],
             'note' => ['nullable', 'string', 'max:255'],
-        ], $this->parameterMessages($parameter), [
+        ], $this->parameterMessages($parameter, $productMax, $bmpk), [
             'product_id' => 'product', 'committee_path_id' => 'category', 'requested_amount' => 'loan amount', 'requested_tenor' => 'tenor',
             'method_id' => 'interest method', 'installment_id' => 'installment system', 'interest_rate' => 'interest rate', 'usage_type' => 'usage',
             'office_id' => 'office', 'supervisor_id' => 'section head',
@@ -303,22 +307,34 @@ class LoanApplicationController extends Controller
     /**
      * @return array<string, string>
      */
-    private function parameterMessages(?ProductParameter $p): array
+    private function parameterMessages(?ProductParameter $p, ?int $productMax, ?int $bmpk): array
     {
+        $idr = LendingLimit::format(...);
+        // The BMPK message wins when it is the stricter of the two limits.
+        $max = $bmpk !== null && ($productMax === null || $bmpk <= $productMax)
+            ? ['requested_amount.max' => "The loan amount exceeds the legal lending limit (BMPK) of {$idr($bmpk)}."]
+            : ($productMax !== null ? ['requested_amount.max' => "The maximum loan amount is {$idr($productMax)} for this product."] : []);
+
         if (! $p) {
-            return [];
+            return $max;
         }
 
-        $idr = fn ($value): string => 'Rp'.number_format((float) $value, 0, ',', '.');
-
         return [
+            ...$max,
             'requested_amount.min' => "The minimum loan amount is {$idr($p->min_amount)} for this product.",
-            'requested_amount.max' => "The maximum loan amount is {$idr($p->max_amount)} for this product.",
             'requested_tenor.min' => "The minimum tenor is {$p->min_tenor} months for this product.",
             'requested_tenor.max' => "The maximum tenor is {$p->max_tenor} months for this product.",
             'method_id.in' => 'This interest method is not allowed for the product.',
             'installment_id.in' => 'This installment system is not allowed for the product.',
         ];
+    }
+
+    /** The strictest of the product maximum and the BMPK (null = no limit). */
+    private function amountCeiling(?int $productMax, ?int $bmpk): ?int
+    {
+        $limits = array_filter([$productMax, $bmpk]);
+
+        return $limits === [] ? null : min($limits);
     }
 
     private function collateralRequired(LoanApplication $loan): bool
@@ -347,7 +363,7 @@ class LoanApplicationController extends Controller
             'parameters' => ProductParameter::all()->keyBy('product_id')->map(fn (ProductParameter $p): array => [
                 'method_ids' => (array) $p->allowed_method_ids, 'installment_ids' => (array) $p->allowed_installment_ids,
                 'default_method_id' => $p->default_method_id, 'default_installment_id' => $p->default_installment_id, 'interest_rate' => $p->interest_rate,
-                'min_amount' => (int) $p->min_amount, 'max_amount' => (int) $p->max_amount, 'min_tenor' => (int) $p->min_tenor, 'max_tenor' => (int) $p->max_tenor,
+                'min_amount' => (int) $p->min_amount, 'max_amount' => (int) ($this->amountCeiling($p->max_amount ? (int) $p->max_amount : null, LendingLimit::bmpk()) ?? 0), 'min_tenor' => (int) $p->min_tenor, 'max_tenor' => (int) $p->max_tenor,
                 'collateral_required' => $p->collateral_required,
             ]),
             'categories' => CommitteePath::where('is_active', true)->orderBy('condition')->get(['id', 'product_id', 'condition'])
