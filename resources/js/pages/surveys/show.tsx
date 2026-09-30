@@ -390,6 +390,29 @@ export default function SurveyShow({
                             })}
                         </div>
                     </Section>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                    <Section title="Loan request">
+                        <dl className="grid gap-3 p-3">
+                            <Detail label="Product">
+                                {loan.product_label}
+                            </Detail>
+                            <Detail label="Amount">
+                                {rupiah(loan.requested_amount)}
+                            </Detail>
+                            <Detail label="Tenor">
+                                {loan.requested_tenor} months
+                            </Detail>
+                            <Detail label="Usage">{loan.usage_type}</Detail>
+                            <Detail label="Section head">
+                                {loan.supervisor_name}
+                            </Detail>
+                            <Detail label="Schedule note">
+                                {loan.schedule_note}
+                            </Detail>
+                        </dl>
+                    </Section>
 
                     <Section title="Result">
                         <form
@@ -437,29 +460,6 @@ export default function SurveyShow({
                                 </div>
                             )}
                         </form>
-                    </Section>
-                </div>
-
-                <div className="flex flex-col gap-3">
-                    <Section title="Loan request">
-                        <dl className="grid gap-3 p-3">
-                            <Detail label="Product">
-                                {loan.product_label}
-                            </Detail>
-                            <Detail label="Amount">
-                                {rupiah(loan.requested_amount)}
-                            </Detail>
-                            <Detail label="Tenor">
-                                {loan.requested_tenor} months
-                            </Detail>
-                            <Detail label="Usage">{loan.usage_type}</Detail>
-                            <Detail label="Section head">
-                                {loan.supervisor_name}
-                            </Detail>
-                            <Detail label="Schedule note">
-                                {loan.schedule_note}
-                            </Detail>
-                        </dl>
                     </Section>
                 </div>
             </div>
