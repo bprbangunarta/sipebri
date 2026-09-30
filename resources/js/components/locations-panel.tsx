@@ -15,6 +15,7 @@ export type LocationPlace = {
         source: string | null;
         located_at: string | null;
         located_by: string | null;
+        address: string | null;
         maps_url: string;
     } | null;
 };
@@ -62,28 +63,38 @@ export function LocationsPanel({ places }: { places: LocationPlace[] }) {
                             )}
                         </div>
                         {p.location ? (
-                            <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
-                                <MapPin className="size-3.5 text-primary" />
-                                <span className="font-mono tabular-nums">
-                                    {p.location.latitude.toFixed(6)},{' '}
-                                    {p.location.longitude.toFixed(6)}
-                                </span>
-                                {p.location.source && (
-                                    <Badge>
-                                        {SOURCES[p.location.source] ??
-                                            p.location.source}
-                                    </Badge>
+                            <div className="flex flex-col gap-0.5 text-xs">
+                                <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                    <MapPin className="size-3.5 text-primary" />
+                                    <span className="font-mono tabular-nums">
+                                        {p.location.latitude.toFixed(6)},{' '}
+                                        {p.location.longitude.toFixed(6)}
+                                    </span>
+                                    {p.location.source && (
+                                        <Badge>
+                                            {SOURCES[p.location.source] ??
+                                                p.location.source}
+                                        </Badge>
+                                    )}
+                                    <a
+                                        href={p.location.maps_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-primary hover:underline"
+                                    >
+                                        Google Maps{' '}
+                                        <ExternalLink className="size-3" />
+                                    </a>
+                                </p>
+                                {p.location.address && (
+                                    <p
+                                        className="text-muted"
+                                        title="Approximate address from OpenStreetMap, found from the coordinates. Check it on site."
+                                    >
+                                        ≈ {p.location.address}
+                                    </p>
                                 )}
-                                <a
-                                    href={p.location.maps_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-primary hover:underline"
-                                >
-                                    Google Maps{' '}
-                                    <ExternalLink className="size-3" />
-                                </a>
-                            </p>
+                            </div>
                         ) : (
                             <span className="text-xs text-muted">
                                 No position recorded

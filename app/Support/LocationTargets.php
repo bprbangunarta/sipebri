@@ -41,7 +41,7 @@ class LocationTargets
                     $types[$c->collateral_type_code] ?? $c->collateral_type_code,
                     $c->owner_address ?: $c->description,
                 ])->filter()->implode(' · '),
-                'location' => self::location($c->latitude, $c->longitude, $c->location_source, $c->located_at?->format('d M Y H:i'), $c->located_by),
+                'location' => self::location($c->latitude, $c->longitude, $c->location_source, $c->located_at?->format('d M Y H:i'), $c->located_by, $c->location_address),
             ];
         }
 
@@ -54,25 +54,25 @@ class LocationTargets
     private static function surveyLocation(LoanApplication $loan): ?array
     {
         if ($loan->survey_latitude !== null) {
-            return self::location($loan->survey_latitude, $loan->survey_longitude, $loan->survey_source, $loan->survey_located_at?->format('d M Y H:i'), $loan->survey_located_by);
+            return self::location($loan->survey_latitude, $loan->survey_longitude, $loan->survey_source, $loan->survey_located_at?->format('d M Y H:i'), $loan->survey_located_by, $loan->survey_address);
         }
 
         $survey = $loan->surveys()->reorder('id', 'desc')->first();
 
-        return $survey !== null ? self::location($survey->latitude, $survey->longitude, $survey->location_source, $survey->created_at?->format('d M Y H:i'), $survey->created_by) : null;
+        return $survey !== null ? self::location($survey->latitude, $survey->longitude, $survey->location_source, $survey->created_at?->format('d M Y H:i'), $survey->created_by, $survey->location_address) : null;
     }
 
     /**
      * @return array<string, mixed>|null
      */
-    private static function location(?string $latitude, ?string $longitude, ?string $source, ?string $at, ?string $by): ?array
+    private static function location(?string $latitude, ?string $longitude, ?string $source, ?string $at, ?string $by, ?string $address): ?array
     {
         if ($latitude === null || $longitude === null) {
             return null;
         }
 
         return [
-            'latitude' => (float) $latitude, 'longitude' => (float) $longitude, 'source' => $source, 'located_at' => $at, 'located_by' => $by,
+            'latitude' => (float) $latitude, 'longitude' => (float) $longitude, 'source' => $source, 'located_at' => $at, 'located_by' => $by, 'address' => $address,
             'maps_url' => Coordinates::mapsUrl($latitude, $longitude),
         ];
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\LoanStatus;
 use App\Models\Collateral;
 use App\Models\LoanApplication;
+use App\Services\ReverseGeocoder;
 use App\Support\Coordinates;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ use Illuminate\Validation\ValidationException;
  */
 class SurveyLocationController extends Controller
 {
-    public function store(Request $request, LoanApplication $loanApplication): RedirectResponse
+    public function store(Request $request, LoanApplication $loanApplication, ReverseGeocoder $geocoder): RedirectResponse
     {
         if ($blocked = $this->blocked($request, $loanApplication)) {
             return $blocked;
@@ -35,15 +36,17 @@ class SurveyLocationController extends Controller
 
         [$latitude, $longitude, $source] = $this->resolve($request, $loanApplication, $data);
         $by = $request->user()->name;
+        // A hint for people: the approximate address of this position. No answer (switched off, slow, failing) is fine.
+        $address = $geocoder->lookup($latitude, $longitude);
 
         if ($data['target'] === 'survey') {
             $loanApplication->update([
                 'survey_latitude' => $latitude, 'survey_longitude' => $longitude, 'survey_source' => $source,
-                'survey_located_at' => now(), 'survey_located_by' => $by,
+                'survey_located_at' => now(), 'survey_located_by' => $by, 'survey_address' => $address,
             ]);
         } else {
             $this->collateral($loanApplication, (int) $data['collateral_id'])
-                ->update(['latitude' => $latitude, 'longitude' => $longitude, 'location_source' => $source, 'located_at' => now(), 'located_by' => $by]);
+                ->update(['latitude' => $latitude, 'longitude' => $longitude, 'location_source' => $source, 'located_at' => now(), 'located_by' => $by, 'location_address' => $address]);
         }
 
         return back()->with('success', 'Location saved.');
@@ -58,10 +61,10 @@ class SurveyLocationController extends Controller
         $data = $request->validate($this->targetRules());
 
         if ($data['target'] === 'survey') {
-            $loanApplication->update(['survey_latitude' => null, 'survey_longitude' => null, 'survey_source' => null, 'survey_located_at' => null, 'survey_located_by' => null]);
+            $loanApplication->update(['survey_latitude' => null, 'survey_longitude' => null, 'survey_source' => null, 'survey_located_at' => null, 'survey_located_by' => null, 'survey_address' => null]);
         } else {
             $this->collateral($loanApplication, (int) $data['collateral_id'])
-                ->update(['latitude' => null, 'longitude' => null, 'location_source' => null, 'located_at' => null, 'located_by' => null]);
+                ->update(['latitude' => null, 'longitude' => null, 'location_source' => null, 'located_at' => null, 'located_by' => null, 'location_address' => null]);
         }
 
         return back()->with('success', 'Location removed.');

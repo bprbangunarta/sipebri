@@ -49,6 +49,7 @@ type Place = {
         source: string | null;
         located_at: string | null;
         located_by: string | null;
+        address: string | null;
         maps_url: string;
     } | null;
 };
@@ -575,6 +576,15 @@ function PlaceBlock({
                     >
                         {required && <CircleAlert className="size-3.5" />} No
                         position yet
+                    </p>
+                )}
+
+                {loc?.address && (
+                    <p
+                        className="text-xs text-muted"
+                        title="Approximate address from OpenStreetMap, found from the coordinates. Check it on site."
+                    >
+                        ≈ {loc.address}
                     </p>
                 )}
 

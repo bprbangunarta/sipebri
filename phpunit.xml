@@ -25,6 +25,7 @@
         <env name="CACHE_STORE" value="array"/>
         <!-- Tests must never touch the real bucket: attachments stay on a local (faked) disk. -->
         <env name="ATTACHMENTS_DISK" value="public"/>
+        <env name="REVERSE_GEOCODING" value="false"/>
         <env name="AWS_ACCESS_KEY_ID" value=""/>
         <env name="AWS_SECRET_ACCESS_KEY" value=""/>
         <env name="AWS_BUCKET" value=""/>

@@ -43,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $survey_source how the position was set: paste, map or photo
  * @property Carbon|null $survey_located_at
  * @property string|null $survey_located_by
+ * @property string|null $survey_address approximate address of the survey location (reverse geocoding), a hint only
  * @property-read Product|null $product
  * @property-read Office|null $office
  * @property-read Method|null $method
@@ -53,7 +54,7 @@ use Illuminate\Support\Carbon;
     'application_code', 'application_date', 'status', 'nik', 'full_name', 'cif_number', 'office_id', 'product_id', 'institution_id',
     'committee_path_id', 'marketing', 'usage_type', 'requested_amount', 'requested_tenor', 'method_id', 'installment_id',
     'interest_rate', 'note', 'supervisor_id', 'surveyor_id', 'survey_date', 'created_by',
-    'survey_latitude', 'survey_longitude', 'survey_source', 'survey_located_at', 'survey_located_by',
+    'survey_latitude', 'survey_longitude', 'survey_source', 'survey_located_at', 'survey_located_by', 'survey_address',
 ])]
 class LoanApplication extends Model
 {

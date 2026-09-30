@@ -22,10 +22,11 @@ use Illuminate\Support\Carbon;
  * @property string|null $latitude
  * @property string|null $longitude
  * @property string|null $location_source how the position was set: gps, paste, map or photo
+ * @property string|null $location_address approximate address of the position (reverse geocoding), a hint only
  * @property string $created_by
  * @property Carbon|null $created_at
  */
-#[Fillable(['loan_application_id', 'sequence', 'surveyor_id', 'surveyor_name', 'survey_date', 'note', 'latitude', 'longitude', 'location_source', 'created_by'])]
+#[Fillable(['loan_application_id', 'sequence', 'surveyor_id', 'surveyor_name', 'survey_date', 'note', 'latitude', 'longitude', 'location_source', 'location_address', 'created_by'])]
 class LoanSurvey extends Model
 {
     use Auditable;

@@ -41,6 +41,17 @@ return [
     |  - customer master: applicant identity is looked up by national ID (OAuth client_credentials with CODEX_ID / CODEX_SECRET).
     | Without CODEX_ENDPOINT the lookup fails visibly (it never guesses).
     */
+    /*
+    | Reverse geocoding (position -> approximate address) through Nominatim. The positions of customers' homes and
+    | collaterals are sent there, so it can be switched off (REVERSE_GEOCODING=false) or pointed at an own instance.
+    */
+    'geocoder' => [
+        'enabled' => (bool) env('REVERSE_GEOCODING', true),
+        'endpoint' => env('GEOCODER_ENDPOINT', 'https://nominatim.openstreetmap.org/reverse'),
+        'user_agent' => env('GEOCODER_USER_AGENT', 'SIPEBRI ('.env('MAIL_FROM_ADDRESS', 'noreply@example.com').')'),
+        'timeout' => (int) env('GEOCODER_TIMEOUT', 3),
+    ],
+
     'codex' => [
         'endpoint' => env('CODEX_ENDPOINT'),
         'token' => env('CODEX_TOKEN'),
