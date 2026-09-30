@@ -2,10 +2,13 @@
 
 namespace App\Security\TwoFactor;
 
+use App\Audit\Audit;
 use App\Mail\LoginCode;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
+use Throwable;
 
 /**
  * One-time codes sent to the person's email. Only a keyed hash of the code is kept (in the cache),
@@ -23,15 +26,23 @@ class EmailCode
     {
         $sentAt = Cache::get($this->key($user))['sent_at'] ?? null;
 
-        return $sentAt === null ? 0 : (int) max(0, $sentAt + (int) config('security.email_resend_seconds') - now()->getTimestamp());
+        $cooldown = $sentAt === null ? 0 : (int) max(0, $sentAt + (int) config('security.email_resend_seconds') - now()->getTimestamp());
+        $capped = RateLimiter::tooManyAttempts($this->capKey($user), (int) config('security.email_max_per_hour')) ? RateLimiter::availableIn($this->capKey($user)) : 0;
+
+        return max($cooldown, $capped);
     }
 
     /**
-     * Send a fresh code. Returns false (and sends nothing) while the resend cooldown is running.
+     * Send a fresh code. Returns false (and sends nothing) while the resend cooldown or the hourly cap is running.
+     * Every send is written to the audit trail (never the code itself).
      */
     public function issue(User $user): bool
     {
         if ($this->secondsUntilResend($user) > 0) {
+            if (RateLimiter::tooManyAttempts($this->capKey($user), (int) config('security.email_max_per_hour'))) {
+                Audit::record('auth.mfa_code_throttled', 'auth', 'mfa_code_throttled', $user, context: ['method' => 'email'], outcome: 'denied', actor: $user);
+            }
+
             return false;
         }
 
@@ -41,7 +52,17 @@ class EmailCode
 
         Cache::put($this->key($user), ['hash' => $this->hash($user, $code), 'sent_at' => now()->getTimestamp(), 'attempts' => 0], now()->addMinutes($ttl));
 
-        Mail::to($user->email)->send(new LoginCode($code, $ttl));
+        try {
+            Mail::to($user->email)->send(new LoginCode($code, $ttl));
+        } catch (Throwable $exception) {
+            Cache::forget($this->key($user));
+            Audit::record('auth.mfa_code_send_failed', 'auth', 'mfa_code_send_failed', $user, context: ['method' => 'email', 'error' => class_basename($exception)], outcome: 'failure', actor: $user);
+
+            throw $exception;
+        }
+
+        RateLimiter::hit($this->capKey($user), 3600);
+        Audit::record('auth.mfa_code_sent', 'auth', 'mfa_code_sent', $user, context: ['method' => 'email'], actor: $user);
 
         return true;
     }
@@ -80,6 +101,11 @@ class EmailCode
     private function key(User $user): string
     {
         return "two-factor:email:{$user->id}";
+    }
+
+    private function capKey(User $user): string
+    {
+        return "two-factor:email-cap:{$user->id}";
     }
 
     private function hash(User $user, string $code): string

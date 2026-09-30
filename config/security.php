@@ -21,6 +21,10 @@ return [
     // Seconds before another email code may be requested.
     'email_resend_seconds' => 60,
 
+    // Emailed codes one person may be sent per hour (on top of the resend cooldown): protects the mailbox
+    // and the SMTP daily quota from a stolen password being used to flood someone.
+    'email_max_per_hour' => 6,
+
     // Minutes the second step of a sign-in may take.
     'challenge_ttl' => 10,
 

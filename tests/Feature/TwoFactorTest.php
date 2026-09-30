@@ -1,7 +1,9 @@
 <?php
 
+use App\Audit\AuditLog;
 use App\Mail\LoginCode;
 use App\Models\User;
+use App\Security\TwoFactor\EmailCode;
 use App\Security\TwoFactor\RecoveryCodes;
 use App\Security\TwoFactor\Totp;
 use Database\Seeders\RoleSeeder;
@@ -260,4 +262,31 @@ it('validates the new password before calling Codex', function () {
     $this->put(route('profile.password'), ['current_password' => 'abc12345', 'password' => 'abc12345', 'password_confirmation' => 'abc12345'])->assertSessionHasErrors('password');
     $this->put(route('profile.password'), ['current_password' => 'abc', 'password' => 'long-enough-1', 'password_confirmation' => 'different-1'])->assertSessionHasErrors('password');
     Http::assertNothingSent();
+});
+
+it('caps emailed codes per hour even when the cooldown has passed, and audits every send', function () {
+    config(['security.email_resend_seconds' => 0, 'security.email_max_per_hour' => 2]);
+    $user = mfaUser('email');
+    RateLimiter::clear("two-factor:email-cap:{$user->id}");
+    $codes = app(EmailCode::class);
+
+    expect($codes->issue($user))->toBeTrue()
+        ->and($codes->issue($user))->toBeTrue()
+        ->and($codes->issue($user))->toBeFalse()
+        ->and($codes->secondsUntilResend($user))->toBeGreaterThan(0);
+
+    Mail::assertSent(LoginCode::class, 2);
+    expect(AuditLog::query()->where('event', 'auth.mfa_code_sent')->count())->toBe(2)
+        ->and(AuditLog::query()->where('event', 'auth.mfa_code_throttled')->count())->toBe(1)
+        ->and(AuditLog::query()->where('event', 'auth.mfa_code_sent')->value('context'))->not->toMatch('/\d{6}/');
+});
+
+it('drops the code and audits the failure when the mail server cannot be reached', function () {
+    Mail::shouldReceive('to')->andThrow(new RuntimeException('SMTP down'));
+    $user = mfaUser('email');
+    $codes = app(EmailCode::class);
+
+    expect(fn () => $codes->issue($user))->toThrow(RuntimeException::class)
+        ->and($codes->secondsUntilResend($user))->toBe(0)
+        ->and(AuditLog::query()->where('event', 'auth.mfa_code_send_failed')->exists())->toBeTrue();
 });
