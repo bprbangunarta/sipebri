@@ -7,16 +7,10 @@ import { Combobox } from '@/components/ui/combobox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DialogFooter, Modal } from '@/components/ui/dialog';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
-import {
-    Badge,
-    Card,
-    EmptyState,
-    ErrorState,
-    PageHeader,
-    Skeleton,
-} from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
-import { Pagination } from '@/components/ui/pagination';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
@@ -85,6 +79,27 @@ const show = (value: unknown): string =>
           ? value
           : JSON.stringify(value);
 
+const changedFields = (log: LogRow): string[] =>
+    Array.from(
+        new Set([...Object.keys(log.old ?? {}), ...Object.keys(log.new ?? {})]),
+    );
+
+const diffColumns = (log: LogRow): Column<string>[] => [
+    { key: 'field', header: 'Field', className: 'font-medium', cell: (f) => f },
+    {
+        key: 'before',
+        header: 'Before',
+        className: 'break-all text-muted',
+        cell: (f) => show(log.old?.[f]),
+    },
+    {
+        key: 'after',
+        header: 'After',
+        className: 'break-all',
+        cell: (f) => show(log.new?.[f]),
+    },
+];
+
 export default function AuditLogsIndex({
     logs,
     filters,
@@ -129,6 +144,71 @@ export default function AuditLogsIndex({
             },
         );
 
+    const columns: Column<LogRow>[] = [
+        {
+            key: 'time',
+            header: 'Time',
+            className: 'whitespace-nowrap',
+            cell: (log) =>
+                format(
+                    new Date(log.at.replace(' ', 'T')),
+                    'dd MMM yyyy HH:mm:ss',
+                ),
+        },
+        {
+            key: 'user',
+            header: 'User',
+            cell: (log) => (
+                <>
+                    <p className="font-medium">{log.user ?? 'System'}</p>
+                    <p className="text-xs text-muted">{log.ip ?? ''}</p>
+                </>
+            ),
+        },
+        {
+            key: 'event',
+            header: 'Event',
+            cell: (log) => (
+                <>
+                    <p>{log.event}</p>
+                    <p className="text-xs text-muted">{log.module}</p>
+                </>
+            ),
+        },
+        {
+            key: 'record',
+            header: 'Record',
+            hideBelow: 'md',
+            cell: (log) => log.subject ?? '–',
+        },
+        {
+            key: 'outcome',
+            header: 'Outcome',
+            cell: (log) => (
+                <Badge tone={TONES[log.outcome]}>{log.outcome}</Badge>
+            ),
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (log) => (
+                <Tip label="Details">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Details of entry ${log.id}`}
+                        onClick={() => setSelected(log)}
+                    >
+                        <Eye />
+                    </Button>
+                </Tip>
+            ),
+        },
+    ];
+
     return (
         <>
             <Head title="Audit Log" />
@@ -167,209 +247,94 @@ export default function AuditLogsIndex({
                 </div>
             )}
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder="Search user, event, record, IP…"
-                            label="Search audit log"
-                        />
-                    }
-                >
-                    <div className="w-full sm:w-36">
-                        <DatePicker
-                            value={filters.from ?? ''}
-                            min={MIN_DATE}
-                            placeholder="From"
-                            onChange={(v) => visit({ from: iso(v) })}
-                        />
-                    </div>
-                    <div className="w-full sm:w-36">
-                        <DatePicker
-                            value={filters.to ?? ''}
-                            min={MIN_DATE}
-                            placeholder="To"
-                            onChange={(v) => visit({ to: iso(v) })}
-                        />
-                    </div>
-                    <Combobox
-                        className="w-full sm:w-40"
-                        clearable
-                        placeholder="Module"
-                        options={modules.map((m) => ({ value: m, label: m }))}
-                        value={filters.module}
-                        onChange={(v) => visit({ module: v })}
-                    />
-                    <Combobox
-                        className="w-full sm:w-32"
-                        clearable
-                        searchable={false}
-                        placeholder="Outcome"
-                        options={OUTCOMES}
-                        value={filters.outcome}
-                        onChange={(v) =>
-                            visit({ outcome: v as Filters['outcome'] })
+            <DataTable
+                rows={logs.data}
+                rowKey={(r) => r.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder="Search user, event, record, IP…"
+                                label="Search audit log"
+                            />
                         }
-                    />
-                    {hasFilters && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() =>
-                                clear({
-                                    module: null,
-                                    outcome: null,
-                                    from: null,
-                                    to: null,
-                                })
+                    >
+                        <div className="w-full sm:w-36">
+                            <DatePicker
+                                value={filters.from ?? ''}
+                                min={MIN_DATE}
+                                placeholder="From"
+                                onChange={(v) => visit({ from: iso(v) })}
+                            />
+                        </div>
+                        <div className="w-full sm:w-36">
+                            <DatePicker
+                                value={filters.to ?? ''}
+                                min={MIN_DATE}
+                                placeholder="To"
+                                onChange={(v) => visit({ to: iso(v) })}
+                            />
+                        </div>
+                        <Combobox
+                            className="w-full sm:w-40"
+                            clearable
+                            placeholder="Module"
+                            options={modules.map((m) => ({
+                                value: m,
+                                label: m,
+                            }))}
+                            value={filters.module}
+                            onChange={(v) => visit({ module: v })}
+                        />
+                        <Combobox
+                            className="w-full sm:w-32"
+                            clearable
+                            searchable={false}
+                            placeholder="Outcome"
+                            options={OUTCOMES}
+                            value={filters.outcome}
+                            onChange={(v) =>
+                                visit({ outcome: v as Filters['outcome'] })
                             }
-                        >
-                            <X /> Reset
-                        </Button>
-                    )}
-                </FilterBar>
-
-                {error ? (
-                    <ErrorState message={error} onRetry={() => visit({})} />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Time
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        User
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Event
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium md:table-cell"
-                                    >
-                                        Record
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Outcome
-                                    </th>
-                                    <th scope="col" className="w-10 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                className={
-                                    loading && logs.data.length > 0
-                                        ? 'divide-y divide-line opacity-50'
-                                        : 'divide-y divide-line'
+                        />
+                        {hasFilters && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                    clear({
+                                        module: null,
+                                        outcome: null,
+                                        from: null,
+                                        to: null,
+                                    })
                                 }
                             >
-                                {loading && logs.data.length === 0
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <tr key={i}>
-                                              <td
-                                                  colSpan={6}
-                                                  className="px-3 py-2.5"
-                                              >
-                                                  <Skeleton className="h-4 w-full" />
-                                              </td>
-                                          </tr>
-                                      ))
-                                    : logs.data.map((log) => (
-                                          <tr
-                                              key={log.id}
-                                              className="hover:bg-canvas/60"
-                                          >
-                                              <td className="px-3 py-1.5 whitespace-nowrap">
-                                                  {format(
-                                                      new Date(
-                                                          log.at.replace(
-                                                              ' ',
-                                                              'T',
-                                                          ),
-                                                      ),
-                                                      'dd MMM yyyy HH:mm:ss',
-                                                  )}
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  <p className="font-medium">
-                                                      {log.user ?? 'System'}
-                                                  </p>
-                                                  <p className="text-xs text-muted">
-                                                      {log.ip ?? ''}
-                                                  </p>
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  <p>{log.event}</p>
-                                                  <p className="text-xs text-muted">
-                                                      {log.module}
-                                                  </p>
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 md:table-cell">
-                                                  {log.subject ?? '–'}
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  <Badge
-                                                      tone={TONES[log.outcome]}
-                                                  >
-                                                      {log.outcome}
-                                                  </Badge>
-                                              </td>
-                                              <td className="px-3 py-1.5 text-right">
-                                                  <Tip label="Details">
-                                                      <Button
-                                                          variant="ghost"
-                                                          size="icon"
-                                                          aria-label={`Details of entry ${log.id}`}
-                                                          onClick={() =>
-                                                              setSelected(log)
-                                                          }
-                                                      >
-                                                          <Eye />
-                                                      </Button>
-                                                  </Tip>
-                                              </td>
-                                          </tr>
-                                      ))}
-                            </tbody>
-                        </table>
-                        {!loading && logs.data.length === 0 && (
-                            <EmptyState
-                                icon={<ScrollText />}
-                                title={
-                                    hasFilters
-                                        ? 'No entries match your filters'
-                                        : 'No entries yet'
-                                }
-                            />
+                                <X /> Reset
+                            </Button>
                         )}
-                    </div>
-                )}
-
-                <Pagination
-                    meta={logs}
-                    perPage={filters.per_page}
-                    perPageOptions={[10, 25, 50]}
-                    onPage={(page) => visit({ page })}
-                    onPerPage={(per_page) => visit({ per_page })}
-                />
-            </Card>
+                    </FilterBar>
+                }
+                columns={columns}
+                empty={{
+                    icon: <ScrollText />,
+                    title: hasFilters
+                        ? 'No entries match your filters'
+                        : 'No entries yet',
+                }}
+                pagination={{
+                    meta: logs,
+                    perPage: filters.per_page,
+                    options: [10, 25, 50],
+                    onPage: (page) => visit({ page }),
+                    onPerPage: (per_page) => visit({ per_page }),
+                }}
+            />
 
             <Modal
                 wide
@@ -426,49 +391,19 @@ export default function AuditLogsIndex({
                             </dl>
 
                             {(selected.old || selected.new) && (
-                                <table className="mt-3 w-full text-xs">
-                                    <thead className="border-b border-line text-muted">
-                                        <tr>
-                                            <th className="py-1 text-left font-medium">
-                                                Field
-                                            </th>
-                                            <th className="py-1 text-left font-medium">
-                                                Before
-                                            </th>
-                                            <th className="py-1 text-left font-medium">
-                                                After
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-line">
-                                        {Array.from(
-                                            new Set([
-                                                ...Object.keys(
-                                                    selected.old ?? {},
-                                                ),
-                                                ...Object.keys(
-                                                    selected.new ?? {},
-                                                ),
-                                            ]),
-                                        ).map((field) => (
-                                            <tr key={field}>
-                                                <td className="py-1 pr-2 font-medium">
-                                                    {field}
-                                                </td>
-                                                <td className="py-1 pr-2 break-all text-muted">
-                                                    {show(
-                                                        selected.old?.[field],
-                                                    )}
-                                                </td>
-                                                <td className="py-1 break-all">
-                                                    {show(
-                                                        selected.new?.[field],
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <div className="mt-3 rounded-md border border-line">
+                                    <DataTable
+                                        bare
+                                        dense
+                                        rows={changedFields(selected)}
+                                        rowKey={(field) => field}
+                                        columns={diffColumns(selected)}
+                                        empty={{
+                                            icon: <ScrollText />,
+                                            title: 'No field changes',
+                                        }}
+                                    />
+                                </div>
                             )}
 
                             {selected.context && (

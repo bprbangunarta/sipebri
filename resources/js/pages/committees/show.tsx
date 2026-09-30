@@ -13,7 +13,10 @@ import { Combobox } from '@/components/ui/combobox';
 import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Badge, Card, EmptyState, PageHeader } from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
+import { Tip } from '@/components/ui/tooltip';
 import { rupiah } from '@/lib/format';
 import type { PathRow } from '@/pages/committees/index';
 
@@ -100,6 +103,128 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
         }
     };
 
+    const columns: Column<Tier>[] = [
+        {
+            key: 'order',
+            header: '#',
+            narrow: true,
+            className: 'text-muted tabular-nums',
+            cell: (_t, i) => i + 1,
+        },
+        {
+            key: 'tier',
+            header: 'Tier',
+            className: 'font-medium',
+            cell: (t) => t.label ?? '–',
+        },
+        { key: 'role', header: 'Deciding role', cell: (t) => t.role },
+        ...(byAmount
+            ? [
+                  {
+                      key: 'range',
+                      header: 'Amount range',
+                      align: 'right',
+                      className: 'whitespace-nowrap tabular-nums',
+                      cell: (t: Tier) =>
+                          `${rupiah(t.min_amount ?? 0)} – ${t.max_amount === null ? 'no limit' : rupiah(t.max_amount)}`,
+                  } satisfies Column<Tier>,
+              ]
+            : []),
+        {
+            key: 'decisions',
+            header: 'Decisions',
+            cell: (t) => (
+                <span className="flex flex-wrap gap-1">
+                    {DECISIONS.filter(([key]) => t[key]).map(([key, label]) => (
+                        <Badge
+                            key={key}
+                            tone={
+                                key === 'can_approve'
+                                    ? 'success'
+                                    : key === 'can_reject'
+                                      ? 'danger'
+                                      : key === 'can_escalate'
+                                        ? 'info'
+                                        : 'neutral'
+                            }
+                        >
+                            {label}
+                        </Badge>
+                    ))}
+                </span>
+            ),
+        },
+        ...(canManage
+            ? [
+                  {
+                      key: 'actions',
+                      header: 'Actions',
+                      srOnly: true,
+                      align: 'right',
+                      className: 'whitespace-nowrap',
+                      cell: (t: Tier, i: number) => (
+                          <>
+                              <Tip label="Move up">
+                                  <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      aria-label="Move up"
+                                      disabled={i === 0}
+                                      onClick={() =>
+                                          router.put(
+                                              `${base}/${t.id}/move/up`,
+                                              {},
+                                              { preserveScroll: true },
+                                          )
+                                      }
+                                  >
+                                      <ArrowUp />
+                                  </Button>
+                              </Tip>
+                              <Tip label="Move down">
+                                  <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      aria-label="Move down"
+                                      disabled={i === path.tiers.length - 1}
+                                      onClick={() =>
+                                          router.put(
+                                              `${base}/${t.id}/move/down`,
+                                              {},
+                                              { preserveScroll: true },
+                                          )
+                                      }
+                                  >
+                                      <ArrowDown />
+                                  </Button>
+                              </Tip>
+                              <Tip label="Edit">
+                                  <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      aria-label={`Edit ${t.role}`}
+                                      onClick={() => openForm(t)}
+                                  >
+                                      <Pencil />
+                                  </Button>
+                              </Tip>
+                              <Tip label="Delete">
+                                  <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      aria-label={`Delete ${t.role}`}
+                                      onClick={() => setToDelete(t)}
+                                  >
+                                      <Trash2 />
+                                  </Button>
+                              </Tip>
+                          </>
+                      ),
+                  } satisfies Column<Tier>,
+              ]
+            : []),
+    ];
+
     return (
         <>
             <Head title={path.title} />
@@ -126,176 +251,17 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 }
             />
 
-            <Card>
-                {path.tiers.length === 0 ? (
-                    <EmptyState
-                        icon={<Plus />}
-                        title="No tiers yet"
-                        description="Add the deciding levels in the order they escalate."
-                    />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="w-10 px-3 py-2 text-left font-medium"
-                                    >
-                                        #
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Tier
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Deciding role
-                                    </th>
-                                    {byAmount && (
-                                        <th
-                                            scope="col"
-                                            className="px-3 py-2 text-right font-medium"
-                                        >
-                                            Amount range
-                                        </th>
-                                    )}
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Decisions
-                                    </th>
-                                    {canManage && (
-                                        <th
-                                            scope="col"
-                                            className="w-32 px-3 py-2"
-                                        >
-                                            <span className="sr-only">
-                                                Actions
-                                            </span>
-                                        </th>
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-line">
-                                {path.tiers.map((t, i) => (
-                                    <tr
-                                        key={t.id}
-                                        className="hover:bg-canvas/60"
-                                    >
-                                        <td className="px-3 py-1.5 text-muted tabular-nums">
-                                            {i + 1}
-                                        </td>
-                                        <td className="px-3 py-1.5 font-medium">
-                                            {t.label ?? '–'}
-                                        </td>
-                                        <td className="px-3 py-1.5">
-                                            {t.role}
-                                        </td>
-                                        {byAmount && (
-                                            <td className="px-3 py-1.5 text-right whitespace-nowrap tabular-nums">
-                                                {rupiah(t.min_amount ?? 0)} –{' '}
-                                                {t.max_amount === null
-                                                    ? 'no limit'
-                                                    : rupiah(t.max_amount)}
-                                            </td>
-                                        )}
-                                        <td className="px-3 py-1.5">
-                                            <span className="flex flex-wrap gap-1">
-                                                {DECISIONS.filter(
-                                                    ([key]) => t[key],
-                                                ).map(([key, label]) => (
-                                                    <Badge
-                                                        key={key}
-                                                        tone={
-                                                            key ===
-                                                            'can_approve'
-                                                                ? 'success'
-                                                                : key ===
-                                                                    'can_reject'
-                                                                  ? 'danger'
-                                                                  : key ===
-                                                                      'can_escalate'
-                                                                    ? 'info'
-                                                                    : 'neutral'
-                                                        }
-                                                    >
-                                                        {label}
-                                                    </Badge>
-                                                ))}
-                                            </span>
-                                        </td>
-                                        {canManage && (
-                                            <td className="px-3 py-1.5 text-right whitespace-nowrap">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    aria-label="Move up"
-                                                    disabled={i === 0}
-                                                    onClick={() =>
-                                                        router.put(
-                                                            `${base}/${t.id}/move/up`,
-                                                            {},
-                                                            {
-                                                                preserveScroll: true,
-                                                            },
-                                                        )
-                                                    }
-                                                >
-                                                    <ArrowUp />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    aria-label="Move down"
-                                                    disabled={
-                                                        i ===
-                                                        path.tiers.length - 1
-                                                    }
-                                                    onClick={() =>
-                                                        router.put(
-                                                            `${base}/${t.id}/move/down`,
-                                                            {},
-                                                            {
-                                                                preserveScroll: true,
-                                                            },
-                                                        )
-                                                    }
-                                                >
-                                                    <ArrowDown />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    aria-label={`Edit ${t.role}`}
-                                                    onClick={() => openForm(t)}
-                                                >
-                                                    <Pencil />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    aria-label={`Delete ${t.role}`}
-                                                    onClick={() =>
-                                                        setToDelete(t)
-                                                    }
-                                                >
-                                                    <Trash2 />
-                                                </Button>
-                                            </td>
-                                        )}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </Card>
+            <DataTable
+                rows={path.tiers}
+                rowKey={(t) => t.id}
+                columns={columns}
+                empty={{
+                    icon: <Plus />,
+                    title: 'No tiers yet',
+                    description:
+                        'Add the deciding levels in the order they escalate.',
+                }}
+            />
 
             <Modal
                 open={editing !== null}

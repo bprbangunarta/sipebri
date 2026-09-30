@@ -14,15 +14,9 @@ import {
 } from '@/components/ui/dropdown';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-    Badge,
-    Card,
-    EmptyState,
-    ErrorState,
-    PageHeader,
-    Skeleton,
-} from '@/components/ui/misc';
-import { Pagination } from '@/components/ui/pagination';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
@@ -120,7 +114,6 @@ export default function MasterDataIndex({
         resource.item_url.replace('__id__', String(item.id));
     const label = resource.label.toLowerCase();
     const primary = resource.fields[0].name;
-    const columns = resource.fields;
 
     const openForm = (item: Item | 'new') => {
         form.clearErrors();
@@ -165,7 +158,86 @@ export default function MasterDataIndex({
     };
 
     const hasSearch = filters.search !== '';
-    const colSpan = columns.length + (resource.tracks_usage ? 1 : 0) + 1;
+
+    const columns: Column<Item>[] = [
+        ...resource.fields.map((f): Column<Item> => ({
+            key: f.name,
+            header: f.label,
+            hideBelow: f.hide_below ? 'md' : undefined,
+            align: f.type === 'number' ? 'right' : undefined,
+            className: f.name === primary ? 'font-medium' : undefined,
+            cell: (item) => cell(f, item),
+        })),
+        ...(resource.tracks_usage
+            ? [
+                  {
+                      key: 'usage',
+                      header: 'In use',
+                      align: 'right',
+                      className: 'tabular-nums',
+                      cell: (item: Item) => item.usage_count,
+                  } satisfies Column<Item>,
+              ]
+            : []),
+        {
+            key: 'actions',
+            header: 'Actions',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (item) =>
+                (canManage || resource.actions.length > 0) && (
+                    <DropdownMenu>
+                        <Tip label="Actions">
+                            <DropdownTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    aria-label={`Actions for ${item[primary]}`}
+                                >
+                                    <MoreHorizontal />
+                                </Button>
+                            </DropdownTrigger>
+                        </Tip>
+                        <DropdownContent>
+                            {resource.actions.map((a) => (
+                                <DropdownItem
+                                    key={a.label}
+                                    onSelect={() =>
+                                        router.visit(
+                                            a.url.replace(
+                                                '{id}',
+                                                String(item.id),
+                                            ),
+                                        )
+                                    }
+                                >
+                                    {a.label}
+                                </DropdownItem>
+                            ))}
+                            {canManage && (
+                                <>
+                                    <DropdownItem
+                                        icon={<Pencil />}
+                                        onSelect={() => openForm(item)}
+                                    >
+                                        Edit
+                                    </DropdownItem>
+                                    <DropdownSeparator />
+                                    <DropdownItem
+                                        danger
+                                        icon={<Trash2 />}
+                                        onSelect={() => setToDelete(item)}
+                                    >
+                                        Delete
+                                    </DropdownItem>
+                                </>
+                            )}
+                        </DropdownContent>
+                    </DropdownMenu>
+                ),
+        },
+    ];
 
     return (
         <>
@@ -182,222 +254,55 @@ export default function MasterDataIndex({
                 }
             />
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder={`Search ${label}…`}
-                            label="Search"
-                        />
-                    }
-                />
-
-                {error ? (
-                    <ErrorState message={error} onRetry={() => visit({})} />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    {columns.map((f) => (
-                                        <th
-                                            key={f.name}
-                                            scope="col"
-                                            className={cn(
-                                                'px-3 py-2 text-left font-medium',
-                                                f.hide_below &&
-                                                    'hidden md:table-cell',
-                                                f.type === 'number' &&
-                                                    'text-right',
-                                            )}
-                                        >
-                                            {f.label}
-                                        </th>
-                                    ))}
-                                    {resource.tracks_usage && (
-                                        <th
-                                            scope="col"
-                                            className="px-3 py-2 text-right font-medium"
-                                        >
-                                            In use
-                                        </th>
-                                    )}
-                                    <th scope="col" className="w-10 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                className={cn(
-                                    'divide-y divide-line',
-                                    loading &&
-                                        items.data.length > 0 &&
-                                        'opacity-50',
-                                )}
-                            >
-                                {loading && items.data.length === 0
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <tr key={i}>
-                                              <td
-                                                  colSpan={colSpan}
-                                                  className="px-3 py-2.5"
-                                              >
-                                                  <Skeleton className="h-4 w-full" />
-                                              </td>
-                                          </tr>
-                                      ))
-                                    : items.data.map((item) => (
-                                          <tr
-                                              key={item.id}
-                                              className="hover:bg-canvas/60"
-                                          >
-                                              {columns.map((f) => (
-                                                  <td
-                                                      key={f.name}
-                                                      className={cn(
-                                                          'px-3 py-1.5',
-                                                          f.name === primary &&
-                                                              'font-medium',
-                                                          f.hide_below &&
-                                                              'hidden md:table-cell',
-                                                          f.type === 'number' &&
-                                                              'text-right',
-                                                      )}
-                                                  >
-                                                      {cell(f, item)}
-                                                  </td>
-                                              ))}
-                                              {resource.tracks_usage && (
-                                                  <td className="px-3 py-1.5 text-right tabular-nums">
-                                                      {item.usage_count}
-                                                  </td>
-                                              )}
-                                              <td className="px-3 py-1.5 text-right">
-                                                  {(canManage ||
-                                                      resource.actions.length >
-                                                          0) && (
-                                                      <DropdownMenu>
-                                                          <Tip label="Actions">
-                                                              <DropdownTrigger
-                                                                  asChild
-                                                              >
-                                                                  <Button
-                                                                      variant="ghost"
-                                                                      size="icon"
-                                                                      aria-label={`Actions for ${item[primary]}`}
-                                                                  >
-                                                                      <MoreHorizontal />
-                                                                  </Button>
-                                                              </DropdownTrigger>
-                                                          </Tip>
-                                                          <DropdownContent>
-                                                              {resource.actions.map(
-                                                                  (a) => (
-                                                                      <DropdownItem
-                                                                          key={
-                                                                              a.label
-                                                                          }
-                                                                          onSelect={() =>
-                                                                              router.visit(
-                                                                                  a.url.replace(
-                                                                                      '{id}',
-                                                                                      String(
-                                                                                          item.id,
-                                                                                      ),
-                                                                                  ),
-                                                                              )
-                                                                          }
-                                                                      >
-                                                                          {
-                                                                              a.label
-                                                                          }
-                                                                      </DropdownItem>
-                                                                  ),
-                                                              )}
-                                                              {canManage && (
-                                                                  <>
-                                                                      <DropdownItem
-                                                                          icon={
-                                                                              <Pencil />
-                                                                          }
-                                                                          onSelect={() =>
-                                                                              openForm(
-                                                                                  item,
-                                                                              )
-                                                                          }
-                                                                      >
-                                                                          Edit
-                                                                      </DropdownItem>
-                                                                      <DropdownSeparator />
-                                                                      <DropdownItem
-                                                                          danger
-                                                                          icon={
-                                                                              <Trash2 />
-                                                                          }
-                                                                          onSelect={() =>
-                                                                              setToDelete(
-                                                                                  item,
-                                                                              )
-                                                                          }
-                                                                      >
-                                                                          Delete
-                                                                      </DropdownItem>
-                                                                  </>
-                                                              )}
-                                                          </DropdownContent>
-                                                      </DropdownMenu>
-                                                  )}
-                                              </td>
-                                          </tr>
-                                      ))}
-                            </tbody>
-                        </table>
-                        {!loading && items.data.length === 0 && (
-                            <EmptyState
-                                icon={<Database />}
-                                title={
-                                    hasSearch
-                                        ? 'No results found'
-                                        : `No ${label} records yet`
-                                }
-                                description={
-                                    hasSearch
-                                        ? 'Try a different search term.'
-                                        : undefined
-                                }
-                                action={
-                                    hasSearch ? (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => clear()}
-                                        >
-                                            Clear search
-                                        </Button>
-                                    ) : canManage ? (
-                                        <Button
-                                            size="sm"
-                                            onClick={() => openForm('new')}
-                                        >
-                                            <Plus /> Add {label}
-                                        </Button>
-                                    ) : undefined
-                                }
+            <DataTable
+                rows={items.data}
+                rowKey={(r) => r.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder={`Search ${label}…`}
+                                label="Search"
                             />
-                        )}
-                    </div>
-                )}
-
-                <Pagination
-                    meta={items}
-                    perPage={filters.per_page}
-                    perPageOptions={perPageOptions}
-                    onPage={(page) => visit({ page })}
-                    onPerPage={(per_page) => visit({ per_page })}
-                />
-            </Card>
+                        }
+                    />
+                }
+                columns={columns}
+                empty={{
+                    icon: <Database />,
+                    title: hasSearch
+                        ? 'No results found'
+                        : `No ${label} records yet`,
+                    description: hasSearch
+                        ? 'Try a different search term.'
+                        : undefined,
+                    action: hasSearch ? (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => clear()}
+                        >
+                            Clear search
+                        </Button>
+                    ) : canManage ? (
+                        <Button size="sm" onClick={() => openForm('new')}>
+                            <Plus /> Add {label}
+                        </Button>
+                    ) : undefined,
+                }}
+                pagination={{
+                    meta: items,
+                    perPage: filters.per_page,
+                    options: perPageOptions,
+                    onPage: (page) => visit({ page }),
+                    onPerPage: (per_page) => visit({ per_page }),
+                }}
+            />
 
             <Modal
                 open={editing !== null}

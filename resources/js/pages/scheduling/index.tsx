@@ -24,22 +24,15 @@ import {
 } from '@/components/ui/dropdown';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-    Badge,
-    Card,
-    EmptyState,
-    ErrorState,
-    PageHeader,
-    Skeleton,
-} from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
-import { Pagination } from '@/components/ui/pagination';
 import type { PageMeta } from '@/components/ui/pagination';
-import { SortHead, nextSort } from '@/components/ui/sort-head';
+import { nextSort } from '@/components/ui/sort-head';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
 import { formatDate, rupiah } from '@/lib/format';
-import { cn } from '@/lib/utils';
 
 type Option = { value: string | number; label: string };
 type Row = {
@@ -307,6 +300,159 @@ export default function SchedulingIndex({
     const hasFilters = Boolean(filters.search || filters.status);
     const sortBy = (column: string) => visit(nextSort(filters, column));
 
+    const columns: Column<Row>[] = [
+        {
+            key: 'file',
+            header: 'File',
+            sort: 'application_code',
+            cell: (l) => (
+                <>
+                    <p className="font-medium">{l.application_code}</p>
+                    <p className="text-xs text-muted">{l.product_label}</p>
+                </>
+            ),
+        },
+        {
+            key: 'applicant',
+            header: 'Applicant',
+            sort: 'full_name',
+            cell: (l) => (
+                <>
+                    {l.full_name}
+                    <p className="text-xs text-muted">
+                        {l.office_label ?? '–'} · {l.supervisor_name ?? '–'}
+                    </p>
+                </>
+            ),
+        },
+        {
+            key: 'amount',
+            header: 'Amount',
+            align: 'right',
+            hideBelow: 'md',
+            className: 'whitespace-nowrap tabular-nums',
+            cell: (l) => (
+                <>
+                    {rupiah(l.requested_amount)}
+                    <p className="text-xs text-muted">
+                        {l.requested_tenor} months
+                    </p>
+                </>
+            ),
+        },
+        {
+            key: 'survey',
+            header: 'Survey',
+            sort: 'survey_date',
+            cell: (l) => (
+                <>
+                    {l.survey_date ? (
+                        formatDate(l.survey_date)
+                    ) : (
+                        <span className="text-muted">Not scheduled</span>
+                    )}
+                    <p className="text-xs text-muted">
+                        {l.surveyor_name ?? '–'}
+                        {l.schedule_count > 0 && ` · ${l.schedule_count}×`}
+                    </p>
+                </>
+            ),
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            sort: 'status',
+            cell: (l) => (
+                <span className="flex flex-wrap items-center gap-1">
+                    <Badge tone={l.status_tone}>
+                        {l.resurvey ? 'Surveyed' : l.status_label}
+                    </Badge>
+                    {l.over_limit && (
+                        <Tip label={`Scheduled ${l.schedule_count} times`}>
+                            <span>
+                                <AlertTriangle className="size-3.5 text-amber-600" />
+                            </span>
+                        </Tip>
+                    )}
+                </span>
+            ),
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (l) => (
+                <DropdownMenu>
+                    <Tip label="Actions">
+                        <DropdownTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={`Actions for ${l.application_code}`}
+                            >
+                                <MoreHorizontal />
+                            </Button>
+                        </DropdownTrigger>
+                    </Tip>
+                    <DropdownContent>
+                        {canManage && l.status !== 'scheduling' && (
+                            <DropdownItem
+                                icon={<CalendarPlus />}
+                                onSelect={() => setScheduling(l)}
+                            >
+                                {l.resurvey
+                                    ? 'Schedule re-survey'
+                                    : l.schedule_count
+                                      ? 'Reschedule'
+                                      : 'Schedule survey'}
+                            </DropdownItem>
+                        )}
+                        {canManage && l.status === 'scheduling' && (
+                            <DropdownItem
+                                icon={<CalendarPlus />}
+                                onSelect={() => setScheduling(l)}
+                            >
+                                Reschedule
+                            </DropdownItem>
+                        )}
+                        {l.can_cancel && (
+                            <DropdownItem
+                                icon={<XCircle />}
+                                onSelect={() =>
+                                    setCancelUrl(`/scheduling/${l.id}/cancel`)
+                                }
+                            >
+                                Cancel schedule
+                            </DropdownItem>
+                        )}
+                        <DropdownItem
+                            icon={<History />}
+                            onSelect={() => setHistory(l)}
+                        >
+                            History
+                        </DropdownItem>
+                        {canManage && (
+                            <>
+                                <DropdownSeparator />
+                                <DropdownItem
+                                    danger
+                                    icon={<Ban />}
+                                    onSelect={() =>
+                                        setVoidUrl(`/scheduling/${l.id}/void`)
+                                    }
+                                >
+                                    Void application
+                                </DropdownItem>
+                            </>
+                        )}
+                    </DropdownContent>
+                </DropdownMenu>
+            ),
+        },
+    ];
+
     return (
         <>
             <Head title="Survey scheduling" />
@@ -315,307 +461,82 @@ export default function SchedulingIndex({
                 description="Set the survey date and surveyor for submitted files"
             />
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder="Search code, name, NIK…"
-                            label="Search files"
-                        />
-                    }
-                >
-                    <Combobox
-                        className="w-full sm:w-40"
-                        searchable={false}
-                        options={[
-                            { value: 'mine', label: 'My files' },
-                            { value: 'all', label: 'All section heads' },
-                        ]}
-                        value={filters.scope}
-                        onChange={(v) =>
-                            visit({ scope: (v ?? 'mine') as 'mine' | 'all' })
-                        }
-                    />
-                    <Combobox
-                        className="w-full sm:w-40"
-                        clearable
-                        searchable={false}
-                        placeholder="Status"
-                        options={statuses}
-                        value={filters.status}
-                        onChange={(v) => visit({ status: v })}
-                    />
-                    {hasFilters && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => clear({ status: null })}
-                        >
-                            <X /> Reset
-                        </Button>
-                    )}
-                </FilterBar>
-
-                {error ? (
-                    <ErrorState message={error} onRetry={() => visit({})} />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <SortHead
-                                        column="application_code"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        File
-                                    </SortHead>
-                                    <SortHead
-                                        column="full_name"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Applicant
-                                    </SortHead>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-right font-medium md:table-cell"
-                                    >
-                                        Amount
-                                    </th>
-                                    <SortHead
-                                        column="survey_date"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Survey
-                                    </SortHead>
-                                    <SortHead
-                                        column="status"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Status
-                                    </SortHead>
-                                    <th scope="col" className="w-10 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                className={cn(
-                                    'divide-y divide-line',
-                                    loading &&
-                                        loans.data.length > 0 &&
-                                        'opacity-50',
-                                )}
-                            >
-                                {loading && loans.data.length === 0
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <tr key={i}>
-                                              <td
-                                                  colSpan={6}
-                                                  className="px-3 py-2.5"
-                                              >
-                                                  <Skeleton className="h-4 w-full" />
-                                              </td>
-                                          </tr>
-                                      ))
-                                    : loans.data.map((l) => (
-                                          <tr
-                                              key={l.id}
-                                              className="hover:bg-canvas/60"
-                                          >
-                                              <td className="px-3 py-1.5">
-                                                  <p className="font-medium">
-                                                      {l.application_code}
-                                                  </p>
-                                                  <p className="text-xs text-muted">
-                                                      {l.product_label}
-                                                  </p>
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  {l.full_name}
-                                                  <p className="text-xs text-muted">
-                                                      {l.office_label ?? '–'} ·{' '}
-                                                      {l.supervisor_name ?? '–'}
-                                                  </p>
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 text-right whitespace-nowrap tabular-nums md:table-cell">
-                                                  {rupiah(l.requested_amount)}
-                                                  <p className="text-xs text-muted">
-                                                      {l.requested_tenor} months
-                                                  </p>
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  {l.survey_date ? (
-                                                      formatDate(l.survey_date)
-                                                  ) : (
-                                                      <span className="text-muted">
-                                                          Not scheduled
-                                                      </span>
-                                                  )}
-                                                  <p className="text-xs text-muted">
-                                                      {l.surveyor_name ?? '–'}
-                                                      {l.schedule_count > 0 &&
-                                                          ` · ${l.schedule_count}×`}
-                                                  </p>
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  <span className="flex flex-wrap items-center gap-1">
-                                                      <Badge
-                                                          tone={l.status_tone}
-                                                      >
-                                                          {l.resurvey
-                                                              ? 'Surveyed'
-                                                              : l.status_label}
-                                                      </Badge>
-                                                      {l.over_limit && (
-                                                          <Tip
-                                                              label={`Scheduled ${l.schedule_count} times`}
-                                                          >
-                                                              <span>
-                                                                  <AlertTriangle className="size-3.5 text-amber-600" />
-                                                              </span>
-                                                          </Tip>
-                                                      )}
-                                                  </span>
-                                              </td>
-                                              <td className="px-3 py-1.5 text-right">
-                                                  <DropdownMenu>
-                                                      <Tip label="Actions">
-                                                          <DropdownTrigger
-                                                              asChild
-                                                          >
-                                                              <Button
-                                                                  variant="ghost"
-                                                                  size="icon"
-                                                                  aria-label={`Actions for ${l.application_code}`}
-                                                              >
-                                                                  <MoreHorizontal />
-                                                              </Button>
-                                                          </DropdownTrigger>
-                                                      </Tip>
-                                                      <DropdownContent>
-                                                          {canManage &&
-                                                              l.status !==
-                                                                  'scheduling' && (
-                                                                  <DropdownItem
-                                                                      icon={
-                                                                          <CalendarPlus />
-                                                                      }
-                                                                      onSelect={() =>
-                                                                          setScheduling(
-                                                                              l,
-                                                                          )
-                                                                      }
-                                                                  >
-                                                                      {l.resurvey
-                                                                          ? 'Schedule re-survey'
-                                                                          : l.schedule_count
-                                                                            ? 'Reschedule'
-                                                                            : 'Schedule survey'}
-                                                                  </DropdownItem>
-                                                              )}
-                                                          {canManage &&
-                                                              l.status ===
-                                                                  'scheduling' && (
-                                                                  <DropdownItem
-                                                                      icon={
-                                                                          <CalendarPlus />
-                                                                      }
-                                                                      onSelect={() =>
-                                                                          setScheduling(
-                                                                              l,
-                                                                          )
-                                                                      }
-                                                                  >
-                                                                      Reschedule
-                                                                  </DropdownItem>
-                                                              )}
-                                                          {l.can_cancel && (
-                                                              <DropdownItem
-                                                                  icon={
-                                                                      <XCircle />
-                                                                  }
-                                                                  onSelect={() =>
-                                                                      setCancelUrl(
-                                                                          `/scheduling/${l.id}/cancel`,
-                                                                      )
-                                                                  }
-                                                              >
-                                                                  Cancel
-                                                                  schedule
-                                                              </DropdownItem>
-                                                          )}
-                                                          <DropdownItem
-                                                              icon={<History />}
-                                                              onSelect={() =>
-                                                                  setHistory(l)
-                                                              }
-                                                          >
-                                                              History
-                                                          </DropdownItem>
-                                                          {canManage && (
-                                                              <>
-                                                                  <DropdownSeparator />
-                                                                  <DropdownItem
-                                                                      danger
-                                                                      icon={
-                                                                          <Ban />
-                                                                      }
-                                                                      onSelect={() =>
-                                                                          setVoidUrl(
-                                                                              `/scheduling/${l.id}/void`,
-                                                                          )
-                                                                      }
-                                                                  >
-                                                                      Void
-                                                                      application
-                                                                  </DropdownItem>
-                                                              </>
-                                                          )}
-                                                      </DropdownContent>
-                                                  </DropdownMenu>
-                                              </td>
-                                          </tr>
-                                      ))}
-                            </tbody>
-                        </table>
-                        {!loading && loans.data.length === 0 && (
-                            <EmptyState
-                                icon={<CalendarDays />}
-                                title={
-                                    hasFilters
-                                        ? 'No files match your filters'
-                                        : filters.scope === 'mine'
-                                          ? 'No files waiting for you'
-                                          : 'No files to schedule'
-                                }
-                                description={
-                                    hasFilters
-                                        ? 'Try a different search or clear the filters.'
-                                        : 'Submitted files assigned to you appear here.'
-                                }
+            <DataTable
+                rows={loans.data}
+                rowKey={(r) => r.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder="Search code, name, NIK…"
+                                label="Search files"
                             />
+                        }
+                    >
+                        <Combobox
+                            className="w-full sm:w-40"
+                            searchable={false}
+                            options={[
+                                { value: 'mine', label: 'My files' },
+                                { value: 'all', label: 'All section heads' },
+                            ]}
+                            value={filters.scope}
+                            onChange={(v) =>
+                                visit({
+                                    scope: (v ?? 'mine') as 'mine' | 'all',
+                                })
+                            }
+                        />
+                        <Combobox
+                            className="w-full sm:w-40"
+                            clearable
+                            searchable={false}
+                            placeholder="Status"
+                            options={statuses}
+                            value={filters.status}
+                            onChange={(v) => visit({ status: v })}
+                        />
+                        {hasFilters && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => clear({ status: null })}
+                            >
+                                <X /> Reset
+                            </Button>
                         )}
-                    </div>
-                )}
-
-                <Pagination
-                    meta={loans}
-                    perPage={filters.per_page}
-                    perPageOptions={perPageOptions}
-                    onPage={(page) => visit({ page })}
-                    onPerPage={(per_page) => visit({ per_page })}
-                />
-            </Card>
+                    </FilterBar>
+                }
+                columns={columns}
+                sort={{
+                    sort: filters.sort,
+                    direction: filters.direction,
+                    onSort: sortBy,
+                }}
+                empty={{
+                    icon: <CalendarDays />,
+                    title: hasFilters
+                        ? 'No files match your filters'
+                        : filters.scope === 'mine'
+                          ? 'No files waiting for you'
+                          : 'No files to schedule',
+                    description: hasFilters
+                        ? 'Try a different search or clear the filters.'
+                        : 'Submitted files assigned to you appear here.',
+                }}
+                pagination={{
+                    meta: loans,
+                    perPage: filters.per_page,
+                    options: perPageOptions,
+                    onPage: (page) => visit({ page }),
+                    onPerPage: (per_page) => visit({ per_page }),
+                }}
+            />
 
             <ScheduleDialog
                 key={scheduling?.id ?? 'none'}

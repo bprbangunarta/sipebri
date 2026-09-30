@@ -69,3 +69,19 @@ it('records writes that bypass model events', function () {
 
     expect($offenders)->toBe([]);
 });
+
+it('renders every table through the shared DataTable component', function () {
+    $offenders = [];
+
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(resource_path('js'))) as $file) {
+        if ($file->getExtension() !== 'tsx' || str_ends_with($file->getPathname(), 'components/ui/data-table.tsx')) {
+            continue;
+        }
+
+        if (preg_match('/<table[\s>]/', (string) file_get_contents($file->getPathname()))) {
+            $offenders[] = str_replace(base_path().'/', '', $file->getPathname());
+        }
+    }
+
+    expect($offenders)->toBe([]);
+});

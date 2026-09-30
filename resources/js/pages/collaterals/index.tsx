@@ -19,20 +19,14 @@ import {
     DropdownSeparator,
     DropdownTrigger,
 } from '@/components/ui/dropdown';
-import {
-    Card,
-    EmptyState,
-    ErrorState,
-    PageHeader,
-    Skeleton,
-} from '@/components/ui/misc';
-import { Pagination } from '@/components/ui/pagination';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { PageHeader } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
-import { SortHead, nextSort } from '@/components/ui/sort-head';
+import { nextSort } from '@/components/ui/sort-head';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
 import { rupiah } from '@/lib/format';
-import { cn } from '@/lib/utils';
 
 type Row = {
     id: number;
@@ -95,6 +89,91 @@ export default function CollateralsIndex({
         });
     };
 
+    const columns: Column<Row>[] = [
+        {
+            key: 'id',
+            header: 'Collateral ID',
+            sort: 'cbs_id',
+            className: 'font-medium',
+            cell: (c) => c.cbs_id ?? `#${c.id}`,
+        },
+        {
+            key: 'type',
+            header: 'Type',
+            sort: 'collateral_type_code',
+            hideBelow: 'md',
+            cell: (c) => c.type_label,
+        },
+        {
+            key: 'owner',
+            header: 'Owner',
+            sort: 'owner_name',
+            cell: (c) => (
+                <>
+                    {c.owner_name}
+                    <p className="max-w-xs truncate text-xs text-muted">
+                        {c.description}
+                    </p>
+                </>
+            ),
+        },
+        {
+            key: 'document',
+            header: 'Document',
+            hideBelow: 'lg',
+            cell: (c) => c.document_number,
+        },
+        {
+            key: 'appraisal',
+            header: 'Appraisal',
+            sort: 'appraisal_value',
+            align: 'right',
+            className: 'whitespace-nowrap tabular-nums',
+            cell: (c) => rupiah(c.appraisal_value),
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (c) =>
+                canManage && (
+                    <DropdownMenu>
+                        <Tip label="Actions">
+                            <DropdownTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    aria-label={`Actions for ${c.cbs_id ?? c.id}`}
+                                >
+                                    <MoreHorizontal />
+                                </Button>
+                            </DropdownTrigger>
+                        </Tip>
+                        <DropdownContent>
+                            <DropdownItem
+                                icon={<Pencil />}
+                                onSelect={() =>
+                                    router.visit(`/collaterals/${c.id}/edit`)
+                                }
+                            >
+                                Edit
+                            </DropdownItem>
+                            <DropdownSeparator />
+                            <DropdownItem
+                                danger
+                                icon={<Trash2 />}
+                                onSelect={() => setToDelete(c)}
+                            >
+                                Delete
+                            </DropdownItem>
+                        </DropdownContent>
+                    </DropdownMenu>
+                ),
+        },
+    ];
+
     return (
         <>
             <Head title="Collaterals" />
@@ -112,231 +191,81 @@ export default function CollateralsIndex({
                 }
             />
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder="Search ID, owner, document…"
-                            label="Search collaterals"
+            <DataTable
+                rows={collaterals.data}
+                rowKey={(r) => r.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder="Search ID, owner, document…"
+                                label="Search collaterals"
+                            />
+                        }
+                    >
+                        <Combobox
+                            className="w-full sm:w-56"
+                            clearable
+                            placeholder="Collateral type"
+                            options={typeOptions}
+                            value={filters.type}
+                            onChange={(v) => visit({ type: v })}
                         />
-                    }
-                >
-                    <Combobox
-                        className="w-full sm:w-56"
-                        clearable
-                        placeholder="Collateral type"
-                        options={typeOptions}
-                        value={filters.type}
-                        onChange={(v) => visit({ type: v })}
-                    />
-                    {hasFilters && (
+                        {hasFilters && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => clear({ type: null })}
+                            >
+                                <X /> Reset
+                            </Button>
+                        )}
+                    </FilterBar>
+                }
+                columns={columns}
+                sort={{
+                    sort: filters.sort,
+                    direction: filters.direction,
+                    onSort: sortBy,
+                }}
+                empty={{
+                    icon: <Landmark />,
+                    title: hasFilters
+                        ? 'No collaterals match your filters'
+                        : 'No collaterals yet',
+                    description: hasFilters
+                        ? 'Try a different search or clear the filters.'
+                        : 'Collaterals can also be added straight from a loan application.',
+                    action: hasFilters ? (
                         <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
                             onClick={() => clear({ type: null })}
                         >
-                            <X /> Reset
+                            Clear filters
                         </Button>
-                    )}
-                </FilterBar>
-
-                {error ? (
-                    <ErrorState message={error} onRetry={() => visit({})} />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <SortHead
-                                        column="cbs_id"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Collateral ID
-                                    </SortHead>
-                                    <SortHead
-                                        column="collateral_type_code"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                        className="hidden md:table-cell"
-                                    >
-                                        Type
-                                    </SortHead>
-                                    <SortHead
-                                        column="owner_name"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Owner
-                                    </SortHead>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium lg:table-cell"
-                                    >
-                                        Document
-                                    </th>
-                                    <SortHead
-                                        column="appraisal_value"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                        className="text-right [&_button]:ml-auto"
-                                    >
-                                        Appraisal
-                                    </SortHead>
-                                    <th scope="col" className="w-10 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                className={cn(
-                                    'divide-y divide-line',
-                                    loading &&
-                                        collaterals.data.length > 0 &&
-                                        'opacity-50',
-                                )}
-                            >
-                                {loading && collaterals.data.length === 0
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <tr key={i}>
-                                              <td
-                                                  colSpan={6}
-                                                  className="px-3 py-2.5"
-                                              >
-                                                  <Skeleton className="h-4 w-full" />
-                                              </td>
-                                          </tr>
-                                      ))
-                                    : collaterals.data.map((c) => (
-                                          <tr
-                                              key={c.id}
-                                              className="hover:bg-canvas/60"
-                                          >
-                                              <td className="px-3 py-1.5 font-medium">
-                                                  {c.cbs_id ?? `#${c.id}`}
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 md:table-cell">
-                                                  {c.type_label}
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  {c.owner_name}
-                                                  <p className="max-w-xs truncate text-xs text-muted">
-                                                      {c.description}
-                                                  </p>
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 lg:table-cell">
-                                                  {c.document_number}
-                                              </td>
-                                              <td className="px-3 py-1.5 text-right whitespace-nowrap tabular-nums">
-                                                  {rupiah(c.appraisal_value)}
-                                              </td>
-                                              <td className="px-3 py-1.5 text-right">
-                                                  {canManage && (
-                                                      <DropdownMenu>
-                                                          <Tip label="Actions">
-                                                              <DropdownTrigger
-                                                                  asChild
-                                                              >
-                                                                  <Button
-                                                                      variant="ghost"
-                                                                      size="icon"
-                                                                      aria-label={`Actions for ${c.cbs_id ?? c.id}`}
-                                                                  >
-                                                                      <MoreHorizontal />
-                                                                  </Button>
-                                                              </DropdownTrigger>
-                                                          </Tip>
-                                                          <DropdownContent>
-                                                              <DropdownItem
-                                                                  icon={
-                                                                      <Pencil />
-                                                                  }
-                                                                  onSelect={() =>
-                                                                      router.visit(
-                                                                          `/collaterals/${c.id}/edit`,
-                                                                      )
-                                                                  }
-                                                              >
-                                                                  Edit
-                                                              </DropdownItem>
-                                                              <DropdownSeparator />
-                                                              <DropdownItem
-                                                                  danger
-                                                                  icon={
-                                                                      <Trash2 />
-                                                                  }
-                                                                  onSelect={() =>
-                                                                      setToDelete(
-                                                                          c,
-                                                                      )
-                                                                  }
-                                                              >
-                                                                  Delete
-                                                              </DropdownItem>
-                                                          </DropdownContent>
-                                                      </DropdownMenu>
-                                                  )}
-                                              </td>
-                                          </tr>
-                                      ))}
-                            </tbody>
-                        </table>
-                        {!loading && collaterals.data.length === 0 && (
-                            <EmptyState
-                                icon={<Landmark />}
-                                title={
-                                    hasFilters
-                                        ? 'No collaterals match your filters'
-                                        : 'No collaterals yet'
-                                }
-                                description={
-                                    hasFilters
-                                        ? 'Try a different search or clear the filters.'
-                                        : 'Collaterals can also be added straight from a loan application.'
-                                }
-                                action={
-                                    hasFilters ? (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                clear({ type: null })
-                                            }
-                                        >
-                                            Clear filters
-                                        </Button>
-                                    ) : canManage ? (
-                                        <Button
-                                            size="sm"
-                                            onClick={() =>
-                                                router.visit(
-                                                    '/collaterals/create',
-                                                )
-                                            }
-                                        >
-                                            <Plus /> Add collateral
-                                        </Button>
-                                    ) : undefined
-                                }
-                            />
-                        )}
-                    </div>
-                )}
-
-                <Pagination
-                    meta={collaterals}
-                    perPage={filters.per_page}
-                    perPageOptions={perPageOptions}
-                    onPage={(page) => visit({ page })}
-                    onPerPage={(per_page) => visit({ per_page })}
-                />
-            </Card>
+                    ) : canManage ? (
+                        <Button
+                            size="sm"
+                            onClick={() => router.visit('/collaterals/create')}
+                        >
+                            <Plus /> Add collateral
+                        </Button>
+                    ) : undefined,
+                }}
+                pagination={{
+                    meta: collaterals,
+                    perPage: filters.per_page,
+                    options: perPageOptions,
+                    onPage: (page) => visit({ page }),
+                    onPerPage: (per_page) => visit({ per_page }),
+                }}
+            />
 
             <ConfirmDialog
                 open={toDelete !== null}

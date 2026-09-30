@@ -7,15 +7,9 @@ import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { Input } from '@/components/ui/input';
-import {
-    Badge,
-    Card,
-    EmptyState,
-    ErrorState,
-    PageHeader,
-    Skeleton,
-} from '@/components/ui/misc';
-import { Pagination } from '@/components/ui/pagination';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
@@ -108,6 +102,57 @@ export default function PermissionsIndex({
                 : form.data.actions.filter((a) => a !== action),
         );
 
+    const columns: Column<Row>[] = [
+        {
+            key: 'name',
+            header: 'Permission',
+            className: 'font-mono text-xs',
+            cell: (p) => p.name,
+        },
+        {
+            key: 'module',
+            header: 'Module',
+            hideBelow: 'sm',
+            cell: (p) => p.module ?? <span className="text-muted">–</span>,
+        },
+        {
+            key: 'type',
+            header: 'Type',
+            cell: (p) => (
+                <Badge tone={p.custom ? 'info' : 'neutral'}>
+                    {p.custom ? 'Custom' : 'System'}
+                </Badge>
+            ),
+        },
+        {
+            key: 'roles',
+            header: 'Roles',
+            align: 'right',
+            className: 'tabular-nums',
+            cell: (p) => p.roles,
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (p) =>
+                p.custom && (
+                    <Tip label="Delete">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Delete ${p.name}`}
+                            onClick={() => setToDelete(p)}
+                        >
+                            <Trash2 />
+                        </Button>
+                    </Tip>
+                ),
+        },
+    ];
+
     return (
         <>
             <Head title="Permissions" />
@@ -121,171 +166,73 @@ export default function PermissionsIndex({
                 }
             />
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder="Search permission…"
-                            label="Search permissions"
+            <DataTable
+                rows={permissions.data}
+                rowKey={(r) => r.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder="Search permission…"
+                                label="Search permissions"
+                            />
+                        }
+                    >
+                        <Combobox
+                            className="w-full sm:w-48"
+                            clearable
+                            placeholder="Entity"
+                            options={entities.map((e) => ({
+                                value: e,
+                                label: e,
+                            }))}
+                            value={filters.entity}
+                            onChange={(v) => visit({ entity: v })}
                         />
-                    }
-                >
-                    <Combobox
-                        className="w-full sm:w-48"
-                        clearable
-                        placeholder="Entity"
-                        options={entities.map((e) => ({ value: e, label: e }))}
-                        value={filters.entity}
-                        onChange={(v) => visit({ entity: v })}
-                    />
-                    <Combobox
-                        className="w-full sm:w-36"
-                        clearable
-                        searchable={false}
-                        placeholder="Type"
-                        options={TYPES}
-                        value={filters.type}
-                        onChange={(v) => visit({ type: v as Filters['type'] })}
-                    />
-                    {hasFilters && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => clear({ entity: null, type: null })}
-                        >
-                            <X /> Reset
-                        </Button>
-                    )}
-                </FilterBar>
-
-                {error ? (
-                    <ErrorState message={error} onRetry={() => visit({})} />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Permission
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium sm:table-cell"
-                                    >
-                                        Module
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Type
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-right font-medium"
-                                    >
-                                        Roles
-                                    </th>
-                                    <th scope="col" className="w-10 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                className={
-                                    loading && permissions.data.length > 0
-                                        ? 'divide-y divide-line opacity-50'
-                                        : 'divide-y divide-line'
+                        <Combobox
+                            className="w-full sm:w-36"
+                            clearable
+                            searchable={false}
+                            placeholder="Type"
+                            options={TYPES}
+                            value={filters.type}
+                            onChange={(v) =>
+                                visit({ type: v as Filters['type'] })
+                            }
+                        />
+                        {hasFilters && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                    clear({ entity: null, type: null })
                                 }
                             >
-                                {loading && permissions.data.length === 0
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <tr key={i}>
-                                              <td
-                                                  colSpan={5}
-                                                  className="px-3 py-2.5"
-                                              >
-                                                  <Skeleton className="h-4 w-full" />
-                                              </td>
-                                          </tr>
-                                      ))
-                                    : permissions.data.map((p) => (
-                                          <tr
-                                              key={p.id}
-                                              className="hover:bg-canvas/60"
-                                          >
-                                              <td className="px-3 py-1.5 font-mono text-xs">
-                                                  {p.name}
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 sm:table-cell">
-                                                  {p.module ?? (
-                                                      <span className="text-muted">
-                                                          –
-                                                      </span>
-                                                  )}
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  <Badge
-                                                      tone={
-                                                          p.custom
-                                                              ? 'info'
-                                                              : 'neutral'
-                                                      }
-                                                  >
-                                                      {p.custom
-                                                          ? 'Custom'
-                                                          : 'System'}
-                                                  </Badge>
-                                              </td>
-                                              <td className="px-3 py-1.5 text-right tabular-nums">
-                                                  {p.roles}
-                                              </td>
-                                              <td className="px-3 py-1.5 text-right">
-                                                  {p.custom && (
-                                                      <Tip label="Delete">
-                                                          <Button
-                                                              variant="ghost"
-                                                              size="icon"
-                                                              aria-label={`Delete ${p.name}`}
-                                                              onClick={() =>
-                                                                  setToDelete(p)
-                                                              }
-                                                          >
-                                                              <Trash2 />
-                                                          </Button>
-                                                      </Tip>
-                                                  )}
-                                              </td>
-                                          </tr>
-                                      ))}
-                            </tbody>
-                        </table>
-                        {!loading && permissions.data.length === 0 && (
-                            <EmptyState
-                                icon={<KeyRound />}
-                                title={
-                                    hasFilters
-                                        ? 'No permissions match your filters'
-                                        : 'No permissions yet'
-                                }
-                            />
+                                <X /> Reset
+                            </Button>
                         )}
-                    </div>
-                )}
-
-                <Pagination
-                    meta={permissions}
-                    perPage={filters.per_page}
-                    perPageOptions={[10, 25, 50]}
-                    onPage={(page) => visit({ page })}
-                    onPerPage={(per_page) => visit({ per_page })}
-                />
-            </Card>
+                    </FilterBar>
+                }
+                columns={columns}
+                empty={{
+                    icon: <KeyRound />,
+                    title: hasFilters
+                        ? 'No permissions match your filters'
+                        : 'No permissions yet',
+                }}
+                pagination={{
+                    meta: permissions,
+                    perPage: filters.per_page,
+                    options: [10, 25, 50],
+                    onPage: (page) => visit({ page }),
+                    onPerPage: (per_page) => visit({ per_page }),
+                }}
+            />
 
             <Modal
                 open={generating}

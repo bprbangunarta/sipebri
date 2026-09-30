@@ -2,6 +2,8 @@ import { AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
 import { Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -43,6 +45,25 @@ const tones: Record<ChainRow['status'], BadgeTone> = {
 };
 
 /** Read-only check of which tier decides a given product, condition and amount. */
+const chainColumns: Column<ChainRow>[] = [
+    { key: 'tier', header: 'Tier', cell: (row) => row.label ?? '–' },
+    { key: 'role', header: 'Role', cell: (row) => row.role },
+    {
+        key: 'result',
+        header: 'Result',
+        cell: (row) => (
+            <Badge tone={tones[row.status]}>{row.status_label}</Badge>
+        ),
+    },
+    {
+        key: 'users',
+        header: 'Users',
+        align: 'right',
+        className: 'tabular-nums',
+        cell: (row) => row.user_count,
+    },
+];
+
 export function AuthorityCheck({
     open,
     onOpenChange,
@@ -180,45 +201,18 @@ export function AuthorityCheck({
                                 </span>
                             )}
                         </p>
-                        <div className="relative overflow-x-auto rounded-md border border-line">
-                            <table className="w-full text-sm">
-                                <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                    <tr>
-                                        <th className="px-2 py-1.5 text-left font-medium">
-                                            Tier
-                                        </th>
-                                        <th className="px-2 py-1.5 text-left font-medium">
-                                            Role
-                                        </th>
-                                        <th className="px-2 py-1.5 text-left font-medium">
-                                            Result
-                                        </th>
-                                        <th className="px-2 py-1.5 text-right font-medium">
-                                            Users
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-line">
-                                    {result.chain.map((row) => (
-                                        <tr key={row.id}>
-                                            <td className="px-2 py-1.5">
-                                                {row.label ?? '–'}
-                                            </td>
-                                            <td className="px-2 py-1.5">
-                                                {row.role}
-                                            </td>
-                                            <td className="px-2 py-1.5">
-                                                <Badge tone={tones[row.status]}>
-                                                    {row.status_label}
-                                                </Badge>
-                                            </td>
-                                            <td className="px-2 py-1.5 text-right tabular-nums">
-                                                {row.user_count}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div className="rounded-md border border-line">
+                            <DataTable
+                                bare
+                                dense
+                                rows={result.chain}
+                                rowKey={(row) => row.id}
+                                columns={chainColumns}
+                                empty={{
+                                    icon: <AlertTriangle />,
+                                    title: 'No tiers',
+                                }}
+                            />
                         </div>
                         {result.warnings.map((w) => (
                             <p

@@ -21,7 +21,9 @@ import {
 } from '@/components/ui/dropdown';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Badge, Card, EmptyState, PageHeader } from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
 
 type Option = { value: number | string; label: string };
@@ -119,6 +121,83 @@ export default function CommitteesIndex({
         });
     };
 
+    const columns: Column<PathRow>[] = [
+        {
+            key: 'product',
+            header: 'Product',
+            className: 'font-medium',
+            cell: (p) => p.product_label,
+        },
+        {
+            key: 'condition',
+            header: 'Condition',
+            hideBelow: 'sm',
+            cell: (p) => p.condition_label,
+        },
+        {
+            key: 'mechanism',
+            header: 'Mechanism',
+            hideBelow: 'md',
+            cell: (p) => p.mechanism_label,
+        },
+        {
+            key: 'tiers',
+            header: 'Tiers',
+            align: 'right',
+            hideBelow: 'sm',
+            className: 'tabular-nums',
+            cell: (p) => p.tiers_count,
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            cell: (p) => (
+                <Badge tone={p.is_active ? 'success' : 'neutral'}>
+                    {p.is_active ? 'Active' : 'Inactive'}
+                </Badge>
+            ),
+        },
+        {
+            key: 'actions',
+            header: 'Actions',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (p) =>
+                canManage && (
+                    <DropdownMenu>
+                        <Tip label="Actions">
+                            <DropdownTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    aria-label={`Actions for ${p.title}`}
+                                >
+                                    <MoreHorizontal />
+                                </Button>
+                            </DropdownTrigger>
+                        </Tip>
+                        <DropdownContent>
+                            <DropdownItem
+                                icon={<Pencil />}
+                                onSelect={() => openForm(p)}
+                            >
+                                Edit
+                            </DropdownItem>
+                            <DropdownSeparator />
+                            <DropdownItem
+                                danger
+                                icon={<Trash2 />}
+                                onSelect={() => setToDelete(p)}
+                            >
+                                Delete
+                            </DropdownItem>
+                        </DropdownContent>
+                    </DropdownMenu>
+                ),
+        },
+    ];
+
     return (
         <>
             <Head title="Committees" />
@@ -142,146 +221,23 @@ export default function CommitteesIndex({
                 }
             />
 
-            <Card>
-                {paths.length === 0 ? (
-                    <EmptyState
-                        icon={<Gavel />}
-                        title="No committee paths yet"
-                        description="Create a path per product (or across products for conditions such as RELOAN), then define its tiers."
-                        action={
-                            canManage ? (
-                                <Button
-                                    size="sm"
-                                    onClick={() => openForm('new')}
-                                >
-                                    <Plus /> Add path
-                                </Button>
-                            ) : undefined
-                        }
-                    />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Product
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium sm:table-cell"
-                                    >
-                                        Condition
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium md:table-cell"
-                                    >
-                                        Mechanism
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-right font-medium sm:table-cell"
-                                    >
-                                        Tiers
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Status
-                                    </th>
-                                    <th scope="col" className="w-10 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-line">
-                                {paths.map((p) => (
-                                    <tr
-                                        key={p.id}
-                                        className="cursor-pointer hover:bg-canvas/60"
-                                        onClick={() =>
-                                            router.visit(`/committees/${p.id}`)
-                                        }
-                                    >
-                                        <td className="px-3 py-1.5 font-medium">
-                                            {p.product_label}
-                                        </td>
-                                        <td className="hidden px-3 py-1.5 sm:table-cell">
-                                            {p.condition_label}
-                                        </td>
-                                        <td className="hidden px-3 py-1.5 md:table-cell">
-                                            {p.mechanism_label}
-                                        </td>
-                                        <td className="hidden px-3 py-1.5 text-right tabular-nums sm:table-cell">
-                                            {p.tiers_count}
-                                        </td>
-                                        <td className="px-3 py-1.5">
-                                            <Badge
-                                                tone={
-                                                    p.is_active
-                                                        ? 'success'
-                                                        : 'neutral'
-                                                }
-                                            >
-                                                {p.is_active
-                                                    ? 'Active'
-                                                    : 'Inactive'}
-                                            </Badge>
-                                        </td>
-                                        <td
-                                            className="px-3 py-1.5 text-right"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            {canManage && (
-                                                <DropdownMenu>
-                                                    <Tip label="Actions">
-                                                        <DropdownTrigger
-                                                            asChild
-                                                        >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                aria-label={`Actions for ${p.title}`}
-                                                            >
-                                                                <MoreHorizontal />
-                                                            </Button>
-                                                        </DropdownTrigger>
-                                                    </Tip>
-                                                    <DropdownContent>
-                                                        <DropdownItem
-                                                            icon={<Pencil />}
-                                                            onSelect={() =>
-                                                                openForm(p)
-                                                            }
-                                                        >
-                                                            Edit
-                                                        </DropdownItem>
-                                                        <DropdownSeparator />
-                                                        <DropdownItem
-                                                            danger
-                                                            icon={<Trash2 />}
-                                                            onSelect={() =>
-                                                                setToDelete(p)
-                                                            }
-                                                        >
-                                                            Delete
-                                                        </DropdownItem>
-                                                    </DropdownContent>
-                                                </DropdownMenu>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </Card>
+            <DataTable
+                rows={paths}
+                rowKey={(p) => p.id}
+                columns={columns}
+                onRowClick={(p) => router.visit(`/committees/${p.id}`)}
+                empty={{
+                    icon: <Gavel />,
+                    title: 'No committee paths yet',
+                    description:
+                        'Create a path per product (or across products for conditions such as RELOAN), then define its tiers.',
+                    action: canManage ? (
+                        <Button size="sm" onClick={() => openForm('new')}>
+                            <Plus /> Add path
+                        </Button>
+                    ) : undefined,
+                }}
+            />
 
             <Modal
                 open={editing !== null}

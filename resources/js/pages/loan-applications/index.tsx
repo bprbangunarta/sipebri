@@ -7,21 +7,14 @@ import { Combobox } from '@/components/ui/combobox';
 import { DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-    Badge,
-    Card,
-    EmptyState,
-    ErrorState,
-    PageHeader,
-    Skeleton,
-} from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
-import { Pagination } from '@/components/ui/pagination';
 import type { PageMeta } from '@/components/ui/pagination';
-import { SortHead, nextSort } from '@/components/ui/sort-head';
+import { nextSort } from '@/components/ui/sort-head';
 import { useListQuery } from '@/hooks/use-list-query';
 import { formatDate, rupiah } from '@/lib/format';
-import { cn } from '@/lib/utils';
 
 export type LoanRow = {
     id: number;
@@ -239,6 +232,63 @@ export default function LoanApplicationsIndex({
     );
     const sortBy = (column: string) => visit(nextSort(filters, column));
 
+    const columns: Column<LoanRow>[] = [
+        {
+            key: 'file',
+            header: 'File',
+            sort: 'application_code',
+            cell: (l) => (
+                <>
+                    <p className="font-medium">{l.application_code}</p>
+                    <p className="text-xs text-muted">
+                        {formatDate(l.application_date)}
+                    </p>
+                </>
+            ),
+        },
+        {
+            key: 'applicant',
+            header: 'Applicant',
+            sort: 'full_name',
+            cell: (l) => (
+                <>
+                    {l.full_name}
+                    <p className="font-mono text-xs text-muted">{l.nik}</p>
+                </>
+            ),
+        },
+        {
+            key: 'product',
+            header: 'Product',
+            hideBelow: 'md',
+            cell: (l) => l.product_label ?? '–',
+        },
+        {
+            key: 'amount',
+            header: 'Amount',
+            sort: 'requested_amount',
+            align: 'right',
+            hideBelow: 'sm',
+            className: 'whitespace-nowrap tabular-nums',
+            cell: (l) => (
+                <>
+                    {l.requested_amount ? rupiah(l.requested_amount) : '–'}
+                    {l.requested_tenor > 0 && (
+                        <p className="text-xs text-muted">
+                            {l.requested_tenor} months
+                        </p>
+                    )}
+                </>
+            ),
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            sort: 'status',
+            cell: (l) => <Badge tone={l.status_tone}>{l.status_label}</Badge>,
+        },
+    ];
+
     return (
         <>
             <Head title="Loan applications" />
@@ -254,216 +304,94 @@ export default function LoanApplicationsIndex({
                 }
             />
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder="Search code, name, NIK…"
-                            label="Search applications"
-                        />
-                    }
-                >
-                    <Combobox
-                        className="w-full sm:w-40"
-                        clearable
-                        searchable={false}
-                        placeholder="Status"
-                        options={statuses}
-                        value={filters.status}
-                        onChange={(v) => visit({ status: v })}
-                    />
-                    <Combobox
-                        className="w-full sm:w-56"
-                        clearable
-                        placeholder="Product"
-                        options={products}
-                        value={filters.product}
-                        onChange={(v) =>
-                            visit({ product: v ? Number(v) : null })
+            <DataTable
+                rows={loans.data}
+                rowKey={(r) => r.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder="Search code, name, NIK…"
+                                label="Search applications"
+                            />
                         }
-                    />
-                    {hasFilters && (
+                    >
+                        <Combobox
+                            className="w-full sm:w-40"
+                            clearable
+                            searchable={false}
+                            placeholder="Status"
+                            options={statuses}
+                            value={filters.status}
+                            onChange={(v) => visit({ status: v })}
+                        />
+                        <Combobox
+                            className="w-full sm:w-56"
+                            clearable
+                            placeholder="Product"
+                            options={products}
+                            value={filters.product}
+                            onChange={(v) =>
+                                visit({ product: v ? Number(v) : null })
+                            }
+                        />
+                        {hasFilters && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                    clear({ status: null, product: null })
+                                }
+                            >
+                                <X /> Reset
+                            </Button>
+                        )}
+                    </FilterBar>
+                }
+                columns={columns}
+                sort={{
+                    sort: filters.sort,
+                    direction: filters.direction,
+                    onSort: sortBy,
+                }}
+                onRowClick={(l) => router.visit(`/loan-applications/${l.id}`)}
+                empty={{
+                    icon: <FileText />,
+                    title: hasFilters
+                        ? 'No applications match your filters'
+                        : 'No applications yet',
+                    description: hasFilters
+                        ? 'Try a different search or clear the filters.'
+                        : 'Open a new application with the applicant’s national ID.',
+                    action: hasFilters ? (
                         <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
                             onClick={() =>
                                 clear({ status: null, product: null })
                             }
                         >
-                            <X /> Reset
+                            Clear filters
                         </Button>
-                    )}
-                </FilterBar>
-
-                {error ? (
-                    <ErrorState message={error} onRetry={() => visit({})} />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <SortHead
-                                        column="application_code"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        File
-                                    </SortHead>
-                                    <SortHead
-                                        column="full_name"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Applicant
-                                    </SortHead>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium md:table-cell"
-                                    >
-                                        Product
-                                    </th>
-                                    <SortHead
-                                        column="requested_amount"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                        className="hidden text-right sm:table-cell [&_button]:ml-auto"
-                                    >
-                                        Amount
-                                    </SortHead>
-                                    <SortHead
-                                        column="status"
-                                        sort={filters.sort}
-                                        direction={filters.direction}
-                                        onSort={sortBy}
-                                    >
-                                        Status
-                                    </SortHead>
-                                </tr>
-                            </thead>
-                            <tbody
-                                className={cn(
-                                    'divide-y divide-line',
-                                    loading &&
-                                        loans.data.length > 0 &&
-                                        'opacity-50',
-                                )}
-                            >
-                                {loading && loans.data.length === 0
-                                    ? Array.from({ length: 5 }).map((_, i) => (
-                                          <tr key={i}>
-                                              <td
-                                                  colSpan={5}
-                                                  className="px-3 py-2.5"
-                                              >
-                                                  <Skeleton className="h-4 w-full" />
-                                              </td>
-                                          </tr>
-                                      ))
-                                    : loans.data.map((l) => (
-                                          <tr
-                                              key={l.id}
-                                              className="cursor-pointer hover:bg-canvas/60"
-                                              onClick={() =>
-                                                  router.visit(
-                                                      `/loan-applications/${l.id}`,
-                                                  )
-                                              }
-                                          >
-                                              <td className="px-3 py-1.5">
-                                                  <p className="font-medium">
-                                                      {l.application_code}
-                                                  </p>
-                                                  <p className="text-xs text-muted">
-                                                      {formatDate(
-                                                          l.application_date,
-                                                      )}
-                                                  </p>
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  {l.full_name}
-                                                  <p className="font-mono text-xs text-muted">
-                                                      {l.nik}
-                                                  </p>
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 md:table-cell">
-                                                  {l.product_label ?? '–'}
-                                              </td>
-                                              <td className="hidden px-3 py-1.5 text-right whitespace-nowrap tabular-nums sm:table-cell">
-                                                  {l.requested_amount
-                                                      ? rupiah(
-                                                            l.requested_amount,
-                                                        )
-                                                      : '–'}
-                                                  {l.requested_tenor > 0 && (
-                                                      <p className="text-xs text-muted">
-                                                          {l.requested_tenor}{' '}
-                                                          months
-                                                      </p>
-                                                  )}
-                                              </td>
-                                              <td className="px-3 py-1.5">
-                                                  <Badge tone={l.status_tone}>
-                                                      {l.status_label}
-                                                  </Badge>
-                                              </td>
-                                          </tr>
-                                      ))}
-                            </tbody>
-                        </table>
-                        {!loading && loans.data.length === 0 && (
-                            <EmptyState
-                                icon={<FileText />}
-                                title={
-                                    hasFilters
-                                        ? 'No applications match your filters'
-                                        : 'No applications yet'
-                                }
-                                description={
-                                    hasFilters
-                                        ? 'Try a different search or clear the filters.'
-                                        : 'Open a new application with the applicant’s national ID.'
-                                }
-                                action={
-                                    hasFilters ? (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() =>
-                                                clear({
-                                                    status: null,
-                                                    product: null,
-                                                })
-                                            }
-                                        >
-                                            Clear filters
-                                        </Button>
-                                    ) : canManage ? (
-                                        <Button
-                                            size="sm"
-                                            onClick={() => setCreating(true)}
-                                        >
-                                            <Plus /> New application
-                                        </Button>
-                                    ) : undefined
-                                }
-                            />
-                        )}
-                    </div>
-                )}
-
-                <Pagination
-                    meta={loans}
-                    perPage={filters.per_page}
-                    perPageOptions={perPageOptions}
-                    onPage={(page) => visit({ page })}
-                    onPerPage={(per_page) => visit({ per_page })}
-                />
-            </Card>
+                    ) : canManage ? (
+                        <Button size="sm" onClick={() => setCreating(true)}>
+                            <Plus /> New application
+                        </Button>
+                    ) : undefined,
+                }}
+                pagination={{
+                    meta: loans,
+                    perPage: filters.per_page,
+                    options: perPageOptions,
+                    onPage: (page) => visit({ page }),
+                    onPerPage: (per_page) => visit({ per_page }),
+                }}
+            />
 
             <NewApplication
                 open={creating}

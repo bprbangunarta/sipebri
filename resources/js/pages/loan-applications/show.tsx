@@ -17,8 +17,11 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Badge, Card, EmptyState, PageHeader } from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { Badge, Card, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
+import { Tip } from '@/components/ui/tooltip';
 import { formatDate, rupiah } from '@/lib/format';
 
 type Option = { value: string | number; label: string };
@@ -338,6 +341,64 @@ export default function LoanApplicationShow({
                 : 'Collateral (optional for this product)',
             loan.checklist.collateral,
         ],
+    ];
+
+    const collateralColumns: Column<(typeof collaterals)[number]>[] = [
+        {
+            key: 'collateral',
+            header: 'Collateral',
+            cell: (c) => (
+                <>
+                    <p className="font-medium">
+                        {c.cbs_id ?? `#${c.id}`} · {c.owner_name}
+                    </p>
+                    <p className="max-w-md truncate text-xs text-muted">
+                        {c.description}
+                    </p>
+                </>
+            ),
+        },
+        {
+            key: 'document',
+            header: 'Document',
+            hideBelow: 'sm',
+            cell: (c) => c.document_number,
+        },
+        {
+            key: 'appraisal',
+            header: 'Appraisal',
+            align: 'right',
+            className: 'whitespace-nowrap tabular-nums',
+            cell: (c) => rupiah(c.appraisal_value),
+        },
+        ...(editable
+            ? [
+                  {
+                      key: 'actions',
+                      header: 'Actions',
+                      srOnly: true,
+                      narrow: true,
+                      align: 'right',
+                      cell: (c: (typeof collaterals)[number]) => (
+                          <Tip label="Detach">
+                              <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label="Detach collateral"
+                                  onClick={() =>
+                                      router.delete(
+                                          `/loan-applications/${loan.id}/collaterals/${c.id}`,
+                                          { preserveScroll: true },
+                                      )
+                                  }
+                              >
+                                  <Unlink />
+                              </Button>
+                          </Tip>
+                      ),
+                  } satisfies Column<(typeof collaterals)[number]>,
+              ]
+            : []),
     ];
 
     return (
@@ -702,97 +763,19 @@ export default function LoanApplicationShow({
                             </Button>
                         </div>
                     )}
-                    {collaterals.length === 0 ? (
-                        <EmptyState
-                            icon={<CircleAlert />}
-                            title="No collateral attached"
-                            description={
-                                loan.collateral_required
-                                    ? 'This product requires collateral.'
-                                    : 'Collateral is optional for this product.'
-                            }
-                        />
-                    ) : (
-                        <div className="relative overflow-x-auto">
-                            <table className="w-full text-sm">
-                                <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            className="px-3 py-2 text-left font-medium"
-                                        >
-                                            Collateral
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="hidden px-3 py-2 text-left font-medium sm:table-cell"
-                                        >
-                                            Document
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-3 py-2 text-right font-medium"
-                                        >
-                                            Appraisal
-                                        </th>
-                                        {editable && (
-                                            <th
-                                                scope="col"
-                                                className="w-10 px-3 py-2"
-                                            >
-                                                <span className="sr-only">
-                                                    Actions
-                                                </span>
-                                            </th>
-                                        )}
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-line">
-                                    {collaterals.map((c) => (
-                                        <tr
-                                            key={c.id}
-                                            className="hover:bg-canvas/60"
-                                        >
-                                            <td className="px-3 py-1.5">
-                                                <p className="font-medium">
-                                                    {c.cbs_id ?? `#${c.id}`} ·{' '}
-                                                    {c.owner_name}
-                                                </p>
-                                                <p className="max-w-md truncate text-xs text-muted">
-                                                    {c.description}
-                                                </p>
-                                            </td>
-                                            <td className="hidden px-3 py-1.5 sm:table-cell">
-                                                {c.document_number}
-                                            </td>
-                                            <td className="px-3 py-1.5 text-right whitespace-nowrap tabular-nums">
-                                                {rupiah(c.appraisal_value)}
-                                            </td>
-                                            {editable && (
-                                                <td className="px-3 py-1.5 text-right">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        aria-label="Detach collateral"
-                                                        onClick={() =>
-                                                            router.delete(
-                                                                `/loan-applications/${loan.id}/collaterals/${c.id}`,
-                                                                {
-                                                                    preserveScroll: true,
-                                                                },
-                                                            )
-                                                        }
-                                                    >
-                                                        <Unlink />
-                                                    </Button>
-                                                </td>
-                                            )}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
+                    <DataTable
+                        bare
+                        rows={collaterals}
+                        rowKey={(c) => c.id}
+                        columns={collateralColumns}
+                        empty={{
+                            icon: <CircleAlert />,
+                            title: 'No collateral attached',
+                            description: loan.collateral_required
+                                ? 'This product requires collateral.'
+                                : 'Collateral is optional for this product.',
+                        }}
+                    />
                 </Step>
 
                 {loan.status === 'draft' && (

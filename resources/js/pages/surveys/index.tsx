@@ -2,7 +2,9 @@ import { Head, router } from '@inertiajs/react';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
-import { Card, EmptyState, PageHeader } from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { PageHeader } from '@/components/ui/misc';
 import { useListQuery } from '@/hooks/use-list-query';
 import { formatDate, rupiah } from '@/lib/format';
 
@@ -18,6 +20,59 @@ type Row = {
 };
 type Filters = { search: string };
 
+const columns: Column<Row>[] = [
+    {
+        key: 'file',
+        header: 'File',
+        cell: (l) => (
+            <>
+                <p className="font-medium">{l.application_code}</p>
+                <p className="text-xs text-muted">{l.product_label}</p>
+            </>
+        ),
+    },
+    {
+        key: 'applicant',
+        header: 'Applicant',
+        cell: (l) => (
+            <>
+                {l.full_name}
+                <p className="font-mono text-xs text-muted">{l.nik}</p>
+            </>
+        ),
+    },
+    {
+        key: 'amount',
+        header: 'Amount',
+        align: 'right',
+        hideBelow: 'sm',
+        className: 'whitespace-nowrap tabular-nums',
+        cell: (l) => (
+            <>
+                {rupiah(l.requested_amount)}
+                <p className="text-xs text-muted">{l.requested_tenor} months</p>
+            </>
+        ),
+    },
+    {
+        key: 'head',
+        header: 'Section head',
+        hideBelow: 'md',
+        cell: (l) => l.supervisor_name ?? '–',
+    },
+    {
+        key: 'actions',
+        header: 'Actions',
+        srOnly: true,
+        align: 'right',
+        cell: (l) => (
+            <Button size="sm" onClick={() => router.visit(`/surveys/${l.id}`)}>
+                Open
+            </Button>
+        ),
+    },
+];
+
 export default function SurveysIndex({
     loans,
     filters,
@@ -27,7 +82,7 @@ export default function SurveysIndex({
     filters: Filters;
     today: string;
 }) {
-    const { search, onSearch } = useListQuery<Filters>({
+    const { visit, search, onSearch, loading, error } = useListQuery<Filters>({
         url: '/surveys',
         filters,
         defaults: {},
@@ -42,105 +97,32 @@ export default function SurveysIndex({
                 description={`Files scheduled for you today, ${formatDate(today)}`}
             />
 
-            <Card>
-                <FilterBar
-                    search={
-                        <SearchInput
-                            value={search}
-                            onChange={onSearch}
-                            placeholder="Search code, name, NIK…"
-                            label="Search files"
-                        />
-                    }
-                />
-                {loans.length === 0 ? (
-                    <EmptyState
-                        icon={<MapPin />}
-                        title="No surveys today"
-                        description="Files show up here on their scheduled survey date."
+            <DataTable
+                rows={loans}
+                rowKey={(l) => l.id}
+                loading={loading}
+                error={error}
+                onRetry={() => visit({})}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <SearchInput
+                                value={search}
+                                onChange={onSearch}
+                                placeholder="Search code, name, NIK…"
+                                label="Search files"
+                            />
+                        }
                     />
-                ) : (
-                    <div className="relative overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="border-b border-line bg-canvas text-xs text-muted">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        File
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-2 text-left font-medium"
-                                    >
-                                        Applicant
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-right font-medium sm:table-cell"
-                                    >
-                                        Amount
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="hidden px-3 py-2 text-left font-medium md:table-cell"
-                                    >
-                                        Section head
-                                    </th>
-                                    <th scope="col" className="w-24 px-3 py-2">
-                                        <span className="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-line">
-                                {loans.map((l) => (
-                                    <tr
-                                        key={l.id}
-                                        className="hover:bg-canvas/60"
-                                    >
-                                        <td className="px-3 py-1.5">
-                                            <p className="font-medium">
-                                                {l.application_code}
-                                            </p>
-                                            <p className="text-xs text-muted">
-                                                {l.product_label}
-                                            </p>
-                                        </td>
-                                        <td className="px-3 py-1.5">
-                                            {l.full_name}
-                                            <p className="font-mono text-xs text-muted">
-                                                {l.nik}
-                                            </p>
-                                        </td>
-                                        <td className="hidden px-3 py-1.5 text-right whitespace-nowrap tabular-nums sm:table-cell">
-                                            {rupiah(l.requested_amount)}
-                                            <p className="text-xs text-muted">
-                                                {l.requested_tenor} months
-                                            </p>
-                                        </td>
-                                        <td className="hidden px-3 py-1.5 md:table-cell">
-                                            {l.supervisor_name ?? '–'}
-                                        </td>
-                                        <td className="px-3 py-1.5 text-right">
-                                            <Button
-                                                size="sm"
-                                                onClick={() =>
-                                                    router.visit(
-                                                        `/surveys/${l.id}`,
-                                                    )
-                                                }
-                                            >
-                                                Open
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </Card>
+                }
+                columns={columns}
+                empty={{
+                    icon: <MapPin />,
+                    title: 'No surveys today',
+                    description:
+                        'Files show up here on their scheduled survey date.',
+                }}
+            />
         </>
     );
 }

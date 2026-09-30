@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Card, EmptyState, PageHeader } from '@/components/ui/misc';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { PageHeader } from '@/components/ui/misc';
+import { Tip } from '@/components/ui/tooltip';
 
 type RoleRow = {
     id: number;
@@ -14,6 +17,55 @@ type RoleRow = {
     permissions_count: number;
     locked: boolean;
 };
+
+const columns: Column<RoleRow>[] = [
+    {
+        key: 'role',
+        header: 'Role',
+        className: 'font-medium',
+        cell: (r) => (
+            <span className="inline-flex items-center gap-1.5">
+                {r.name}
+                {r.locked && (
+                    <Lock className="size-3 text-muted" aria-label="Locked" />
+                )}
+            </span>
+        ),
+    },
+    {
+        key: 'users',
+        header: 'Users',
+        align: 'right',
+        className: 'tabular-nums',
+        cell: (r) => r.users_count,
+    },
+    {
+        key: 'permissions',
+        header: 'Permissions',
+        align: 'right',
+        className: 'tabular-nums',
+        cell: (r) => (r.locked ? 'All' : r.permissions_count),
+    },
+    {
+        key: 'actions',
+        header: 'Actions',
+        srOnly: true,
+        narrow: true,
+        align: 'right',
+        cell: (r) => (
+            <Tip label="Open">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`Open ${r.name}`}
+                    onClick={() => router.visit(`/roles/${r.id}`)}
+                >
+                    <Settings2 />
+                </Button>
+            </Tip>
+        ),
+    },
+];
 
 export default function RolesIndex({
     roles,
@@ -51,74 +103,13 @@ export default function RolesIndex({
                 }
             />
 
-            <Card className="max-w-3xl">
-                {roles.length === 0 ? (
-                    <EmptyState icon={<Shield />} title="No roles yet" />
-                ) : (
-                    <table className="w-full text-sm">
-                        <thead className="border-b border-line bg-canvas text-xs text-muted">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    className="px-3 py-2 text-left font-medium"
-                                >
-                                    Role
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-3 py-2 text-right font-medium"
-                                >
-                                    Users
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="px-3 py-2 text-right font-medium"
-                                >
-                                    Permissions
-                                </th>
-                                <th scope="col" className="w-10 px-3 py-2">
-                                    <span className="sr-only">Actions</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-line">
-                            {roles.map((r) => (
-                                <tr key={r.id} className="hover:bg-canvas/60">
-                                    <td className="px-3 py-1.5 font-medium">
-                                        <span className="inline-flex items-center gap-1.5">
-                                            {r.name}
-                                            {r.locked && (
-                                                <Lock
-                                                    className="size-3 text-muted"
-                                                    aria-label="Locked"
-                                                />
-                                            )}
-                                        </span>
-                                    </td>
-                                    <td className="px-3 py-1.5 text-right tabular-nums">
-                                        {r.users_count}
-                                    </td>
-                                    <td className="px-3 py-1.5 text-right tabular-nums">
-                                        {r.locked ? 'All' : r.permissions_count}
-                                    </td>
-                                    <td className="px-3 py-1.5 text-right">
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            aria-label={`Open ${r.name}`}
-                                            onClick={() =>
-                                                router.visit(`/roles/${r.id}`)
-                                            }
-                                        >
-                                            <Settings2 />
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </Card>
+            <DataTable
+                className="max-w-3xl"
+                rows={roles}
+                rowKey={(r) => r.id}
+                columns={columns}
+                empty={{ icon: <Shield />, title: 'No roles yet' }}
+            />
 
             <Modal
                 open={creating}

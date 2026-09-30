@@ -30,3 +30,10 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 
 - Pembungkus tabel yang bisa digulir wajib `relative overflow-x-auto`. Tanpa `relative`, elemen `position:absolute` di dalamnya (mis. `sr-only` pada header kolom aksi) keluar dari area gulir dan melebarkan seluruh halaman di ponsel, sehingga layout bisa digeser ke samping.
 - Setelah mengubah halaman daftar, periksa di lebar 375px bahwa `document.documentElement.scrollWidth` sama dengan lebar layar.
+
+## DataTable: satu-satunya tabel
+
+- Semua tabel memakai `components/ui/data-table.tsx` (`DataTable` + tipe `Column`); jangan menulis `<table>` di halaman (`ArchitectureTest` akan gagal). Komponen ini mengurus kartu, toolbar (`FilterBar`), header yang bisa diurutkan (`sort` pada kolom), skeleton, kondisi kosong, galat + coba lagi, klik baris (`onRowClick`), paginasi, dan pembungkus gulir `relative overflow-x-auto`.
+- Definisikan kolom sebagai `Column<Row>[]`: `hideBelow` ('sm'|'md'|'lg') untuk kolom yang disembunyikan di layar kecil, `align: 'right'` untuk angka, `srOnly` + `narrow` untuk kolom aksi (klik di kolom aksi tidak memicu klik baris). Aksi baris: ikon saja dengan `Tip`.
+- Tabel di dalam kartu lain atau dialog: `bare` (tanpa kartu), dan `dense` untuk teks kecil. `className` mengatur kartu (mis. `max-w-3xl`).
+- Halaman daftar server-side tetap memakai `useListQuery` untuk filter/urutan/halaman; hasilnya dioper ke `DataTable`.
