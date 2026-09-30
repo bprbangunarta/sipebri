@@ -6,7 +6,9 @@ use App\Models\Institution;
 use App\Models\Method;
 use App\Models\OwnershipStatus;
 use App\Models\Product;
+use App\Models\ProductParameter;
 use App\Models\Region;
+use Database\Seeders\CreditReferenceSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -102,4 +104,19 @@ it('saves product parameters and validates their consistency', function () {
     ])->assertSessionHasNoErrors();
 
     expect($product->parameter->fresh()->only(['max_amount', 'collateral_required']))->toBe(['max_amount' => 5000000, 'collateral_required' => true]);
+});
+
+it('seeds the product parameters of the company staging data and never resets later edits', function () {
+    $this->seed(CreditReferenceSeeder::class);
+
+    $kpn = Product::where('code', '12')->firstOrFail()->parameter;
+    expect(Product::count())->toBe(17)
+        ->and((float) $kpn->interest_rate)->toBe(17.04)
+        ->and($kpn->rc_threshold)->toBeNull()
+        ->and(ProductParameter::whereNotNull('rc_threshold')->count())->toBe(0);
+
+    $kpn->update(['interest_rate' => 18.5]);
+    $this->seed(CreditReferenceSeeder::class);
+
+    expect((float) $kpn->fresh()->interest_rate)->toBe(18.5);
 });

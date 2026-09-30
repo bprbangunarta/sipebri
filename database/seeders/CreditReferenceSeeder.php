@@ -82,27 +82,29 @@ class CreditReferenceSeeder extends Seeder
     ];
 
     /**
-     * Product parameters (board decree).
-     * [product, min amount, max amount, min tenor, max tenor, interest %, provision %, admin %, RC %, interest method codes, installment codes, collateral required]
+     * Product parameters, mirroring the staging database of the previous SIPEBRI as dumped on 2026-10-01 (the company's
+     * configured values): RC threshold is not set there (null), and KPN carries 17.04 % interest.
+     * They are only created when missing, so values a Super Admin changes later are never reset by a re-seed or a deploy.
+     * [product, min amount, max amount, min tenor, max tenor, interest %, provision %, admin %, RC % (null = not set), interest method codes, installment codes, collateral required]
      */
     private const PARAMETERS = [
-        ['01', 1000000, 999999999999, 1, 300, 3.5, 0, 0, 70, ['10'], ['3'], true],
-        ['02', 1000000, 999999999999, 1, 60, 13, 0, 0, 70, ['10'], ['3'], true],
-        ['03', 1000000, 999999999999, 1, 36, 15, 0, 0, 70, ['10'], ['3'], true],
-        ['04', 1000000, 999999999999, 1, 36, 14, 0, 0, 70, ['20'], ['8'], true],
-        ['05', 10000000, 999999999999, 6, 60, 13, 0, 0, 70, ['10'], ['3'], true],
-        ['06', 1000000, 150000000, 6, 120, 10, 0, 0, 70, ['22'], ['7'], true],
-        ['07', 1000000, 100000000, 1, 36, 32, 0, 0, 70, ['30'], ['3'], true],
-        ['08', 1000000, 21000000, 6, 60, 13, 0, 0, 70, ['10'], ['3'], true],
-        ['09', 10000000, 100000000, 12, 60, 12, 0, 0, 70, ['10'], ['8'], true],
-        ['10', 1000000, 100000000, 1, 36, 25, 0, 0, 70, ['10'], ['3'], true],
-        ['11', 10000000, 100000000, 1, 3, 18, 0, 0, 70, ['10'], ['3'], true],
-        ['12', 1000000, 250000000, 1, 60, 17.4, 0, 0, 70, ['10'], ['3'], true],
-        ['13', 10000000, 100000000, 12, 36, 12, 0, 0, 70, ['10'], ['8'], true],
-        ['14', 2000000, 10000000, 3, 10, 32, 0, 0, 70, ['10'], ['3'], false],
-        ['15', 1000000, 100000000, 6, 18, 24, 0, 0, 70, ['10'], ['3'], true],
-        ['16', 2000000, 250000000, 6, 120, 14, 0, 0, 70, ['10'], ['3'], true],
-        ['17', 1000000, 3000000, 6, 12, 9, 0, 0, 70, ['10'], ['2'], false],
+        ['01', 1000000, 999999999999, 1, 300, 3.5, 0, 0, null, ['10'], ['3'], true],
+        ['02', 1000000, 999999999999, 1, 60, 13, 0, 0, null, ['10'], ['3'], true],
+        ['03', 1000000, 999999999999, 1, 36, 15, 0, 0, null, ['10'], ['3'], true],
+        ['04', 1000000, 999999999999, 1, 36, 14, 0, 0, null, ['20'], ['8'], true],
+        ['05', 10000000, 999999999999, 6, 60, 13, 0, 0, null, ['10'], ['3'], true],
+        ['06', 1000000, 150000000, 6, 120, 10, 0, 0, null, ['22'], ['7'], true],
+        ['07', 1000000, 100000000, 1, 36, 32, 0, 0, null, ['30'], ['3'], true],
+        ['08', 1000000, 21000000, 6, 60, 13, 0, 0, null, ['10'], ['3'], true],
+        ['09', 10000000, 100000000, 12, 60, 12, 0, 0, null, ['10'], ['8'], true],
+        ['10', 1000000, 100000000, 1, 36, 25, 0, 0, null, ['10'], ['3'], true],
+        ['11', 10000000, 100000000, 1, 3, 18, 0, 0, null, ['10'], ['3'], true],
+        ['12', 1000000, 250000000, 1, 60, 17.04, 0, 0, null, ['10'], ['3'], true],
+        ['13', 10000000, 100000000, 12, 36, 12, 0, 0, null, ['10'], ['8'], true],
+        ['14', 2000000, 10000000, 3, 10, 32, 0, 0, null, ['10'], ['3'], false],
+        ['15', 1000000, 100000000, 6, 18, 24, 0, 0, null, ['10'], ['3'], true],
+        ['16', 2000000, 250000000, 6, 120, 14, 0, 0, null, ['10'], ['3'], true],
+        ['17', 1000000, 3000000, 6, 12, 9, 0, 0, null, ['10'], ['2'], false],
     ];
 
     public function run(): void
@@ -151,7 +153,7 @@ class CreditReferenceSeeder extends Seeder
                 continue;
             }
 
-            ProductParameter::updateOrCreate(['product_id' => $products[$product]], [
+            ProductParameter::firstOrCreate(['product_id' => $products[$product]], [
                 'min_amount' => $minAmount, 'max_amount' => $maxAmount, 'min_tenor' => $minTenor, 'max_tenor' => $maxTenor,
                 'interest_rate' => $interest, 'provision_rate' => $provision, 'admin_rate' => $admin, 'rc_threshold' => $rc,
                 'allowed_method_ids' => array_map(fn (string $c) => $methods[$c], $methodCodes),

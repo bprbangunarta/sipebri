@@ -68,10 +68,15 @@ Terakhir diperbarui: 2026-09-30.
 ## Saran peningkatan (belum dikerjakan, keputusan ada di user)
 
 - **Layanan email (OTP).** Kuota pengirim diurus user; ini hanya catatan saran:
-  - Kuota SMTP Gmail/Workspace terbatas (sekitar 500–2.000 penerima/hari dan bisa berubah), dan login ikut gagal bila akun diblokir atau password aplikasinya dicabut. Untuk produksi pertimbangkan layanan email transaksional (SES, Postmark, Mailgun) atau relay resmi.
-  - Pasang SPF, DKIM, dan DMARC untuk `bprbangunarta.co.id` supaya email OTP tidak masuk spam atau ditolak.
-  - Pengiriman kini sinkron dengan timeout 10 detik dan batas 6 kode/jam/orang. Bila volume tumbuh, pindahkan ke antrean (perlu worker yang selalu hidup) dan tambahkan mailer cadangan (`failover`) yang tidak membuka celah keamanan.
-  - Ganti password SMTP yang pernah terlihat di komentar `.env`.
+    - Kuota SMTP Gmail/Workspace terbatas (sekitar 500–2.000 penerima/hari dan bisa berubah), dan login ikut gagal bila akun diblokir atau password aplikasinya dicabut. Untuk produksi pertimbangkan layanan email transaksional (SES, Postmark, Mailgun) atau relay resmi.
+    - Pasang SPF, DKIM, dan DMARC untuk `bprbangunarta.co.id` supaya email OTP tidak masuk spam atau ditolak.
+    - Pengiriman kini sinkron dengan timeout 10 detik dan batas 6 kode/jam/orang. Bila volume tumbuh, pindahkan ke antrean (perlu worker yang selalu hidup) dan tambahkan mailer cadangan (`failover`) yang tidak membuka celah keamanan.
+    - Ganti password SMTP yang pernah terlihat di komentar `.env`.
+- **Parameter produk, hal yang perlu dikonfirmasi perusahaan** (seeder sudah mengikuti dump staging 2026-10-01, tetapi nilai berikut tampak janggal dan sama di data lama):
+  - KRU (Kredit Umum): bunga 3,5 dengan tenor sampai 300 bulan; bandingkan dengan produk lain (9–32). Pastikan satuan dan nilainya.
+  - Ambang RC (repayment capacity) kosong di semua produk pada staging; belum dipakai kode kita. Tentukan nilainya sebelum tahap analisa/persetujuan.
+  - Kolom SK Direksi (`decree`) kosong di semua produk.
+  - KRS: di staging sistem cicilan bawaan kosong (yang diizinkan hanya Bulanan); di seeder kita bawaan = Bulanan.
 - **Audit akses baca.** Saat ini hanya halaman detail data sensitif yang dicatat (pengajuan, jaminan, survei, cek nasabah). Halaman daftar (list) sengaja belum dicatat karena volumenya besar. Bila OJK/auditor meminta jejak baca untuk daftar juga, tambahkan pencatatan ringkas (siapa, halaman, filter, jumlah baris), sebaiknya dengan sampling atau ringkasan per sesi agar tabel tidak membengkak, dan perhatikan retensi 5 tahun.
 
 ## Dibatalkan
