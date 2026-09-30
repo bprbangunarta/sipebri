@@ -18,6 +18,16 @@ type Props = {
     placeholder?: string;
 };
 
+/**
+ * The month the calendar opens on when nothing is chosen: the current month, or the nearest month of the allowed range
+ * when today falls outside it. (Opening on the range's last month made a wide range open far in the future.)
+ */
+function openingMonth(min: Date, max: Date): Date {
+    const today = new Date();
+
+    return today < min ? min : today > max ? max : today;
+}
+
 /** Value is an ISO `YYYY-MM-DD` string, matching what the backend stores. */
 export function DatePicker({
     value,
@@ -53,7 +63,7 @@ export function DatePicker({
                     captionLayout="dropdown"
                     startMonth={min}
                     endMonth={max}
-                    defaultMonth={selected ?? defaultMonth ?? max}
+                    defaultMonth={selected ?? defaultMonth ?? openingMonth(min, max)}
                     selected={selected}
                     disabled={{ before: min, after: max }}
                     onSelect={(date) => {
