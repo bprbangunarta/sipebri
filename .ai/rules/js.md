@@ -52,3 +52,7 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 
 - Koordinat survei tidak pernah diambil dari perangkat yang mengunggah foto (survei diisi di kantor; foto datang lewat WhatsApp). Sumbernya: tombol "Tandai lokasi" di lapangan, tempel koordinat/tautan, klik peta, atau GPS foto bila ada. Jangan menambah `navigator.geolocation` di alur unggah.
 - Peta selalu lewat `components/location-map.tsx` (Leaflet dimuat malasan); tampilan baca-saja lewat `components/locations-panel.tsx`.
+
+## Penjajaran baris judul + aksi
+
+- Baris yang berisi blok teks (judul, keterangan) di kiri dan tombol/aksi di kanan memakai `items-center`: aksi rata tengah secara vertikal terhadap seluruh blok teks, bukan menempel ke baris pertama. `items-start justify-between` hanya untuk daftar pilihan yang ikon kecilnya harus sejajar dengan baris teks pertama (opsi `Combobox`). `ArchitectureTest` memeriksa ini.

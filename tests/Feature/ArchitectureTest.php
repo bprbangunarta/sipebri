@@ -93,3 +93,20 @@ it('keeps the test suite away from real external storage', function () {
         ->and($phpunit)->toContain('<env name="AWS_BUCKET" value=""/>')
         ->and(config('filesystems.attachments'))->toBe('public');
 });
+
+it('centres the actions of title-and-action rows instead of pinning them to the first line', function () {
+    $offenders = [];
+
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(resource_path('js'))) as $file) {
+        // Combobox options are the exception: their check mark belongs next to the first line of a multi-line option.
+        if ($file->getExtension() !== 'tsx' || str_ends_with($file->getPathname(), 'components/ui/combobox.tsx')) {
+            continue;
+        }
+
+        if (preg_match('/items-start[^"\'`]*justify-between|justify-between[^"\'`]*items-start/', (string) file_get_contents($file->getPathname()))) {
+            $offenders[] = str_replace(base_path().'/', '', $file->getPathname());
+        }
+    }
+
+    expect($offenders)->toBe([]);
+});

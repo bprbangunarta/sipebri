@@ -340,7 +340,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                         </p>
                     ) : (
                         <div className="flex flex-col divide-y divide-line">
-                            <div className="flex items-start justify-between gap-3 p-3">
+                            <div className="flex items-center justify-between gap-3 p-3">
                                 <div className="flex gap-2.5">
                                     <Smartphone className="mt-0.5 size-4 shrink-0 text-muted" />
                                     <div>
@@ -373,7 +373,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                     </Button>
                                 )}
                             </div>
-                            <div className="flex items-start justify-between gap-3 p-3">
+                            <div className="flex items-center justify-between gap-3 p-3">
                                 <div className="flex gap-2.5">
                                     <Mail className="mt-0.5 size-4 shrink-0 text-muted" />
                                     <div>
