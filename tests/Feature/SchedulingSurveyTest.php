@@ -171,3 +171,15 @@ it('stores survey photos on the configured attachments disk', function () {
     expect(Storage::disk('vault')->exists($photo))->toBeTrue()
         ->and((new LoanSurveyPhoto(['path' => $photo]))->url())->toContain($photo);
 });
+
+it('serves photos through a signed, expiring link on an S3 disk', function () {
+    config([
+        'filesystems.attachments' => 's3',
+        'filesystems.disks.s3.key' => 'test-key', 'filesystems.disks.s3.secret' => 'test-secret',
+        'filesystems.disks.s3.region' => 'ap-southeast-3', 'filesystems.disks.s3.bucket' => 'sipebri-test',
+    ]);
+
+    $url = (new LoanSurveyPhoto(['path' => 'surveys/00700001/a.jpg']))->url();
+
+    expect($url)->toContain('sipebri-test')->toContain('surveys/00700001/a.jpg')->toContain('X-Amz-Signature')->toContain('X-Amz-Expires=1800');
+});
