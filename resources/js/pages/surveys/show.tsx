@@ -89,20 +89,38 @@ function Detail({ label, children }: { label: string; children: ReactNode }) {
     );
 }
 
-/** Reads the device position; the browser only allows this on HTTPS or localhost. */
+/**
+ * Reads the device position. Browsers only hand it out on HTTPS or localhost, so an address such as
+ * http://192.168.x.x never works; each failure says what to fix instead of one generic message.
+ */
 function currentPosition(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
+        if (!window.isSecureContext) {
+            reject(
+                new Error(
+                    'Location needs a secure connection. Open the app through https:// (or localhost), not a plain http:// address.',
+                ),
+            );
+
+            return;
+        }
+
         if (!navigator.geolocation) {
             reject(new Error('This device cannot provide a location.'));
 
             return;
         }
+
         navigator.geolocation.getCurrentPosition(
             resolve,
-            () =>
+            (error) =>
                 reject(
                     new Error(
-                        'Location is required. Allow location access and try again.',
+                        error.code === error.PERMISSION_DENIED
+                            ? 'Location access is blocked. Allow it for this site in the browser settings and try again.'
+                            : error.code === error.TIMEOUT
+                              ? 'Getting your location took too long. Move to an open area and try again.'
+                              : 'Your location is unavailable. Turn on location services (GPS) and try again.',
                     ),
                 ),
             { enableHighAccuracy: true, timeout: 15000 },
