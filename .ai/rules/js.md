@@ -37,3 +37,8 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 - Definisikan kolom sebagai `Column<Row>[]`: `hideBelow` ('sm'|'md'|'lg') untuk kolom yang disembunyikan di layar kecil, `align: 'right'` untuk angka, `srOnly` + `narrow` untuk kolom aksi (klik di kolom aksi tidak memicu klik baris). Aksi baris: ikon saja dengan `Tip`.
 - Tabel di dalam kartu lain atau dialog: `bare` (tanpa kartu), dan `dense` untuk teks kecil. `className` mengatur kartu (mis. `max-w-3xl`).
 - Halaman daftar server-side tetap memakai `useListQuery` untuk filter/urutan/halaman; hasilnya dioper ke `DataTable`.
+
+## Pilihan (Combobox) dengan teks panjang
+
+- Jangan memotong identitas di dalam daftar pilihan. Daftar boleh lebih lebar dari kolomnya dan membungkus baris; kolom yang menampung pilihan panjang (jenis agunan, pengikatan, wilayah) dibuat selebar baris form, dan dialognya `wide`.
+- Untuk pilihan yang mirip satu sama lain (mis. agunan), isi `description` pada opsi: label = identitas singkat, `description` = pembeda (nomor dokumen, jenis, nilai, alamat lengkap). `description` ikut dicari. Teks terpilih di kolom yang terpotong tetap punya tooltip (`title`).

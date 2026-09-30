@@ -139,8 +139,7 @@ class LoanApplicationController extends Controller
                 'collateral_required' => $this->collateralRequired($loan),
             ],
             'collaterals' => $loan->collaterals->map(fn (Collateral $c): array => [...$c->only(['id', 'cbs_id', 'collateral_type_code', 'owner_name', 'document_number', 'description']), 'appraisal_value' => $c->appraisal_value]),
-            'collateralOptions' => Collateral::query()->orderBy('id')->get(['id', 'cbs_id', 'owner_name', 'description'])
-                ->map(fn (Collateral $c): array => ['value' => $c->id, 'label' => trim(($c->cbs_id ?? "#{$c->id}").' — '.$c->owner_name.' — '.mb_substr((string) $c->description, 0, 40))]),
+            'collateralOptions' => $this->collateralOptions(),
             'editable' => $request->user()->can('modify', $loan),
             'references' => $this->references(),
         ]);
@@ -327,6 +326,31 @@ class LoanApplicationController extends Controller
             'method_id.in' => 'This interest method is not allowed for the product.',
             'installment_id.in' => 'This installment system is not allowed for the product.',
         ];
+    }
+
+    /**
+     * Collaterals that can be attached. The label is the identity (ID and owner); the second line carries what tells
+     * similar collaterals apart: document number, type, appraisal and the full description (nothing is cut off).
+     *
+     * @return list<array{value: int, label: string, description: string}>
+     */
+    private function collateralOptions(): array
+    {
+        $types = CollateralType::query()->pluck('name', 'code');
+
+        $options = Collateral::query()->orderBy('id')->get()
+            ->map(fn (Collateral $c): array => [
+                'value' => $c->id,
+                'label' => trim(($c->cbs_id ?? "#{$c->id}").' — '.$c->owner_name),
+                'description' => collect([
+                    $c->document_number ? 'Doc '.$c->document_number : null,
+                    $types[$c->collateral_type_code] ?? $c->collateral_type_code,
+                    $c->appraisal_value ? 'Appraisal '.LendingLimit::format($c->appraisal_value) : null,
+                    $c->description,
+                ])->filter()->implode(' · '),
+            ]);
+
+        return array_values($options->all());
     }
 
     /** The strictest of the product maximum and the BMPK (null = no limit). */

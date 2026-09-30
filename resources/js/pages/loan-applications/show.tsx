@@ -24,7 +24,11 @@ import type { BadgeTone } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
 import { formatDate, rupiah } from '@/lib/format';
 
-type Option = { value: string | number; label: string };
+type Option = {
+    value: string | number;
+    label: string;
+    description?: string;
+};
 type Parameter = {
     method_ids: number[];
     installment_ids: number[];
@@ -175,6 +179,7 @@ function NewCollateral({
         <Modal
             open={open}
             onOpenChange={onOpenChange}
+            wide
             title="New collateral"
             description="It is attached to this file straight away."
         >
@@ -196,6 +201,7 @@ function NewCollateral({
                         label="Collateral type"
                         required
                         error={form.errors.collateral_type_code}
+                        className="sm:col-span-2"
                     >
                         <Combobox
                             options={refs.collateralTypes}
@@ -209,6 +215,7 @@ function NewCollateral({
                     <Field
                         label="Binding type"
                         error={form.errors.binding_type_code}
+                        className="sm:col-span-2"
                     >
                         <Combobox
                             clearable
@@ -739,7 +746,7 @@ export default function LoanApplicationShow({
                     {editable && (
                         <div className="flex flex-wrap items-center gap-2 border-b border-line p-2.5">
                             <Combobox
-                                className="w-80 max-w-full"
+                                className="min-w-64 flex-1"
                                 placeholder="Attach an existing collateral…"
                                 options={attachable}
                                 value={attach}

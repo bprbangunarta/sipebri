@@ -4,7 +4,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { controlClass } from '@/components/ui/input';
 
-export type Option = { value: string | number; label: string };
+export type Option = {
+    value: string | number;
+    label: string;
+    /** A second, smaller line under the label (identity details that help telling similar options apart). Also searchable. */
+    description?: string;
+};
 
 type Props = {
     options: Option[];
@@ -40,7 +45,9 @@ export function Combobox({
     const filtered = useMemo(
         () =>
             options.filter((o) =>
-                o.label.toLowerCase().includes(query.trim().toLowerCase()),
+                `${o.label} ${o.description ?? ''}`
+                    .toLowerCase()
+                    .includes(query.trim().toLowerCase()),
             ),
         [options, query],
     );
@@ -80,6 +87,7 @@ export function Combobox({
                         role="combobox"
                         aria-expanded={open}
                         aria-invalid={invalid || undefined}
+                        title={selected?.label}
                         className={cn(controlClass, 'flex items-center justify-between gap-1 text-left', clearable && selected && 'pr-12')}
                     >
                         <span className={cn('truncate', !selected && 'text-muted/70')}>
@@ -100,7 +108,7 @@ export function Combobox({
                 )}
             </div>
             <PopoverContent
-                className="w-(--radix-popover-trigger-width) min-w-44 p-1"
+                className="w-max max-w-[min(36rem,calc(100vw-2rem))] min-w-(--radix-popover-trigger-width) p-1"
                 onOpenAutoFocus={(e) => {
                     if (!searchable) {
                         return;
@@ -138,12 +146,17 @@ export function Combobox({
                                 onMouseEnter={() => setActive(index)}
                                 onClick={() => choose(option)}
                                 className={cn(
-                                    'flex cursor-pointer items-center justify-between rounded px-2 py-1.5 text-sm',
+                                    'flex cursor-pointer items-start justify-between gap-2 rounded px-2 py-1.5 text-sm',
                                     index === active && 'bg-canvas',
                                 )}
                             >
-                                <span className="truncate">{option.label}</span>
-                                {isSelected && <Check className="size-3.5 text-primary" />}
+                                <span className="min-w-0 break-words">
+                                    {option.label}
+                                    {option.description && (
+                                        <span className="block text-xs text-muted">{option.description}</span>
+                                    )}
+                                </span>
+                                {isSelected && <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />}
                             </li>
                         );
                     })}

@@ -188,3 +188,18 @@ it('refuses to delete master data that loan applications use', function () {
     $this->delete(route('master-data.destroy', ['products', $s['product']->id]))->assertSessionHas('error');
     $this->delete(route('master-data.destroy', ['offices', $s['office']->id]))->assertSessionHas('error');
 });
+
+it('describes attachable collaterals fully so similar ones cannot be confused', function () {
+    $s = loanSetup();
+    CollateralType::create(['code' => '04', 'name' => 'SKMHT : SURAT KUASA MEMBEBANKAN HAK TANGGUNGAN']);
+    $this->actingAs($officer = loanOfficer());
+    $loan = LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => $officer->id]);
+    Collateral::create([
+        'collateral_type_code' => '04', 'owner_name' => 'ONIH', 'document_number' => 'SHM 1234/2020', 'appraisal_value' => 150_000_000,
+        'description' => 'DUSUN WANARASA RT 20 RW 05 DESA SUKAMANDI KECAMATAN PAGADEN BARAT',
+    ]);
+
+    $this->get(route('loan-applications.show', $loan))->assertInertia(fn (Assert $page) => $page
+        ->where('collateralOptions.0.label', '#1 — ONIH')
+        ->where('collateralOptions.0.description', 'Doc SHM 1234/2020 · SKMHT : SURAT KUASA MEMBEBANKAN HAK TANGGUNGAN · Appraisal Rp150.000.000 · DUSUN WANARASA RT 20 RW 05 DESA SUKAMANDI KECAMATAN PAGADEN BARAT'));
+});
