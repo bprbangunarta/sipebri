@@ -201,3 +201,12 @@ it('does not prune when nothing is old enough', function () {
 
     expect(AuditLog::query()->count())->toBe(1)->and(DB::table('audit_anchors')->count())->toBe(0);
 });
+
+it('records views of sensitive file details', function () {
+    $admin = superAdmin();
+    $collateral = Collateral::create(['collateral_type_code' => '05']);
+
+    $this->actingAs($admin)->get(route('collaterals.edit', $collateral))->assertOk();
+
+    expect(AuditLog::query()->where('event', 'collaterals.viewed')->where('subject_id', $collateral->id)->where('user_id', $admin->id)->exists())->toBeTrue();
+});

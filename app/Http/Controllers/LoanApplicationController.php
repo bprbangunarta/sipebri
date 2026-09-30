@@ -221,6 +221,7 @@ class LoanApplicationController extends Controller
 
         $collateral = Collateral::create([...$data, 'created_by' => $request->user()->id]);
         $loanApplication->collaterals()->syncWithoutDetaching([$collateral->id]);
+        Audit::record('loan_applications.collateral_attached', 'loan_applications', 'collateral_attached', $loanApplication, new: ['collateral_id' => $collateral->id], context: ['created_with_file' => true]);
 
         return back()->with('success', 'New collateral added to the file.');
     }

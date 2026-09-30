@@ -32,3 +32,4 @@ Label sidebar sudah Indonesia (lihat App\Support\Navigation). Nama peran mengiku
 
 - Setiap kolom relasi baru wajib punya FK dengan aturan hapus yang disengaja (restrict/cascade/nullOnDelete). Untuk relasi lewat kode string (tanpa FK), daftarkan relasi `hasMany` berkunci kode di `usage` config master data dan/atau tambahkan pemeriksaan di controller yang menghapus/mengganti nama, plus test di `DataIntegrityTest`.
 - Data bisnis dihapus dengan soft delete; jangan `forceDelete` berkas atau pengguna.
+- Penjaga otomatis: `ArchitectureTest` gagal bila sebuah kelas memakai penulisan tanpa event model (pivot `attach/detach/sync`, `update/delete` massal, `DB::table()->update`, `*Quietly`) tanpa memanggil `Audit::record()`. Kejadian non-model yang wajib dicatat: login/logout/gagal, MFA (kirim, gagal, dipakai, kode pemulihan), ganti password, perubahan peran/izin, akses ditolak, baca data sensitif (pengajuan, jaminan, survei, cek nasabah), ekspor/verifikasi/prune audit log.

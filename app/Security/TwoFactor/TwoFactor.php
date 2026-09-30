@@ -2,6 +2,7 @@
 
 namespace App\Security\TwoFactor;
 
+use App\Audit\Audit;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,9 +53,21 @@ class TwoFactor
     {
         return match ($this->methodFor($user)) {
             self::EMAIL => $this->email->verify($user, $code),
-            self::TOTP => $this->verifyTotp($user, $code) || $this->recovery->consume($user, $code),
+            self::TOTP => $this->verifyTotp($user, $code) || $this->consumeRecoveryCode($user, $code),
             default => false,
         };
+    }
+
+    /** A recovery code is single use and means the phone was not available, so each use is recorded. */
+    private function consumeRecoveryCode(User $user, string $code): bool
+    {
+        if (! $this->recovery->consume($user, $code)) {
+            return false;
+        }
+
+        Audit::record('auth.mfa_recovery_code_used', 'auth', 'mfa_recovery_code_used', $user, context: ['remaining' => $this->recovery->remaining($user)], actor: $user);
+
+        return true;
     }
 
     /**

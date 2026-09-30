@@ -124,6 +124,8 @@ class CodexUserSync
             DB::table('model_has_roles')->where('model_type', User::class)->where('model_id', $existing->id)->update(['model_id' => $id]);
             DB::table('model_has_permissions')->where('model_type', User::class)->where('model_id', $existing->id)->update(['model_id' => $id]);
             DB::table('users')->where('id', $existing->id)->update(['id' => $id]);
+            // Raw updates raise no model events; the id change is a notable event, so it is recorded by hand.
+            Audit::record('users.id_migrated', 'users', 'id_migrated', null, ['id' => $existing->id], ['id' => $id], label: (string) $existing->username);
         });
 
         return User::withTrashed()->find($id);

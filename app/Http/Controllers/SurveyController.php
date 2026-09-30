@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Audit\Audit;
 use App\Enums\LoanStatus;
 use App\Models\LoanApplication;
 use App\Models\LoanSurvey;
@@ -53,6 +54,7 @@ class SurveyController extends Controller
     {
         $this->authorizeSurveyor($request, $loanApplication);
         $loan = $loanApplication->load(['product:id,alias,name', 'supervisor:id,name', 'collaterals']);
+        Audit::record('surveys.viewed', 'surveys', 'viewed', $loanApplication);
         $survey = $loan->surveys()->reorder('id', 'desc')->first();
 
         return Inertia::render('surveys/show', [
@@ -157,6 +159,8 @@ class SurveyController extends Controller
         ]);
 
         LoanSurveyPhoto::query()->whereIn('id', $photos->modelKeys())->update(['loan_survey_id' => $survey->id]);
+        // The bulk update above raises no model events, so the link between the photos and the survey is recorded here.
+        Audit::record('surveys.photos_linked', 'surveys', 'photos_linked', $survey, new: ['photo_ids' => $photos->modelKeys()], context: ['loan_application_id' => $loanApplication->id]);
         $loanApplication->update(['status' => LoanStatus::Survey]);
 
         Notify::toUser($request->user(), 'File ready for analysis', 'Survey', "Survey of file {$loanApplication->application_code} is done; it now appears under Analysis.", '/analysis');

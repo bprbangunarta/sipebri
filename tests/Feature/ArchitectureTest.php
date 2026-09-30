@@ -37,3 +37,35 @@ arch('the audit trail is only written through the Audit service')
 arch('models do not reach into HTTP')
     ->expect('App\Models')
     ->not->toUse(['Illuminate\Http\Request', 'Illuminate\Support\Facades\Request']);
+
+/*
+| Writes that raise no model events (pivot changes, bulk updates, raw table updates, file deletes) leave no trace in the
+| audit trail by themselves. Any class that does one must also call Audit::record(), or be listed below with the reason.
+*/
+it('records writes that bypass model events', function () {
+    $bypass = '/->(syncWithoutDetaching|attach|detach|sync)\(|DB::table\([^)]*\)->(insert|update|delete|upsert)|::query\(\)->[^;]*->(update|delete)\(|Quietly\(/';
+    $exempt = [
+        'app/Http/Controllers/NotificationController.php' => 'read markers of the signed-in person, not business data',
+        'app/Audit/Audit.php' => 'the audit writer itself',
+        'app/Audit/Auditable.php' => 'the audit hook itself',
+        'app/Console/Commands/AuditPrune.php' => 'retention pruning records itself',
+    ];
+    $offenders = [];
+
+    foreach (['app/Http', 'app/Auth', 'app/Support', 'app/Security', 'app/Services', 'app/Audit', 'app/Console'] as $dir) {
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path($dir))) as $file) {
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+
+            $relative = str_replace(base_path().'/', '', $file->getPathname());
+            $source = (string) file_get_contents($file->getPathname());
+
+            if (! array_key_exists($relative, $exempt) && preg_match($bypass, $source) && ! str_contains($source, 'Audit::record')) {
+                $offenders[] = $relative;
+            }
+        }
+    }
+
+    expect($offenders)->toBe([]);
+});

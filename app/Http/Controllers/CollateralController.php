@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Audit\Audit;
 use App\Models\BindingType;
 use App\Models\Collateral;
 use App\Models\CollateralCondition;
@@ -61,6 +62,8 @@ class CollateralController extends Controller
 
     public function edit(Collateral $collateral): Response
     {
+        Audit::record('collaterals.viewed', 'collaterals', 'viewed', $collateral);
+
         return Inertia::render('collaterals/form', [
             'collateral' => [
                 ...$collateral->only(['id', 'cbs_id', 'credit_account', 'collateral_type_code', 'binding_type_code', 'document_number', 'description', 'owner_name', 'owner_address', 'region_code', 'region_label', 'guarantee_value', 'adjustment_value', 'fair_value', 'njop_value', 'appraisal_value', 'independent_value', 'appraiser_name', 'independent_name', 'condition_code', 'insurance_code', 'ppap_code']),
