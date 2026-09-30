@@ -6,6 +6,7 @@ use App\Audit\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,8 +43,20 @@ class LoanSurveyPhoto extends Model
         return $this->belongsTo(LoanApplication::class, 'loan_application_id');
     }
 
+    /** The disk the attachments live on (config `filesystems.attachments`). */
+    public static function disk(): FilesystemAdapter
+    {
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk((string) config('filesystems.attachments'));
+
+        return $disk;
+    }
+
+    /** A private disk (s3) gets a short-lived signed link: the photos show where a customer's business or home is. */
     public function url(): string
     {
-        return Storage::disk('public')->url($this->path);
+        $disk = self::disk();
+
+        return $disk->providesTemporaryUrls() ? $disk->temporaryUrl($this->path, now()->addMinutes(30)) : $disk->url($this->path);
     }
 }

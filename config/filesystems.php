@@ -17,6 +17,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Attachments Disk
+    |--------------------------------------------------------------------------
+    |
+    | Where uploaded attachments (today: the survey location photos) are stored. "public" keeps them on this server;
+    | "s3" puts them in the AWS bucket (needs league/flysystem-aws-s3-v3 and the AWS_* variables). A disk that can make
+    | temporary URLs (s3) serves them through short-lived signed links, so the bucket can stay private.
+    |
+    */
+
+    'attachments' => env('ATTACHMENTS_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |

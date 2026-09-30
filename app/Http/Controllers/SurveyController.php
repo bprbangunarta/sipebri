@@ -11,7 +11,6 @@ use App\Support\CustomerDirectory;
 use App\Support\Notify;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
@@ -105,7 +104,7 @@ class SurveyController extends Controller
         ], [], ['photo' => 'photo']);
 
         $loanApplication->photos()->create([
-            'path' => Storage::disk('public')->putFile('surveys/'.$loanApplication->application_code, $request->file('photo')),
+            'path' => LoanSurveyPhoto::disk()->putFile('surveys/'.$loanApplication->application_code, $request->file('photo')),
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
             'source' => $data['source'] ?? 'camera',
@@ -123,7 +122,7 @@ class SurveyController extends Controller
             return back()->with('error', 'Photos of a saved survey cannot be deleted.');
         }
 
-        Storage::disk('public')->delete($photo->path);
+        LoanSurveyPhoto::disk()->delete($photo->path);
         $photo->delete();
 
         return back()->with('success', 'Photo deleted.');

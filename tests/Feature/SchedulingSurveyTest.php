@@ -5,6 +5,7 @@ use App\Models\AppNotification;
 use App\Models\LoanApplication;
 use App\Models\LoanSchedule;
 use App\Models\LoanSurvey;
+use App\Models\LoanSurveyPhoto;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
@@ -160,4 +161,13 @@ it('lists only surveyed or walk-in files assigned to the user on the analysis pa
 
     $this->actingAs(userWith(['dashboard.view'], 'Nobody'))->get(route('analysis.index'))->assertForbidden();
     expect($notYet->fresh()->status)->toBe(LoanStatus::Scheduling)->and($someoneElses->fresh()->status)->toBe(LoanStatus::Survey);
+});
+
+it('stores survey photos on the configured attachments disk', function () {
+    Storage::fake('vault');
+    config(['filesystems.attachments' => 'vault']);
+    $photo = LoanSurveyPhoto::disk()->putFile('surveys/00700001', UploadedFile::fake()->image('a.jpg'));
+
+    expect(Storage::disk('vault')->exists($photo))->toBeTrue()
+        ->and((new LoanSurveyPhoto(['path' => $photo]))->url())->toContain($photo);
 });
