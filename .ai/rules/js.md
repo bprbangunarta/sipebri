@@ -60,4 +60,4 @@ Semua UI baru WAJIB mengikuti pola Compact UI yang sudah ada; jangan membuat gay
 ## Header halaman (PageHeader)
 
 - Keterangan di header tidak mengulang data yang sudah tampil di isi halaman (mis. nama pemohon di halaman survey; ada di bagian Applicant). Cukup informasi pendamping yang pendek.
-- `PageHeader` sudah aman untuk teks panjang: di layar lebar teks membungkus di sebelah aksi (aksi tetap di kanan, rata tengah), di layar sempit teks penuh lalu aksi di bawahnya. Jangan membuat header sendiri.
+- Susunan `PageHeader` (teks kiri, aksi kanan; aksi turun ke bawah teks bila tidak muat) sudah disepakati; jangan diubah tanpa diminta.
