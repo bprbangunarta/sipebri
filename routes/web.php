@@ -129,6 +129,8 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
+        Route::post('permissions/generate', [PermissionController::class, 'generate'])->name('permissions.generate');
+        Route::delete('permissions/{permission}', [PermissionController::class, 'destroy'])->whereNumber('permission')->name('permissions.destroy');
 
         Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
         Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
