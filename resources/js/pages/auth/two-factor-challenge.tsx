@@ -1,6 +1,7 @@
 import { Head, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { NetworkStatus } from '@/components/network-status';
 import { Button } from '@/components/ui/button';
 import { CodeInput } from '@/components/ui/code-input';
 import { Field } from '@/components/ui/field';
@@ -38,6 +39,7 @@ export default function TwoFactorChallenge({
 
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
+            <NetworkStatus />
             <Head title="Verification" />
             <div className="w-full max-w-xs">
                 <div className="mb-4 flex flex-col items-center gap-1">

@@ -11,6 +11,7 @@ import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { Toaster, toast } from 'sonner';
+import { NetworkStatus } from '@/components/network-status';
 import { Button } from '@/components/ui/button';
 import {
     DropdownContent,
@@ -312,6 +313,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     <main className="flex-1 p-3 sm:p-5">{children}</main>
                 </div>
             </div>
+            <NetworkStatus />
             <Toaster
                 position="top-right"
                 richColors

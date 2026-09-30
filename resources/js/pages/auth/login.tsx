@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { Field } from '@/components/ui/field';
+import { NetworkStatus } from '@/components/network-status';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/misc';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import LoginController from '@/actions/App/Http/Controllers/Auth/LoginController
 export default function Login() {
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
+            <NetworkStatus />
             <Head title="Log in" />
             <div className="w-full max-w-xs">
                 <div className="mb-4 flex flex-col items-center gap-1">
