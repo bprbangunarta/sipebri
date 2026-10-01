@@ -14,12 +14,12 @@ import {
     X,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { LocationMap } from '@/components/location-map';
 import { ReasonDialog } from '@/components/reason-dialog';
 import type { MapPin as Pin } from '@/components/location-map';
 import { Button } from '@/components/ui/button';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
+import { ConfirmDialog } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Badge, Card, PageHeader } from '@/components/ui/misc';
@@ -139,7 +139,7 @@ export default function SurveyShow({
     const form = useForm({ note: survey?.note ?? '' });
     const [marking, setMarking] = useState<string | null>(null);
     const [replace, setReplace] = useState<Place | null>(null);
-    const [editing, setEditing] = useState<Place | null>(null);
+    const [active, setActive] = useState(locations[0].key);
     const [clearing, setClearing] = useState<Place | null>(null);
     const [cancelling, setCancelling] = useState(false);
     const [uploading, setUploading] = useState<string | null>(null);
@@ -280,7 +280,18 @@ export default function SurveyShow({
                         }
                     >
                         <div className="flex flex-col gap-3 p-3">
-                            {pins.length > 0 && <LocationMap pins={pins} />}
+                            {loan.locked ? (
+                                pins.length > 0 && <LocationMap pins={pins} />
+                            ) : (
+                                <PositionPicker
+                                    places={locations}
+                                    activeKey={active}
+                                    onActive={setActive}
+                                    photos={photos}
+                                    loanId={loan.id}
+                                    pins={pins}
+                                />
+                            )}
 
                             {locations.map((place) => {
                                 const mine = photos.filter(
@@ -304,7 +315,17 @@ export default function SurveyShow({
                                         uploading={uploading === place.key}
                                         canAddPhotos={pendingHere < maxPhotos}
                                         onMark={() => ask(place)}
-                                        onEdit={() => setEditing(place)}
+                                        onEdit={() => {
+                                            setActive(place.key);
+                                            document
+                                                .getElementById(
+                                                    'position-picker',
+                                                )
+                                                ?.scrollIntoView({
+                                                    behavior: 'smooth',
+                                                    block: 'center',
+                                                });
+                                        }}
                                         onClear={() => setClearing(place)}
                                         onUpload={(files) =>
                                             upload(place, files)
@@ -461,14 +482,6 @@ export default function SurveyShow({
                         });
                     }
                 }}
-            />
-
-            <EditLocation
-                key={editing?.key ?? 'none'}
-                place={editing}
-                loanId={loan.id}
-                photos={photos}
-                onClose={() => setEditing(null)}
             />
         </>
     );
@@ -683,36 +696,42 @@ function PlaceBlock({
     );
 }
 
-/** Office-side editing: paste coordinates or a map link, drop a pin on the map, or use a photo that still has GPS data. */
-function EditLocation({
-    place,
-    loanId,
+/**
+ * Set the position of a place from the page itself: drag and zoom the map and click to drop a pin, or paste coordinates or a
+ * map link, or reuse a photo that still carries GPS data. Nothing is saved until the button is pressed.
+ */
+function PositionPicker({
+    places,
+    activeKey,
+    onActive,
     photos,
-    onClose,
+    loanId,
+    pins,
 }: {
-    place: Place | null;
-    loanId: number;
+    places: Place[];
+    activeKey: string;
+    onActive: (key: string) => void;
     photos: Photo[];
-    onClose: () => void;
+    loanId: number;
+    pins: Pin[];
 }) {
+    const place = places.find((p) => p.key === activeKey) ?? places[0];
     const form = useForm({ text: '' });
     const [picked, setPicked] = useState<{ lat: number; lng: number } | null>(
         null,
     );
     const [busy, setBusy] = useState(false);
 
-    const pins: Pin[] = [
-        ...(place?.location
-            ? [
-                  {
-                      key: 'saved',
-                      label: place.label,
-                      latitude: place.location.latitude,
-                      longitude: place.location.longitude,
-                      tone: place.type,
-                  } satisfies Pin,
-              ]
-            : []),
+    // Switching to another place starts clean: a pin or text typed for one place must not be saved on another.
+    useEffect(() => {
+        setPicked(null);
+        form.setData('text', '');
+        form.clearErrors();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [place.key]);
+
+    const shown: Pin[] = [
+        ...pins,
         ...(picked
             ? [
                   {
@@ -726,27 +745,20 @@ function EditLocation({
             : []),
     ];
     const withGps = photos.filter(
-        (p) =>
-            p.latitude !== null &&
-            p.collateral_id === (place?.collateral_id ?? null),
+        (p) => p.latitude !== null && p.collateral_id === place.collateral_id,
     );
 
     const send = (data: Record<string, unknown>) => {
-        if (!place) {
-            return;
-        }
-
         setBusy(true);
         router.post(
             `/surveys/${loanId}/locations`,
-            {
-                target: place.type,
-                collateral_id: place.collateral_id,
-                ...data,
-            },
+            { target: place.type, collateral_id: place.collateral_id, ...data },
             {
                 preserveScroll: true,
-                onSuccess: onClose,
+                onSuccess: () => {
+                    setPicked(null);
+                    form.setData('text', '');
+                },
                 onError: (errors) =>
                     form.setError(
                         'text',
@@ -758,15 +770,46 @@ function EditLocation({
     };
 
     return (
-        <Modal
-            wide
-            open={place !== null}
-            onOpenChange={(open) => !open && onClose()}
-            title={`Posisi ${place?.label ?? ''}`}
-            description="Tempel koordinat atau tautan Google Maps, atau klik peta untuk memasang pin."
+        <div
+            id="position-picker"
+            className="flex flex-col gap-2.5 rounded-md border border-line p-2.5"
         >
+            <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-xs font-medium">Tentukan posisi:</span>
+                {places.map((p) => (
+                    <Button
+                        key={p.key}
+                        type="button"
+                        size="sm"
+                        variant={p.key === place.key ? undefined : 'outline'}
+                        onClick={() => onActive(p.key)}
+                    >
+                        {p.location && <Check />} {p.label}
+                    </Button>
+                ))}
+            </div>
+
+            <LocationMap
+                pins={shown}
+                height={320}
+                onPick={(lat, lng) => {
+                    const point = {
+                        lat: Number(lat.toFixed(7)),
+                        lng: Number(lng.toFixed(7)),
+                    };
+                    setPicked(point);
+                    form.setData('text', `${point.lat}, ${point.lng}`);
+                    form.clearErrors();
+                }}
+            />
+            <p className="text-xs text-muted">
+                Geser peta untuk mencari lokasi, klik untuk memasang pin. Klik
+                peta dulu bila ingin memperbesar dengan roda mouse.
+            </p>
+
             <form
                 noValidate
+                className="flex flex-col gap-2 sm:flex-row sm:items-end"
                 onSubmit={(e) => {
                     e.preventDefault();
                     send(
@@ -781,14 +824,13 @@ function EditLocation({
                     );
                 }}
             >
-                <div className="flex max-h-[70vh] flex-col gap-3 overflow-y-auto p-4">
+                <div className="min-w-0 flex-1">
                     <Field
-                        label="Koordinat atau tautan peta"
+                        label={`Koordinat atau tautan peta untuk ${place.label}`}
                         error={form.errors.text}
                         hint="Contoh -6.4643, 107.8083, atau tautan lokasi yang dibagikan lewat WhatsApp."
                     >
                         <Input
-                            autoFocus
                             value={form.data.text}
                             onChange={(e) => {
                                 form.setData('text', e.target.value);
@@ -797,58 +839,39 @@ function EditLocation({
                             aria-invalid={!!form.errors.text}
                         />
                     </Field>
-
-                    <LocationMap
-                        pins={pins}
-                        height={240}
-                        onPick={(lat, lng) => {
-                            const point = {
-                                lat: Number(lat.toFixed(7)),
-                                lng: Number(lng.toFixed(7)),
-                            };
-                            setPicked(point);
-                            form.setData('text', `${point.lat}, ${point.lng}`);
-                            form.clearErrors();
-                        }}
-                    />
-
-                    {withGps.length > 0 && (
-                        <div className="flex flex-col gap-1.5">
-                            <p className="text-xs font-medium">
-                                Foto yang masih membawa data GPS
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                                {withGps.map((p, i) => (
-                                    <Button
-                                        key={p.id}
-                                        type="button"
-                                        size="sm"
-                                        variant="outline"
-                                        disabled={busy}
-                                        onClick={() => send({ photo_id: p.id })}
-                                    >
-                                        <MapPin /> Pakai foto {i + 1} (
-                                        {p.latitude?.toFixed(5)},{' '}
-                                        {p.longitude?.toFixed(5)})
-                                    </Button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
-                <DialogFooter>
-                    <Button variant="outline" onClick={onClose}>
-                        Batal
-                    </Button>
-                    <Button
-                        type="submit"
-                        loading={busy}
-                        disabled={form.data.text.trim() === ''}
-                    >
-                        Simpan posisi
-                    </Button>
-                </DialogFooter>
+                <Button
+                    type="submit"
+                    loading={busy}
+                    disabled={form.data.text.trim() === ''}
+                >
+                    Simpan posisi
+                </Button>
             </form>
-        </Modal>
+
+            {withGps.length > 0 && (
+                <div className="flex flex-col gap-1.5">
+                    <p className="text-xs font-medium">
+                        Foto yang masih membawa data GPS
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                        {withGps.map((p, i) => (
+                            <Button
+                                key={p.id}
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                disabled={busy}
+                                onClick={() => send({ photo_id: p.id })}
+                            >
+                                <MapPin /> Pakai foto {i + 1} (
+                                {p.latitude?.toFixed(5)},{' '}
+                                {p.longitude?.toFixed(5)})
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

@@ -45,6 +45,7 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
     const map = useRef<LeafletMap | null>(null);
     const markers = useRef<Marker[]>([]);
     const leaflet = useRef<typeof import('leaflet') | null>(null);
+    const lastFit = useRef('');
     const pick = useRef(onPick);
     pick.current = onPick;
 
@@ -73,9 +74,12 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
                 attribution:
                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             }).addTo(created);
-            created.on('click', (e) =>
-                pick.current?.(e.latlng.lat, e.latlng.lng),
-            );
+            created.on('click', (e) => {
+                // The wheel zooms the map only after it was clicked, so scrolling the page past it still works.
+                created.scrollWheelZoom.enable();
+                pick.current?.(e.latlng.lat, e.latlng.lng);
+            });
+            created.on('mouseout', () => created.scrollWheelZoom.disable());
             map.current = created;
             draw();
         })();
@@ -111,17 +115,29 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
             return marker;
         });
 
-        if (pins.length === 1) {
-            current.setView([pins[0].latitude, pins[0].longitude], 17);
-        } else if (pins.length > 1) {
-            current.fitBounds(
-                L.latLngBounds(
-                    pins.map(
-                        (p) => [p.latitude, p.longitude] as [number, number],
+        // Fit the view to the saved places only when they change: a pin being placed must not make the map jump
+        // while the person is still panning and zooming.
+        const saved = pins.filter((p) => p.tone !== 'draft');
+        const fitKey = JSON.stringify(
+            saved.map((p) => [p.key, p.latitude, p.longitude]),
+        );
+
+        if (fitKey !== lastFit.current) {
+            lastFit.current = fitKey;
+
+            if (saved.length === 1) {
+                current.setView([saved[0].latitude, saved[0].longitude], 17);
+            } else if (saved.length > 1) {
+                current.fitBounds(
+                    L.latLngBounds(
+                        saved.map(
+                            (p) =>
+                                [p.latitude, p.longitude] as [number, number],
+                        ),
                     ),
-                ),
-                { padding: [32, 32], maxZoom: 17 },
-            );
+                    { padding: [32, 32], maxZoom: 17 },
+                );
+            }
         }
 
         current.invalidateSize();
