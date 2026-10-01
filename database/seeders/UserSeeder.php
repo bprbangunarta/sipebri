@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Role;
  * Starter people for testing: one or more of every role involved in the credit flow, so each screen can be
  * tried without waiting for a first Codex sign-in. They mirror what CodexUserSync would create (same ids,
  * usernames, offices, roles); signing in through Codex refreshes them. Nobody signs in with a local password.
- * Idempotent, and never runs in production.
+ * Idempotent, and never runs in production. Committee members also get a fake NIK when they have none.
  */
 class UserSeeder extends Seeder
 {
@@ -61,6 +61,9 @@ class UserSeeder extends Seeder
         ['id' => 500, 'username' => '310011221', 'name' => 'Apip', 'email' => 'apipsasa7@gmail.com', 'office' => null, 'role' => 'Staff Sistem & Jaringan', 'active' => false],
     ];
 
+    /** Roles that sit in the default committee levels. */
+    private const COMMITTEE_ROLES = ['Kepala Seksi Analis', 'Kepala Bagian Analis', 'Direktur Bisnis', 'Direktur Utama'];
+
     public function run(): void
     {
         if (app()->isProduction()) {
@@ -91,6 +94,12 @@ class UserSeeder extends Seeder
                 $user->save();
                 $row['active'] ? ($user->trashed() && $user->restore()) : ($user->trashed() || $user->delete());
                 $user->syncRoles([Role::findOrCreate($row['role'], 'web')]);
+
+                // Committee members get a made-up NIK (obviously fake: 9999 prefix) so conflict detection can be tried;
+                // a NIK that Codex or an admin already set is never replaced.
+                if ($user->nik === null && in_array($row['role'], self::COMMITTEE_ROLES, true)) {
+                    $user->setNik('9999'.str_pad((string) $row['id'], 12, '0', STR_PAD_LEFT), 'manual');
+                }
             }
         });
     }
