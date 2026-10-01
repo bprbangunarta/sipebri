@@ -1,1 +1,1 @@
-@extends('errors.layout', ['code' => 419, 'title' => 'Page expired', 'description' => 'Your session expired. Reload the page and try again.', 'reload' => true])
+@extends('errors.layout', ['code' => 419, 'title' => 'Halaman kedaluwarsa', 'description' => 'Sesi Anda berakhir. Muat ulang halaman lalu coba lagi.', 'reload' => true])

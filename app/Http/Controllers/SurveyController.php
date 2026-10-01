@@ -189,7 +189,7 @@ class SurveyController extends Controller
             'survey_latitude' => null, 'survey_longitude' => null, 'survey_source' => null, 'survey_located_at' => null, 'survey_located_by' => null, 'survey_address' => null,
         ]);
 
-        Notify::toUser($request->user(), 'File ready for analysis', 'Survey', "Survey of file {$loanApplication->application_code} is done; it now appears under Analysis.", '/analysis');
+        Notify::toUser($request->user(), 'File ready for analysis', 'Survey', "Survey of file {$loanApplication->application_code} is done; it now appears under Analysis.", '/credit-analysis');
 
         return back()->with('success', 'Survey saved. The file is now ready for analysis.');
     }

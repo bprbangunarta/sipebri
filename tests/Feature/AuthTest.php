@@ -15,7 +15,7 @@ beforeEach(function () {
 
 it('redirects guests to the login page', function (string $uri) {
     $this->get($uri)->assertRedirect(route('login'));
-})->with(['/', '/dashboard', '/loan-applications', '/collaterals', '/committees', '/references/regions']);
+})->with(['/', '/loan-applications', '/collaterals', '/committees', '/references/regions']);
 
 it('renders the login page', function () {
     $this->get(route('login'))->assertOk();
@@ -24,7 +24,7 @@ it('renders the login page', function () {
 it('signs in an active person and mirrors them locally with role and office', function () {
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'anything'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'anything'])->assertRedirect(route('dashboard'));
 
     $user = User::where('username', '309011221')->firstOrFail();
     $this->assertAuthenticatedAs($user);
@@ -92,7 +92,7 @@ it('updates an existing person and lets the role follow Codex', function () {
     User::factory()->create(['id' => 30, 'username' => '309011221', 'name' => 'Old Name'])->assignRole('AO Kredit');
     fakeCodex(['name' => 'New Name', 'role' => 'Kepala Seksi Analis']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     $user = User::findOrFail(30);
     expect(User::where('username', '309011221')->count())->toBe(1)->and($user->name)->toBe('New Name')
@@ -103,7 +103,7 @@ it('moves a person stored under another id to the Codex id', function () {
     $old = User::factory()->create(['id' => 99, 'username' => '309011221'])->assignRole('AO Kredit');
     fakeCodex(['role' => 'AO Kredit']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     expect(User::withTrashed()->find(99))->toBeNull()->and(User::find(30)->hasRole('AO Kredit'))->toBeTrue();
 });
@@ -120,7 +120,7 @@ it('refuses an inactive person but keeps them stored as soft deleted', function 
 it('restores a soft-deleted person when Codex says active again, and soft-deletes one turned inactive', function () {
     User::factory()->create(['id' => 30, 'username' => '309011221'])->delete();
     fakeCodex();
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
     expect(User::withTrashed()->findOrFail(30)->trashed())->toBeFalse();
 
     $this->post(route('logout'));
@@ -156,7 +156,7 @@ it('validates the form before calling Codex', function () {
 it('makes a person with an unknown role a Guest', function () {
     fakeCodex(['role' => 'Some Unknown Role']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     $user = User::findOrFail(30);
     expect($user->hasRole('Guest'))->toBeTrue()->and($user->roles)->toHaveCount(1);
@@ -165,7 +165,7 @@ it('makes a person with an unknown role a Guest', function () {
 it('gives Super Admin to a person whose Codex role is Super Admin', function () {
     fakeCodex(['role' => 'Super Admin']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     $user = User::findOrFail(30);
     expect($user->hasRole('Super Admin'))->toBeTrue()->and($user->roles)->toHaveCount(1)->and($user->can('surveys.manage'))->toBeTrue();
@@ -184,7 +184,7 @@ it('translates a known email into the Codex username', function () {
     User::factory()->create(['id' => 30, 'username' => '309011221', 'email' => 'person@example.com']);
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => 'Person@Example.com', 'password' => 'x'])->assertRedirect(route('home'));
+    $this->post(route('login.store'), ['username' => 'Person@Example.com', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     Http::assertSent(fn ($request) => $request['username'] === '309011221');
     expect(User::where('username', '309011221')->count())->toBe(1);
@@ -212,8 +212,8 @@ it('stops a soft-deleted person\'s existing session', function () {
 });
 
 it('lands people on the first screen they may open, or refuses when there is none', function () {
-    $this->actingAs(userWith(['collaterals.view'], 'Collateral Viewer'))->get(route('home'))->assertRedirect('/collaterals');
-    $this->actingAs(userWith([], 'Guest Like'))->get(route('home'))->assertForbidden()
+    $this->actingAs(userWith(['collaterals.view'], 'Collateral Viewer'))->get(route('dashboard'))->assertRedirect('/collaterals');
+    $this->actingAs(userWith([], 'Guest Like'))->get(route('dashboard'))->assertForbidden()
         ->assertInertia(fn (Assert $page) => $page->component('error')->where('status', 403)->where('auth.user.role', 'Guest Like'));
 });
 
@@ -224,7 +224,7 @@ it('logs out', function () {
 });
 
 it('redirects signed-in users away from the login page', function () {
-    $this->actingAs(superAdmin())->get(route('login'))->assertRedirect(route('home'));
+    $this->actingAs(superAdmin())->get(route('login'))->assertRedirect(route('dashboard'));
 });
 
 it('renders the error page for a missing route, even for guests, without needing a layout', function () {
@@ -235,4 +235,4 @@ it('renders themed Blade error pages for statuses the app layout cannot cover', 
     Route::get('/_error-test/'.$status, fn () => abort($status));
 
     $this->get('/_error-test/'.$status)->assertStatus($status)->assertSee($title)->assertSee(config('app.name'))->assertSee('bg-primary', false);
-})->with([[500, 'Something went wrong'], [503, 'Under maintenance'], [429, 'Too many requests'], [401, 'Sign-in required']]);
+})->with([[500, 'Terjadi kesalahan'], [503, 'Sedang dalam pemeliharaan'], [429, 'Terlalu banyak permintaan'], [401, 'Perlu masuk']]);

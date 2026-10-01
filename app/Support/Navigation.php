@@ -23,7 +23,7 @@ class Navigation
 
             foreach ($section['items'] as $item) {
                 if (isset($item['children'])) {
-                    $children = array_values(array_filter($item['children'], fn(array $child): bool => self::allowed($user, $child)));
+                    $children = array_values(array_filter($item['children'], fn (array $child): bool => self::allowed($user, $child)));
 
                     if ($children !== []) {
                         $items[] = ['label' => $item['label'], 'icon' => $item['icon'], 'children' => array_map(self::link(...), $children)];

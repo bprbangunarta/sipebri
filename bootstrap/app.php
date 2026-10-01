@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->redirectUsersTo(fn () => route('home'));
+        $middleware->redirectUsersTo(fn () => route('dashboard'));
         $middleware->alias([
             'permission' => PermissionMiddleware::class,
             'role' => RoleMiddleware::class,
@@ -56,7 +56,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return Inertia::render('error', [
                 'status' => $status,
-                'message' => $exception instanceof HttpExceptionInterface ? $exception->getMessage() : '',
+                // Only the 403 messages written for people are shown; framework texts of other statuses stay out of sight.
+                'message' => $status === 403 && $exception instanceof HttpExceptionInterface ? $exception->getMessage() : '',
             ])->toResponse($request)->setStatusCode($status);
         });
     })->create();

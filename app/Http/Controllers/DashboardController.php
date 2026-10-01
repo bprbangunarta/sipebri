@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\LoanStatus;
 use App\Models\LoanApplication;
 use App\Models\User;
+use App\Support\Navigation;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -20,10 +22,23 @@ class DashboardController extends Controller
     /** Statuses of a file that is being worked on (submitted, not yet decided). */
     private const IN_PROCESS = [LoanStatus::Submitted, LoanStatus::Scheduling, LoanStatus::Survey, LoanStatus::Analysis, LoanStatus::Committee];
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request): Response|RedirectResponse
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $request->user();
+
+        if ($user === null) {
+            return redirect()->route('login');
+        }
+
+        if (! $user->can('dashboard.view')) {
+            $href = Navigation::firstHref($user);
+
+            abort_if($href === null, 403, 'Peran Anda belum punya akses ke halaman mana pun.');
+
+            return redirect($href);
+        }
+
         $all = $user->hasAnyPermission(['scheduling.view', 'surveys.view', 'analysis.view']);
         $inProcess = array_map(fn (LoanStatus $s): string => $s->value, self::IN_PROCESS);
 

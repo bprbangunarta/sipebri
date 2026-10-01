@@ -127,7 +127,7 @@ class SchedulingController extends Controller
             $walkIn ? 'File ready for analysis' : 'Survey assignment',
             'Scheduling',
             "File {$loanApplication->application_code} ({$loanApplication->full_name}) ".($walkIn ? 'has no field survey and is ready for analysis.' : 'is to be surveyed on '.$loanApplication->survey_date->format('d M Y').'.'),
-            $walkIn ? '/analysis' : '/surveys',
+            $walkIn ? '/credit-analysis' : '/surveys',
         );
 
         return back()->with('success', $walkIn ? 'Schedule saved. This product has no field survey, so the file is ready for analysis.' : 'Survey schedule saved.');

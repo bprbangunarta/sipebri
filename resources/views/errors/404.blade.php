@@ -1,1 +1,1 @@
-@extends('errors.layout', ['code' => 404, 'title' => 'Page not found', 'description' => 'The page you are looking for does not exist or has been moved.', 'reload' => false])
+@extends('errors.layout', ['code' => 404, 'title' => 'Halaman tidak ditemukan', 'description' => 'Halaman yang Anda cari tidak ada atau sudah dipindahkan.', 'reload' => false])

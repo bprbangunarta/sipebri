@@ -22,17 +22,11 @@ use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\SurveyLocationController;
 use App\Http\Controllers\UserController;
-use App\Support\Navigation;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function (Request $request) {
-    $href = $request->user() ? Navigation::firstHref($request->user()) : null;
-
-    abort_if($request->user() && $href === null, 403, 'Your role has no access to any page yet.');
-
-    return redirect($href ?? route('login'));
-})->name('home');
+// The dashboard is the root page; people without access to it are sent to the first page they may open.
+Route::get('/', DashboardController::class)->name('dashboard');
+Route::redirect('dashboard', '/'); // the dashboard used to live here
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'create'])->name('login');
@@ -60,8 +54,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
     Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
-
-    Route::get('dashboard', DashboardController::class)->middleware('permission:dashboard.view')->name('dashboard');
 
     Route::get('collaterals', [CollateralController::class, 'index'])->middleware('permission:collaterals.view')->name('collaterals.index');
     Route::middleware('permission:collaterals.manage')->group(function () {
@@ -104,7 +96,7 @@ Route::middleware('auth')->group(function () {
         Route::post('surveys/{loanApplication}', [SurveyController::class, 'store'])->name('surveys.store');
     });
 
-    Route::get('analysis', [AnalysisController::class, 'index'])->middleware('permission:analysis.view')->name('analysis.index');
+    Route::get('credit-analysis', [AnalysisController::class, 'index'])->middleware('permission:analysis.view')->name('analysis.index');
     Route::get('approvals', [ApprovalController::class, 'index'])->middleware('permission:approvals.view')->name('approvals.index');
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).

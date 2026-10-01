@@ -5,9 +5,11 @@ const appName = import.meta.env.VITE_APP_NAME || 'SIPEBRI';
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    // Login has no layout; the layout needs a signed-in user, so error pages of guests have none either.
+    // Login and error pages are full-screen, without the admin layout; the layout needs a signed-in user anyway.
     layout: (name, page) =>
-        name.startsWith('auth/') || !page.props.auth ? null : AppLayout,
+        name.startsWith('auth/') || name === 'error' || !page.props.auth
+            ? null
+            : AppLayout,
     progress: {
         color: '#4B5563',
     },

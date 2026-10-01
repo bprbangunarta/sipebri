@@ -44,7 +44,7 @@ export default function AnalysisIndex({
 }) {
     const { visit, search, onSearch, clear, loading, error } =
         useListQuery<Filters>({
-            url: '/analysis',
+            url: '/credit-analysis',
             filters,
             defaults: DEFAULTS,
             only: ['loans', 'filters'],

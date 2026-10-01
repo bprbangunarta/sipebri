@@ -87,7 +87,7 @@ it('challenges a person with the email method and only signs them in after the r
     $this->post(route('two-factor.verify'), ['code' => '000000'])->assertSessionHasErrors('code');
     $this->assertGuest();
 
-    $this->post(route('two-factor.verify'), ['code' => lastEmailedCode()])->assertRedirect(route('home'));
+    $this->post(route('two-factor.verify'), ['code' => lastEmailedCode()])->assertRedirect(route('dashboard'));
     $this->assertAuthenticatedAs(User::find(30));
     expect(session('two_factor.login'))->toBeNull();
 });
@@ -102,7 +102,7 @@ it('challenges a person with an authenticator app and refuses a replayed code', 
     Mail::assertNothingSent();
 
     $code = Totp::code($user->mfa_secret);
-    $this->post(route('two-factor.verify'), ['code' => $code])->assertRedirect(route('home'));
+    $this->post(route('two-factor.verify'), ['code' => $code])->assertRedirect(route('dashboard'));
     $this->assertAuthenticated();
 
     $this->post(route('logout'));
@@ -118,7 +118,7 @@ it('accepts a recovery code once', function () {
     fakeCodex();
 
     signInStep();
-    $this->post(route('two-factor.verify'), ['code' => $codes[0]])->assertRedirect(route('home'));
+    $this->post(route('two-factor.verify'), ['code' => $codes[0]])->assertRedirect(route('dashboard'));
 
     $this->post(route('logout'));
     signInStep();

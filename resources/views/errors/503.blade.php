@@ -1,1 +1,1 @@
-@extends('errors.layout', ['code' => 503, 'title' => 'Under maintenance', 'description' => 'The system is being updated and will be back shortly. Please try again in a few minutes.', 'reload' => true])
+@extends('errors.layout', ['code' => 503, 'title' => 'Sedang dalam pemeliharaan', 'description' => 'Sistem sedang diperbarui dan akan segera kembali. Coba lagi dalam beberapa menit.', 'reload' => true])
