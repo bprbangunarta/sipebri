@@ -229,7 +229,8 @@ class SchedulingController extends Controller
     {
         $roles = $this->isWalkIn($loan) ? config('credit.walk_in_roles') : [$this->ladderRole($loan)];
 
-        return User::query()->role($roles)->orderBy('name')->get(['id', 'name'])
+        // A committee member who applies for a credit does not survey their own file.
+        return User::query()->role($roles)->when($loan->committee_conflict_user_id, fn ($q, int $id) => $q->whereKeyNot($id))->orderBy('name')->get(['id', 'name'])
             ->map(fn (User $u): array => ['value' => $u->id, 'label' => $u->name])->values()->all();
     }
 

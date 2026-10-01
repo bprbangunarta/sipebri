@@ -63,6 +63,7 @@ class CodexUserSync
         }
 
         $this->syncRole($local, $user['role'] ?? null);
+        $this->syncNik($local, $user);
 
         return $local;
     }
@@ -129,6 +130,28 @@ class CodexUserSync
         });
 
         return User::withTrashed()->find($id);
+    }
+
+    /**
+     * Codex is the source of the national ID (KTP) of staff, which is how a committee member is recognised when they apply for
+     * a credit. Whatever Codex calls the field, a valid 16-digit value is taken; when Codex sends nothing, a NIK typed
+     * by a Super Admin stays.
+     *
+     * @param  array<string, mixed>  $user
+     */
+    private function syncNik(User $local, array $user): void
+    {
+        foreach (['nik', 'ktp', 'nomor_ktp', 'no_ktp'] as $key) {
+            $value = preg_replace('/\D/', '', (string) ($user[$key] ?? ''));
+
+            if (strlen((string) $value) === 16 && $local->nik !== $value) {
+                $local->setNik($value, 'codex');
+            }
+
+            if (filled($user[$key] ?? null)) {
+                return;
+            }
+        }
     }
 
     /** The email must be unique here; fall back to a placeholder if Codex has none or another user holds it. */

@@ -43,6 +43,8 @@ use Illuminate\Support\Carbon;
  * @property string|null $survey_source how the position was set: paste, map or photo
  * @property Carbon|null $survey_located_at
  * @property string|null $survey_located_by
+ * @property int|null $committee_conflict_user_id the committee member who is the applicant, if any
+ * @property string|null $committee_conflict_source how that was found out: nik (matched by national ID) or manual
  * @property string|null $survey_address approximate address of the survey location (reverse geocoding), a hint only
  * @property-read Product|null $product
  * @property-read Office|null $office
@@ -55,6 +57,7 @@ use Illuminate\Support\Carbon;
     'committee_path_id', 'marketing', 'usage_type', 'requested_amount', 'requested_tenor', 'method_id', 'installment_id',
     'interest_rate', 'note', 'supervisor_id', 'surveyor_id', 'survey_date', 'created_by',
     'survey_latitude', 'survey_longitude', 'survey_source', 'survey_located_at', 'survey_located_by', 'survey_address',
+    'committee_conflict_user_id', 'committee_conflict_source',
 ])]
 class LoanApplication extends Model
 {
@@ -180,6 +183,14 @@ class LoanApplication extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(LoanSurveyPhoto::class)->orderBy('id');
+    }
+
+    /**
+     * @return BelongsTo<User, $this>
+     */
+    public function conflictUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'committee_conflict_user_id');
     }
 
     /**

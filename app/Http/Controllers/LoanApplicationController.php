@@ -18,6 +18,7 @@ use App\Models\Product;
 use App\Models\ProductParameter;
 use App\Models\Region;
 use App\Models\User;
+use App\Support\CommitteeMembers;
 use App\Support\CustomerDirectory;
 use App\Support\LendingLimit;
 use App\Support\LocationTargets;
@@ -25,6 +26,7 @@ use App\Support\Notify;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -71,6 +73,7 @@ class LoanApplicationController extends Controller
             'products' => Product::orderBy('code')->get(['id', 'alias', 'name'])->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} : {$p->name}"]),
             'canManage' => $request->user()->can('loan-applications.manage'),
             'customerSource' => 'the customer master (Codex)',
+            'committeeMembers' => CommitteeMembers::options(),
         ]);
     }
 
@@ -87,19 +90,26 @@ class LoanApplicationController extends Controller
             return response()->json(['found' => false, 'customer' => null, 'message' => 'The customer system cannot be reached right now. Please try again shortly.'], 503);
         }
 
+        // A committee member applying for a credit cannot take part in deciding it, so the file has to know from the start.
+        $member = $customer ? CommitteeMembers::findByNik($nik) : null;
+
         // The national ID is personal data: the trail keeps only its last four digits.
-        Audit::record('customers.lookup', 'customers', 'lookup', context: ['nik' => str_repeat('*', max(0, strlen($nik) - 4)).substr($nik, -4), 'found' => (bool) $customer], label: 'Customer lookup');
+        Audit::record('customers.lookup', 'customers', 'lookup', context: ['nik' => str_repeat('*', max(0, strlen($nik) - 4)).substr($nik, -4), 'found' => (bool) $customer, 'committee_member' => $member !== null], label: 'Customer lookup');
 
         return response()->json([
             'found' => (bool) $customer,
             'customer' => $customer,
+            'committee_member' => $member ? ['id' => $member->id, 'name' => $member->name, 'role' => $member->getRoleNames()->first()] : null,
             'message' => $customer ? null : 'This national ID is not registered in the customer system. Register the customer first.',
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $data = $request->validate(['nik' => ['required', 'digits:16']], [], ['nik' => 'NIK']);
+        $data = $request->validate([
+            'nik' => ['required', 'digits:16'],
+            'committee_conflict_user_id' => ['nullable', 'integer', $this->committeeMemberRule()],
+        ], [], ['nik' => 'NIK', 'committee_conflict_user_id' => 'committee member']);
 
         try {
             $customer = CustomerDirectory::find($data['nik']);
@@ -113,7 +123,14 @@ class LoanApplicationController extends Controller
             throw ValidationException::withMessages(['nik' => 'This national ID is not registered in the customer system, so the application cannot continue.']);
         }
 
+        // Recognised by national ID: decided by the system and not open to being switched off. Otherwise the officer may flag a
+        // member the system could not recognise (e.g. no NIK on record yet).
+        $detected = CommitteeMembers::findByNik($data['nik']);
+        $conflictId = $detected->id ?? (isset($data['committee_conflict_user_id']) ? (int) $data['committee_conflict_user_id'] : null);
+
         $loan = LoanApplication::create([
+            'committee_conflict_user_id' => $conflictId,
+            'committee_conflict_source' => $conflictId === null ? null : ($detected !== null ? 'nik' : 'manual'),
             'application_code' => LoanApplication::nextCode(),
             'application_date' => now()->toDateString(),
             'status' => LoanStatus::Draft,
@@ -129,7 +146,7 @@ class LoanApplicationController extends Controller
     public function show(Request $request, LoanApplication $loanApplication): Response
     {
         $this->authorize('view', $loanApplication);
-        $loan = $loanApplication->load(['collaterals', 'product:id,alias,name', 'office:id,alias']);
+        $loan = $loanApplication->load(['collaterals', 'product:id,alias,name', 'office:id,alias', 'conflictUser']);
         Audit::record('loan_applications.viewed', 'loan_applications', 'viewed', $loanApplication);
 
         return Inertia::render('loan-applications/show', [
@@ -138,12 +155,13 @@ class LoanApplicationController extends Controller
                 ...$loan->only(['institution_id', 'marketing', 'committee_path_id', 'usage_type', 'method_id', 'installment_id', 'interest_rate', 'cif_number', 'supervisor_id', 'note']),
                 'checklist' => $this->checklist($loan),
                 'collateral_required' => $this->collateralRequired($loan),
+                'committee_conflict' => $loan->conflictUser ? ['user_id' => $loan->conflictUser->id, 'name' => $loan->conflictUser->name, 'role' => $loan->conflictUser->getRoleNames()->first(), 'source' => $loan->committee_conflict_source] : null,
             ],
             'collaterals' => $loan->collaterals->map(fn (Collateral $c): array => [...$c->only(['id', 'cbs_id', 'collateral_type_code', 'owner_name', 'document_number', 'description']), 'appraisal_value' => $c->appraisal_value]),
             'collateralOptions' => $this->collateralOptions(),
             'locations' => LocationTargets::for($loan),
             'editable' => $request->user()->can('modify', $loan),
-            'references' => $this->references(),
+            'references' => $this->references($loan),
         ]);
     }
 
@@ -151,6 +169,11 @@ class LoanApplicationController extends Controller
     public function update(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         $this->authorize('modify', $loanApplication);
+
+        // A conflict recognised by national ID stays; a manual flag can be added, changed or removed while the file is a draft.
+        $conflictId = $loanApplication->committee_conflict_source === 'nik'
+            ? $loanApplication->committee_conflict_user_id
+            : ($request->filled('committee_conflict_user_id') ? (int) $request->input('committee_conflict_user_id') : null);
 
         $parameter = ProductParameter::where('product_id', (int) $request->input('product_id'))->first();
         $bmpk = LendingLimit::bmpk();
@@ -168,7 +191,14 @@ class LoanApplicationController extends Controller
             'interest_rate' => ['required', 'numeric', 'min:0', 'max:100'],
             'usage_type' => ['required', Rule::in(LoanApplication::USAGE_TYPES)],
             'office_id' => ['required', 'integer', 'exists:offices,id'],
-            'supervisor_id' => ['required', 'integer', fn (string $attribute, mixed $value, \Closure $fail) => User::role(RoleName::AnalysisSectionHead->value)->whereKey($value)->exists() ? null : $fail('The selected section head does not hold the analysis section head role.')],
+            'supervisor_id' => ['required', 'integer', function (string $attribute, mixed $value, \Closure $fail) use ($conflictId): void {
+                if ($conflictId !== null && (int) $value === $conflictId) {
+                    $fail('The section head cannot be the applicant. Choose another section head.');
+                } elseif (! User::role(RoleName::AnalysisSectionHead->value)->whereKey($value)->exists()) {
+                    $fail('The selected section head does not hold the analysis section head role.');
+                }
+            }],
+            'committee_conflict_user_id' => ['nullable', 'integer', $this->committeeMemberRule()],
             'institution_id' => ['nullable', 'integer', 'exists:institutions,id'],
             'marketing' => ['nullable', 'string', 'max:100'],
             'note' => ['nullable', 'string', 'max:255'],
@@ -188,7 +218,11 @@ class LoanApplicationController extends Controller
             $data['marketing'] = mb_strtoupper($data['marketing']);
         }
 
-        $loanApplication->update($data);
+        $loanApplication->update([
+            ...Arr::except($data, ['committee_conflict_user_id']),
+            'committee_conflict_user_id' => $conflictId,
+            'committee_conflict_source' => $conflictId === null ? null : $loanApplication->committee_conflict_source ?? 'manual',
+        ]);
         $warning = $this->tenorWarning($loanApplication);
 
         return back()->with('success', 'Application data saved.')->with('warning', $warning);
@@ -355,6 +389,16 @@ class LoanApplicationController extends Controller
         return array_values($options->all());
     }
 
+    /** Only a committee member can be flagged as the applicant. */
+    private function committeeMemberRule(): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail): void {
+            if (filled($value) && ! CommitteeMembers::query()->whereKey((int) $value)->exists()) {
+                $fail('The selected person is not a committee member.');
+            }
+        };
+    }
+
     /** The strictest of the product maximum and the BMPK (null = no limit). */
     private function amountCeiling(?int $productMax, ?int $bmpk): ?int
     {
@@ -371,7 +415,7 @@ class LoanApplicationController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function references(): array
+    private function references(?LoanApplication $loan = null): array
     {
         $code = fn ($model, array $cols = ['code', 'name']) => $model::orderBy('code')->get()->map(fn ($m): array => ['value' => $m->getKey(), 'label' => "{$m->code} : {$m->name}"]);
 
@@ -382,7 +426,9 @@ class LoanApplicationController extends Controller
             'institutions' => $code(Institution::class),
             'methods' => $code(Method::class),
             'installments' => Installment::orderBy('code')->get()->map(fn (Installment $i): array => ['value' => $i->id, 'label' => "{$i->code} : {$i->name}", 'period_months' => $i->period_months]),
-            'supervisors' => User::role(RoleName::AnalysisSectionHead->value)->orderBy('name')->get(['id', 'name'])->map(fn (User $u): array => ['value' => $u->id, 'label' => $u->name]),
+            // The applicant (a committee member) cannot be the section head of their own file: with two section heads the other one is left.
+            'supervisors' => User::role(RoleName::AnalysisSectionHead->value)->when($loan?->committee_conflict_user_id, fn ($q, int $id) => $q->whereKeyNot($id))->orderBy('name')->get(['id', 'name'])->map(fn (User $u): array => ['value' => $u->id, 'label' => $u->name]),
+            'committeeMembers' => CommitteeMembers::options(),
             'collateralTypes' => CollateralType::orderBy('code')->get()->map(fn ($t): array => ['value' => $t->code, 'label' => "{$t->code} : {$t->name}"]),
             'bindingTypes' => BindingType::orderBy('code')->get()->map(fn ($t): array => ['value' => $t->code, 'label' => "{$t->code} : {$t->name}"]),
             'regions' => Region::query()->select('code', 'regency')->distinct()->orderBy('code')->get()->map(fn (Region $r): array => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"]),

@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\BmpkController;
 use App\Http\Controllers\CollateralController;
 use App\Http\Controllers\CommitteeController;
+use App\Http\Controllers\CommitteeMemberController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\MasterDataController;
@@ -119,6 +120,9 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::get('committees', [CommitteeController::class, 'index'])->name('committees.index');
+        Route::get('committees/members', [CommitteeMemberController::class, 'index'])->name('committees.members');
+        Route::put('committees/members/{user}', [CommitteeMemberController::class, 'update'])->whereNumber('user')->name('committees.members.update');
+        Route::delete('committees/members/{user}', [CommitteeMemberController::class, 'destroy'])->whereNumber('user')->name('committees.members.destroy');
         Route::get('committees/authority', [CommitteeController::class, 'authority'])->name('committees.authority');
         Route::get('committees/{path}', [CommitteeController::class, 'show'])->name('committees.show');
         Route::scopeBindings()->group(function () {

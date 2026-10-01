@@ -6,6 +6,7 @@ import {
     Plus,
     Save,
     Send,
+    ShieldAlert,
     Trash2,
     Unlink,
 } from 'lucide-react';
@@ -69,6 +70,12 @@ type Loan = {
     requested_tenor: number;
     checklist: { customer: boolean; application: boolean; collateral: boolean };
     collateral_required: boolean;
+    committee_conflict: {
+        user_id: number;
+        name: string;
+        role: string | null;
+        source: 'nik' | 'manual';
+    } | null;
 };
 
 type CollateralRow = {
@@ -95,6 +102,7 @@ type Props = {
         methods: Option[];
         installments: (Option & { period_months: number })[];
         supervisors: Option[];
+        committeeMembers: Option[];
         collateralTypes: Option[];
         bindingTypes: Option[];
         regions: Option[];
@@ -294,6 +302,9 @@ export default function LoanApplicationShow({
         usage_type: loan.usage_type ?? '',
         office_id: loan.office_id ? String(loan.office_id) : '',
         supervisor_id: loan.supervisor_id ? String(loan.supervisor_id) : '',
+        committee_conflict_user_id: loan.committee_conflict
+            ? String(loan.committee_conflict.user_id)
+            : '',
         institution_id: loan.institution_id ? String(loan.institution_id) : '',
         marketing: loan.marketing ?? '',
         note: loan.note ?? '',
@@ -467,6 +478,29 @@ export default function LoanApplicationShow({
                             </dd>
                         </div>
                     </dl>
+                    {loan.committee_conflict && (
+                        <div
+                            role="status"
+                            className="mx-3 mb-3 flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800"
+                        >
+                            <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
+                            <span>
+                                <strong>
+                                    The applicant is a committee member:{' '}
+                                    {loan.committee_conflict.name}
+                                    {loan.committee_conflict.role
+                                        ? ` (${loan.committee_conflict.role})`
+                                        : ''}
+                                    .
+                                </strong>{' '}
+                                {loan.committee_conflict.source === 'nik'
+                                    ? 'Recognised by national ID. '
+                                    : 'Flagged by hand. '}
+                                They cannot decide this file, be its section
+                                head or survey it, and the approval skips them.
+                            </span>
+                        </div>
+                    )}
                 </Step>
 
                 <form onSubmit={save} noValidate>
@@ -682,13 +716,54 @@ export default function LoanApplicationShow({
                             >
                                 <Combobox
                                     id="supervisor_id"
-                                    options={refs.supervisors}
+                                    options={refs.supervisors.filter(
+                                        (s) =>
+                                            String(s.value) !==
+                                            data.committee_conflict_user_id,
+                                    )}
                                     value={data.supervisor_id}
                                     onChange={(v) =>
                                         setData('supervisor_id', v ?? '')
                                     }
                                     invalid={!!errors.supervisor_id}
                                 />
+                            </Field>
+                            <Field
+                                label="Applicant is a committee member"
+                                error={errors.committee_conflict_user_id}
+                                hint={
+                                    loan.committee_conflict?.source === 'nik'
+                                        ? 'Recognised by national ID; cannot be changed.'
+                                        : 'Only if the system did not recognise them.'
+                                }
+                            >
+                                <fieldset
+                                    disabled={
+                                        loan.committee_conflict?.source ===
+                                        'nik'
+                                    }
+                                >
+                                    <Combobox
+                                        id="committee_conflict_user_id"
+                                        clearable
+                                        placeholder="No"
+                                        options={refs.committeeMembers}
+                                        value={data.committee_conflict_user_id}
+                                        onChange={(v) =>
+                                            setData((current) => ({
+                                                ...current,
+                                                committee_conflict_user_id:
+                                                    v ?? '',
+                                                // The applicant cannot be the section head of their own file.
+                                                supervisor_id:
+                                                    v &&
+                                                    current.supervisor_id === v
+                                                        ? ''
+                                                        : current.supervisor_id,
+                                            }))
+                                        }
+                                    />
+                                </fieldset>
                             </Field>
                             <Field
                                 label="Institution"

@@ -92,9 +92,9 @@ class Navigation
                 ['label' => 'Dashboard', 'icon' => 'dashboard', 'route' => 'dashboard', 'permission' => 'dashboard.view'],
                 ['label' => 'Pengajuan', 'icon' => 'file-text', 'route' => 'loan-applications.index', 'permission' => 'loan-applications.view'],
                 ['label' => 'Jaminan', 'icon' => 'landmark', 'route' => 'collaterals.index', 'permission' => 'collaterals.view'],
-                ['label' => 'Jadwal', 'icon' => 'calendar', 'route' => 'scheduling.index', 'permission' => 'scheduling.view'],
-                ['label' => 'Survey', 'icon' => 'map-pin', 'route' => 'surveys.index', 'permission' => 'surveys.view'],
-                ['label' => 'Analisa', 'icon' => 'clipboard-check', 'route' => 'analysis.index', 'permission' => 'analysis.view'],
+                ['label' => 'Penjadwalan', 'icon' => 'calendar', 'route' => 'scheduling.index', 'permission' => 'scheduling.view'],
+                ['label' => 'Proses Survey', 'icon' => 'map-pin', 'route' => 'surveys.index', 'permission' => 'surveys.view'],
+                ['label' => 'Analisa Kredit', 'icon' => 'clipboard-check', 'route' => 'analysis.index', 'permission' => 'analysis.view'],
             ]],
             ['label' => 'Referensi', 'items' => [
                 self::reference('Data Kantor', 'building', 'offices'),
@@ -113,7 +113,10 @@ class Navigation
                     self::reference('Kondisi', 'dot', 'collateral-conditions'),
                     self::reference('Penilaian', 'dot', 'collateral-methods'),
                 ]],
-                ['label' => 'Data Komite', 'icon' => 'gavel', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
+                ['label' => 'Data Komite', 'icon' => 'gavel', 'children' => [
+                    ['label' => 'Jalur & Jenjang', 'icon' => 'dot', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
+                    ['label' => 'Anggota', 'icon' => 'dot', 'route' => 'committees.members', 'role' => RoleName::SuperAdmin->value],
+                ]],
             ]],
             ['label' => 'Pengaturan', 'items' => [
                 ['label' => 'Data Perizinan', 'icon' => 'key-round', 'route' => 'permissions.index', 'role' => RoleName::SuperAdmin->value],

@@ -1,5 +1,5 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { FileText, Loader2, Plus, Search, X } from 'lucide-react';
+import { FileText, Loader2, Plus, Search, ShieldAlert, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
@@ -49,6 +49,7 @@ type Props = {
     products: Option[];
     canManage: boolean;
     customerSource: string;
+    committeeMembers: Option[];
 };
 
 const DEFAULTS = { sort: 'application_code', direction: 'desc', per_page: 10 };
@@ -62,23 +63,33 @@ type Customer = {
     source: string;
 };
 
+type Member = { id: number; name: string; role: string | null };
+
 function NewApplication({
     open,
     onOpenChange,
     source,
+    members,
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     source: string;
+    members: Option[];
 }) {
-    const form = useForm({ nik: '' });
+    const form = useForm({ nik: '', committee_conflict_user_id: '' });
     const [customer, setCustomer] = useState<Customer | null>(null);
+    // A committee member recognised by national ID, or one the officer flags by hand.
+    const [member, setMember] = useState<Member | null>(null);
+    const [flagged, setFlagged] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [looking, setLooking] = useState(false);
 
     const lookup = async () => {
         setLooking(true);
         setCustomer(null);
+        setMember(null);
+        setFlagged(false);
+        form.setData('committee_conflict_user_id', '');
         setMessage(null);
 
         try {
@@ -88,6 +99,7 @@ function NewApplication({
             );
             const body = await response.json();
             setCustomer(body.customer);
+            setMember(body.committee_member ?? null);
             setMessage(body.message);
         } catch {
             setMessage('Unable to reach the server. Please try again.');
@@ -101,6 +113,8 @@ function NewApplication({
             form.reset();
             form.clearErrors();
             setCustomer(null);
+            setMember(null);
+            setFlagged(false);
             setMessage(null);
         }
         onOpenChange(next);
@@ -139,6 +153,12 @@ function NewApplication({
                                         e.target.value.replace(/\D/g, ''),
                                     );
                                     setCustomer(null);
+                                    setMember(null);
+                                    setFlagged(false);
+                                    form.setData(
+                                        'committee_conflict_user_id',
+                                        '',
+                                    );
                                     setMessage(null);
                                 }}
                                 aria-invalid={!!form.errors.nik}
@@ -192,6 +212,70 @@ function NewApplication({
                             </div>
                         </dl>
                     )}
+                    {customer && member && (
+                        <div
+                            role="status"
+                            className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800"
+                        >
+                            <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
+                            <span>
+                                <strong>
+                                    The applicant is a committee member:{' '}
+                                    {member.name}
+                                    {member.role ? ` (${member.role})` : ''}.
+                                </strong>{' '}
+                                The file is marked from the start. They cannot
+                                decide it or be its section head, and the
+                                approval skips them.
+                            </span>
+                        </div>
+                    )}
+                    {customer && !member && (
+                        <div className="flex flex-col gap-2">
+                            <label className="flex items-center gap-2 text-sm">
+                                <input
+                                    type="checkbox"
+                                    className="accent-primary"
+                                    checked={flagged}
+                                    onChange={(e) => {
+                                        setFlagged(e.target.checked);
+                                        form.setData(
+                                            'committee_conflict_user_id',
+                                            '',
+                                        );
+                                    }}
+                                />
+                                The applicant is a committee member
+                            </label>
+                            {flagged && (
+                                <Field
+                                    label="Committee member"
+                                    required
+                                    error={
+                                        form.errors.committee_conflict_user_id
+                                    }
+                                    hint="Not recognised by national ID (no NIK on record yet), so choose the person."
+                                >
+                                    <Combobox
+                                        options={members}
+                                        value={
+                                            form.data.committee_conflict_user_id
+                                        }
+                                        onChange={(v) =>
+                                            form.setData(
+                                                'committee_conflict_user_id',
+                                                v ?? '',
+                                            )
+                                        }
+                                        invalid={
+                                            !!form.errors
+                                                .committee_conflict_user_id
+                                        }
+                                    />
+                                </Field>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => close(false)}>
@@ -200,7 +284,10 @@ function NewApplication({
                     <Button
                         type="submit"
                         loading={form.processing}
-                        disabled={!customer}
+                        disabled={
+                            !customer ||
+                            (flagged && !form.data.committee_conflict_user_id)
+                        }
                     >
                         Open application
                     </Button>
@@ -218,6 +305,7 @@ export default function LoanApplicationsIndex({
     products,
     canManage,
     customerSource,
+    committeeMembers,
 }: Props) {
     const [creating, setCreating] = useState(false);
     const { visit, search, onSearch, clear, loading, error } =
@@ -397,6 +485,7 @@ export default function LoanApplicationsIndex({
                 open={creating}
                 onOpenChange={setCreating}
                 source={customerSource}
+                members={committeeMembers}
             />
         </>
     );
