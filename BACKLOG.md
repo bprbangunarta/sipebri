@@ -82,6 +82,25 @@ Terakhir diperbarui: 2026-09-30.
 - **Alamat dari koordinat.** Bila kebijakan bank tidak mengizinkan koordinat keluar, atau volume tumbuh (Nominatim publik dibatasi), pasang Nominatim sendiri dan isi `GEOCODER_ENDPOINT`. Sengaja **tidak** dibandingkan dengan alamat KTP nasabah: survei bisa dilakukan di mana saja.
 - **Audit akses baca.** Saat ini hanya halaman detail data sensitif yang dicatat (pengajuan, jaminan, survei, cek nasabah). Halaman daftar (list) sengaja belum dicatat karena volumenya besar. Bila OJK/auditor meminta jejak baca untuk daftar juga, tambahkan pencatatan ringkas (siapa, halaman, filter, jumlah baris), sebaiknya dengan sampling atau ringkasan per sesi agar tabel tidak membengkak, dan perhatikan retensi 5 tahun.
 
+## Pengujian yang belum dilakukan
+
+Dicatat agar tidak hilang. Pengujian otomatis (Pest, 206 test) sudah menutup logika; yang di bawah ini butuh perangkat, layanan, atau fitur yang belum ada.
+
+**Fitur yang sudah ada, belum diuji penuh**
+- GPS ponsel lewat **HTTPS** di server sungguhan (di dev sudah berhasil lewat localhost; `http://` biasa memang ditolak browser). Coba juga iOS Safari dan Chrome Android: izin lokasi, akurasi di dalam ruangan, dan unggah beberapa foto sekaligus.
+- Unggah foto ke **S3** pada kondisi buruk: foto besar (batas 8 MB), banyak foto, jaringan lambat, bucket tak terjangkau. Pastikan pesan galat jelas dan tidak ada berkas yatim.
+- **Alur login penuh dengan MFA** di browser: halaman tantangan kode, kode pemulihan, dan authenticator app sungguhan (yang teruji hanya kode email dan logikanya).
+- **Nominatim** di produksi: perilaku saat kena batas pemakaian publik atau diblokir, dan bila memakai instance sendiri.
+- **Penjadwal (cron)** di server: `schedule:run` harus berjalan agar `audit:verify` harian dan `audit:prune` bulanan aktif. Belum diuji di lingkungan produksi.
+- `audit:verify` dan `audit:prune` pada **jumlah baris besar** (jutaan): waktu dan memori.
+- Penerapan **deploy** dari awal: `migrate`, `db:seed --force` (izin dan peran), `php artisan locations:geocode`, dan `ATTACHMENTS_DISK=s3`.
+
+**Untuk tugas yang belum dikerjakan (uji saat dibangun)**
+- **Antrean offline** di lapangan: tandai lokasi saat tidak ada sinyal lalu kirim otomatis saat pulih, tanpa data ganda.
+- **Lembar analisa 8 bagian**, **persetujuan komite**, dan **realisasi**: uji kewenangan dengan nominal sungguhan (batas jenjang, BMPK), jejak audit tiap keputusan, dan izin per peran.
+- **Kewenangan komite yang dapat diatur terpusat** (lihat catatan di bagian saran peningkatan): uji perubahan satu angka merambat ke semua jalur yang memakainya.
+- **Terjemahan UI ke bahasa Indonesia** per layar: uji tampilan teks panjang dan pesan validasi campuran.
+
 ## Dibatalkan
 
 - ❌ HRIS Round 2 (absensi, cuti, payroll, audit log, impor/ekspor karyawan, peran HR/Manager/Employee): dibersihkan atas permintaan user. Cadangan DB pra-modul-kredit ada di scratchpad sesi (`database.before-credit.sqlite`).
