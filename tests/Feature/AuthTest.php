@@ -15,7 +15,7 @@ beforeEach(function () {
 
 it('redirects guests to the login page', function (string $uri) {
     $this->get($uri)->assertRedirect(route('login'));
-})->with(['/', '/dashboard', '/loan-applications', '/collaterals', '/committees', '/master-data/regions']);
+})->with(['/', '/dashboard', '/loan-applications', '/collaterals', '/committees', '/references/regions']);
 
 it('renders the login page', function () {
     $this->get(route('login'))->assertOk();
@@ -84,7 +84,7 @@ it('leaves the office empty when Codex sends none and refuses to delete an offic
 
     $office = Office::create(['code' => '09', 'alias' => 'XYZ', 'name' => 'Somewhere']);
     User::findOrFail(31)->update(['office_id' => $office->id]);
-    $this->actingAs(superAdmin())->delete(route('master-data.destroy', ['offices', $office->id]))->assertSessionHas('error');
+    $this->actingAs(superAdmin())->delete(route('references.destroy', ['offices', $office->id]))->assertSessionHas('error');
     expect(Office::find($office->id))->not->toBeNull();
 });
 

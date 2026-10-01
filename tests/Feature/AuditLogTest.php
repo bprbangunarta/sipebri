@@ -20,9 +20,9 @@ it('records who changed what, with the values before and after', function () {
     $admin = superAdmin();
     AuditLog::query()->getQuery()->delete();
 
-    $this->actingAs($admin)->post('/master-data/products', ['code' => 'ZZ', 'alias' => 'ZZ', 'name' => 'Test Product', 'is_active' => true]);
+    $this->actingAs($admin)->post('/references/products', ['code' => 'ZZ', 'alias' => 'ZZ', 'name' => 'Test Product', 'is_active' => true]);
     $product = Product::query()->where('code', 'ZZ')->firstOrFail();
-    $this->actingAs($admin)->put("/master-data/products/{$product->id}", ['code' => 'ZZ', 'alias' => 'ZZ', 'name' => 'Renamed Product', 'is_active' => true]);
+    $this->actingAs($admin)->put("/references/products/{$product->id}", ['code' => 'ZZ', 'alias' => 'ZZ', 'name' => 'Renamed Product', 'is_active' => true]);
 
     $created = AuditLog::query()->where('event', 'products.created')->firstOrFail();
     $updated = AuditLog::query()->where('event', 'products.updated')->firstOrFail();

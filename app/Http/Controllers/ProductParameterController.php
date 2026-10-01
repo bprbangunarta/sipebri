@@ -18,7 +18,7 @@ class ProductParameterController extends Controller
 {
     public function show(Request $request, Product $product): Response
     {
-        return Inertia::render('master-data/product-parameters', [
+        return Inertia::render('references/product-parameters', [
             'product' => $product->only(['id', 'code', 'alias', 'name']),
             'parameter' => $product->parameter?->only([
                 'min_amount', 'max_amount', 'min_tenor', 'max_tenor', 'interest_rate', 'provision_rate', 'admin_rate', 'rc_threshold',

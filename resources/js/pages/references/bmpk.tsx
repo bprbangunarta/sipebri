@@ -19,7 +19,7 @@ export default function Bmpk({ amount }: { amount: number | null }) {
                     <Button
                         loading={form.processing}
                         onClick={() =>
-                            form.put('/master-data/bmpk', {
+                            form.put('/references/bmpk', {
                                 preserveScroll: true,
                             })
                         }

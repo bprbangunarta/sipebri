@@ -13,8 +13,8 @@ it('denies routes the role has no permission for', function (string $method, str
 })->with([
     ['get', '/loan-applications'],
     ['get', '/collaterals/create'],
-    ['get', '/master-data/regions'],
-    ['post', '/master-data/regions'],
+    ['get', '/references/regions'],
+    ['post', '/references/regions'],
     ['get', '/committees'],
     ['get', '/users'],
     ['get', '/roles'],

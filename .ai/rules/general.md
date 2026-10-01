@@ -8,7 +8,7 @@ paths:
 ## Bahasa: kode Inggris, UI nanti Indonesia
 
 Semua penulisan kode memakai bahasa Inggris: nama class/method/variabel/kolom/route/permission, komentar, PHPDoc, pesan commit, dan nama test.
-Hanya teks yang tampil di UI yang nantinya berbahasa Indonesia. Terjemahan UI dilakukan bertahap per layar atas permintaan user; sampai diminta, jangan menerjemahkan teks UI yang sudah ada dan jangan mencampur bahasa di dalam kode. **URL/route tetap Inggris** tetapi harus sepadan dengan judul UI Indonesianya (mis. Data Resort → `/master-data/resorts`, Aturan khusus → `/committees/special-rules`). Teks yang sudah Indonesia: seluruh menu Referensi dan Pengaturan (Data Kantor/Resort/Wilayah/Kredit/Agunan/Komite, Perizinan, Peranan, Pengguna, Audit Log) beserta komponen bersama (dialog, tabel, paginasi, notifikasi).
+Hanya teks yang tampil di UI yang nantinya berbahasa Indonesia. Terjemahan UI dilakukan bertahap per layar atas permintaan user; sampai diminta, jangan menerjemahkan teks UI yang sudah ada dan jangan mencampur bahasa di dalam kode. **URL/route tetap Inggris** tetapi harus sepadan dengan judul UI Indonesianya (mis. Data Resort → `/references/resorts`, Aturan khusus → `/committees/special-rules`). Teks yang sudah Indonesia: seluruh menu Referensi dan Pengaturan (Data Kantor/Resort/Wilayah/Kredit/Agunan/Komite, Perizinan, Peranan, Pengguna, Audit Log) beserta komponen bersama (dialog, tabel, paginasi, notifikasi).
 Label sidebar sudah Indonesia (lihat App\Support\Navigation). Nama peran mengikuti Codex apa adanya (Indonesia) lewat App\Enums\RoleName; itu data, bukan bahasa kode.
 
 ## Standar kerja (dari code-standards & handling-references milik user)

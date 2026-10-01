@@ -24,19 +24,19 @@ dataset('usable', [
 ]);
 
 it('creates, updates and deletes a record', function (string $slug, string $model, array $create, array $update) {
-    $this->post(route('master-data.store', $slug), $create)->assertSessionHasNoErrors();
+    $this->post(route('references.store', $slug), $create)->assertSessionHasNoErrors();
     $record = $model::query()->latest('id')->first();
     expect($record)->not->toBeNull();
 
-    $this->put(route('master-data.update', [$slug, $record->id]), $update)->assertSessionHasNoErrors();
+    $this->put(route('references.update', [$slug, $record->id]), $update)->assertSessionHasNoErrors();
     expect($model::count())->toBe(1);
 
-    $this->delete(route('master-data.destroy', [$slug, $record->id]))->assertSessionHas('success');
+    $this->delete(route('references.destroy', [$slug, $record->id]))->assertSessionHas('success');
     expect($model::count())->toBe(0);
 })->with('usable');
 
 it('uppercases coded values and trims input', function () {
-    $this->post(route('master-data.store', 'products'), ['code' => ' ab ', 'alias' => 'x', 'name' => ' loan ', 'is_active' => true]);
+    $this->post(route('references.store', 'products'), ['code' => ' ab ', 'alias' => 'x', 'name' => ' loan ', 'is_active' => true]);
 
     expect(Product::first()->only(['code', 'alias', 'name']))->toBe(['code' => 'AB', 'alias' => 'X', 'name' => 'LOAN']);
 });
@@ -45,20 +45,20 @@ it('validates required and unique values', function () {
     Method::create(['code' => 'M1', 'name' => 'First']);
     $other = Method::create(['code' => 'M2', 'name' => 'Second']);
 
-    $this->post(route('master-data.store', 'interest-methods'), ['code' => '', 'name' => 'X'])->assertSessionHasErrors('code');
-    $this->post(route('master-data.store', 'interest-methods'), ['code' => 'm1', 'name' => 'Dup'])->assertSessionHasErrors('code');
-    $this->put(route('master-data.update', ['interest-methods', $other->id]), ['code' => 'M1', 'name' => 'Second'])->assertSessionHasErrors('code');
-    $this->put(route('master-data.update', ['interest-methods', $other->id]), ['code' => 'M2', 'name' => 'Renamed'])->assertSessionHasNoErrors();
+    $this->post(route('references.store', 'interest-methods'), ['code' => '', 'name' => 'X'])->assertSessionHasErrors('code');
+    $this->post(route('references.store', 'interest-methods'), ['code' => 'm1', 'name' => 'Dup'])->assertSessionHasErrors('code');
+    $this->put(route('references.update', ['interest-methods', $other->id]), ['code' => 'M1', 'name' => 'Second'])->assertSessionHasErrors('code');
+    $this->put(route('references.update', ['interest-methods', $other->id]), ['code' => 'M2', 'name' => 'Renamed'])->assertSessionHasNoErrors();
 });
 
 it('scopes uniqueness of ownership codes to the collateral type', function () {
     CollateralType::create(['code' => '05', 'name' => 'Land']);
     CollateralType::create(['code' => '06', 'name' => 'Other']);
 
-    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'A'])->assertSessionHasNoErrors();
-    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'B'])->assertSessionHasErrors('code');
-    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '06', 'code' => '01', 'name' => 'B'])->assertSessionHasNoErrors();
-    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '77', 'code' => '02', 'name' => 'C'])->assertSessionHasErrors('collateral_type_code');
+    $this->post(route('references.store', 'collateral-classifications'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'A'])->assertSessionHasNoErrors();
+    $this->post(route('references.store', 'collateral-classifications'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'B'])->assertSessionHasErrors('code');
+    $this->post(route('references.store', 'collateral-classifications'), ['collateral_type_code' => '06', 'code' => '01', 'name' => 'B'])->assertSessionHasNoErrors();
+    $this->post(route('references.store', 'collateral-classifications'), ['collateral_type_code' => '77', 'code' => '02', 'name' => 'C'])->assertSessionHasErrors('collateral_type_code');
     expect(OwnershipStatus::count())->toBe(2);
 });
 
@@ -67,24 +67,24 @@ it('searches, paginates and reports usage', function () {
         Institution::create(['code' => sprintf('%03d', $i), 'name' => sprintf('Institution %02d', $i)]);
     }
 
-    $this->get(route('master-data.index', 'resorts'))
+    $this->get(route('references.index', 'resorts'))
         ->assertInertia(fn (Assert $page) => $page
-            ->component('master-data/index')
+            ->component('references/index')
             ->has('items.data', 25)
             ->where('items.total', 30)
             ->where('items.data.0.usage_count', 0)
             ->where('resource.tracks_usage', true));
 
-    $this->get(route('master-data.index', ['resorts', 'search' => 'Institution 3']))
+    $this->get(route('references.index', ['resorts', 'search' => 'Institution 3']))
         ->assertInertia(fn (Assert $page) => $page->has('items.data', 1));
 });
 
 it('rejects unknown resources and everybody who is not Super Admin', function () {
-    $this->get('/master-data/unknown')->assertNotFound();
+    $this->get('/references/unknown')->assertNotFound();
 
     $this->actingAs(userWith(['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.manage']));
-    $this->get(route('master-data.index', 'regions'))->assertForbidden();
-    $this->post(route('master-data.store', 'regions'), ['code' => 'X'])->assertForbidden();
+    $this->get(route('references.index', 'regions'))->assertForbidden();
+    $this->post(route('references.store', 'regions'), ['code' => 'X'])->assertForbidden();
     $this->put(route('products.parameters.update', Product::create(['code' => '09', 'alias' => 'XX', 'name' => 'X', 'is_active' => true])), ['max_amount' => 1])->assertForbidden();
 });
 
@@ -93,7 +93,7 @@ it('saves product parameters and validates their consistency', function () {
     $allowed = Method::create(['code' => '10', 'name' => 'Flat']);
     $other = Method::create(['code' => '20', 'name' => 'Effective']);
 
-    $this->get(route('products.parameters', $product))->assertInertia(fn (Assert $page) => $page->component('master-data/product-parameters'));
+    $this->get(route('products.parameters', $product))->assertInertia(fn (Assert $page) => $page->component('references/product-parameters'));
 
     $this->put(route('products.parameters.update', $product), ['min_amount' => 5000000, 'max_amount' => 1000000])->assertSessionHasErrors('max_amount');
     $this->put(route('products.parameters.update', $product), ['allowed_method_ids' => [$allowed->id], 'default_method_id' => $other->id])->assertSessionHasErrors('default_method_id');

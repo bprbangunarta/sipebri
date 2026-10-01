@@ -185,8 +185,8 @@ it('refuses to delete master data that loan applications use', function () {
     $this->actingAs(superAdmin());
     LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'product_id' => $s['product']->id, 'office_id' => $s['office']->id]);
 
-    $this->delete(route('master-data.destroy', ['products', $s['product']->id]))->assertSessionHas('error');
-    $this->delete(route('master-data.destroy', ['offices', $s['office']->id]))->assertSessionHas('error');
+    $this->delete(route('references.destroy', ['products', $s['product']->id]))->assertSessionHas('error');
+    $this->delete(route('references.destroy', ['offices', $s['office']->id]))->assertSessionHas('error');
 });
 
 it('describes attachable collaterals fully so similar ones cannot be confused', function () {

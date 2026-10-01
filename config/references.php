@@ -54,7 +54,7 @@ return [
             $label,
             ['name' => 'is_active', 'label' => 'Aktif', 'type' => 'boolean', 'default' => true, 'hint' => 'Produk nonaktif tidak bisa dipilih untuk pengajuan kredit baru.'],
         ],
-        'actions' => [['label' => 'Atur parameter', 'url' => '/master-data/products/{id}/parameters']],
+        'actions' => [['label' => 'Atur parameter', 'url' => '/references/products/{id}/parameters']],
     ],
     'installments' => [
         'label' => 'Sistem Angsuran', 'section' => 'Referensi', 'group' => 'Ketentuan kredit', 'model' => Installment::class, 'usage' => ['loanApplications' => 'pengajuan kredit'],

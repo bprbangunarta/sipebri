@@ -54,7 +54,7 @@ it('lets only Super Admin change the BMPK, and records the change', function () 
     expect(LendingLimit::bmpk())->toBe(2_000_000_000);
 
     $admin = superAdmin();
-    $this->actingAs($admin)->get(route('bmpk.show'))->assertInertia(fn (Assert $page) => $page->component('master-data/bmpk')->where('amount', 2_000_000_000));
+    $this->actingAs($admin)->get(route('bmpk.show'))->assertInertia(fn (Assert $page) => $page->component('references/bmpk')->where('amount', 2_000_000_000));
     $this->put(route('bmpk.update'), ['amount' => 0])->assertSessionHasErrors('amount');
     $this->put(route('bmpk.update'), ['amount' => 2_500_000_000])->assertSessionHasNoErrors();
 

@@ -150,9 +150,7 @@ export default function ProductParameters({
                     <>
                         <Button
                             variant="outline"
-                            onClick={() =>
-                                router.visit('/master-data/products')
-                            }
+                            onClick={() => router.visit('/references/products')}
                         >
                             <ArrowLeft /> Kembali
                         </Button>
@@ -161,7 +159,7 @@ export default function ProductParameters({
                                 loading={form.processing}
                                 onClick={() =>
                                     form.put(
-                                        `/master-data/products/${product.id}/parameters`,
+                                        `/references/products/${product.id}/parameters`,
                                         { preserveScroll: true },
                                     )
                                 }

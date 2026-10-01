@@ -15,7 +15,7 @@ class BmpkController extends Controller
 {
     public function show(): Response
     {
-        return Inertia::render('master-data/bmpk', ['amount' => LendingLimit::bmpk()]);
+        return Inertia::render('references/bmpk', ['amount' => LendingLimit::bmpk()]);
     }
 
     public function update(Request $request): RedirectResponse

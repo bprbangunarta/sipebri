@@ -83,7 +83,7 @@ function cell(field: FieldDef, item: Item) {
     return value ?? '–';
 }
 
-export default function MasterDataIndex({
+export default function ReferencesIndex({
     items,
     filters,
     perPageOptions,
@@ -104,7 +104,7 @@ export default function MasterDataIndex({
         useForm<Record<string, string | number | boolean | null>>(blank());
     const { visit, search, onSearch, clear, loading, error } =
         useListQuery<Filters>({
-            url: `/master-data/${resource.slug}`,
+            url: `/references/${resource.slug}`,
             filters,
             defaults: DEFAULTS,
             only: ['items', 'filters'],

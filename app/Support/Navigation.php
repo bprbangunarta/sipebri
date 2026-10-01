@@ -125,12 +125,12 @@ class Navigation
     }
 
     /**
-     * A Data Master / Credit Setup page from the registry in config/master_data.php.
+     * A Referensi page from the registry in config/references.php.
      *
      * @return array<string, mixed>
      */
     private static function reference(string $label, string $icon, string $slug): array
     {
-        return ['label' => $label, 'icon' => $icon, 'route' => 'master-data.index', 'params' => ['resource' => $slug], 'role' => RoleName::SuperAdmin->value];
+        return ['label' => $label, 'icon' => $icon, 'route' => 'references.index', 'params' => ['resource' => $slug], 'role' => RoleName::SuperAdmin->value];
     }
 }

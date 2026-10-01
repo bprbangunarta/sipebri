@@ -13,12 +13,12 @@ it('refuses to delete reference data that collaterals refer to by code', functio
     Collateral::create(['collateral_type_code' => '05', 'binding_type_code' => '01']);
     $this->actingAs(superAdmin());
 
-    $this->delete(route('master-data.destroy', ['collateral-types', $type->id]))->assertSessionHas('error');
-    $this->delete(route('master-data.destroy', ['collateral-bindings', $binding->id]))->assertSessionHas('error');
+    $this->delete(route('references.destroy', ['collateral-types', $type->id]))->assertSessionHas('error');
+    $this->delete(route('references.destroy', ['collateral-bindings', $binding->id]))->assertSessionHas('error');
     expect(CollateralType::count())->toBe(1)->and(BindingType::count())->toBe(1);
 
     Collateral::query()->delete();
-    $this->delete(route('master-data.destroy', ['collateral-types', $type->id]))->assertSessionHas('success');
+    $this->delete(route('references.destroy', ['collateral-types', $type->id]))->assertSessionHas('success');
 });
 
 it('refuses to change a code that other records refer to', function () {
@@ -26,10 +26,10 @@ it('refuses to change a code that other records refer to', function () {
     Collateral::create(['collateral_type_code' => '05']);
     $this->actingAs(superAdmin());
 
-    $this->put(route('master-data.update', ['collateral-types', $type->id]), ['code' => '06', 'name' => 'LAND'])->assertSessionHasErrors('code');
+    $this->put(route('references.update', ['collateral-types', $type->id]), ['code' => '06', 'name' => 'LAND'])->assertSessionHasErrors('code');
     expect($type->fresh()->code)->toBe('05');
 
-    $this->put(route('master-data.update', ['collateral-types', $type->id]), ['code' => '05', 'name' => 'LAND AND BUILDINGS'])->assertSessionHasNoErrors();
+    $this->put(route('references.update', ['collateral-types', $type->id]), ['code' => '05', 'name' => 'LAND AND BUILDINGS'])->assertSessionHasNoErrors();
     expect($type->fresh()->name)->toBe('LAND AND BUILDINGS');
 });
 

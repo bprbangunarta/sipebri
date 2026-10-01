@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Support\MasterDataResource;
+use App\Support\ReferenceResource;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,15 +11,15 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 /**
- * Single CRUD controller for every lookup table registered in config/master_data.php.
+ * Single CRUD controller for every lookup table registered in config/references.php.
  */
-class MasterDataController extends Controller
+class ReferenceController extends Controller
 {
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 
     public function index(Request $request, string $resource): Response
     {
-        $definition = MasterDataResource::find($resource);
+        $definition = ReferenceResource::find($resource);
         $filters = $request->validate(['search' => ['nullable', 'string', 'max:100'], 'per_page' => ['nullable', 'integer']]);
         $usage = array_keys($definition->usage());
         $first = $definition->rawFields()[0]['name'];
@@ -31,7 +31,7 @@ class MasterDataController extends Controller
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 25)
             ->withQueryString();
 
-        return Inertia::render('master-data/index', [
+        return Inertia::render('references/index', [
             'items' => $items->through(fn ($record): array => [
                 ...$definition->toItem($record),
                 'usage_count' => array_sum(array_map(fn (string $relation): int => (int) $record->{$relation.'_count'}, $usage)),
@@ -46,15 +46,15 @@ class MasterDataController extends Controller
                 'tracks_usage' => $usage !== [],
                 'fields' => $definition->fields(),
                 'actions' => $definition->actions(),
-                'store_url' => route('master-data.store', $resource, false),
-                'item_url' => route('master-data.update', [$resource, '__id__'], false),
+                'store_url' => route('references.store', $resource, false),
+                'item_url' => route('references.update', [$resource, '__id__'], false),
             ],
         ]);
     }
 
     public function store(Request $request, string $resource): RedirectResponse
     {
-        $definition = MasterDataResource::find($resource);
+        $definition = ReferenceResource::find($resource);
         $input = $definition->normalize($request->all());
         $data = validator($input, $definition->rules(null, $input))->validate();
 
@@ -65,7 +65,7 @@ class MasterDataController extends Controller
 
     public function update(Request $request, string $resource, int $id): RedirectResponse
     {
-        $definition = MasterDataResource::find($resource);
+        $definition = ReferenceResource::find($resource);
         $record = $definition->model()::query()->findOrFail($id);
         $input = $definition->normalize($request->all());
         $data = validator($input, $definition->rules($record, $input))->validate();
@@ -88,7 +88,7 @@ class MasterDataController extends Controller
 
     public function destroy(string $resource, int $id): RedirectResponse
     {
-        $definition = MasterDataResource::find($resource);
+        $definition = ReferenceResource::find($resource);
         $record = $definition->model()::query()->findOrFail($id);
         $name = $record->name ?? $record->getKey();
 

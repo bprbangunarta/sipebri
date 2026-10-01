@@ -11,11 +11,11 @@ use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CommitteeMemberController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoanApplicationController;
-use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductParameterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReferenceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SurveyController;
@@ -107,16 +107,16 @@ Route::middleware('auth')->group(function () {
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).
     Route::middleware('role:'.RoleName::SuperAdmin->value)->group(function () {
-        Route::get('master-data/bmpk', [BmpkController::class, 'show'])->name('bmpk.show');
-        Route::put('master-data/bmpk', [BmpkController::class, 'update'])->name('bmpk.update');
-        Route::get('master-data/products/{product}/parameters', [ProductParameterController::class, 'show'])->name('products.parameters');
-        Route::put('master-data/products/{product}/parameters', [ProductParameterController::class, 'update'])->name('products.parameters.update');
+        Route::get('references/bmpk', [BmpkController::class, 'show'])->name('bmpk.show');
+        Route::put('references/bmpk', [BmpkController::class, 'update'])->name('bmpk.update');
+        Route::get('references/products/{product}/parameters', [ProductParameterController::class, 'show'])->name('products.parameters');
+        Route::put('references/products/{product}/parameters', [ProductParameterController::class, 'update'])->name('products.parameters.update');
 
-        Route::prefix('master-data/{resource}')->group(function () {
-            Route::get('/', [MasterDataController::class, 'index'])->name('master-data.index');
-            Route::post('/', [MasterDataController::class, 'store'])->name('master-data.store');
-            Route::put('{id}', [MasterDataController::class, 'update'])->whereNumber('id')->name('master-data.update');
-            Route::delete('{id}', [MasterDataController::class, 'destroy'])->whereNumber('id')->name('master-data.destroy');
+        Route::prefix('references/{resource}')->group(function () {
+            Route::get('/', [ReferenceController::class, 'index'])->name('references.index');
+            Route::post('/', [ReferenceController::class, 'store'])->name('references.store');
+            Route::put('{id}', [ReferenceController::class, 'update'])->whereNumber('id')->name('references.update');
+            Route::delete('{id}', [ReferenceController::class, 'destroy'])->whereNumber('id')->name('references.destroy');
         });
 
         Route::redirect('committees', '/committees/levels')->name('committees.index');

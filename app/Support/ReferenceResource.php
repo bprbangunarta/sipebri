@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
 
 /**
- * Typed view over one entry of config/master_data.php.
+ * Typed view over one entry of config/references.php.
  */
-class MasterDataResource
+class ReferenceResource
 {
     /**
      * @param  array<string, mixed>  $config
@@ -18,7 +18,7 @@ class MasterDataResource
 
     public static function find(string $slug): self
     {
-        $config = config("master_data.$slug");
+        $config = config("references.$slug");
         abort_unless(is_array($config), 404);
 
         return new self($slug, $config);
@@ -31,7 +31,7 @@ class MasterDataResource
     {
         $all = [];
 
-        foreach (array_keys(config('master_data')) as $slug) {
+        foreach (array_keys(config('references')) as $slug) {
             $all[] = self::find((string) $slug);
         }
 
