@@ -15,18 +15,18 @@ Terakhir diperbarui: 2026-09-30.
 
 ## Modul kredit (porting dari SIPEBRI)
 
-| #   | Tahap                                                   | Status | Catatan                                              |
-| --- | ------------------------------------------------------- | ------ | ---------------------------------------------------- |
-| 0   | Peran, izin, sidebar per izin, notifikasi, Users, Roles | ✅     | `spatie/laravel-permission`                          |
-| 1   | Data referensi kredit + parameter produk                | ✅     | 16 tabel via registry; wilayah 82k baris             |
-| 2   | Komite kredit (jalur, jenjang, Check authority)         | ✅     | Seeder aturan bawaan                                 |
-| 3   | Agunan + Pengajuan kredit (Codex/fallback karyawan)     | ✅     |                                                      |
-| 4   | Penjadwalan survei + Survei (foto berkoordinat)         | ✅     |                                                      |
-| 5a  | Analisa: halaman index berkas siap analisa              | ✅     | Hanya daftar, tanpa aksi buka                        |
-| 5b  | Analisa: lembar 8 bagian                                | ⏸      | Lihat detail di bawah                                |
-| 6   | Persetujuan komite (keputusan per jenjang)              | ⏸      | Bergantung 5b; tabel `loan_approvals`                |
-| 7   | Realisasi/pencairan + posting core banking              | ⏸      | Belum dirancang di sumber                            |
-| 8   | Dashboard kredit (ringkasan berkas per status)          | ✅     | Selesai; akan bertambah seiring tahap analisa/komite |
+| #   | Tahap                                                   | Status | Catatan                                                  |
+| --- | ------------------------------------------------------- | ------ | -------------------------------------------------------- |
+| 0   | Peran, izin, sidebar per izin, notifikasi, Users, Roles | ✅     | `spatie/laravel-permission`                              |
+| 1   | Data referensi kredit + parameter produk                | ✅     | 16 tabel via registry; wilayah 82k baris                 |
+| 2   | Komite kredit (jalur, jenjang, Check authority)         | ✅     | Seeder aturan bawaan                                     |
+| 3   | Agunan + Pengajuan kredit (Codex/fallback karyawan)     | ✅     |                                                          |
+| 4   | Penjadwalan survei + Survei (foto berkoordinat)         | ✅     |                                                          |
+| 5a  | Analisa: halaman index berkas siap analisa              | ✅     | Hanya daftar, tanpa aksi buka                            |
+| 5b  | Analisa: lembar 8 bagian                                | ✅     | Menunggu pembandingan hasil dengan sistem lama oleh user |
+| 6   | Persetujuan komite (keputusan per jenjang)              | ⏸      | Bergantung 5b; tabel `loan_approvals`                    |
+| 7   | Realisasi/pencairan + posting core banking              | ⏸      | Belum dirancang di sumber                                |
+| 8   | Dashboard kredit (ringkasan berkas per status)          | ✅     | Selesai; akan bertambah seiring tahap analisa/komite     |
 
 ### Detail 5b – Lembar analisa (dari `AnalysisController`, `AnalysisBusinessController`, model `Analysis*` di sumber)
 
