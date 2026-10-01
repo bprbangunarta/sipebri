@@ -129,6 +129,7 @@ Route::middleware('auth')->group(function () {
             Route::post('committees', [CommitteeController::class, 'store'])->name('committees.store');
             Route::put('committees/{path}', [CommitteeController::class, 'update'])->name('committees.update');
             Route::delete('committees/{path}', [CommitteeController::class, 'destroy'])->name('committees.destroy');
+            Route::put('committees/{path}/follow', [CommitteeController::class, 'follow'])->name('committees.follow');
             Route::post('committees/{path}/tiers', [CommitteeController::class, 'storeTier'])->name('committees.tiers.store');
             Route::put('committees/{path}/tiers/{tier}', [CommitteeController::class, 'updateTier'])->name('committees.tiers.update');
             Route::delete('committees/{path}/tiers/{tier}', [CommitteeController::class, 'destroyTier'])->name('committees.tiers.destroy');

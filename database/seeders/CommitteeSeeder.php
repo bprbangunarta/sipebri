@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Enums\RoleName;
 use App\Models\CommitteePath;
 use App\Models\Product;
+use App\Support\CommitteeLevels;
 use Illuminate\Database\Seeder;
 
 /**
@@ -39,6 +40,8 @@ class CommitteeSeeder extends Seeder
 
     public function run(): void
     {
+        $this->defaultLevels();
+
         foreach (self::PLAFON_PRODUCTS as $alias) {
             $this->path($alias, null, 'plafon', 'Authority by amount (general path).');
         }
@@ -53,6 +56,20 @@ class CommitteeSeeder extends Seeder
         $this->path(null, 'RELOAN', 'hierarki', 'Applies to every product and overrides the amount-limit path.');
     }
 
+    /** The default authority levels, created once; later edits by an admin are never overwritten. */
+    private function defaultLevels(): void
+    {
+        if (CommitteeLevels::defaultPath() !== null) {
+            return;
+        }
+
+        $path = CommitteePath::create(['product_id' => null, 'condition' => '(DEFAULT)', 'mechanism' => 'plafon', 'is_active' => false, 'is_default' => true, 'note' => 'Authority levels shared by every path that follows the defaults.']);
+
+        foreach (self::PLAFON_TIERS as $i => [$label, $role, $min, $max, $escalate, $approve, $cancel, $reject]) {
+            $path->tiers()->create(['sort' => $i + 1, 'label' => $label, 'role' => $role, 'min_amount' => $min, 'max_amount' => $max, 'can_escalate' => $escalate, 'can_approve' => $approve, 'can_cancel' => $cancel, 'can_reject' => $reject]);
+        }
+    }
+
     private function path(?string $alias, ?string $condition, string $mechanism, string $note): void
     {
         $productId = $alias ? Product::where('alias', $alias)->value('id') : null;
@@ -65,6 +82,14 @@ class CommitteeSeeder extends Seeder
         $path->fill(['mechanism' => $mechanism, 'note' => $note, 'is_active' => true])->save();
 
         if ($path->tiers()->exists()) {
+            return;
+        }
+
+        // A path created here starts on the shared default levels (adjust them once, every follower changes).
+        if (CommitteeLevels::defaultPath() !== null) {
+            $path->forceFill(['follows_default' => true])->save();
+            CommitteeLevels::attach($path);
+
             return;
         }
 

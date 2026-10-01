@@ -29,6 +29,7 @@ class CommitteePathRequest extends FormRequest
             'is_active' => ['boolean'],
             'note' => ['nullable', 'string', 'max:255'],
             'copy_from' => ['nullable', 'integer', Rule::exists('committee_paths', 'id')],
+            'follows_default' => ['boolean'],
         ];
     }
 

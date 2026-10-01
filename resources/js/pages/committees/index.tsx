@@ -5,6 +5,7 @@ import {
     Pencil,
     Plus,
     Scale,
+    SlidersHorizontal,
     Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -36,6 +37,9 @@ export type PathRow = {
     mechanism: string;
     mechanism_label: string;
     is_active: boolean;
+    is_default: boolean;
+    follows_default: boolean;
+    followers?: number | null;
     note: string | null;
     tiers_count: number;
     title: string;
@@ -48,6 +52,7 @@ type Props = {
     conditionMap: Record<string, string[]>;
     committeeMembers: Option[];
     mechanisms: Option[];
+    defaultLevels: { id: number; followers: number } | null;
     canManage: boolean;
 };
 
@@ -58,6 +63,7 @@ export default function CommitteesIndex({
     conditionMap,
     committeeMembers,
     mechanisms,
+    defaultLevels,
     canManage,
 }: Props) {
     const [editing, setEditing] = useState<PathRow | 'new' | null>(null);
@@ -71,6 +77,7 @@ export default function CommitteesIndex({
         is_active: true,
         note: '',
         copy_from: '',
+        follows_default: true,
     });
 
     const openForm = (row: PathRow | 'new') => {
@@ -84,6 +91,7 @@ export default function CommitteesIndex({
                       is_active: true,
                       note: '',
                       copy_from: '',
+                      follows_default: true,
                   }
                 : {
                       product_id: row.product_id ? String(row.product_id) : '',
@@ -92,6 +100,7 @@ export default function CommitteesIndex({
                       is_active: row.is_active,
                       note: row.note ?? '',
                       copy_from: '',
+                      follows_default: row.follows_default,
                   },
         );
         setEditing(row);
@@ -149,6 +158,16 @@ export default function CommitteesIndex({
             hideBelow: 'sm',
             className: 'tabular-nums',
             cell: (p) => p.tiers_count,
+        },
+        {
+            key: 'levels',
+            header: 'Levels',
+            hideBelow: 'sm',
+            cell: (p) => (
+                <Badge tone={p.follows_default ? 'info' : 'neutral'}>
+                    {p.follows_default ? 'Default' : 'Own'}
+                </Badge>
+            ),
         },
         {
             key: 'status',
@@ -214,6 +233,18 @@ export default function CommitteesIndex({
                         >
                             <Scale /> Check authority
                         </Button>
+                        {defaultLevels && (
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    router.visit(
+                                        `/committees/${defaultLevels.id}`,
+                                    )
+                                }
+                            >
+                                <SlidersHorizontal /> Default levels
+                            </Button>
+                        )}
                         {canManage && (
                             <Button onClick={() => openForm('new')}>
                                 <Plus /> Add path
@@ -299,6 +330,32 @@ export default function CommitteesIndex({
                                 invalid={!!form.errors.mechanism}
                             />
                         </Field>
+                        {editing === 'new' && defaultLevels && (
+                            <label className="flex items-start gap-2 text-sm">
+                                <input
+                                    type="checkbox"
+                                    className="mt-0.5 accent-primary"
+                                    checked={
+                                        form.data.follows_default &&
+                                        form.data.copy_from === ''
+                                    }
+                                    disabled={form.data.copy_from !== ''}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'follows_default',
+                                            e.target.checked,
+                                        )
+                                    }
+                                />
+                                <span>
+                                    Follow the default authority levels
+                                    <span className="block text-xs text-muted">
+                                        Limits are kept in one place; change
+                                        them there and this path follows.
+                                    </span>
+                                </span>
+                            </label>
+                        )}
                         {editing === 'new' && (
                             <Field
                                 label="Copy tiers from"

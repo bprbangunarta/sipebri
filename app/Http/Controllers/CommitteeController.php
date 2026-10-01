@@ -9,6 +9,7 @@ use App\Models\CommitteeTier;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\Committee;
+use App\Support\CommitteeLevels;
 use App\Support\CommitteeMembers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,15 +29,16 @@ class CommitteeController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('committees/index', [
-            'paths' => CommitteePath::with('product')->withCount('tiers')->orderBy('product_id')->orderBy('condition')->get()
+            'paths' => CommitteePath::with('product')->withCount('tiers')->where('is_default', false)->orderBy('product_id')->orderBy('condition')->get()
                 ->map(fn (CommitteePath $p): array => $this->pathRow($p)),
             'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} — {$p->name}"]),
-            'pathOptions' => CommitteePath::with('product')->has('tiers')->get()->map(fn (CommitteePath $p): array => ['value' => $p->id, 'label' => $p->title()]),
+            'pathOptions' => CommitteePath::with('product')->has('tiers')->where('is_default', false)->get()->map(fn (CommitteePath $p): array => ['value' => $p->id, 'label' => $p->title()]),
             // Valid conditions per product for the authority check: the product's own plus cross-product ones (e.g. RELOAN).
             'conditionMap' => CommitteePath::where('is_active', true)->get()
                 ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
                 ->map(fn ($paths) => $paths->map(fn (CommitteePath $p): string => (string) $p->condition)->unique()->sort()->values()),
             'committeeMembers' => CommitteeMembers::options(),
+            'defaultLevels' => ($default = CommitteeLevels::defaultPath()) ? ['id' => $default->id, 'followers' => CommitteeLevels::followers()] : null,
             'mechanisms' => collect(CommitteePath::MECHANISMS)->map(fn (string $label, string $value): array => ['value' => $value, 'label' => $label])->values(),
             'canManage' => true,
         ]);
@@ -49,6 +51,7 @@ class CommitteeController extends Controller
         return Inertia::render('committees/show', [
             'path' => [
                 ...$this->pathRow($path),
+                'followers' => $path->is_default ? CommitteeLevels::followers() : null,
                 'tiers' => $path->tiers->map(fn (CommitteeTier $t): array => $t->only(['id', 'sort', 'label', 'role', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject']))->values(),
             ],
             'roles' => Role::orderBy('name')->pluck('name'),
@@ -74,7 +77,13 @@ class CommitteeController extends Controller
     public function store(CommitteePathRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $path = CommitteePath::create(collect($data)->except('copy_from')->all());
+        // Following the defaults is the normal case when they exist; copying another path's tiers means going its own way.
+        $follows = ($data['follows_default'] ?? false) && blank($data['copy_from'] ?? null) && CommitteeLevels::defaultPath() !== null;
+        $path = CommitteePath::create([...collect($data)->except(['copy_from', 'follows_default'])->all(), 'follows_default' => $follows]);
+
+        if ($follows) {
+            CommitteeLevels::attach($path);
+        }
 
         if (filled($data['copy_from'] ?? null)) {
             foreach (CommitteeTier::query()->where('committee_path_id', $data['copy_from'])->orderBy('sort')->get() as $tier) {
@@ -87,13 +96,20 @@ class CommitteeController extends Controller
 
     public function update(CommitteePathRequest $request, CommitteePath $path): RedirectResponse
     {
-        $path->update(collect($request->validated())->except('copy_from')->all());
+        $path->update(collect($request->validated())->except(['copy_from', 'follows_default'])->all());
+
+        // A path on the defaults reads its tiers from them, and a hierarchy path derives them differently from an amount path.
+        if ($path->follows_default && $path->wasChanged('mechanism')) {
+            CommitteeLevels::attach($path);
+        }
 
         return back()->with('success', "Committee path {$path->title()} updated.");
     }
 
     public function destroy(CommitteePath $path): RedirectResponse
     {
+        abort_if($path->is_default, 403, 'The default authority levels cannot be deleted.');
+
         $title = $path->title();
 
         if (($count = $path->loanApplications()->count()) > 0) {
@@ -107,28 +123,66 @@ class CommitteeController extends Controller
 
     public function storeTier(CommitteeTierRequest $request, CommitteePath $path): RedirectResponse
     {
+        if ($path->follows_default) {
+            return $this->followsDefault();
+        }
+
         $tier = $path->tiers()->create([...$request->validated(), 'sort' => (int) $path->tiers()->max('sort') + 1]);
 
-        return back()->with('success', "Tier {$tier->role} added.");
+        return back()->with('success', "Tier {$tier->role} added.".$this->spread($path));
     }
 
     public function updateTier(CommitteeTierRequest $request, CommitteePath $path, CommitteeTier $tier): RedirectResponse
     {
+        if ($path->follows_default) {
+            return $this->followsDefault();
+        }
+
         $tier->update($request->validated());
 
-        return back()->with('success', "Tier {$tier->role} updated.");
+        return back()->with('success', "Tier {$tier->role} updated.".$this->spread($path));
     }
 
     public function destroyTier(CommitteePath $path, CommitteeTier $tier): RedirectResponse
     {
+        if ($path->follows_default) {
+            return $this->followsDefault();
+        }
+
         $tier->delete();
 
-        return back()->with('success', "Tier {$tier->role} deleted.");
+        return back()->with('success', "Tier {$tier->role} deleted.".$this->spread($path));
+    }
+
+    /**
+     * Make a path follow the default authority levels (its own tiers are replaced by a copy), or let it go its own way
+     * (it keeps the tiers it has and they become its own to edit).
+     */
+    public function follow(Request $request, CommitteePath $path): RedirectResponse
+    {
+        abort_if($path->is_default, 403);
+        $data = $request->validate(['follow' => ['required', 'boolean']]);
+
+        if ($data['follow'] && CommitteeLevels::defaultPath() === null) {
+            return back()->with('error', 'There are no default authority levels yet.');
+        }
+
+        $path->update(['follows_default' => (bool) $data['follow']]);
+
+        if ($data['follow']) {
+            CommitteeLevels::attach($path);
+        }
+
+        return back()->with('success', $data['follow'] ? 'This path now follows the default authority levels.' : 'This path now has authority levels of its own.');
     }
 
     /** Move a tier one step up or down. */
     public function moveTier(CommitteePath $path, CommitteeTier $tier, string $direction): RedirectResponse
     {
+        if ($path->follows_default) {
+            return $this->followsDefault();
+        }
+
         $ordered = $path->tiers()->get()->values()->all();
         $index = (int) array_search($tier->id, array_map(fn (CommitteeTier $t): int => $t->id, $ordered), true);
         $target = $direction === 'up' ? $index - 1 : $index + 1;
@@ -143,7 +197,24 @@ class CommitteeController extends Controller
             $row->update(['sort' => $position + 1]);
         }
 
-        return back()->with('success', 'Tier order updated.');
+        return back()->with('success', 'Tier order updated.'.$this->spread($path));
+    }
+
+    private function followsDefault(): RedirectResponse
+    {
+        return back()->with('error', 'This path follows the default authority levels. Give it levels of its own first.');
+    }
+
+    /** After a change to the default levels, copy them to every path that follows them. */
+    private function spread(CommitteePath $path): string
+    {
+        if (! $path->is_default) {
+            return '';
+        }
+
+        $count = CommitteeLevels::propagate();
+
+        return " Applied to {$count} ".str('path')->plural($count).'.';
     }
 
     /**
@@ -160,6 +231,8 @@ class CommitteeController extends Controller
             'mechanism' => $path->mechanism,
             'mechanism_label' => CommitteePath::MECHANISMS[$path->mechanism] ?? $path->mechanism,
             'is_active' => $path->is_active,
+            'is_default' => $path->is_default,
+            'follows_default' => $path->follows_default,
             'note' => $path->note,
             'tiers_count' => $path->tiers_count ?? $path->tiers()->count(),
             'title' => $path->title(),

@@ -14,10 +14,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $condition
  * @property string $mechanism
  * @property bool $is_active
+ * @property bool $is_default the one path that holds the default authority levels (never matched to a loan)
+ * @property bool $follows_default the tiers are kept in step with the default authority levels
  * @property string|null $note
  * @property-read Product|null $product
  */
-#[Fillable(['product_id', 'condition', 'mechanism', 'is_active', 'note'])]
+#[Fillable(['product_id', 'condition', 'mechanism', 'is_active', 'is_default', 'follows_default', 'note'])]
 class CommitteePath extends Model
 {
     use Auditable;
@@ -29,7 +31,7 @@ class CommitteePath extends Model
 
     protected function casts(): array
     {
-        return ['is_active' => 'boolean'];
+        return ['is_active' => 'boolean', 'is_default' => 'boolean', 'follows_default' => 'boolean'];
     }
 
     /**
@@ -51,6 +53,10 @@ class CommitteePath extends Model
     /** Title such as "KRU · Reloan" or "All products · Normal". */
     public function title(): string
     {
+        if ($this->is_default) {
+            return 'Default authority levels';
+        }
+
         return ($this->product_id === null ? 'All products' : $this->product->alias).' · '.$this->conditionLabel();
     }
 

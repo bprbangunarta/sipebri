@@ -49,7 +49,10 @@ const DECISIONS = [
 export default function CommitteeShow({ path, roles, canManage }: Props) {
     const [editing, setEditing] = useState<Tier | 'new' | null>(null);
     const [toDelete, setToDelete] = useState<Tier | null>(null);
+    const [following, setFollowing] = useState(false);
     const byAmount = path.mechanism === 'plafon';
+    const locked = path.follows_default;
+    const editable = canManage && !locked;
     const form = useForm({
         label: '',
         role: '',
@@ -154,7 +157,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 </span>
             ),
         },
-        ...(canManage
+        ...(editable
             ? [
                   {
                       key: 'actions',
@@ -242,7 +245,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                         >
                             <ArrowLeft /> Back
                         </Button>
-                        {canManage && (
+                        {editable && (
                             <Button onClick={() => openForm('new')}>
                                 <Plus /> Add tier
                             </Button>
@@ -250,6 +253,58 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                     </>
                 }
             />
+
+            {path.is_default && (
+                <p className="mb-3 text-sm text-muted">
+                    These levels are shared by {path.followers ?? 0}{' '}
+                    {path.followers === 1 ? 'path' : 'paths'} that follow the
+                    defaults. Any change here is applied to all of them. On a
+                    hierarchy path only the order of the roles is used.
+                </p>
+            )}
+            {locked && canManage && (
+                <div className="border-border mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-surface px-3 py-2 text-sm">
+                    <span>
+                        This path follows the{' '}
+                        <a
+                            className="text-primary hover:underline"
+                            href="/committees"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                router.visit('/committees');
+                            }}
+                        >
+                            default authority levels
+                        </a>
+                        . Give it levels of its own to change them here.
+                    </span>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                            router.put(
+                                `/committees/${path.id}/follow`,
+                                { follow: false },
+                                { preserveScroll: true },
+                            )
+                        }
+                    >
+                        Customize
+                    </Button>
+                </div>
+            )}
+            {!path.is_default && !locked && canManage && (
+                <div className="border-border mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-surface px-3 py-2 text-sm">
+                    <span>This path has authority levels of its own.</span>
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setFollowing(true)}
+                    >
+                        Follow defaults
+                    </Button>
+                </div>
+            )}
 
             <DataTable
                 rows={path.tiers}
@@ -392,6 +447,24 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                     </DialogFooter>
                 </form>
             </Modal>
+
+            <ConfirmDialog
+                open={following}
+                onOpenChange={setFollowing}
+                title="Follow the default levels?"
+                description="The tiers of this path are replaced by a copy of the default authority levels."
+                confirmLabel="Follow defaults"
+                onConfirm={() =>
+                    router.put(
+                        `/committees/${path.id}/follow`,
+                        { follow: true },
+                        {
+                            preserveScroll: true,
+                            onFinish: () => setFollowing(false),
+                        },
+                    )
+                }
+            />
 
             <ConfirmDialog
                 open={toDelete !== null}
