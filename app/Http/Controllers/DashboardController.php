@@ -34,9 +34,8 @@ class DashboardController extends Controller
         if (! $user->can('dashboard.view')) {
             $href = Navigation::firstHref($user);
 
-            abort_if($href === null, 403, 'Peran Anda belum punya akses ke halaman mana pun.');
-
-            return redirect($href);
+            // A role without any page gets a plain explanation, not an error: an error here would loop (home leads back to home).
+            return $href === null ? Inertia::render('no-access') : redirect($href);
         }
 
         $all = $user->hasAnyPermission(['scheduling.view', 'surveys.view', 'credit-analysis.view']);

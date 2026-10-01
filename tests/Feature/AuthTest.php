@@ -211,10 +211,10 @@ it('stops a soft-deleted person\'s existing session', function () {
     expect($provider->retrieveById($user->id))->toBeNull();
 });
 
-it('lands people on the first screen they may open, or refuses when there is none', function () {
+it('lands people on the first screen they may open, or explains when there is none', function () {
     $this->actingAs(userWith(['collaterals.view'], 'Collateral Viewer'))->get(route('dashboard'))->assertRedirect('/collaterals');
-    $this->actingAs(userWith([], 'Guest Like'))->get(route('dashboard'))->assertForbidden()
-        ->assertInertia(fn (Assert $page) => $page->component('error')->where('status', 403)->where('auth.user.role', 'Guest Like'));
+    $this->actingAs(userWith([], 'Guest Like'))->get(route('dashboard'))->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->component('no-access')->where('auth.user.role', 'Guest Like'));
 });
 
 it('logs out', function () {
