@@ -110,3 +110,21 @@ it('centres the actions of title-and-action rows instead of pinning them to the 
 
     expect($offenders)->toBe([]);
 });
+
+it('reads the device position only through the shared geolocation helper, never in the photo upload flow', function () {
+    $offenders = [];
+
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(resource_path('js'))) as $file) {
+        $path = $file->getPathname();
+
+        if (! in_array($file->getExtension(), ['ts', 'tsx'], true) || str_ends_with($path, 'lib/geolocation.ts')) {
+            continue;
+        }
+
+        if (str_contains((string) file_get_contents($path), 'navigator.geolocation')) {
+            $offenders[] = str_replace(base_path().'/', '', $path);
+        }
+    }
+
+    expect($offenders)->toBe([]);
+});

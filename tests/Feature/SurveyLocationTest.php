@@ -232,3 +232,15 @@ it('keeps going back for the scheduling list and refuses a return target it does
     $this->post(route('scheduling.cancel', $loan), ['reason' => 'x'])->assertRedirect()->assertSessionHas('success');
     expect($loan->fresh()->status)->toBe(LoanStatus::Submitted);
 });
+
+it('ignores any position sent along with a photo: the uploading device is not where the survey took place', function () {
+    Storage::fake('public');
+    [$analyst, $loan] = surveyFile();
+
+    $this->actingAs($analyst)->post(route('surveys.photos.store', $loan), [
+        'photo' => UploadedFile::fake()->image('s.jpg'), 'latitude' => -6.9, 'longitude' => 107.6,
+    ])->assertSessionHasNoErrors();
+
+    $photo = $loan->photos()->firstOrFail();
+    expect($photo->latitude)->toBeNull()->and($photo->longitude)->toBeNull()->and($loan->fresh()->survey_latitude)->toBeNull();
+});
