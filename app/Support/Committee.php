@@ -18,12 +18,21 @@ class Committee
         'escalate' => 'Escalates',
         'blocked' => 'Cannot decide or escalate',
         'not_needed' => 'Not needed',
+        'skipped' => 'Skipped (applicant)',
     ];
 
     /**
+     * Who decides for a product, condition and amount. When the applicant is a committee member, the applicant cannot take part
+     * in deciding their own file:
+     *  - a tier is skipped when the applicant holds its role and nobody else does (with another holder, such as the second section
+     *    head, the tier stays: the other person acts);
+     *  - if the tier that would decide is skipped, the next tier above decides; when there is none above (the top committee),
+     *    the highest remaining tier below decides, and that is reported as an exception;
+     *  - tiers the file would only pass through are simply left out.
+     *
      * @return array<string, mixed>
      */
-    public static function resolve(?int $productId, ?string $condition, int $amount): array
+    public static function resolve(?int $productId, ?string $condition, int $amount, ?User $applicant = null): array
     {
         $condition = filled($condition) ? mb_strtoupper(trim($condition)) : null;
         $path = self::path($productId, $condition);
@@ -39,7 +48,8 @@ class Committee
             ];
         }
 
-        $chain = $path->mechanism === 'plafon' ? self::plafonChain($path, $amount) : self::hierarchyChain($path);
+        $skipped = self::skippedTierIds($path, $applicant);
+        [$chain, $exception] = $path->mechanism === 'plafon' ? self::plafonChain($path, $amount, $skipped) : self::hierarchyChain($path, $skipped);
 
         return [
             'found' => true,
@@ -54,7 +64,9 @@ class Committee
             ],
             'chain' => $chain,
             'decider' => collect($chain)->firstWhere('status', 'decider'),
-            'warnings' => self::warnings($path, $chain),
+            'applicant' => $applicant ? ['id' => $applicant->id, 'name' => $applicant->name, 'role' => $applicant->getRoleNames()->first()] : null,
+            'exception' => $exception,
+            'warnings' => self::warnings($path, $chain, $applicant !== null),
         ];
     }
 
@@ -85,39 +97,84 @@ class Committee
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * Ids of the tiers the applicant takes out of the chain: tiers whose role the applicant holds and nobody else does.
+     *
+     * @return list<int>
      */
-    private static function plafonChain(CommitteePath $path, int $amount): array
+    private static function skippedTierIds(CommitteePath $path, ?User $applicant): array
     {
-        $deciderFound = false;
+        if ($applicant === null) {
+            return [];
+        }
 
-        return $path->tiers->map(function (CommitteeTier $tier) use ($amount, &$deciderFound): array {
-            $inRange = $amount >= ($tier->min_amount ?? 0) && ($tier->max_amount === null || $amount <= $tier->max_amount);
+        $ids = $path->tiers
+            ->filter(fn (CommitteeTier $t): bool => $applicant->hasRole($t->role) && ! User::role($t->role)->whereKeyNot($applicant->id)->exists())
+            ->map(fn (CommitteeTier $t): int => $t->id);
 
-            if ($inRange && ! $deciderFound && $tier->canDecide()) {
-                $deciderFound = true;
-                $status = 'decider';
-            } elseif (! $deciderFound && $tier->max_amount !== null && $amount > $tier->max_amount) {
-                $status = $tier->can_escalate ? 'escalate' : 'blocked';
-            } else {
-                $status = 'not_needed';
-            }
-
-            return self::row($tier, $status);
-        })->all();
+        return array_values($ids->all());
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @param  list<int>  $skipped
+     * @return array{0: array<int, array<string, mixed>>, 1: string|null} the chain and an exception note, if any
      */
-    private static function hierarchyChain(CommitteePath $path): array
+    private static function plafonChain(CommitteePath $path, int $amount, array $skipped): array
     {
-        $last = $path->tiers->last(fn (CommitteeTier $t): bool => $t->canDecide());
+        $tiers = $path->tiers;
+        $natural = $tiers->first(fn (CommitteeTier $t): bool => $t->canDecide() && $amount >= ($t->min_amount ?? 0) && ($t->max_amount === null || $amount <= $t->max_amount));
+        $decider = $natural;
+        $exception = null;
 
-        return $path->tiers->map(fn (CommitteeTier $tier): array => self::row(
+        if ($natural !== null && in_array($natural->id, $skipped, true)) {
+            $above = $tiers->first(fn (CommitteeTier $t): bool => $t->sort > $natural->sort && $t->canDecide() && ! in_array($t->id, $skipped, true));
+            $decider = $above ?? $tiers->last(fn (CommitteeTier $t): bool => $t->sort < $natural->sort && $t->canDecide() && ! in_array($t->id, $skipped, true));
+
+            if ($above === null && $decider !== null) {
+                $exception = "{$decider->role} decides although the amount is above its limit: the top committee member is the applicant.";
+            }
+        }
+
+        $reach = max($natural->sort ?? 0, $decider->sort ?? 0);
+        $rows = $tiers->map(function (CommitteeTier $tier) use ($amount, $skipped, $decider, $reach): array {
+            if (in_array($tier->id, $skipped, true)) {
+                return self::row($tier, $tier->sort <= $reach ? 'skipped' : 'not_needed');
+            }
+
+            if ($decider !== null && $tier->is($decider)) {
+                return self::row($tier, 'decider');
+            }
+
+            $passesThrough = $decider !== null && $tier->sort < $decider->sort && $tier->max_amount !== null && $amount > $tier->max_amount;
+
+            return self::row($tier, $passesThrough ? ($tier->can_escalate ? 'escalate' : 'blocked') : 'not_needed');
+        })->all();
+
+        return [$rows, $exception];
+    }
+
+    /**
+     * @param  list<int>  $skipped
+     * @return array{0: array<int, array<string, mixed>>, 1: string|null}
+     */
+    private static function hierarchyChain(CommitteePath $path, array $skipped): array
+    {
+        $tiers = $path->tiers;
+        $natural = $tiers->last(fn (CommitteeTier $t): bool => $t->canDecide());
+        // When the tier that gives the final decision is the applicant's, the highest tier left takes over that decision,
+        // whatever its own rights are (on a hierarchy path only the last tier is allowed to decide).
+        $last = $natural === null || ! in_array($natural->id, $skipped, true)
+            ? $natural
+            : $tiers->last(fn (CommitteeTier $t): bool => ! in_array($t->id, $skipped, true));
+        $exception = $natural !== null && $last !== null && ! $last->is($natural)
+            ? "{$last->role} gives the final decision: the top committee member is the applicant."
+            : null;
+
+        $rows = $tiers->map(fn (CommitteeTier $tier): array => self::row(
             $tier,
-            $last && $tier->is($last) ? 'decider' : ($tier->can_escalate ? 'escalate' : 'blocked'),
+            in_array($tier->id, $skipped, true) ? 'skipped' : ($last !== null && $tier->is($last) ? 'decider' : ($last !== null && $tier->sort > $last->sort ? 'not_needed' : ($tier->can_escalate ? 'escalate' : 'blocked'))),
         ))->all();
+
+        return [$rows, $exception];
     }
 
     /**
@@ -148,12 +205,14 @@ class Committee
      * @param  array<int, array<string, mixed>>  $chain
      * @return array<int, string>
      */
-    private static function warnings(CommitteePath $path, array $chain): array
+    private static function warnings(CommitteePath $path, array $chain, bool $hasApplicant = false): array
     {
         $warnings = [];
 
         if (! collect($chain)->contains(fn (array $row): bool => $row['status'] === 'decider')) {
-            $warnings[] = 'No tier is authorised to decide at this amount. Check the amount range of each tier.';
+            $warnings[] = $hasApplicant && collect($chain)->contains(fn (array $row): bool => $row['status'] === 'skipped')
+                ? 'Nobody is left to decide once the applicant is taken out. Check the committee.'
+                : 'No tier is authorised to decide at this amount. Check the amount range of each tier.';
         }
 
         foreach ($chain as $row) {

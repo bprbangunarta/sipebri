@@ -7,10 +7,13 @@ use App\Http\Requests\CommitteeTierRequest;
 use App\Models\CommitteePath;
 use App\Models\CommitteeTier;
 use App\Models\Product;
+use App\Models\User;
 use App\Support\Committee;
+use App\Support\CommitteeMembers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
@@ -33,6 +36,7 @@ class CommitteeController extends Controller
             'conditionMap' => CommitteePath::where('is_active', true)->get()
                 ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
                 ->map(fn ($paths) => $paths->map(fn (CommitteePath $p): string => (string) $p->condition)->unique()->sort()->values()),
+            'committeeMembers' => CommitteeMembers::options(),
             'mechanisms' => collect(CommitteePath::MECHANISMS)->map(fn (string $label, string $value): array => ['value' => $value, 'label' => $label])->values(),
             'canManage' => true,
         ]);
@@ -59,9 +63,12 @@ class CommitteeController extends Controller
             'product_id' => ['nullable', 'integer', 'exists:products,id'],
             'condition' => ['nullable', 'string', 'max:30'],
             'amount' => ['required', 'integer', 'min:0'],
-        ]);
+            'applicant_id' => ['nullable', 'integer', Rule::in(CommitteeMembers::query()->pluck('id')->all())],
+        ], ['applicant_id.in' => 'The selected person is not a committee member.'], ['applicant_id' => 'applicant']);
 
-        return response()->json(Committee::resolve($data['product_id'] ?? null, $data['condition'] ?? null, (int) $data['amount']));
+        $applicant = isset($data['applicant_id']) ? User::find((int) $data['applicant_id']) : null;
+
+        return response()->json(Committee::resolve($data['product_id'] ?? null, $data['condition'] ?? null, (int) $data['amount'], $applicant));
     }
 
     public function store(CommitteePathRequest $request): RedirectResponse

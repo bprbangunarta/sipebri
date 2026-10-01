@@ -18,7 +18,7 @@ type ChainRow = {
     min_amount: number | null;
     max_amount: number | null;
     decisions: string[];
-    status: 'decider' | 'escalate' | 'blocked' | 'not_needed';
+    status: 'decider' | 'escalate' | 'blocked' | 'not_needed' | 'skipped';
     status_label: string;
     user_count: number;
 };
@@ -34,6 +34,8 @@ type Result = {
         matched_globally: boolean;
     };
     chain: ChainRow[];
+    applicant?: { id: number; name: string; role: string | null } | null;
+    exception?: string | null;
     warnings: string[];
 };
 
@@ -42,6 +44,7 @@ const tones: Record<ChainRow['status'], BadgeTone> = {
     escalate: 'info',
     blocked: 'danger',
     not_needed: 'neutral',
+    skipped: 'warning',
 };
 
 /** Read-only check of which tier decides a given product, condition and amount. */
@@ -69,15 +72,18 @@ export function AuthorityCheck({
     onOpenChange,
     productOptions,
     conditionMap,
+    memberOptions,
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     productOptions: { value: number | string; label: string }[];
     conditionMap: Record<string, string[]>;
+    memberOptions: { value: number | string; label: string }[];
 }) {
     const [product, setProduct] = useState('');
     const [condition, setCondition] = useState('');
     const [amount, setAmount] = useState('');
+    const [applicant, setApplicant] = useState('');
     const [result, setResult] = useState<Result | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -102,6 +108,9 @@ export function AuthorityCheck({
             const query = new URLSearchParams({ amount, condition });
             if (product) {
                 query.set('product_id', product);
+            }
+            if (applicant) {
+                query.set('applicant_id', applicant);
             }
             const response = await fetch(`/committees/authority?${query}`, {
                 headers: { Accept: 'application/json' },
@@ -173,6 +182,21 @@ export function AuthorityCheck({
                         />
                     </Field>
                 </div>
+                <Field
+                    label="Applicant is a committee member"
+                    hint="Simulates a member applying for a credit: they cannot decide their own file, so the approval skips them."
+                >
+                    <Combobox
+                        clearable
+                        placeholder="No"
+                        options={memberOptions}
+                        value={applicant}
+                        onChange={(v) => {
+                            setApplicant(v ?? '');
+                            setResult(null);
+                        }}
+                    />
+                </Field>
                 <div>
                     <Button
                         loading={loading}
@@ -214,6 +238,31 @@ export function AuthorityCheck({
                                 }}
                             />
                         </div>
+                        {result.applicant && (
+                            <p className="rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs text-amber-800">
+                                Applicant:{' '}
+                                <strong>
+                                    {result.applicant.name}
+                                    {result.applicant.role
+                                        ? ` (${result.applicant.role})`
+                                        : ''}
+                                </strong>
+                                {result.chain.some(
+                                    (r) => r.status === 'skipped',
+                                )
+                                    ? '. The tiers marked skipped are left out.'
+                                    : '. Their tier stays: another holder of the role acts.'}
+                            </p>
+                        )}
+                        {result.exception && (
+                            <p className="flex items-start gap-1.5 rounded-md border border-danger/30 bg-red-50 px-2.5 py-1.5 text-xs text-danger">
+                                <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
+                                <span>
+                                    <strong>Exception.</strong>{' '}
+                                    {result.exception}
+                                </span>
+                            </p>
+                        )}
                         {result.warnings.map((w) => (
                             <p
                                 key={w}

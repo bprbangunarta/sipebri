@@ -46,6 +46,7 @@ type Props = {
     productOptions: Option[];
     pathOptions: Option[];
     conditionMap: Record<string, string[]>;
+    committeeMembers: Option[];
     mechanisms: Option[];
     canManage: boolean;
 };
@@ -55,6 +56,7 @@ export default function CommitteesIndex({
     productOptions,
     pathOptions,
     conditionMap,
+    committeeMembers,
     mechanisms,
     canManage,
 }: Props) {
@@ -367,6 +369,7 @@ export default function CommitteesIndex({
                 onOpenChange={setChecking}
                 productOptions={productOptions}
                 conditionMap={conditionMap}
+                memberOptions={committeeMembers}
             />
         </>
     );
