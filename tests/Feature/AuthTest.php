@@ -236,3 +236,8 @@ it('renders themed Blade error pages for statuses the app layout cannot cover', 
 
     $this->get('/_error-test/'.$status)->assertStatus($status)->assertSee($title)->assertSee(config('app.name'))->assertSee('bg-primary', false);
 })->with([[500, 'Terjadi kesalahan'], [503, 'Sedang dalam pemeliharaan'], [429, 'Terlalu banyak permintaan'], [401, 'Perlu masuk']]);
+
+it('tells search engines not to index any page', function () {
+    $this->get(route('login'))->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+    $this->get('/no-such-page')->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+});
