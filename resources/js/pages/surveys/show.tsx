@@ -16,6 +16,7 @@ import {
 import type { ReactNode } from 'react';
 import { useMemo, useRef, useState } from 'react';
 import { LocationMap } from '@/components/location-map';
+import { ReasonDialog } from '@/components/reason-dialog';
 import type { MapPin as Pin } from '@/components/location-map';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
@@ -140,6 +141,7 @@ export default function SurveyShow({
     const [replace, setReplace] = useState<Place | null>(null);
     const [editing, setEditing] = useState<Place | null>(null);
     const [clearing, setClearing] = useState<Place | null>(null);
+    const [cancelling, setCancelling] = useState(false);
     const [uploading, setUploading] = useState<string | null>(null);
 
     const surveyPlace = locations[0];
@@ -374,25 +376,47 @@ export default function SurveyShow({
                                     </p>
                                 )
                             ) : (
-                                <div>
-                                    <Button
-                                        type="submit"
-                                        loading={form.processing}
-                                        disabled={missing.length > 0}
-                                    >
-                                        <Check /> Save survey result
-                                    </Button>
+                                <>
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => setCancelling(true)}
+                                        >
+                                            <X /> Cancel and ask for a new
+                                            schedule
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            loading={form.processing}
+                                            disabled={missing.length > 0}
+                                        >
+                                            <Check /> Save survey result
+                                        </Button>
+                                    </div>
                                     {missing.length > 0 && (
-                                        <span className="ml-2 text-xs text-muted">
+                                        <p className="text-xs text-muted">
                                             First {missing.join(' and ')}.
-                                        </span>
+                                        </p>
                                     )}
-                                </div>
+                                </>
                             )}
                         </form>
                     </Section>
                 </div>
             </div>
+
+            <ReasonDialog
+                title="Cancel survey"
+                description="Tell the section head why the survey cannot take place as scheduled."
+                action={cancelling ? `/scheduling/${loan.id}/cancel` : null}
+                confirmLabel="Send request"
+                fieldLabel="Cancellation reason"
+                hint="The file goes back to the section head to be scheduled again. The earlier schedule history is kept; the position and photos entered for this visit are discarded."
+                tone="primary"
+                extra={{ return: 'surveys' }}
+                onClose={() => setCancelling(false)}
+            />
 
             <ConfirmDialog
                 open={replace !== null}

@@ -12,6 +12,7 @@ import {
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
+import { ReasonDialog } from '@/components/reason-dialog';
 import { Combobox } from '@/components/ui/combobox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { DialogFooter, Modal } from '@/components/ui/dialog';
@@ -208,73 +209,6 @@ function ScheduleDialog({
                     </DialogFooter>
                 </form>
             )}
-        </Modal>
-    );
-}
-
-function ReasonDialog({
-    title,
-    description,
-    action,
-    confirmLabel,
-    onClose,
-}: {
-    title: string;
-    description: string;
-    action: string | null;
-    confirmLabel: string;
-    onClose: () => void;
-}) {
-    const form = useForm({ reason: '' });
-
-    return (
-        <Modal
-            open={action !== null}
-            onOpenChange={(open) => !open && onClose()}
-            title={title}
-            description={description}
-        >
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    if (action) {
-                        form.post(action, {
-                            preserveScroll: true,
-                            onSuccess: () => {
-                                form.reset();
-                                onClose();
-                            },
-                        });
-                    }
-                }}
-                noValidate
-            >
-                <div className="p-4">
-                    <Field label="Reason" required error={form.errors.reason}>
-                        <Input
-                            autoFocus
-                            value={form.data.reason}
-                            maxLength={255}
-                            onChange={(e) =>
-                                form.setData('reason', e.target.value)
-                            }
-                            aria-invalid={!!form.errors.reason}
-                        />
-                    </Field>
-                </div>
-                <DialogFooter>
-                    <Button variant="outline" onClick={onClose}>
-                        Back
-                    </Button>
-                    <Button
-                        type="submit"
-                        variant="danger"
-                        loading={form.processing}
-                    >
-                        {confirmLabel}
-                    </Button>
-                </DialogFooter>
-            </form>
         </Modal>
     );
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\LoanStatus;
 use App\Models\LoanApplication;
 use App\Models\LoanSchedule;
+use App\Models\LoanSurveyPhoto;
 use App\Models\User;
 use App\Support\Notify;
 use Illuminate\Http\RedirectResponse;
@@ -135,10 +136,11 @@ class SchedulingController extends Controller
             return back()->with('error', 'This file has no active survey schedule.');
         }
 
-        $data = $request->validate(['reason' => ['required', 'string', 'max:255']], [], ['reason' => 'cancellation reason']);
+        $data = $request->validate(['reason' => ['required', 'string', 'max:255'], 'return' => ['nullable', 'in:surveys']], [], ['reason' => 'cancellation reason']);
         $done = $this->scheduleCount($loanApplication);
 
         $this->record($loanApplication, LoanSchedule::ACTION_CANCEL, $data['reason'], $request->user()->name, $done);
+        $this->discardSurveyDraft($loanApplication);
         $loanApplication->update(['status' => LoanStatus::Submitted, 'surveyor_id' => null, 'survey_date' => null]);
 
         $exceeded = $done >= (int) config('credit.max_schedules');
@@ -146,7 +148,25 @@ class SchedulingController extends Controller
         Notify::toPermission('scheduling.manage', $exceeded ? 'Rescheduling limit exceeded' : 'Reschedule requested', 'Scheduling',
             "File {$loanApplication->application_code}: {$data['reason']}".($exceeded ? " (already scheduled {$done} times)" : ''), '/scheduling', $exceeded ? 'warning' : 'info');
 
-        return back()->with('success', $exceeded ? "Schedule cancelled. The file has been scheduled {$done} times — please review it." : 'Schedule cancelled; the file awaits a new schedule.');
+        $message = $exceeded ? "Schedule cancelled. The file has been scheduled {$done} times — please review it." : 'Schedule cancelled; the file awaits a new schedule.';
+
+        // From the survey page the file is no longer the surveyor's, so going back to it would be refused.
+        return ($data['return'] ?? null) === 'surveys' ? to_route('surveys.index')->with('success', $message) : back()->with('success', $message);
+    }
+
+    /**
+     * What the cancelled visit produced (the position marked for the survey location and the photos not yet saved with a survey)
+     * belongs to that visit only, so it is discarded: the next surveyor starts clean and cannot meet the requirements with
+     * another visit's evidence. Collateral positions stay: they describe the collateral itself.
+     */
+    private function discardSurveyDraft(LoanApplication $loan): void
+    {
+        foreach ($loan->photos()->whereNull('loan_survey_id')->get() as $photo) {
+            LoanSurveyPhoto::disk()->delete($photo->path);
+            $photo->delete();
+        }
+
+        $loan->update(['survey_latitude' => null, 'survey_longitude' => null, 'survey_source' => null, 'survey_located_at' => null, 'survey_located_by' => null, 'survey_address' => null]);
     }
 
     /** Void the application (used when scheduling has dragged on). */
