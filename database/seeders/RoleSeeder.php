@@ -80,13 +80,13 @@ class RoleSeeder extends Seeder
     private const DEFAULT_PERMISSIONS = [
         'AO Kredit' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage'],
         'Kepala Seksi Analis' => ['dashboard.view', 'loan-applications.view', 'scheduling.view', 'scheduling.manage', 'surveys.view', 'surveys.manage'],
-        'Staff Analis & Appraisal' => ['dashboard.view', 'loan-applications.view', 'surveys.view', 'surveys.manage', 'analysis.view'],
+        'Staff Analis & Appraisal' => ['dashboard.view', 'loan-applications.view', 'surveys.view', 'surveys.manage', 'credit-analysis.view'],
         'Kepala Bagian Analis' => ['dashboard.view'],
         'Direktur Bisnis' => ['dashboard.view'],
         'Direktur Utama' => ['dashboard.view'],
-        'Kepala Kantor Kas' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage', 'surveys.view', 'surveys.manage', 'analysis.view'],
-        'Customer Service' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage', 'surveys.view', 'surveys.manage', 'analysis.view'],
-        'Teller' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage', 'surveys.view', 'surveys.manage', 'analysis.view'],
+        'Kepala Kantor Kas' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage', 'surveys.view', 'surveys.manage', 'credit-analysis.view'],
+        'Customer Service' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage', 'surveys.view', 'surveys.manage', 'credit-analysis.view'],
+        'Teller' => ['dashboard.view', 'loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage', 'surveys.view', 'surveys.manage', 'credit-analysis.view'],
     ];
 
     /**
@@ -96,10 +96,10 @@ class RoleSeeder extends Seeder
      * @var array<string, list<string>>
      */
     private const REQUIRED = [
-        'Staff Analis & Appraisal' => ['analysis.view', 'approvals.view'],
-        'Kepala Kantor Kas' => ['analysis.view'],
-        'Customer Service' => ['analysis.view'],
-        'Teller' => ['analysis.view'],
+        'Staff Analis & Appraisal' => ['credit-analysis.view', 'approvals.view'],
+        'Kepala Kantor Kas' => ['credit-analysis.view'],
+        'Customer Service' => ['credit-analysis.view'],
+        'Teller' => ['credit-analysis.view'],
         'Kepala Seksi Analis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
         'Kepala Bagian Analis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
         'Direktur Bisnis' => ['surveys.view', 'surveys.manage', 'approvals.view'],

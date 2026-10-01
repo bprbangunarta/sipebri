@@ -94,7 +94,7 @@ it('manages paths and tiers', function () {
 
     $this->delete(route('committees.tiers.destroy', [$path, $first]))->assertSessionHas('success');
     expect($path->tiers()->count())->toBe(1);
-    $this->delete(route('committees.destroy', $path))->assertRedirect(route('committees.paths'));
+    $this->delete(route('committees.destroy', $path))->assertRedirect(route('committees.special-rules'));
     expect(CommitteePath::count())->toBe(0);
 });
 
@@ -115,7 +115,7 @@ it('copies tiers from another path and restricts access to Super Admin', functio
     $this->post(route('committees.store'), ['condition' => 'copy', 'mechanism' => 'plafon', 'copy_from' => $source->id]);
     expect(CommitteePath::firstWhere('condition', 'COPY')->tiers()->count())->toBe(5);
 
-    $this->get(route('committees.paths'))->assertInertia(fn (Assert $page) => $page->component('committees/special-rules'));
+    $this->get(route('committees.special-rules'))->assertInertia(fn (Assert $page) => $page->component('committees/special-rules'));
 
     $this->actingAs(userWith(['dashboard.view'], 'Nobody'));
     $this->get(route('committees.index'))->assertForbidden();

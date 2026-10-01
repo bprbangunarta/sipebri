@@ -17,7 +17,7 @@ class LoanApplicationPolicy
             return true;
         }
 
-        return $user->hasAnyPermission(['scheduling.view', 'surveys.view', 'analysis.view']);
+        return $user->hasAnyPermission(['scheduling.view', 'surveys.view', 'credit-analysis.view']);
     }
 
     /**

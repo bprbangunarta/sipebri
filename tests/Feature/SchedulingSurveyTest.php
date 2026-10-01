@@ -155,11 +155,11 @@ it('lists only surveyed or walk-in files assigned to the user on the analysis pa
     $notYet = tap(submittedLoan())->update(['status' => LoanStatus::Scheduling, 'surveyor_id' => $analyst->id]);
     $someoneElses = tap(submittedLoan())->update(['status' => LoanStatus::Survey, 'surveyor_id' => roleUser('Staff Analis & Appraisal')->id]);
 
-    $this->actingAs($analyst)->get(route('analysis.index'))
-        ->assertInertia(fn (Assert $page) => $page->component('analysis/index')->has('loans.data', 1)->where('loans.data.0.id', $ready->id)->where('loans.data.0.surveyed', true));
-    $this->get(route('analysis.index', ['search' => 'nobody']))->assertInertia(fn (Assert $page) => $page->has('loans.data', 0));
+    $this->actingAs($analyst)->get(route('credit-analysis.index'))
+        ->assertInertia(fn (Assert $page) => $page->component('credit-analysis/index')->has('loans.data', 1)->where('loans.data.0.id', $ready->id)->where('loans.data.0.surveyed', true));
+    $this->get(route('credit-analysis.index', ['search' => 'nobody']))->assertInertia(fn (Assert $page) => $page->has('loans.data', 0));
 
-    $this->actingAs(userWith(['dashboard.view'], 'Nobody'))->get(route('analysis.index'))->assertForbidden();
+    $this->actingAs(userWith(['dashboard.view'], 'Nobody'))->get(route('credit-analysis.index'))->assertForbidden();
     expect($notYet->fresh()->status)->toBe(LoanStatus::Scheduling)->and($someoneElses->fresh()->status)->toBe(LoanStatus::Survey);
 });
 

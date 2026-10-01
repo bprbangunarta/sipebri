@@ -29,7 +29,7 @@ class Modules
         'collaterals' => ['label' => 'Jaminan', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
         'scheduling' => ['label' => 'Penjadwalan Survei', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
         'surveys' => ['label' => 'Survei', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
-        'analysis' => ['label' => 'Analisa Kredit', 'group' => 'Kredit', 'abilities' => ['view']],
+        'credit-analysis' => ['label' => 'Analisa Kredit', 'group' => 'Kredit', 'abilities' => ['view']],
         'approvals' => ['label' => 'Persetujuan', 'group' => 'Kredit', 'abilities' => ['view']],
     ];
 

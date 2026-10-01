@@ -13,7 +13,7 @@ it('lists every permission with its type and the number of roles holding it', fu
         ->assertInertia(fn (Assert $page) => $page->component('permissions/index')
             ->has('permissions.data', 11)
             ->where('permissions.data.0.custom', false)
-            ->where('permissions.data.0.name', 'analysis.view')
+            ->where('permissions.data.0.name', 'approvals.view')
             ->has('entities', 7));
 
     $this->get(route('permissions.index', ['search' => 'surveys']))
@@ -28,18 +28,18 @@ it('generates standard permissions, skips existing ones and gives them to Super 
     $admin = superAdmin();
     $this->actingAs($admin);
 
-    $this->post(route('permissions.generate'), ['entity' => 'Credit Analysis', 'actions' => ['view', 'create', 'update']])->assertSessionHasNoErrors();
+    $this->post(route('permissions.generate'), ['entity' => 'Stock Report', 'actions' => ['view', 'create', 'update']])->assertSessionHasNoErrors();
 
-    expect(Permission::where('is_custom', true)->orderBy('name')->pluck('name')->all())->toBe(['credit-analysis.create', 'credit-analysis.update', 'credit-analysis.view'])
-        ->and(Role::findByName('Super Admin')->hasPermissionTo('credit-analysis.create'))->toBeTrue()
-        ->and($admin->fresh()->can('credit-analysis.update'))->toBeTrue();
+    expect(Permission::where('is_custom', true)->orderBy('name')->pluck('name')->all())->toBe(['stock-report.create', 'stock-report.update', 'stock-report.view'])
+        ->and(Role::findByName('Super Admin')->hasPermissionTo('stock-report.create'))->toBeTrue()
+        ->and($admin->fresh()->can('stock-report.update'))->toBeTrue();
 
-    $this->post(route('permissions.generate'), ['entity' => 'credit-analysis', 'actions' => ['view', 'delete']])
+    $this->post(route('permissions.generate'), ['entity' => 'stock-report', 'actions' => ['view', 'delete']])
         ->assertSessionHas('success', '1 izin berhasil dibuat, 1 sudah ada sebelumnya.');
-    expect(Permission::where('name', 'credit-analysis.delete')->exists())->toBeTrue();
+    expect(Permission::where('name', 'stock-report.delete')->exists())->toBeTrue();
 
     $row = AuditLog::query()->where('event', 'permissions.generated')->latest('id')->firstOrFail();
-    expect($row->decoded('context')['skipped'])->toBe(['credit-analysis.view']);
+    expect($row->decoded('context')['skipped'])->toBe(['stock-report.view']);
 });
 
 it('does not duplicate a system permission and validates the input', function () {

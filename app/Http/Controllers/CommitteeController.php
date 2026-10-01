@@ -45,7 +45,7 @@ class CommitteeController extends Controller
     }
 
     /** Paths that deviate from the default levels (hierarchy, or levels of their own); the rest can be shown on request. */
-    public function paths(): Response
+    public function specialRules(): Response
     {
         return Inertia::render('committees/special-rules', [
             'paths' => CommitteePath::with('product')->withCount('tiers')->where('is_default', false)->orderBy('product_id')->orderBy('condition')->get()
@@ -158,7 +158,7 @@ class CommitteeController extends Controller
 
         $path->delete();
 
-        return to_route('committees.paths')->with('success', "Jalur komite {$title} berhasil dihapus.");
+        return to_route('committees.special-rules')->with('success', "Jalur komite {$title} berhasil dihapus.");
     }
 
     public function storeTier(CommitteeTierRequest $request, CommitteePath $path): RedirectResponse

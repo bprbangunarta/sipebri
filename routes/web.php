@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\RoleName;
-use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
@@ -10,6 +9,7 @@ use App\Http\Controllers\BmpkController;
 use App\Http\Controllers\CollateralController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CommitteeMemberController;
+use App\Http\Controllers\CreditAnalysisController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\NotificationController;
@@ -96,7 +96,7 @@ Route::middleware('auth')->group(function () {
         Route::post('surveys/{loanApplication}', [SurveyController::class, 'store'])->name('surveys.store');
     });
 
-    Route::get('credit-analysis', [AnalysisController::class, 'index'])->middleware('permission:analysis.view')->name('analysis.index');
+    Route::get('credit-analysis', [CreditAnalysisController::class, 'index'])->middleware('permission:credit-analysis.view')->name('credit-analysis.index');
     Route::get('approvals', [ApprovalController::class, 'index'])->middleware('permission:approvals.view')->name('approvals.index');
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).
@@ -118,7 +118,7 @@ Route::middleware('auth')->group(function () {
         Route::get('committees/members', [CommitteeMemberController::class, 'index'])->name('committees.members');
         Route::put('committees/members/{user}', [CommitteeMemberController::class, 'update'])->whereNumber('user')->name('committees.members.update');
         Route::delete('committees/members/{user}', [CommitteeMemberController::class, 'destroy'])->whereNumber('user')->name('committees.members.destroy');
-        Route::get('committees/special-rules', [CommitteeController::class, 'paths'])->name('committees.paths');
+        Route::get('committees/special-rules', [CommitteeController::class, 'specialRules'])->name('committees.special-rules');
         Route::get('committees/exceptions', [CommitteeController::class, 'exceptions'])->name('committees.exceptions');
         Route::get('committees/authority', [CommitteeController::class, 'authority'])->name('committees.authority');
         Route::get('committees/{path}', [CommitteeController::class, 'show'])->name('committees.show');

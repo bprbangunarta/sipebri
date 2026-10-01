@@ -12,7 +12,7 @@ use Inertia\Response;
  * Credit analysis, stage 4. For now this only lists the files that are ready to be analysed:
  * surveyed files (or walk-in files, which skip the visit) assigned to the current user.
  */
-class AnalysisController extends Controller
+class CreditAnalysisController extends Controller
 {
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 
@@ -40,7 +40,7 @@ class AnalysisController extends Controller
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 10)
             ->withQueryString();
 
-        return Inertia::render('analysis/index', [
+        return Inertia::render('credit-analysis/index', [
             'loans' => $loans->through(fn (LoanApplication $l): array => [
                 ...$l->only(['id', 'application_code', 'full_name', 'nik', 'requested_amount', 'requested_tenor']),
                 'application_date' => $l->application_date->toDateString(),

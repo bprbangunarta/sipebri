@@ -94,7 +94,7 @@ class Navigation
                 ['label' => 'Jaminan', 'icon' => 'landmark', 'route' => 'collaterals.index', 'permission' => 'collaterals.view'],
                 ['label' => 'Penjadwalan', 'icon' => 'calendar', 'route' => 'scheduling.index', 'permission' => 'scheduling.view'],
                 ['label' => 'Proses Survey', 'icon' => 'map-pin', 'route' => 'surveys.index', 'permission' => 'surveys.view'],
-                ['label' => 'Analisa Kredit', 'icon' => 'clipboard-check', 'route' => 'analysis.index', 'permission' => 'analysis.view'],
+                ['label' => 'Analisa Kredit', 'icon' => 'clipboard-check', 'route' => 'credit-analysis.index', 'permission' => 'credit-analysis.view'],
                 ['label' => 'Persetujuan', 'icon' => 'badge-check', 'route' => 'approvals.index', 'permission' => 'approvals.view'],
             ]],
             ['label' => 'Referensi', 'items' => [

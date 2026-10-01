@@ -48,7 +48,7 @@ Terakhir diperbarui: 2026-09-30.
 - ✅ Data Pengguna menampilkan pengguna tidak aktif juga (soft delete dari Codex) dengan filter status Active/Inactive, kolom username, kantor, dan status; baris tidak aktif tanpa aksi.
 - 🔜 Sisa di halaman **Data Pengguna** (tambah/ubah password/peran) masih versi lama (buat user + password lokal, ubah peran). Sekarang akun berasal dari Codex dan peran di-reset tiap login, jadi halaman ini perlu diubah jadi daftar baca-saja (tanpa tambah/ubah password/peran).
 - 🔜 Sisa pesan validasi kustom & atribut (`->attributes()`) di controller masih Inggris; rapikan saat terjemahan UI (pakai pesan laravel-lang sebisanya).
-- 🔜 Terjemahan UI ke bahasa Indonesia per layar (kode tetap Inggris; lihat `.ai/rules/general.md`).
+- 🔜 Terjemahan UI ke bahasa Indonesia: sisa login, verifikasi dua langkah, profil, dan email OTP (menu lain sudah Indonesia; URL tetap Inggris dan sepadan dengan judul UI; lihat `.ai/rules/general.md`).
 - Catatan dev: akun lokal lama (admin@example.com, ao@, dst.) tidak bisa login lagi; barisnya masih ada di database dan akan ditimpa bila id Codex sama.
 
 ## Keputusan yang masih terbuka

@@ -39,7 +39,7 @@ class DashboardController extends Controller
             return redirect($href);
         }
 
-        $all = $user->hasAnyPermission(['scheduling.view', 'surveys.view', 'analysis.view']);
+        $all = $user->hasAnyPermission(['scheduling.view', 'surveys.view', 'credit-analysis.view']);
         $inProcess = array_map(fn (LoanStatus $s): string => $s->value, self::IN_PROCESS);
 
         return Inertia::render('dashboard', [
